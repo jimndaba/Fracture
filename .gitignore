@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/Fracture/vendor/SDL2
+/Fracture/vendor/lib
+/Fracture/vendor/KHR
+/Fracture/vendor/GLAD
+/Fracture/int/Fracture.tlog
+/Fracture/int

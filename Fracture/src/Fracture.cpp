@@ -2,10 +2,12 @@
 //
 
 #include <iostream>
-
+#include "Game/Game.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::cout << "FRACTURE ENGINE 2020\n";
+    Fracture::Game game;
+    game.run();
 }
 
