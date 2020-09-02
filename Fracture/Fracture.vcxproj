@@ -94,14 +94,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Component\ComponentManager.cpp" />
+    <ClCompile Include="src\Component\TransformComponent.cpp" />
+    <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Fracture.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
     <ClCompile Include="src\Rendering\glad.c" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\Component\Component.h" />
+    <ClInclude Include="src\Component\ComponentManager.h" />
+    <ClInclude Include="src\Component\TransformComponent.h" />
+    <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
@@ -112,7 +120,35 @@
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Scripting\GameLogic.h" />
+    <ClInclude Include="vendor\glm\common.hpp" />
+    <ClInclude Include="vendor\glm\exponential.hpp" />
+    <ClInclude Include="vendor\glm\ext.hpp" />
+    <ClInclude Include="vendor\glm\fwd.hpp" />
+    <ClInclude Include="vendor\glm\geometric.hpp" />
+    <ClInclude Include="vendor\glm\glm.hpp" />
+    <ClInclude Include="vendor\glm\integer.hpp" />
+    <ClInclude Include="vendor\glm\mat2x2.hpp" />
+    <ClInclude Include="vendor\glm\mat2x3.hpp" />
+    <ClInclude Include="vendor\glm\mat2x4.hpp" />
+    <ClInclude Include="vendor\glm\mat3x2.hpp" />
+    <ClInclude Include="vendor\glm\mat3x3.hpp" />
+    <ClInclude Include="vendor\glm\mat3x4.hpp" />
+    <ClInclude Include="vendor\glm\mat4x2.hpp" />
+    <ClInclude Include="vendor\glm\mat4x3.hpp" />
+    <ClInclude Include="vendor\glm\mat4x4.hpp" />
+    <ClInclude Include="vendor\glm\matrix.hpp" />
+    <ClInclude Include="vendor\glm\packing.hpp" />
+    <ClInclude Include="vendor\glm\trigonometric.hpp" />
+    <ClInclude Include="vendor\glm\vec2.hpp" />
+    <ClInclude Include="vendor\glm\vec3.hpp" />
+    <ClInclude Include="vendor\glm\vec4.hpp" />
+    <ClInclude Include="vendor\glm\vector_relational.hpp" />
     <ClInclude Include="vendor\KHR\khrplatform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="vendor\glm\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

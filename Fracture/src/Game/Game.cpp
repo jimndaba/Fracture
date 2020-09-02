@@ -2,10 +2,18 @@
 #include "GameWindow.h"
 #include "Rendering/Renderer.h"
 
+#include "Component/ComponentManager.h"
+#include "Component/TransformComponent.h"
+#include "Scene/Scene.h"
+
+
+Fracture::Scene* test;
+
 Fracture::Game::Game()
 {
 	m_GameWindow = std::shared_ptr<GameWindow>(new GameWindow());
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
+	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 }
 
 Fracture::Game::~Game()
@@ -29,10 +37,14 @@ void Fracture::Game::run()
 
 void Fracture::Game::init()
 {
+
+	test = new Scene();
 }
 
 void Fracture::Game::loadContent()
 {
+	std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(1);
+
 }
 
 void Fracture::Game::update()
@@ -47,6 +59,7 @@ void Fracture::Game::render()
 
 void Fracture::Game::unloadContent()
 {
+	delete test;
 }
 
 void Fracture::Game::shutdown()

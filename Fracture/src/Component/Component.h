@@ -1,0 +1,32 @@
+#pragma once
+#ifndef COMPONENT_H
+#define COMPONENT_H
+
+namespace Fracture
+{
+	enum class ComponentType
+	{
+		None,
+		Transform,
+		Mesh,
+		Physics,
+		Script,
+		Light,
+		Audio,
+	};
+
+	class Component
+	{
+	public:
+		Component(int id,ComponentType mtype):entityID(id)
+		{
+		};
+		~Component() {};
+		virtual void onAttach() = 0;
+		virtual void onDettach() = 0;
+
+		int entityID;
+		ComponentType componentType = ComponentType::None;
+	};
+}
+#endif

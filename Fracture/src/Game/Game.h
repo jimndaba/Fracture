@@ -9,6 +9,7 @@ namespace Fracture
 
 	class GameWindow;
 	class Renderer;
+	class ComponentManager;
 
 	class Game
 	{
@@ -33,6 +34,7 @@ namespace Fracture
 		bool m_isRunning = true;
 		std::shared_ptr<GameWindow> m_GameWindow;
 		std::unique_ptr<Renderer> m_Renderer;
+		std::unique_ptr<ComponentManager> m_ComponentManager;
 	};
 
 }
