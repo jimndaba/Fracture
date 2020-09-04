@@ -18,7 +18,7 @@ void Fracture::Entity::addChild(std::shared_ptr<Entity> child)
 void Fracture::Entity::removeChild(std::shared_ptr<Entity> child)
 {
 	std::vector<std::shared_ptr<Entity>>::iterator new_end;
-	new_end = remove(m_children.begin(), m_children.begin(), child);
+	new_end = std::remove(m_children.begin(), m_children.begin(), child);
 }
 
 void Fracture::Entity::clearChildren()

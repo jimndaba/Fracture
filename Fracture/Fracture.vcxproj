@@ -100,9 +100,16 @@
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Fracture.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
-    <ClCompile Include="src\Rendering\glad.c" />
+    <ClCompile Include="src\Rendering\BufferElement.cpp" />
+    <ClCompile Include="src\Rendering\BufferLayout.cpp" />
+    <ClCompile Include="src\Rendering\FrameBuffer.cpp" />
+    <ClCompile Include="src\Rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="src\Rendering\VertexArray.cpp" />
+    <ClCompile Include="src\Rendering\VertexBuffer.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
+    <ClCompile Include="vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
@@ -113,7 +120,11 @@
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
+    <ClInclude Include="src\Rendering\BufferElement.h" />
+    <ClInclude Include="src\Rendering\BufferLayout.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
+    <ClInclude Include="src\Rendering\FrameBuffer.h" />
+    <ClInclude Include="src\Rendering\IndexBuffer.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />
@@ -121,8 +132,12 @@
     <ClInclude Include="src\Rendering\Renderer2D.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
+    <ClInclude Include="src\Rendering\Vertex.h" />
+    <ClInclude Include="src\Rendering\VertexArray.h" />
+    <ClInclude Include="src\Rendering\VertexBuffer.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
+    <ClInclude Include="vendor\glad\glad.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\exponential.hpp" />
     <ClInclude Include="vendor\glm\ext.hpp" />

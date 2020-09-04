@@ -30,6 +30,7 @@ void Fracture::ComponentManager::RemoveComponent(std::shared_ptr<Component> comp
 {
 	component->onDettach();
 	std::vector<std::shared_ptr<Component>>::iterator new_end;
-	new_end = remove(m_Components.begin(), m_Components.begin(),component);	
+	new_end = std::remove(m_Components.begin(), m_Components.begin(),component);
+
 }
 
