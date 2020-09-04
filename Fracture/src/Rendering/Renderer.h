@@ -15,13 +15,14 @@ namespace Fracture
 
 		void BeginFrame();
 		/*
-		--Run Render passes.
-		--Effect passes
-		--skybox passes
-		--light passes
-		--Shadow passes
+		--Run Render passes:
+		--skybox pass
+		--light pass
+		--Shadow pass
 		--Opaque Pass
+		--Decal pass
 		--Transparency Pass	
+		--Effect pass
 		*/
 		void EndFrame();
 

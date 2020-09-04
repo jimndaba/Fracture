@@ -13,6 +13,12 @@ namespace Fracture
 	{
 
 	public:
+		GameLogic() {};
+		~GameLogic() {};
+
+		virtual void onStart() = 0 ;
+		virtual void onUpdate() = 0;
+		virtual void onLateUpdate() = 0;
 
 		template<class T>
 		std::shared_ptr<T> GetComponent(int entityID);
