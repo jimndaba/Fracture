@@ -33,9 +33,9 @@ namespace Fracture
 	{
 		for (const auto& component_pair : m_Components)
 		{
-			if (static_cast<std::shared_ptr<T>>(component_pair) != nullptr && component_pair->entityID == entitytId)
+			if (std::static_pointer_cast<T>(component_pair) != nullptr && component_pair->entityID == entitytId)
 			{
-				return static_cast<std::shared_ptr<T>>(component_pair);
+				return std::static_pointer_cast<T>(component_pair);			
 			}
 		}
 	}

@@ -22,11 +22,13 @@ void Fracture::ComponentManager::onUpdate()
 
 void Fracture::ComponentManager::AddComponent(std::shared_ptr<Component> component)
 {
+	component->onAttach();
 	m_Components.push_back(component);
 }
 
 void Fracture::ComponentManager::RemoveComponent(std::shared_ptr<Component> component)
 {
+	component->onDettach();
 	std::vector<std::shared_ptr<Component>>::iterator new_end;
 	new_end = remove(m_Components.begin(), m_Components.begin(),component);	
 }

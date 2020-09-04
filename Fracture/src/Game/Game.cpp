@@ -37,14 +37,13 @@ void Fracture::Game::run()
 
 void Fracture::Game::init()
 {
-
+	m_Renderer->clearColor(0.2f, 0.5f, 0.6f);
 	test = new Scene();
 }
 
 void Fracture::Game::loadContent()
 {
-	std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(1);
-
+	
 }
 
 void Fracture::Game::update()
@@ -54,11 +53,12 @@ void Fracture::Game::update()
 void Fracture::Game::render()
 {
 	m_Renderer->clear();
-	m_Renderer->clearColor(0.2f, 0.5f, 0.6f);
+	
 }
 
 void Fracture::Game::unloadContent()
 {
+
 	delete test;
 }
 

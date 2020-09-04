@@ -2,6 +2,7 @@
 
 Fracture::TransformComponent::TransformComponent(int entityID):Component(entityID,ComponentType::Transform)
 {
+	Position = glm::vec3(15.0f,7.0f,2.0f);
 }
 
 Fracture::TransformComponent::~TransformComponent()
