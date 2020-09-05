@@ -9,12 +9,23 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 
+std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
+std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::m_Textures;
+std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
+std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
+std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
+
 Fracture::AssetManager::AssetManager()
 {
 }
 
 Fracture::AssetManager::~AssetManager()
 {
+	m_Materials.clear();
+	m_meshes.clear();
+	m_Shaders.clear();
+	m_Models.clear();
+	m_Textures.clear();
 }
 
 void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std::string fragment)
@@ -49,6 +60,16 @@ void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
 {
+}
+
+std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string name)
+{
+	return m_Shaders[name];
+}
+
+std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(std::string name)
+{
+	return m_Models[name];
 }
 
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string path)
@@ -136,31 +157,31 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			vertex.uvs = glm::vec2(0.0f, 0.0f);
 
 		vertices.push_back(vertex);
-
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			aiFace face = mesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
-				indices.push_back(face.mIndices[j]);
-		}
-		// process materials
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		// process material
-		// 1. diffuse maps
-		std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, "texture_diffuse");
-		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		// 2. specular maps
-		std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, "texture_specular");
-		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		// 3. normal maps
-		std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model,material, aiTextureType_HEIGHT, "texture_normal");
-		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		// 4. height maps
-		std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, "texture_height");
-		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
-		// return a mesh object created from the extracted mesh data
 	}
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(face.mIndices[j]);
+	}
+	// process materials
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	// process material
+	// 1. diffuse maps
+	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, "texture_diffuse");
+	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+	// 2. specular maps
+	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, "texture_specular");
+	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+	// 3. normal maps
+	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model,material, aiTextureType_HEIGHT, "texture_normal");
+	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+	// 4. height maps
+	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, "texture_height");
+	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+	// return a mesh object created from the extracted mesh data
+	
 	return std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 }
 

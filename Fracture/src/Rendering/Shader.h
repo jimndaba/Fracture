@@ -34,6 +34,8 @@ namespace Fracture {
 		std::string vertexPath;
 		std::string fragPath;
 
+		unsigned int ID();
+
 	private:
 		unsigned int m_vertex;
 		unsigned int m_fragment;

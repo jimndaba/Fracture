@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
+    <ClCompile Include="src\Component\RenderComponent.cpp" />
     <ClCompile Include="src\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
@@ -105,8 +106,10 @@
     <ClCompile Include="src\Rendering\BufferLayout.cpp" />
     <ClCompile Include="src\Rendering\FrameBuffer.cpp" />
     <ClCompile Include="src\Rendering\IndexBuffer.cpp" />
+    <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
+    <ClCompile Include="src\Rendering\RenderBucket.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
@@ -119,6 +122,7 @@
     <ClInclude Include="src\AssetManager\AssetManager.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
+    <ClInclude Include="src\Component\RenderComponent.h" />
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Game\Game.h" />
@@ -132,6 +136,8 @@
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />
+    <ClInclude Include="src\Rendering\RenderBucket.h" />
+    <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Rendering\Renderer2D.h" />
     <ClInclude Include="src\Rendering\Shader.h" />

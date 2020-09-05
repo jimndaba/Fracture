@@ -30,6 +30,9 @@ namespace Fracture
 		AssetManager();
 		~AssetManager();
 
+		static std::shared_ptr<Shader> getShader(std::string name);
+		static std::shared_ptr<Model> getModel(std::string name);
+
 		std::shared_ptr<Model> loadModel(std::string path);
 		std::shared_ptr<Texture> loadTexture(std::string path);
 		
@@ -44,11 +47,11 @@ namespace Fracture
 		Assimp::Importer importer;
 
 		//Libraries
-		std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
-		std::map<std::string, std::shared_ptr<Texture>> m_Textures;
-		std::map<std::string, std::shared_ptr<Model>> m_Models;
-		std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
-		std::map<std::string, std::shared_ptr<Material>> m_Materials;
+		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
+		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
+		static std::map<std::string, std::shared_ptr<Model>> m_Models;
+		static std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
+		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
 
 
 		std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene);

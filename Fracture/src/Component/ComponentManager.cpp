@@ -10,6 +10,7 @@ Fracture::ComponentManager::ComponentManager()
 
 Fracture::ComponentManager::~ComponentManager()
 {
+	m_Components.clear();
 }
 
 void Fracture::ComponentManager::onUpdate()

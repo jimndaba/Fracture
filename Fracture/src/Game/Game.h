@@ -10,6 +10,8 @@ namespace Fracture
 	class GameWindow;
 	class Renderer;
 	class ComponentManager;
+	class AssetManager;
+
 
 	class Game
 	{
@@ -32,9 +34,10 @@ namespace Fracture
 
 	private:
 		bool m_isRunning = true;
-		std::shared_ptr<GameWindow> m_GameWindow;
+		std::unique_ptr<GameWindow> m_GameWindow;
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
+		std::unique_ptr<AssetManager> m_AssetManager;
 	};
 
 }

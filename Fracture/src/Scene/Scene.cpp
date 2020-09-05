@@ -2,6 +2,8 @@
 #include "Entity/Entity.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Component/RenderComponent.h"
+
 
 Fracture::Scene::Scene()
 {

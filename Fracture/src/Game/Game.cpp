@@ -1,19 +1,24 @@
 #include "Game.h"
 #include "GameWindow.h"
 #include "Rendering/Renderer.h"
-
+#include "AssetManager/AssetManager.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Component/RenderComponent.h"
+#include "Entity/Entity.h"
 #include "Scene/Scene.h"
 
 
-Fracture::Scene* test;
+std::shared_ptr<Fracture::Scene> test;
+
+
 
 Fracture::Game::Game()
 {
-	m_GameWindow = std::shared_ptr<GameWindow>(new GameWindow());
+	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow());
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+	m_AssetManager = std::unique_ptr<AssetManager>(new AssetManager());
 }
 
 Fracture::Game::~Game()
@@ -38,12 +43,19 @@ void Fracture::Game::run()
 void Fracture::Game::init()
 {
 	m_Renderer->clearColor(0.2f, 0.5f, 0.6f);
-	test = new Scene();
+	test = std::shared_ptr<Scene>(new Scene());
 }
 
 void Fracture::Game::loadContent()
 {
+	m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
 	
+	std::shared_ptr<Entity> monkey = std::shared_ptr<Entity>(new Entity(2));
+	m_ComponentManager->AddComponent(std::shared_ptr<TransformComponent>(new TransformComponent(2)));
+	m_ComponentManager->AddComponent(std::shared_ptr<RenderComponent>(new RenderComponent(2,"monkey")));
+	test->addEntity(monkey);
+
+
 }
 
 void Fracture::Game::update()
@@ -52,18 +64,20 @@ void Fracture::Game::update()
 
 void Fracture::Game::render()
 {
-	m_Renderer->clear();
-	
+	m_Renderer->BeginFrame(test);
+	m_Renderer->RenderPasses();
+	m_Renderer->EndFrame();
 }
 
 void Fracture::Game::unloadContent()
 {
 
-	delete test;
+
 }
 
 void Fracture::Game::shutdown()
 {
+
 }
 
 void Fracture::Game::onQuit()

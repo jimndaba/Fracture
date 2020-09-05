@@ -8,6 +8,7 @@ namespace Fracture
 	{
 		None,
 		Transform,
+		Render,
 		Mesh,
 		Physics,
 		Script,
