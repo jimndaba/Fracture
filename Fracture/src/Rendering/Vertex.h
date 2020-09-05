@@ -7,8 +7,9 @@
 namespace Fracture
 {
 
-	struct Vertex
+	class Vertex
 	{
+	public:
 		glm::vec3 position;
 		glm::vec2 normal;
 		glm::vec2 uvs;

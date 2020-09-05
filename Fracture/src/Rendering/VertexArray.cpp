@@ -6,6 +6,7 @@
 Fracture::VertexArray::VertexArray()
 {
 	glGenVertexArrays(1, &m_Id);
+	bind();
 }
 
 Fracture::VertexArray::~VertexArray()

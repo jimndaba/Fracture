@@ -30,6 +30,10 @@ namespace Fracture {
 		void setMat3(const std::string& name, glm::mat3& value) const;
 		void setMat4(const std::string& name, glm::mat4& value) const;
 
+		std::string Name;
+		std::string vertexPath;
+		std::string fragPath;
+
 	private:
 		unsigned int m_vertex;
 		unsigned int m_fragment;

@@ -8,13 +8,14 @@
 
 namespace Fracture
 {
-
+	class Vertex;
 	class VertexBuffer
 	{
 
 	public:
 		VertexBuffer(unsigned int size);
 		VertexBuffer(float* vertices, unsigned int size);
+		VertexBuffer(std::vector<Vertex> vertices, unsigned int size);
 		~VertexBuffer();
 
 		void bind();

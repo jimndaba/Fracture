@@ -1,4 +1,5 @@
 #include "VertexBuffer.h"
+#include "Vertex.h"
 #include "GLAD/glad.h"
 
 Fracture::VertexBuffer::VertexBuffer(unsigned int size)
@@ -13,6 +14,13 @@ Fracture::VertexBuffer::VertexBuffer(float* vertices, unsigned int size)
 	glGenBuffers(1, &m_id);
 	glBindBuffer(GL_ARRAY_BUFFER, m_id);
 	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+}
+
+Fracture::VertexBuffer::VertexBuffer(std::vector<Vertex> vertices, unsigned int size)
+{
+	glGenBuffers(1, &m_id);
+	glBindBuffer(GL_ARRAY_BUFFER, m_id);
+	glBufferData(GL_ARRAY_BUFFER, size, &vertices[0], GL_STATIC_DRAW);
 }
 
 Fracture::VertexBuffer::~VertexBuffer()

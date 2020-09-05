@@ -2,6 +2,8 @@
 #ifndef INDEXBUFFER_H
 #define INDEXBUFFER_H
 
+#include <vector>
+
 namespace Fracture
 {
 
@@ -10,6 +12,7 @@ namespace Fracture
 
 	public:
 		IndexBuffer(unsigned int* indicies, unsigned int count);
+		IndexBuffer(std::vector<unsigned int> indicies, unsigned int count);
 		~IndexBuffer();
 
 		void bind();

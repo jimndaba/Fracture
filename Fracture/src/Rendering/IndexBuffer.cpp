@@ -8,6 +8,13 @@ Fracture::IndexBuffer::IndexBuffer(unsigned int* indicies, unsigned int count)
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
 }
 
+Fracture::IndexBuffer::IndexBuffer(std::vector<unsigned int> indices, unsigned int count)
+{
+	glGenBuffers(1, &m_Id);
+	glBindBuffer(GL_ARRAY_BUFFER, m_Id);
+	glBufferData(GL_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+}
+
 Fracture::IndexBuffer::~IndexBuffer()
 {
 	glDeleteBuffers(1, &m_Id);
