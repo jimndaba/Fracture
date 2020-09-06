@@ -19,7 +19,7 @@ namespace Fracture
 	class Component
 	{
 	public:
-		Component(int id,ComponentType mtype):entityID(id)
+		Component(int id,ComponentType mtype):entityID(id),componentType(mtype)
 		{
 		};
 		~Component() {};

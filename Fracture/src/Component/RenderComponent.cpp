@@ -3,7 +3,7 @@
 #include "Rendering/Material.h"
 #include "AssetManager/AssetManager.h"
 
-Fracture::RenderComponent::RenderComponent(int entityID,std::string model,std::string material):Component(entityID,ComponentType::Render),m_modelName(model),m_materialName(material)
+Fracture::RenderComponent::RenderComponent(int entityID,std::string model,std::string material):Component(entityID,ComponentType::Mesh),m_modelName(model),m_materialName(material)
 {
 }
 

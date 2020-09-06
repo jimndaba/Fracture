@@ -6,10 +6,11 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <type_traits>
+#include "Component.h"
 
 namespace Fracture
 {
-	class Component;
 
 	class ComponentManager
 	{
@@ -23,22 +24,24 @@ namespace Fracture
 		static void RemoveComponent(std::shared_ptr<Component> component);
 
 		template <class T>
-		static std::shared_ptr<T>	GetComponent(int enitytId);
+		static std::shared_ptr<T>	GetComponent(int enitytId, ComponentType compType);
 
 	private:
 		static std::vector<std::shared_ptr<Component>> m_Components;
 	};
 
 	template<class T>
-	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId)
+	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId,ComponentType compType)
 	{
+		
 		for (const auto& component_pair : m_Components)
 		{
-			if (std::static_pointer_cast<T>(component_pair) != nullptr && component_pair->entityID == entitytId)
+			if (component_pair != nullptr && component_pair->entityID == entitytId && component_pair->componentType == compType)
 			{
-				return std::static_pointer_cast<T>(component_pair);			
+				return std::dynamic_pointer_cast<T>(component_pair);
 			}
 		}
+		return nullptr;
 	}
 
 

@@ -16,7 +16,7 @@ namespace Fracture
 		Scene();
 		~Scene();
 
-		std::shared_ptr<Entity> Root;
+		std::shared_ptr<Entity> Root();
 
 		void addEntity(std::shared_ptr<Entity> entity);
 		void removeEntity(std::shared_ptr<Entity> entity);

@@ -16,6 +16,11 @@ Fracture::Scene::~Scene()
 {
 }
 
+std::shared_ptr<Fracture::Entity> Fracture::Scene::Root()
+{
+	return m_root;
+}
+
 void Fracture::Scene::addEntity(std::shared_ptr<Entity> entity)
 {
 	m_root->addChild(entity);

@@ -115,14 +115,15 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
         return;
     }
 
-    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
-    std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
+    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id,ComponentType::Mesh);
+    std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id,ComponentType::Transform);
 
     if (render)
     {
         for (auto mesh : render->model->GetMeshes())
         {
             RenderCommand command;
+            command.material = render->material;
             command.mesh = mesh;
             command.transform = transform;
             PushCommand(command);
@@ -144,6 +145,6 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
-    RenderEntity(scene->Root);
+    RenderEntity(scene->Root());
 }
 
