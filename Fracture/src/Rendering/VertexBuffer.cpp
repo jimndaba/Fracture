@@ -2,6 +2,8 @@
 #include "Vertex.h"
 #include "GLAD/glad.h"
 
+
+
 Fracture::VertexBuffer::VertexBuffer(unsigned int size)
 {
 	glGenBuffers(1, &m_id);
@@ -49,7 +51,7 @@ std::shared_ptr<Fracture::VertexBuffer> Fracture::VertexBuffer::create(unsigned 
 	return std::shared_ptr<VertexBuffer>(new VertexBuffer(size));
 }
 
-std::shared_ptr<Fracture::VertexBuffer> Fracture::VertexBuffer::create(float* vertices, unsigned int size)
+std::shared_ptr<Fracture::VertexBuffer> Fracture::VertexBuffer::create(std::vector<Vertex> vertices, unsigned int size)
 {
 	return std::shared_ptr<VertexBuffer>(new VertexBuffer(vertices,size));
 }

@@ -5,6 +5,9 @@
 #include <GLAD/glad.h>
 #include <memory>
 #include <vector>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Fracture
 {
@@ -12,6 +15,7 @@ namespace Fracture
 	class RenderCommand;
 	class Entity;
 	class Scene;
+	class Camera;
 
 	class Renderer
 	{
@@ -48,7 +52,7 @@ namespace Fracture
 		void RenderScene(std::shared_ptr<Scene> scene);
 
 	private:
-
+		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
 	};

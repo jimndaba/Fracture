@@ -2,6 +2,7 @@
 #include "RenderCommand.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
+#include "Mesh.h"
 #include "Shader.h"
 
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b);
@@ -19,10 +20,10 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 	m_commands.push_back(command);
 }
 
-void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::RenderComponent> render, std::shared_ptr<Fracture::TransformComponent> transform)
+void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::TransformComponent> transform)
 {
 	RenderCommand command;
-	command.render = render;
+	command.mesh = mesh;
 	command.transform = transform;
 	m_commands.push_back(command);
 }

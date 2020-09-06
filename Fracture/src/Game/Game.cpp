@@ -49,10 +49,12 @@ void Fracture::Game::init()
 void Fracture::Game::loadContent()
 {
 	m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
+	m_AssetManager->AddShader("default","bin/content/shaders/model/vertex.glsl","bin/content/shaders/model/fragment.glsl");
+	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
 	
 	std::shared_ptr<Entity> monkey = std::shared_ptr<Entity>(new Entity(2));
 	m_ComponentManager->AddComponent(std::shared_ptr<TransformComponent>(new TransformComponent(2)));
-	m_ComponentManager->AddComponent(std::shared_ptr<RenderComponent>(new RenderComponent(2,"monkey")));
+	m_ComponentManager->AddComponent(std::shared_ptr<RenderComponent>(new RenderComponent(2,"monkey","default")));
 	test->addEntity(monkey);
 
 

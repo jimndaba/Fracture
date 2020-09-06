@@ -5,10 +5,15 @@ Fracture::BufferLayout::BufferLayout()
 {
 }
 
-Fracture::BufferLayout::BufferLayout(std::initializer_list<BufferElement>& elements):
+Fracture::BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements):
 	m_Elements(elements)
 {
 	CalculateOffsetsAndStride();
+}
+
+void Fracture::BufferLayout::addElement(BufferElement element)
+{
+	m_Elements.push_back(element);
 }
 
 void Fracture::BufferLayout::CalculateOffsetsAndStride()

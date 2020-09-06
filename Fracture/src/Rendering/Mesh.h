@@ -22,6 +22,9 @@ namespace Fracture
 		~Mesh();
 
 		std::string director;
+		std::shared_ptr<VertexArray> vao;
+		std::shared_ptr<VertexBuffer> vbo;
+		std::shared_ptr<IndexBuffer> ibo;
 	private:
 		void setupMesh();
 
@@ -29,9 +32,6 @@ namespace Fracture
 		std::vector<std::shared_ptr<Texture>> m_textures;
 		std::vector<unsigned int> m_indices;
 
-		std::shared_ptr<VertexArray> vao;
-		std::shared_ptr<VertexBuffer> vbo;
-		std::shared_ptr<IndexBuffer> ibo;
 	};
 
 }

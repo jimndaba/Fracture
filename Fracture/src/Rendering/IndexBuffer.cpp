@@ -30,6 +30,11 @@ void Fracture::IndexBuffer::unbind()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+std::shared_ptr<Fracture::IndexBuffer> Fracture::IndexBuffer::create(std::vector<unsigned int> indicies, unsigned int count)
+{
+	return std::shared_ptr<IndexBuffer>(new IndexBuffer(indicies,count));
+}
+
 unsigned int Fracture::IndexBuffer::GetCount()
 {
 	return m_Count;

@@ -9,20 +9,24 @@
 namespace Fracture
 {
 	class Model;
+	class Material;
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(int entityID, std::string model);
+		RenderComponent(int entityID, std::string model,std::string material);
 		~RenderComponent();
 
 		virtual void onAttach();
 		virtual void onDettach();
 
-		std::shared_ptr<Model> GetModel();
+		std::shared_ptr<Model> model;
+		std::shared_ptr<Material> material;
 
 	private:
 		std::string m_modelName;
-		std::shared_ptr<Model> m_model;
+		std::string m_materialName;
+		
+
 	};
 
 }

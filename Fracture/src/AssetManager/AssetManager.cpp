@@ -60,6 +60,8 @@ void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
 {
+	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(shader));
+	m_Materials.emplace(name, material);
 }
 
 std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string name)
@@ -70,6 +72,11 @@ std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string 
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(std::string name)
 {
 	return m_Models[name];
+}
+
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::getMaterial(std::string name)
+{
+	return m_Materials[name];
 }
 
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string path)

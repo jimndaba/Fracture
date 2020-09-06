@@ -2,13 +2,16 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
+#include "BufferLayout.h"
 #include <glm/glm.hpp>
 #include <memory>
-#include "BufferLayout.h"
+
 
 namespace Fracture
 {
 	class Vertex;
+
+
 	class VertexBuffer
 	{
 
@@ -23,11 +26,11 @@ namespace Fracture
 
 		const BufferLayout& GetLayout(){ return m_bufferlayout; }
 
-		void SetLayout(const BufferLayout& layout){ m_bufferlayout = layout; }
+		void SetLayout(BufferLayout layout){ m_bufferlayout = layout; }
 
 		void setData(const void* data, unsigned int size);
 		static std::shared_ptr<VertexBuffer> create(unsigned int size);
-		static std::shared_ptr<VertexBuffer> create(float* vertices, unsigned int size);
+		static std::shared_ptr<VertexBuffer> create(std::vector<Vertex> vertices, unsigned int size);
 
 	private:
 		BufferLayout m_bufferlayout;

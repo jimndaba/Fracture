@@ -112,32 +112,32 @@ void Fracture::Shader::setFloat(const std::string& name, float value) const
     glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
 }
 
-void Fracture::Shader::setVec2(const std::string& name, glm::vec2& value) const
+void Fracture::Shader::setVec2(const std::string& name, glm::vec2 value) const
 {
     glUniform2fv(glGetUniformLocation(m_program, name.c_str()),1,&value[0]);
 }
 
-void Fracture::Shader::setVec3(const std::string& name, glm::vec3& value) const
+void Fracture::Shader::setVec3(const std::string& name, glm::vec3 value) const
 {
     glUniform3fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
 }
 
-void Fracture::Shader::setVec4(const std::string& name, glm::vec4& value) const
+void Fracture::Shader::setVec4(const std::string& name, glm::vec4 value) const
 {
     glUniform4fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
 }
 
-void Fracture::Shader::setMat2(const std::string& name, glm::mat2& value) const
+void Fracture::Shader::setMat2(const std::string& name, glm::mat2 value) const
 {
     glUniformMatrix2fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, &value[0][0]);
 }
 
-void Fracture::Shader::setMat3(const std::string& name, glm::mat3& value) const
+void Fracture::Shader::setMat3(const std::string& name, glm::mat3 value) const
 {
     glUniformMatrix3fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, &value[0][0]);
 }
 
-void Fracture::Shader::setMat4(const std::string& name, glm::mat4& value) const
+void Fracture::Shader::setMat4(const std::string& name, glm::mat4 value) const
 {
     glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, &value[0][0]);
 }

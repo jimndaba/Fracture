@@ -32,6 +32,7 @@ namespace Fracture
 
 		static std::shared_ptr<Shader> getShader(std::string name);
 		static std::shared_ptr<Model> getModel(std::string name);
+		static std::shared_ptr<Material> getMaterial(std::string name);
 
 		std::shared_ptr<Model> loadModel(std::string path);
 		std::shared_ptr<Texture> loadTexture(std::string path);

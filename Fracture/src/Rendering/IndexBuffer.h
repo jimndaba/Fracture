@@ -3,6 +3,7 @@
 #define INDEXBUFFER_H
 
 #include <vector>
+#include <memory>
 
 namespace Fracture
 {
@@ -17,6 +18,8 @@ namespace Fracture
 
 		void bind();
 		void unbind();
+
+		static std::shared_ptr<IndexBuffer> create(std::vector<unsigned int> indicies, unsigned int count);
 
 		unsigned int GetCount();
 

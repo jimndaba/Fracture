@@ -21,6 +21,9 @@ namespace Fracture
 
 		std::string Name;
 		std::string directory;
+
+		std::vector<std::shared_ptr<Mesh>> GetMeshes();
+
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 

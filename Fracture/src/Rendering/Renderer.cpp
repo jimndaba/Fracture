@@ -1,11 +1,18 @@
 #include "Renderer.h"
 #include "RenderCommand.h"
 #include "RenderBucket.h"
+#include "Model.h"
+#include "Mesh.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/ComponentManager.h"
 #include "Entity/Entity.h"
 #include "Scene/Scene.h"
+#include "Camera.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -25,6 +32,7 @@ void _check_gl_error(const char* file, int line);
 Fracture::Renderer::Renderer()
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    m_camera = std::shared_ptr<Camera>(new Camera());
 }
 
 Fracture::Renderer::~Renderer()
@@ -48,6 +56,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 
 void Fracture::Renderer::RenderPasses()
 {
+    // for each render pass ->DrawScene();
 }
 
 void Fracture::Renderer::EndFrame()
@@ -58,7 +67,25 @@ void Fracture::Renderer::EndFrame()
 
 void Fracture::Renderer::flush()
 {
-	//flush to GPU
+    for (auto command : m_opaqueBucket->getCommands())
+    {
+        std::shared_ptr<Material> material = command.material;
+        std::shared_ptr<Mesh> mesh = command.mesh;
+        std::shared_ptr<TransformComponent> transform = command.transform;
+
+        material->getShader()->use();
+        glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
+        material->getShader()->setMat4("projection", projection);
+        material->getShader()->setMat4("view", m_camera->getViewMatrix());
+        material->getShader()->setMat4("model",transform->GetLocalTranform());
+
+        mesh->vao->bind();
+        glDrawElements(GL_TRIANGLES, mesh->ibo->GetCount(), GL_UNSIGNED_INT, 0);
+        mesh->vao->unbind();
+
+        material->getShader()->unbind();
+
+    }
 }
 
 void Fracture::Renderer::clear()
@@ -93,10 +120,13 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 
     if (render)
     {
-        RenderCommand command; 
-        command.render = render;
-        command.transform = transform;
-        PushCommand(command);
+        for (auto mesh : render->model->GetMeshes())
+        {
+            RenderCommand command;
+            command.mesh = mesh;
+            command.transform = transform;
+            PushCommand(command);
+        }   
 
         for (int i = 0; i < entity->Children().size(); i++)
         {
