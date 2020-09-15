@@ -2,6 +2,7 @@
 #include "VertexBuffer.h"
 #include "BufferElement.h"
 #include "IndexBuffer.h"
+#include "Vertex.h"
 #include <GLAD/glad.h>
 #include <iostream>
 
@@ -29,7 +30,6 @@ static GLenum ShaderDataTypeToOpenGLBaseType(Fracture::ShaderDataType type)
 Fracture::VertexArray::VertexArray()
 {
 	glGenVertexArrays(1, &m_Id);
-	bind();
 }
 
 Fracture::VertexArray::~VertexArray()
@@ -40,11 +40,13 @@ Fracture::VertexArray::~VertexArray()
 void Fracture::VertexArray::bind()
 {
 	glBindVertexArray(m_Id);
+	std::cout << "VertexArray Bound" << std::endl;
 }
 
 void Fracture::VertexArray::unbind()
 {
 	glBindVertexArray(0);
+	std::cout << "VertexArray Unbound" << std::endl;
 }
 
 std::shared_ptr<Fracture::VertexArray> Fracture::VertexArray::create()
@@ -54,8 +56,8 @@ std::shared_ptr<Fracture::VertexArray> Fracture::VertexArray::create()
 
 void Fracture::VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> buffer)
 {
-	bind();
-	buffer->bind();
+	//bind();
+	//buffer->bind();
 	auto layout = buffer->GetLayout();
 	for (auto element : layout)
 	{
@@ -72,12 +74,14 @@ void Fracture::VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> buffer
 		case ShaderDataType::Bool:
 		{
 			glEnableVertexAttribArray(m_Id);
-			glVertexAttribPointer(m_Id,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset);
+			//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+			GLenum _type = ShaderDataTypeToOpenGLBaseType(element.Type);
+			GLenum _ctype = GL_FLOAT;
+			GLsizeiptr _stride = layout.GetStride();
+			GLint _count = element.GetComponentCount();
+			GLsizeiptr _mstride = sizeof(Vertex);
+			glVertexAttribPointer(m_Id, _count, GL_FLOAT ,
+				element.Normalized ? GL_TRUE : GL_FALSE, sizeof(Vertex),(const void*)element.Offset);
 			m_Id++;
 			break;
 		}
@@ -92,7 +96,7 @@ void Fracture::VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> buffer
 					count,
 					ShaderDataTypeToOpenGLBaseType(element.Type),
 					element.Normalized ? GL_TRUE : GL_FALSE,
-					layout.GetStride(),
+					sizeof(Vertex),
 					(const void*)(element.Offset + sizeof(float) * count * i));
 				glVertexAttribDivisor(m_Id, 1);
 				m_Id++;
@@ -104,6 +108,7 @@ void Fracture::VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> buffer
 		}
 	}
 	m_vertexBuffers.push_back(buffer);
+
 }
 
 void Fracture::VertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer> index)

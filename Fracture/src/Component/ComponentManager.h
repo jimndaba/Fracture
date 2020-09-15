@@ -4,14 +4,18 @@
 
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 #include <algorithm>
 #include <type_traits>
+#include <functional>
+#include <typeinfo>
+#include <typeindex>
 #include "Component.h"
 
 namespace Fracture
 {
-
+	
 	class ComponentManager
 	{
 	public:
@@ -20,29 +24,48 @@ namespace Fracture
 
 		void onUpdate();
 
-		static void AddComponent(std::shared_ptr<Component> component);
-		static void RemoveComponent(std::shared_ptr<Component> component);
+		
+		template< class T, typename... Args >
+		static void AddComponent(int entity, Args&&... params);
 
 		template <class T>
-		static std::shared_ptr<T>	GetComponent(int enitytId, ComponentType compType);
-
+		static std::shared_ptr<T>GetComponent(int enitytId);
+			
+	
+		/*
+		template< class ComponentType, typename... Args >
+		void GameObject::AddComponent(Args&&... params) {
+			components.emplace_back(std::make_unique< ComponentType >(std::forward< Args >(params)...))
+		*/
 	private:
 		static std::vector<std::shared_ptr<Component>> m_Components;
+		//static std::unordered_map<int,std::shared_ptr<Component>> m_Components;
 	};
 
+	template<class T, typename ...Args>
+	inline void ComponentManager::AddComponent(int entity, Args && ...params)
+	{		
+		m_Components.push_back(std::make_shared<T>(entity,params...));
+	}
+
 	template<class T>
-	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId,ComponentType compType)
+	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId)
 	{
-		
-		for (const auto& component_pair : m_Components)
-		{
-			if (component_pair != nullptr && component_pair->entityID == entitytId && component_pair->componentType == compType)
+		for (const auto& component : m_Components)
+		{			
+			if (check)
 			{
-				return std::dynamic_pointer_cast<T>(component_pair);
-			}
+				if (component != nullptr && component->entityID == entitytId)
+				{									
+					return std::dynamic_pointer_cast<T>(component);
+				}
+			}						
 		}
 		return nullptr;
 	}
+
+	template <class T, class... Ts>
+	struct are_same : std::conjunction<std::is_same<T, Ts>...> {};
 
 
 }

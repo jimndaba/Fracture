@@ -23,7 +23,7 @@ namespace Fracture
 		Renderer();
 		~Renderer();
 
-
+		void update();
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 

@@ -5,6 +5,11 @@ Fracture::TransformComponent::TransformComponent(int entityID):Component(entityI
 	Position = glm::vec3(15.0f,7.0f,2.0f);
 }
 
+Fracture::TransformComponent::TransformComponent(int entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform)
+{
+	Position = pos;
+}
+
 Fracture::TransformComponent::~TransformComponent()
 {
 }

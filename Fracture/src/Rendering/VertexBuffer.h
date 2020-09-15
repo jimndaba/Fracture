@@ -24,16 +24,16 @@ namespace Fracture
 		void bind();
 		void unbind();
 
-		const BufferLayout& GetLayout(){ return m_bufferlayout; }
+		const BufferLayout& GetLayout(){ return *m_bufferlayout; }
 
-		void SetLayout(BufferLayout layout){ m_bufferlayout = layout; }
+		void SetLayout(BufferLayout* layout){ m_bufferlayout = layout; }
 
 		void setData(const void* data, unsigned int size);
 		static std::shared_ptr<VertexBuffer> create(unsigned int size);
 		static std::shared_ptr<VertexBuffer> create(std::vector<Vertex> vertices, unsigned int size);
 
 	private:
-		BufferLayout m_bufferlayout;
+		BufferLayout* m_bufferlayout;
 		unsigned int m_id;
 	};
 

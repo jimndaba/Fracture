@@ -53,8 +53,8 @@ void Fracture::Game::loadContent()
 	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
 	
 	std::shared_ptr<Entity> monkey = std::shared_ptr<Entity>(new Entity(2));
-	m_ComponentManager->AddComponent(std::shared_ptr<TransformComponent>(new TransformComponent(2)));
-	m_ComponentManager->AddComponent(std::shared_ptr<RenderComponent>(new RenderComponent(2,"monkey","default")));
+	ComponentManager::AddComponent<TransformComponent>(monkey->Id, glm::vec3(0.0f, 0.0f, 0.0f));
+	ComponentManager::AddComponent<RenderComponent>(monkey->Id, "monkey", "default");
 	test->addEntity(monkey);
 
 
@@ -62,6 +62,7 @@ void Fracture::Game::loadContent()
 
 void Fracture::Game::update()
 {
+	m_ComponentManager->onUpdate();
 }
 
 void Fracture::Game::render()

@@ -16,6 +16,7 @@ namespace Fracture
 	{
 	public:
 		TransformComponent(int entityID);
+		TransformComponent(int entityID, glm::vec3 pos);
 		~TransformComponent();
 
 		virtual void onAttach();

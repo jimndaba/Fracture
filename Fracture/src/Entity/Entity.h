@@ -22,12 +22,13 @@ namespace Fracture
 		void setParent(std::shared_ptr<Entity> parent);
 
 		std::vector<std::shared_ptr<Entity>> Children();
-		std::shared_ptr<Entity> Parent = nullptr;
-
+		std::shared_ptr<Entity> Parent = nullptr;		
 	private:
 		std::vector<std::shared_ptr<Entity>> m_children;
 
 	};
+
+	
 
 }
 

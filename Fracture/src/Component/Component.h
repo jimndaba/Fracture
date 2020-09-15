@@ -28,6 +28,9 @@ namespace Fracture
 
 		int entityID;
 		ComponentType componentType = ComponentType::None;
+
+		
 	};
+	
 }
 #endif

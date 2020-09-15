@@ -8,7 +8,7 @@
 Fracture::Scene::Scene()
 {
 	m_root = std::shared_ptr<Entity>(new Entity(1));
-	ComponentManager::AddComponent(std::shared_ptr<TransformComponent>(new TransformComponent(m_root->Id)));
+	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
 
 }
 
