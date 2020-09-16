@@ -34,6 +34,9 @@ namespace Fracture
 		static std::shared_ptr<Model> getModel(std::string name);
 		static std::shared_ptr<Material> getMaterial(std::string name);
 
+		template< class T, typename... Args >
+		static void AddAsset(Args&&... params);
+
 		std::shared_ptr<Model> loadModel(std::string path);
 		std::shared_ptr<Texture> loadTexture(std::string path);
 		
@@ -67,6 +70,21 @@ namespace Fracture
 
 	
 	};
+
+	template<class T, typename ...Args>
+	inline void AssetManager::AddAsset(Args&& ...params)
+	{
+		auto resource = std::make_shared<T>(params...);
+
+		if (resource)
+		{
+			std::cout << "added Model";
+		}
+
+
+
+	}
+
 }
 
 #endif

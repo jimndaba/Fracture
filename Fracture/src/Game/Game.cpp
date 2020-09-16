@@ -5,20 +5,22 @@
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RenderComponent.h"
+#include "Rendering/Model.h"
 #include "Entity/Entity.h"
+#include "Entity/EntityManager.h"
 #include "Scene/Scene.h"
 
 
 std::shared_ptr<Fracture::Scene> test;
 
 
-
 Fracture::Game::Game()
 {
-	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow());
+	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280,720,"FRACTURE"));
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_AssetManager = std::unique_ptr<AssetManager>(new AssetManager());
+	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 }
 
 Fracture::Game::~Game()
@@ -48,11 +50,13 @@ void Fracture::Game::init()
 
 void Fracture::Game::loadContent()
 {
-	m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
+	//m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
 	m_AssetManager->AddShader("default","bin/content/shaders/model/vertex.glsl","bin/content/shaders/model/fragment.glsl");
 	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
-	
-	std::shared_ptr<Entity> monkey = std::shared_ptr<Entity>(new Entity(2));
+
+	AssetManager::AddAsset<Model>("monkey","bin/content/models/monkey.fbx");
+
+	std::shared_ptr<Entity> monkey = EntityManager::CreateEntity();
 	ComponentManager::AddComponent<TransformComponent>(monkey->Id, glm::vec3(0.0f, 0.0f, 0.0f));
 	ComponentManager::AddComponent<RenderComponent>(monkey->Id, "monkey", "default");
 	test->addEntity(monkey);

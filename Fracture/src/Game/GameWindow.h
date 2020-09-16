@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-
+#include <string>
 #include "GLAD/glad.h"
 
 namespace Fracture
@@ -14,11 +14,15 @@ namespace Fracture
 	{
 
 	public:
-		GameWindow();
+		GameWindow(int width, int height,std::string title);
 		~GameWindow();
 
 		void pollEvents(Game& game);
 		void swapBuffers();
+
+		int Width;
+		int Height;
+		std::string Title;
 
 	private:
 		SDL_Window* m_window;

@@ -3,11 +3,12 @@
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RenderComponent.h"
+#include "Entity/EntityManager.h"
 
 
 Fracture::Scene::Scene()
 {
-	m_root = std::shared_ptr<Entity>(new Entity(1));
+	m_root = EntityManager::CreateEntity();
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
 
 }

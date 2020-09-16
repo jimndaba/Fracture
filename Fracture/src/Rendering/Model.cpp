@@ -4,6 +4,10 @@ Fracture::Model::Model()
 {
 }
 
+Fracture::Model::Model(std::string name, std::string path):Name(name),Path(path)
+{
+}
+
 Fracture::Model::~Model()
 {
 }

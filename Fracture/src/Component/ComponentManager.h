@@ -23,23 +23,15 @@ namespace Fracture
 		~ComponentManager();
 
 		void onUpdate();
-
-		
+				
 		template< class T, typename... Args >
 		static void AddComponent(int entity, Args&&... params);
 
 		template <class T>
-		static std::shared_ptr<T>GetComponent(int enitytId);
-			
+		static std::shared_ptr<T>GetComponent(int enitytId);			
 	
-		/*
-		template< class ComponentType, typename... Args >
-		void GameObject::AddComponent(Args&&... params) {
-			components.emplace_back(std::make_unique< ComponentType >(std::forward< Args >(params)...))
-		*/
 	private:
 		static std::vector<std::shared_ptr<Component>> m_Components;
-		//static std::unordered_map<int,std::shared_ptr<Component>> m_Components;
 	};
 
 	template<class T, typename ...Args>
@@ -53,19 +45,14 @@ namespace Fracture
 	{
 		for (const auto& component : m_Components)
 		{			
-			if (check)
-			{
 				if (component != nullptr && component->entityID == entitytId)
 				{									
 					return std::dynamic_pointer_cast<T>(component);
 				}
-			}						
+							
 		}
 		return nullptr;
 	}
-
-	template <class T, class... Ts>
-	struct are_same : std::conjunction<std::is_same<T, Ts>...> {};
 
 
 }

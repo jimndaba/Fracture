@@ -289,3 +289,4 @@ unsigned int Fracture::AssetManager::TextureFromFile(const char* path, const std
 
 	return textureID;
 }
+

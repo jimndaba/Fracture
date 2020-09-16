@@ -1,7 +1,8 @@
 #include "GameWindow.h"
 #include "Game/Game.h"
 
-Fracture::GameWindow::GameWindow()
+Fracture::GameWindow::GameWindow(int width, int height, std::string title):
+	Width(width),Height(height),Title(title)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -15,7 +16,7 @@ Fracture::GameWindow::GameWindow()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 
-	m_window = SDL_CreateWindow("Hello World!", 100, 100, 1280, 720, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	m_window = SDL_CreateWindow(Title.c_str(), 100, 100, Width, Height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (m_window == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 		SDL_Quit();

@@ -15,11 +15,13 @@ namespace Fracture
 	{
 	public:
 		Model();
+		Model(std::string name, std::string path);
 		~Model();
 
 		void addMesh(std::shared_ptr<Mesh> mesh);
 
 		std::string Name;
+		std::string Path;
 		std::string directory;
 
 		std::vector<std::shared_ptr<Mesh>> GetMeshes();
