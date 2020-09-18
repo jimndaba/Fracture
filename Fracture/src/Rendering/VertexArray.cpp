@@ -40,13 +40,13 @@ Fracture::VertexArray::~VertexArray()
 void Fracture::VertexArray::bind()
 {
 	glBindVertexArray(m_Id);
-	std::cout << "VertexArray Bound" << std::endl;
+	//std::cout << "VertexArray Bound" << std::endl;
 }
 
 void Fracture::VertexArray::unbind()
 {
 	glBindVertexArray(0);
-	std::cout << "VertexArray Unbound" << std::endl;
+	//std::cout << "VertexArray Unbound" << std::endl;
 }
 
 std::shared_ptr<Fracture::VertexArray> Fracture::VertexArray::create()

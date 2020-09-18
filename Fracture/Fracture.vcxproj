@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\AssetManager\IResource.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />

@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <string>
 
 namespace Fracture
 {
@@ -15,6 +16,7 @@ namespace Fracture
 		~Entity();
 
 		int Id;
+		std::string name;
 
 		void addChild(std::shared_ptr<Entity> child);
 		void removeChild(std::shared_ptr<Entity> child);

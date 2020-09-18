@@ -2,7 +2,7 @@
 #include "GLAD/glad.h"
 #include <iostream>
 
-Fracture::Shader::Shader(std::string vertexPath, std::string fragmentPath)
+Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string fragmentPath):Name(name)
 {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;

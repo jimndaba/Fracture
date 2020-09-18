@@ -1,7 +1,7 @@
 #include "Material.h"
 #include "Shader.h"
 
-Fracture::Material::Material(std::shared_ptr<Shader> shader):m_shader(shader)
+Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):Name(name),m_shader(shader)
 {
 }
 

@@ -229,6 +229,6 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
-    RenderEntity(scene->Root());
+    //RenderEntity(scene->Root());
 }
 

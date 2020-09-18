@@ -1,12 +1,16 @@
 #include "Entity.h"
 
-Fracture::Entity::Entity(int id):Id(id)
+#include <iostream>
 
+Fracture::Entity::Entity(int id):Id(id)
 {
+
 }
 
 Fracture::Entity::~Entity()
 {
+	std::cout << "destroy entity: "<< name << std::endl;
+	Parent = nullptr;	
 }
 
 void Fracture::Entity::addChild(std::shared_ptr<Entity> child)
@@ -17,12 +21,17 @@ void Fracture::Entity::addChild(std::shared_ptr<Entity> child)
 
 void Fracture::Entity::removeChild(std::shared_ptr<Entity> child)
 {
-	std::vector<std::shared_ptr<Entity>>::iterator new_end;
-	new_end = std::remove(m_children.begin(), m_children.begin(), child);
+	//std::vector<Entity>::iterator new_end;
+	//new_end = std::remove(m_children.begin(),m_children.end(), child);
 }
 
 void Fracture::Entity::clearChildren()
 {
+	std::cout << "clear children" << std::endl;	
+	for (int i =0;i <m_children.size();i++)
+	{
+		m_children[i].reset();
+	}
 	m_children.clear();
 }
 

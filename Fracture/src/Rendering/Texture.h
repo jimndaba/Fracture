@@ -20,8 +20,8 @@ namespace Fracture
 	class Texture
 	{
 	public:
-		Texture();
-		Texture(int Width, int Height);
+		Texture(std::string name);
+		Texture(std::string name,int Width, int Height);
 
 		void Bind();
 		void Unbind();

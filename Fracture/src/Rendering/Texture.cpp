@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include "GLAD/glad.h"
 
-Fracture::Texture::Texture()
+Fracture::Texture::Texture(std::string name):Name(name)
 {
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D,id);
@@ -16,7 +16,7 @@ Fracture::Texture::Texture()
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-Fracture::Texture::Texture(int Width, int Height)
+Fracture::Texture::Texture(std::string name,int Width, int Height):Name(name)
 {
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);

@@ -16,7 +16,7 @@ Fracture::ComponentManager::~ComponentManager()
 
 void Fracture::ComponentManager::onUpdate()
 {
-	std::cout << m_Components.size() << std::endl;
+	//std::cout << m_Components.size() << std::endl;
 	//Push physics components to Physics system
 	//push render Components to Render system
 	//push Audio Components to Audio System

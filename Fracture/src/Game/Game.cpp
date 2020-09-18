@@ -19,7 +19,7 @@ Fracture::Game::Game()
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280,720,"FRACTURE"));
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
-	m_AssetManager = std::unique_ptr<AssetManager>(new AssetManager());
+	m_AssetManager = Fracture::AssetManager::instance();
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 }
 
@@ -45,18 +45,17 @@ void Fracture::Game::run()
 void Fracture::Game::init()
 {
 	m_Renderer->clearColor(0.2f, 0.5f, 0.6f);
-	test = std::shared_ptr<Scene>(new Scene());
+	test = std::make_shared<Scene>();
 }
 
 void Fracture::Game::loadContent()
 {
-	//m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
+	m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
 	m_AssetManager->AddShader("default","bin/content/shaders/model/vertex.glsl","bin/content/shaders/model/fragment.glsl");
 	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
 
-	AssetManager::AddAsset<Model>("monkey","bin/content/models/monkey.fbx");
-
-	std::shared_ptr<Entity> monkey = EntityManager::CreateEntity();
+	std::shared_ptr<Fracture::Entity> monkey = EntityManager::Create_Entity_ptr();
+	monkey->name = "monkey";
 	ComponentManager::AddComponent<TransformComponent>(monkey->Id, glm::vec3(0.0f, 0.0f, 0.0f));
 	ComponentManager::AddComponent<RenderComponent>(monkey->Id, "monkey", "default");
 	test->addEntity(monkey);
@@ -78,13 +77,18 @@ void Fracture::Game::render()
 
 void Fracture::Game::unloadContent()
 {
-
-
+	test->clearScene();
+	test.reset();
 }
 
 void Fracture::Game::shutdown()
 {
-
+	
+	m_AssetManager.release();
+	m_Renderer.release();
+	m_ComponentManager.release();
+	m_EntityManager.release();
+	m_GameWindow.release();
 }
 
 void Fracture::Game::onQuit()

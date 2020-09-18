@@ -5,13 +5,14 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include "AssetManager/IResource.h"
 
 namespace Fracture
 {
 	class Mesh;
 
 
-	class Model
+	class Model:public IResource
 	{
 	public:
 		Model();

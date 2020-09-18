@@ -9,6 +9,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 
+std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
+
 std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
 std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::m_Textures;
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
@@ -30,12 +32,13 @@ Fracture::AssetManager::~AssetManager()
 
 void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std::string fragment)
 {
-	std::shared_ptr<Shader> m_shader = std::shared_ptr<Shader>(new Shader(vertex, fragment));
+	std::shared_ptr<Shader> m_shader = std::shared_ptr<Shader>(new Shader(name,vertex, fragment));
 	m_shader->Name = name;
 	m_shader->vertexPath = vertex;
 	m_shader->fragPath = fragment;
 	m_Shaders.emplace(name, m_shader);
 }
+
 
 void Fracture::AssetManager::AddModel(std::string name, std::string path)
 {
@@ -45,14 +48,16 @@ void Fracture::AssetManager::AddModel(std::string name, std::string path)
 	m_Models.emplace(name, model);
 }
 
+
 void Fracture::AssetManager::AddTexture(std::string name, std::string path)
 {
-	std::shared_ptr<Texture> texture = loadTexture(path);
+	std::shared_ptr<Texture> texture = loadTexture(name,path);
 	texture->Name = name;
 	texture->path = path;
 	texture->textureType = TextureType::Diffuse;
 	m_Textures.emplace(name, texture);
 }
+
 
 void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 {
@@ -60,9 +65,10 @@ void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
 {
-	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(shader));
+	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,shader));
 	m_Materials.emplace(name, material);
 }
+
 
 std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string name)
 {
@@ -97,9 +103,9 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	return m_model;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::string path)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::string name,std::string path)
 {
-	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture());
+	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture(name));
 	newTex->path = path;
 	newTex->m_data = stbi_load(path.c_str(), &newTex->width, &newTex->height, &newTex->channel, 0);
 	if (newTex->m_data)

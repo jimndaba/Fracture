@@ -7,8 +7,7 @@
 namespace Fracture
 {
 
-	class Entity;
-
+	class Entity; 
 	class Scene
 	{
 
@@ -23,8 +22,7 @@ namespace Fracture
 		void clearScene();
 
 	private:
-
-		std::shared_ptr<Entity> m_root = nullptr;
+		std::shared_ptr<Entity> m_root;
 	};
 }
 

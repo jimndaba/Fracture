@@ -14,7 +14,7 @@ namespace Fracture {
 	class Shader
 	{
 	public:
-		Shader(std::string vertexPath, std::string fragmentPath);
+		Shader(std::string name, std::string vertexPath, std::string fragmentPath);
 		~Shader();
 
 		void use();

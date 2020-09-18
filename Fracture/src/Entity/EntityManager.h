@@ -15,7 +15,12 @@ namespace Fracture
 		EntityManager();
 		~EntityManager();
 
-		static std::shared_ptr<Entity> CreateEntity()
+		static Entity CreateEntity()
+		{
+			return Entity(getID());
+		}
+
+		static std::shared_ptr<Entity> Create_Entity_ptr()
 		{
 			return std::shared_ptr<Entity>(new Entity(getID()));
 		}

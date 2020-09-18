@@ -3,6 +3,7 @@
 #define MATERIAL_H
 
 #include <memory>
+#include <string>
 
 namespace Fracture
 {
@@ -11,9 +12,11 @@ namespace Fracture
 	class Material
 	{
 	public:
-		Material(std::shared_ptr<Shader> shader);
+		Material(std::string name, std::shared_ptr<Shader> shader);
 		~Material();
 		std::shared_ptr<Shader> getShader();
+
+		std::string Name;
 
 	private:
 		std::shared_ptr<Shader> m_shader;
