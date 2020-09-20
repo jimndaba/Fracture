@@ -5,6 +5,7 @@
 
 Fracture::RenderComponent::RenderComponent(int entityID,std::string model,std::string material):Component(entityID,ComponentType::Mesh),m_modelName(model),m_materialName(material)
 {
+    onAttach();
 }
 
 Fracture::RenderComponent::~RenderComponent()

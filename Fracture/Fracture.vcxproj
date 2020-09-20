@@ -132,11 +132,13 @@
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
+    <ClInclude Include="src\Input\Keycode.h" />
     <ClInclude Include="src\Rendering\BufferElement.h" />
     <ClInclude Include="src\Rendering\BufferLayout.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Rendering\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\IndexBuffer.h" />
+    <ClInclude Include="src\Rendering\Key.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />

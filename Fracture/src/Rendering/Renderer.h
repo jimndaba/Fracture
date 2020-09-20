@@ -40,7 +40,7 @@ namespace Fracture
 		*/
 		void EndFrame();
 
-		void flush();
+		void Submit();
 
 		void clear();
 		void clearColor(float r, float g, float b);

@@ -8,8 +8,7 @@
 #include "Texture.h"
 
 Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures):m_vertices(vertices),m_indices(indices),m_textures(textures)
-{
-    
+{    
     setupMesh();
 }
 
@@ -19,6 +18,7 @@ Fracture::Mesh::~Mesh()
 
 void Fracture::Mesh::setupMesh()
 {
+    /*
     vao = VertexArray::create(); //std::shared_ptr<VertexArray>(new VertexArray());
     vbo = VertexBuffer::create(m_vertices,(size_t)m_vertices.size() * sizeof(Vertex));    
     BufferElement position = { ShaderDataType::Float3, "a_position" };
@@ -38,5 +38,38 @@ void Fracture::Mesh::setupMesh()
     ibo = IndexBuffer::create(m_indices, (size_t)m_indices.size() * sizeof(unsigned int));
     vao->addVertexBuffer(vbo);
     vao->setIndexBuffer(ibo);
+    */
+
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &IBO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    // vertex normals
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    // vertex texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uvs));
+    // vertex tangent
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+    // vertex bitangent
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
+
+
+
+    glBindVertexArray(0);
 
 }

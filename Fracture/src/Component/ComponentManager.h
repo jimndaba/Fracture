@@ -44,12 +44,11 @@ namespace Fracture
 	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId)
 	{
 		for (const auto& component : m_Components)
-		{			
-				if (component != nullptr && component->entityID == entitytId)
-				{									
+		{						
+				if (component != nullptr && component->entityID == entitytId && std::dynamic_pointer_cast<T>(component) != nullptr)
+				{						
 					return std::dynamic_pointer_cast<T>(component);
-				}
-							
+				}							
 		}
 		return nullptr;
 	}

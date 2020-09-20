@@ -23,8 +23,14 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::TransformComponent> transform)
 {
 	RenderCommand command;
-	command.mesh = mesh;
+	
+
+	command.VAO = mesh->VAO;
+	command.IAO = mesh->IBO;
+	command.VBO = mesh->VBO;
+
 	command.transform = transform;
+
 	m_commands.push_back(command);
 }
 

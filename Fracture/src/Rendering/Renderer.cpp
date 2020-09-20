@@ -30,68 +30,10 @@ void _check_gl_error(const char* file, int line);
 
 #endif // GLERROR_H
 
-unsigned int vao, vbo, ibo;
-std::vector<Fracture::Vertex> _vertices;
-std::shared_ptr<Fracture::VertexArray> _vao;
-std::shared_ptr<Fracture::VertexBuffer> _vbo;
-
 Fracture::Renderer::Renderer()
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_camera = std::shared_ptr<Camera>(new Camera());
-
-    float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
-    };
-
-    Vertex v1;
-    v1.position = glm::vec3(-0.5f, -0.5f, 0.0f);
-    v1.normal = glm::vec3(0);
-    v1.uvs = glm::vec2(0);
-    v1.tangent = glm::vec3(0);
-    v1.bitangent = glm::vec3(0);
-    Vertex v2;
-    v2.position = glm::vec3(0.5f, -0.5f, 0.0f);
-    v2.normal = glm::vec3(0);
-    v2.uvs = glm::vec2(0);
-    v2.tangent = glm::vec3(0);
-    v2.bitangent = glm::vec3(0);
-    Vertex v3;
-    v3.position = glm::vec3(0.0f, 0.5f, 0.0f);
-    v3.normal = glm::vec3(0);
-    v3.uvs = glm::vec2(0);
-    v3.tangent = glm::vec3(0);
-    v3.bitangent = glm::vec3(0);
-
-    _vertices.push_back(v1);
-    _vertices.push_back(v2);
-    _vertices.push_back(v3);
-   
-
-    _vao = VertexArray::create();
-    _vao->bind();
-    _vbo = VertexBuffer::create(_vertices, _vertices.size() * sizeof(Vertex));
-    BufferElement _position = { ShaderDataType::Float3, "a_position"};
-    _vbo->SetLayout({ new BufferLayout({_position}) });
-    _vao->addVertexBuffer(_vbo);
-    //_vao->unbind();
-    /*
-
-     
-    glGenVertexArrays(1, &vao);
-  
-    //glBindVertexArray(vao);
-   
-   
-    GLsizeiptr size = _vertices.size() * sizeof(Vertex);
-    glBufferData(GL_ARRAY_BUFFER,size, &_vertices[0],GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
-       */
-   
 }
 
 Fracture::Renderer::~Renderer()
@@ -120,16 +62,18 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 void Fracture::Renderer::RenderPasses()
 {
     // for each render pass ->DrawScene();
+ 
 }
 
 void Fracture::Renderer::EndFrame()
 {
 	//anything to do before flush
-	flush();
+	Submit();
 }
 
-void Fracture::Renderer::flush()
+void Fracture::Renderer::Submit()
 {
+    /*
     AssetManager::getShader("default")->use();
     glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
     AssetManager::getShader("default")->setMat4("projection", projection);
@@ -138,36 +82,23 @@ void Fracture::Renderer::flush()
     trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
     trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
     AssetManager::getShader("default")->setMat4("model", trans);
-
-    _vao->bind(); 
-    glDrawArrays(GL_TRIANGLES, 0, 3);   
-    _vao->unbind();
-
-    //glBindVertexArray(vao);
-    //glDrawArrays(GL_TRIANGLES, 0, 3);
-    //glBindVertexArray(0);
-
-    //AssetManager::getShader("default")->unbind();
-    /*
-    for (auto command : m_opaqueBucket->getCommands())
-    {
-        std::shared_ptr<Material> material = command.material;
-        std::shared_ptr<Mesh> mesh = command.mesh;
-        std::shared_ptr<TransformComponent> transform = command.transform;
-
-        material->getShader()->use();
-        glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
-        material->getShader()->setMat4("projection", projection);
-        material->getShader()->setMat4("view", m_camera->getViewMatrix());
-        material->getShader()->setMat4("model",transform->GetLocalTranform());
-
-        mesh->vao->bind();
-        glDrawElements(GL_TRIANGLES, mesh->ibo->GetCount(), GL_UNSIGNED_INT, 0);
-        mesh->vao->unbind();
-        material->getShader()->unbind();
-
-    }
     */
+
+    for(const auto& command : m_opaqueBucket->getCommands())
+    {
+        command.material->getShader()->use();
+        //set material settings
+
+
+
+        glBindVertexArray(command.VAO);
+        glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        command.material->getShader()->unbind();
+    } 
+    
+
+   
 }
 
 void Fracture::Renderer::clear()
@@ -198,16 +129,17 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
         return;
     }
  
-    //std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id,ComponentType::Mesh);
+    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
-    /*
+  
     if (render)
     {
         for (auto mesh : render->model->GetMeshes())
         {
             RenderCommand command;
             command.material = render->material;
-            command.mesh = mesh;
+            command.VAO = mesh->VAO;
+            command.indiceSize = (GLint)mesh->GetIndices().size();
             command.transform = transform;
             PushCommand(command);
         }   
@@ -224,11 +156,11 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
             RenderEntity(entity->Children()[i]);
         }
     }
-    */
+  
 }
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
-    //RenderEntity(scene->Root());
+    RenderEntity(scene->Root());
 }
 

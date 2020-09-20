@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <GLAD/glad.h>
 
 namespace Fracture
 {
@@ -22,9 +23,17 @@ namespace Fracture
 		~Mesh();
 
 		std::string director;
-		std::shared_ptr<VertexArray> vao;
-		std::shared_ptr<VertexBuffer> vbo;
-		std::shared_ptr<IndexBuffer> ibo;
+		//std::shared_ptr<VertexArray> vao;
+		//std::shared_ptr<VertexBuffer> vbo;
+		//std::shared_ptr<IndexBuffer> ibo;
+		unsigned int VAO, VBO, IBO;
+
+
+		std::vector<unsigned int> GetIndices()
+		{
+			return m_indices;
+		}
+
 	private:
 		void setupMesh();
 
