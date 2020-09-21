@@ -133,6 +133,7 @@
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Input\Keycode.h" />
+    <ClInclude Include="src\Input\Mousecode.h" />
     <ClInclude Include="src\Rendering\BufferElement.h" />
     <ClInclude Include="src\Rendering\BufferLayout.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
