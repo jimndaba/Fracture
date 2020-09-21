@@ -8,7 +8,9 @@
 #include "Rendering/Model.h"
 #include "Entity/Entity.h"
 #include "Entity/EntityManager.h"
+#include "Input/InputManager.h"
 #include "Scene/Scene.h"
+
 
 
 std::shared_ptr<Fracture::Scene> test;
@@ -21,6 +23,7 @@ Fracture::Game::Game()
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
+	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 }
 
 Fracture::Game::~Game()
@@ -34,6 +37,7 @@ void Fracture::Game::run()
 	while (m_isRunning)
 	{
 		m_GameWindow->pollEvents(*this);
+		InputManager::PollEvents();
 		update();
 		render();
 		m_GameWindow->swapBuffers();
@@ -66,6 +70,11 @@ void Fracture::Game::loadContent()
 void Fracture::Game::update()
 {
 	m_ComponentManager->onUpdate();
+	
+	if (InputManager::IsMouseScroll())
+	{
+
+	}
 }
 
 void Fracture::Game::render()

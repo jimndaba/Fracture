@@ -103,6 +103,7 @@
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Fracture.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
+    <ClCompile Include="src\Input\InputManager.cpp" />
     <ClCompile Include="src\Rendering\BufferElement.cpp" />
     <ClCompile Include="src\Rendering\BufferLayout.cpp" />
     <ClCompile Include="src\Rendering\FrameBuffer.cpp" />

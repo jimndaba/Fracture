@@ -12,7 +12,7 @@ namespace Fracture
 	class ComponentManager;
 	class AssetManager;
 	class EntityManager;
-
+	class InputManager;
 
 	class Game
 	{
@@ -40,6 +40,7 @@ namespace Fracture
 		std::unique_ptr<ComponentManager> m_ComponentManager;
 		std::unique_ptr<AssetManager> m_AssetManager;
 		std::unique_ptr<EntityManager> m_EntityManager;
+		std::unique_ptr<InputManager> m_InputManager;
 	};
 
 }
