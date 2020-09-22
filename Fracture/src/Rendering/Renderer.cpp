@@ -30,7 +30,7 @@ void _check_gl_error(const char* file, int line);
 
 #endif // GLERROR_H
 
-Fracture::Renderer::Renderer()
+Fracture::Renderer::Renderer(GameWindow& window):m_window(window)
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_camera = std::shared_ptr<Camera>(new Camera());
@@ -40,8 +40,9 @@ Fracture::Renderer::~Renderer()
 {
 }
 
-void Fracture::Renderer::update()
+void Fracture::Renderer::update(float dt)
 {
+    m_camera->update(dt);
 }
 
 
@@ -73,32 +74,19 @@ void Fracture::Renderer::EndFrame()
 
 void Fracture::Renderer::Submit()
 {
-    /*
-    AssetManager::getShader("default")->use();
-    glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
-    AssetManager::getShader("default")->setMat4("projection", projection);
-    AssetManager::getShader("default")->setMat4("view", m_camera->getViewMatrix());
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-    AssetManager::getShader("default")->setMat4("model", trans);
-    */
-
     for(const auto& command : m_opaqueBucket->getCommands())
     {
         command.material->getShader()->use();
         //set material settings
-
-
+        command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(&m_window));
+        command.material->getShader()->setMat4("view", m_camera->getViewMatrix());
+        command.material->getShader()->setMat4("model",command.transform->GetWorldTransform());
 
         glBindVertexArray(command.VAO);
         glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
         command.material->getShader()->unbind();
-    } 
-    
-
-   
+    }    
 }
 
 void Fracture::Renderer::clear()

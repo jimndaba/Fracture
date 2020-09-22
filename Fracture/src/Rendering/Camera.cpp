@@ -1,0 +1,104 @@
+#include "Camera.h"
+
+
+Fracture::Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch):Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),Position(position)
+{
+    Yaw = -90.0f;
+    Pitch = 0.0f;
+    WorldUp = up;
+    //foV = FOV;
+    //nearClip = Nclip;
+    //farClip = fClip;
+    Right = glm::vec3(1.0f, 0.0f, 0.0f);;
+}
+
+glm::mat4 Fracture::Camera::getViewMatrix()
+{
+	return glm::lookAt(Position, Position + Front, Up);
+}
+
+glm::mat4 Fracture::Camera::getProjectionMatrix(GameWindow* m_window)
+{
+	return glm::perspective(glm::radians(foV), float(m_window->Width) / float(m_window->Height), nearClip, farClip);
+}
+
+void Fracture::Camera::update(float dt)
+{
+    foV = glm::lerp(foV, targetZoom, dt * 3.0f);
+    Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
+    Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
+    Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
+
+    std::cout << dt << std::endl;
+    UpdateCameraVectors();
+}
+
+void Fracture::Camera::Move(Camera_Movement td, float dt)
+{
+    switch (td) {
+    case Camera_Movement::UP:
+        m_TargetPosition -= glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
+        break;
+    case Camera_Movement::DOWN:
+        m_TargetPosition += glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
+        break;
+    case Camera_Movement::LEFT:
+        m_TargetPosition -= Right * MovementSpeed * dt;
+        break;
+    case Camera_Movement::RIGHT:
+        m_TargetPosition += Right * MovementSpeed * dt;
+        break;
+    case Camera_Movement::FORWARD:
+        m_TargetPosition += Front * MovementSpeed * dt;
+        break;
+    case Camera_Movement::BACKWARD:
+        m_TargetPosition -= Front * MovementSpeed * dt;
+        break;
+    }
+}
+
+void Fracture::Camera::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
+{
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    lastX = xpos;
+    lastY = ypos;
+
+    if (m_TargetYaw == 0.0f) m_TargetYaw = 0.01f;
+    if (m_TargetPitch == 0.0f) m_TargetPitch = 0.01f;
+
+    m_TargetYaw += MouseSensitivity * xoffset;
+
+
+    if (constrainPitch)
+    {
+        if (m_TargetPitch > 89.0f)
+        {
+            m_TargetPitch = 89.0f;
+        }
+        else if (m_TargetPitch < -89.0f)
+        {
+            m_TargetPitch = -89.0f;
+        }
+        else
+        {
+            m_TargetPitch += MouseSensitivity * yoffset;
+        }
+    }
+
+}
+
+void Fracture::Camera::ZoomCamera(glm::vec2 zoom, float dt)
+{
+}
+
+void Fracture::Camera::UpdateCameraVectors()
+{
+    glm::vec3 front;
+    front.x = cos(glm::radians(Pitch)) * cos(glm::radians(Yaw));
+    front.y = sin(glm::radians(Pitch));
+    front.z = cos(glm::radians(Pitch)) * sin(glm::radians(Yaw));
+    Front = glm::normalize(front);
+    Right = glm::normalize(glm::cross(Front, WorldUp)); // Normalize the vectors, because their length 
+    Up = glm::normalize(glm::cross(Right, Front));
+}

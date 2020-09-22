@@ -24,7 +24,7 @@ namespace Fracture
 		void run();
 		void init();
 		void loadContent();
-		void update();
+		void update(float dt);
 		void render();
 		void unloadContent();
 		void shutdown();

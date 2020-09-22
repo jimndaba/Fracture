@@ -14,12 +14,16 @@
 
 
 std::shared_ptr<Fracture::Scene> test;
+double t = 0.0;
+const double dt = 0.01;
 
+double currentTime = SDL_GetTicks() / 1000.0;
+double accumulator = 0.0;
 
 Fracture::Game::Game()
 {
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280,720,"FRACTURE"));
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer(*m_GameWindow));
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
@@ -38,7 +42,19 @@ void Fracture::Game::run()
 	{
 		m_GameWindow->pollEvents(*this);
 		InputManager::PollEvents();
-		update();
+
+		double newTime = (double)SDL_GetTicks()/1000.0;
+		double frameTime = newTime - currentTime;
+		currentTime = newTime;
+
+		//while (frameTime > 0.0)
+		//{
+		//	float deltaTime = (float)fmin(frameTime, dt);
+		//fixed step
+		//	frameTime -= deltaTime;
+		//	t += deltaTime;
+		//}
+		update(frameTime);
 		render();
 		m_GameWindow->swapBuffers();
 	}
@@ -54,7 +70,7 @@ void Fracture::Game::init()
 
 void Fracture::Game::loadContent()
 {
-	m_AssetManager->AddModel("monkey","bin/content/models/monkey.fbx");
+	m_AssetManager->AddModel("monkey","bin/content/models/Survival_BackPack_2.fbx");
 	m_AssetManager->AddShader("default","bin/content/shaders/model/vertex.glsl","bin/content/shaders/model/fragment.glsl");
 	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
 
@@ -67,14 +83,16 @@ void Fracture::Game::loadContent()
 
 }
 
-void Fracture::Game::update()
+void Fracture::Game::update(float dt)
 {
 	m_ComponentManager->onUpdate();
 	
-	if (InputManager::IsMouseScroll())
+	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
-
+		onQuit();
 	}
+
+	m_Renderer->update(dt);
 }
 
 void Fracture::Game::render()

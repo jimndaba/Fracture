@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "Game/GameWindow.h"
 
 namespace Fracture
 {
@@ -20,10 +21,10 @@ namespace Fracture
 	class Renderer
 	{
 	public:
-		Renderer();
+		Renderer(GameWindow& window);
 		~Renderer();
 
-		void update();
+		void update(float dt);
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 
@@ -52,6 +53,7 @@ namespace Fracture
 		void RenderScene(std::shared_ptr<Scene> scene);
 
 	private:
+		GameWindow& m_window;
 		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
