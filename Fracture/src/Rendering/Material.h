@@ -4,10 +4,82 @@
 
 #include <memory>
 #include <string>
+#include <map>
+#include <unordered_map>
+#define GLM_FORCE_NO_CTOR_INIT 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <algorithm>
+#include "Texture.h"
 
 namespace Fracture
 {
 	class Shader;
+
+    enum SHADER_TYPE
+    {
+        SHADER_TYPE_BOOL,
+        SHADER_TYPE_INT,
+        SHADER_TYPE_FLOAT,
+        SHADER_TYPE_SAMPLER1D,
+        SHADER_TYPE_SAMPLER2D,
+        SHADER_TYPE_SAMPLER3D,
+        SHADER_TYPE_SAMPLERCUBE,
+        SHADER_TYPE_VEC2,
+        SHADER_TYPE_VEC3,
+        SHADER_TYPE_VEC4,
+        SHADER_TYPE_MAT2,
+        SHADER_TYPE_MAT3,
+        SHADER_TYPE_MAT4,
+    };
+
+    struct Uniform
+    {
+        SHADER_TYPE  Type;
+        std::string  Name;
+        int          Size;
+        unsigned int Location;      
+    };
+
+    struct UniformValue
+    {
+        SHADER_TYPE Type;
+        std::string Name;
+        // TODO(Joey): now each element takes up the space of its largest 
+        // element (mat4) which is 64 bytes; come up with a better solution!
+        union
+        {
+            bool       Bool;
+            int        Int;
+            float      Float;
+            glm::vec2 Vec2;
+            glm::vec3 Vec3;
+            glm::vec4 Vec4;
+            glm::mat2 Mat2;
+            glm::mat3 Mat3;
+            glm::mat4 Mat4;
+        };
+
+        UniformValue() {};
+    };
+
+    struct UniformValueSampler
+    {
+        SHADER_TYPE  Type;
+        unsigned int Unit;
+        union
+        {
+            Texture* texture;
+        };
+
+        UniformValueSampler() :texture{}
+        {}
+
+        ~UniformValueSampler()
+        {}
+        
+    };
 
 	class Material
 	{
@@ -17,9 +89,29 @@ namespace Fracture
 		std::shared_ptr<Shader> getShader();
 
 		std::string Name;
+        void setBool(std::string name, bool value) const;
+        void setInt(std::string name, int value) const;
+        void setFloat(std::string name, float value) const;
+        void setVec2(std::string name, const glm::vec2& value) const;
+        void setVec2(std::string name, float x, float y) const;
+        void setVec3(std::string name, const glm::vec3& value) const;
+        void setVec3(std::string name, float x, float y, float z) const;
+        void setVec4(std::string name, const glm::vec4& value) const;
+        void setVec4(std::string name, float x, float y, float z, float w) const;
+        void setMat2(std::string name, const glm::mat2& mat) const;
+        void setMat3(std::string name, const glm::mat3& mat) const;
+        void setMat4(std::string name, const glm::mat4& mat) const;
+
+        void SetTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
+        void ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
+
+        std::unordered_map<std::string, UniformValue>* GetUniforms();
+        std::map<std::string, UniformValueSampler>*GetSamplerUniforms();
 
 	private:
 		std::shared_ptr<Shader> m_shader;
+        std::unordered_map<std::string, UniformValue>* m_Uniforms;
+        std::map<std::string, UniformValueSampler>* m_SamplerUniforms;
 	};
 }
 

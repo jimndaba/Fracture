@@ -20,6 +20,7 @@ namespace Fracture
 	class Texture
 	{
 	public:
+		Texture();
 		Texture(std::string name);
 		Texture(std::string name,int Width, int Height);
 

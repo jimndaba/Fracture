@@ -22,10 +22,7 @@ namespace Fracture
 		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
 		~Mesh();
 
-		std::string director;
-		//std::shared_ptr<VertexArray> vao;
-		//std::shared_ptr<VertexBuffer> vbo;
-		//std::shared_ptr<IndexBuffer> ibo;
+		std::string director;		
 		unsigned int VAO, VBO, IBO;
 
 

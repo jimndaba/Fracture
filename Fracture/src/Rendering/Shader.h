@@ -8,8 +8,11 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <memory>
 
 namespace Fracture {
+
+	class Texture;
 
 	class Shader
 	{
@@ -29,6 +32,8 @@ namespace Fracture {
 		void setMat2(const std::string& name, glm::mat2 value) const;
 		void setMat3(const std::string& name, glm::mat3 value) const;
 		void setMat4(const std::string& name, glm::mat4 value) const;
+
+		void setTexture(const std::string& name, const Texture* value, unsigned int unit) const;
 
 		std::string Name;
 		std::string vertexPath;

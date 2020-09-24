@@ -20,6 +20,7 @@ const double dt = 0.01;
 double currentTime = SDL_GetTicks() / 1000.0;
 double accumulator = 0.0;
 
+
 Fracture::Game::Game()
 {
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280,720,"FRACTURE"));
@@ -70,15 +71,8 @@ void Fracture::Game::init()
 
 void Fracture::Game::loadContent()
 {
-	m_AssetManager->AddModel("monkey","bin/content/models/Survival_BackPack_2.fbx");
-	m_AssetManager->AddShader("default","bin/content/shaders/model/vertex.glsl","bin/content/shaders/model/fragment.glsl");
-	m_AssetManager->AddMaterial("default",m_AssetManager->getShader("default"));
-
-	std::shared_ptr<Fracture::Entity> monkey = EntityManager::Create_Entity_ptr();
-	monkey->name = "monkey";
-	ComponentManager::AddComponent<TransformComponent>(monkey->Id, glm::vec3(0.0f, 0.0f, 0.0f));
-	ComponentManager::AddComponent<RenderComponent>(monkey->Id, "monkey", "default");
-	test->addEntity(monkey);
+	test->onLoad();
+	
 
 
 }
@@ -86,6 +80,11 @@ void Fracture::Game::loadContent()
 void Fracture::Game::update(float dt)
 {
 	m_ComponentManager->onUpdate();
+
+	
+	std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(1);
+
+	transform->Rotation.x += 0.5f * dt;
 	
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{

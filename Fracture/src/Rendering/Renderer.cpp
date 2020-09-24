@@ -80,7 +80,62 @@ void Fracture::Renderer::Submit()
         //set material settings
         command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(&m_window));
         command.material->getShader()->setMat4("view", m_camera->getViewMatrix());
-        command.material->getShader()->setMat4("model",command.transform->GetWorldTransform());
+       
+
+        // set uniform state of material
+        std::unordered_map<std::string, UniformValue>* uniforms = command.material->GetUniforms();
+        for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+        {
+            switch (it->second.Type)
+            {
+            case SHADER_TYPE_BOOL:
+                command.material->getShader()->setBool(it->first, it->second.Bool);
+                break;
+            case SHADER_TYPE_INT:
+                command.material->getShader()->setInt(it->first, it->second.Int);
+                break;
+            case SHADER_TYPE_FLOAT:
+                command.material->getShader()->setFloat(it->first, it->second.Float);
+                break;
+            case SHADER_TYPE_VEC2:
+                command.material->getShader()->setVec2(it->first, it->second.Vec2);
+                break;
+            case SHADER_TYPE_VEC3:
+                command.material->getShader()->setVec3(it->first, it->second.Vec3);
+                break;
+            case SHADER_TYPE_VEC4:
+                command.material->getShader()->setVec4(it->first, it->second.Vec4);
+                break;
+            case SHADER_TYPE_MAT2:
+                command.material->getShader()->setMat2(it->first, it->second.Mat2);
+                break;
+            case SHADER_TYPE_MAT3:
+                command.material->getShader()->setMat3(it->first, it->second.Mat3);
+                break;
+            case SHADER_TYPE_MAT4:
+                command.material->getShader()->setMat4(it->first, it->second.Mat4);
+                break;
+            default:
+                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+                break;
+            }
+        }
+
+        std::map<std::string, UniformValueSampler>* uniformsSamplers = command.material->GetSamplerUniforms();
+        for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+        {
+            switch (it->second.Type)
+            {
+            case SHADER_TYPE_SAMPLER2D:
+                command.material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
+                break;
+            default:
+                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+                break;
+            }
+        }
+
+        command.material->getShader()->setMat4("model", command.transform->GetWorldTransform());
 
         glBindVertexArray(command.VAO);
         glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);

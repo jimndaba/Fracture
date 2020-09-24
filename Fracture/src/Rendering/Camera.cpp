@@ -6,9 +6,6 @@ Fracture::Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitc
     Yaw = -90.0f;
     Pitch = 0.0f;
     WorldUp = up;
-    //foV = FOV;
-    //nearClip = Nclip;
-    //farClip = fClip;
     Right = glm::vec3(1.0f, 0.0f, 0.0f);;
 }
 
@@ -28,8 +25,6 @@ void Fracture::Camera::update(float dt)
     Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
     Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
-
-    std::cout << dt << std::endl;
     UpdateCameraVectors();
 }
 

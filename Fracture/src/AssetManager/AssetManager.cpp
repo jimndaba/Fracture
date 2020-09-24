@@ -69,6 +69,11 @@ void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shade
 	m_Materials.emplace(name, material);
 }
 
+void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Material> material)
+{
+	m_Materials.emplace(name, material);
+}
+
 
 std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string name)
 {
@@ -85,10 +90,16 @@ std::shared_ptr<Fracture::Material> Fracture::AssetManager::getMaterial(std::str
 	return m_Materials[name];
 }
 
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(std::string name)
+{
+	return m_Textures[name];
+}
+
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string path)
 {
 	std::shared_ptr<Model> m_model = nullptr;
-	scene = importer.ReadFile(path, aiProcess_CalcTangentSpace |
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(path, aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate);//| aiProcess_CalcTangentSpace
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
@@ -127,6 +138,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		stbi_image_free(newTex->m_data);
+		newTex->Unbind();
 	}
 	else
 	{
@@ -167,7 +179,10 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			vertex.uvs = vec;
 		}
 		else
+		{
 			vertex.uvs = glm::vec2(0.0f, 0.0f);
+		}
+			
 
 		vertices.push_back(vertex);
 	}
@@ -181,6 +196,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// process material
 	// 1. diffuse maps
+	
 	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
@@ -286,6 +302,7 @@ unsigned int Fracture::AssetManager::TextureFromFile(const char* path, const std
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		stbi_image_free(data);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{

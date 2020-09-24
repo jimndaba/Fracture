@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "GLAD/glad.h"
 #include <iostream>
+#include "Texture.h"
 
 Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string fragmentPath):Name(name)
 {
@@ -140,6 +141,13 @@ void Fracture::Shader::setMat3(const std::string& name, glm::mat3 value) const
 void Fracture::Shader::setMat4(const std::string& name, glm::mat4 value) const
 {
     glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, &value[0][0]);
+}
+
+void Fracture::Shader::setTexture(const std::string& name, const Texture* value, unsigned int unit) const
+{
+    glActiveTexture(GL_TEXTURE0 + unit);
+    glBindTexture(GL_TEXTURE_2D, value->id);
+    glUniform1i(glGetUniformLocation(m_program , name.c_str()), unit);
 }
 
 unsigned int Fracture::Shader::ID()

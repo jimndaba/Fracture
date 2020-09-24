@@ -21,6 +21,8 @@ namespace Fracture
 		void removeEntity(std::shared_ptr<Entity> entity);
 		void clearScene();
 
+		void onLoad();
+
 	private:
 		std::shared_ptr<Entity> m_root;
 	};

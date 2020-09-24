@@ -1,6 +1,10 @@
 #include "Texture.h"
 #include "GLAD/glad.h"
 
+Fracture::Texture::Texture()
+{
+}
+
 Fracture::Texture::Texture(std::string name):Name(name)
 {
 	glGenTextures(1, &id);
@@ -14,6 +18,7 @@ Fracture::Texture::Texture(std::string name):Name(name)
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Fracture::Texture::Texture(std::string name,int Width, int Height):Name(name)
@@ -29,6 +34,7 @@ Fracture::Texture::Texture(std::string name,int Width, int Height):Name(name)
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Fracture::Texture::Bind()
