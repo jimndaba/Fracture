@@ -85,7 +85,8 @@ void Fracture::Game::update(float dt)
 	std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(1);
 
 	transform->Rotation.x += 0.5f * dt;
-	
+	transform->Rotation.y += 0.8f * dt;
+
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
 		onQuit();
