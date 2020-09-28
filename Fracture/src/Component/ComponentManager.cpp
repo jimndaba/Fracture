@@ -22,3 +22,18 @@ void Fracture::ComponentManager::onUpdate()
 	//push Audio Components to Audio System
 	//push Script Components to GameLogic System
 }
+
+std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetComponents(int enitytId)
+{
+	std::vector<std::shared_ptr<Component>> components;
+
+	for (int i = 0; i < m_Components.size(); i++)
+	{
+
+		if (m_Components[i] != NULL && m_Components[i]->entityID == enitytId)
+		{
+			components.push_back(m_Components[i]);
+		}
+	}
+	return components;
+}

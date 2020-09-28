@@ -31,6 +31,11 @@ namespace Fracture
 			return m_indices;
 		}
 
+		std::vector<std::shared_ptr<Texture>> Textures()
+		{
+			return m_textures;
+		}
+
 	private:
 		void setupMesh();
 

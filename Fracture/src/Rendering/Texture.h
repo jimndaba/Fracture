@@ -7,7 +7,7 @@
 namespace Fracture
 {
 
-	enum class TextureType
+	enum class TextureType 
 	{
 		Diffuse,
 		Specular,
@@ -20,9 +20,9 @@ namespace Fracture
 	class Texture
 	{
 	public:
-		Texture();
-		Texture(std::string name);
-		Texture(std::string name,int Width, int Height);
+		Texture(Fracture::TextureType mtype);
+		Texture(std::string name, Fracture::TextureType mtype);
+		Texture(std::string name,int Width, int Height, Fracture::TextureType mtype);
 
 		void Bind();
 		void Unbind();

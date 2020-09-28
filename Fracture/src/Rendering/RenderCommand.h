@@ -17,24 +17,23 @@ namespace Fracture
 	public:
 		RenderCommand()
 		{
-			//mkey = new Key();
+		
 		}
 		~RenderCommand()
 		{
-			//delete mkey;
+	
 		}
 		
-		//Key* mkey;
+	
 
 		unsigned int VAO;
-		unsigned int VBO;
-		unsigned int IAO;
+		unsigned int texture_unit;
+		unsigned int texture_id;
 		GLint indiceSize;
-
 		std::shared_ptr<TransformComponent> transform;
 		std::shared_ptr<Material> material;
 
-		//std::shared_ptr<Mesh> mesh;
+
 		
 	};
 

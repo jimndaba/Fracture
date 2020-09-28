@@ -63,24 +63,24 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 void Fracture::Renderer::RenderPasses()
 {
     // for each render pass ->DrawScene();
- 
+    Submit();
 }
 
 void Fracture::Renderer::EndFrame()
 {
-	//anything to do before flush
-	Submit();
+    
 }
 
 void Fracture::Renderer::Submit()
 {
     for(const auto& command : m_opaqueBucket->getCommands())
     {
-        command.material->getShader()->use();
+        std::shared_ptr<Material> material = command.material;
         //set material settings
-        command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(&m_window));
-        command.material->getShader()->setMat4("view", m_camera->getViewMatrix());
-       
+        material->getShader()->use();
+        material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(&m_window));
+        material->getShader()->setMat4("view", m_camera->getViewMatrix());
+        material->getShader()->setVec3("viewPos", m_camera->Position);
 
         // set uniform state of material
         std::unordered_map<std::string, UniformValue>* uniforms = command.material->GetUniforms();
@@ -89,31 +89,31 @@ void Fracture::Renderer::Submit()
             switch (it->second.Type)
             {
             case SHADER_TYPE_BOOL:
-                command.material->getShader()->setBool(it->first, it->second.Bool);
+                material->getShader()->setBool(it->first, it->second.Bool);
                 break;
             case SHADER_TYPE_INT:
-                command.material->getShader()->setInt(it->first, it->second.Int);
+                material->getShader()->setInt(it->first, it->second.Int);
                 break;
             case SHADER_TYPE_FLOAT:
-                command.material->getShader()->setFloat(it->first, it->second.Float);
+                material->getShader()->setFloat(it->first, it->second.Float);
                 break;
             case SHADER_TYPE_VEC2:
-                command.material->getShader()->setVec2(it->first, it->second.Vec2);
+                material->getShader()->setVec2(it->first, it->second.Vec2);
                 break;
             case SHADER_TYPE_VEC3:
-                command.material->getShader()->setVec3(it->first, it->second.Vec3);
+                material->getShader()->setVec3(it->first, it->second.Vec3);
                 break;
             case SHADER_TYPE_VEC4:
-                command.material->getShader()->setVec4(it->first, it->second.Vec4);
+                material->getShader()->setVec4(it->first, it->second.Vec4);
                 break;
             case SHADER_TYPE_MAT2:
-                command.material->getShader()->setMat2(it->first, it->second.Mat2);
+                material->getShader()->setMat2(it->first, it->second.Mat2);
                 break;
             case SHADER_TYPE_MAT3:
-                command.material->getShader()->setMat3(it->first, it->second.Mat3);
+                material->getShader()->setMat3(it->first, it->second.Mat3);
                 break;
             case SHADER_TYPE_MAT4:
-                command.material->getShader()->setMat4(it->first, it->second.Mat4);
+                material->getShader()->setMat4(it->first, it->second.Mat4);
                 break;
             default:
                 //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
@@ -121,25 +121,45 @@ void Fracture::Renderer::Submit()
             }
         }
 
-        std::map<std::string, UniformValueSampler>* uniformsSamplers = command.material->GetSamplerUniforms();
+        std::unordered_map<std::string, UniformValueSampler>* uniformsSamplers = material->GetSamplerUniforms();
         for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
         {
             switch (it->second.Type)
             {
             case SHADER_TYPE_SAMPLER2D:
-                command.material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
-                break;
-            default:
+                material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
+                    break;
                 //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
                 break;
             }
         }
 
-        command.material->getShader()->setMat4("model", command.transform->GetWorldTransform());
+        material->getShader()->setMat4("model", command.transform->GetWorldTransform());
 
         glBindVertexArray(command.VAO);
         glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+        
+        for (const auto& command : m_opaqueBucket->getCommands())
+        {
+            std::unordered_map<std::string, UniformValueSampler>* uniformsSamplers = command.material->GetSamplerUniforms();
+            for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+            {
+                switch (it->second.Type)
+                {
+                case SHADER_TYPE_SAMPLER2D:
+                    //material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
+                    glActiveTexture(GL_TEXTURE0 + it->second.Unit);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    break;
+                    //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+                    break;
+                }
+            }
+        }
+
+
+
         command.material->getShader()->unbind();
     }    
 }
@@ -164,6 +184,11 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
 	m_opaqueBucket->pushCommand(command);
 }
 
+void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
+{
+    m_opaqueBucket->pushCommand(mesh,material,transform);
+}
+
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
    
@@ -179,12 +204,7 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     {
         for (auto mesh : render->model->GetMeshes())
         {
-            RenderCommand command;
-            command.material = render->material;
-            command.VAO = mesh->VAO;
-            command.indiceSize = (GLint)mesh->GetIndices().size();
-            command.transform = transform;
-            PushCommand(command);
+            PushCommand(mesh, render->material, transform);
         }   
 
         for (int i = 0; i < entity->Children().size(); i++)

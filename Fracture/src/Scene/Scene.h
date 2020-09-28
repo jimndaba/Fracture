@@ -3,11 +3,16 @@
 #define SCENE_H
 
 #include <memory>
+#include <vector>
+#include <algorithm>
+#include <glm/glm.hpp>
 
 namespace Fracture
 {
 
 	class Entity; 
+	class TransformComponent;
+
 	class Scene
 	{
 
@@ -18,6 +23,7 @@ namespace Fracture
 		std::shared_ptr<Entity> Root();
 
 		void addEntity(std::shared_ptr<Entity> entity);
+		
 		void removeEntity(std::shared_ptr<Entity> entity);
 		void clearScene();
 

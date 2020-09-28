@@ -146,8 +146,8 @@ void Fracture::Shader::setMat4(const std::string& name, glm::mat4 value) const
 void Fracture::Shader::setTexture(const std::string& name, const Texture* value, unsigned int unit) const
 {
     glActiveTexture(GL_TEXTURE0 + unit);
-    glBindTexture(GL_TEXTURE_2D, value->id);
-    glUniform1i(glGetUniformLocation(m_program , name.c_str()), unit);
+    glUniform1i(glGetUniformLocation(m_program, name.c_str()), unit);
+    glBindTexture(GL_TEXTURE_2D, value->id);   
 }
 
 unsigned int Fracture::Shader::ID()

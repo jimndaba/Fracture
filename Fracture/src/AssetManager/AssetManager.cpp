@@ -49,12 +49,9 @@ void Fracture::AssetManager::AddModel(std::string name, std::string path)
 }
 
 
-void Fracture::AssetManager::AddTexture(std::string name, std::string path)
+void Fracture::AssetManager::AddTexture(std::string name, std::string path, TextureType mtype)
 {
-	std::shared_ptr<Texture> texture = loadTexture(name,path);
-	texture->Name = name;
-	texture->path = path;
-	texture->textureType = TextureType::Diffuse;
+	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
 	m_Textures.emplace(name, texture);
 }
 
@@ -100,7 +97,7 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	std::shared_ptr<Model> m_model = nullptr;
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate);//| aiProcess_CalcTangentSpace
+		aiProcess_Triangulate| aiProcess_GenNormals);//| aiProcess_CalcTangentSpace
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -114,9 +111,9 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	return m_model;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::string name,std::string path)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::string name,std::string path,Fracture::TextureType texType)
 {
-	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture(name));
+	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture(name,texType));
 	newTex->path = path;
 	newTex->m_data = stbi_load(path.c_str(), &newTex->width, &newTex->height, &newTex->channel, 0);
 	if (newTex->m_data)
@@ -130,6 +127,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 			format = GL_RGBA;
 
 		//GL_TEXTURE_2D;
+	
 		newTex->Bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, format, newTex->width, newTex->height, 0, format, GL_UNSIGNED_BYTE, newTex->m_data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -146,8 +144,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 		std::cout << "Failed to load texture" << std::endl;
 		stbi_image_free(newTex->m_data);
 	}
-
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return newTex;
 }
 
@@ -198,16 +195,16 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	// process material
 	// 1. diffuse maps
 	
-	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, TextureType::Diffuse);
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, TextureType::Specular);
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
-	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model,material, aiTextureType_HEIGHT, "texture_normal");
+	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model, material, aiTextureType_HEIGHT, TextureType::Height);
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
-	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, "texture_height");
+	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, TextureType::Height);
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	// return a mesh object created from the extracted mesh data
@@ -215,7 +212,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	return std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 }
 
-std::vector<std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::loadMaterialTextures(std::shared_ptr<Fracture::Model> model,aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::loadMaterialTextures(std::shared_ptr<Fracture::Model> model,aiMaterial* mat, aiTextureType type, Fracture::TextureType typeName)
 {
 	std::vector<std::shared_ptr<Texture>> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -227,7 +224,7 @@ std::vector<std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::loadMate
 		{
 			for(const auto& component_pair :  m_Textures)
 			{
-				if (std::strcmp(component_pair.second->path.data(), str.C_Str()) == 0)
+				if (std::strcmp(component_pair.first.c_str(), str.C_Str()) == 0)
 				{
 					textures.push_back(component_pair.second);
 					skip = true;
@@ -237,12 +234,11 @@ std::vector<std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::loadMate
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			std::shared_ptr<Texture> texture;
-			texture->id = TextureFromFile(str.C_Str(), model->directory);
-			texture->type = typeName;
+			std::shared_ptr<Texture> texture = TextureFromFile(str.C_Str(), model->directory,typeName);
+			texture->textureType = typeName;
 			texture->path = str.C_Str();
 			textures.push_back(texture);
-			//textures_loaded.push_back(texture); // add to loaded textures
+			m_Textures.emplace(texture->Name,texture); // add to loaded textures
 		}
 	}
 	return textures;
@@ -273,44 +269,44 @@ void Fracture::AssetManager::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-unsigned int Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, bool gamma)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma)
 {
 	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
 
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
+	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
+	
+	texture->Name = path;
+	texture->path = filename;
+	texture->m_data = stbi_load(filename.c_str(), &texture->width, &texture->height, &texture->channel, 0);
+	if (texture->m_data)
 	{
 		GLenum format;
-		if (nrComponents == 1)
+		if (texture->channel == 1)
 			format = GL_RED;
-		else if (nrComponents == 3)
+		else if (texture->channel == 3)
 			format = GL_RGB;
-		else if (nrComponents == 4)
+		else if (texture->channel == 4)
 			format = GL_RGBA;
 
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		texture->Bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, texture->m_data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		stbi_image_free(texture->m_data);
+		
 	}
 	else
 	{
 		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
+		stbi_image_free(texture->m_data);
 	}
-
-	return textureID;
+	//texture->Unbind();
+	return texture;
 }
 

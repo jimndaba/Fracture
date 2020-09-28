@@ -23,6 +23,7 @@ namespace Fracture
 	class Shader;
 	class Model;
 	class Material; 
+	enum class TextureType;
 
 	class AssetManager
 	{
@@ -33,7 +34,7 @@ namespace Fracture
 
 
 		static std::shared_ptr<Model> loadModel(std::string path);
-		static std::shared_ptr<Texture> loadTexture(std::string name, std::string path);
+		static std::shared_ptr<Texture> loadTexture(std::string name, std::string path, Fracture::TextureType texType);
 
 		static std::shared_ptr<Shader> getShader(std::string name);
 		static std::shared_ptr<Model> getModel(std::string name);
@@ -42,7 +43,7 @@ namespace Fracture
 
 		static void AddShader(std::string name, std::string vertex, std::string fragment);
 		static void AddModel(std::string name, std::string path);
-		static void AddTexture(std::string name, std::string path);
+		static void AddTexture(std::string name, std::string path, TextureType mtype);
 		static void AddMesh(std::string name, std::string path);
 		static void AddMaterial(std::string name, std::shared_ptr<Shader> shader);
 		static void AddMaterial(std::string name, std::shared_ptr<Material> material);
@@ -73,8 +74,8 @@ namespace Fracture
 		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
 		static void ProcessNode(aiNode* node, const aiScene* scene);
 		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene);
-		static std::vector<std::shared_ptr<Texture>> loadMaterialTextures(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, std::string typeName);
-		static unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+		static std::vector<std::shared_ptr<Texture>> loadMaterialTextures(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, TextureType typeName);
+		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 
 	
 	};

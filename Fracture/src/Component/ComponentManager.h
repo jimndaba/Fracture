@@ -28,7 +28,9 @@ namespace Fracture
 		static void AddComponent(int entity, Args&&... params);
 
 		template <class T>
-		static std::shared_ptr<T>GetComponent(int enitytId);			
+		static std::shared_ptr<T>GetComponent(int enitytId);	
+
+		static std::vector<std::shared_ptr<Component>> GetComponents(int enitytId);
 	
 	private:
 		static std::vector<std::shared_ptr<Component>> m_Components;
@@ -52,7 +54,6 @@ namespace Fracture
 		}
 		return nullptr;
 	}
-
 
 }
 

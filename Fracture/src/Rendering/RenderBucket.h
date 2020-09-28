@@ -12,6 +12,7 @@ namespace Fracture
 	class RenderComponent;
 	class TransformComponent;
 	class Mesh;
+	class Material;
 
 	class RenderBucket
 	{
@@ -19,7 +20,7 @@ namespace Fracture
 		RenderBucket();
 		~RenderBucket();
 		void pushCommand(RenderCommand command);
-		void pushCommand(std::shared_ptr<Mesh> mesh, std::shared_ptr<TransformComponent> transform);
+		void pushCommand(std::shared_ptr<Mesh> mesh, std::shared_ptr<Fracture::Material> material,std::shared_ptr<TransformComponent> transform);
 
 		void sort();
 		void clear();
