@@ -97,6 +97,8 @@
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
+    <ClCompile Include="src\Component\DirectLightComponent.cpp" />
+    <ClCompile Include="src\Component\PointLightComponent.cpp" />
     <ClCompile Include="src\Component\RenderComponent.cpp" />
     <ClCompile Include="src\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Entity\DirectLight.cpp" />
@@ -127,8 +129,11 @@
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
+    <ClInclude Include="src\Component\DirectLightComponent.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
+    <ClInclude Include="src\Component\PointLightComponent.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />
+    <ClInclude Include="src\Component\SpotLightComponent.h" />
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Entity\DirectLight.h" />
     <ClInclude Include="src\Entity\Entity.h" />

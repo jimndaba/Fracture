@@ -10,7 +10,7 @@ namespace Fracture
 	class DirectLight :public Entity
 	{
 	public:
-		DirectLight(int id);
+		DirectLight();
 		~DirectLight();
 	};
 }

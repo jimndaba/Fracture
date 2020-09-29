@@ -16,6 +16,9 @@ namespace Fracture
 	class RenderCommand;
 	class RenderInstancedCommand;
 	class TransformComponent;
+	class DirectLightComponent;
+	class SpotLightComponent;
+	class PointLightComponent;
 	class Mesh;
 	class Material;
 	class Entity;
@@ -27,26 +30,13 @@ namespace Fracture
 	{
 	public:
 		Renderer(GameWindow& window);
-		~Renderer();
-
-		void update(float dt);
+		~Renderer();		
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
-
-		void RenderPasses();
-		/*
-		--Run Render passes:
-		--skybox pass
-		--light pass
-		--Shadow pass
-		--Opaque Pass
-		--Decal pass
-		--Transparency Pass	
-		--Effect pass
-		*/
+		void RenderPasses();		
 		void EndFrame();
-
 		void Submit();
+
 
 		void clear();
 		void clearColor(float r, float g, float b);
@@ -54,20 +44,24 @@ namespace Fracture
 		
 		void PushCommand(RenderCommand command);
 		void PushInstancedCommand(RenderInstancedCommand command);
-
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
-		void RenderEntity(std::shared_ptr<Entity> entity);
-		void RenderInstanced(std::shared_ptr<EntityInstance> instance);
-		void RenderScene(std::shared_ptr<Scene> scene);
+		void AddDirectLight(std::shared_ptr<Fracture::DirectLightComponent> directLight);
+		void AddPointLight(std::shared_ptr<Fracture::PointLightComponent> pointLight);
+		void AddSpotLight(std::shared_ptr<Fracture::SpotLightComponent> spotLight);
 
-		std::shared_ptr<Camera> MainCamera();
+		void RenderEntity(std::shared_ptr<Entity> entity);		
+		void RenderScene(std::shared_ptr<Scene> scene);
 
 	private:
 		GameWindow& m_window;
-		std::shared_ptr<Camera> m_camera;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
+
+		std::vector<std::shared_ptr<Fracture::DirectLightComponent>> m_directLights;
+		std::vector<std::shared_ptr<Fracture::PointLightComponent>> m_pointLights;
+		std::vector<std::shared_ptr<Fracture::SpotLightComponent>> m_spotLights;
+
 	};
 
 }

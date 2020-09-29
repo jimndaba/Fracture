@@ -26,24 +26,19 @@ namespace Fracture
 
 		std::shared_ptr<Entity> Root();
 
-		void addEntity(std::shared_ptr<Entity> entity);		
-		void removeEntity(std::shared_ptr<Entity> entity);
-
-		void Instantiate(std::shared_ptr<Entity> entity);
-		void Instantiate(std::shared_ptr<Entity> entity,glm::vec3 position);
-
-		void clearScene();
 
 		void onLoad();
 
-		std::map<std::string, std::shared_ptr<InstancePool>>* GetInstances();
+		void addEntity(std::shared_ptr<Entity> entity);		
+		void removeEntity(std::shared_ptr<Entity> entity);
+		void clearScene();		
 
 		static std::shared_ptr<Camera> MainCamera();
 
 	private:
 		std::shared_ptr<Entity> m_root;
 		static std::shared_ptr<Camera> main_Camera;
-		std::map<std::string,std::shared_ptr<InstancePool>>* m_instancepools;
+		
 	};
 }
 

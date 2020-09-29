@@ -84,7 +84,7 @@ void Fracture::Game::update(float dt)
 
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(test->MainCamera()->Id);
 	
-	for (int i = 2; i < 12; i++)
+	for (int i = 3; i < 13; i++)
 	{
 		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(i);
 		transform->Rotation.x += 0.5f * dt * i;
@@ -128,8 +128,7 @@ void Fracture::Game::update(float dt)
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
 		onQuit();
-	}
-	m_Renderer->update(dt);
+	}	
 }
 
 void Fracture::Game::render()

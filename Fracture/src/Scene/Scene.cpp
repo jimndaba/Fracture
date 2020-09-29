@@ -4,6 +4,7 @@
 #include "Component/RenderComponent.h"
 #include "Entity/EntityManager.h"
 #include "Entity/Entity.h"
+#include "Entity/DirectLight.h"
 #include "InstancePool.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/TransformComponent.h"
@@ -16,17 +17,14 @@ std::shared_ptr<Fracture::Entity> monkey;
 std::shared_ptr<Fracture::Material> defaultMaterial;
 std::shared_ptr<Fracture::Material> samusMaterial;
 std::shared_ptr<Fracture::Entity> cube;
-
 std::shared_ptr<Fracture::Camera> Fracture::Scene::main_Camera;
 
 Fracture::Scene::Scene()
 {
-	m_instancepools = new std::map<std::string,std::shared_ptr<InstancePool>>();
-	m_root = EntityManager::Create_Entity_ptr();
+	m_root = EntityManager::CreateEntity<Entity>();
 	m_root->name = "Root";
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
-
-	main_Camera = std::shared_ptr<Camera>(new Camera());
+	main_Camera = EntityManager::CreateEntity<Camera>();
 	addEntity(main_Camera);
 
 }
@@ -51,53 +49,6 @@ void Fracture::Scene::removeEntity(std::shared_ptr<Entity>  entity)
 	m_root->removeChild(entity);
 }
 
-void Fracture::Scene::Instantiate(std::shared_ptr<Entity> entity)
-{
-	if (m_instancepools->find(entity->name) != m_instancepools->end())
-	{
-		std::shared_ptr<EntityInstance> instance = std::shared_ptr<EntityInstance>(new EntityInstance());
-		instance->EntityID = entity->Id;
-		instance->InstanceID = (*m_instancepools)[entity->name]->GetInstances().size()+1;
-
-
-
-		(*m_instancepools)[entity->name]->AddInstance(instance);
-	}
-	else
-	{
-		std::shared_ptr<InstancePool> instancePool = std::shared_ptr<InstancePool>(new InstancePool(entity->name));
-		std::shared_ptr<EntityInstance> instance = std::shared_ptr<EntityInstance>(new EntityInstance());
-		instance->EntityID = entity->Id;
-		instance->InstanceID = 0;
-		instancePool->AddInstance(instance);
-		m_instancepools->emplace(entity->name, instancePool);
-	}
-}
-
-void Fracture::Scene::Instantiate(std::shared_ptr<Entity> entity, glm::vec3 position)
-{
-	if (m_instancepools->find(entity->name) != m_instancepools->end())
-	{
-		std::shared_ptr<EntityInstance> instance = std::shared_ptr<EntityInstance>(new EntityInstance());
-		instance->EntityID = entity->Id;
-		instance->InstanceID = IDManager::GetID();
-
-		ComponentManager::AddComponent<TransformComponent>(instance->InstanceID,position);
-		(*m_instancepools)[entity->name]->AddInstance(instance);
-	}
-	else
-	{
-		std::shared_ptr<InstancePool> instancePool = std::shared_ptr<InstancePool>(new InstancePool(entity->name));
-		std::shared_ptr<EntityInstance> instance = std::shared_ptr<EntityInstance>(new EntityInstance());
-		instance->EntityID = entity->Id;
-		instance->InstanceID = IDManager::GetID();
-
-		ComponentManager::AddComponent<TransformComponent>(instance->InstanceID, position);
-		instancePool->AddInstance(instance);
-		m_instancepools->emplace(entity->name, instancePool);
-	}
-}
-
 void Fracture::Scene::clearScene()
 {
 	std::cout << "clear scene" << std::endl;
@@ -118,14 +69,14 @@ void Fracture::Scene::onLoad()
 	glm::vec3(1.5f,  0.2f, -1.5f),
 	};
 	//models
-	AssetManager::AddModel("samus", "bin/content/models/samus/DolSzerosuitR1.obj");
-	AssetManager::AddModel("cube", "bin/content/models/cube.obj");
+	AssetManager::AddModel("samus", "content/models/samus/DolSzerosuitR1.obj");
+	AssetManager::AddModel("cube", "content/models/cube.obj");
 	
 	//textures
-	AssetManager::AddTexture("container", "bin/content/textures/container.png", TextureType::Diffuse);
-	AssetManager::AddTexture("specular", "bin/content/textures/container_specular.png", TextureType::Specular);
+	AssetManager::AddTexture("container", "content/textures/container.png", TextureType::Diffuse);
+	AssetManager::AddTexture("specular", "content/textures/container_specular.png", TextureType::Specular);
 	
-	AssetManager::AddShader("default", "bin/content/shaders/model/vertex.glsl", "bin/content/shaders/model/fragment.glsl");
+	AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
 	
 	std::shared_ptr<Fracture::Material> defaultMaterial = std::shared_ptr<Fracture::Material>(new Material("default", AssetManager::getShader("default")));
 
@@ -152,29 +103,23 @@ void Fracture::Scene::onLoad()
 
 	AssetManager::AddMaterial("default", defaultMaterial);
 	AssetManager::AddMaterial("samus", samusMaterial);
-
-
-	for (unsigned int i = 0; i < 10; i++)
-	{		
-		std::shared_ptr<Fracture::Entity> cube = EntityManager::Create_Entity_ptr();
-		cube->name = "cube";
-		ComponentManager::AddComponent<TransformComponent>(cube->Id,cubePositions[i]);
-		ComponentManager::AddComponent<RenderComponent>(cube->Id, "cube", "default");
-		addEntity(cube);
-	}
-
-	std::cout << m_instancepools->size() << std::endl;
-
-
-	monkey = EntityManager::Create_Entity_ptr();
+	
+	monkey = EntityManager::CreateEntity<Entity>();
 	ComponentManager::AddComponent<TransformComponent>(monkey->Id, glm::vec3(0.0f), glm::vec3(0.3f));
 	ComponentManager::AddComponent<RenderComponent>(monkey->Id, "samus", "samus");
 	addEntity(monkey);
-}
 
-std::map<std::string, std::shared_ptr<Fracture::InstancePool>>* Fracture::Scene::GetInstances()
-{
-	return m_instancepools;
+	for (unsigned int i = 0; i < 10; i++)
+	{		
+		std::shared_ptr<Fracture::Entity> cube = EntityManager::CreateEntity<Entity>();
+		cube->name = "cube";
+		ComponentManager::AddComponent<TransformComponent>(cube->Id,cubePositions[i]);
+		ComponentManager::AddComponent<RenderComponent>(cube->Id, "cube", "default");
+		//addEntity(cube);
+		monkey->addChild(cube);
+	}
+
+	
 }
 
 std::shared_ptr<Fracture::Camera> Fracture::Scene::MainCamera()

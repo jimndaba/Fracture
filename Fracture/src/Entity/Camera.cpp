@@ -4,7 +4,7 @@
 #include "Component/ComponentManager.h"
 
 
-Fracture::Camera::Camera():Entity(IDManager::GetID())
+Fracture::Camera::Camera():Entity()
 {
     ComponentManager::AddComponent<CameraControllerComponent>(this->Id);
 }

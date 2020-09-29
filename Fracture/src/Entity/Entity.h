@@ -12,7 +12,7 @@ namespace Fracture
 	class Entity
 	{
 	public:
-		Entity(int id);
+		Entity();
 		~Entity();
 
 		int Id;
@@ -22,6 +22,8 @@ namespace Fracture
 		void removeChild(std::shared_ptr<Entity> child);
 		void clearChildren();
 		void setParent(std::shared_ptr<Entity> parent);
+
+		std::shared_ptr<Entity> GetParent();
 
 		std::vector<std::shared_ptr<Entity>> Children();
 		std::shared_ptr<Entity> Parent = nullptr;		

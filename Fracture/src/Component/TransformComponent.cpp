@@ -1,4 +1,5 @@
 #include "TransformComponent.h"
+#include "ComponentManager.h"
 
 Fracture::TransformComponent::TransformComponent(int entityID):Component(entityID,ComponentType::Transform)
 {
@@ -54,6 +55,19 @@ glm::mat4 Fracture::TransformComponent::GetLocalTranform()
 
 glm::mat4 Fracture::TransformComponent::GetWorldTransform()
 {
+	/* TODO
+	if (this->GetEntityParent())
+	{
+		m_parentTransform = Game::ComponentManager()->GetComponent<DiTransformComponent>(this->GetEntityParent()->GetID());
+		//(DiTransformComponent*)Game::ComponentManager()->GetComponent(ComponentType::Transform, this->GetEntityParent()->GetID());
+		m_WorldTransform = m_parentTransform->GetWorldTransform() * GetLocalTranform();
+	}
+	else
+	{
+		m_WorldTransform = GetLocalTranform();
+	}
+	*/
+	//return m_WorldTransform;
     return GetLocalTranform();
 }
 

@@ -13,7 +13,9 @@ namespace Fracture
 		Mesh,
 		Physics,
 		Script,
-		Light,
+		DirectLight,
+		PointLight,
+		SpotLight,
 		Audio,
 	};
 

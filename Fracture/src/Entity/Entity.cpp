@@ -1,8 +1,8 @@
 #include "Entity.h"
-
+#include "IDManager.h"
 #include <iostream>
 
-Fracture::Entity::Entity(int id):Id(id)
+Fracture::Entity::Entity():Id(IDManager::GetID())
 {
 
 }
@@ -38,6 +38,14 @@ void Fracture::Entity::clearChildren()
 void Fracture::Entity::setParent(std::shared_ptr<Entity> parent)
 {
 	Parent = parent;
+}
+
+std::shared_ptr<Fracture::Entity> Fracture::Entity::GetParent()
+{
+	if (Parent)
+		return Parent;
+	std::cout << "ERROR: NO PARENT COULD BE FOIND FOR - " << name << std::endl;
+	return nullptr;
 }
 
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Entity::Children()

@@ -8,6 +8,9 @@
 #include "Texture.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
+#include "Component/DirectLightComponent.h"
+#include "Component/SpotLightComponent.h"
+#include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
 #include "Entity/Entity.h"
 #include "Scene/InstancePool.h"
@@ -37,12 +40,6 @@ Fracture::Renderer::Renderer(GameWindow& window):m_window(window)
 Fracture::Renderer::~Renderer()
 {
 }
-
-void Fracture::Renderer::update(float dt)
-{
- 
-}
-
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
@@ -226,6 +223,21 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     //push to prost processing
 }
 
+void Fracture::Renderer::AddDirectLight(std::shared_ptr<Fracture::DirectLightComponent> directLight)
+{
+    m_directLights.push_back(directLight);
+}
+
+void Fracture::Renderer::AddPointLight(std::shared_ptr<Fracture::PointLightComponent> pointLight)
+{
+    m_pointLights.push_back(pointLight);
+}
+
+void Fracture::Renderer::AddSpotLight(std::shared_ptr<Fracture::SpotLightComponent> spotLight)
+{
+    m_spotLights.push_back(spotLight);
+}
+
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
    
@@ -255,67 +267,13 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
         {
             RenderEntity(entity->Children()[i]);
         }
-    }
-  
-}
-
-void Fracture::Renderer::RenderInstanced(std::shared_ptr<EntityInstance> instance)
-{
-    if (!instance)
-    {
-        return;
-    }
-
-    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(instance->EntityID);
-    std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(instance->InstanceID);
-
-    if (render)
-    {
-        for (auto mesh : render->model->GetMeshes())
-        {
-            RenderInstancedCommand command = RenderInstancedCommand(mesh->VAO);
-            command.InstanceID = instance->InstanceID;
-            command.transform = transform;
-            PushInstancedCommand(command);
-        }
-
-        //for (int i = 0; i < entity->Children().size(); i++)
-        //{
-        //    RenderEntity(entity->Children()[i]);
-        //}
-    }
-    //else
-    //{
-       // for (int i = 0; i < entity->Children().size(); i++)
-       // {
-       //     RenderEntity(entity->Children()[i]);
-       // }
-   // }
-
+    }  
 }
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
     RenderEntity(scene->Root());
-
-    std::map<std::string, std::shared_ptr<InstancePool>>* instancepools = scene->GetInstances();
-    for (auto it  = instancepools->begin(); it != instancepools->end();it++)
-    {
-        for (int i = 0; i < it->second->GetInstances().size(); i++)
-        {
-            RenderInstanced(it->second->GetInstances()[i]);
-        }       
-    }
-
-
 }
 
-std::shared_ptr<Fracture::Camera> Fracture::Renderer::MainCamera()
-{
-    if (m_camera)
-    {
-        return m_camera;
-    }
-    return nullptr;
-}
+
 
