@@ -96,8 +96,7 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 {
 	std::shared_ptr<Model> m_model = nullptr;
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate| aiProcess_GenNormals);//| aiProcess_CalcTangentSpace
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);//| aiProcess_CalcTangentSpace
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -291,13 +290,12 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 
 		texture->Bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, texture->m_data);
-		glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(texture->m_data);
 		
 	}
@@ -306,7 +304,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(texture->m_data);
 	}
-	//texture->Unbind();
+	texture->Unbind();
 	return texture;
 }
 

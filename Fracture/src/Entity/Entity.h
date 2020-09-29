@@ -30,7 +30,12 @@ namespace Fracture
 
 	};
 
-	
+	class EntityInstance
+	{
+	public:
+		unsigned int EntityID;
+		unsigned int InstanceID;
+	};
 
 }
 

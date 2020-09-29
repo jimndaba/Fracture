@@ -13,6 +13,7 @@ namespace Fracture
 	class AssetManager;
 	class EntityManager;
 	class InputManager;
+	class IDManager;
 
 	class Game
 	{
@@ -41,6 +42,7 @@ namespace Fracture
 		std::unique_ptr<AssetManager> m_AssetManager;
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
+		std::unique_ptr<IDManager> m_IDManager;
 	};
 
 }

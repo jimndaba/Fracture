@@ -1,25 +1,30 @@
-#include "Camera.h"
+#include "CameraControllerComponent.h"
 
 
-Fracture::Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch):Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),Position(position)
+Fracture::CameraControllerComponent::CameraControllerComponent(int id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
 {
     Yaw = -90.0f;
     Pitch = 0.0f;
     WorldUp = up;
-    Right = glm::vec3(1.0f, 0.0f, 0.0f);;
+    Right = glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
-glm::mat4 Fracture::Camera::getViewMatrix()
+Fracture::CameraControllerComponent::~CameraControllerComponent()
 {
-	return glm::lookAt(Position, Position + Front, Up);
+
 }
 
-glm::mat4 Fracture::Camera::getProjectionMatrix(GameWindow* m_window)
+glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
 {
-	return glm::perspective(glm::radians(foV), float(m_window->Width) / float(m_window->Height), nearClip, farClip);
+    return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Fracture::Camera::update(float dt)
+glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(GameWindow* m_window)
+{
+    return glm::perspective(glm::radians(foV), float(m_window->Width) / float(m_window->Height), nearClip, farClip);
+}
+
+void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);
     Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
@@ -28,7 +33,15 @@ void Fracture::Camera::update(float dt)
     UpdateCameraVectors();
 }
 
-void Fracture::Camera::Move(Camera_Movement td, float dt)
+void Fracture::CameraControllerComponent::onAttach()
+{
+}
+
+void Fracture::CameraControllerComponent::onDettach()
+{
+}
+
+void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
 {
     switch (td) {
     case Camera_Movement::UP:
@@ -52,7 +65,7 @@ void Fracture::Camera::Move(Camera_Movement td, float dt)
     }
 }
 
-void Fracture::Camera::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
+void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
 {
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
@@ -83,11 +96,11 @@ void Fracture::Camera::InputMouse(float xpos, float ypos, float dt, bool constra
 
 }
 
-void Fracture::Camera::ZoomCamera(glm::vec2 zoom, float dt)
+void Fracture::CameraControllerComponent::ZoomCamera(glm::vec2 zoom, float dt)
 {
 }
 
-void Fracture::Camera::UpdateCameraVectors()
+void Fracture::CameraControllerComponent::UpdateCameraVectors()
 {
     glm::vec3 front;
     front.x = cos(glm::radians(Pitch)) * cos(glm::radians(Yaw));

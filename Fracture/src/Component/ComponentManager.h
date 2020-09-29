@@ -22,7 +22,7 @@ namespace Fracture
 		ComponentManager();
 		~ComponentManager();
 
-		void onUpdate();
+		void onUpdate(float dt);
 				
 		template< class T, typename... Args >
 		static void AddComponent(int entity, Args&&... params);

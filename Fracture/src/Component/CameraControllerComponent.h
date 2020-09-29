@@ -1,16 +1,17 @@
 #pragma once
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CAMERACONTROLLER_H
+#define CAMERACONTROLLER_H
 
+
+#include "Component.h"
+#include "IUpdatable.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "glm/gtx/compatibility.hpp"
+#include "Game/GameWindow.h"
 #include <vector>
 #include <math.h>
-
-#include "Game/GameWindow.h"
-
 
 namespace Fracture
 {
@@ -23,31 +24,19 @@ namespace Fracture
 		DOWN
 	};
 
-	// Default camera values
 	const float YAW = -90.0f;
 	const float PITCH = 0.0f;
-	const float SPEED = 2.5f;
+	const float SPEED = 5.0f;
 	const float SENSITIVITY = 0.1f;
 	const float ZOOM = 45.0f;
 
-	class Camera
+
+	class CameraControllerComponent :public Component,public IUPDATABLE
 	{
-	private:
-		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
-		float m_TargetYaw = -90.0f;
-		float m_TargetPitch = 0.0f;
-		float targetZoom = 45.0f;
-
-		float lastX = 1280.0f / 2.0f;
-		float lastY = 720.0f / 2.0f;
-		bool firstMouse = true;
-
-		void UpdateCameraVectors();
 
 	public:
-
-		Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
-		~Camera() {};
+		CameraControllerComponent(int id, glm::vec3 position = glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+		~CameraControllerComponent();
 
 		// Camera Attributes
 		glm::vec3 Position = glm::vec3(0.0f, 0.0f, 15.0f);
@@ -61,26 +50,37 @@ namespace Fracture
 		float Roll = 0.0f;
 		// camera options
 		float mouseSpeed = 0.8f;
-		float MovementSpeed = 5.0f;
+		float MovementSpeed = 10.0f;
 		float MouseSensitivity = 0.3f;
 		float Damping = 2.0f;
 		float Zoom;
 		float foV = 45.0f;
 		float nearClip = 1.0f;
 		float farClip = 100.0f;
-			   
+
 		glm::mat4 getViewMatrix();
 
 		glm::mat4 getProjectionMatrix(GameWindow* m_window);
 
-		void update(float dt);
+		virtual void onUpdate(float dt);
+		virtual void onAttach();
+		virtual void onDettach();
 
 		void Move(Camera_Movement td, float dt);
-
 		void InputMouse(float xpos, float ypos, float dt, bool constrainPitch = true);
-
 		void ZoomCamera(glm::vec2 zoom, float dt);
 
+	private:
+		void UpdateCameraVectors();
+
+		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
+		float m_TargetYaw = -90.0f;
+		float m_TargetPitch = 0.0f;
+		float targetZoom = 45.0f;
+
+		float lastX = 1280.0f / 2.0f;
+		float lastY = 720.0f / 2.0f;
+		bool firstMouse = true;
 
 	};
 

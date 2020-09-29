@@ -22,48 +22,19 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 	m_commands.push_back(command);
 }
 
+void Fracture::RenderBucket::pushInstancedCommand(RenderInstancedCommand command)
+{
+	m_InstancedCommands.push_back(command);
+}
+
 void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
-	RenderCommand command = {};
-	
+	RenderCommand command = {};	
 	command.material = material;
 	command.VAO = mesh->VAO;
 	command.indiceSize = (GLint)mesh->GetIndices().size();
 	command.transform = transform;
-
-	command.texture_id = mate;
-	command.texture_unit;
-
-	/*
-	for (int i = 0; i < mesh->Textures().size(); i++)
-	{
-		if (mesh->Textures()[i]->textureType == TextureType::Diffuse)
-		{
-			command.material->SetTexture("material.diffuse", mesh->Textures()[i],0);
-		}
-		if (mesh->Textures()[i]->textureType == TextureType::Normal)
-		{
-			command.material->SetTexture("material.normal", mesh->Textures()[i],1);
-		}
-		if (mesh->Textures()[i]->textureType == TextureType::Specular)
-		{
-			command.material->SetTexture("material.specular", mesh->Textures()[i], 2);
-		}
-		if (mesh->Textures()[i]->textureType == TextureType::Reflection)
-		{
-			command.material->SetTexture("material.reflection", mesh->Textures()[i],3);
-		}
-		if (mesh->Textures()[i]->textureType == TextureType::Height)
-		{
-			command.material->SetTexture("material.height", mesh->Textures()[i], 4);
-		}
-		if (mesh->Textures()[i]->textureType == TextureType::Bump)
-		{
-			command.material->SetTexture("material.bump", mesh->Textures()[i], 5);
-		}		
-	}
-	*/
-
+	command.Textures = mesh->Textures();
 	m_commands.push_back(command);
 }
 
@@ -80,6 +51,11 @@ void Fracture::RenderBucket::clear()
 std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cull)
 {
 	return m_commands;
+}
+
+std::vector<Fracture::RenderInstancedCommand> Fracture::RenderBucket::getInstancedCommands()
+{
+	return m_InstancedCommands;
 }
 
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)

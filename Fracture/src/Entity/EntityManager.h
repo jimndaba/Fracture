@@ -3,6 +3,7 @@
 #define ENTITYMANAGER_H
 
 #include "Entity.h"
+#include "IDManager.h"
 #include <memory>
 
 namespace Fracture
@@ -17,26 +18,14 @@ namespace Fracture
 
 		static Entity CreateEntity()
 		{
-			return Entity(getID());
+			return Entity(IDManager::GetID());
 		}
 
 		static std::shared_ptr<Entity> Create_Entity_ptr()
 		{
-			return std::shared_ptr<Entity>(new Entity(getID()));
+			return std::shared_ptr<Entity>(new Entity(IDManager::GetID()));
 		}
-
-		static int getID()
-		{
-			int current = m_currentID;
-			m_currentID += 1;
-			return current;
-		}
-
 	private:
-
-		static int m_currentID;
-
-
 
 	};
 

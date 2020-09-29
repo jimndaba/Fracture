@@ -9,6 +9,7 @@ namespace Fracture
 		None,
 		Transform,
 		Render,
+		Camera,
 		Mesh,
 		Physics,
 		Script,

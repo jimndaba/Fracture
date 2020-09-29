@@ -14,10 +14,12 @@ namespace Fracture
 {
 	class RenderBucket;
 	class RenderCommand;
+	class RenderInstancedCommand;
 	class TransformComponent;
 	class Mesh;
 	class Material;
 	class Entity;
+	class EntityInstance;
 	class Scene;
 	class Camera;
 
@@ -51,11 +53,15 @@ namespace Fracture
 		void setViewport(int width,int height);
 		
 		void PushCommand(RenderCommand command);
+		void PushInstancedCommand(RenderInstancedCommand command);
 
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
 		void RenderEntity(std::shared_ptr<Entity> entity);
+		void RenderInstanced(std::shared_ptr<EntityInstance> instance);
 		void RenderScene(std::shared_ptr<Scene> scene);
+
+		std::shared_ptr<Camera> MainCamera();
 
 	private:
 		GameWindow& m_window;

@@ -95,20 +95,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
+    <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\RenderComponent.cpp" />
     <ClCompile Include="src\Component\TransformComponent.cpp" />
+    <ClCompile Include="src\Entity\DirectLight.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\EntityManager.cpp" />
+    <ClCompile Include="src\Entity\IDManager.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Fracture.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
-    <ClCompile Include="src\Rendering\BufferElement.cpp" />
-    <ClCompile Include="src\Rendering\BufferLayout.cpp" />
-    <ClCompile Include="src\Rendering\Camera.cpp" />
+    <ClCompile Include="src\Entity\Camera.cpp" />
     <ClCompile Include="src\Rendering\FrameBuffer.cpp" />
-    <ClCompile Include="src\Rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
@@ -117,31 +117,33 @@
     <ClCompile Include="src\Rendering\RenderPass.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
-    <ClCompile Include="src\Rendering\VertexArray.cpp" />
-    <ClCompile Include="src\Rendering\VertexBuffer.cpp" />
+    <ClCompile Include="src\Scene\InstancePool.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
     <ClInclude Include="src\AssetManager\IResource.h" />
+    <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
+    <ClInclude Include="src\Component\IUpdatable.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />
     <ClInclude Include="src\Component\TransformComponent.h" />
+    <ClInclude Include="src\Entity\DirectLight.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\EntityManager.h" />
+    <ClInclude Include="src\Entity\GameObject.h" />
+    <ClInclude Include="src\Entity\IDManager.h" />
+    <ClInclude Include="src\Entity\PointLight.h" />
+    <ClInclude Include="src\Entity\SpotLight.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Input\Keycode.h" />
     <ClInclude Include="src\Input\Mousecode.h" />
-    <ClInclude Include="src\Rendering\BufferElement.h" />
-    <ClInclude Include="src\Rendering\BufferLayout.h" />
-    <ClInclude Include="src\Rendering\Camera.h" />
+    <ClInclude Include="src\Entity\Camera.h" />
     <ClInclude Include="src\Rendering\FrameBuffer.h" />
-    <ClInclude Include="src\Rendering\IndexBuffer.h" />
-    <ClInclude Include="src\Rendering\Key.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />
@@ -153,8 +155,7 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
-    <ClInclude Include="src\Rendering\VertexArray.h" />
-    <ClInclude Include="src\Rendering\VertexBuffer.h" />
+    <ClInclude Include="src\Scene\InstancePool.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
     <ClInclude Include="vendor\glad\glad.h" />

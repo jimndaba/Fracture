@@ -1,10 +1,5 @@
 #include "Mesh.h"
 #include "Vertex.h"
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "BufferLayout.h"
-#include "BufferElement.h"
 #include "Texture.h"
 
 Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures):m_vertices(vertices),m_indices(indices),m_textures(textures)
@@ -14,6 +9,9 @@ Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
 
 Fracture::Mesh::~Mesh()
 {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &IBO);
 }
 
 void Fracture::Mesh::setupMesh()
@@ -46,8 +44,6 @@ void Fracture::Mesh::setupMesh()
     // vertex bitangent
     glEnableVertexAttribArray(4);
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
-
-
 
     glBindVertexArray(0);
 
