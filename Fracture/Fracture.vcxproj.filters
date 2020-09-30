@@ -45,9 +45,6 @@
     <ClCompile Include="src\Rendering\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\FrameBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\RenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity\EntityManager.cpp">
@@ -230,9 +224,6 @@
     <ClInclude Include="src\Rendering\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Component\RenderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -240,9 +231,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderBucket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\RenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity\EntityManager.h">

@@ -18,18 +18,17 @@ Fracture::ComponentManager::~ComponentManager()
 void Fracture::ComponentManager::onUpdate(float dt)
 {
 	//std::cout << m_Components.size() << std::endl;
+	//Push physics components to Physics system
+	//push render Components to Render system
+	//push Audio Components to Audio System
+	//push Script Components to GameLogic System
 
 	for (auto& component : m_Components)
 	{
 		std::shared_ptr<IUPDATABLE> c = std::dynamic_pointer_cast<IUPDATABLE>(component);
 		if(c)
 			c->onUpdate(dt);
-	}
-
-	//Push physics components to Physics system
-	//push render Components to Render system
-	//push Audio Components to Audio System
-	//push Script Components to GameLogic System
+	}	
 }
 
 std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetComponents(int enitytId)

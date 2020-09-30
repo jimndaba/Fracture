@@ -80,7 +80,7 @@ void Fracture::Game::loadContent()
 
 void Fracture::Game::update(float dt)
 {
-
+	m_ComponentManager->onUpdate(dt);
 
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(test->MainCamera()->Id);
 	
@@ -124,7 +124,7 @@ void Fracture::Game::update(float dt)
 		}		
 	}
 
-	m_ComponentManager->onUpdate(dt);
+	
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
 		onQuit();

@@ -110,13 +110,11 @@
     <ClCompile Include="src\Game\GameWindow.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
     <ClCompile Include="src\Entity\Camera.cpp" />
-    <ClCompile Include="src\Rendering\FrameBuffer.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
     <ClCompile Include="src\Rendering\RenderBucket.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Rendering\RenderPass.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene\InstancePool.cpp" />
@@ -148,7 +146,6 @@
     <ClInclude Include="src\Input\Keycode.h" />
     <ClInclude Include="src\Input\Mousecode.h" />
     <ClInclude Include="src\Entity\Camera.h" />
-    <ClInclude Include="src\Rendering\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />
@@ -156,7 +153,6 @@
     <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Rendering\Renderer2D.h" />
-    <ClInclude Include="src\Rendering\RenderPass.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />

@@ -27,6 +27,8 @@ namespace Fracture
 		void Bind();
 		void Unbind();
 
+		void Resize(int width,int height);
+
 
 		std::string Name;
 		std::string path;

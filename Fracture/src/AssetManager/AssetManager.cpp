@@ -129,11 +129,12 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	
 		newTex->Bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, format, newTex->width, newTex->height, 0, format, GL_UNSIGNED_BYTE, newTex->m_data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glGenerateMipmap(GL_TEXTURE_2D);
 	
 		stbi_image_free(newTex->m_data);
 		newTex->Unbind();

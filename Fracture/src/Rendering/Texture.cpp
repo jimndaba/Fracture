@@ -40,3 +40,9 @@ void Fracture::Texture::Unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+void Fracture::Texture::Resize(int width, int height)
+{
+	Bind();	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+}

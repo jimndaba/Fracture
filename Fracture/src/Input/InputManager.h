@@ -20,6 +20,7 @@ namespace Fracture
 
 		static bool IsKeyDown(KeyCode key);
 		static bool IsMouseDown(MOUSECODE key);
+		static bool IsMouseUp(MOUSECODE key);
 
 		static glm::vec2 GetMousePosition();
 		static bool IsMouseScroll();

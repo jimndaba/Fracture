@@ -31,6 +31,15 @@ bool Fracture::InputManager::IsMouseDown(MOUSECODE key)
 	return false;
 }
 
+bool Fracture::InputManager::IsMouseUp(MOUSECODE key)
+{
+	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON((Uint32)key))
+	{
+		return true;
+	}
+	return false;
+}
+
 glm::vec2 Fracture::InputManager::GetMousePosition()
 {
 	glm::vec2 pos = glm::vec2(0.0f, 0.0f);	

@@ -65,8 +65,18 @@ void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
     }
 }
 
+bool firstMouse = true;
 void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
 {
+    if (firstMouse)
+    {        
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+   
+
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
     lastX = xpos;
