@@ -1,7 +1,7 @@
 #include "SandboxScene.h"
 
 
-SandboxScene::SandboxScene()
+SandboxScene::SandboxScene():Fracture::Scene()
 {
 }
 

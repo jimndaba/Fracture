@@ -16,7 +16,7 @@
 
 
 
-std::shared_ptr<Fracture::Scene> test;
+
 double t = 0.0;
 const double dt = 0.01;
 double currentTime = SDL_GetTicks() / 1000.0;
@@ -68,19 +68,21 @@ void Fracture::Game::run()
 
 void Fracture::Game::init()
 {	
-	test = std::make_shared<Scene>();
 }
 
 void Fracture::Game::loadContent()
 {
-	test->onLoad();
+	if (m_currentScene)
+	{
+		m_currentScene->onLoad();
+	}
 }
 
 void Fracture::Game::update(float dt)
 {
 	m_ComponentManager->onUpdate(dt);
 
-	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(test->MainCamera()->Id);
+	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
 	
 	for (int i = 3; i < 13; i++)
 	{
@@ -131,15 +133,15 @@ void Fracture::Game::update(float dt)
 
 void Fracture::Game::render()
 {
-	m_Renderer->BeginFrame(test);
+	m_Renderer->BeginFrame(m_currentScene);
 	m_Renderer->RenderPasses();
 	m_Renderer->EndFrame();
 }
 
 void Fracture::Game::unloadContent()
 {
-	test->clearScene();
-	test.reset();
+	m_currentScene->clearScene();
+	m_currentScene.reset();
 }
 
 void Fracture::Game::shutdown()
@@ -150,6 +152,18 @@ void Fracture::Game::shutdown()
 	m_ComponentManager.release();
 	m_EntityManager.release();
 	m_GameWindow.release();
+}
+
+void Fracture::Game::addScene(std::shared_ptr<Fracture::Scene> scene)
+{
+	m_currentScene = scene;
+}
+
+std::shared_ptr<Fracture::Scene> Fracture::Game::CurrentScene()
+{
+	if(m_currentScene)
+		return m_currentScene;
+	return nullptr;
 }
 
 void Fracture::Game::onQuit()

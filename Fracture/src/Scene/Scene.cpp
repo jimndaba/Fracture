@@ -10,7 +10,10 @@
 #include "Component/RenderComponent.h"
 #include "Rendering/Model.h"
 #include "Rendering/Material.h"
+#include "Entity/Camera.h"
 #include <iostream>
+
+std::shared_ptr < Fracture::Camera > Fracture::Scene::main_Camera;
 
 Fracture::Scene::Scene()
 {

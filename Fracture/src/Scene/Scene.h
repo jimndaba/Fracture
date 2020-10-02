@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <glm/glm.hpp>
-#include "Entity/Camera.h"
+
 
 namespace Fracture
 {
@@ -16,6 +16,7 @@ namespace Fracture
 	class Entity; 
 	class TransformComponent;
 	class InstancePool;
+	class Camera;
 
 	class Scene
 	{

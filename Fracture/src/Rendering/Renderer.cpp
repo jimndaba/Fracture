@@ -33,6 +33,7 @@ void _check_gl_error(const char* file, int line);
 Fracture::Renderer::Renderer(GameWindow& window):m_window(window)
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    glClearColor(0.3f, 0.4f, 0.6f,1.0f);
 }
 
 Fracture::Renderer::~Renderer()

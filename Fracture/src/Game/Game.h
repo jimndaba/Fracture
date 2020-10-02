@@ -14,6 +14,7 @@ namespace Fracture
 	class EntityManager;
 	class InputManager;
 	class IDManager;
+	class Scene;
 
 	class Game
 	{
@@ -30,6 +31,13 @@ namespace Fracture
 		void unloadContent();
 		void shutdown();
 
+		//scene management
+		void addScene(std::shared_ptr<Fracture::Scene> scene);
+		//void removeScene();
+		//void changeScene();
+
+		std::shared_ptr<Fracture::Scene> CurrentScene();
+
 		//events
 		void onQuit();
 		void onWindowResize(int width, int height);
@@ -43,6 +51,8 @@ namespace Fracture
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
+
+		std::shared_ptr<Fracture::Scene> m_currentScene;
 	};
 
 }
