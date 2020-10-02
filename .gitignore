@@ -3,3 +3,9 @@
 ################################################################################
 
 /Fracture/.vs/Fracture/v16
+/Fracture/bin
+/Fracture/int
+/Fracture/vendor
+/.vs
+/Sandbox/bin
+/Sandbox/int

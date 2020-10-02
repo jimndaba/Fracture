@@ -12,8 +12,6 @@
 #include "Component/SpotLightComponent.h"
 #include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
-#include "Entity/Entity.h"
-#include "Scene/InstancePool.h"
 #include "Scene/Scene.h"
 #include "AssetManager/AssetManager.h"
 #include "Entity/Camera.h"

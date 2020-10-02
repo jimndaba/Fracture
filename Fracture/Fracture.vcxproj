@@ -19,13 +19,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,6 +72,10 @@
       <AdditionalDependencies>assimp-vc142-mt.lib;opengl32.lib;SDL2.lib;SDL2main.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -92,6 +96,10 @@
       <AdditionalDependencies>assimp-vc142-mt.lib;opengl32.lib;SDL2.lib;SDL2main.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
@@ -106,7 +114,6 @@
     <ClCompile Include="src\Entity\EntityManager.cpp" />
     <ClCompile Include="src\Entity\IDManager.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
-    <ClCompile Include="src\Fracture.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
     <ClCompile Include="src\Entity\Camera.cpp" />
@@ -117,7 +124,6 @@
     <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
-    <ClCompile Include="src\Scene\InstancePool.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
   </ItemGroup>
@@ -140,6 +146,7 @@
     <ClInclude Include="src\Entity\IDManager.h" />
     <ClInclude Include="src\Entity\PointLight.h" />
     <ClInclude Include="src\Entity\SpotLight.h" />
+    <ClInclude Include="src\Fracture.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
@@ -156,7 +163,6 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
-    <ClInclude Include="src\Scene\InstancePool.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
     <ClInclude Include="vendor\glad\glad.h" />

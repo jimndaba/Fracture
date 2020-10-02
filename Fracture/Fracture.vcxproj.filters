@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Fracture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,9 +67,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Input\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\InstancePool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity\IDManager.cpp">
@@ -245,9 +239,6 @@
     <ClInclude Include="src\Input\Mousecode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\InstancePool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entity\IDManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -279,6 +270,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\PointLightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fracture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

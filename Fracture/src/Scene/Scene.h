@@ -27,7 +27,7 @@ namespace Fracture
 		std::shared_ptr<Entity> Root();
 
 
-		void onLoad();
+		virtual void onLoad() = 0;
 
 		void addEntity(std::shared_ptr<Entity> entity);		
 		void removeEntity(std::shared_ptr<Entity> entity);

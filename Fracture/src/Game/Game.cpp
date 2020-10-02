@@ -19,7 +19,6 @@
 std::shared_ptr<Fracture::Scene> test;
 double t = 0.0;
 const double dt = 0.01;
-
 double currentTime = SDL_GetTicks() / 1000.0;
 double accumulator = 0.0;
 
@@ -68,8 +67,7 @@ void Fracture::Game::run()
 }
 
 void Fracture::Game::init()
-{
-	m_Renderer->clearColor(0.2f, 0.5f, 0.6f);
+{	
 	test = std::make_shared<Scene>();
 }
 
