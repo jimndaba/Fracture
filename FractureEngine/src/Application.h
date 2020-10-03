@@ -3,7 +3,6 @@
 #define APPLICATION_H
 #include "Fracture.h"
 
-
 namespace Fracture
 {
 	class Editor;
@@ -23,9 +22,9 @@ namespace Fracture
 	private:
 
 		bool m_IsRunning = true;
-
-		std::unique_ptr<Game> m_Game;
 		std::unique_ptr<Editor> m_Editor;
+
+		//EventQueue
 	};
 
 }

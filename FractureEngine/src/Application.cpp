@@ -3,6 +3,7 @@
 
 Fracture::Application::Application()
 {
+	m_Editor = std::unique_ptr<Editor>(new Editor());
 }
 
 Fracture::Application::~Application()
@@ -11,6 +12,7 @@ Fracture::Application::~Application()
 
 void Fracture::Application::init()
 {
+	m_Editor->onInit();
 }
 
 void Fracture::Application::run()
@@ -18,7 +20,7 @@ void Fracture::Application::run()
 	init();
 	while (m_IsRunning)
 	{
-
+		m_Editor->onUpdate();
 	}
 }
 
