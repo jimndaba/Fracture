@@ -18,10 +18,9 @@ void Fracture::Application::init()
 void Fracture::Application::run()
 {
 	init();
-	while (m_IsRunning)
-	{
-		m_Editor->onUpdate();
-	}
+
+	m_Editor->onUpdate();
+	
 }
 
 void Fracture::Application::onUpdate()

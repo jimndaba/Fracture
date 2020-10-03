@@ -19,11 +19,24 @@ namespace Fracture
 		void onInit();
 		void onUpdate();
 
+		void Begin();
+		void Render();
+		void End();
+
 	private:
 		SDL_Window* window;
 		SDL_GLContext gl_context;
-
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		ImGuiWindowFlags panel_flags = ImGuiWindowFlags_MenuBar;
+		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		bool done;
+		static bool p_open;
+		static bool opt_fullscreen;
+		static bool opt_padding;
+		
 		int display_width, display_height;
+
+		void ToolBar();
 	};
 }
 
