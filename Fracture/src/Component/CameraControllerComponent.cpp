@@ -19,9 +19,9 @@ glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
     return glm::lookAt(Position, Position + Front, Up);
 }
 
-glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(GameWindow* m_window)
+glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, int height)
 {
-    return glm::perspective(glm::radians(foV), float(m_window->Width) / float(m_window->Height), nearClip, farClip);
+    return glm::perspective(glm::radians(foV), float(width) / float(height), nearClip, farClip);
 }
 
 void Fracture::CameraControllerComponent::onUpdate(float dt)

@@ -45,6 +45,12 @@
     <ClInclude Include="vendor\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SandboxScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -71,5 +77,36 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SandboxScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FractureEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\fractureIcon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Icon256.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Icon256.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\icon256_vbh_icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\fractureIcon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\favicon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

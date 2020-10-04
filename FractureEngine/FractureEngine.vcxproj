@@ -87,8 +87,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\SandboxScene.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h" />
@@ -102,11 +104,24 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\SandboxScene.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
     <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="vendor\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FractureEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\favicon.ico" />
+    <Image Include="..\fractureIcon.ico" />
+    <Image Include="..\fractureIcon.png" />
+    <Image Include="..\Icon256.ico" />
+    <Image Include="..\Icon256.png" />
+    <Image Include="..\icon256_vbh_icon.ico" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

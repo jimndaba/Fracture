@@ -13,6 +13,7 @@
 #include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
 #include "Scene/Scene.h"
+#include "RenderTarget.h"
 #include "AssetManager/AssetManager.h"
 #include "Entity/Camera.h"
 
@@ -30,9 +31,10 @@ void _check_gl_error(const char* file, int line);
 
 #endif // GLERROR_H
 
-Fracture::Renderer::Renderer(GameWindow& window):m_window(window)
+Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width,m_Height,GL_FLOAT,1,true));
     glClearColor(0.3f, 0.4f, 0.6f,1.0f);
 }
 
@@ -56,7 +58,17 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 
 void Fracture::Renderer::RenderPasses()
 {
+    
     // for each render pass ->DrawScene();
+    SceneRenderTarget->bind();
+    glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Submit();   
+    SceneRenderTarget->Unbind();
+
+
+    clearColor(0.3f, 0.5f, 0.6f);
+    glClear(GL_COLOR_BUFFER_BIT);
     Submit();
 }
 
@@ -73,7 +85,7 @@ void Fracture::Renderer::Submit()
         //set material settings
         
         material->getShader()->use();
-        material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(&m_window));
+        material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width,m_Height));
         material->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
         material->getShader()->setVec3("viewPos", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->Position);
 

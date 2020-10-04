@@ -21,6 +21,7 @@ namespace Fracture
 
 	public:
 		Game();
+		Game(int width, int height);
 		~Game();
 
 		void run();
@@ -42,6 +43,8 @@ namespace Fracture
 		void onQuit();
 		void onWindowResize(int width, int height);
 
+		Renderer* GetRenderer();
+	
 	private:
 		bool m_isRunning = true;
 		std::unique_ptr<GameWindow> m_GameWindow;
@@ -51,7 +54,6 @@ namespace Fracture
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
-
 		std::shared_ptr<Fracture::Scene> m_currentScene;
 	};
 

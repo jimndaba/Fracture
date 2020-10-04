@@ -60,7 +60,7 @@ namespace Fracture
 
 		glm::mat4 getViewMatrix();
 
-		glm::mat4 getProjectionMatrix(GameWindow* m_window);
+		glm::mat4 getProjectionMatrix(int width,int height);
 
 		virtual void onUpdate(float dt);
 		virtual void onAttach();

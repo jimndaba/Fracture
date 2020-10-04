@@ -1,0 +1,118 @@
+#include "RenderTarget.h"
+#include "Texture.h"
+#include <iostream>
+
+
+Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
+{
+    Width = width;
+    Height = height;
+    Type = type;
+
+    glGenFramebuffers(1, &ID);
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    // generate all requested color attachments
+    for (unsigned int i = 0; i < nrColorAttachments; ++i)
+    {
+        /*
+        //texture.FilterMin = GL_LINEAR;
+        //texture.FilterMax = GL_LINEAR;
+        //texture.WrapS = GL_CLAMP_TO_EDGE;
+        //texture.WrapT = GL_CLAMP_TO_EDGE;
+        //texture.Mipmapping = false;
+      
+        */
+
+        /*
+       texture.FilterMin = GL_LINEAR;
+       texture.FilterMax = GL_LINEAR;
+       texture.WrapS = GL_CLAMP_TO_EDGE;
+       texture.WrapT = GL_CLAMP_TO_EDGE;
+       texture.Mipmapping = false;
+       texture.Generate(width, height, GL_DEPTH_STENCIL, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
+       */
+
+        GLenum internalFormat = GL_RGBA;
+        if (type == GL_HALF_FLOAT)
+            internalFormat = GL_RGBA16F;
+        else if (type == GL_FLOAT)
+            internalFormat = GL_RGBA32F;
+                
+        std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(new Texture("cAttachment" + i, width, height, internalFormat, GL_RGBA, GL_FLOAT, TextureType::ColorAttachment));
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->id, 0);
+        m_ColorAttachments.push_back(texture);
+    }
+    // then generate Depth/Stencil texture if requested
+    HasDepthAndStencil = depthAndStencil;
+    if (depthAndStencil)
+    {
+        std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH_STENCIL, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
+       
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture->id, 0);
+        m_DepthStencil = texture;
+    }
+
+
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cout << "Framebuffer not complete!" << std::endl;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
+Fracture::RenderTarget::~RenderTarget()
+{
+
+    glDeleteFramebuffers(1,&ID);
+
+}
+
+std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetDepthStencilTexture()
+{
+	return std::shared_ptr<Texture>();
+}
+
+std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetColorTexture(unsigned int index)
+{
+    if (index < m_ColorAttachments.size())
+        return m_ColorAttachments[index];
+    else
+    {
+        std::cout << "RenderTarget color texture requested, but not available: " + std::to_string(index) << std::endl;
+        return nullptr;
+    }
+}
+
+void Fracture::RenderTarget::bind()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+}
+
+void Fracture::RenderTarget::Unbind()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Fracture::RenderTarget::Resize(unsigned int width, unsigned int height)
+{
+    Width = width;
+    Height = height;
+
+    for (unsigned int i = 0; i < m_ColorAttachments.size(); ++i)
+    {
+        m_ColorAttachments[i]->Resize(width, height);
+    }
+    // generate Depth/Stencil texture if requested
+    if (HasDepthAndStencil)
+    {
+        m_DepthStencil->Resize(width, height);
+    }
+}
+
+void Fracture::RenderTarget::SetTarget(GLenum target)
+{
+    m_Target = target;
+}

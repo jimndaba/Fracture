@@ -25,10 +25,21 @@ double accumulator = 0.0;
 
 Fracture::Game::Game()
 {
-	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280,720,"FRACTURE"));
+	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer(*m_GameWindow));		
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer(m_GameWindow->Width,m_GameWindow->Height));
+	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
+	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
+	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
+}
+
+Fracture::Game::Game(int width, int height)
+{
+	//m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
+	m_AssetManager = Fracture::AssetManager::instance();
+	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer(width,height));
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
@@ -51,15 +62,9 @@ void Fracture::Game::run()
 		double frameTime = newTime - currentTime;
 		currentTime = newTime;
 
-		//while (frameTime > 0.0)
-		//{
-		//	float deltaTime = (float)fmin(frameTime, dt);
-		//fixed step
-		//	frameTime -= deltaTime;
-		//	t += deltaTime;
-		//}
 		update(frameTime);
 		render();
+
 		m_GameWindow->swapBuffers();
 	}
 	unloadContent();
@@ -68,6 +73,7 @@ void Fracture::Game::run()
 
 void Fracture::Game::init()
 {	
+	
 }
 
 void Fracture::Game::loadContent()
@@ -81,7 +87,7 @@ void Fracture::Game::loadContent()
 void Fracture::Game::update(float dt)
 {
 	m_ComponentManager->onUpdate(dt);
-
+	
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
 	
 	for (int i = 3; i < 13; i++)
@@ -123,8 +129,8 @@ void Fracture::Game::update(float dt)
 			camera->Move(Camera_Movement::DOWN, dt);
 		}		
 	}
-
 	
+
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
 		onQuit();
@@ -175,3 +181,9 @@ void Fracture::Game::onWindowResize(int width, int height)
 {
 	m_Renderer->setViewport(width, height);
 }
+
+Fracture::Renderer* Fracture::Game::GetRenderer()
+{
+	return m_Renderer.get();
+}
+

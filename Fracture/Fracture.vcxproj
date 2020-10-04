@@ -122,6 +122,7 @@
     <ClCompile Include="src\Rendering\Model.cpp" />
     <ClCompile Include="src\Rendering\RenderBucket.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Rendering\RenderTarget.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Rendering\Renderer2D.h" />
+    <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />

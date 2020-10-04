@@ -9,7 +9,7 @@
 
 namespace Fracture
 {
-
+	class Game;
 	class Editor
 	{
 	public:
@@ -18,18 +18,23 @@ namespace Fracture
 
 		void onInit();
 		void onUpdate();
+		void onShutdown();
+
+		void SetGame(Game* game);
 
 		void Begin();
 		void Render();
 		void End();
+		bool done;
 
 	private:
+		Game* m_game;
 		SDL_Window* window;
 		SDL_GLContext gl_context;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		ImGuiWindowFlags panel_flags = ImGuiWindowFlags_MenuBar;
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-		bool done;
+		
 		static bool p_open;
 		static bool opt_fullscreen;
 		static bool opt_padding;

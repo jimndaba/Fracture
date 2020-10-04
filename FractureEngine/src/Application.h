@@ -6,6 +6,14 @@
 namespace Fracture
 {
 	class Editor;
+	class Game;
+
+	enum class EngineState
+	{
+		Editor,
+		Game,
+		Paused,
+	};
 
 	class Application
 	{
@@ -22,8 +30,9 @@ namespace Fracture
 	private:
 
 		bool m_IsRunning = true;
+		EngineState m_state;
 		std::unique_ptr<Editor> m_Editor;
-
+		std::unique_ptr<Game> m_Game;
 		//EventQueue
 	};
 

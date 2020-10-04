@@ -24,12 +24,13 @@ namespace Fracture
 	class Entity;
 	class EntityInstance;
 	class Scene;
+	class RenderTarget;
 	class Camera;
 
 	class Renderer
 	{
 	public:
-		Renderer(GameWindow& window);
+		Renderer(int width,int height);
 		~Renderer();		
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
@@ -53,8 +54,11 @@ namespace Fracture
 		void RenderEntity(std::shared_ptr<Entity> entity);		
 		void RenderScene(std::shared_ptr<Scene> scene);
 
+		std::shared_ptr<RenderTarget> SceneRenderTarget;
+
 	private:
-		GameWindow& m_window;
+		int m_width;
+		int m_Height;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
 
