@@ -6,10 +6,13 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "SDL2/SDL.h"
 #include "GLAD/glad.h"
+#include <memory>
 
 namespace Fracture
 {
 	class Game;
+	class Frame;
+
 	class Editor
 	{
 	public:
@@ -20,11 +23,10 @@ namespace Fracture
 		void onUpdate();
 		void onShutdown();
 
-		void SetGame(Game* game);
+		void SetGame(Fracture::Game* game);
 
-		void Begin();
 		void Render();
-		void End();
+
 		bool done;
 
 	private:
@@ -34,11 +36,13 @@ namespace Fracture
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		ImGuiWindowFlags panel_flags = ImGuiWindowFlags_MenuBar;
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-		
+
+		std::shared_ptr<Frame> m_frame;
+
+
 		static bool p_open;
 		static bool opt_fullscreen;
-		static bool opt_padding;
-		
+		static bool opt_padding;		
 		int display_width, display_height;
 
 		void ToolBar();

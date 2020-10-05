@@ -1,2 +1,7 @@
-﻿  Application.cpp
-  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+﻿  Editor.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(254,96): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(254,70): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(257,68): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(369,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(378,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

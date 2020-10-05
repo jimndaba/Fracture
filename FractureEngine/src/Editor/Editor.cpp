@@ -3,6 +3,7 @@
 #include "Game/Game.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RenderTarget.h"
+#include "Frame.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -14,7 +15,7 @@ inline void Style();
 
 Fracture::Editor::Editor()
 {
-    
+    m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
 }
 
 Fracture::Editor::~Editor()
@@ -61,27 +62,9 @@ void Fracture::Editor::onInit()
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
-
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-
-    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+    
     Style();
-
-    /*
-    ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        style.WindowRounding = 0.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-    }*/
-    
   
-    
     // Setup Platform/Renderer bindings
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 400");
@@ -105,28 +88,12 @@ void Fracture::Editor::onUpdate()
             done = true;
        
     }
-        
-
-        /*/
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->GetWorkPos());
-        ImGui::SetNextWindowSize(viewport->GetWorkSize());
-        ImGui::SetNextWindowViewport(viewport->ID);
-
-
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-        */
-    // Rendering
-    
-   // glViewport(0, 0, 1280, 720);
-    //glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT);
-    Begin();
+      
+    m_frame->begin(window);
 
     Render();
 
-    End();
+    m_frame->end();
     
     SDL_GL_SwapWindow(window); 
 }
@@ -146,14 +113,6 @@ void Fracture::Editor::onShutdown()
 void Fracture::Editor::SetGame(Game* game)
 {
     m_game = game;
-}
-
-void Fracture::Editor::Begin()
-{
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-    ImGui::NewFrame();
 }
 
 void Fracture::Editor::Render()
@@ -264,6 +223,8 @@ void Fracture::Editor::Render()
    
         ToolBar();
 
+        m_frame->render();
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         if (ImGui::Begin("Property editor",&p_open, panel_flags))
         {
@@ -290,12 +251,14 @@ void Fracture::Editor::Render()
             //the third parameter is the lower right corner
             //the last two parameters are the UVs
             //they have to be flipped (normally they would be (0,0);(1,1) 
-     
+            m_game->GetRenderer()->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+
             ImGui::GetWindowDrawList()->AddImage(
                 (void*)m_game->GetRenderer()->SceneRenderTarget->ID,
                 ImVec2(ImGui::GetCursorScreenPos()),
                 ImVec2(ImGui::GetCursorScreenPos().x + ImGui::GetWindowSize().x ,
                     ImGui::GetCursorScreenPos().y + ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
+            
   
             //we are done working with this window
 
@@ -313,22 +276,6 @@ void Fracture::Editor::Render()
 
     ImGui::End();
 
-}
-
-void Fracture::Editor::End()
-{
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());  
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-        SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-    }
-    
 }
 
 void Fracture::Editor::ToolBar()
