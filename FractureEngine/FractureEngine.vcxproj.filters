@@ -54,10 +54,10 @@
     <ClInclude Include="src\Editor\Frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Elements\Element.h">
+    <ClInclude Include="src\Editor\Elements\UIStyle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Elements\UIStyle.h">
+    <ClInclude Include="src\Editor\Elements\Panel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClCompile Include="src\Editor\Frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Elements\Element.cpp">
+    <ClCompile Include="src\Editor\Elements\Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

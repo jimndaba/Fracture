@@ -9,7 +9,7 @@
 
 namespace Fracture
 {
-	class Element;
+	class Panel;
 
 	class Frame
 	{
@@ -22,14 +22,14 @@ namespace Fracture
 		void render();
 		void end();
 
-		void AddElement(std::shared_ptr<Element> element);
-		void RemoveElement(std::shared_ptr<Element>  element);
+		void AddPanel(std::shared_ptr<Panel> panel);
+		void RemovePanel(std::shared_ptr<Panel>  panel);
 
-		std::vector <std::shared_ptr<Element>> GetElements();
+		std::vector <std::shared_ptr<Panel>> GetElements();
 
 	private:
 
-		std::vector<std::shared_ptr<Element>> m_elements;
+		std::vector<std::shared_ptr<Panel>> m_panels;
 
 
 	};

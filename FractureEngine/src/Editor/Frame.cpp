@@ -2,7 +2,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "Elements/Element.h"
+#include "Elements/Panel.h"
 
 Fracture::Frame::Frame()
 {
@@ -22,9 +22,9 @@ void Fracture::Frame::begin(SDL_Window* window)
 
 void Fracture::Frame::render()
 {
-    for (int i = 0; i < m_elements.size(); i++)
+    for (int i = 0; i < m_panels.size(); i++)
     {
-        m_elements[i]->render();
+        m_panels[i]->render();
     }
 }
 
@@ -43,17 +43,17 @@ void Fracture::Frame::end()
     }
 }
 
-void Fracture::Frame::AddElement(std::shared_ptr<Element>  element)
+void Fracture::Frame::AddPanel(std::shared_ptr<Fracture::Panel> panel)
 {
-    if(element)
-        m_elements.push_back(element);
+    if(panel)
+        m_panels.push_back(panel);
 }
 
-void Fracture::Frame::RemoveElement(std::shared_ptr<Element>  element)
+void Fracture::Frame::RemovePanel(std::shared_ptr<Fracture::Panel>  panel)
 {
 }
 
-std::vector<std::shared_ptr<Fracture::Element>> Fracture::Frame::GetElements()
+std::vector<std::shared_ptr<Fracture::Panel>> Fracture::Frame::GetElements()
 {
-    return std::vector<std::shared_ptr<Element>>();
+    return std::vector<std::shared_ptr<Panel>>();
 }
