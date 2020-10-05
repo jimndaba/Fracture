@@ -54,10 +54,31 @@
     <ClInclude Include="src\Editor\Frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Elements\UIStyle.h">
+    <ClInclude Include="src\Editor\Panels\Inspector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Elements\Panel.h">
+    <ClInclude Include="src\Editor\Panels\Panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Panels\SceneviewPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Panels\TabbedPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Panels\UIStyle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Panels\ViewPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Elements\Element.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Elements\TabbedElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Elements\TagComponentElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +113,28 @@
     <ClCompile Include="src\Editor\Frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Elements\Panel.cpp">
+    <ClCompile Include="src\Editor\Panels\Inspector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Panels\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Panels\SceneviewPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Panels\TabbedPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Panels\ViewPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Elements\Element.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Elements\TabbedElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Elements\TagComponentElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,9 +154,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Icon256.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\icon256_vbh_icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\fractureIcon.png">

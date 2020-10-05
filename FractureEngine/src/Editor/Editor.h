@@ -12,6 +12,10 @@ namespace Fracture
 {
 	class Game;
 	class Frame;
+	class SceneView;
+	class InspectorPanel;
+	class ViewPanel;
+	class TabbedPanel;
 
 	class Editor
 	{
@@ -38,7 +42,10 @@ namespace Fracture
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 		std::shared_ptr<Frame> m_frame;
-
+		std::shared_ptr<SceneView> m_sceneview;
+		std::shared_ptr<InspectorPanel> m_inspectorpanel;
+		std::shared_ptr<ViewPanel> m_viewpanel;
+		std::shared_ptr<TabbedPanel> m_TabbedPanel;
 
 		static bool p_open;
 		static bool opt_fullscreen;

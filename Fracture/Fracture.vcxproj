@@ -108,6 +108,7 @@
     <ClCompile Include="src\Component\DirectLightComponent.cpp" />
     <ClCompile Include="src\Component\PointLightComponent.cpp" />
     <ClCompile Include="src\Component\RenderComponent.cpp" />
+    <ClCompile Include="src\Component\TagComponent.cpp" />
     <ClCompile Include="src\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Entity\DirectLight.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="src\Component\PointLightComponent.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />
     <ClInclude Include="src\Component\SpotLightComponent.h" />
+    <ClInclude Include="src\Component\TagComponent.h" />
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Entity\DirectLight.h" />
     <ClInclude Include="src\Entity\Entity.h" />

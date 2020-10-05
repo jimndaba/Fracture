@@ -4,6 +4,11 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RenderTarget.h"
 #include "Frame.h"
+#include "Panels/Panel.h"
+#include "Panels/SceneviewPanel.h"
+#include "Panels/Inspector.h"
+#include "Panels/ViewPanel.h"
+#include "Panels/TabbedPanel.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -16,6 +21,16 @@ inline void Style();
 Fracture::Editor::Editor()
 {
     m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
+
+    m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
+    m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
+    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
+    m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
+
+    m_frame->AddPanel(m_sceneview);
+    m_frame->AddPanel(m_inspectorpanel);
+    m_frame->AddPanel(m_viewpanel);
+    m_frame->AddPanel(m_TabbedPanel);
 }
 
 Fracture::Editor::~Editor()
@@ -113,6 +128,7 @@ void Fracture::Editor::onShutdown()
 void Fracture::Editor::SetGame(Game* game)
 {
     m_game = game;
+    m_viewpanel->setGame(game);
 }
 
 void Fracture::Editor::Render()
@@ -225,55 +241,7 @@ void Fracture::Editor::Render()
 
         m_frame->render();
 
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        if (ImGui::Begin("Property editor",&p_open, panel_flags))
-        {
-            ImGui::PopStyleVar();
-            ImGui::End();
-        }
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        if (ImGui::Begin("Log", & p_open, panel_flags))
-        {
-            ImGui::PopStyleVar();
-            ImGui::End();
-        }
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        if (ImGui::Begin("Viewport", &p_open, panel_flags))
-        {
-            ImGui::PopStyleVar();
-            ImVec2 pos = ImGui::GetCursorScreenPos();
-
-            //pass the texture of the FBO
-            //window.getRenderTexture() is the texture of the FBO
-            //the next parameter is the upper left corner for the uvs to be applied at
-            //the third parameter is the lower right corner
-            //the last two parameters are the UVs
-            //they have to be flipped (normally they would be (0,0);(1,1) 
-            m_game->GetRenderer()->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-
-            ImGui::GetWindowDrawList()->AddImage(
-                (void*)m_game->GetRenderer()->SceneRenderTarget->ID,
-                ImVec2(ImGui::GetCursorScreenPos()),
-                ImVec2(ImGui::GetCursorScreenPos().x + ImGui::GetWindowSize().x ,
-                    ImGui::GetCursorScreenPos().y + ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
-            
-  
-            //we are done working with this window
-
-          
-
-            ImGui::End();
-        }
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        if (ImGui::Begin("Scene", &p_open, panel_flags))
-        {
-            ImGui::PopStyleVar();
-            ImGui::End();
-        }
-
+      
     ImGui::End();
 
 }

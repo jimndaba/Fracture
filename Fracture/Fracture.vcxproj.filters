@@ -90,6 +90,9 @@
     <ClCompile Include="src\Rendering\RenderTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\TagComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -279,6 +282,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Component\TagComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

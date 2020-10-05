@@ -2,7 +2,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "Elements/Panel.h"
+#include "Panels/Panel.h"
 
 Fracture::Frame::Frame()
 {
@@ -24,7 +24,9 @@ void Fracture::Frame::render()
 {
     for (int i = 0; i < m_panels.size(); i++)
     {
+        m_panels[i]->begin();
         m_panels[i]->render();
+        m_panels[i]->end();
     }
 }
 
@@ -51,6 +53,11 @@ void Fracture::Frame::AddPanel(std::shared_ptr<Fracture::Panel> panel)
 
 void Fracture::Frame::RemovePanel(std::shared_ptr<Fracture::Panel>  panel)
 {
+}
+
+void Fracture::Frame::clearPanel()
+{
+    m_panels.clear();
 }
 
 std::vector<std::shared_ptr<Fracture::Panel>> Fracture::Frame::GetElements()

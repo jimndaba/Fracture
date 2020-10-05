@@ -7,6 +7,7 @@ namespace Fracture
 	enum class ComponentType
 	{
 		None,
+		Tag,
 		Transform,
 		Render,
 		Camera,
