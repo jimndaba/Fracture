@@ -35,5 +35,12 @@
 #include "Entity/Entity.h"
 #include "Entity/IDManager.h"
 
+#include "Component/TagComponent.h"
+#include "Component/TransformComponent.h"
+#include "Component/CameraControllerComponent.h"
+#include "Component/ScriptComponent.h"
+
+
+#include "Scripting/GameLogic.h"
 
 #endif

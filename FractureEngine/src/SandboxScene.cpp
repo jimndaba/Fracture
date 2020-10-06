@@ -1,6 +1,5 @@
 #include "SandboxScene.h"
 
-#include "SandboxScene.h"
 
 
 Fracture::SandboxScene::SandboxScene() :Fracture::Scene()
@@ -63,6 +62,7 @@ void Fracture::SandboxScene::onLoad()
 	std::shared_ptr<Fracture::Entity> monkey = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
 	Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(monkey->Id, glm::vec3(0.0f), glm::vec3(0.3f));
 	Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(monkey->Id, "samus", "samus");
+	Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(monkey->Id, "Samus");
 	addEntity(monkey);
 
 	for (unsigned int i = 0; i < 10; i++)
@@ -71,6 +71,8 @@ void Fracture::SandboxScene::onLoad()
 		cube->name = "cube";
 		Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(cube->Id, cubePositions[i]);
 		Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(cube->Id, "cube", "default");
+		Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id, "Cube");
+	
 		//addEntity(cube);
 		monkey->addChild(cube);
 	}

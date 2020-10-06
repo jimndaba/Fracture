@@ -88,10 +88,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CubeScript.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\SandboxScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CubeScript.h" />
     <ClInclude Include="src\SandboxScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

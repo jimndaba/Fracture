@@ -13,7 +13,11 @@ namespace Fracture
 
 	public:
 		TagComponent(int entityID);
+		TagComponent(int entityID,std::string name);
 		~TagComponent();
+
+		virtual void onAttach();
+		virtual void onDettach();
 
 		int ID;
 		std::string Name;

@@ -1,6 +1,10 @@
 #include "ComponentManager.h"
 #include "Component.h"
+#include "TagComponent.h"
 #include "IUpdatable.h"
+#include "Game/Game.h"
+#include "Scripting/ScriptManager.h"
+#include "ScriptComponent.h"
 #include <iostream>
 
 std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::m_Components;
@@ -16,19 +20,21 @@ Fracture::ComponentManager::~ComponentManager()
 }
 
 void Fracture::ComponentManager::onUpdate(float dt)
-{
-	//std::cout << m_Components.size() << std::endl;
-	//Push physics components to Physics system
-	//push render Components to Render system
-	//push Audio Components to Audio System
-	//push Script Components to GameLogic System
-
+{	
 	for (auto& component : m_Components)
 	{
 		std::shared_ptr<IUPDATABLE> c = std::dynamic_pointer_cast<IUPDATABLE>(component);
-		if(c)
+		if (c)
 			c->onUpdate(dt);
-	}	
+			
+	}
+
+	for (auto& component : m_Components)
+	{
+		std::shared_ptr<ScriptComponent> c = std::dynamic_pointer_cast<ScriptComponent>(component);
+		if(c)
+			Game::AddScript(c->GetScript());
+	}
 }
 
 std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetComponents(int enitytId)

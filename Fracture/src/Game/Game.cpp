@@ -13,7 +13,7 @@
 #include "Input/InputManager.h"
 #include "Entity/IDManager.h"
 #include "Scene/Scene.h"
-
+#include "Scripting/ScriptManager.h"
 
 
 
@@ -22,6 +22,7 @@ const double dt = 0.01;
 double currentTime = SDL_GetTicks() / 1000.0;
 double accumulator = 0.0;
 
+std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager;
 
 Fracture::Game::Game()
 {
@@ -32,6 +33,7 @@ Fracture::Game::Game()
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
+	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 }
 
 Fracture::Game::Game(int width, int height)
@@ -87,20 +89,20 @@ void Fracture::Game::loadContent()
 void Fracture::Game::update(float dt)
 {
 	m_ComponentManager->onUpdate(dt);
+	if (m_ScriptManager->Start)
+	{
+		m_ScriptManager->onStart();
+		m_ScriptManager->Start = false;
+	}
+
+	m_ScriptManager->OnUpdate(dt);	
+	
 	
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
-	
-	for (int i = 3; i < 13; i++)
-	{
-		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(i);
-		transform->Rotation.x += 0.5f * dt * i;
-		transform->Rotation.y += 0.8f * dt * i;
-	}
 
 	float mouseX = m_InputManager->GetMousePosition().x;
 	float mouseY = m_InputManager->GetMousePosition().y;
 	
-
 	if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 	{
 		camera->InputMouse(mouseX, mouseY, dt);
@@ -128,8 +130,7 @@ void Fracture::Game::update(float dt)
 		{
 			camera->Move(Camera_Movement::DOWN, dt);
 		}		
-	}
-	
+	}	
 
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
@@ -170,6 +171,11 @@ std::shared_ptr<Fracture::Scene> Fracture::Game::CurrentScene()
 	if(m_currentScene)
 		return m_currentScene;
 	return nullptr;
+}
+
+void Fracture::Game::AddScript(std::shared_ptr<GameLogic> script)
+{
+	m_ScriptManager->AddScript(script);
 }
 
 void Fracture::Game::onQuit()

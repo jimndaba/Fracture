@@ -15,6 +15,8 @@ namespace Fracture
 	class InputManager;
 	class IDManager;
 	class Scene;
+	class ScriptManager;
+	class GameLogic;
 
 	class Game
 	{
@@ -36,8 +38,10 @@ namespace Fracture
 		void addScene(std::shared_ptr<Fracture::Scene> scene);
 		//void removeScene();
 		//void changeScene();
-
 		std::shared_ptr<Fracture::Scene> CurrentScene();
+
+		//Scripting
+		static void AddScript(std::shared_ptr<GameLogic> script);
 
 		//events
 		void onQuit();
@@ -54,9 +58,10 @@ namespace Fracture
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
+		static std::unique_ptr<ScriptManager> m_ScriptManager;
 		std::shared_ptr<Fracture::Scene> m_currentScene;
 	};
 
 }
-#endif // ! GAME_H
+#endif
 

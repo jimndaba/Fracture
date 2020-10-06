@@ -1,1 +1,6 @@
-﻿  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+﻿  Application.cpp
+  Frame.cpp
+  SandboxScene.cpp
+  main.cpp
+  Generating Code...
+  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
