@@ -152,7 +152,7 @@ void Fracture::Game::unloadContent()
 
 void Fracture::Game::shutdown()
 {
-	
+
 	m_AssetManager.release();
 	m_Renderer.release();
 	m_ComponentManager.release();

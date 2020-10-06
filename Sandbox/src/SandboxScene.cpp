@@ -23,14 +23,14 @@ void SandboxScene::onLoad()
 	glm::vec3(1.5f,  0.2f, -1.5f),
 	};
 	//models
-	Fracture::AssetManager::AddModel("samus", "content/models/samus/DolSzerosuitR1.obj");
-	Fracture::AssetManager::AddModel("cube", "content/models/cube.obj");
+	Fracture::AssetManager::AddModel("samus", "bin/content/models/samus/DolSzerosuitR1.obj");
+	Fracture::AssetManager::AddModel("cube", "bin/content/models/cube.obj");
 
 	//textures
-	Fracture::AssetManager::AddTexture("container", "content/textures/container.png", Fracture::TextureType::Diffuse);
-	Fracture::AssetManager::AddTexture("specular", "content/textures/container_specular.png", Fracture::TextureType::Specular);
+	Fracture::AssetManager::AddTexture("container", "bin/content/textures/container.png", Fracture::TextureType::Diffuse);
+	Fracture::AssetManager::AddTexture("specular", "bin/content/textures/container_specular.png", Fracture::TextureType::Specular);
 
-	Fracture::AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
+	Fracture::AssetManager::AddShader("default", "bin/content/shaders/model/vertex.glsl", "bin/content/shaders/model/fragment.glsl");
 
 	std::shared_ptr<Fracture::Material> defaultMaterial = std::shared_ptr<Fracture::Material>(new Fracture::Material("default", Fracture::AssetManager::getShader("default")));
 
