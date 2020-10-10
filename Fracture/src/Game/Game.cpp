@@ -14,7 +14,7 @@
 #include "Entity/IDManager.h"
 #include "Scene/Scene.h"
 #include "Scripting/ScriptManager.h"
-
+#include "Profiling/Profiler.h"
 
 
 double t = 0.0;
@@ -41,6 +41,7 @@ Fracture::Game::Game(int width, int height)
 	//m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer(width,height));
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
@@ -53,6 +54,7 @@ Fracture::Game::~Game()
 
 void Fracture::Game::run()
 {
+	Profiler::Get().BeginSession("Profile");
 	init();
 	loadContent();
 	while (m_isRunning)
@@ -75,11 +77,12 @@ void Fracture::Game::run()
 
 void Fracture::Game::init()
 {	
-	
+	ProfilerTimer timer("Init");
 }
 
 void Fracture::Game::loadContent()
 {
+	ProfilerTimer timer("loadContent");
 	if (m_currentScene)
 	{
 		m_currentScene->onLoad();
@@ -88,6 +91,7 @@ void Fracture::Game::loadContent()
 
 void Fracture::Game::update(float dt)
 {
+	ProfilerTimer timer("Update");
 	m_ComponentManager->onUpdate(dt);
 	if (m_ScriptManager->Start)
 	{
@@ -140,6 +144,7 @@ void Fracture::Game::update(float dt)
 
 void Fracture::Game::render()
 {
+	ProfilerTimer timer("Render");
 	m_Renderer->BeginFrame(m_currentScene);
 	m_Renderer->RenderPasses();
 	m_Renderer->EndFrame();
@@ -153,12 +158,13 @@ void Fracture::Game::unloadContent()
 
 void Fracture::Game::shutdown()
 {
-
+	Profiler::Get().EndSession();
 	m_AssetManager.release();
 	m_Renderer.release();
 	m_ComponentManager.release();
 	m_EntityManager.release();
 	m_GameWindow.release();
+	
 }
 
 void Fracture::Game::addScene(std::shared_ptr<Fracture::Scene> scene)

@@ -35,7 +35,7 @@ namespace Fracture
 	{
 
 	public:
-		CameraControllerComponent(int id, glm::vec3 position = glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+		CameraControllerComponent(uint32_t id, glm::vec3 position = glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 		~CameraControllerComponent();
 
 		// Camera Attributes
@@ -58,13 +58,14 @@ namespace Fracture
 		float nearClip = 1.0f;
 		float farClip = 100.0f;
 
+
+		virtual void onStart();
+
 		glm::mat4 getViewMatrix();
 
 		glm::mat4 getProjectionMatrix(int width,int height);
 
 		virtual void onUpdate(float dt);
-		virtual void onAttach();
-		virtual void onDettach();
 
 		void Move(Camera_Movement td, float dt);
 		void InputMouse(float xpos, float ypos, float dt, bool constrainPitch = true);

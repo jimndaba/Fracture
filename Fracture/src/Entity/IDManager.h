@@ -2,6 +2,8 @@
 #ifndef IDMANAGER_H
 #define IDMANAGER_H
 
+#include <cstdint>
+
 namespace Fracture
 {
 
@@ -12,15 +14,15 @@ namespace Fracture
 		IDManager();
 		~IDManager();
 
-		static int GetID()
+		static uint32_t GetID()
 		{
-			int id = m_currentID;
+			uint32_t id = m_currentID;
 			nextID();
 			return id;
 		};
 
 	private:
-		static int m_currentID;
+		static uint32_t m_currentID;
 		static void nextID()
 		{
 			m_currentID++;

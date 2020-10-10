@@ -7,6 +7,8 @@
 #include <vector>
 #include <math.h>
 
+#include "Profiling/Profiler.h"
+
 #include "Game/Game.h"
 #include "Game/GameWindow.h"
 #include "Rendering/Renderer.h"
@@ -39,6 +41,7 @@
 #include "Component/TransformComponent.h"
 #include "Component/CameraControllerComponent.h"
 #include "Component/ScriptComponent.h"
+#include "Component/RelationshipComponent.h"
 
 
 #include "Scripting/GameLogic.h"

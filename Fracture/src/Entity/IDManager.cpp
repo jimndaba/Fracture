@@ -1,6 +1,6 @@
 #include "IDManager.h"
 
-int Fracture::IDManager::m_currentID;
+uint32_t Fracture::IDManager::m_currentID;
 
 Fracture::IDManager::IDManager()
 {

@@ -1,28 +1,30 @@
 #include "TransformComponent.h"
 #include "ComponentManager.h"
+#include "Component/RelationshipComponent.h"
+#include "Entity/Entity.h"
 
-Fracture::TransformComponent::TransformComponent(int entityID):Component(entityID,ComponentType::Transform)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID):Component(entityID,ComponentType::Transform)
 {
 	Position = glm::vec3(0.0f,-5.0f,0.0f);
 	Scale = glm::vec3(0.5f);
 	Rotation = glm::vec3(0.0f);
 }
 
-Fracture::TransformComponent::TransformComponent(int entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform)
 {
 	Position = pos;
 	Scale = glm::vec3(0.5f);
 	Rotation = glm::vec3(0.0f);
 }
 
-Fracture::TransformComponent::TransformComponent(int entityID, glm::vec3 pos,glm::vec3 scale) : Component(entityID, ComponentType::Transform)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos,glm::vec3 scale) : Component(entityID, ComponentType::Transform)
 {
 	Position = pos;
 	Scale = scale;
 	Rotation = glm::vec3(0.0f);
 }
 
-Fracture::TransformComponent::TransformComponent(int entityID, glm::vec3 pos, glm::vec3 scale,glm::vec3 rotation) : Component(entityID, ComponentType::Transform)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale,glm::vec3 rotation) : Component(entityID, ComponentType::Transform)
 {
 	Position = pos;
 	Scale = scale;
@@ -33,13 +35,8 @@ Fracture::TransformComponent::~TransformComponent()
 {
 }
 
-void Fracture::TransformComponent::onAttach()
+void Fracture::TransformComponent::onStart()
 {
-}
-
-void Fracture::TransformComponent::onDettach()
-{
-
 }
 
 glm::mat4 Fracture::TransformComponent::GetLocalTranform()
@@ -55,18 +52,18 @@ glm::mat4 Fracture::TransformComponent::GetLocalTranform()
 
 glm::mat4 Fracture::TransformComponent::GetWorldTransform()
 {
-	/* TODO
-	if (this->GetEntityParent())
+	RelationShipComponent& component = *ComponentManager::GetComponent<RelationShipComponent>(EntityID);
+
+	if (component.m_parent)
 	{
-		m_parentTransform = Game::ComponentManager()->GetComponent<DiTransformComponent>(this->GetEntityParent()->GetID());
+		TransformComponent& m_parentTransform = *ComponentManager::GetComponent<TransformComponent>(component.m_parent->Id);
 		//(DiTransformComponent*)Game::ComponentManager()->GetComponent(ComponentType::Transform, this->GetEntityParent()->GetID());
-		m_WorldTransform = m_parentTransform->GetWorldTransform() * GetLocalTranform();
+		m_WorldTransform = m_parentTransform.GetWorldTransform() * GetLocalTranform();
 	}
 	else
 	{
 		m_WorldTransform = GetLocalTranform();
 	}
-	*/
 	//return m_WorldTransform;
     return GetLocalTranform();
 }

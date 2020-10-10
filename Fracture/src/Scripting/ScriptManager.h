@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 
+
 namespace Fracture
 {
 	class GameLogic;

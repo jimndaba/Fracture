@@ -19,10 +19,15 @@ namespace Fracture
 		float quadratic = 0.0f;
 
 	public:
-		PointLightComponent(int id);
+		PointLightComponent(uint32_t id);
 		~PointLightComponent();
 
+
+		virtual void onStart();
+
 		void SetPosition(glm::vec3 pos);
+
+
 
 		glm::vec3 GetPosition();
 

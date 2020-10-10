@@ -13,11 +13,11 @@ namespace Fracture
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(int entityID, std::string model,std::string material);
+		RenderComponent(uint32_t entityID, std::string model,std::string material);
 		~RenderComponent();
 
-		virtual void onAttach();
-		virtual void onDettach();
+
+		virtual void onStart();
 
 		std::shared_ptr<Model> model;
 		std::shared_ptr<Material> material;

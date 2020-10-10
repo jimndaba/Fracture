@@ -21,7 +21,7 @@ namespace Fracture
 		virtual void onLateUpdate(float dt);
 
 		template<class T>
-		static std::shared_ptr<T> GetComponent(int entityID);
+		static std::shared_ptr<T> GetComponent(uint32_t entityID);
 
 		template<class T>
 		static std::shared_ptr<T> GetComponent(std::string entityName);
@@ -29,7 +29,7 @@ namespace Fracture
 	};
 
 	template<class T>
-	inline std::shared_ptr<T> GameLogic::GetComponent(int entityID)
+	inline std::shared_ptr<T> GameLogic::GetComponent(uint32_t entityID)
 	{
 		return ComponentManager::GetComponent<T>(entityID);
 	}

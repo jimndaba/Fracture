@@ -11,6 +11,7 @@ Fracture::Application::Application()
 
 Fracture::Application::~Application()
 {
+
 }
 
 void Fracture::Application::init()

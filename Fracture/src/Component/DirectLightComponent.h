@@ -17,11 +17,11 @@ namespace Fracture
 		glm::vec3 m_specular = glm::vec3(0.0f);
 
 	public:
-		DirectLightComponent(int id);
+		DirectLightComponent(uint32_t id);
 		~DirectLightComponent();
 
-		virtual void onAttach();
-		virtual void onDettach();
+
+		virtual void onStart();
 
 		glm::vec3 GetLightDirection()
 		{

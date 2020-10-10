@@ -1,6 +1,6 @@
 #include "DirectLightComponent.h"
 
-Fracture::DirectLightComponent::DirectLightComponent(int id):Component(id,ComponentType::DirectLight)
+Fracture::DirectLightComponent::DirectLightComponent(uint32_t id):Component(id,ComponentType::DirectLight)
 {
 }
 
@@ -8,13 +8,10 @@ Fracture::DirectLightComponent::~DirectLightComponent()
 {
 }
 
-void Fracture::DirectLightComponent::onAttach()
+void Fracture::DirectLightComponent::onStart()
 {
 }
 
-void Fracture::DirectLightComponent::onDettach()
-{
-}
 
 void Fracture::DirectLightComponent::SetDirection(glm::vec3 direction)
 {

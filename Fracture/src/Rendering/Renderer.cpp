@@ -16,6 +16,7 @@
 #include "RenderTarget.h"
 #include "AssetManager/AssetManager.h"
 #include "Entity/Camera.h"
+#include "Profiling/Profiler.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -44,6 +45,7 @@ Fracture::Renderer::~Renderer()
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
+    ProfilerTimer timer("Begin Frame");
     clear();
 	//set state defaults
 	//setViewport();
@@ -58,17 +60,19 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 
 void Fracture::Renderer::RenderPasses()
 {
-    
+    ProfilerTimer timer("RenderPass");
     // for each render pass ->DrawScene();
+    m_opaqueBucket->sort();
+   
     SceneRenderTarget->bind();
     glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Submit();   
     SceneRenderTarget->Unbind();
-
+ 
 
     clearColor(0.3f, 0.5f, 0.6f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);   
     Submit();
 }
 
@@ -79,48 +83,47 @@ void Fracture::Renderer::EndFrame()
 
 void Fracture::Renderer::Submit()
 {
-    for(const auto& command : m_opaqueBucket->getCommands())
+    ProfilerTimer timer("Submit");
+    for(auto& command : m_opaqueBucket->getCommands())
     {
-        std::shared_ptr<Material> material = command.material;
-        //set material settings
-        
-        material->getShader()->use();
-        material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width,m_Height));
-        material->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
-        material->getShader()->setVec3("viewPos", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->Position);
+        command.material->getShader()->use();
+        command.material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+        command.material->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+        command.material->getShader()->setVec3("viewPos", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->Position);
 
-        // set uniform state of material
-        std::unordered_map<std::string, UniformValue>* uniforms = command.material->GetUniforms();
+        command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+
+        auto* uniforms = command.material->GetUniforms();
         for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
         {
             switch (it->second.Type)
             {
             case SHADER_TYPE_BOOL:
-                material->getShader()->setBool(it->first, it->second.Bool);
+                command.material->getShader()->setBool(it->first, it->second.Bool);
                 break;
             case SHADER_TYPE_INT:
-                material->getShader()->setInt(it->first, it->second.Int);
+                command.material->getShader()->setInt(it->first, it->second.Int);
                 break;
             case SHADER_TYPE_FLOAT:
-                material->getShader()->setFloat(it->first, it->second.Float);
+                command.material->getShader()->setFloat(it->first, it->second.Float);
                 break;
             case SHADER_TYPE_VEC2:
-                material->getShader()->setVec2(it->first, it->second.Vec2);
+                command.material->getShader()->setVec2(it->first, it->second.Vec2);
                 break;
             case SHADER_TYPE_VEC3:
-                material->getShader()->setVec3(it->first, it->second.Vec3);
+                command.material->getShader()->setVec3(it->first, it->second.Vec3);
                 break;
             case SHADER_TYPE_VEC4:
-                material->getShader()->setVec4(it->first, it->second.Vec4);
+                command.material->getShader()->setVec4(it->first, it->second.Vec4);
                 break;
             case SHADER_TYPE_MAT2:
-                material->getShader()->setMat2(it->first, it->second.Mat2);
+                command.material->getShader()->setMat2(it->first, it->second.Mat2);
                 break;
             case SHADER_TYPE_MAT3:
-                material->getShader()->setMat3(it->first, it->second.Mat3);
+                command.material->getShader()->setMat3(it->first, it->second.Mat3);
                 break;
             case SHADER_TYPE_MAT4:
-                material->getShader()->setMat4(it->first, it->second.Mat4);
+                command.material->getShader()->setMat4(it->first, it->second.Mat4);
                 break;
             default:
                 //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
@@ -128,77 +131,44 @@ void Fracture::Renderer::Submit()
             }
         }
 
-        std::unordered_map<std::string, UniformValueSampler>* uniformsSamplers = material->GetSamplerUniforms();
+        std::unordered_map<std::string, UniformValueSampler>* uniformsSamplers = command.material->GetSamplerUniforms();
         for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
         {
             switch (it->second.Type)
             {
             case SHADER_TYPE_SAMPLER2D:
-                material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
+                command.material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
                 break;
                 //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
                 break;
             }
         }
 
-      
-        std::vector<std::shared_ptr<Texture>> Textures = command.Textures;
-        for (auto it : Textures)
+        for (int i = 0; i < command.Textures.size(); i++)
         {
-            switch (it->textureType)
-            {
-            case TextureType::Diffuse:
-                material->getShader()->setTexture("material.diffuse",it.get(), (int)it->textureType);
-                    break;
-            case TextureType::Specular:
-                material->getShader()->setTexture("material.specular", it.get(), (int)it->textureType);
-                break;
-            case TextureType::Normal:
-                material->getShader()->setTexture("material.normal", it.get(), (int)it->textureType);
-                break;
-            case TextureType::Reflection:
-                material->getShader()->setTexture("material.reflection", it.get(), (int)it->textureType);
-                break;
-            case TextureType::Bump:
-                material->getShader()->setTexture("material.bump", it.get(), (int)it->textureType);
-                break;
-            case TextureType::Height:
-                material->getShader()->setTexture("material.height", it.get(), (int)it->textureType);
-                break;
-                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
-                break;
-            }
+            command.material->getShader()->setTexture(command.Textures[i]->type, command.Textures[i].get(), (int)command.Textures[i]->textureType);
         }
 
-        material->getShader()->setMat4("model", command.transform->GetWorldTransform());
 
-        glBindVertexArray(command.VAO);
-        glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-        
-  
-        for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
-        {
-            switch (it->second.Type)
-            {
-            case SHADER_TYPE_SAMPLER2D:
-                //material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
-                glActiveTexture(GL_TEXTURE0 + it->second.Unit);
-                glBindTexture(GL_TEXTURE_2D, 0);
-                break;
-                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
-                break;
-            }
-        }
-     
-        for (int  i =0; i < Textures.size();i++)
-        {
-            glActiveTexture(GL_TEXTURE0 + (int)Textures[i]->textureType);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
+        Draw(command);
         command.material->getShader()->unbind();
-    }    
+    }
+}
+
+void Fracture::Renderer::Draw(RenderCommand command)
+{
+    glBindVertexArray(command.VAO);
+    glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+void Fracture::Renderer::DrawInstanced(RenderCommand command)
+{
+    glMultiDrawElementsIndirect(GL_TRIANGLES, //type
+        GL_UNSIGNED_INT,                   //indices represented as unsigned ints
+        (GLvoid*)0,                        //start with the first draw command
+        100,                               //draw 100 objects
+        0);
 }
 
 void Fracture::Renderer::clear()
@@ -219,11 +189,14 @@ void Fracture::Renderer::setViewport(int width, int height)
 void Fracture::Renderer::PushCommand(RenderCommand command)
 {
 	m_opaqueBucket->pushCommand(command);
-}
-
-void Fracture::Renderer::PushInstancedCommand(RenderInstancedCommand command)
-{
-    m_opaqueBucket->pushInstancedCommand(command);
+    /*
+    for (each entity)
+    {
+        push opaque command
+            push shadow command
+            push ....command;
+    }
+    */
 }
 
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
@@ -234,24 +207,10 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     //push to prost processing
 }
 
-void Fracture::Renderer::AddDirectLight(std::shared_ptr<Fracture::DirectLightComponent> directLight)
-{
-    m_directLights.push_back(directLight);
-}
-
-void Fracture::Renderer::AddPointLight(std::shared_ptr<Fracture::PointLightComponent> pointLight)
-{
-    m_pointLights.push_back(pointLight);
-}
-
-void Fracture::Renderer::AddSpotLight(std::shared_ptr<Fracture::SpotLightComponent> spotLight)
-{
-    m_spotLights.push_back(spotLight);
-}
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
-   
+    ProfilerTimer timer("Render Entity");
     if (!entity)
     {
         return;
@@ -262,28 +221,23 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
   
     if (render)
     {
+      
         for (auto mesh : render->model->GetMeshes())
         {
+            
             PushCommand(mesh, render->material, transform);
         }   
-
-        for (int i = 0; i < entity->Children().size(); i++)
-        {
-            RenderEntity(entity->Children()[i]);
-        }
     }
-    else
-    {
-        for (int i = 0; i < entity->Children().size(); i++)
-        {
-            RenderEntity(entity->Children()[i]);
-        }
-    }  
 }
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
-    RenderEntity(scene->Root());
+    ProfilerTimer timer("Render Scene");
+    for (std::shared_ptr<Entity> entity : scene->Entities())
+    {
+        RenderEntity(entity);
+    }
+    
 }
 
 

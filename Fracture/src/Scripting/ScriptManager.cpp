@@ -1,5 +1,6 @@
 #include "ScriptManager.h"
 #include "GameLogic.h"
+#include "Profiling/Profiler.h"
 
 Fracture::ScriptManager::ScriptManager()
 {
@@ -34,6 +35,7 @@ void Fracture::ScriptManager::onStart()
 
 void Fracture::ScriptManager::OnUpdate(float dt)
 {
+	
 	for (auto script : m_scripts)
 	{
 		script->onUpdate(dt);

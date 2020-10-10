@@ -38,6 +38,9 @@ namespace Fracture
 		void EndFrame();
 		void Submit();
 
+		void Draw(RenderCommand command);
+		void DrawInstanced(RenderCommand command);
+
 
 		void clear();
 		void clearColor(float r, float g, float b);

@@ -2,11 +2,14 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <cstdint>
+
 namespace Fracture
 {
 	enum class ComponentType
 	{
 		None,
+		Relationship,
 		Tag,
 		Transform,
 		Render,
@@ -23,17 +26,15 @@ namespace Fracture
 	class Component
 	{
 	public:
-		Component(int id,ComponentType mtype):entityID(id),componentType(mtype)
+		Component(uint32_t id,ComponentType mtype):EntityID(id),componentType(mtype)
 		{
 		};
 		~Component() {};
-		virtual void onAttach() = 0;
-		virtual void onDettach() = 0;
 
-		int entityID;
-		ComponentType componentType = ComponentType::None;
+		virtual void onStart() = 0;
 
-		
+		uint32_t EntityID;
+		ComponentType componentType = ComponentType::None;		
 	};
 	
 }

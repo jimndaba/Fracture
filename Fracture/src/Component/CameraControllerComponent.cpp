@@ -1,7 +1,7 @@
 #include "CameraControllerComponent.h"
 
 
-Fracture::CameraControllerComponent::CameraControllerComponent(int id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
+Fracture::CameraControllerComponent::CameraControllerComponent(uint32_t id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
 {
     Yaw = -90.0f;
     Pitch = 0.0f;
@@ -12,6 +12,10 @@ Fracture::CameraControllerComponent::CameraControllerComponent(int id, glm::vec3
 Fracture::CameraControllerComponent::~CameraControllerComponent()
 {
 
+}
+
+void Fracture::CameraControllerComponent::onStart()
+{
 }
 
 glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
@@ -31,14 +35,6 @@ void Fracture::CameraControllerComponent::onUpdate(float dt)
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
     Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
     UpdateCameraVectors();
-}
-
-void Fracture::CameraControllerComponent::onAttach()
-{
-}
-
-void Fracture::CameraControllerComponent::onDettach()
-{
 }
 
 void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)

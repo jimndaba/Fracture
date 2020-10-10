@@ -25,12 +25,14 @@ namespace Fracture
 		void onUpdate(float dt);
 				
 		template< class T, typename... Args >
-		static void AddComponent(int entity, Args&&... params);
+		static void AddComponent(uint32_t entity, Args&&... params);
+
+		static void AddComponent(std::shared_ptr<Component> component);
 
 		template <class T>
-		static std::shared_ptr<T>GetComponent(int enitytId);	
+		static std::shared_ptr<T>GetComponent(uint32_t enitytId);
 
-		static std::vector<std::shared_ptr<Component>> GetComponents(int enitytId);
+		static std::vector<std::shared_ptr<Component>> GetComponents(uint32_t enitytId);
 
 	
 	private:
@@ -38,17 +40,17 @@ namespace Fracture
 	};
 
 	template<class T, typename ...Args>
-	inline void ComponentManager::AddComponent(int entity, Args && ...params)
+	inline void ComponentManager::AddComponent(uint32_t entity, Args && ...params)
 	{		
 		m_Components.push_back(std::make_shared<T>(entity,params...));
 	}
 
 	template<class T>
-	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(int entitytId)
+	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(uint32_t entitytId)
 	{
 		for (const auto& component : m_Components)
 		{						
-				if (component != nullptr && component->entityID == entitytId && std::dynamic_pointer_cast<T>(component) != nullptr)
+				if (component != nullptr && component->EntityID == entitytId && std::dynamic_pointer_cast<T>(component) != nullptr)
 				{						
 					return std::dynamic_pointer_cast<T>(component);
 				}							

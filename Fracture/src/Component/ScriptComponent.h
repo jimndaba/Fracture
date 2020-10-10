@@ -13,11 +13,11 @@ namespace Fracture
 	{
 
 	public:
-		ScriptComponent(int id, std::shared_ptr<GameLogic>  script);
+		ScriptComponent(uint32_t id, std::shared_ptr<GameLogic>  script);
 		~ScriptComponent();
 
-		virtual void onAttach();
-		virtual void onDettach();
+
+		virtual void onStart();
 
 		std::shared_ptr<GameLogic> GetScript();
 

@@ -22,19 +22,19 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 	m_commands.push_back(command);
 }
 
-void Fracture::RenderBucket::pushInstancedCommand(RenderInstancedCommand command)
-{
-	m_InstancedCommands.push_back(command);
-}
-
 void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
 	RenderCommand command = {};	
-	command.material = material;
+	command.material = material.get();
+
+	for (int i = 0; i < mesh->Textures().size(); i++)
+	{
+		command.Textures.push_back(mesh->Textures()[i]);
+	}
+
 	command.VAO = mesh->VAO;
 	command.indiceSize = (GLint)mesh->GetIndices().size();
-	command.transform = transform;
-	command.Textures = mesh->Textures();
+	command.ID= transform->EntityID;
 	m_commands.push_back(command);
 }
 
@@ -51,11 +51,6 @@ void Fracture::RenderBucket::clear()
 std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cull)
 {
 	return m_commands;
-}
-
-std::vector<Fracture::RenderInstancedCommand> Fracture::RenderBucket::getInstancedCommands()
-{
-	return m_InstancedCommands;
 }
 
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)

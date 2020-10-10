@@ -14,29 +14,17 @@ namespace Fracture
 	public:
 		Entity();
 		~Entity();
-
-		int Id;
+		uint32_t Id;
 		std::string name;
-
-		void addChild(std::shared_ptr<Entity> child);
-		void removeChild(std::shared_ptr<Entity> child);
-		void clearChildren();
-		void setParent(std::shared_ptr<Entity> parent);
-
-		std::shared_ptr<Entity> GetParent();
-
-		std::vector<std::shared_ptr<Entity>> Children();
-		std::shared_ptr<Entity> Parent = nullptr;		
 	private:
-		std::vector<std::shared_ptr<Entity>> m_children;
 
 	};
 
 	class EntityInstance
 	{
 	public:
-		unsigned int EntityID;
-		unsigned int InstanceID;
+		uint32_t EntityID;
+		uint32_t InstanceID;
 	};
 
 }

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <string>
 #include <memory>
 
 namespace Fracture
@@ -21,18 +22,18 @@ namespace Fracture
 		RenderBucket();
 		~RenderBucket();
 		void pushCommand(RenderCommand command);
-		void pushInstancedCommand(RenderInstancedCommand command);
 		void pushCommand(std::shared_ptr<Mesh> mesh, std::shared_ptr<Fracture::Material> material,std::shared_ptr<TransformComponent> transform);
 
 		void sort();
 		void clear();
 
 		std::vector<RenderCommand> getCommands(bool cull = false);
-		std::vector< RenderInstancedCommand> getInstancedCommands();
+
+		std::vector<std::string> Materials;
+	
+
 	private:
 		std::vector<RenderCommand> m_commands;
-		std::vector< RenderInstancedCommand> m_InstancedCommands;
-
 	};
 
 }

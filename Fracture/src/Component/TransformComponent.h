@@ -10,19 +10,20 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <cstdint>
+
 namespace Fracture
 {
 	class TransformComponent:public Component
 	{
 	public:
-		TransformComponent(int entityID);
-		TransformComponent(int entityID, glm::vec3 pos);
-		TransformComponent(int entityID, glm::vec3 pos, glm::vec3 scale);
-		TransformComponent(int entityID, glm::vec3 pos, glm::vec3 scale, glm::vec3 rotation);
+		TransformComponent(uint32_t entityID);
+		TransformComponent(uint32_t entityID, glm::vec3 pos);
+		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale);
+		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale, glm::vec3 rotation);
 		~TransformComponent();
 
-		virtual void onAttach();
-		virtual void onDettach();
+		virtual void onStart();
 
 		glm::vec3 Position;
 		glm::vec3 Scale;
