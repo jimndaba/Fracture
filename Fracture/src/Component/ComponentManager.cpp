@@ -5,6 +5,9 @@
 #include "Game/Game.h"
 #include "Scripting/ScriptManager.h"
 #include "ScriptComponent.h"
+#include "BoxColliderComponent.h"
+#include "RigidBodyComponent.h"
+#include "Physics/PhysicsManager.h"
 #include <iostream>
 #include "Profiling/Profiler.h"
 
@@ -20,6 +23,23 @@ Fracture::ComponentManager::~ComponentManager()
 	m_Components.clear();
 }
 
+void Fracture::ComponentManager::onLoad()
+{
+	for (auto& component : m_Components)
+	{
+		std::shared_ptr<BoxColliderComponent> c = std::dynamic_pointer_cast<BoxColliderComponent>(component);
+		if (c)
+			PhysicsManager::AddCollider(c->m_boxCollider);
+	}
+
+	for (auto& component : m_Components)
+	{
+		std::shared_ptr<RigidBodyComponent> c = std::dynamic_pointer_cast<RigidBodyComponent>(component);
+		if (c)
+			PhysicsManager::AddRigidBody(c->m_rigid);
+	}
+}
+
 void Fracture::ComponentManager::onUpdate(float dt)
 {	
 	ProfilerTimer timer("Component OnUpdate");
@@ -27,8 +47,7 @@ void Fracture::ComponentManager::onUpdate(float dt)
 	{
 		std::shared_ptr<IUPDATABLE> c = std::dynamic_pointer_cast<IUPDATABLE>(component);
 		if (c)
-			c->onUpdate(dt);
-			
+			c->onUpdate(dt);			
 	}
 
 	for (auto& component : m_Components)

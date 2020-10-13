@@ -63,8 +63,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Physx\include;$(SolutionDir)vendor\Physx\pxshared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalUsingDirectories>$(SolutionDir)vendor\</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include</AdditionalUsingDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -73,8 +74,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Physx\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysX_64.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,8 +86,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Physx\include;$(SolutionDir)vendor\Physx\pxshared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalUsingDirectories>$(SolutionDir)vendor\</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include</AdditionalUsingDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,18 +99,20 @@
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Physx\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysX_64.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
+    <ClCompile Include="src\Component\BoxColliderComponent.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\DirectLightComponent.cpp" />
     <ClCompile Include="src\Component\PointLightComponent.cpp" />
     <ClCompile Include="src\Component\RelationshipComponent.cpp" />
     <ClCompile Include="src\Component\RenderComponent.cpp" />
+    <ClCompile Include="src\Component\RigidBodyComponent.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\TagComponent.cpp" />
     <ClCompile Include="src\Component\TransformComponent.cpp" />
@@ -138,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
     <ClInclude Include="src\AssetManager\IResource.h" />
+    <ClInclude Include="src\Component\BoxColliderComponent.h" />
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
@@ -146,6 +151,7 @@
     <ClInclude Include="src\Component\PointLightComponent.h" />
     <ClInclude Include="src\Component\RelationshipComponent.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />
+    <ClInclude Include="src\Component\RigidBodyComponent.h" />
     <ClInclude Include="src\Component\ScriptComponent.h" />
     <ClInclude Include="src\Component\SpotLightComponent.h" />
     <ClInclude Include="src\Component\TagComponent.h" />

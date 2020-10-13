@@ -17,6 +17,7 @@ namespace Fracture
 	class Scene;
 	class ScriptManager;
 	class GameLogic;
+	class PhysicsManager;
 
 	class Game
 	{
@@ -58,6 +59,7 @@ namespace Fracture
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
+		std::unique_ptr<PhysicsManager> m_PhysicsManager;
 		static std::unique_ptr<ScriptManager> m_ScriptManager;
 		std::shared_ptr<Fracture::Scene> m_currentScene;
 	};

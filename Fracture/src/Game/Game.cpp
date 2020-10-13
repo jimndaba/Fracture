@@ -15,6 +15,7 @@
 #include "Scene/Scene.h"
 #include "Scripting/ScriptManager.h"
 #include "Profiling/Profiler.h"
+#include "Physics/PhysicsManager.h"
 
 
 double t = 0.0;
@@ -34,6 +35,7 @@ Fracture::Game::Game()
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
 	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
+	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 }
 
 Fracture::Game::Game(int width, int height)
@@ -65,7 +67,6 @@ void Fracture::Game::run()
 		double newTime = (double)SDL_GetTicks()/1000.0;
 		double frameTime = newTime - currentTime;
 		currentTime = newTime;
-
 		update(frameTime);
 		render();
 
@@ -78,6 +79,7 @@ void Fracture::Game::run()
 void Fracture::Game::init()
 {	
 	ProfilerTimer timer("Init");
+	m_PhysicsManager->Init();
 }
 
 void Fracture::Game::loadContent()
@@ -86,6 +88,7 @@ void Fracture::Game::loadContent()
 	if (m_currentScene)
 	{
 		m_currentScene->onLoad();
+		m_ComponentManager->onLoad();
 	}
 }
 
@@ -93,6 +96,10 @@ void Fracture::Game::update(float dt)
 {
 	ProfilerTimer timer("Update");
 	m_ComponentManager->onUpdate(dt);
+
+
+	m_PhysicsManager->onUpdate(dt);
+
 	if (m_ScriptManager->Start)
 	{
 		m_ScriptManager->onStart();
@@ -100,6 +107,10 @@ void Fracture::Game::update(float dt)
 	}
 
 	m_ScriptManager->OnUpdate(dt);	
+
+
+
+	
 	
 	
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);

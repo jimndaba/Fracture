@@ -1,1 +1,5 @@
-﻿  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+﻿  SandboxScene.cpp
+C:\Dev\Fracture\FractureEngine\src\SandboxScene.cpp(77,19): error C2039: 'addChild': is not a member of 'Fracture::Entity'
+C:\Dev\Fracture\Fracture\src\Scene\Scene.h(16): message : see declaration of 'Fracture::Entity'
+  imgui_widgets.cpp
+  Generating Code...

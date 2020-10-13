@@ -35,7 +35,7 @@ void Fracture::ScriptManager::onStart()
 
 void Fracture::ScriptManager::OnUpdate(float dt)
 {
-	
+	ProfilerTimer timer("Script Update");
 	for (auto script : m_scripts)
 	{
 		script->onUpdate(dt);

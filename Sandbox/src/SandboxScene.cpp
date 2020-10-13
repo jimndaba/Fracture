@@ -61,28 +61,44 @@ void SandboxScene::onLoad()
 	Fracture::AssetManager::AddMaterial("samus", samusMaterial);
 
 	std::shared_ptr<Fracture::Entity> monkey = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
+	monkey->name = "Samus";
 	std::shared_ptr<Fracture::RelationShipComponent> realationship = std::shared_ptr<Fracture::RelationShipComponent>(new Fracture::RelationShipComponent(monkey->Id));
 	realationship->SetParent(Root());
 	Fracture::ComponentManager::AddComponent(realationship);
-	Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(monkey->Id, glm::vec3(0.0f), glm::vec3(0.3f));
+	Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(monkey->Id, glm::vec3(0.0f), glm::vec3(0.5f));
 	Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(monkey->Id, "samus", "samus");
 	Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(monkey->Id);
+	Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(monkey->Id,1,1,1);
+	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(monkey->Id,0.0002f);
 	addEntity(monkey);
+
+
+	std::shared_ptr<Fracture::Entity> floor = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
+	floor->name = "Floor";
+
+	Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(floor->Id, glm::vec3(0,-10,0), glm::vec3(1.0f));
+	Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(floor->Id);
+	Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(floor->Id, 50, 2, 50);
+	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(floor->Id, 0.0f);
+
+	addEntity(floor);
 
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		std::shared_ptr<Fracture::Entity> cube = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
 		cube->name = "cube";
-		Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(cube->Id, cubePositions[i]);
+		Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(cube->Id, cubePositions[i], glm::vec3(1.0f));
 		Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(cube->Id, "cube", "default");
-		Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id);
-		Fracture::ComponentManager::AddComponent<Fracture::ScriptComponent>(cube->Id,std::make_shared<Fracture::CubeScript>(cube->Id));
-		std::shared_ptr<Fracture::RelationShipComponent> realationship = std::shared_ptr<Fracture::RelationShipComponent>(new Fracture::RelationShipComponent(cube->Id));
-		realationship->SetParent(Root());
-		Fracture::ComponentManager::AddComponent(realationship);
+		Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id);		
+	    Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(cube->Id, 1, 1, 1);
+		Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(cube->Id,10.0f);
+		//Fracture::ComponentManager::AddComponent<Fracture::ScriptComponent>(cube->Id,std::make_shared<Fracture::CubeScript>(cube->Id));
+		std::shared_ptr<Fracture::RelationShipComponent> crealationship = std::make_shared<Fracture::RelationShipComponent>(cube->Id);
+			
+		crealationship->SetParent(Root());
+		Fracture::ComponentManager::AddComponent(crealationship);
 
 		addEntity(cube);
-		//monkey addChild(cube);
 	}
 
 

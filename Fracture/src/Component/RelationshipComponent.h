@@ -20,10 +20,10 @@ namespace Fracture
 		virtual void onStart();
 
 		uint32_t noChildren = 0;
-		std::shared_ptr<Entity> m_parent = NULL;
-
+		std::shared_ptr<Entity> m_parent;
 		void SetParent(std::shared_ptr<Entity> parent);
 	private:
+		
 
 	};
 

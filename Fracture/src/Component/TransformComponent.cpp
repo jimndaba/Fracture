@@ -57,14 +57,12 @@ glm::mat4 Fracture::TransformComponent::GetWorldTransform()
 	if (component.m_parent)
 	{
 		TransformComponent& m_parentTransform = *ComponentManager::GetComponent<TransformComponent>(component.m_parent->Id);
-		//(DiTransformComponent*)Game::ComponentManager()->GetComponent(ComponentType::Transform, this->GetEntityParent()->GetID());
 		m_WorldTransform = m_parentTransform.GetWorldTransform() * GetLocalTranform();
 	}
 	else
 	{
 		m_WorldTransform = GetLocalTranform();
 	}
-	//return m_WorldTransform;
-    return GetLocalTranform();
+	return m_WorldTransform;
 }
 

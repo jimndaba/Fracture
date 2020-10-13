@@ -22,6 +22,8 @@ namespace Fracture
 		ComponentManager();
 		~ComponentManager();
 
+		void onLoad();
+
 		void onUpdate(float dt);
 				
 		template< class T, typename... Args >

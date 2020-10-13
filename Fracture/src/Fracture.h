@@ -42,6 +42,8 @@
 #include "Component/CameraControllerComponent.h"
 #include "Component/ScriptComponent.h"
 #include "Component/RelationshipComponent.h"
+#include "Component/BoxColliderComponent.h"
+#include "Component/RigidBodyComponent.h"
 
 
 #include "Scripting/GameLogic.h"
