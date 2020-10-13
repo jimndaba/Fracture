@@ -16,9 +16,9 @@ namespace Fracture
 		GameLogic() {};
 		~GameLogic() {};
 
-		virtual void onStart();
-		virtual void onUpdate(float dt);
-		virtual void onLateUpdate(float dt);
+		virtual void onStart() = 0;
+		virtual void onUpdate(float dt) = 0;
+		virtual void onLateUpdate(float dt) = 0;
 
 		template<class T>
 		static std::shared_ptr<T> GetComponent(uint32_t entityID);

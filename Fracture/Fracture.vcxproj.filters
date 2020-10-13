@@ -99,9 +99,6 @@
     <ClCompile Include="src\Component\ScriptComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\GameLogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\PhysicsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
