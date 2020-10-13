@@ -16,6 +16,7 @@ namespace Fracture
 	class InspectorPanel;
 	class ViewPanel;
 	class TabbedPanel;
+	class Renderer;
 
 	class Editor
 	{
@@ -46,6 +47,8 @@ namespace Fracture
 		std::shared_ptr<InspectorPanel> m_inspectorpanel;
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
+
+		std::unique_ptr<Renderer> m_Renderer;
 
 		static bool p_open;
 		static bool opt_fullscreen;

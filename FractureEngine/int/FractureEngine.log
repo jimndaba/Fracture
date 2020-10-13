@@ -1,5 +1,5 @@
-﻿  SandboxScene.cpp
-C:\Dev\Fracture\FractureEngine\src\SandboxScene.cpp(77,19): error C2039: 'addChild': is not a member of 'Fracture::Entity'
-C:\Dev\Fracture\Fracture\src\Scene\Scene.h(16): message : see declaration of 'Fracture::Entity'
-  imgui_widgets.cpp
-  Generating Code...
+﻿  Editor.cpp
+C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(344,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(353,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

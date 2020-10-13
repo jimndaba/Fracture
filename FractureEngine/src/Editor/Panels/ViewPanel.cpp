@@ -27,12 +27,16 @@ void Fracture::ViewPanel::render()
     //the last two parameters are the UVs
     //they have to be flipped (normally they would be (0,0);(1,1) 
     //m_game->GetRenderer()->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-
+    
+    ImGui::BeginChild("GameRender");
     ImGui::GetWindowDrawList()->AddImage(
         (void*)m_game->GetRenderer()->SceneRenderTarget->ID,
         ImVec2(ImGui::GetCursorScreenPos()),
         ImVec2(ImGui::GetCursorScreenPos().x + ImGui::GetWindowSize().x,
             ImGui::GetCursorScreenPos().y + ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
-
-
+  
+   
+    //ImVec2 wsize = ImGui::GetWindowSize();
+    //ImGui::Image((ImTextureID)m_game->GetRenderer()->SceneRenderTarget->ID, wsize, ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::EndChild();
 }

@@ -26,6 +26,7 @@ Fracture::Editor::Editor()
     m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
     m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
+    
 
     m_frame->AddPanel(m_sceneview);
     m_frame->AddPanel(m_inspectorpanel);
@@ -84,6 +85,8 @@ void Fracture::Editor::onInit()
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 400");
 
+   // m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
+
 }
 
 void Fracture::Editor::onUpdate()
@@ -133,6 +136,10 @@ void Fracture::Editor::SetGame(Game* game)
 
 void Fracture::Editor::Render()
 {
+    //m_Renderer->BeginFrame(m_game->CurrentScene());
+   // m_Renderer->RenderPasses();
+    //m_Renderer->EndFrame();
+
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen)
     {
