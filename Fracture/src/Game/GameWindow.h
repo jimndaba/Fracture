@@ -24,6 +24,11 @@ namespace Fracture
 		int Height;
 		std::string Title;
 
+		SDL_Window* Context()
+		{
+			return m_window;
+		}
+
 	private:
 		SDL_Window* m_window;
 		SDL_Event m_event;

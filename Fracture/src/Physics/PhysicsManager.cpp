@@ -97,8 +97,7 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 
 		if (body && body->getMotionState()) {
 			
-			body->getMotionState()->getWorldTransform(trans);
-			printf("world pos object %d = %f,%f,%f\n", i, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
+			body->getMotionState()->getWorldTransform(trans);			
 			
 			void* userPointer = body->getUserPointer();
 			if (userPointer) {

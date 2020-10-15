@@ -25,7 +25,6 @@ namespace Fracture
 	class EntityInstance;
 	class Scene;
 	class RenderTarget;
-	class Camera;
 
 	class Renderer
 	{

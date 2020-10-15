@@ -18,6 +18,7 @@ namespace Fracture
 	class ScriptManager;
 	class GameLogic;
 	class PhysicsManager;
+	class Logger;
 
 	class Game
 	{
@@ -60,8 +61,10 @@ namespace Fracture
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
-		static std::unique_ptr<ScriptManager> m_ScriptManager;
+		std::unique_ptr<Logger> m_logger;
+	
 		std::shared_ptr<Fracture::Scene> m_currentScene;
+		static std::unique_ptr<ScriptManager> m_ScriptManager;
 	};
 
 }

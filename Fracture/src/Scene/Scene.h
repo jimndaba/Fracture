@@ -16,7 +16,6 @@ namespace Fracture
 	class Entity; 
 	class TransformComponent;
 	class InstancePool;
-	class Camera;
 
 	class Scene
 	{
@@ -34,12 +33,12 @@ namespace Fracture
 		void removeEntity(std::shared_ptr<Entity> entity);
 		void clearScene();		
 
-		static std::shared_ptr<Camera> MainCamera();
+		static std::shared_ptr<Entity> MainCamera();
 		std::vector<std::shared_ptr<Entity>> Entities();
 
 	private:
 		std::shared_ptr<Entity> m_root;
-		static std::shared_ptr<Camera> main_Camera;
+		static std::shared_ptr<Entity> main_Camera;
 		std::vector<std::shared_ptr<Entity>> m_entities;
 		
 	};

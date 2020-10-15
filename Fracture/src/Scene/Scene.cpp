@@ -2,19 +2,19 @@
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RenderComponent.h"
+#include "Component/CameraControllerComponent.h"
 #include "Entity/EntityManager.h"
 #include "Entity/Entity.h"
-#include "Entity/DirectLight.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/RenderComponent.h"
 #include "Rendering/Model.h"
 #include "Rendering/Material.h"
-#include "Entity/Camera.h"
+#include "Logging/Logger.h"
 #include <iostream>
 
-std::shared_ptr < Fracture::Camera > Fracture::Scene::main_Camera;
+std::shared_ptr < Fracture::Entity > Fracture::Scene::main_Camera;
 
 Fracture::Scene::Scene()
 {
@@ -25,13 +25,12 @@ Fracture::Scene::Scene()
 	ComponentManager::AddComponent(m_root_rel);
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
 
-	main_Camera = EntityManager::CreateEntity<Camera>();
+	main_Camera = EntityManager::CreateEntity<Entity>();
 	main_Camera->name = "Main Camera";
-
-	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));
-	
+	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));	
 	m_camera_rel->SetParent(m_root);
-
+	ComponentManager::AddComponent(m_camera_rel);
+	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->Id);
 
 	addEntity(m_root);
 	addEntity(main_Camera);
@@ -40,7 +39,7 @@ Fracture::Scene::Scene()
 
 Fracture::Scene::~Scene()
 {
-	std::cout << "destroy scene"<< std::endl;	
+	FRACTURE_INFO("Scene Deleted");
 	clearScene();
 }
 
@@ -61,11 +60,11 @@ void Fracture::Scene::removeEntity(std::shared_ptr<Entity>  entity)
 
 void Fracture::Scene::clearScene()
 {
-	std::cout << "clear scene" << std::endl;
+	FRACTURE_INFO("Scene Cleared");
 	m_entities.clear();
 }
 
-std::shared_ptr<Fracture::Camera> Fracture::Scene::MainCamera()
+std::shared_ptr<Fracture::Entity> Fracture::Scene::MainCamera()
 {
 	if (main_Camera)
 		return main_Camera;

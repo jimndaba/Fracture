@@ -1,11 +1,12 @@
 #include "GameWindow.h"
 #include "Game/Game.h"
+#include "Logging/Logger.h"
 
 Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	Width(width),Height(height),Title(title)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		FRACTURE_CRITICAL("FAILED TO INIT SDL");
 		return;
 	}
 
@@ -18,7 +19,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 
 	m_window = SDL_CreateWindow(Title.c_str(), 100, 100, Width, Height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (m_window == nullptr) {
-		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+		FRACTURE_CRITICAL("FAILED TO INIT WINDOW : {}" , SDL_GetError());
 		SDL_Quit();
 		return;
 	}
@@ -26,16 +27,16 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	maincontext = SDL_GL_CreateContext(m_window);
 	if (maincontext == NULL)
 	{
-		std::cout << ("Failed to create OpenGL context") << SDL_GetError() << std::endl;
+		FRACTURE_CRITICAL("FAILED TO create OpenGL context {}" ,SDL_GetError());
 	}
 		
 
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 	// Check OpenGL properties
-	printf("OpenGL loaded\n");
-	printf("Vendor:   %s\n", glGetString(GL_VENDOR));
-	printf("Renderer: %s\n", glGetString(GL_RENDERER));
-	printf("Version:  %s\n", glGetString(GL_VERSION));
+	FRACTURE_INFO("OpenGL loaded");
+	FRACTURE_INFO("Vendor: {}", glGetString(GL_VENDOR));
+	FRACTURE_INFO("Renderer: {}", glGetString(GL_RENDERER));
+	FRACTURE_INFO("Version: {}", glGetString(GL_VERSION));
 }
 
 Fracture::GameWindow::~GameWindow()
@@ -68,7 +69,7 @@ void Fracture::GameWindow::pollEvents(Game& game)
                 game.onWindowResize(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h);
                 break;
             case SDL_WINDOWEVENT_SIZE_CHANGED:
-                SDL_Log("Window %d size changed to %dx%d",
+				FRACTURE_TRACE("Window {} size changed to {}x{}",
                     m_event.window.windowID, m_event.window.data1,
                     m_event.window.data2);
                 break;

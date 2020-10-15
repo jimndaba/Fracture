@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include "Profiling/Profiler.h"
+#include "Logging/Logger.h"
 
 #include "Game/Game.h"
 #include "Game/GameWindow.h"

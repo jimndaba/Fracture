@@ -14,15 +14,15 @@ SandboxScene::~SandboxScene()
 void SandboxScene::onLoad()
 {
 	glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(0.0f,  1.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, 0.0f),
+	glm::vec3(-1.5f, 8.2f, -0.5f),
+	glm::vec3(-3.8f, 6.0f, -0.3f),
+	glm::vec3(2.4f, 4.4f, -0.5f),
+	glm::vec3(-1.7f,  3.0f, -0.5f),
+	glm::vec3(1.3f, 9.0f, 0.5f),
+	glm::vec3(1.5f,  2.0f, 0.5f),
+	glm::vec3(1.5f,  10.2f, 0.5f),
 	};
 	//models
 	Fracture::AssetManager::AddModel("samus", "bin/content/models/samus/DolSzerosuitR1.obj");
@@ -69,7 +69,7 @@ void SandboxScene::onLoad()
 	Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(monkey->Id, "samus", "samus");
 	Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(monkey->Id);
 	Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(monkey->Id,1,1,1);
-	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(monkey->Id,0.0002f);
+	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(monkey->Id,1.0f);
 	addEntity(monkey);
 
 
@@ -91,7 +91,7 @@ void SandboxScene::onLoad()
 		Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(cube->Id, "cube", "default");
 		Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id);		
 	    Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(cube->Id, 1, 1, 1);
-		Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(cube->Id,10.0f);
+		Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(cube->Id,5.0f);
 		//Fracture::ComponentManager::AddComponent<Fracture::ScriptComponent>(cube->Id,std::make_shared<Fracture::CubeScript>(cube->Id));
 		std::shared_ptr<Fracture::RelationShipComponent> crealationship = std::make_shared<Fracture::RelationShipComponent>(cube->Id);
 			

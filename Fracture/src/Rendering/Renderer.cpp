@@ -12,10 +12,11 @@
 #include "Component/SpotLightComponent.h"
 #include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
+#include "Component/CameraControllerComponent.h"
 #include "Scene/Scene.h"
 #include "RenderTarget.h"
+#include "Entity/Entity.h"
 #include "AssetManager/AssetManager.h"
-#include "Entity/Camera.h"
 #include "Profiling/Profiler.h"
 
 #ifndef GLERROR_H

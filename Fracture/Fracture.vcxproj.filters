@@ -72,13 +72,7 @@
     <ClCompile Include="src\Entity\IDManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\CameraControllerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entity\DirectLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\DirectLightComponent.cpp">
@@ -112,6 +106,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\RigidBodyComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logging\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,25 +266,10 @@
     <ClInclude Include="src\Entity\IDManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entity\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Component\IUpdatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\CameraControllerComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity\DirectLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity\PointLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity\SpotLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\DirectLightComponent.h">
@@ -327,6 +309,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\RigidBodyComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logging\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

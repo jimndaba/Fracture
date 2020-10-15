@@ -7,7 +7,6 @@
 #include "Component/RenderComponent.h"
 #include "Rendering/Model.h"
 #include "Entity/Entity.h"
-#include "Entity/Camera.h"
 #include "Component/CameraControllerComponent.h"
 #include "Entity/EntityManager.h"
 #include "Input/InputManager.h"
@@ -16,6 +15,7 @@
 #include "Scripting/ScriptManager.h"
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
+#include "Logging/Logger.h"
 
 
 double t = 0.0;
@@ -27,6 +27,7 @@ std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager;
 
 Fracture::Game::Game()
 {
+	m_logger = std::make_unique<Logger>();
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
@@ -36,6 +37,7 @@ Fracture::Game::Game()
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
 	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
+	
 }
 
 Fracture::Game::Game(int width, int height)
@@ -120,6 +122,7 @@ void Fracture::Game::update(float dt)
 	
 	if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 	{
+		//SDL_WarpMouseInWindow(m_GameWindow->Context(), m_GameWindow->Width / 2, m_GameWindow->Height / 2);
 		camera->InputMouse(mouseX, mouseY, dt);
 		if (InputManager::IsKeyDown(KeyCode::W))
 		{
@@ -145,6 +148,7 @@ void Fracture::Game::update(float dt)
 		{
 			camera->Move(Camera_Movement::DOWN, dt);
 		}		
+		
 	}	
 
 	if (InputManager::IsKeyDown(KeyCode::Escape))

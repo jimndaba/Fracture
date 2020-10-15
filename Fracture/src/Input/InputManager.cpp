@@ -5,7 +5,8 @@ SDL_Event Fracture::InputManager::event;
 
 Fracture::InputManager::InputManager()
 {
-	
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_CaptureMouse(SDL_TRUE);
 }
 
 Fracture::InputManager::~InputManager()
