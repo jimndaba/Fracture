@@ -20,7 +20,9 @@ void Fracture::CameraControllerComponent::onStart()
 
 glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
 {
-    return glm::lookAt(Position, Position + Front, Up);
+    return m_viewMatrix;
+    //return glm::lookAt(Position, Position + Front, Up);
+
 }
 
 glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, int height)
@@ -31,7 +33,7 @@ glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, in
 void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);
-    Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
+    //Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
     Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
     UpdateCameraVectors();
@@ -104,6 +106,17 @@ void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, flo
 
 void Fracture::CameraControllerComponent::ZoomCamera(glm::vec2 zoom, float dt)
 {
+}
+
+void Fracture::CameraControllerComponent::LookAt(glm::vec3 target)
+{
+
+    glm::vec3 cameraDirection = glm::normalize(Position - target);
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+    m_viewMatrix = glm::lookAt(Position,cameraDirection, cameraUp);
 }
 
 void Fracture::CameraControllerComponent::UpdateCameraVectors()

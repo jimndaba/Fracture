@@ -2,6 +2,7 @@
 #include "GLAD/glad.h"
 #include <iostream>
 #include "Texture.h"
+#include "Logging/Logger.h"
 
 Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string fragmentPath):Name(name)
 {
@@ -30,8 +31,8 @@ Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string f
         fragmentCode = fShaderStream.str();
     }
     catch (std::ifstream::failure e)
-    {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+    {   
+        FRACTURE_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
     }
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
@@ -50,7 +51,7 @@ Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string f
     if (!success)
     {
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        FRACTURE_ERROR("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n {}", infoLog);    
     };
 
     // Frag Shader
@@ -62,7 +63,7 @@ Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string f
     if (!success)
     {
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        FRACTURE_ERROR("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n {}", infoLog);
     };
 
     // shader Program
@@ -75,7 +76,7 @@ Fracture::Shader::Shader(std::string name, std::string vertexPath, std::string f
     if (!success)
     {
         glGetProgramInfoLog(m_program, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        FRACTURE_ERROR("ERROR::SHADER::PROGRAM LINKING_FAILED\n {}", infoLog);
     }
 
     // delete the shaders as they're linked into our program now and no longer necessery
@@ -165,7 +166,7 @@ void Fracture::Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            FRACTURE_ERROR("ERROR::SHADER_COMPILATION_ERROR of type: {} \n {} \n ", type , infoLog, "-- --------------------------------------------------- -- ");
         }
     }
     else
@@ -173,8 +174,8 @@ void Fracture::Shader::checkCompileErrors(unsigned int shader, std::string type)
         glGetProgramiv(shader, GL_LINK_STATUS, &success);
         if (!success)
         {
-            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            glGetProgramInfoLog(shader, 1024, NULL, infoLog);           
+            FRACTURE_ERROR("ERROR::PROGRAM_LINKING_ERROR of type: {} \n {} \n ", type, infoLog, "-- --------------------------------------------------- -- ");
         }
     }
 }

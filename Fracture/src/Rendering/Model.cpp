@@ -1,10 +1,10 @@
 #include "Model.h"
 #include "Mesh.h"
-Fracture::Model::Model():IResource(ResourceType::MODEL)
+Fracture::Model::Model()
 {
 }
 
-Fracture::Model::Model(std::string name, std::string path):Name(name),Path(path),IResource(ResourceType::MODEL)
+Fracture::Model::Model(std::string name, std::string path):Name(name),Path(path)
 {
 }
 

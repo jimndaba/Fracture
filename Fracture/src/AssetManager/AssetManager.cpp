@@ -5,7 +5,7 @@
 #include "Rendering/Model.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Vertex.h"
-
+#include "Logging/Logger.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 
@@ -37,6 +37,7 @@ void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std
 	m_shader->vertexPath = vertex;
 	m_shader->fragPath = fragment;
 	m_Shaders.emplace(name, m_shader);
+	FRACTURE_TRACE("Loaded Shader: {}", name);
 }
 
 
@@ -46,6 +47,7 @@ void Fracture::AssetManager::AddModel(std::string name, std::string path)
 	model->Name = name;
 	model->directory = path;
 	m_Models.emplace(name, model);
+	FRACTURE_TRACE("Loaded model: {}", name);
 }
 
 
@@ -53,6 +55,7 @@ void Fracture::AssetManager::AddTexture(std::string name, std::string path, Text
 {
 	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
 	m_Textures.emplace(name, texture);
+	FRACTURE_TRACE("Loaded Texture: {}",name);
 }
 
 
@@ -64,11 +67,13 @@ void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shade
 {
 	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,shader));
 	m_Materials.emplace(name, material);
+	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Material> material)
 {
 	m_Materials.emplace(name, material);
+	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
 
@@ -99,7 +104,7 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);//| aiProcess_CalcTangentSpace
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
-		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+		FRACTURE_ERROR("ERROR::ASSIMP:: {}", importer.GetErrorString());	
 		return 0;
 	}
 
@@ -141,7 +146,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		FRACTURE_ERROR("Failed to load texture");		
 		stbi_image_free(newTex->m_data);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -302,7 +307,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		FRACTURE_ERROR("Failed to load texture {}",path);
 		stbi_image_free(texture->m_data);
 	}
 	texture->Unbind();

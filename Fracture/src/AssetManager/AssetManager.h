@@ -13,8 +13,6 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <GLAD/glad.h>
-#include "IResource.h"
-
 
 namespace Fracture
 {

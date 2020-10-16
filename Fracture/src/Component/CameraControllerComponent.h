@@ -71,10 +71,16 @@ namespace Fracture
 		void InputMouse(float xpos, float ypos, float dt, bool constrainPitch = true);
 		void ZoomCamera(glm::vec2 zoom, float dt);
 
+		void LookAt(glm::vec3 target);
+
+		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
+
 	private:
 		void UpdateCameraVectors();
 
-		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
+		glm::mat4 m_viewMatrix;
+
+	
 		float m_TargetYaw = -90.0f;
 		float m_TargetPitch = 0.0f;
 		float targetZoom = 45.0f;

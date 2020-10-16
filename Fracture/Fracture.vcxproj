@@ -135,11 +135,11 @@
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\Serializer.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
-    <ClInclude Include="src\AssetManager\IResource.h" />
     <ClInclude Include="src\Component\BoxColliderComponent.h" />
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
@@ -180,6 +180,7 @@
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
+    <ClInclude Include="src\Serialisation\Serializer.h" />
     <ClInclude Include="vendor\glad\glad.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\exponential.hpp" />

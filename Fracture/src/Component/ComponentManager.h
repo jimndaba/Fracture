@@ -25,7 +25,13 @@ namespace Fracture
 		void onLoad();
 
 		void onUpdate(float dt);
-				
+	
+		//AddRenderComponent (ID, model , material)
+		//AddTransformComponent (ID)
+		//AddTransformComponent (ID, position)
+		//AddTransformComponent (ID, positon , scale)
+		//AddTransformComponent (ID, positon , scale, rotation)
+		//AddScriptComponent (ID, script)
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
 

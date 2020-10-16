@@ -29,8 +29,8 @@ namespace Fracture
 
 		virtual void onLoad() = 0;
 
-		void addEntity(std::shared_ptr<Entity> entity);		
-		void removeEntity(std::shared_ptr<Entity> entity);
+		void addEntity(std::shared_ptr<Entity> entity);				
+		void Destroy(std::shared_ptr<Entity> entity);
 		void clearScene();		
 
 		static std::shared_ptr<Entity> MainCamera();

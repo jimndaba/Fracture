@@ -39,7 +39,7 @@ Fracture::Scene::Scene()
 
 Fracture::Scene::~Scene()
 {
-	FRACTURE_INFO("Scene Deleted");
+	
 	clearScene();
 }
 
@@ -53,14 +53,12 @@ void Fracture::Scene::addEntity(std::shared_ptr<Entity> entity)
 	m_entities.push_back(entity);
 }
 
-void Fracture::Scene::removeEntity(std::shared_ptr<Entity>  entity)
+void Fracture::Scene::Destroy(std::shared_ptr<Entity> entity)
 {
-	//m_root->removeChild(entity);
 }
 
 void Fracture::Scene::clearScene()
-{
-	FRACTURE_INFO("Scene Cleared");
+{	
 	m_entities.clear();
 }
 

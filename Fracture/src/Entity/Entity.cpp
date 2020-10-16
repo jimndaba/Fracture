@@ -11,6 +11,6 @@ Fracture::Entity::Entity():Id(IDManager::GetID())
 
 Fracture::Entity::~Entity()
 {
-	std::cout << "destroy entity: "<< name << std::endl;
+	
 }
 

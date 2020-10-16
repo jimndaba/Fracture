@@ -36,8 +36,7 @@ Fracture::Game::Game()
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
 	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
-	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
-	
+	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());	
 }
 
 Fracture::Game::Game(int width, int height)
@@ -69,9 +68,17 @@ void Fracture::Game::run()
 		double newTime = (double)SDL_GetTicks()/1000.0;
 		double frameTime = newTime - currentTime;
 		currentTime = newTime;
-		update(frameTime);
-		render();
 
+		accumulator += frameTime;
+		
+		while (accumulator >= dt)
+		{
+			update(dt);
+			accumulator -= dt;
+			t += dt;
+		}
+	
+		render();
 		m_GameWindow->swapBuffers();
 	}
 	unloadContent();
@@ -99,7 +106,6 @@ void Fracture::Game::update(float dt)
 	ProfilerTimer timer("Update");
 	m_ComponentManager->onUpdate(dt);
 
-
 	m_PhysicsManager->onUpdate(dt);
 
 	if (m_ScriptManager->Start)
@@ -109,12 +115,7 @@ void Fracture::Game::update(float dt)
 	}
 
 	m_ScriptManager->OnUpdate(dt);	
-
-
-
-	
-	
-	
+		
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
 
 	float mouseX = m_InputManager->GetMousePosition().x;
@@ -179,7 +180,6 @@ void Fracture::Game::shutdown()
 	m_ComponentManager.release();
 	m_EntityManager.release();
 	m_GameWindow.release();
-	
 }
 
 void Fracture::Game::addScene(std::shared_ptr<Fracture::Scene> scene)
