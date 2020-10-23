@@ -1,5 +1,7 @@
 #include "GameWindow.h"
 #include "Game/Game.h"
+#include "Event/Event.h"
+#include "Event/WindowEvents.h";
 #include "Logging/Logger.h"
 
 Fracture::GameWindow::GameWindow(int width, int height, std::string title):
@@ -66,7 +68,8 @@ void Fracture::GameWindow::pollEvents(Game& game)
             case SDL_WINDOWEVENT_MOVED:                
                 break;
             case SDL_WINDOWEVENT_RESIZED:
-                game.onWindowResize(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h);
+                //game.onWindowResize(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h);
+				Game::onEvent(new WindowResizeEvent(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h));
                 break;
             case SDL_WINDOWEVENT_SIZE_CHANGED:
 				FRACTURE_TRACE("Window {} size changed to {}x{}",

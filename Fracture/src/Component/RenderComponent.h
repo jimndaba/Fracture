@@ -3,6 +3,7 @@
 #define RENDERCOMPONENT_H
 
 #include "Component/Component.h"
+#include "Physics/CollisionFilter.h"
 #include <memory>
 #include <string>
 
@@ -21,6 +22,9 @@ namespace Fracture
 
 		std::shared_ptr<Model> model;
 		std::shared_ptr<Material> material;
+
+		CollisionGroup collisionGroup;
+		CollisionMask collisionMask;
 
 	private:
 		std::string m_modelName;

@@ -12,9 +12,13 @@
 #include "Input/InputManager.h"
 #include "Entity/IDManager.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 #include "Scripting/ScriptManager.h"
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
+#include "Rendering/DebugRenderer.h"
+#include "Event/Event.h"
+#include "Event/Eventbus.h"
 #include "Logging/Logger.h"
 
 
@@ -23,20 +27,14 @@ const double dt = 0.01;
 double currentTime = SDL_GetTicks() / 1000.0;
 double accumulator = 0.0;
 
-std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager;
+std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager =0;
+std::shared_ptr<Fracture::Eventbus> Fracture::Game::m_Eventbus=0;
+std::shared_ptr<Fracture::Scene> Fracture::Game::m_currentScene=0;
+std::unique_ptr<Fracture::SceneManager> Fracture::Game::m_SceneManager = 0;
 
 Fracture::Game::Game()
 {
-	m_logger = std::make_unique<Logger>();
-	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
-	m_AssetManager = Fracture::AssetManager::instance();
-	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer(m_GameWindow->Width,m_GameWindow->Height));
-	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
-	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
-	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
-	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
-	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());	
+	
 }
 
 Fracture::Game::Game(int width, int height)
@@ -76,9 +74,11 @@ void Fracture::Game::run()
 			update(dt);
 			accumulator -= dt;
 			t += dt;
+			m_ScriptManager->onEndFrame();
 		}
 	
 		render();
+	
 		m_GameWindow->swapBuffers();
 	}
 	unloadContent();
@@ -88,15 +88,32 @@ void Fracture::Game::run()
 void Fracture::Game::init()
 {	
 	ProfilerTimer timer("Init");
+	m_logger = std::make_unique<Logger>();
+	m_Eventbus = std::make_shared<Eventbus>();
+	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
+	m_AssetManager = Fracture::AssetManager::instance();
+	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer(m_GameWindow->Width, m_GameWindow->Height));
+	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
+	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
+	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
+	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
+	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
+	m_SceneManager = std::make_unique<SceneManager>();
+	m_debug = std::make_unique<DebugRenderer>();
+
+	m_Renderer->onInit();
 	m_PhysicsManager->Init();
+	
+
 }
 
 void Fracture::Game::loadContent()
 {
 	ProfilerTimer timer("loadContent");
-	if (m_currentScene)
+	if (m_SceneManager->GetActiveScene())
 	{
-		m_currentScene->onLoad();
+		m_SceneManager->GetActiveScene()->onLoad();
 		m_ComponentManager->onLoad();
 	}
 }
@@ -106,15 +123,18 @@ void Fracture::Game::update(float dt)
 	ProfilerTimer timer("Update");
 	m_ComponentManager->onUpdate(dt);
 
-	m_PhysicsManager->onUpdate(dt);
-
 	if (m_ScriptManager->Start)
 	{
 		m_ScriptManager->onStart();
 		m_ScriptManager->Start = false;
 	}
 
-	m_ScriptManager->OnUpdate(dt);	
+	m_ScriptManager->OnUpdate(dt);
+
+
+
+	m_PhysicsManager->onUpdate(dt);
+
 		
 	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
 
@@ -161,15 +181,16 @@ void Fracture::Game::update(float dt)
 void Fracture::Game::render()
 {
 	ProfilerTimer timer("Render");
-	m_Renderer->BeginFrame(m_currentScene);
+	m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
 	m_Renderer->RenderPasses();
+	//DebugRenderer::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
 	m_Renderer->EndFrame();
 }
 
 void Fracture::Game::unloadContent()
 {
-	m_currentScene->clearScene();
-	m_currentScene.reset();
+	m_SceneManager->GetActiveScene()->clearScene();
+	//m_currentScene.reset();
 }
 
 void Fracture::Game::shutdown()
@@ -182,21 +203,47 @@ void Fracture::Game::shutdown()
 	m_GameWindow.release();
 }
 
-void Fracture::Game::addScene(std::shared_ptr<Fracture::Scene> scene)
+void Fracture::Game::addScene(std::string name,std::shared_ptr<Fracture::Scene> scene)
 {
-	m_currentScene = scene;
+	//m_currentScene = scene;
+	m_SceneManager->AddScene(name, scene);
+}
+
+void Fracture::Game::addEntity(std::shared_ptr<Fracture::Entity> entity)
+{
+	m_SceneManager->GetActiveScene()->addEntity(entity);
+}
+
+void Fracture::Game::removeScene(std::string name)
+{
+	m_SceneManager->RemoveScene(name);
+}
+
+void Fracture::Game::changeScene(std::string name)
+{
+	m_SceneManager->SetScene(name);
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::Game::CurrentScene()
 {
-	if(m_currentScene)
-		return m_currentScene;
+	if(m_SceneManager->GetActiveScene())
+		return m_SceneManager->GetActiveScene();
 	return nullptr;
+}
+
+std::shared_ptr<Fracture::Eventbus> Fracture::Game::GetEventbus()
+{
+	return m_Eventbus;
 }
 
 void Fracture::Game::AddScript(std::shared_ptr<GameLogic> script)
 {
 	m_ScriptManager->AddScript(script);
+}
+
+void Fracture::Game::onEvent(Event* mEvent)
+{
+	m_Eventbus->Publish(mEvent);
 }
 
 void Fracture::Game::onQuit()
@@ -206,7 +253,7 @@ void Fracture::Game::onQuit()
 
 void Fracture::Game::onWindowResize(int width, int height)
 {
-	m_Renderer->setViewport(width, height);
+	//m_Renderer->setViewport(width, height);
 }
 
 Fracture::Renderer* Fracture::Game::GetRenderer()

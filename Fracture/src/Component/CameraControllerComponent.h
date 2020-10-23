@@ -43,6 +43,7 @@ namespace Fracture
 		glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::vec3 Right = glm::vec3(1.0f, 0.0f, 0.0f);
+		glm::vec3 LookTarget = glm::vec3(0,0,0);
 		glm::vec3 WorldUp;
 		// euler Angles
 		float Yaw = 0.0f;
@@ -52,7 +53,7 @@ namespace Fracture
 		float mouseSpeed = 0.8f;
 		float MovementSpeed = 10.0f;
 		float MouseSensitivity = 0.3f;
-		float Damping = 2.0f;
+		float Damping = 1.5f;
 		float Zoom;
 		float foV = 45.0f;
 		float nearClip = 1.0f;
@@ -72,6 +73,7 @@ namespace Fracture
 		void ZoomCamera(glm::vec2 zoom, float dt);
 
 		void LookAt(glm::vec3 target);
+		void Translate(glm::vec3 position);
 
 		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
 

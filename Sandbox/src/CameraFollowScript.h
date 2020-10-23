@@ -21,6 +21,8 @@ namespace Fracture
 
 		virtual void onLateUpdate(float dt);
 
+		void onCollision(CollisionEvent* collision);
+
 		glm::vec3 offset;
 	    float smoothTime = 0.3F;
 		uint32_t target;
@@ -28,6 +30,7 @@ namespace Fracture
 	private:
 		std::shared_ptr<CameraControllerComponent> camera;
 		std::shared_ptr<TransformComponent> tagerTtransform;
+		glm::vec3 targetPosition;
 		uint32_t m_id;
 
 

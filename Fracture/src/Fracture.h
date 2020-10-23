@@ -34,9 +34,11 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Material.h"
+#include "Scene/Scene.h"
 
 #include "Entity/Entity.h"
 #include "Entity/IDManager.h"
+#include "Scripting/GameLogic.h"
 
 #include "Component/TagComponent.h"
 #include "Component/TransformComponent.h"
@@ -45,6 +47,9 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/BoxColliderComponent.h"
 #include "Component/RigidBodyComponent.h"
+
+#include "Physics/CollisionFilter.h"
+#include "Physics/Collisions.h"
 
 
 #include "Scripting/GameLogic.h"

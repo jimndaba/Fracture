@@ -20,8 +20,8 @@ void Fracture::CameraControllerComponent::onStart()
 
 glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
 {
-    return m_viewMatrix;
-    //return glm::lookAt(Position, Position + Front, Up);
+    ///return m_viewMatrix;
+    return glm::lookAt(Position,LookTarget, Up);//-Position
 
 }
 
@@ -41,26 +41,7 @@ void Fracture::CameraControllerComponent::onUpdate(float dt)
 
 void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
 {
-    switch (td) {
-    case Camera_Movement::UP:
-        m_TargetPosition -= glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
-        break;
-    case Camera_Movement::DOWN:
-        m_TargetPosition += glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
-        break;
-    case Camera_Movement::LEFT:
-        m_TargetPosition -= Right * MovementSpeed * dt;
-        break;
-    case Camera_Movement::RIGHT:
-        m_TargetPosition += Right * MovementSpeed * dt;
-        break;
-    case Camera_Movement::FORWARD:
-        m_TargetPosition += Front * MovementSpeed * dt;
-        break;
-    case Camera_Movement::BACKWARD:
-        m_TargetPosition -= Front * MovementSpeed * dt;
-        break;
-    }
+  
 }
 
 bool firstMouse = true;
@@ -110,14 +91,15 @@ void Fracture::CameraControllerComponent::ZoomCamera(glm::vec2 zoom, float dt)
 
 void Fracture::CameraControllerComponent::LookAt(glm::vec3 target)
 {
-
-    glm::vec3 cameraDirection = glm::normalize(Position - target);
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-    m_viewMatrix = glm::lookAt(Position,cameraDirection, cameraUp);
+    LookTarget = target;
 }
+
+void Fracture::CameraControllerComponent::Translate(glm::vec3 position)
+{
+    m_TargetPosition = position;
+}
+
+
 
 void Fracture::CameraControllerComponent::UpdateCameraVectors()
 {

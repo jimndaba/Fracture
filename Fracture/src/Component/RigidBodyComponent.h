@@ -4,7 +4,9 @@
 
 #include "Component/Component.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
+#include "Physics/CollisionFilter.h"
 #include <memory>
+#include "glm/glm.hpp"
 
 namespace Fracture
 {
@@ -23,7 +25,13 @@ namespace Fracture
 		btRigidBody* m_rigid;
 		btTransform m_Transform;
 
+		CollisionGroup collisionGroup;
+		CollisionMask collisionMask;
+
 		virtual void onStart();
+
+		void setVelocity(glm::vec3 velocity);
+		void Translate(glm::vec3 position);
 
 	};
 

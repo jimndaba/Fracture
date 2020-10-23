@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Game/GameWindow.h"
+#include "Event/Event.h"
+#include "Event/WindowEvents.h"
 
 namespace Fracture
 {
@@ -30,7 +32,9 @@ namespace Fracture
 	{
 	public:
 		Renderer(int width,int height);
-		~Renderer();		
+		~Renderer();	
+
+		void onInit();
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderPasses();		
@@ -55,8 +59,9 @@ namespace Fracture
 
 		void RenderEntity(std::shared_ptr<Entity> entity);		
 		void RenderScene(std::shared_ptr<Scene> scene);
-
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
+
+		void onWindowResize(WindowResizeEvent* mevent);
 
 	private:
 		int m_width;

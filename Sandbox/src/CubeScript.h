@@ -21,12 +21,13 @@ namespace Fracture
 
 		virtual void onLateUpdate();
 	
-
+		void onCollision(CollisionEvent* collision);
 
 	private:
 
 		std::shared_ptr<TransformComponent> transform;
 		int m_id;
+		glm::vec3 targetPosition;
 
 
 	};

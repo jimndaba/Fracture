@@ -31,15 +31,18 @@ namespace Fracture
 
 		void addEntity(std::shared_ptr<Entity> entity);				
 		void Destroy(std::shared_ptr<Entity> entity);
+		void Destroy(uint32_t id);
 		void clearScene();		
 
 		static std::shared_ptr<Entity> MainCamera();
 		std::vector<std::shared_ptr<Entity>> Entities();
 
+		static std::shared_ptr<Entity> GetEntity(uint32_t id);
+
 	private:
 		std::shared_ptr<Entity> m_root;
 		static std::shared_ptr<Entity> main_Camera;
-		std::vector<std::shared_ptr<Entity>> m_entities;
+		static std::vector<std::shared_ptr<Entity>> m_entities;
 		
 	};
 }

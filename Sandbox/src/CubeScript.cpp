@@ -24,3 +24,7 @@ void Fracture::CubeScript::onLateUpdate()
 {
 
 }
+
+void Fracture::CubeScript::onCollision(CollisionEvent* collision)
+{
+}

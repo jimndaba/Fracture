@@ -5,15 +5,15 @@
 
 Fracture::TransformComponent::TransformComponent(uint32_t entityID):Component(entityID,ComponentType::Transform)
 {
-	Position = glm::vec3(0.0f,-5.0f,0.0f);
-	Scale = glm::vec3(0.5f);
+	Position = glm::vec3(0.0f,0.0f,0.0f);
+	Scale = glm::vec3(1.0f);
 	Rotation = glm::vec3(0.0f);
 }
 
 Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform)
 {
 	Position = pos;
-	Scale = glm::vec3(0.5f);
+	Scale = glm::vec3(1.0f);
 	Rotation = glm::vec3(0.0f);
 }
 

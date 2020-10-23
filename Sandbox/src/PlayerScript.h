@@ -22,14 +22,16 @@ namespace Fracture
 
 		virtual void onLateUpdate(float dt);
 
+		void onCollision(CollisionEvent* collision);
 		
 		float smoothTime = 0.3F;
 		float playerSpeed = 1.0f;
 		glm::vec3 position = glm::vec3();
 	private:
 		std::shared_ptr<TransformComponent> transform;
+		std::shared_ptr<RigidBodyComponent> rigidbody;
 		uint32_t m_id;
-
+		glm::vec3 targetPosition;
 
 	};
 

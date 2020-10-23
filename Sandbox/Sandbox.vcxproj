@@ -90,16 +90,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BulletScript.cpp" />
     <ClCompile Include="src\CameraFollowScript.cpp" />
     <ClCompile Include="src\CubeScript.cpp" />
+    <ClCompile Include="src\EnemyScript.cpp" />
+    <ClCompile Include="src\EnemySpawner.cpp" />
     <ClCompile Include="src\PlayerScript.cpp" />
+    <ClCompile Include="src\PlayerShoot.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\SandboxScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BulletScript.h" />
     <ClInclude Include="src\CameraFollowScript.h" />
     <ClInclude Include="src\CubeScript.h" />
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\EnemyScript.h" />
+    <ClInclude Include="src\EnemySpawner.h" />
     <ClInclude Include="src\PlayerScript.h" />
+    <ClInclude Include="src\PlayerShoot.h" />
     <ClInclude Include="src\SandboxScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

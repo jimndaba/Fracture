@@ -13,15 +13,18 @@ void Fracture::CameraFollowScript::onStart()
 }
 
 void Fracture::CameraFollowScript::onUpdate(float dt)
-{
-	
-	glm::vec3 targetPosition = tagerTtransform->Position + offset;
-	
-	camera->Position = glm::lerp(camera->Position,targetPosition,smoothTime * dt);
-	FRACTURE_TRACE("Camera Position: {} , {} ,{} ",camera->Position.x, camera->Position.y, camera->Position.z);
+{	
+	targetPosition = tagerTtransform->Position + offset; // 
 	camera->LookAt(tagerTtransform->Position);
+	camera->Position = glm::lerp(camera->Position, targetPosition, dt * smoothTime);
+
+
 }
 
 void Fracture::CameraFollowScript::onLateUpdate(float dt)
+{
+}
+
+void Fracture::CameraFollowScript::onCollision(CollisionEvent* collision)
 {
 }

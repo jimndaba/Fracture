@@ -2,7 +2,7 @@
 #include "Component/ComponentManager.h"
 #include "TransformComponent.h"
 
-Fracture::BoxColliderComponent::BoxColliderComponent(uint32_t id,float _SizeX, float _SizeY, float _SizeZ):Component(id,ComponentType::Physics),X(_SizeX), Y(_SizeY), Z(_SizeZ)
+Fracture::BoxColliderComponent::BoxColliderComponent(uint32_t id,float _SizeX, float _SizeY, float _SizeZ):Component(id,ComponentType::BoxCollider),X(_SizeX), Y(_SizeY), Z(_SizeZ)
 {
 	m_boxCollider = new btBoxShape(btVector3(btScalar(X), btScalar(Y), btScalar(Z)));
 	glm::vec3 position = ComponentManager::GetComponent<TransformComponent>(id)->Position;

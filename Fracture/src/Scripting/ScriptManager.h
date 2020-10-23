@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <vector>
+#include "Event/PhysicsEvents.h"
 
 
 namespace Fracture
@@ -24,6 +25,10 @@ namespace Fracture
 
 		void onStart();
 		void OnUpdate(float dt);
+
+		void OnCollision(CollisionEvent* collision);
+
+		void onEndFrame();
 
 		bool Start = true;
 

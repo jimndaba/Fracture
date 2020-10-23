@@ -13,11 +13,15 @@
 #include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
+
+#include "Game/Game.h"
 #include "Scene/Scene.h"
 #include "RenderTarget.h"
 #include "Entity/Entity.h"
 #include "AssetManager/AssetManager.h"
 #include "Profiling/Profiler.h"
+#include "Logging/Logger.h"
+#include "Event/Eventbus.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -42,6 +46,12 @@ Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(heig
 
 Fracture::Renderer::~Renderer()
 {
+}
+
+void Fracture::Renderer::onInit()
+{    
+    FRACTURE_INFO("Renderer Init");
+    Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -239,6 +249,12 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
         RenderEntity(entity);
     }
     
+}
+
+void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
+{
+    FRACTURE_TRACE("WINDOW RESIZE");
+    setViewport(mevent->Width, mevent->Height);
 }
 
 

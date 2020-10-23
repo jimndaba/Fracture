@@ -12,6 +12,10 @@
 #include <typeinfo>
 #include <typeindex>
 #include "Component.h"
+#include "Logging/Logger.h"
+#include "BoxColliderComponent.h"
+#include "RigidBodyComponent.h"
+#include "Physics/PhysicsManager.h"
 
 namespace Fracture
 {
@@ -26,21 +30,22 @@ namespace Fracture
 
 		void onUpdate(float dt);
 	
-		//AddRenderComponent (ID, model , material)
-		//AddTransformComponent (ID)
-		//AddTransformComponent (ID, position)
-		//AddTransformComponent (ID, positon , scale)
-		//AddTransformComponent (ID, positon , scale, rotation)
-		//AddScriptComponent (ID, script)
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
 
 		static void AddComponent(std::shared_ptr<Component> component);
 
+		template<class T>
+		static void RemoveComponent(uint32_t id);
+		static void RemoveComponentsbyID(uint32_t id);
+		static void RemoveComponent(std::shared_ptr<Component> component);
+
 		template <class T>
 		static std::shared_ptr<T>GetComponent(uint32_t enitytId);
 
 		static std::vector<std::shared_ptr<Component>> GetComponents(uint32_t enitytId);
+
+		static std::vector<std::shared_ptr<Component>> GetAllComponents();
 
 	
 	private:
@@ -50,8 +55,23 @@ namespace Fracture
 	template<class T, typename ...Args>
 	inline void ComponentManager::AddComponent(uint32_t entity, Args && ...params)
 	{		
-		m_Components.push_back(std::make_shared<T>(entity,params...));
+		m_Components.push_back(std::make_shared<T>(entity, params...));
 	}
+
+	template<class T>
+	inline void ComponentManager::RemoveComponent(uint32_t id)
+	{
+		std::vector<std::shared_ptr<Component>>::const_iterator it;
+		for (it = m_Components.begin(); it != m_Components.end(); ++it)
+		{
+			if ((*it)->EntityID == id && std::dynamic_pointer_cast<T>(*it) != nullptr)
+			{
+				FRACTURE_TRACE("Removed component: {} of Type {}", (*it)->EntityID, (*it)->componentType);
+				RemoveComponent(*it);				
+			}
+			
+		}
+	} 
 
 	template<class T>
 	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(uint32_t entitytId)
