@@ -3,11 +3,11 @@
 #define VIEWPANEL_H
 
 #include "Panel.h"
+#include "Fracture.h"
 
 namespace Fracture
 {
-	class Game;
-
+	
 	class ViewPanel : public Panel
 	{
 
@@ -15,12 +15,16 @@ namespace Fracture
 		ViewPanel(std::string name);
 		~ViewPanel();
 
-		void setGame(Game* game);
+		void init();
+		void setRenderer(Renderer* renderer);
 		void render() override;
+		void onUpdate(float dt);
 
 	private:
-		Game* m_game;
-
+		Renderer* m_renderer;
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		std::shared_ptr<CameraControllerComponent> m_camera;
 	};
 
 }

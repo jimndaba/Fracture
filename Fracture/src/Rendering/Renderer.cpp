@@ -82,9 +82,9 @@ void Fracture::Renderer::RenderPasses()
     SceneRenderTarget->Unbind();
  
 
-    clearColor(0.3f, 0.5f, 0.6f);
-    glClear(GL_COLOR_BUFFER_BIT);   
-    Submit();
+    //clearColor(0.3f, 0.5f, 0.6f);
+    //glClear(GL_COLOR_BUFFER_BIT);   
+    //Submit();
 }
 
 void Fracture::Renderer::EndFrame()

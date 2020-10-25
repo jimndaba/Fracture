@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
-#include "Application.h"
+#include "Editor/Editor.h"
 #include "Fracture.h"
 
 int main(int argc, char* args[])
 {
 
-	Fracture::Application FractureEngine;
+	Fracture::Editor FractureEngine;
 	FractureEngine.run();
 
 	return 0;

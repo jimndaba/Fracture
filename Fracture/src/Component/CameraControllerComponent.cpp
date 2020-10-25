@@ -21,7 +21,7 @@ void Fracture::CameraControllerComponent::onStart()
 glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
 {
     ///return m_viewMatrix;
-    return glm::lookAt(Position,LookTarget, Up);//-Position
+    return glm::lookAt(Position, Position + Front, Up);//-Position
 
 }
 
@@ -33,7 +33,7 @@ glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, in
 void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);
-    //Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
+    Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
     Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
     UpdateCameraVectors();
@@ -41,7 +41,26 @@ void Fracture::CameraControllerComponent::onUpdate(float dt)
 
 void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
 {
-  
+    switch (td) {
+    case Camera_Movement::UP:
+        m_TargetPosition -= glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
+        break;
+    case Camera_Movement::DOWN:
+        m_TargetPosition += glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
+        break;
+    case Camera_Movement::LEFT:
+        m_TargetPosition -= Right * MovementSpeed * dt;
+        break;
+    case Camera_Movement::RIGHT:
+        m_TargetPosition += Right * MovementSpeed * dt;
+        break;
+    case Camera_Movement::FORWARD:
+        m_TargetPosition += Front * MovementSpeed * dt;
+        break;
+    case Camera_Movement::BACKWARD:
+        m_TargetPosition -= Front * MovementSpeed * dt;
+        break;
+    }
 }
 
 bool firstMouse = true;
@@ -53,9 +72,7 @@ void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, flo
         lastY = ypos;
         firstMouse = false;
     }
-
-   
-
+    
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
     lastX = xpos;
@@ -98,8 +115,6 @@ void Fracture::CameraControllerComponent::Translate(glm::vec3 position)
 {
     m_TargetPosition = position;
 }
-
-
 
 void Fracture::CameraControllerComponent::UpdateCameraVectors()
 {

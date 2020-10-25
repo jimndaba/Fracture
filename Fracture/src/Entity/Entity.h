@@ -16,6 +16,11 @@ namespace Fracture
 		~Entity();
 		uint32_t Id;
 		std::string name;
+
+		operator bool() const
+		{
+			return true;
+		}
 	private:
 
 	};

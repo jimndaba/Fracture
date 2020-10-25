@@ -1,7 +1,7 @@
 #include "ViewPanel.h"
-#include "Game/Game.h"
-#include "Rendering/Renderer.h"
 #include "Rendering/RenderTarget.h"
+#include "../Editor.h"
+
 
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
@@ -11,32 +11,83 @@ Fracture::ViewPanel::~ViewPanel()
 {
 }
 
-void Fracture::ViewPanel::setGame(Game* game)
+
+void Fracture::ViewPanel::init()
 {
-    m_game = game;
+	m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->MainCamera()->Id);
+	m_camera->onStart();
+}
+
+void Fracture::ViewPanel::setRenderer(Renderer* renderer)
+{
+    m_renderer = renderer;
 }
 
 void Fracture::ViewPanel::render()
 {
-    ImVec2 pos = ImGui::GetCursorScreenPos();
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+	ImGui::BeginChild("GameRender");
 
-    //pass the texture of the FBO
-    //window.getRenderTexture() is the texture of the FBO
-    //the next parameter is the upper left corner for the uvs to be applied at
-    //the third parameter is the lower right corner
-    //the last two parameters are the UVs
-    //they have to be flipped (normally they would be (0,0);(1,1) 
-    //m_game->GetRenderer()->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-    
-    ImGui::BeginChild("GameRender");
-    ImGui::GetWindowDrawList()->AddImage(
-        (void*)m_game->GetRenderer()->SceneRenderTarget->ID,
-        ImVec2(ImGui::GetCursorScreenPos()),
-        ImVec2(ImGui::GetCursorScreenPos().x + ImGui::GetWindowSize().x,
-            ImGui::GetCursorScreenPos().y + ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
-  
-   
-    //ImVec2 wsize = ImGui::GetWindowSize();
-    //ImGui::Image((ImTextureID)m_game->GetRenderer()->SceneRenderTarget->ID, wsize, ImVec2(0, 1), ImVec2(1, 0));
+	m_ViewportFocused = ImGui::IsWindowFocused();
+	m_ViewportHovered = ImGui::IsWindowHovered();
+
+    //m_renderer->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);    
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };    
+
+    ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
+        ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0, 1}, ImVec2{ 1, 0 });
+
+    ImGui::PopStyleVar();
     ImGui::EndChild();
+}
+
+void Fracture::ViewPanel::onUpdate(float dt)
+{
+	
+
+	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
+	{
+		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+	}
+
+	if(m_ViewportFocused && m_camera)
+	{ 
+		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
+		{
+			float mouseX = InputManager::GetMousePosition().x;
+			float mouseY = InputManager::GetMousePosition().y;
+
+			//SDL_WarpMouseInWindow(m_GameWindow->Context(), m_GameWindow->Width / 2, m_GameWindow->Height / 2);
+			m_camera->InputMouse(mouseX, mouseY, dt);
+			if (InputManager::IsKeyDown(KeyCode::W))
+			{
+				m_camera->Move(Camera_Movement::FORWARD, dt);
+			}
+			if (InputManager::IsKeyDown(KeyCode::S))
+			{
+				m_camera->Move(Camera_Movement::BACKWARD, dt);
+			}
+			if (InputManager::IsKeyDown(KeyCode::A))
+			{
+				m_camera->Move(Camera_Movement::LEFT, dt);
+			}
+			if (InputManager::IsKeyDown(KeyCode::D))
+			{
+				m_camera->Move(Camera_Movement::RIGHT, dt);
+			}
+			if (InputManager::IsKeyDown(KeyCode::E))
+			{
+				m_camera->Move(Camera_Movement::UP, dt);
+			}
+			if (InputManager::IsKeyDown(KeyCode::Q))
+			{
+				m_camera->Move(Camera_Movement::DOWN, dt);
+			}
+
+			m_camera->onUpdate(dt);
+		}
+		
+	}
 }

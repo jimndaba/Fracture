@@ -1,11 +1,12 @@
 #include "Inspector.h"
 #include "../Elements/TagComponentElement.h"
+#include "SceneviewPanel.h"
 
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
 {
-	m_tagcomponent = std::shared_ptr< TagComponentElement>(new TagComponentElement("Tag"));
+	//m_tagcomponent = std::shared_ptr< TagComponentElement>(new TagComponentElement("Tag"));
 
-	AddElement(m_tagcomponent);
+	//AddElement(m_tagcomponent);
 }
 
 Fracture::InspectorPanel::~InspectorPanel()
@@ -14,4 +15,236 @@ Fracture::InspectorPanel::~InspectorPanel()
 
 void Fracture::InspectorPanel::render()
 {
+	if (SceneView::SelectedEntity())
+	{
+		DrawComponents(SceneView::SelectedEntity());
+	}
+}
+
+void Fracture::InspectorPanel::DrawComponents(Entity entity)
+{
+	
+	
+	ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+	if (ComponentManager::HasComponent<TagComponent>(entity.Id))
+	{
+		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity.Id);
+
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strcpy_s(buffer, sizeof(buffer), tag->Name.c_str());
+
+		if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
+		{
+	
+			tag->Name = std::string(buffer);
+		}
+
+		
+	}
+
+	ImGui::SameLine();
+	ImGui::PushItemWidth(-1);
+
+	if (ImGui::Button("Add Component"))
+	{
+		ImGui::OpenPopup("AddComponent");
+	}	
+
+	if (ImGui::BeginPopup("AddComponent"))
+	{
+		if (ImGui::MenuItem("Transform"))
+		{
+			ComponentManager::AddComponent<TransformComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Camera"))
+		{
+			ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Light"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Collision"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Rigidbody"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Script"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);	
+
+	if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+	{
+		ImGui::OpenPopup("ComponentSettings");
+	}	
+	
+	ImGui::PopItemWidth();
+
+	DrawComponent<RenderComponent>("Mesh Render",entity, [](auto& component)
+	{
+
+	});
+
+	DrawComponent<CameraControllerComponent>("Camera Controller",entity,[](auto& component)
+	{
+			std::shared_ptr<CameraControllerComponent> camera = std::dynamic_pointer_cast<CameraControllerComponent>(component);
+					
+			const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
+			//const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
+			if (ImGui::BeginCombo("Projection", "Perspective"))
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					bool isSelected = false;// = currentProjectionTypeString == projectionTypeStrings[i];
+					if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+					{
+						//currentProjectionTypeString = projectionTypeStrings[i];
+						//camera.SetProjectionType((SceneCamera::ProjectionType)i);
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			float perspectiveVerticalFov = camera->foV;
+			if (ImGui::DragFloat("Vertical FOV", &perspectiveVerticalFov))
+			{
+				camera->foV = perspectiveVerticalFov;
+			}
+			
+
+			float perspectiveNear = camera->nearClip;
+			if (ImGui::DragFloat("Near", &perspectiveNear))
+			{
+				camera->nearClip = perspectiveNear;
+			}
+				
+
+			float perspectiveFar = camera->farClip;
+			if (ImGui::DragFloat("Far", &perspectiveFar))
+			{
+				camera->farClip = perspectiveFar;
+			}
+
+			DrawVec3Control("Position", camera->Position);
+			DrawVec3Control("Front", camera->Front);
+			DrawVec3Control("Up", camera->Up);
+			DrawVec3Control("Right", camera->Right);
+				
+	});
+	
+	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
+	{
+			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);			
+			DrawVec3Control("Position",transform->Position);
+			DrawVec3Control("Scale", transform->Scale,1);
+			DrawVec3Control("Rotation", transform->Rotation);
+	});
+
+	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
+	{
+
+	});
+
+	DrawComponent<BoxColliderComponent>("Collider", entity, [](auto& component)
+	{
+
+	});
+
+	DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+	{
+
+	});
+
+}
+
+void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+
+	ImGui::PushID(label.c_str());
+
+	ImGui::Columns(2);
+	ImGui::SetColumnWidth(0, columnWidth);
+	ImGui::Text(label.c_str());
+	ImGui::NextColumn();
+
+	ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("X", buttonSize))
+		values.x = resetValue;
+	ImGui::PopFont();
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("Y", buttonSize))
+		values.y = resetValue;
+	ImGui::PopFont();
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("Z", buttonSize))
+		values.z = resetValue;
+	ImGui::PopFont();
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+
+	ImGui::PopStyleVar();
+
+	ImGui::Columns(1);
+
+	ImGui::PopID();
 }

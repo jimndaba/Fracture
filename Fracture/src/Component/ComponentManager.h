@@ -28,11 +28,10 @@ namespace Fracture
 
 		void onLoad();
 
-		void onUpdate(float dt);
+		static void onUpdate(float dt);
 	
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
-
 		static void AddComponent(std::shared_ptr<Component> component);
 
 		template<class T>
@@ -42,11 +41,11 @@ namespace Fracture
 
 		template <class T>
 		static std::shared_ptr<T>GetComponent(uint32_t enitytId);
-
 		static std::vector<std::shared_ptr<Component>> GetComponents(uint32_t enitytId);
-
 		static std::vector<std::shared_ptr<Component>> GetAllComponents();
 
+		template<class T>
+		static bool HasComponent(uint32_t id);
 	
 	private:
 		static std::vector<std::shared_ptr<Component>> m_Components;
@@ -84,6 +83,19 @@ namespace Fracture
 				}							
 		}
 		return nullptr;
+	}
+
+	template<class T>
+	inline bool ComponentManager::HasComponent(uint32_t id)
+	{
+		for (auto& component : m_Components)
+		{
+			std::shared_ptr<T> c = GetComponent<T>(id);
+
+			if (c)
+				return true;
+		}
+		return false;
 	}
 
 	

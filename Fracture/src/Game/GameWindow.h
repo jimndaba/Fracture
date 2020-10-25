@@ -29,6 +29,11 @@ namespace Fracture
 			return m_window;
 		}
 
+		SDL_GLContext glContext()
+		{
+			return maincontext;
+		}
+
 	private:
 		SDL_Window* m_window;
 		SDL_Event m_event;

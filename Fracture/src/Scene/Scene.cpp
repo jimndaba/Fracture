@@ -8,6 +8,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RelationshipComponent.h"
+#include "Component/TagComponent.h"
 #include "Component/RenderComponent.h"
 #include "Rendering/Model.h"
 #include "Rendering/Material.h"
@@ -25,14 +26,14 @@ Fracture::Scene::Scene()
 	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->Id));
 	ComponentManager::AddComponent(m_root_rel);
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
-
+	ComponentManager::AddComponent<TagComponent>(m_root->Id, "Root");
 	main_Camera = EntityManager::CreateEntity<Entity>();
 	main_Camera->name = "Main Camera";
 	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));	
 	m_camera_rel->SetParent(m_root);
 	ComponentManager::AddComponent(m_camera_rel);
 	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->Id);
-
+	ComponentManager::AddComponent<TagComponent>(main_Camera->Id, "Main Camera");
 	addEntity(m_root);
 	addEntity(main_Camera);
 

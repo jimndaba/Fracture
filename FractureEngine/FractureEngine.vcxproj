@@ -90,7 +90,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\Editor\Elements\Element.h" />
     <ClInclude Include="src\Editor\Elements\TabbedElement.h" />
@@ -102,7 +101,7 @@
     <ClInclude Include="src\Editor\Panels\ViewPanel.h" />
     <ClInclude Include="src\Editor\Frame.h" />
     <ClInclude Include="src\Editor\Panels\UIStyle.h" />
-    <ClInclude Include="src\SandboxScene.h" />
+    <ClInclude Include="src\Editor\SandboxScene.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h" />
@@ -113,7 +112,6 @@
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Editor\Elements\Element.cpp" />
     <ClCompile Include="src\Editor\Elements\TabbedElement.cpp" />
@@ -125,7 +123,7 @@
     <ClCompile Include="src\Editor\Panels\ViewPanel.cpp" />
     <ClCompile Include="src\Editor\Frame.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\SandboxScene.cpp" />
+    <ClCompile Include="src\Editor\SandboxScene.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
     <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp" />

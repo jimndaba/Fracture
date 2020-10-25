@@ -1,18 +1,19 @@
 #include "Editor.h"
 #include <iostream>
-#include "Game/Game.h"
-#include "Rendering/Renderer.h"
-#include "Rendering/RenderTarget.h"
 #include "Frame.h"
 #include "Panels/Panel.h"
 #include "Panels/SceneviewPanel.h"
 #include "Panels/Inspector.h"
 #include "Panels/ViewPanel.h"
 #include "Panels/TabbedPanel.h"
+#include "SandboxScene.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
 bool Fracture::Editor::opt_fullscreen;
+
+std::shared_ptr<Fracture::SandboxScene> sandboxScene;
+std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 
 
 inline void Style();
@@ -20,18 +21,7 @@ inline void Style();
 
 Fracture::Editor::Editor()
 {
-    m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
-
-    m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
-    m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
-    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
-    m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
-    
-
-    m_frame->AddPanel(m_sceneview);
-    m_frame->AddPanel(m_inspectorpanel);
-    m_frame->AddPanel(m_viewpanel);
-    m_frame->AddPanel(m_TabbedPanel);
+   
 }
 
 Fracture::Editor::~Editor()
@@ -41,6 +31,12 @@ Fracture::Editor::~Editor()
 
 void Fracture::Editor::onInit()
 {
+    m_logger = std::make_unique<Logger>();
+    m_Eventbus = std::make_unique<Eventbus>();
+    m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine");
+    m_InputManager = std::make_unique<InputManager>();
+
+    /*
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
         printf("Error: %s\n", SDL_GetError());
@@ -66,6 +62,8 @@ void Fracture::Editor::onInit()
 
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1); // Enable vsync 
+    */
+
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -82,11 +80,41 @@ void Fracture::Editor::onInit()
     Style();
   
     // Setup Platform/Renderer bindings
-    ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
+    ImGui_ImplSDL2_InitForOpenGL(m_window->Context(), m_window->glContext());
     ImGui_ImplOpenGL3_Init("#version 400");
 
-   // m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
+    m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
 
+    m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
+    m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
+    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
+    m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
+
+    sandboxScene = std::make_shared<SandboxScene>();
+    SetScene(sandboxScene);
+
+    m_frame->AddPanel(m_sceneview);
+    m_frame->AddPanel(m_inspectorpanel);
+    m_frame->AddPanel(m_viewpanel);
+    m_frame->AddPanel(m_TabbedPanel);
+
+
+    m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
+    m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
+
+    m_Renderer->onInit();
+    m_viewpanel->setRenderer(m_Renderer.get());
+    m_viewpanel->init();
+}
+
+void Fracture::Editor::run()
+{
+    onInit();
+    while (!done)
+    {
+        onUpdate();
+    }
+    onShutdown();
 }
 
 void Fracture::Editor::onUpdate()
@@ -102,18 +130,19 @@ void Fracture::Editor::onUpdate()
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT)
             done = true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window->Context()))
             done = true;
-       
     }
-      
-    m_frame->begin(window);
+    InputManager::PollEvents();
+       
+    m_viewpanel->onUpdate(1 / 60.0f);
 
+
+    m_frame->begin(m_window->Context());
     Render();
-
     m_frame->end();
     
-    SDL_GL_SwapWindow(window); 
+    m_window->swapBuffers();
 }
 
 void Fracture::Editor::onShutdown()
@@ -123,22 +152,11 @@ void Fracture::Editor::onShutdown()
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
-
-void Fracture::Editor::SetGame(Game* game)
-{
-    m_game = game;
-    m_viewpanel->setGame(game);
+    m_window.reset();
 }
 
 void Fracture::Editor::Render()
-{
-    //m_Renderer->BeginFrame(m_game->CurrentScene());
-   // m_Renderer->RenderPasses();
-    //m_Renderer->EndFrame();
+{ 
 
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen)
@@ -246,11 +264,25 @@ void Fracture::Editor::Render()
    
         ToolBar();
 
+        m_Renderer->BeginFrame(m_ActiveScene);
+        m_Renderer->RenderPasses();
+        m_Renderer->EndFrame();
+
         m_frame->render();
 
-      
-    ImGui::End();
+        ImGui::End();
+}
 
+void Fracture::Editor::SetScene(std::shared_ptr<Scene> scene)
+{
+    scene->onLoad();
+    m_ActiveScene = scene;
+    m_sceneview->setScene(m_ActiveScene);
+}
+
+std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
+{
+    return m_ActiveScene;
 }
 
 void Fracture::Editor::ToolBar()

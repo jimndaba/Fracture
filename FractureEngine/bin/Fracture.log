@@ -1,0 +1,12 @@
+[20:30:34] [info] FRACTURE: OpenGL loaded
+[20:30:34] [info] FRACTURE: Vendor: Intel
+[20:30:34] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[20:30:34] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[20:30:34] [trace] FRACTURE: Loaded model: samus
+[20:30:34] [trace] FRACTURE: Loaded model: cube
+[20:30:35] [trace] FRACTURE: Loaded Texture: container
+[20:30:35] [trace] FRACTURE: Loaded Texture: specular
+[20:30:35] [trace] FRACTURE: Loaded Shader: default
+[20:30:35] [trace] FRACTURE: Loaded Material: default
+[20:30:35] [trace] FRACTURE: Loaded Material: samus
+[20:30:35] [info] FRACTURE: Renderer Init

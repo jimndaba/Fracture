@@ -6,9 +6,14 @@
 #include <memory>
 #include <vector>
 #include <math.h>
+#include "SDL2/SDL.h"
+#include "GLAD/glad.h"
 
 #include "Profiling/Profiler.h"
 #include "Logging/Logger.h"
+#include "Event/Eventbus.h"
+#include "Event/Event.h"
+#include "Event/WindowEvents.h"
 
 #include "Game/Game.h"
 #include "Game/GameWindow.h"

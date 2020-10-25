@@ -4,19 +4,18 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "SDL2/SDL.h"
-#include "GLAD/glad.h"
+#include "Fracture.h"
 #include <memory>
 
 namespace Fracture
 {
-	class Game;
+
 	class Frame;
 	class SceneView;
 	class InspectorPanel;
 	class ViewPanel;
 	class TabbedPanel;
-	class Renderer;
+
 
 	class Editor
 	{
@@ -25,19 +24,28 @@ namespace Fracture
 		~Editor();
 
 		void onInit();
+		void run();
 		void onUpdate();
 		void onShutdown();
-
-		void SetGame(Fracture::Game* game);
-
 		void Render();
+
+		void SetScene(std::shared_ptr<Scene> scene);
 
 		bool done;
 
+		static std::shared_ptr<Scene> ActiveScene();
+
 	private:
-		Game* m_game;
-		SDL_Window* window;
-		SDL_GLContext gl_context;
+
+		std::unique_ptr<Logger> m_logger;
+		std::unique_ptr<Renderer> m_Renderer;
+		std::unique_ptr<GameWindow> m_window;
+		std::unique_ptr<Eventbus> m_Eventbus;
+		std::unique_ptr<InputManager> m_InputManager;
+
+		static std::shared_ptr<Scene> m_ActiveScene;
+
+
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		ImGuiWindowFlags panel_flags = ImGuiWindowFlags_MenuBar;
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -47,8 +55,6 @@ namespace Fracture
 		std::shared_ptr<InspectorPanel> m_inspectorpanel;
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
-
-		std::unique_ptr<Renderer> m_Renderer;
 
 		static bool p_open;
 		static bool opt_fullscreen;
