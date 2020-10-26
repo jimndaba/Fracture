@@ -1,11 +1,8 @@
-﻿  Editor.cpp
+﻿  ViewPanel.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(376,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(385,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  ViewPanel.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-C:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(38,95): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
-  Generating Code...
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(36,5): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(41,5): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(46,5): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(65,95): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
   FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

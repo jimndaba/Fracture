@@ -35,6 +35,7 @@ void Fracture::Editor::onInit()
     m_Eventbus = std::make_unique<Eventbus>();
     m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine");
     m_InputManager = std::make_unique<InputManager>();
+    m_AssetMaanger = std::make_unique<AssetManager>();
 
     /*
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
@@ -72,6 +73,8 @@ void Fracture::Editor::onInit()
 
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
+
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("Play-Regular.TTF",15.0f);
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -105,6 +108,10 @@ void Fracture::Editor::onInit()
     m_Renderer->onInit();
     m_viewpanel->setRenderer(m_Renderer.get());
     m_viewpanel->init();
+
+    m_AssetMaanger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
+    m_AssetMaanger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
+    m_AssetMaanger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
 }
 
 void Fracture::Editor::run()
@@ -162,10 +169,8 @@ void Fracture::Editor::Render()
     if (opt_fullscreen)
     {
         ImGuiViewport* viewport = ImGui::GetMainViewport();
-        //ImGui::SetNextWindowPos(viewport->GetWorkPos());
-        //ImGui::SetNextWindowSize(viewport->GetWorkSize());   
-        ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + 50));
-        ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, viewport->Size.y-50));
+        ImGui::SetNextWindowPos(viewport->GetWorkPos());
+        ImGui::SetNextWindowSize(viewport->GetWorkSize());
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
@@ -206,9 +211,15 @@ void Fracture::Editor::Render()
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);  
-                ImGui::MenuItem("Padding", NULL, &opt_padding);              
-                if (ImGui::MenuItem("Close", NULL))
+                ImGui::MenuItem("New Project", NULL);  
+                ImGui::MenuItem("Open Project", NULL);   
+                ImGui::Separator();        
+                ImGui::MenuItem("New Scene", NULL);
+                ImGui::MenuItem("Open Scene", NULL);
+                ImGui::Separator();
+                ImGui::MenuItem("Save", NULL);
+                ImGui::MenuItem("Save As", NULL);
+                if (ImGui::MenuItem("Exit", NULL))
                 {
                     done = true;
                 }
@@ -219,14 +230,14 @@ void Fracture::Editor::Render()
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Undo", NULL);
-                ImGui::MenuItem("Redo", NULL);
-                ImGui::MenuItem("Cut", NULL);
-                ImGui::MenuItem("Copy", NULL);
-                ImGui::MenuItem("Paste", NULL);
-                ImGui::MenuItem("Delete", NULL);
+                ImGui::MenuItem("Undo", "CTRL+Z");
+                ImGui::MenuItem("Redo", "CTRL+Y");
+                ImGui::MenuItem("Cut", "CTRL+X");
+                ImGui::MenuItem("Copy", "CTRL+C");
+                ImGui::MenuItem("Paste", "CTRL+V");
+                ImGui::MenuItem("Delete", "Del");
                 ImGui::Separator();
-                ImGui::MenuItem("Select All", NULL);
+                ImGui::MenuItem("Select All", "CTRL+A");
                 ImGui::Separator();
                 ImGui::MenuItem("Project Settings", NULL);
                 ImGui::EndMenu();
@@ -237,16 +248,20 @@ void Fracture::Editor::Render()
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
                 ImGui::MenuItem("Toolbar", NULL);
+                ImGui::MenuItem("Content Manager", NULL);
+                ImGui::MenuItem("Logging", NULL);
                 ImGui::MenuItem("Project Settings", NULL);
                 ImGui::EndMenu();
             }
             
-            if (ImGui::BeginMenu("Tools"))
+            if (ImGui::BeginMenu("Systems"))
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Toolbar", NULL);
-                ImGui::MenuItem("Project Settings", NULL);
+                ImGui::MenuItem("Render System", NULL);
+                ImGui::MenuItem("Audio System", NULL);
+                ImGui::MenuItem("Physics System", NULL);
+                ImGui::MenuItem("Input System", NULL);
                 ImGui::EndMenu();
             }
 
@@ -262,7 +277,7 @@ void Fracture::Editor::Render()
             ImGui::EndMainMenuBar();
         }
    
-        ToolBar();
+      
 
         m_Renderer->BeginFrame(m_ActiveScene);
         m_Renderer->RenderPasses();
@@ -283,30 +298,6 @@ void Fracture::Editor::SetScene(std::shared_ptr<Scene> scene)
 std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
 {
     return m_ActiveScene;
-}
-
-void Fracture::Editor::ToolBar()
-{
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + 19 ));
-    ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, 30));
-    ImGui::SetNextWindowViewport(viewport->ID);
-
-    ImGuiWindowFlags toolbar_flags = 0
-        | ImGuiWindowFlags_NoTitleBar
-        | ImGuiWindowFlags_NoResize
-       
-        | ImGuiWindowFlags_NoScrollbar
-        | ImGuiWindowFlags_NoSavedSettings
-        ;
-    //| ImGuiWindowFlags_NoMove
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-    ImGui::Begin("TOOLBAR", NULL, toolbar_flags);
-    ImGui::PopStyleVar();
-    ImGui::Button("Toolbar goes here", ImVec2(30, 30));
-    ImGui::End();
-
-
 }
 
 inline void Style()

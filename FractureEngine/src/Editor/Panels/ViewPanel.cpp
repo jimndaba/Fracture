@@ -25,21 +25,50 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 
 void Fracture::ViewPanel::render()
 {
+
+	enum Mode
+	{
+		Mode_Copy,
+		Mode_Move,
+		Mode_Swap
+	};
+	
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("TranslateIcon")->id, ImVec2(25,25), ImVec2(0, 0), ImVec2(1, 1),1))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("RotateIcon")->id, ImVec2(25, 25), ImVec2(0, 0), ImVec2(1, 1), 1))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("ScaleIcon")->id, ImVec2(25, 25), ImVec2(0, 0), ImVec2(1, 1), 1))
+	{
+
+	}
+	
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 	ImGui::BeginChild("GameRender");
+	
 
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
     //m_renderer->setViewport(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);    
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };    
+	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };   
+
+
 
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
         ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0, 1}, ImVec2{ 1, 0 });
 
+	
     ImGui::PopStyleVar();
     ImGui::EndChild();
+
 }
 
 void Fracture::ViewPanel::onUpdate(float dt)

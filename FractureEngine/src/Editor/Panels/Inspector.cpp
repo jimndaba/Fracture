@@ -102,10 +102,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	
 	ImGui::PopItemWidth();
 
-	DrawComponent<RenderComponent>("Mesh Render",entity, [](auto& component)
-	{
 
-	});
+	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
+		{
+			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);
+			DrawVec3Control("Position", transform->Position);
+			DrawVec3Control("Scale", transform->Scale, 1);
+			DrawVec3Control("Rotation", transform->Rotation);
+		});
 
 	DrawComponent<CameraControllerComponent>("Camera Controller",entity,[](auto& component)
 	{
@@ -157,15 +161,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			DrawVec3Control("Right", camera->Right);
 				
 	});
-	
-	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
-	{
-			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);			
-			DrawVec3Control("Position",transform->Position);
-			DrawVec3Control("Scale", transform->Scale,1);
-			DrawVec3Control("Rotation", transform->Rotation);
-	});
 
+	DrawComponent<RenderComponent>("Mesh Render", entity, [](auto& component)
+		{
+
+		});
+	
 	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
 	{
 

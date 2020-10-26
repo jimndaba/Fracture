@@ -5,6 +5,7 @@
 #include "Panel.h"
 #include "Fracture.h"
 
+
 namespace Fracture
 {
 	
@@ -25,6 +26,8 @@ namespace Fracture
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		std::shared_ptr<CameraControllerComponent> m_camera;
+		int gizmoCount = 1;
+		int lastUsing = 0;
 	};
 
 }
