@@ -26,24 +26,19 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 void Fracture::ViewPanel::render()
 {
 
-	enum Mode
-	{
-		Mode_Copy,
-		Mode_Move,
-		Mode_Swap
-	};
 	
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("TranslateIcon")->id, ImVec2(25,25), ImVec2(0, 0), ImVec2(1, 1),1))
+	
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("TranslateIcon")->id, ImVec2(32,32), ImVec2(0, 0), ImVec2(1, 1),1))
 	{
 
 	}
 	ImGui::SameLine();
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("RotateIcon")->id, ImVec2(25, 25), ImVec2(0, 0), ImVec2(1, 1), 1))
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("RotateIcon")->id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 1))
 	{
 
 	}
 	ImGui::SameLine();
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("ScaleIcon")->id, ImVec2(25, 25), ImVec2(0, 0), ImVec2(1, 1), 1))
+	if (ImGui::ImageButton((void*)AssetManager::getTexture("ScaleIcon")->id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 1))
 	{
 
 	}

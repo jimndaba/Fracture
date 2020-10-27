@@ -1,15 +1,15 @@
-[22:20:07] [info] FRACTURE: OpenGL loaded
-[22:20:07] [info] FRACTURE: Vendor: Intel
-[22:20:07] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[22:20:07] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[22:20:07] [trace] FRACTURE: Loaded model: samus
-[22:20:07] [trace] FRACTURE: Loaded model: cube
-[22:20:07] [trace] FRACTURE: Loaded Texture: container
-[22:20:07] [trace] FRACTURE: Loaded Texture: specular
-[22:20:07] [trace] FRACTURE: Loaded Shader: default
-[22:20:07] [trace] FRACTURE: Loaded Material: default
-[22:20:07] [trace] FRACTURE: Loaded Material: samus
-[22:20:07] [info] FRACTURE: Renderer Init
-[22:20:07] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[22:20:07] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[22:20:07] [trace] FRACTURE: Loaded Texture: RotateIcon
+[10:11:08] [info] FRACTURE: OpenGL loaded
+[10:11:08] [info] FRACTURE: Vendor: Intel
+[10:11:08] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[10:11:08] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[10:11:08] [trace] FRACTURE: Loaded model: samus
+[10:11:08] [trace] FRACTURE: Loaded model: cube
+[10:11:08] [trace] FRACTURE: Loaded Texture: container
+[10:11:08] [trace] FRACTURE: Loaded Texture: specular
+[10:11:08] [trace] FRACTURE: Loaded Shader: default
+[10:11:08] [trace] FRACTURE: Loaded Material: default
+[10:11:08] [trace] FRACTURE: Loaded Material: samus
+[10:11:08] [info] FRACTURE: Renderer Init
+[10:11:08] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[10:11:08] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[10:11:08] [trace] FRACTURE: Loaded Texture: RotateIcon
