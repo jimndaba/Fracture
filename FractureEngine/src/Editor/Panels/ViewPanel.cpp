@@ -45,7 +45,7 @@ void Fracture::ViewPanel::render()
 	
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-	ImGui::BeginChild("GameRender");
+	ImGui::BeginChild("SceneView");
 	
 
 	m_ViewportFocused = ImGui::IsWindowFocused();
