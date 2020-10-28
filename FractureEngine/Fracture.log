@@ -1,15 +1,41 @@
-[10:11:08] [info] FRACTURE: OpenGL loaded
-[10:11:08] [info] FRACTURE: Vendor: Intel
-[10:11:08] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[10:11:08] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[10:11:08] [trace] FRACTURE: Loaded model: samus
-[10:11:08] [trace] FRACTURE: Loaded model: cube
-[10:11:08] [trace] FRACTURE: Loaded Texture: container
-[10:11:08] [trace] FRACTURE: Loaded Texture: specular
-[10:11:08] [trace] FRACTURE: Loaded Shader: default
-[10:11:08] [trace] FRACTURE: Loaded Material: default
-[10:11:08] [trace] FRACTURE: Loaded Material: samus
-[10:11:08] [info] FRACTURE: Renderer Init
-[10:11:08] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[10:11:08] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[10:11:08] [trace] FRACTURE: Loaded Texture: RotateIcon
+[21:36:04] [info] FRACTURE: OpenGL loaded
+[21:36:04] [info] FRACTURE: Vendor: Intel
+[21:36:04] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[21:36:04] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[21:36:05] [trace] FRACTURE: Loaded model: samus
+[21:36:05] [trace] FRACTURE: Loaded model: cube
+[21:36:05] [trace] FRACTURE: Loaded Texture: container
+[21:36:05] [trace] FRACTURE: Loaded Texture: specular
+[21:36:05] [trace] FRACTURE: Loaded Shader: default
+[21:36:05] [trace] FRACTURE: Loaded Material: default
+[21:36:05] [trace] FRACTURE: Loaded Material: samus
+[21:36:05] [info] FRACTURE: Renderer Init
+[21:36:05] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[21:36:05] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[21:36:05] [trace] FRACTURE: Loaded Texture: RotateIcon
+[21:37:03] [trace] FRACTURE: Fracture DeSerializing Scene
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 4
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 5
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 6
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 7
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 9
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 11
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 12
+[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 13
+[21:37:40] [trace] FRACTURE: Fracture DeSerializing Scene
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 4
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 5
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 6
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 7
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 9
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 11
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 12
+[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 13

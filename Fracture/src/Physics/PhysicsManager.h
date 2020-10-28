@@ -22,6 +22,8 @@ namespace Fracture
 
 		void setGravity(float x,float y, float z);
 
+		static void ClearScene();
+
 		static void AddCollider(int id,btCollisionShape* collider);
 		static void RemoveCollider(btCollisionShape* collider);
 

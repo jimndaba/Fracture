@@ -42,7 +42,8 @@ namespace Fracture
 		std::unique_ptr<GameWindow> m_window;
 		std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
-		std::unique_ptr<AssetManager> m_AssetMaanger;
+		std::unique_ptr<AssetManager> m_AssetManger;
+		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 
 		static std::shared_ptr<Scene> m_ActiveScene;
 

@@ -35,7 +35,8 @@ void Fracture::Editor::onInit()
     m_Eventbus = std::make_unique<Eventbus>();
     m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine");
     m_InputManager = std::make_unique<InputManager>();
-    m_AssetMaanger = std::make_unique<AssetManager>();
+    m_AssetManger = std::make_unique<AssetManager>();
+    m_PhysicsManger = std::make_unique<PhysicsManager>();
 
     /*
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
@@ -74,7 +75,7 @@ void Fracture::Editor::onInit()
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
-    ImFont* pFont = io.Fonts->AddFontFromFileTTF("Play-Regular.TTF",15.0f);
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("Roboto-Regular.TTF",14.0f);
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -101,7 +102,7 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_viewpanel);
     m_frame->AddPanel(m_TabbedPanel);
 
-
+    
     m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
 
@@ -109,9 +110,11 @@ void Fracture::Editor::onInit()
     m_viewpanel->setRenderer(m_Renderer.get());
     m_viewpanel->init();
 
-    m_AssetMaanger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
-    m_AssetMaanger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
-    m_AssetMaanger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
+    m_PhysicsManger->Init();
+
+    m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
 }
 
 void Fracture::Editor::run()
@@ -214,10 +217,24 @@ void Fracture::Editor::Render()
                 ImGui::MenuItem("New Project", NULL);  
                 ImGui::MenuItem("Open Project", NULL);   
                 ImGui::Separator();        
-                ImGui::MenuItem("New Scene", NULL);
-                ImGui::MenuItem("Open Scene", NULL);
+                if (ImGui::MenuItem("New Scene", NULL))
+                {
+                    sandboxScene->clearScene();
+                }
+                if(ImGui::MenuItem("Open Scene", NULL))
+                {
+                    SceneSerializer serializer(sandboxScene);
+                    if (!serializer.DeSerialize("bin/content/Sandbox.json"))
+                    {
+                        FRACTURE_ERROR("FAILED TO LOAD SCENE");
+                    }
+                }
                 ImGui::Separator();
-                ImGui::MenuItem("Save", NULL);
+                if (ImGui::MenuItem("Save", NULL))
+                {
+                    SceneSerializer serializer(sandboxScene);
+                    serializer.Serialize("bin/content/Sandbox.json");
+                }
                 ImGui::MenuItem("Save As", NULL);
                 if (ImGui::MenuItem("Exit", NULL))
                 {

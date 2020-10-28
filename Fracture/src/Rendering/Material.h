@@ -87,6 +87,7 @@ namespace Fracture
 		Material(std::string name, std::shared_ptr<Shader> shader);
 		~Material();
 		std::shared_ptr<Shader> getShader();
+        void setShader(std::string shader);
 
 		std::string Name;
         void setBool(std::string name, bool value) const;

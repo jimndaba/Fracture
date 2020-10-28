@@ -2,6 +2,7 @@
 #include "../Elements/TagComponentElement.h"
 #include "SceneviewPanel.h"
 
+
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
 {
 	//m_tagcomponent = std::shared_ptr< TagComponentElement>(new TagComponentElement("Tag"));
@@ -23,8 +24,6 @@ void Fracture::InspectorPanel::render()
 
 void Fracture::InspectorPanel::DrawComponents(Entity entity)
 {
-	
-	
 	ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
@@ -40,9 +39,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 	
 			tag->Name = std::string(buffer);
-		}
-
-		
+		}		
 	}
 
 	ImGui::SameLine();
@@ -67,6 +64,34 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImGui::CloseCurrentPopup();
 		}
 
+		if (ImGui::BeginMenu("Render"))
+		{
+			std::string modelName;
+			for (auto const& model : AssetManager::GetModels())
+			{
+				if (ImGui::MenuItem(model.first.c_str()))
+				{
+					modelName = model.first;
+					if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
+					{
+						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, "default");
+					}
+					else
+					{
+						FRACTURE_ERROR("ENTITY DOES NOT HAVE TRANSFORM COMPONENT");
+					}
+
+				}
+			}			
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Audio"))
+		{
+			
+			ImGui::CloseCurrentPopup();
+		}
+
 		if (ImGui::MenuItem("Light"))
 		{
 			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
@@ -75,24 +100,26 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Collision"))
 		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ComponentManager::AddComponent<BoxColliderComponent>(entity.Id,1.0f, 1.0f, 1.0f);
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Rigidbody"))
 		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ComponentManager::AddComponent<RigidBodyComponent>(entity.Id,1.0f);
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Script"))
 		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
 			ImGui::CloseCurrentPopup();
 		}
 
+		
 		ImGui::EndPopup();
 	}
+
 	ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);	
 
 	if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
@@ -163,18 +190,107 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	});
 
 	DrawComponent<RenderComponent>("Mesh Render", entity, [](auto& component)
-		{
+	{
+			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 
-		});
+			static std::string current_Model = render->material->Name;
+			static std::string current_Material = render->model->Name;
+			static std::string current_Shader = render->material->getShader()->Name;
+
+			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
+
+			if (ImGui::BeginCombo("Model",current_Model.c_str()))
+			{				
+				for (auto const& model : AssetManager::GetModels())
+				{
+					bool is_selected = (current_Model.c_str() == model.first.c_str());
+					if (ImGui::Selectable(model.first.c_str(), is_selected))
+					{
+						current_Model = model.first;
+					}
+
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+						render->SetModel(model.first);
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::BeginCombo("Material", current_Material.c_str()))
+			{
+
+				for (auto const& material : AssetManager::GetMaterials())
+				{
+					bool is_selected = (current_Material.c_str() == material.first.c_str());
+
+					if (ImGui::Selectable(material.first.c_str(), is_selected))
+					{
+						current_Material = material.first;
+					}
+
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+						render->SetMaterial(material.first);
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::BeginCombo("Shader", current_Shader.c_str()))
+			{
+
+				for (auto const& shader: AssetManager::GetShaders())
+				{
+					bool is_selected = (current_Shader.c_str() == shader.first.c_str());
+
+					if (ImGui::Selectable(current_Shader.c_str(), is_selected))
+					{
+						current_Shader = shader.first;
+					}
+
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+						render->material->setShader(shader.first);
+					}
+				}
+				ImGui::EndCombo();
+			}
+	});
 	
 	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
-	{
-
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			auto boldFont = io.Fonts->Fonts[0];
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			std::shared_ptr<RigidBodyComponent> rigid = std::dynamic_pointer_cast<RigidBodyComponent>(component);
+			ImVec2 buttonSize = { lineHeight + 15.0f, lineHeight };
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+			ImGui::PushFont(boldFont);
+			if (ImGui::Button("Mass", buttonSize))
+			{
+				rigid->Mass = 1.0f;
+			}				
+			ImGui::PopFont();
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine();
+			ImGui::DragFloat("##Mass", &rigid->Mass, 0.1f, 0.0f, 0.0f, "%.2f");
 	});
 
 	DrawComponent<BoxColliderComponent>("Collider", entity, [](auto& component)
 	{
+			std::shared_ptr<BoxColliderComponent> collider = std::dynamic_pointer_cast<BoxColliderComponent>(component);
+			glm::vec3 size = glm::vec3(collider->X, collider->Y, collider->Z);
+			DrawVec3Control("Size",size,1);
 
+			collider->X = size.x;
+			collider->Y = size.y;
+			collider->Z = size.z;
 	});
 
 	DrawComponent<ScriptComponent>("Script", entity, [](auto& component)

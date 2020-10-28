@@ -58,6 +58,12 @@ void Fracture::ComponentManager::onUpdate(float dt)
 	}
 }
 
+void Fracture::ComponentManager::ClearComponents()
+{
+	PhysicsManager::ClearScene();
+	m_Components.clear();
+}
+
 void Fracture::ComponentManager::AddComponent(std::shared_ptr<Component> component)
 {
 	m_Components.push_back(component);
@@ -102,39 +108,6 @@ void Fracture::ComponentManager::RemoveComponent(std::shared_ptr<Component> comp
 				std::end(m_Components), component),
 			std::end(m_Components));
 	}
-
-	/*
-	for (auto& other : m_Components)
-	{
-		if (component->EntityID == other->EntityID && component->componentType == other->componentType) {
-
-			m_Components.erase(
-				std::remove(std::begin(m_Components),
-					std::end(m_Components), component),
-				std::end(m_Components));
-		}
-	}
-	*/
-
-	/*
-	std::vector<std::shared_ptr<Component>>::iterator itr;
-	for (itr = m_Components.begin(); itr != m_Components.end(); ) 
-	{
-		if ((*itr)->EntityID == component->EntityID && (*itr)->componentType == component->componentType) {
-		
-			if(itr != m_Components.end())
-			{
-				FRACTURE_INFO("Removing Component in iterator for Entity {}", (*itr)->EntityID);			
-				itr = m_Components.erase(std::remove(std::begin(m_Components),
-					std::end(m_Components), component),
-					std::end(m_Components));
-			}
-		}
-		else {
-			++itr;
-		}
-	}
-	*/
 	
 }
 

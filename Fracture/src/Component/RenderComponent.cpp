@@ -17,3 +17,13 @@ Fracture::RenderComponent::~RenderComponent()
 void Fracture::RenderComponent::onStart()
 {
 }
+
+void Fracture::RenderComponent::SetMaterial(std::string name)
+{
+	material = AssetManager::getMaterial(name);
+}
+
+void Fracture::RenderComponent::SetModel(std::string name)
+{
+	model = AssetManager::getModel(name);
+}

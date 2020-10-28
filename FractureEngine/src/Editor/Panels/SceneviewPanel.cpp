@@ -18,15 +18,12 @@ void Fracture::SceneView::setScene(std::shared_ptr<Scene> scene)
 }
 
 void Fracture::SceneView::render()
-{
+{	
+	ImGui::Columns(3,"scene");
 	
-	for (auto& entity : m_scene->Entities())
-	{
-		DrawEntityNode(*entity.get());
-	}
-
-
-	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+	DrawEntityNode(m_scene->Root()->Id);
+	
+	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) //
 		m_selection = {};
 
 	// Right-click on blank space
@@ -36,10 +33,11 @@ void Fracture::SceneView::render()
 		{
 			std::shared_ptr<Entity> empty = EntityManager::CreateEntity<Entity>();
 			ComponentManager::AddComponent<TagComponent>(empty->Id, "Empty");
+			std::shared_ptr<RelationShipComponent> relation = std::make_shared<RelationShipComponent>(empty->Id);
+			ComponentManager::AddComponent(relation);
+			relation->SetParent(m_selection.Id);
 			m_scene->addEntity(empty);
 		}
-			
-
 		ImGui::EndPopup();
 	}
 }
@@ -49,43 +47,68 @@ Fracture::Entity Fracture::SceneView::SelectedEntity()
 	return m_selection;
 }
 
-void Fracture::SceneView::DrawEntityNode(Entity entity)
+void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 {
-	std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity.Id);
-
-	ImGuiTreeNodeFlags flags = ((m_selection.Id == entity.Id) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
-	bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity.Id, flags, tag->Name.c_str());
-	if (ImGui::IsItemClicked())
+	std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity);
+	if (ComponentManager::HasComponent<RelationShipComponent>(entity) && tag)
 	{
-		m_selection = entity;
-	}
+		std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity);
 
-	bool entityDeleted = false;
-	if (ImGui::BeginPopupContextItem())
-	{
-		if (ImGui::MenuItem("Delete Entity"))
-			entityDeleted = true;
+		ImGuiTreeNodeFlags flags = ((m_selection.Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 
-		ImGui::EndPopup();
-	}
+		if (relationship->GetChildren().size() == 0)
+		{
+			flags |= ImGuiTreeNodeFlags_Leaf;
+		}
+			
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag->Name.c_str());
+		
+		if (ImGui::IsItemClicked())
+		{
+			m_selection.Id = entity;
+		}
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+				entityDeleted = true;
+			ImGui::EndPopup();
+		}
 
-	if (opened)
-	{
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag->Name.c_str());
+		if (entityDeleted)
+		{
+			if (relationship->GetChildren().size() > 0)
+			{
+				for (auto& child : relationship->GetChildren())
+				{
+					m_scene->Destroy(child);
+				}
+			}
+			m_scene->Destroy(entity);
+			
+			if (m_selection.Id == entity)
+				m_selection = {};
+		}
+		
+		ImGui::NextColumn();
+		ImGui::ImageButton(nullptr, ImVec2(8, 8), ImVec2(0, 0), ImVec2(1, 1), 1);
+		ImGui::NextColumn();
+		ImGui::ImageButton(nullptr, ImVec2(8, 8), ImVec2(0, 0), ImVec2(1, 1), 1);
+		ImGui::NextColumn();
+
 		if (opened)
+		{
+			if (ComponentManager::HasComponent<RelationShipComponent>(entity))
+			{
+				for (auto& child : relationship->GetChildren())
+				{
+
+					DrawEntityNode(child);
+				}
+			}
 			ImGui::TreePop();
-		ImGui::TreePop();
+		}
+			
 	}
-
-	if (entityDeleted)
-	{
-		m_scene->Destroy(entity.Id);
-		if (m_selection.Id == entity.Id)
-			m_selection = {};
-	}
-
-
-
+	
 }

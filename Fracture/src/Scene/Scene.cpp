@@ -21,16 +21,14 @@ std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::m_entities;
 Fracture::Scene::Scene()
 {
 	m_root = EntityManager::CreateEntity<Entity>();
-	m_root->name = "Root";
-
+	
 	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->Id));
 	ComponentManager::AddComponent(m_root_rel);
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
 	ComponentManager::AddComponent<TagComponent>(m_root->Id, "Root");
 	main_Camera = EntityManager::CreateEntity<Entity>();
-	main_Camera->name = "Main Camera";
 	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));	
-	m_camera_rel->SetParent(m_root);
+	m_camera_rel->SetParent(m_root->Id);
 	ComponentManager::AddComponent(m_camera_rel);
 	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->Id);
 	ComponentManager::AddComponent<TagComponent>(main_Camera->Id, "Main Camera");
@@ -40,8 +38,7 @@ Fracture::Scene::Scene()
 }
 
 Fracture::Scene::~Scene()
-{
-	
+{	
 	clearScene();
 }
 
@@ -66,6 +63,8 @@ void Fracture::Scene::Destroy(std::shared_ptr<Entity> entity)
 				std::end(m_entities), entity),
 			std::end(m_entities));
 	}
+
+	ComponentManager::RemoveComponentsbyID(entity->Id);
 }
 
 void Fracture::Scene::Destroy(uint32_t id)
@@ -82,6 +81,8 @@ void Fracture::Scene::Destroy(uint32_t id)
 void Fracture::Scene::clearScene()
 {	
 	m_entities.clear();
+	ComponentManager::ClearComponents();
+	IDManager::ResetIDs();
 }
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::MainCamera()
@@ -89,6 +90,11 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::MainCamera()
 	if (main_Camera)
 		return main_Camera;
 	return nullptr;
+}
+
+void Fracture::Scene::setCamera(std::shared_ptr<Entity> camera)
+{
+	main_Camera = camera;
 }
 
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::Entities()

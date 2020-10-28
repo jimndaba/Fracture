@@ -139,6 +139,7 @@
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scripting\GameLogic.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\SceneSerializer.cpp" />
     <ClCompile Include="src\Serialisation\Serializer.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
   </ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
+    <ClInclude Include="src\Serialisation\SceneSerializer.h" />
     <ClInclude Include="src\Serialisation\Serializer.h" />
     <ClInclude Include="vendor\glad\glad.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
@@ -218,6 +220,44 @@
     <ClInclude Include="vendor\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\vector_relational.hpp" />
     <ClInclude Include="vendor\KHR\khrplatform.h" />
+    <ClInclude Include="vendor\nlohmann\json.hpp" />
+    <ClInclude Include="vendor\yaml-cpp\anchor.h" />
+    <ClInclude Include="vendor\yaml-cpp\binary.h" />
+    <ClInclude Include="vendor\yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="vendor\yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="vendor\yaml-cpp\depthguard.h" />
+    <ClInclude Include="vendor\yaml-cpp\dll.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitter.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitterdef.h" />
+    <ClInclude Include="vendor\yaml-cpp\emittermanip.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="vendor\yaml-cpp\eventhandler.h" />
+    <ClInclude Include="vendor\yaml-cpp\exceptions.h" />
+    <ClInclude Include="vendor\yaml-cpp\mark.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\convert.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\impl.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\iterator.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\iterator_fwd.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\memory.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\node.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\node_data.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\node_iterator.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\detail\node_ref.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\emit.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\impl.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\iterator.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\node.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\parse.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\ptr.h" />
+    <ClInclude Include="vendor\yaml-cpp\node\type.h" />
+    <ClInclude Include="vendor\yaml-cpp\noexcept.h" />
+    <ClInclude Include="vendor\yaml-cpp\null.h" />
+    <ClInclude Include="vendor\yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="vendor\yaml-cpp\parser.h" />
+    <ClInclude Include="vendor\yaml-cpp\stlemitter.h" />
+    <ClInclude Include="vendor\yaml-cpp\traits.h" />
+    <ClInclude Include="vendor\yaml-cpp\yaml.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\glm\CMakeLists.txt" />

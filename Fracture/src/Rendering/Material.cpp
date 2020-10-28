@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include <utility>
 #include <functional>
+#include "AssetManager/AssetManager.h"
 
 Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):Name(name),m_shader(shader)
 {
@@ -16,6 +17,11 @@ Fracture::Material::~Material()
 std::shared_ptr <Fracture:: Shader > Fracture::Material::getShader()
 {
     return m_shader;
+}
+
+void Fracture::Material::setShader(std::string shader)
+{
+	m_shader = AssetManager::getShader(shader);
 }
 
 void Fracture::Material::setBool(std::string name, bool value) const

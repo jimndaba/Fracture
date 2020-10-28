@@ -54,9 +54,9 @@ glm::mat4 Fracture::TransformComponent::GetWorldTransform()
 {
 	RelationShipComponent& component = *ComponentManager::GetComponent<RelationShipComponent>(EntityID);
 
-	if (component.m_parent)
+	if (component.hasParent)
 	{
-		TransformComponent& m_parentTransform = *ComponentManager::GetComponent<TransformComponent>(component.m_parent->Id);
+		TransformComponent& m_parentTransform = *ComponentManager::GetComponent<TransformComponent>(component.m_parent);
 		m_WorldTransform = m_parentTransform.GetWorldTransform() * GetLocalTranform();
 	}
 	else

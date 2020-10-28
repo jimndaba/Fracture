@@ -35,6 +35,8 @@ namespace Fracture
 		void clearScene();		
 
 		static std::shared_ptr<Entity> MainCamera();
+		static void setCamera(std::shared_ptr<Entity> camera);
+
 		std::vector<std::shared_ptr<Entity>> Entities();
 
 		static std::shared_ptr<Entity> GetEntity(uint32_t id);

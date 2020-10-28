@@ -29,6 +29,8 @@ namespace Fracture
 		void onLoad();
 
 		static void onUpdate(float dt);
+
+		static void ClearComponents();
 	
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);

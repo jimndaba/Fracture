@@ -97,6 +97,31 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(std::strin
 	return m_Textures[name];
 }
 
+std::map<std::string, std::shared_ptr<Fracture::Mesh>> Fracture::AssetManager::GetMeshes()
+{
+	return m_meshes;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::GetTextures()
+{
+	return m_Textures;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::GetModels()
+{
+	return m_Models;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::GetShaders()
+{
+	return m_Shaders;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::GetMaterials()
+{
+	return m_Materials;
+}
+
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string path)
 {
 	std::shared_ptr<Model> m_model = nullptr;

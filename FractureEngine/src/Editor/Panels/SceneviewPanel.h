@@ -27,7 +27,7 @@ namespace Fracture
 		std::shared_ptr<Scene> m_scene;
 		static Entity m_selection;
 
-		void DrawEntityNode(Entity entity);
+		void DrawEntityNode(uint32_t entity);
 	};
 
 }

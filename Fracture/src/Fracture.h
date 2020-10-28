@@ -52,11 +52,13 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/BoxColliderComponent.h"
 #include "Component/RigidBodyComponent.h"
+#include "Component/RelationshipComponent.h"
 
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"
 
-
 #include "Scripting/GameLogic.h"
+
+#include "Serialisation/SceneSerializer.h"
 
 #endif

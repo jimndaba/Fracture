@@ -25,9 +25,6 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 
 void Fracture::ViewPanel::render()
 {
-
-	
-	
 	if (ImGui::ImageButton((void*)AssetManager::getTexture("TranslateIcon")->id, ImVec2(32,32), ImVec2(0, 0), ImVec2(1, 1),1))
 	{
 

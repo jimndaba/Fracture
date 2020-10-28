@@ -76,6 +76,24 @@ void Fracture::PhysicsManager::setGravity(float x, float y, float z)
 	m_gravity = btVector3(x,y,z);
 }
 
+void Fracture::PhysicsManager::ClearScene()
+{
+	collisionShapes.clear();
+
+	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		dynamicsWorld->removeCollisionObject(obj);
+		delete obj;
+	}
+
+}
+
 void Fracture::PhysicsManager::AddCollider(int id, btCollisionShape* collider)
 {
 	if (std::find(collision_ids.begin(), collision_ids.end(),id) != collision_ids.end())

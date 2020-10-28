@@ -13,9 +13,9 @@ namespace Fracture
 	{
 	public:
 		Entity();
+		Entity(uint32_t id);
 		~Entity();
 		uint32_t Id;
-		std::string name;
 
 		operator bool() const
 		{
@@ -23,13 +23,6 @@ namespace Fracture
 		}
 	private:
 
-	};
-
-	class EntityInstance
-	{
-	public:
-		uint32_t EntityID;
-		uint32_t InstanceID;
 	};
 
 }

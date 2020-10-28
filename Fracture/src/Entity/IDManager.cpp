@@ -9,3 +9,8 @@ Fracture::IDManager::IDManager()
 Fracture::IDManager::~IDManager()
 {
 }
+
+void Fracture::IDManager::ResetIDs()
+{
+	m_currentID = 1;
+}

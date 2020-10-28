@@ -19,6 +19,8 @@ namespace Fracture
 
 		template <class T>
 		static std::shared_ptr<T> CreateEntity();
+
+		static std::shared_ptr<Entity> CreateEntity(uint32_t id);
 		
 	private:
 
