@@ -94,6 +94,7 @@
     <ClInclude Include="src\Editor\Elements\Element.h" />
     <ClInclude Include="src\Editor\Elements\TabbedElement.h" />
     <ClInclude Include="src\Editor\Elements\TagComponentElement.h" />
+    <ClInclude Include="src\Editor\Panels\AssetBrowserPanel.h" />
     <ClInclude Include="src\Editor\Panels\Inspector.h" />
     <ClInclude Include="src\Editor\Panels\Panel.h" />
     <ClInclude Include="src\Editor\Panels\SceneviewPanel.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="src\Editor\Elements\Element.cpp" />
     <ClCompile Include="src\Editor\Elements\TabbedElement.cpp" />
     <ClCompile Include="src\Editor\Elements\TagComponentElement.cpp" />
+    <ClCompile Include="src\Editor\Panels\AssetBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\Inspector.cpp" />
     <ClCompile Include="src\Editor\Panels\Panel.cpp" />
     <ClCompile Include="src\Editor\Panels\SceneviewPanel.cpp" />

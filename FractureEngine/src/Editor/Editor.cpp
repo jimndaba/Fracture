@@ -6,6 +6,7 @@
 #include "Panels/Inspector.h"
 #include "Panels/ViewPanel.h"
 #include "Panels/TabbedPanel.h"
+#include "Panels/AssetBrowserPanel.h"
 #include "SandboxScene.h"
 
 bool Fracture::Editor::opt_padding;
@@ -37,7 +38,7 @@ void Fracture::Editor::onInit()
     m_InputManager = std::make_unique<InputManager>();
     m_AssetManger = std::make_unique<AssetManager>();
     m_PhysicsManger = std::make_unique<PhysicsManager>();
-
+  
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -63,6 +64,7 @@ void Fracture::Editor::onInit()
     m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
     m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
+    m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
     sandboxScene = std::make_shared<SandboxScene>();
     SetScene(sandboxScene);
@@ -71,7 +73,7 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_inspectorpanel);
     m_frame->AddPanel(m_viewpanel);
     m_frame->AddPanel(m_TabbedPanel);
-
+    m_frame->AddPanel(m_AssetBrowser);
     
     m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
@@ -353,17 +355,17 @@ inline void Style()
     style.PopupBorderSize = 1;
     style.FrameBorderSize = is3D;
 
-    style.WindowRounding = 3;
-    style.ChildRounding = 3;
-    style.FrameRounding = 3;
+    style.WindowRounding = 2;
+    style.ChildRounding = 2;
+    style.FrameRounding = 2;
     style.ScrollbarRounding = 2;
-    style.GrabRounding = 3;
+    style.GrabRounding = 2;
 
 #ifdef IMGUI_HAS_DOCK 
     style.TabBorderSize = is3D;
     style.TabRounding = 3;
 
-    colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
+    colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.22f, 0.23f, 0.25f, 1.00f);
     colors[ImGuiCol_Tab] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
     colors[ImGuiCol_TabHovered] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
     colors[ImGuiCol_TabActive] = ImVec4(0.33f, 0.33f, 0.33f, 1.00f);

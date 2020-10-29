@@ -15,7 +15,7 @@ namespace Fracture
 	class InspectorPanel;
 	class ViewPanel;
 	class TabbedPanel;
-
+	class AssetBrowserPanel;
 
 	class Editor
 	{
@@ -44,7 +44,7 @@ namespace Fracture
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<AssetManager> m_AssetManger;
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
-
+		
 		static std::shared_ptr<Scene> m_ActiveScene;
 
 
@@ -57,6 +57,7 @@ namespace Fracture
 		std::shared_ptr<InspectorPanel> m_inspectorpanel;
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
+		std::shared_ptr<AssetBrowserPanel> m_AssetBrowser;
 
 		static bool p_open;
 		static bool opt_fullscreen;

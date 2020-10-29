@@ -1,15 +1,15 @@
-[08:49:43] [info] FRACTURE: OpenGL loaded
-[08:49:43] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[08:49:43] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[08:49:43] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[08:49:43] [trace] FRACTURE: Loaded model: samus
-[08:49:43] [trace] FRACTURE: Loaded model: cube
-[08:49:43] [trace] FRACTURE: Loaded Texture: container
-[08:49:43] [trace] FRACTURE: Loaded Texture: specular
-[08:49:43] [trace] FRACTURE: Loaded Shader: default
-[08:49:43] [trace] FRACTURE: Loaded Material: default
-[08:49:43] [trace] FRACTURE: Loaded Material: samus
-[08:49:43] [info] FRACTURE: Renderer Init
-[08:49:43] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[08:49:43] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[08:49:43] [trace] FRACTURE: Loaded Texture: RotateIcon
+[15:15:50] [info] FRACTURE: OpenGL loaded
+[15:15:50] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[15:15:50] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[15:15:50] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[15:15:50] [trace] FRACTURE: Loaded model: samus
+[15:15:50] [trace] FRACTURE: Loaded model: cube
+[15:15:50] [trace] FRACTURE: Loaded Texture: container
+[15:15:50] [trace] FRACTURE: Loaded Texture: specular
+[15:15:50] [trace] FRACTURE: Loaded Shader: default
+[15:15:50] [trace] FRACTURE: Loaded Material: default
+[15:15:50] [trace] FRACTURE: Loaded Material: samus
+[15:15:50] [info] FRACTURE: Renderer Init
+[15:15:50] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[15:15:50] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[15:15:50] [trace] FRACTURE: Loaded Texture: RotateIcon
