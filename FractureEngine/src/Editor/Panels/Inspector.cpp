@@ -193,9 +193,9 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 
-			static std::string current_Model = render->material->Name;
-			static std::string current_Material = render->model->Name;
-			static std::string current_Shader = render->material->getShader()->Name;
+			std::string current_Model = render->model->Name;
+			std::string current_Material = render->material->Name;
+			std::string current_Shader = render->material->getShader()->Name;
 
 			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
@@ -203,16 +203,17 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			{				
 				for (auto const& model : AssetManager::GetModels())
 				{
-					bool is_selected = (current_Model.c_str() == model.first.c_str());
+					const bool is_selected = (current_Model.c_str() == model.first.c_str());
 					if (ImGui::Selectable(model.first.c_str(), is_selected))
 					{
-						current_Model = model.first;
+						current_Model = model.first;	
+						render->SetModel(model.first);
 					}
 
 					if (is_selected)
 					{
 						ImGui::SetItemDefaultFocus();
-						render->SetModel(model.first);
+						//render->SetModel(model.first);
 					}
 				}
 				ImGui::EndCombo();

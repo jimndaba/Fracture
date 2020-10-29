@@ -1,41 +1,15 @@
-[21:36:04] [info] FRACTURE: OpenGL loaded
-[21:36:04] [info] FRACTURE: Vendor: Intel
-[21:36:04] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[21:36:04] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[21:36:05] [trace] FRACTURE: Loaded model: samus
-[21:36:05] [trace] FRACTURE: Loaded model: cube
-[21:36:05] [trace] FRACTURE: Loaded Texture: container
-[21:36:05] [trace] FRACTURE: Loaded Texture: specular
-[21:36:05] [trace] FRACTURE: Loaded Shader: default
-[21:36:05] [trace] FRACTURE: Loaded Material: default
-[21:36:05] [trace] FRACTURE: Loaded Material: samus
-[21:36:05] [info] FRACTURE: Renderer Init
-[21:36:05] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[21:36:05] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[21:36:05] [trace] FRACTURE: Loaded Texture: RotateIcon
-[21:37:03] [trace] FRACTURE: Fracture DeSerializing Scene
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 4
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 5
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 6
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 7
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 9
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 11
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 12
-[21:37:03] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 13
-[21:37:40] [trace] FRACTURE: Fracture DeSerializing Scene
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 4
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 5
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 6
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 7
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 9
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 11
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 12
-[21:37:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 13
+[08:49:43] [info] FRACTURE: OpenGL loaded
+[08:49:43] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[08:49:43] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[08:49:43] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[08:49:43] [trace] FRACTURE: Loaded model: samus
+[08:49:43] [trace] FRACTURE: Loaded model: cube
+[08:49:43] [trace] FRACTURE: Loaded Texture: container
+[08:49:43] [trace] FRACTURE: Loaded Texture: specular
+[08:49:43] [trace] FRACTURE: Loaded Shader: default
+[08:49:43] [trace] FRACTURE: Loaded Material: default
+[08:49:43] [trace] FRACTURE: Loaded Material: samus
+[08:49:43] [info] FRACTURE: Renderer Init
+[08:49:43] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[08:49:43] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[08:49:43] [trace] FRACTURE: Loaded Texture: RotateIcon
