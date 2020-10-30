@@ -38,7 +38,8 @@ void Fracture::Editor::onInit()
     m_InputManager = std::make_unique<InputManager>();
     m_AssetManger = std::make_unique<AssetManager>();
     m_PhysicsManger = std::make_unique<PhysicsManager>();
-  
+    m_Profiler = std::make_unique<Profiler>();
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -245,7 +246,9 @@ void Fracture::Editor::Render()
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
                 ImGui::MenuItem("Toolbar", NULL);
-                ImGui::MenuItem("Content Manager", NULL);
+                ImGui::MenuItem("Hierachy View", NULL);
+                ImGui::MenuItem("Inspector", NULL);
+                ImGui::MenuItem("Asset Viewer", NULL);
                 ImGui::MenuItem("Logging", NULL);
                 ImGui::MenuItem("Project Settings", NULL);
                 ImGui::EndMenu();

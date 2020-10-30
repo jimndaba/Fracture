@@ -38,6 +38,7 @@ namespace Fracture
 	private:
 
 		std::unique_ptr<Logger> m_logger;
+		std::unique_ptr<Profiler> m_Profiler;
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<GameWindow> m_window;
 		std::unique_ptr<Eventbus> m_Eventbus;

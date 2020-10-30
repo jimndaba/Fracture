@@ -6,7 +6,6 @@
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
 {
 	//m_tagcomponent = std::shared_ptr< TagComponentElement>(new TagComponentElement("Tag"));
-
 	//AddElement(m_tagcomponent);
 }
 
@@ -42,84 +41,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		}		
 	}
 
-	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);
-
-	if (ImGui::Button("Add Component"))
-	{
-		ImGui::OpenPopup("AddComponent");
-	}	
-
-	if (ImGui::BeginPopup("AddComponent"))
-	{
-		if (ImGui::MenuItem("Transform"))
-		{
-			ComponentManager::AddComponent<TransformComponent>(entity.Id);
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Camera"))
-		{
-			ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::BeginMenu("Render"))
-		{
-			std::string modelName;
-			for (auto const& model : AssetManager::GetModels())
-			{
-				if (ImGui::MenuItem(model.first.c_str()))
-				{
-					modelName = model.first;
-					if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
-					{
-						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, "default");
-					}
-					else
-					{
-						FRACTURE_ERROR("ENTITY DOES NOT HAVE TRANSFORM COMPONENT");
-					}
-
-				}
-			}			
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::MenuItem("Audio"))
-		{
-			
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Light"))
-		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Collision"))
-		{
-			ComponentManager::AddComponent<BoxColliderComponent>(entity.Id,1.0f, 1.0f, 1.0f);
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Rigidbody"))
-		{
-			ComponentManager::AddComponent<RigidBodyComponent>(entity.Id,1.0f);
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::MenuItem("Script"))
-		{
-			//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
-			ImGui::CloseCurrentPopup();
-		}
-
-		
-		ImGui::EndPopup();
-	}
-
 	ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);	
 
 	if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
@@ -298,6 +220,86 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 
 	});
+
+	//ImGui::SameLine();
+	//ImGui::PushItemWidth(-1);
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Add Component"))
+	{
+		ImGui::OpenPopup("AddComponent");
+	}
+
+	if (ImGui::BeginPopup("AddComponent"))
+	{
+		if (ImGui::MenuItem("Transform"))
+		{
+			ComponentManager::AddComponent<TransformComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Camera"))
+		{
+			ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::BeginMenu("Render"))
+		{
+			std::string modelName;
+			for (auto const& model : AssetManager::GetModels())
+			{
+				if (ImGui::MenuItem(model.first.c_str()))
+				{
+					modelName = model.first;
+					if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
+					{
+						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, "default");
+					}
+					else
+					{
+						FRACTURE_ERROR("ENTITY DOES NOT HAVE TRANSFORM COMPONENT");
+					}
+
+				}
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Audio"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);			
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Light"))
+		{
+			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Collision"))
+		{
+			ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Rigidbody"))
+		{
+			ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Script"))
+		{
+			//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+
+		ImGui::EndPopup();
+	}
 
 }
 
