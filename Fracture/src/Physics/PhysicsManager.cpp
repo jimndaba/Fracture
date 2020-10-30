@@ -27,7 +27,7 @@ Fracture::PhysicsManager::PhysicsManager()
 
 Fracture::PhysicsManager::~PhysicsManager()
 {
-	collisionShapes.clear();
+
 
 	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
 	{
@@ -40,6 +40,8 @@ Fracture::PhysicsManager::~PhysicsManager()
 		dynamicsWorld->removeCollisionObject(obj);
 		delete obj;
 	}
+
+	collisionShapes.clear();
 
 	delete collisionConfiguration;
 	delete dispatcher;

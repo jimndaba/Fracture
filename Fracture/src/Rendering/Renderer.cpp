@@ -13,6 +13,7 @@
 #include "Component/PointLightComponent.h"
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
+#include "Component/TagComponent.h"
 
 #include "Game/Game.h"
 #include "Scene/Scene.h"
@@ -229,8 +230,9 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
  
     std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
+    std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);
   
-    if (render)
+    if (render && tag->isVisible)
     {
       
         for (auto mesh : render->model->GetMeshes())

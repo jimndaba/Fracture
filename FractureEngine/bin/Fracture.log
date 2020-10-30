@@ -1,12 +1,4 @@
-[20:30:34] [info] FRACTURE: OpenGL loaded
-[20:30:34] [info] FRACTURE: Vendor: Intel
-[20:30:34] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[20:30:34] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[20:30:34] [trace] FRACTURE: Loaded model: samus
-[20:30:34] [trace] FRACTURE: Loaded model: cube
-[20:30:35] [trace] FRACTURE: Loaded Texture: container
-[20:30:35] [trace] FRACTURE: Loaded Texture: specular
-[20:30:35] [trace] FRACTURE: Loaded Shader: default
-[20:30:35] [trace] FRACTURE: Loaded Material: default
-[20:30:35] [trace] FRACTURE: Loaded Material: samus
-[20:30:35] [info] FRACTURE: Renderer Init
+[10:49:36] [info] FRACTURE: OpenGL loaded
+[10:49:36] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[10:49:36] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[10:49:36] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000

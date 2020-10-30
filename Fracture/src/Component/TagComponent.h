@@ -21,7 +21,7 @@ namespace Fracture
 
 		int ID;
 		std::string Name;
-
+		bool isVisible = true;
 		void SetName(std::string name);
 	};
 

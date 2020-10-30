@@ -1,6 +1,7 @@
 #include "AssetBrowserPanel.h"
 #include <imgui/imgui_internal.h>
 
+
 Fracture::AssetBrowserPanel::AssetBrowserPanel():Panel("AssetBrowser")
 {
 }
@@ -67,6 +68,7 @@ void Fracture::AssetBrowserPanel::render()
     ImGui::BeginChild("AssetViewer");
     ImGui::SetScrollY(scroll_y);
     ImGui::ImageButton(nullptr, ImVec2(64, 64));
+    ImGui::Image((void*)AssetManager::getTexture("GameObjectIcon")->id, ImVec2(16, 16));
 
     scroll_y = ImGui::GetScrollY();
     ImGui::EndChild();

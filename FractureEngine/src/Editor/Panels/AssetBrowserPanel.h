@@ -3,6 +3,7 @@
 #define ASSETBROWSER_H
 
 #include "Panel.h"
+#include "Fracture.h"
 
 namespace Fracture
 {

@@ -87,6 +87,12 @@ void Fracture::Editor::onInit()
     m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
+
+    m_AssetManger->AddTexture("GameObjectIcon", "bin/content/textures/GameObjectIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("CameraIcon", "bin/content/textures/CameraIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("LightIcon", "bin/content/textures/LightIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIcon", "bin/content/textures/EyeIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIconC", "bin/content/textures/EyeIconC.png", TextureType::Diffuse);
 }
 
 void Fracture::Editor::run()
@@ -133,7 +139,9 @@ void Fracture::Editor::onShutdown()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
-
+    m_Renderer.reset();
+    m_PhysicsManger->ClearScene();
+    m_PhysicsManger.reset();
     m_window.reset();
 }
 

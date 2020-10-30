@@ -32,7 +32,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 		FRACTURE_CRITICAL("FAILED TO create OpenGL context {}" ,SDL_GetError());
 	}
 		
-
+	SDL_MaximizeWindow(m_window);
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 	// Check OpenGL properties
 	FRACTURE_INFO("OpenGL loaded");
