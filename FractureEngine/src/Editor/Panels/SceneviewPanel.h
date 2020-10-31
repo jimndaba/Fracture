@@ -21,6 +21,7 @@ namespace Fracture
 		void render() override;
 
 		static Entity SelectedEntity();
+		static void setSelectEntity(Entity selection);
 
 	private:
 

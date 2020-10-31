@@ -61,6 +61,14 @@ Fracture::Entity Fracture::SceneView::SelectedEntity()
 	return m_selection;
 }
 
+void Fracture::SceneView::setSelectEntity(Entity selection)
+{
+	if(selection)
+		m_selection = selection;
+}
+
+
+
 void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 {
 	ImVec2 size = ImVec2(16.0f,16.0f);

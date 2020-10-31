@@ -23,6 +23,8 @@
 #include "Profiling/Profiler.h"
 #include "Logging/Logger.h"
 #include "Event/Eventbus.h"
+#include "Physics/PhysicsManager.h"
+#include "DebugLine.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -38,11 +40,15 @@ void _check_gl_error(const char* file, int line);
 
 #endif // GLERROR_H
 
+std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDraws;
+
 Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width,m_Height,GL_FLOAT,1,true));
     glClearColor(0.3f, 0.4f, 0.6f,1.0f);
+    glEnable(GL_DEPTH_TEST);
+ 
 }
 
 Fracture::Renderer::~Renderer()
@@ -53,6 +59,7 @@ void Fracture::Renderer::onInit()
 {    
     FRACTURE_INFO("Renderer Init");
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
+
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -74,23 +81,49 @@ void Fracture::Renderer::RenderPasses()
 {
     ProfilerTimer timer("RenderPass");
     // for each render pass ->DrawScene();
-    m_opaqueBucket->sort();
-   
+    m_opaqueBucket->sort();   
     SceneRenderTarget->bind();
     glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    Submit();   
+
+    Submit();    
+    
+    PhysicsManager::DrawDebug();
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glEnableClientState(GL_COLOR_ARRAY);
+    RenderDebug();   
+    //glDisableClientState(GL_VERTEX_ARRAY);
+    //glDisableClientState(GL_COLOR_ARRAY);
     SceneRenderTarget->Unbind();
  
-
+    //glDisable(GL_DEPTH_TEST);   
     //clearColor(0.3f, 0.5f, 0.6f);
     //glClear(GL_COLOR_BUFFER_BIT);   
     //Submit();
 }
 
+void Fracture::Renderer::RenderDebug()
+{
+    //glDisable(GL_DEPTH_TEST);
+   // glEnable(GL_LINE_SMOOTH);
+   // glEnable(GL_BLEND);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
+    m_DebugMaterial->getShader()->use();
+    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+    m_DebugMaterial->getShader()->setVec4("DebugColor", glm::vec4(1.0f,0.0f,0.0f,1.0f));
+    for (int i = 0; i < m_DebugDraws.size(); i++)
+    {
+        m_DebugDraws[i]->Render();
+    }  
+   
+}
+
 void Fracture::Renderer::EndFrame()
 {
-    
+    m_DebugDraws.clear();
 }
 
 void Fracture::Renderer::Submit()
@@ -217,6 +250,11 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     //push to Shadow Passes
     //push to  Depth Pass
     //push to prost processing
+}
+
+void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)
+{
+    m_DebugDraws.push_back(std::make_shared<DebugLine>(start,end));
 }
 
 

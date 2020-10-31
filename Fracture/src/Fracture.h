@@ -56,6 +56,8 @@
 
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"
+#include "Physics/RayHit.h"
+#include "Physics/Ray.h"
 
 #include "Scripting/GameLogic.h"
 

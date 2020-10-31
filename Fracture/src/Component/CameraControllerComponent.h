@@ -30,6 +30,8 @@ namespace Fracture
 	const float SENSITIVITY = 0.1f;
 	const float ZOOM = 45.0f;
 
+	class Ray;
+
 
 	class CameraControllerComponent :public Component,public IUPDATABLE
 	{
@@ -74,6 +76,8 @@ namespace Fracture
 
 		void LookAt(glm::vec3 target);
 		void Translate(glm::vec3 position);
+
+		Ray ScreenPointToRay(glm::vec2 mousePosition, int viewWidth,int viewHeight);
 
 		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
 

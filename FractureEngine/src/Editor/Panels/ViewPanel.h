@@ -9,6 +9,13 @@
 namespace Fracture
 {
 	
+	enum class Gizmo_Mode
+	{
+		Translate,
+		Rotate,
+		Scale,
+	};
+
 	class ViewPanel : public Panel
 	{
 
@@ -26,7 +33,11 @@ namespace Fracture
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		std::shared_ptr<CameraControllerComponent> m_camera;
+
+		//Gizmo stuff
 		int gizmoCount = 1;
+		Gizmo_Mode m_gizmoMode;
+
 		int lastUsing = 0;
 	};
 

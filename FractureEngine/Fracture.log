@@ -1,20 +1,27 @@
-[12:42:33] [info] FRACTURE: OpenGL loaded
-[12:42:33] [info] FRACTURE: Vendor: Intel
-[12:42:33] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[12:42:33] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[12:42:33] [trace] FRACTURE: Loaded model: samus
-[12:42:33] [trace] FRACTURE: Loaded model: cube
-[12:42:33] [trace] FRACTURE: Loaded Texture: container
-[12:42:33] [trace] FRACTURE: Loaded Texture: specular
-[12:42:33] [trace] FRACTURE: Loaded Shader: default
-[12:42:33] [trace] FRACTURE: Loaded Material: default
-[12:42:33] [trace] FRACTURE: Loaded Material: samus
-[12:42:33] [info] FRACTURE: Renderer Init
-[12:42:33] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: RotateIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: CameraIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: LightIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: EyeIcon
-[12:42:33] [trace] FRACTURE: Loaded Texture: EyeIconC
+[01:14:56] [info] FRACTURE: OpenGL loaded
+[01:14:56] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[01:14:56] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[01:14:56] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[01:14:56] [trace] FRACTURE: Loaded model: samus
+[01:14:56] [trace] FRACTURE: Loaded model: cube
+[01:14:56] [trace] FRACTURE: Loaded Texture: container
+[01:14:56] [trace] FRACTURE: Loaded Texture: specular
+[01:14:56] [trace] FRACTURE: Loaded Shader: default
+[01:14:56] [trace] FRACTURE: Loaded Material: default
+[01:14:56] [trace] FRACTURE: Loaded Material: samus
+[01:14:56] [trace] FRACTURE: Loaded Shader: DebugShader
+[01:14:56] [trace] FRACTURE: Loaded Material: DebugMaterial
+[01:14:56] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: RotateIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: CameraIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: LightIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: EyeIcon
+[01:14:56] [trace] FRACTURE: Loaded Texture: EyeIconC
+[01:14:56] [info] FRACTURE: Renderer Init
+[01:14:58] [info] FRACTURE: No Hit 
+[01:14:58] [info] FRACTURE: No Hit 
+[01:14:58] [info] FRACTURE: No Hit 
+[01:14:58] [info] FRACTURE: No Hit 
+[01:14:58] [info] FRACTURE: No Hit 

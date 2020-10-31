@@ -3,6 +3,7 @@
 #define TABBEDELEMENT_H
 
 #include "Element.h"
+#include "Fracture.h"
 
 namespace Fracture
 {
@@ -17,6 +18,9 @@ namespace Fracture
 		virtual void begin();
 		virtual void render();
 		virtual void end();
+		
+		ImGuiTextBuffer     m_buffer;
+		ImGuiTextFilter     m_filter;
 
 
 	};

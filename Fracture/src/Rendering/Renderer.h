@@ -27,6 +27,7 @@ namespace Fracture
 	class EntityInstance;
 	class Scene;
 	class RenderTarget;
+	class DebugLine;
 
 	class Renderer
 	{
@@ -37,7 +38,8 @@ namespace Fracture
 		void onInit();
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
-		void RenderPasses();		
+		void RenderPasses();
+		void RenderDebug();
 		void EndFrame();
 		void Submit();
 
@@ -52,6 +54,8 @@ namespace Fracture
 		void PushCommand(RenderCommand command);
 		void PushInstancedCommand(RenderInstancedCommand command);
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
+
+		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);
 
 		void AddDirectLight(std::shared_ptr<Fracture::DirectLightComponent> directLight);
 		void AddPointLight(std::shared_ptr<Fracture::PointLightComponent> pointLight);
@@ -72,7 +76,8 @@ namespace Fracture
 		std::vector<std::shared_ptr<Fracture::DirectLightComponent>> m_directLights;
 		std::vector<std::shared_ptr<Fracture::PointLightComponent>> m_pointLights;
 		std::vector<std::shared_ptr<Fracture::SpotLightComponent>> m_spotLights;
-
+		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
+		std::shared_ptr<Material> m_DebugMaterial;
 	};
 
 }

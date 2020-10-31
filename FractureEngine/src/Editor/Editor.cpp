@@ -47,7 +47,7 @@ void Fracture::Editor::onInit()
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
-    ImFont* pFont = io.Fonts->AddFontFromFileTTF("Roboto-Regular.TTF",14.0f);
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("bin/content/fonts/Roboto-Regular.TTF",14.0f);
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -75,15 +75,10 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_viewpanel);
     m_frame->AddPanel(m_TabbedPanel);
     m_frame->AddPanel(m_AssetBrowser);
-    
-    m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
-    m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
+   
 
-    m_Renderer->onInit();
-    m_viewpanel->setRenderer(m_Renderer.get());
-    m_viewpanel->init();
-
-    m_PhysicsManger->Init();
+    m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
+    m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
 
     m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
@@ -94,6 +89,14 @@ void Fracture::Editor::onInit()
     m_AssetManger->AddTexture("LightIcon", "bin/content/textures/LightIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("EyeIcon", "bin/content/textures/EyeIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("EyeIconC", "bin/content/textures/EyeIconC.png", TextureType::Diffuse);
+
+    m_PhysicsManger->Init();
+
+    m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
+    m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
+    m_Renderer->onInit();
+    m_viewpanel->setRenderer(m_Renderer.get());
+    m_viewpanel->init();
 }
 
 void Fracture::Editor::run()
@@ -123,14 +126,18 @@ void Fracture::Editor::onUpdate()
             done = true;
     }
     InputManager::PollEvents();
-       
+    
+    m_PhysicsManger->startPhysics();
+
     m_viewpanel->onUpdate(1 / 60.0f);
 
+  
 
     m_frame->begin(m_window->Context());
     Render();
     m_frame->end();
-    
+
+    //m_PhysicsManger->DrawDebug();
     m_window->swapBuffers();
 }
 
@@ -277,7 +284,7 @@ void Fracture::Editor::Render()
             ImGui::EndMainMenuBar();
         }
    
-      
+        m_Renderer->DrawDebugLine(glm::vec3(0), glm::vec3(500));
 
         m_Renderer->BeginFrame(m_ActiveScene);
         m_Renderer->RenderPasses();

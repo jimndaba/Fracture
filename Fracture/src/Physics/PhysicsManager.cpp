@@ -3,12 +3,18 @@
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Collisions.h"
+#include "RayHit.h"
+#include "Ray.h"
 #include "Profiling/Profiler.h"
 #include "Logging/Logger.h"
 #include "Event/Eventbus.h"
 #include "Event/PhysicsEvents.h"
 #include <iostream>
 #include <algorithm>
+#include "PhysicsDebugDraw.h"
+
+#include "Bullet/include/BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "Bullet/include/BulletCollision/Gimpact/btGImpactShape.h"
 
 btDefaultCollisionConfiguration* Fracture::PhysicsManager::collisionConfiguration;
 btCollisionDispatcher* Fracture::PhysicsManager::dispatcher;
@@ -70,6 +76,10 @@ void Fracture::PhysicsManager::Init()
 
 	dynamicsWorld->setGravity(m_gravity);
 
+	m_debug = new PhysicsDebugDraw();
+	dynamicsWorld->setDebugDrawer(m_debug);
+
+	
 	///-----initialization_end----
 }
 
@@ -114,7 +124,6 @@ void Fracture::PhysicsManager::RemoveCollider(btCollisionShape* collider)
 	collisionShapes.remove(collider);
 }
 
-
 void Fracture::PhysicsManager::AddRigidBody(int id, btRigidBody* body)
 {
 	if (std::find(rigid_ids.begin(), rigid_ids.end(), id) != rigid_ids.end())
@@ -146,8 +155,37 @@ void Fracture::PhysicsManager::RemoveRigidBody(btRigidBody* body)
 	dynamicsWorld->removeRigidBody(body);
 }
 
+bool Fracture::PhysicsManager::RayCast(Ray rayIn, RayHit& out)
+{
+	glm::vec3 out_end = rayIn.GetEndPoint(1000.0f);
+
+	btCollisionWorld::ClosestRayResultCallback RayCallback(
+		btVector3(rayIn.GetOrigin().x, rayIn.GetOrigin().y, rayIn.GetOrigin().z),
+		btVector3(out_end.x, out_end.y, out_end.z)
+	);
+
+	dynamicsWorld->updateAabbs();
+	dynamicsWorld->computeOverlappingPairs();
+
+	dynamicsWorld->rayTest(
+		btVector3(rayIn.GetOrigin().x, rayIn.GetOrigin().y, rayIn.GetOrigin().z),
+		btVector3(out_end.x, out_end.y, out_end.z),
+		RayCallback
+	);
+
+	if (RayCallback.hasHit()) {
+		
+		FRACTURE_INFO("mesh : {} " ,(int)RayCallback.m_collisionObject->getUserPointer());
+		out.ID = (int)RayCallback.m_collisionObject->getUserPointer();
+		return true;
+	}	
+	FRACTURE_INFO("No Hit ");
+	return false;
+}
+
 void Fracture::PhysicsManager::startPhysics()
 {
+	
 	std::vector<std::shared_ptr<Component>> components = ComponentManager::GetAllComponents();	
 
 	for (auto& component : components)
@@ -213,8 +251,6 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 					transcomponent->Position = glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
 					transcomponent->Rotation = glm::vec3(orientation.getX(), orientation.getY(), orientation.getZ());
 				}
-
-				
 				
 			}
 		}
@@ -222,6 +258,11 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 	}
 	
 
+}
+
+void Fracture::PhysicsManager::DrawDebug()
+{
+	dynamicsWorld->debugDrawWorld();
 }
 
 void Fracture::PhysicsManager::checkCollision()

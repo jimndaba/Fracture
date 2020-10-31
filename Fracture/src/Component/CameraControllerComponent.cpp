@@ -1,5 +1,5 @@
 #include "CameraControllerComponent.h"
-
+#include "Physics/Ray.h"
 
 Fracture::CameraControllerComponent::CameraControllerComponent(uint32_t id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
 {
@@ -114,6 +114,25 @@ void Fracture::CameraControllerComponent::LookAt(glm::vec3 target)
 void Fracture::CameraControllerComponent::Translate(glm::vec3 position)
 {
     m_TargetPosition = position;
+}
+
+Fracture::Ray Fracture::CameraControllerComponent::ScreenPointToRay(glm::vec2 mousePosition, int viewWidth, int viewHeight)
+{
+    // these positions must be in range [-1, 1] (!!!), not [0, width] and [0, height]
+
+    float mouseX = (2.0f * mousePosition.x) / viewWidth - 1.0f;
+    float mouseY = 1.0f - (2.0f * mousePosition.y) / viewHeight;
+
+    glm::vec4 ray_clip = glm::vec4(mouseX, mouseY, -1.0, 1.0);
+    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix(viewWidth,viewHeight)) * ray_clip;
+    toEyeCoords = glm::vec4(toEyeCoords.x, toEyeCoords.y, -1.0, 0.0);
+
+    glm::vec4 toWorldCoords = glm::inverse(getViewMatrix()) * toEyeCoords;
+
+    glm::vec3 mouse_ray = glm::vec3(toWorldCoords.x, toWorldCoords.y, toWorldCoords.z);
+    mouse_ray = glm::normalize(mouse_ray);
+
+    return Ray(Position, mouse_ray);
 }
 
 void Fracture::CameraControllerComponent::UpdateCameraVectors()

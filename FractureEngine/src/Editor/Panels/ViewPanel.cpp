@@ -1,5 +1,6 @@
 #include "ViewPanel.h"
 #include "Rendering/RenderTarget.h"
+#include "SceneviewPanel.h"
 #include "../Editor.h"
 
 
@@ -25,20 +26,12 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 
 void Fracture::ViewPanel::render()
 {
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("TranslateIcon")->id, ImVec2(32,32), ImVec2(0, 0), ImVec2(1, 1),1))
-	{
-
-	}
+	int gizmoMode = (int) m_gizmoMode;
+	ImGui::RadioButton("Translate (W)", &gizmoMode);
 	ImGui::SameLine();
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("RotateIcon")->id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 1))
-	{
-
-	}
+	ImGui::RadioButton("Rotate (E)", &gizmoMode);
 	ImGui::SameLine();
-	if (ImGui::ImageButton((void*)AssetManager::getTexture("ScaleIcon")->id, ImVec2(32, 32), ImVec2(0, 0), ImVec2(1, 1), 1))
-	{
-
-	}
+	ImGui::RadioButton("Scale (R)", &gizmoMode);
 	
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -56,7 +49,7 @@ void Fracture::ViewPanel::render()
 
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
         ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0, 1}, ImVec2{ 1, 0 });
-
+	
 	
     ImGui::PopStyleVar();
     ImGui::EndChild();
@@ -110,5 +103,15 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			m_camera->onUpdate(dt);
 		}
 		
+		if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft))
+		{
+			float mouseX = InputManager::GetMousePosition().x;
+			float mouseY = InputManager::GetMousePosition().y;
+			RayHit hit;
+			if (PhysicsManager::RayCast(m_camera->ScreenPointToRay(glm::vec2(mouseX,mouseY), m_ViewportSize.x, m_ViewportSize.y),hit))
+			{
+				FRACTURE_INFO("RAY HIT: {} ", hit.ID);
+			}
+		}
 	}
 }
