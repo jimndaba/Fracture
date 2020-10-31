@@ -284,7 +284,7 @@ void Fracture::Editor::Render()
             ImGui::EndMainMenuBar();
         }
    
-        m_Renderer->DrawDebugLine(glm::vec3(0), glm::vec3(500));
+        //m_Renderer->DrawDebugLine(glm::vec3(0), glm::vec3(500));
 
         m_Renderer->BeginFrame(m_ActiveScene);
         m_Renderer->RenderPasses();

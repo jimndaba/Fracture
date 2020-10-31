@@ -8,10 +8,10 @@ Fracture::DebugLine::DebugLine(glm::vec3 start, glm::vec3 end):m_start(start),m_
 	
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-	glLineWidth(3.0f);
+	glLineWidth(2.0f);
 	glGenBuffers(1, &VBO);	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(lineCoordinates), lineCoordinates, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineCoordinates), &lineCoordinates, GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size

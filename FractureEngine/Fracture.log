@@ -1,27 +1,84 @@
-[01:14:56] [info] FRACTURE: OpenGL loaded
-[01:14:56] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[01:14:56] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[01:14:56] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[01:14:56] [trace] FRACTURE: Loaded model: samus
-[01:14:56] [trace] FRACTURE: Loaded model: cube
-[01:14:56] [trace] FRACTURE: Loaded Texture: container
-[01:14:56] [trace] FRACTURE: Loaded Texture: specular
-[01:14:56] [trace] FRACTURE: Loaded Shader: default
-[01:14:56] [trace] FRACTURE: Loaded Material: default
-[01:14:56] [trace] FRACTURE: Loaded Material: samus
-[01:14:56] [trace] FRACTURE: Loaded Shader: DebugShader
-[01:14:56] [trace] FRACTURE: Loaded Material: DebugMaterial
-[01:14:56] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: RotateIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: CameraIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: LightIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: EyeIcon
-[01:14:56] [trace] FRACTURE: Loaded Texture: EyeIconC
-[01:14:56] [info] FRACTURE: Renderer Init
-[01:14:58] [info] FRACTURE: No Hit 
-[01:14:58] [info] FRACTURE: No Hit 
-[01:14:58] [info] FRACTURE: No Hit 
-[01:14:58] [info] FRACTURE: No Hit 
-[01:14:58] [info] FRACTURE: No Hit 
+[14:49:15] [info] FRACTURE: OpenGL loaded
+[14:49:15] [info] FRACTURE: Vendor: Intel
+[14:49:15] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[14:49:15] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[14:49:15] [trace] FRACTURE: Loaded model: samus
+[14:49:15] [trace] FRACTURE: Loaded model: cube
+[14:49:15] [trace] FRACTURE: Loaded Texture: container
+[14:49:15] [trace] FRACTURE: Loaded Texture: specular
+[14:49:15] [trace] FRACTURE: Loaded Shader: default
+[14:49:15] [trace] FRACTURE: Loaded Material: default
+[14:49:15] [trace] FRACTURE: Loaded Material: samus
+[14:49:15] [trace] FRACTURE: Loaded Shader: DebugShader
+[14:49:15] [trace] FRACTURE: Loaded Material: DebugMaterial
+[14:49:15] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: RotateIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: CameraIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: LightIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: EyeIcon
+[14:49:15] [trace] FRACTURE: Loaded Texture: EyeIconC
+[14:49:15] [info] FRACTURE: Renderer Init
+[14:49:19] [info] FRACTURE: No Hit 
+[14:49:19] [info] FRACTURE: No Hit 
+[14:49:19] [info] FRACTURE: No Hit 
+[14:49:31] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:49:44] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:19] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:20] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:27] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:28] [info] FRACTURE: No Hit 
+[14:50:45] [info] FRACTURE: No Hit 
+[14:51:12] [info] FRACTURE: No Hit 
+[14:51:20] [info] FRACTURE: No Hit 

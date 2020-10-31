@@ -92,6 +92,7 @@ Fracture::Shader::~Shader()
 
 void Fracture::Shader::use()
 {
+    glUseProgram(m_program);
 }
 
 void Fracture::Shader::unbind()

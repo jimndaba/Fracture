@@ -89,13 +89,11 @@ void Fracture::Renderer::RenderPasses()
     Submit();    
     
     PhysicsManager::DrawDebug();
-    //glEnableClientState(GL_VERTEX_ARRAY);
-    //glEnableClientState(GL_COLOR_ARRAY);
-    RenderDebug();   
-    //glDisableClientState(GL_VERTEX_ARRAY);
-    //glDisableClientState(GL_COLOR_ARRAY);
+    
+    RenderDebug();
+   
     SceneRenderTarget->Unbind();
- 
+  
     //glDisable(GL_DEPTH_TEST);   
     //clearColor(0.3f, 0.5f, 0.6f);
     //glClear(GL_COLOR_BUFFER_BIT);   
@@ -105,19 +103,20 @@ void Fracture::Renderer::RenderPasses()
 void Fracture::Renderer::RenderDebug()
 {
     //glDisable(GL_DEPTH_TEST);
-   // glEnable(GL_LINE_SMOOTH);
-   // glEnable(GL_BLEND);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_BLEND);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(SceneRenderTarget->Width,SceneRenderTarget->Height));
     m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
-    m_DebugMaterial->getShader()->setVec4("DebugColor", glm::vec4(1.0f,0.0f,0.0f,1.0f));
+    m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f,0.7f,0.0f,1.0f));
     for (int i = 0; i < m_DebugDraws.size(); i++)
     {
         m_DebugDraws[i]->Render();
     }  
+    m_DebugMaterial->getShader()->unbind();
    
 }
 

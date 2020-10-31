@@ -12,8 +12,7 @@ Fracture::PhysicsDebugDraw::~PhysicsDebugDraw()
 
 void Fracture::PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	//glColor3f(color.x(), color.y(), color.z());
-	Renderer::DrawDebugLine(glm::vec3(from.getX(), from.getY(), from.getY()), glm::vec3(to.getX(),to.getY(), to.getZ()));
+	Renderer::DrawDebugLine(glm::vec3(from.getX(), from.getY(), from.getZ()), glm::vec3(to.getX(),to.getY(), to.getZ()));
 }
 
 void Fracture::PhysicsDebugDraw::reportErrorWarning(const char* warningString)
