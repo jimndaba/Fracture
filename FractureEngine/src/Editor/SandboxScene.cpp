@@ -41,16 +41,16 @@ void Fracture::SandboxScene::onLoad()
 	defaultMaterial->SetTexture("material.specular", Fracture::AssetManager::getTexture("specular"), 1);
 
 
-	defaultMaterial->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
-	defaultMaterial->setVec3("light.ambient", 0.6f, 0.6f, 0.6f);
-	defaultMaterial->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
-	defaultMaterial->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-	samusMaterial->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
-	samusMaterial->setVec3("light.ambient", 0.6f, 0.6f, 0.6f);
-	samusMaterial->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
-	samusMaterial->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-	samusMaterial->setFloat("material.shininess", 64.0f);
+	//defaultMaterial->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+	//defaultMaterial->setVec3("light.ambient", 0.6f, 0.6f, 0.6f);
+	//defaultMaterial->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+	//defaultMaterial->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	
+	//samusMaterial->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+	//samusMaterial->setVec3("light.ambient", 0.6f, 0.6f, 0.6f);
+	//samusMaterial->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+	//samusMaterial->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	//samusMaterial->setFloat("material.shininess", 64.0f);
 
 	// material properties
 	defaultMaterial->setFloat("material.shininess", 64.0f);

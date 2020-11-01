@@ -38,6 +38,7 @@ void Fracture::Editor::onInit()
     m_InputManager = std::make_unique<InputManager>();
     m_AssetManger = std::make_unique<AssetManager>();
     m_PhysicsManger = std::make_unique<PhysicsManager>();
+    m_SceneManager = std::make_unique<SceneManager>();
     m_Profiler = std::make_unique<Profiler>();
 
     // Setup Dear ImGui context
@@ -78,11 +79,28 @@ void Fracture::Editor::onInit()
    
 
     m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
+    m_AssetManger->AddShader("Primitives", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
+
     m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
+
+    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("Primitive Material",m_AssetManger->getShader("Primitives"));
+
+    primitivesMaterial->setVec3("material.diffuse",glm::vec3(0.9,0.3,0.5));
+    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
+
+    m_AssetManger->AddMaterial("Primitive Material",primitivesMaterial);
 
     m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
+
+    m_AssetManger->AddModel("Plane", "bin/content/models/primitives/plane.fbx");
+    m_AssetManger->AddModel("Cube", "bin/content/models/primitives/cube.fbx");
+    m_AssetManger->AddModel("Sphere", "bin/content/models/primitives/sphere.fbx");
+    m_AssetManger->AddModel("Cylinder", "bin/content/models/primitives/cylinder.fbx");
+    m_AssetManger->AddModel("Torus", "bin/content/models/primitives/torus.fbx");
+    m_AssetManger->AddModel("Suzane", "bin/content/models/primitives/suzane.fbx");
 
     m_AssetManger->AddTexture("GameObjectIcon", "bin/content/textures/GameObjectIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("CameraIcon", "bin/content/textures/CameraIcon.png", TextureType::Diffuse);
@@ -101,6 +119,7 @@ void Fracture::Editor::onInit()
 
 void Fracture::Editor::run()
 {
+    Profiler::Get().BeginSession("EditorProfile");
     onInit();
     while (!done)
     {
@@ -111,6 +130,7 @@ void Fracture::Editor::run()
 
 void Fracture::Editor::onUpdate()
 {
+    ProfilerTimer timer("onUpdate");
     done = false;
     p_open = true;
     opt_fullscreen = true;
@@ -151,11 +171,12 @@ void Fracture::Editor::onShutdown()
     m_PhysicsManger->ClearScene();
     m_PhysicsManger.reset();
     m_window.reset();
+    Profiler::Get().EndSession();
 }
 
 void Fracture::Editor::Render()
 { 
-
+    ProfilerTimer timer("onRender");
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen)
     {
@@ -258,6 +279,16 @@ void Fracture::Editor::Render()
                 ImGui::MenuItem("Asset Viewer", NULL);
                 ImGui::MenuItem("Logging", NULL);
                 ImGui::MenuItem("Project Settings", NULL);
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Create"))
+            {
+                // Disabling fullscreen would allow the window to be moved to the front of other windows,
+                // which we can't undo at the moment without finer window depth/z control.
+                ImGui::MenuItem("Empty", NULL);
+                ImGui::MenuItem("Camera", NULL);
+                ImGui::MenuItem("Light", NULL);
                 ImGui::EndMenu();
             }
             

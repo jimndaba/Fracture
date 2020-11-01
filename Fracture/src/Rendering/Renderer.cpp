@@ -8,9 +8,8 @@
 #include "Texture.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
-#include "Component/DirectLightComponent.h"
-#include "Component/SpotLightComponent.h"
-#include "Component/PointLightComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
 #include "Component/TagComponent.h"
@@ -42,6 +41,7 @@ void _check_gl_error(const char* file, int line);
 
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDraws;
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDrawsRetained;
+bool Fracture::Renderer::m_isDebugRender;
 
 Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
 {
@@ -60,7 +60,7 @@ void Fracture::Renderer::onInit()
 {    
     FRACTURE_INFO("Renderer Init");
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
-
+    m_isDebugRender = false;
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -89,9 +89,14 @@ void Fracture::Renderer::RenderPasses()
 
     Submit();    
     
-    PhysicsManager::DrawDebug();    
-    RenderDebug();
-    RenderDebugRetained();
+    
+    if (m_isDebugRender)
+    {
+        //PhysicsManager::DrawDebug();  
+        RenderDebug();
+        RenderDebugRetained();
+    }
+   
     SceneRenderTarget->Unbind();
   
     //glDisable(GL_DEPTH_TEST);   
@@ -102,6 +107,7 @@ void Fracture::Renderer::RenderPasses()
 
 void Fracture::Renderer::RenderDebug()
 {
+    ProfilerTimer timer("Render debug");
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
@@ -122,10 +128,10 @@ void Fracture::Renderer::RenderDebug()
 
 void Fracture::Renderer::RenderDebugRetained()
 {
-    //glDisable(GL_DEPTH_TEST);
+    ProfilerTimer timer("debug retained");
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+ 
 
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
@@ -142,6 +148,7 @@ void Fracture::Renderer::RenderDebugRetained()
 void Fracture::Renderer::EndFrame()
 {
     m_DebugDraws.clear();
+    m_lights.clear();
 }
 
 void Fracture::Renderer::Submit()
@@ -212,7 +219,7 @@ void Fracture::Renderer::Submit()
             command.material->getShader()->setTexture(command.Textures[i]->type, command.Textures[i].get(), (int)command.Textures[i]->textureType);
         }
 
-
+        SetupLighting(command.material);
         Draw(command);
         command.material->getShader()->unbind();
     }
@@ -265,9 +272,7 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
     m_opaqueBucket->pushCommand(mesh,material,transform);
-    //push to Shadow Passes
-    //push to  Depth Pass
-    //push to prost processing
+
 }
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)
@@ -280,6 +285,66 @@ void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end)
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end));
 }
 
+void Fracture::Renderer::IsDebugRender(bool debug)
+{
+    m_isDebugRender = debug;
+}
+
+void Fracture::Renderer::AddLight(const std::shared_ptr<ILight>& light)
+{
+    m_lights.push_back(light);
+}
+
+void Fracture::Renderer::SetupLighting(Material* material)
+{
+    for (int i = 0; i < m_lights.size(); i++)
+    {
+        switch(m_lights[i]->GetLightType())
+        {
+            case LightType::Sun:
+            {
+                material->getShader()->setBool("sunLights[" + std::to_string(i) + "].enabled", true);
+                material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].direction", m_lights[i]->GetDirection());
+                material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].ambient", m_lights[i]->GetAmbient());
+                material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
+                material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
+                break;
+            }
+            case LightType::Point:
+            {
+                material->getShader()->setBool("pointLights[" + std::to_string(i) + "].enabled", true);
+                material->getShader()->setVec3("pointLights[" + std::to_string(i) + "].position", m_lights[i]->GetPosition());
+                material->getShader()->setVec3("pointLights[" + std::to_string(i) + "].ambient", m_lights[i]->GetAmbient());
+                material->getShader()->setVec3("pointLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
+                material->getShader()->setVec3("pointLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
+                material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].constant", m_lights[i]->GetConstant());
+                material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].linear", m_lights[i]->GetLinear());
+                material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].quadratic", m_lights[i]->GetQuadratic());
+                break;
+            }
+            case LightType::Spot:
+            {
+                material->getShader()->setBool("spotLights[" + std::to_string(i) + "].enabled", true);
+                material->getShader()->setVec3("spotLights[" + std::to_string(i) + "].position", m_lights[i]->GetPosition());
+                material->getShader()->setVec3("spotLights[" + std::to_string(i) + "].direction", m_lights[i]->GetDirection());
+                material->getShader()->setVec3("spotLights[" + std::to_string(i) + "].ambient", m_lights[i]->GetAmbient());
+                material->getShader()->setVec3("spotLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
+                material->getShader()->setVec3("spotLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].constant", m_lights[i]->GetConstant());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].linear", m_lights[i]->GetLinear());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].quadratic", m_lights[i]->GetQuadratic());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].cutOff", m_lights[i]->GetCutoff());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].outerCutOff", m_lights[i]->GetOuterCutOff());
+                break;
+            }
+
+        }
+       
+    }
+
+
+}
+
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
@@ -287,20 +352,24 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     if (!entity)
     {
         return;
-    }
- 
-    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
+    }  
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
+    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
+    std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
     std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);
   
     if (render && tag->isVisible)
     {
       
         for (auto mesh : render->model->GetMeshes())
-        {
-            
+        {            
             PushCommand(mesh, render->material, transform);
         }   
+    }
+
+    if (lightcomponent && tag->isVisible)
+    {
+        AddLight(lightcomponent->GetLight());
     }
 }
 

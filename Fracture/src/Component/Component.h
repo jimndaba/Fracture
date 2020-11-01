@@ -18,6 +18,7 @@ namespace Fracture
 		Rigidbody,
 		BoxCollider,
 		Script,
+		Light,
 		DirectLight,
 		PointLight,
 		SpotLight,

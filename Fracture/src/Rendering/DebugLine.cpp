@@ -8,7 +8,7 @@ Fracture::DebugLine::DebugLine(glm::vec3 start, glm::vec3 end):m_start(start),m_
 	
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-	glLineWidth(2.0f);
+	glLineWidth(1.5f);
 	glGenBuffers(1, &VBO);	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(lineCoordinates), &lineCoordinates, GL_STATIC_DRAW);

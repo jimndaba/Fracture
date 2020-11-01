@@ -40,6 +40,7 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Material.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
 
 #include "Entity/Entity.h"
 #include "Entity/IDManager.h"
@@ -53,6 +54,7 @@
 #include "Component/BoxColliderComponent.h"
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
+#include "Component/LightComponent.h"
 
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"

@@ -91,6 +91,10 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 		{
 			icon = (void*)AssetManager::getTexture("CameraIcon")->id;
 		}
+		else if (ComponentManager::HasComponent<LightComponent>(entity))
+		{
+			icon = (void*)AssetManager::getTexture("LightIcon")->id;
+		}
 		else 
 		{
 			icon = (void*)AssetManager::getTexture("GameObjectIcon")->id;

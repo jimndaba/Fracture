@@ -262,6 +262,7 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 
 void Fracture::PhysicsManager::DrawDebug()
 {
+	ProfilerTimer timer("Physics Debug Draw");
 	dynamicsWorld->debugDrawWorld();
 }
 

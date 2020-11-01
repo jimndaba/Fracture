@@ -24,6 +24,8 @@ namespace Fracture
 		void DrawComponent(const std::string& name,Entity entity, UIFunction uiFunction);
 
 		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawColourControl(const std::string& label, glm::vec4& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawfloatControl(const std::string& label, float& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 	};
 
 	template<class T, typename UIFunction>

@@ -1,5 +1,6 @@
 #include "PhysicsDebugDraw.h"
 #include "GLAD/glad.h"
+//#include "GLAD/glad.c"
 #include "Rendering/Renderer.h"
 
 Fracture::PhysicsDebugDraw::PhysicsDebugDraw()
@@ -13,6 +14,13 @@ Fracture::PhysicsDebugDraw::~PhysicsDebugDraw()
 void Fracture::PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	Renderer::DrawDebugLine(glm::vec3(from.getX(), from.getY(), from.getZ()), glm::vec3(to.getX(),to.getY(), to.getZ()));
+
+    //glBegin(GL_LINES);
+    //glColor3f(color.getX(), color.getY(), color.getZ());
+   // glVertex3d(from.getX(), from.getY(), from.getZ());
+   // glColor3f(color.getX(), color.getY(), color.getZ());
+   // glVertex3d(to.getX(), to.getY(), to.getZ());
+   // glEnd();
 }
 
 void Fracture::PhysicsDebugDraw::reportErrorWarning(const char* warningString)

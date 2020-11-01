@@ -18,9 +18,8 @@ namespace Fracture
 	class RenderCommand;
 	class RenderInstancedCommand;
 	class TransformComponent;
-	class DirectLightComponent;
-	class SpotLightComponent;
-	class PointLightComponent;
+	class LightComponent;
+	class ILight;
 	class Mesh;
 	class Material;
 	class Entity;
@@ -58,10 +57,10 @@ namespace Fracture
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end);
+		static void IsDebugRender(bool debug);
 
-		void AddDirectLight(std::shared_ptr<Fracture::DirectLightComponent> directLight);
-		void AddPointLight(std::shared_ptr<Fracture::PointLightComponent> pointLight);
-		void AddSpotLight(std::shared_ptr<Fracture::SpotLightComponent> spotLight);
+		void AddLight(const std::shared_ptr<ILight>& light);
+		void SetupLighting(Material* material);
 
 		void RenderEntity(std::shared_ptr<Entity> entity);		
 		void RenderScene(std::shared_ptr<Scene> scene);
@@ -72,12 +71,10 @@ namespace Fracture
 	private:
 		int m_width;
 		int m_Height;
+		static bool m_isDebugRender;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
-
-		std::vector<std::shared_ptr<Fracture::DirectLightComponent>> m_directLights;
-		std::vector<std::shared_ptr<Fracture::PointLightComponent>> m_pointLights;
-		std::vector<std::shared_ptr<Fracture::SpotLightComponent>> m_spotLights;
+		std::vector<std::shared_ptr<Fracture::ILight>> m_lights;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;
 		std::shared_ptr<Material> m_DebugMaterial;

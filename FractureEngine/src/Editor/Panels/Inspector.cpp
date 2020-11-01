@@ -5,8 +5,7 @@
 
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
 {
-	//m_tagcomponent = std::shared_ptr< TagComponentElement>(new TagComponentElement("Tag"));
-	//AddElement(m_tagcomponent);
+	
 }
 
 Fracture::InspectorPanel::~InspectorPanel()
@@ -159,12 +158,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					if (ImGui::Selectable(material.first.c_str(), is_selected))
 					{
 						current_Material = material.first;
+						render->SetMaterial(material.first);
 					}
 
 					if (is_selected)
 					{
 						ImGui::SetItemDefaultFocus();
-						render->SetMaterial(material.first);
 					}
 				}
 				ImGui::EndCombo();
@@ -180,12 +179,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					if (ImGui::Selectable(current_Shader.c_str(), is_selected))
 					{
 						current_Shader = shader.first;
+						render->material->setShader(shader.first);
 					}
 
 					if (is_selected)
 					{
-						ImGui::SetItemDefaultFocus();
-						render->material->setShader(shader.first);
+						ImGui::SetItemDefaultFocus();						
 					}
 				}
 				ImGui::EndCombo();
@@ -226,8 +225,142 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	});
 
-	//ImGui::SameLine();
-	//ImGui::PushItemWidth(-1);
+	DrawComponent<LightComponent>("Light", entity, [](auto& component)
+	{
+			std::shared_ptr<LightComponent> light = std::dynamic_pointer_cast<LightComponent>(component);
+			
+			const char* lType = "None";
+
+			if (light->GetLightType() == LightType::Sun)
+			{
+				lType = "Sunlight";
+			}
+			if (light->GetLightType() == LightType::Point)
+			{
+				lType = "Point light";
+			}
+			if (light->GetLightType() == LightType::Spot)
+			{
+				lType = "Spotlight";
+			}
+			static ImGuiComboFlags flags = 0;
+			const char* items[] = { "Sunlight","Pointlight","Spotlight" };
+			LightType lighttypes[] = {LightType::Sun,LightType::Point ,LightType::Spot };
+			static int item_current_idx = 0;                    // Here our selection data is an index.
+			static LightType m_LightType = LightType::Point;
+			const char* combo_label = items[item_current_idx];  // Label to preview before opening the combo (technically it could be anything)
+			if (ImGui::BeginCombo("Light Type", combo_label, flags))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+				{
+					const bool is_selected = (item_current_idx == n);
+					if (ImGui::Selectable(items[n], is_selected))
+					{
+						m_LightType = lighttypes[n];
+						light->ChangeLightType(m_LightType);
+						item_current_idx = n;
+					}			
+
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+					{						
+						ImGui::SetItemDefaultFocus();
+					}
+						
+				}
+				ImGui::EndCombo();
+			}
+
+			switch(light->GetLightType())
+			{
+				case LightType::Sun:
+				{
+					glm::vec3 direction = light->GetDirection();
+					DrawVec3Control("Direction", direction);
+					light->SetDirection(direction);
+			
+					glm::vec4 ambient = light->GetAmbient();
+					DrawColourControl("Ambient", ambient, 1.0f);
+					light->SetAmbient(ambient);
+					glm::vec4 diffuse = light->GetDiffuse();
+					DrawColourControl("Diffuse", diffuse, 1.0f);
+					light->SetDiffuse(diffuse);
+					glm::vec4 specular = light->GetSpecular();
+					DrawColourControl("Specular", specular, 1.0f);
+					light->SetSpecular(specular);
+					break;
+				}
+				case LightType::Point:
+				{
+					glm::vec3 position = light->GetPosition();
+					DrawVec3Control("Position",position );
+					light->SetPosition(position);
+
+					glm::vec4 ambient = light->GetAmbient();
+					DrawColourControl("Ambient", ambient, 1.0f);
+					light->SetAmbient(ambient);
+					glm::vec4 diffuse = light->GetDiffuse();
+					DrawColourControl("Diffuse", diffuse, 1.0f);
+					light->SetDiffuse(diffuse);
+					glm::vec4 specular = light->GetSpecular();
+					DrawColourControl("Specular", specular, 1.0f);
+					light->SetSpecular(specular);
+
+					float constant = light->GetConstant();
+					DrawfloatControl("Constant", constant, 1.0f);
+					light->SetConstant(constant);
+
+					float linear = light->GetLinear();
+					DrawfloatControl("Linear", linear, 1.0f);
+					light->SetLinear(linear);
+
+					float quad = light->GetQuadratic();
+					DrawfloatControl("Quadratic", quad, 1.0f);
+					light->SetQuadratic(quad);
+					break;
+				}
+				case LightType::Spot:
+				{
+					glm::vec3 position = light->GetPosition();
+					glm::vec3 direction = light->GetDirection();
+					DrawVec3Control("Position", position);
+					DrawVec3Control("Direction", direction);
+					light->SetPosition(position);
+					light->SetDirection(direction);
+
+					glm::vec4 ambient = light->GetAmbient();
+					DrawColourControl("Ambient", ambient, 1.0f);
+					light->SetAmbient(ambient);
+					glm::vec4 diffuse = light->GetDiffuse();
+					DrawColourControl("Diffuse", diffuse, 1.0f);
+					light->SetDiffuse(diffuse);
+					glm::vec4 specular = light->GetSpecular();
+					DrawColourControl("Specular", specular, 1.0f);
+					light->SetSpecular(specular);
+
+					float constant = light->GetConstant();
+					DrawfloatControl("Constant", constant, 1.0f);
+					light->SetConstant(constant);
+
+					float linear = light->GetLinear();
+					DrawfloatControl("Linear", linear, 1.0f);
+					light->SetLinear(linear);
+
+					float quad = light->GetQuadratic();
+					DrawfloatControl("Quadratic", quad, 1.0f);
+					light->SetQuadratic(quad);
+
+					float cutoff = light->GetCutoff();
+					DrawfloatControl("Cutoff", cutoff, 1.0f);
+					light->SetCutoff(cutoff);
+
+					float ocutoff = light->GetOuterCutOff();
+					DrawfloatControl("OuterCutoff", ocutoff, 1.0f);
+					light->SetOuterCutOff(ocutoff);
+					break;
+				}
+			}
+	});
 
 	ImGui::Separator();
 
@@ -280,7 +413,15 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Light"))
 		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			{
+				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+			}
+			else
+			{
+				ComponentManager::AddComponent<LightComponent>(entity.Id, LightType::Sun);
+			}
+			
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -369,6 +510,46 @@ void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::ve
 
 	ImGui::PopStyleVar();
 
+	ImGui::Columns(1);
+
+	ImGui::PopID();
+}
+
+void Fracture::InspectorPanel::DrawColourControl(const std::string& label, glm::vec4& values, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+	float color4[4] = { values .x,values.y,values.z,values.w };
+	ImGui::PushID("##color");		
+	ImGui::ColorEdit4(label.c_str(), (float*)&color4, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);	
+	values = glm::vec4(color4[0], color4[1], color4[2], color4[3]);
+	ImGui::SameLine();
+	ImGui::Text(label.c_str());
+	ImGui::PopID();
+	ImGui::Separator();
+}
+
+void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float& value, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+
+	ImGui::PushID(label.c_str());
+
+	ImGui::Columns(2);
+	ImGui::SetColumnWidth(0, columnWidth);
+	ImGui::Text(label.c_str());
+	ImGui::NextColumn();
+
+	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("-", buttonSize))
+		value = resetValue;
+	ImGui::PopFont();
+	ImGui::SameLine();
+	ImGui::DragFloat("##X", &value, 0.1f, 0.0f, 0.0f, "%.2f");
 	ImGui::Columns(1);
 
 	ImGui::PopID();

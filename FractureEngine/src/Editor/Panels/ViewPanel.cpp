@@ -26,6 +26,7 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 
 void Fracture::ViewPanel::render()
 {
+	ProfilerTimer timer("viewPanel Render");
 	int gizmoMode = (int) m_gizmoMode;
 	ImGui::RadioButton("Translate (W)", &gizmoMode);
 	ImGui::SameLine();
@@ -59,16 +60,13 @@ void Fracture::ViewPanel::render()
 	{
 		float region_x = io.MousePos.x - screen_pos.x - m_ViewportSize.x * 0.5f;
 		float region_y = io.MousePos.y - screen_pos.y - m_ViewportSize.y * 0.5f;
-		RayHit hit;
-		Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), m_ViewportSize.x, m_ViewportSize.y);
-		FRACTURE_INFO("Mouse : {} , {}", region_x, region_y);
-		FRACTURE_INFO("Viewport : {} , {}", m_ViewportSize.x, m_ViewportSize.y);
-		m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000));
-		if (PhysicsManager::RayCast(ray, hit))
-		{
+		//RayHit hit;
+		//Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), m_ViewportSize.x, m_ViewportSize.y);
+		//FRACTURE_INFO("Mouse : {} , {}", region_x, region_y);
+		//FRACTURE_INFO("Viewport : {} , {}", m_ViewportSize.x, m_ViewportSize.y);
+		//m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000));
+		//if (PhysicsManager::RayCast(ray, hit)){}
 
-
-		}
 	}
 	
     ImGui::PopStyleVar();
@@ -78,7 +76,7 @@ void Fracture::ViewPanel::render()
 
 void Fracture::ViewPanel::onUpdate(float dt)
 {
-	
+	ProfilerTimer timer("ViewPanel update");
 	
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
