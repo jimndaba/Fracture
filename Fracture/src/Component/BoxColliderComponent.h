@@ -5,6 +5,7 @@
 #include "Component/Component.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 #include <memory>
+#include "Physics/PhysicsUtility.h"
 
 namespace Fracture
 {
@@ -22,6 +23,8 @@ namespace Fracture
 		btBoxShape* m_boxCollider;
 		btTransform m_Transform;
 		float X, Y, Z;
+
+		void setScale(glm::vec3 sale);
 
 	};
 

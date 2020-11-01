@@ -45,11 +45,31 @@ void Fracture::ViewPanel::render()
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };   
 
-
+	
 
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
         ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0, 1}, ImVec2{ 1, 0 });
 	
+	
+
+	ImVec2 screen_pos = ImGui::GetCursorScreenPos();
+	ImGuiIO& io = ImGui::GetIO();
+	
+	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft))
+	{
+		float region_x = io.MousePos.x - screen_pos.x - m_ViewportSize.x * 0.5f;
+		float region_y = io.MousePos.y - screen_pos.y - m_ViewportSize.y * 0.5f;
+		RayHit hit;
+		Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), m_ViewportSize.x, m_ViewportSize.y);
+		FRACTURE_INFO("Mouse : {} , {}", region_x, region_y);
+		FRACTURE_INFO("Viewport : {} , {}", m_ViewportSize.x, m_ViewportSize.y);
+		m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000));
+		if (PhysicsManager::RayCast(ray, hit))
+		{
+
+
+		}
+	}
 	
     ImGui::PopStyleVar();
     ImGui::EndChild();
@@ -59,11 +79,13 @@ void Fracture::ViewPanel::render()
 void Fracture::ViewPanel::onUpdate(float dt)
 {
 	
-
+	
+	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
 		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
 	if(m_ViewportFocused && m_camera)
@@ -103,15 +125,6 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			m_camera->onUpdate(dt);
 		}
 		
-		if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft))
-		{
-			float mouseX = InputManager::GetMousePosition().x;
-			float mouseY = InputManager::GetMousePosition().y;
-			RayHit hit;
-			if (PhysicsManager::RayCast(m_camera->ScreenPointToRay(glm::vec2(mouseX,mouseY), m_ViewportSize.x, m_ViewportSize.y),hit))
-			{
-				FRACTURE_INFO("RAY HIT: {} ", hit.ID);
-			}
-		}
+		
 	}
 }

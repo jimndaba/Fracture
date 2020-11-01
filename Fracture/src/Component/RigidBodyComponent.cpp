@@ -2,6 +2,9 @@
 #include "ComponentManager.h"
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
+#include <glm/gtx/transform.hpp> 
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 
 Fracture::RigidBodyComponent::RigidBodyComponent(uint32_t id,float _mass):Component(id,ComponentType::Rigidbody),Mass(_mass)
@@ -43,10 +46,34 @@ void Fracture::RigidBodyComponent::onStart()
 {
 }
 
+void Fracture::RigidBodyComponent::setMass(float mass)
+{
+	Mass = mass;
+}
+
 void Fracture::RigidBodyComponent::setVelocity(glm::vec3 velocity)
 {
 	m_rigid->setActivationState(1);
 	m_rigid->setLinearVelocity(btVector3(velocity.x,velocity.y,velocity.z));
+}
+
+void Fracture::RigidBodyComponent::setPosition(glm::vec3 pos)
+{
+	if (m_rigid)
+	{
+		btTransform& worldTrans = m_rigid->getWorldTransform();
+		worldTrans.setOrigin(ToBtVec3(pos));
+	}
+}
+
+void Fracture::RigidBodyComponent::setRotation(glm::vec3 rot)
+{
+	if (m_rigid)
+	{
+		btTransform& worldTrans = m_rigid->getWorldTransform();
+		btQuaternion qt;
+		worldTrans.setRotation(ToBtQuat(rot));
+	}
 }
 
 void Fracture::RigidBodyComponent::Translate(glm::vec3 position)

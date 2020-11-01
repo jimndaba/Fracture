@@ -18,3 +18,11 @@ Fracture::BoxColliderComponent::~BoxColliderComponent()
 void Fracture::BoxColliderComponent::onStart()
 {
 }
+
+void Fracture::BoxColliderComponent::setScale(glm::vec3 scale)
+{
+	m_boxCollider->setLocalScaling(ToBtVec3(scale));
+	X = scale.x;
+	Y = scale.y;
+	Z = scale.z;
+}

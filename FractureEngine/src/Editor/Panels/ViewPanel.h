@@ -32,6 +32,7 @@ namespace Fracture
 		Renderer* m_renderer;
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		glm::vec2 m_Mousepos = { 0.0f, 0.0f };
 		std::shared_ptr<CameraControllerComponent> m_camera;
 
 		//Gizmo stuff

@@ -153,6 +153,7 @@
     <ClInclude Include="src\Component\ComponentManager.h" />
     <ClInclude Include="src\Component\DirectLightComponent.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
+    <ClInclude Include="src\Physics\PhysicsUtility.h" />
     <ClInclude Include="src\Component\PointLightComponent.h" />
     <ClInclude Include="src\Component\RelationshipComponent.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />

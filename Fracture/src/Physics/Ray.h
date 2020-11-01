@@ -22,6 +22,7 @@ namespace Fracture
 		glm::vec3 GetEndPoint(float t)
 		{
 			m_endpoint = m_origin + m_direction * t;
+			m_length = t;
 			return m_endpoint;
 		}
 		glm::vec3 GetDirection()

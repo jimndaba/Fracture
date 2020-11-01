@@ -41,6 +41,7 @@ void _check_gl_error(const char* file, int line);
 #endif // GLERROR_H
 
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDraws;
+std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDrawsRetained;
 
 Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
 {
@@ -88,10 +89,9 @@ void Fracture::Renderer::RenderPasses()
 
     Submit();    
     
-    PhysicsManager::DrawDebug();
-    
+    PhysicsManager::DrawDebug();    
     RenderDebug();
-   
+    RenderDebugRetained();
     SceneRenderTarget->Unbind();
   
     //glDisable(GL_DEPTH_TEST);   
@@ -102,14 +102,14 @@ void Fracture::Renderer::RenderPasses()
 
 void Fracture::Renderer::RenderDebug()
 {
-    //glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(SceneRenderTarget->Width,SceneRenderTarget->Height));
+    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
     m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
     m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f,0.7f,0.0f,1.0f));
     for (int i = 0; i < m_DebugDraws.size(); i++)
@@ -118,6 +118,25 @@ void Fracture::Renderer::RenderDebug()
     }  
     m_DebugMaterial->getShader()->unbind();
    
+}
+
+void Fracture::Renderer::RenderDebugRetained()
+{
+    //glDisable(GL_DEPTH_TEST);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_BLEND);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
+    m_DebugMaterial->getShader()->use();
+    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+    m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f, 0.7f, 0.0f, 1.0f));
+    for (int i = 0; i <m_DebugDrawsRetained.size(); i++)
+    {
+        m_DebugDrawsRetained[i]->Render();
+    }
+    m_DebugMaterial->getShader()->unbind();
 }
 
 void Fracture::Renderer::EndFrame()
@@ -254,6 +273,11 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)
 {
     m_DebugDraws.push_back(std::make_shared<DebugLine>(start,end));
+}
+
+void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end)
+{
+    m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end));
 }
 
 

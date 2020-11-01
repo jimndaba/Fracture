@@ -54,10 +54,18 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
-			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);
+			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);	
 			DrawVec3Control("Position", transform->Position);
 			DrawVec3Control("Scale", transform->Scale, 1);
 			DrawVec3Control("Rotation", transform->Rotation);
+			if (ComponentManager::HasComponent<RigidBodyComponent>(transform->EntityID))
+			{
+				std::shared_ptr<RigidBodyComponent> body = ComponentManager::GetComponent<RigidBodyComponent>(transform->EntityID);
+				body->setPosition(transform->Position);
+				body->setRotation(transform->Rotation);
+			}
+
+
 		});
 
 	DrawComponent<CameraControllerComponent>("Camera Controller",entity,[](auto& component)
@@ -113,8 +121,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<RenderComponent>("Mesh Render", entity, [](auto& component)
 	{
-			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 
+			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 			std::string current_Model = render->model->Name;
 			std::string current_Material = render->material->Name;
 			std::string current_Shader = render->material->getShader()->Name;
@@ -210,10 +218,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			std::shared_ptr<BoxColliderComponent> collider = std::dynamic_pointer_cast<BoxColliderComponent>(component);
 			glm::vec3 size = glm::vec3(collider->X, collider->Y, collider->Z);
 			DrawVec3Control("Size",size,1);
-
-			collider->X = size.x;
-			collider->Y = size.y;
-			collider->Z = size.z;
+			collider->setScale(size);		
 	});
 
 	DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
