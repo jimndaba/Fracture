@@ -6,16 +6,15 @@ Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Compo
 {
 	switch (lightType)
 	{
-	case LightType::Sun:
-		m_light.reset();
+	case LightType::Sun:	
 		m_light = std::make_shared<SunLight>();
 		break;
 	case LightType::Point:
-		m_light.reset();
+		
 		m_light = std::make_shared<PointLight>();
 		break;
 	case LightType::Spot:
-		m_light.reset();
+		
 		m_light = std::make_shared<SpotLight>();
 		break;
 	}

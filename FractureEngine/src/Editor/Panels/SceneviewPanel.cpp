@@ -114,7 +114,13 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 		if (ImGui::BeginPopupContextItem())
 		{
 			if (ImGui::MenuItem("Delete Entity"))
-				entityDeleted = true;
+			{ 
+				if (m_selection != NULL)
+				{
+					entityDeleted = true;
+
+				}
+			}
 			ImGui::EndPopup();
 		}
 
@@ -131,6 +137,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 			
 			if (m_selection.Id == entity)
 				m_selection = {};
+
 		}
 		
 		ImGui::NextColumn();

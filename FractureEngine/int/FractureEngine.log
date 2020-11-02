@@ -1,4 +1,5 @@
 ﻿  Inspector.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-C:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

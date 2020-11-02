@@ -84,15 +84,13 @@ void Fracture::Renderer::RenderPasses()
     // for each render pass ->DrawScene();
     m_opaqueBucket->sort();   
     SceneRenderTarget->bind();
-    glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    Submit();    
-    
+    Submit();        
     
     if (m_isDebugRender)
     {
-        //PhysicsManager::DrawDebug();  
+        PhysicsManager::DrawDebug();  
         RenderDebug();
         RenderDebugRetained();
     }
@@ -220,8 +218,8 @@ void Fracture::Renderer::Submit()
         }
 
         SetupLighting(command.material);
+       
         Draw(command);
-        command.material->getShader()->unbind();
     }
 }
 

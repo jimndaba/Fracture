@@ -150,11 +150,9 @@ namespace Fracture
 		glm::vec4 m_specular = glm::vec4(0.6f);
 		glm::vec3 m_position = glm::vec3(0.0f);
 		glm::vec3 m_rotation = glm::vec3(0.0f);;
-		float m_cutoff = 0.0f;
-		float m_outerCutOff = 0.0f;
-		float m_constant = 0.0f;
-		float m_linear = 0.0f;
-		float m_quadratic = 0.0f;
+		float m_constant = 1.0f;
+		float m_linear = 0.09f;
+		float m_quadratic = 0.032f;
 		
 
 	};
@@ -198,11 +196,11 @@ namespace Fracture
 		glm::vec4 m_specular = glm::vec4(0.6f);
 		glm::vec3 m_position = glm::vec3(0.0f);
 		glm::vec3 m_rotation = glm::vec3(0.0f);;
-		float m_cutoff = 0.0f;
-		float m_outerCutOff = 0.0f;
-		float m_constant = 0.0f;
-		float m_linear = 0.0f;
-		float m_quadratic = 0.0f;
+		float m_cutoff = 0.91;
+		float m_outerCutOff = 0.82f;
+		float m_constant = 1.0f;
+		float m_linear = 0.09f;
+		float m_quadratic = 0.032f;
 	};
 
 }

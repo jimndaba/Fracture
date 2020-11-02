@@ -97,7 +97,7 @@ void Fracture::Shader::use()
 
 void Fracture::Shader::unbind()
 {
-    glUseProgram(m_program);
+    glUseProgram(0);
 }
 
 void Fracture::Shader::setBool(const std::string& name, bool value) const

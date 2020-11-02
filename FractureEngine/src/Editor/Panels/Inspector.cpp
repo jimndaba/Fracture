@@ -189,8 +189,9 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				}
 				ImGui::EndCombo();
 			}
-	});
-	
+
+	});	
+
 	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -416,6 +417,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
 			{
 				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+
 			}
 			else
 			{
@@ -427,13 +429,34 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Collision"))
 		{
-			ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			{
+				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+
+			}
+			else
+			{
+				ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+			}		
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Rigidbody"))
 		{
-			ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			{
+				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+			}
+			else if (!ComponentManager::HasComponent<BoxColliderComponent>(entity.Id))
+			{
+				ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f,1.0f,1.0f);
+				ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+			}
+			else
+			{
+				ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+			}
+			
 			ImGui::CloseCurrentPopup();
 		}
 

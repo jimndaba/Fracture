@@ -95,7 +95,7 @@ void main()
       {
         continue;
       }
-      result = CalcDirLight(sunLights[i],norm,viewDir);//
+      result += CalcDirLight(sunLights[i],norm,viewDir);//
     }
 
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
