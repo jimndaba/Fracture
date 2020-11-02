@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <GLAD/glad.h>
+#include "RenderCommand.h"
 
 namespace Fracture
 {
@@ -14,6 +15,7 @@ namespace Fracture
 	class VertexArray;
 	class VertexBuffer;
 	class IndexBuffer;
+	struct RenderInstancedElementsCommand;
 
 	class Mesh
 	{
@@ -36,11 +38,17 @@ namespace Fracture
 			return m_textures;
 		}
 
+		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> GetInstanceCommands()
+		{
+			return m_instanceCommands;
+		}
+
 	private:
 		void setupMesh();
 
 		std::vector<Vertex> m_vertices;
 		std::vector<std::shared_ptr<Texture>> m_textures;
+		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> m_instanceCommands;
 		std::vector<unsigned int> m_indices;
 
 	};

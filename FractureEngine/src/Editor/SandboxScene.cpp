@@ -70,24 +70,19 @@ void Fracture::SandboxScene::onLoad()
 	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(monkey->Id, 0.0002f);
 	addEntity(monkey);
 
+	std::shared_ptr<Fracture::Entity> cube = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
+	Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(cube->Id, glm::vec3(0.0f));
+	Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(cube->Id, "cube", "default");
+	Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id, "Cube");
+	Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(cube->Id, 1, 1, 1);
+	Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(cube->Id, 10.0f);
+	std::shared_ptr<Fracture::RelationShipComponent> crealationship = std::make_shared<Fracture::RelationShipComponent>(cube->Id);
+	crealationship->SetParent(monkey->Id);
+	Fracture::ComponentManager::AddComponent(crealationship);
+
+
 	for (unsigned int i = 0; i < 10; i++)
 	{
-		std::shared_ptr<Fracture::Entity> cube = Fracture::EntityManager::CreateEntity<Fracture::Entity>();
-		Fracture::ComponentManager::AddComponent<Fracture::TransformComponent>(cube->Id, cubePositions[i]);
-		Fracture::ComponentManager::AddComponent<Fracture::RenderComponent>(cube->Id, "cube", "default");
-		Fracture::ComponentManager::AddComponent<Fracture::TagComponent>(cube->Id,"Cube");
-		Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent>(cube->Id, 1, 1, 1);
-		Fracture::ComponentManager::AddComponent<Fracture::RigidBodyComponent>(cube->Id, 10.0f);
-		//Fracture::ComponentManager::AddComponent<Fracture::ScriptComponent>(cube->Id,std::make_shared<Fracture::CubeScript>(cube->Id));
-		std::shared_ptr<Fracture::RelationShipComponent> crealationship = std::make_shared<Fracture::RelationShipComponent>(cube->Id);
-
-		crealationship->SetParent(monkey->Id);
-		Fracture::ComponentManager::AddComponent(crealationship);
-		addEntity(cube);
-	
+		Instance(cube, cubePositions[i]);	
 	}
-
-
-
-
 }

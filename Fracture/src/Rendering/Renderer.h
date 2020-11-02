@@ -16,7 +16,7 @@ namespace Fracture
 {
 	class RenderBucket;
 	class RenderCommand;
-	class RenderInstancedCommand;
+	struct RenderInstancedElementsCommand;
 	class TransformComponent;
 	class LightComponent;
 	class ILight;
@@ -27,6 +27,7 @@ namespace Fracture
 	class Scene;
 	class RenderTarget;
 	class DebugLine;
+
 
 	class Renderer
 	{
@@ -44,7 +45,7 @@ namespace Fracture
 		void Submit();
 
 		void Draw(RenderCommand command);
-		void DrawInstanced(RenderCommand command);
+		void DrawInstancedElement(std::shared_ptr<RenderInstancedElementsCommand> command);
 
 
 		void clear();
@@ -52,7 +53,7 @@ namespace Fracture
 		void setViewport(int width,int height);
 		
 		void PushCommand(RenderCommand command);
-		void PushInstancedCommand(RenderInstancedCommand command);
+		void PushInstancedElementsCommand(std::shared_ptr<RenderInstancedElementsCommand> command);
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);

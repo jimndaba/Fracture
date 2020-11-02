@@ -33,9 +33,15 @@ void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,st
 	}
 
 	command.VAO = mesh->VAO;
+	command.HasTransparency = 0;
 	command.indiceSize = (GLint)mesh->GetIndices().size();
 	command.ID= transform->EntityID;
 	m_commands.push_back(command);
+}
+
+void Fracture::RenderBucket::pushInstancedElementCommand(std::shared_ptr<RenderInstancedElementsCommand> command)
+{
+	m_InstancedElemtcommands.push_back(command);
 }
 
 void Fracture::RenderBucket::sort()
@@ -53,7 +59,12 @@ std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cu
 	return m_commands;
 }
 
+std::vector<std::shared_ptr<Fracture::RenderInstancedElementsCommand>> Fracture::RenderBucket::GetInstanced(bool cull)
+{
+	return m_InstancedElemtcommands;
+}
+
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)
 {
-	return a.material->getShader()->ID() < b.material->getShader()->ID();
+	return a < b;
 }

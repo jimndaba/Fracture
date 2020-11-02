@@ -9,8 +9,17 @@
 
 namespace Fracture
 {
+
 	class Model;
 	class Material;
+
+	enum class RenderType
+	{
+		Normal,
+		InstancedElementsIndirect,
+		InstancedArrayIndirect,
+	};
+
 	class RenderComponent :public Component
 	{
 	public:
@@ -19,20 +28,19 @@ namespace Fracture
 
 
 		virtual void onStart();
-
 		void SetMaterial(std::string name);
 		void SetModel(std::string name);
+
+		void SetRenderType(RenderType m_type);
+		RenderType getRenderType();
 
 		std::shared_ptr<Model> model;
 		std::shared_ptr<Material> material;
 
-		CollisionGroup collisionGroup;
-		CollisionMask collisionMask;
-
 	private:
 		std::string m_modelName;
 		std::string m_materialName;
-		
+		RenderType m_Rendertype;
 
 	};
 

@@ -1,112 +1,70 @@
-[00:09:44] [info] FRACTURE: OpenGL loaded
-[00:09:44] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[00:09:44] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[00:09:44] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[00:09:44] [trace] FRACTURE: Loaded model: samus
-[00:09:44] [trace] FRACTURE: Loaded model: cube
-[00:09:44] [trace] FRACTURE: Loaded Texture: container
-[00:09:44] [trace] FRACTURE: Loaded Texture: specular
-[00:09:44] [trace] FRACTURE: Loaded Shader: default
-[00:09:44] [trace] FRACTURE: Loaded Material: default
-[00:09:44] [trace] FRACTURE: Loaded Material: samus
-[00:09:44] [trace] FRACTURE: Loaded Shader: DebugShader
-[00:09:44] [trace] FRACTURE: Loaded Shader: Primitives
-[00:09:44] [trace] FRACTURE: Loaded Material: DebugMaterial
-[00:09:44] [trace] FRACTURE: Loaded Material: Primitive Material
-[00:09:44] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: RotateIcon
-[00:09:44] [trace] FRACTURE: Loaded model: Plane
-[00:09:44] [trace] FRACTURE: Loaded model: Cube
-[00:09:44] [trace] FRACTURE: Loaded model: Sphere
-[00:09:44] [trace] FRACTURE: Loaded model: Cylinder
-[00:09:44] [trace] FRACTURE: Loaded model: Torus
-[00:09:44] [trace] FRACTURE: Loaded model: Suzane
-[00:09:44] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: CameraIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: LightIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: EyeIcon
-[00:09:44] [trace] FRACTURE: Loaded Texture: EyeIconC
-[00:09:44] [info] FRACTURE: Renderer Init
-[00:09:48] [trace] FRACTURE: Removed component: 4 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 4
-[00:09:48] [trace] FRACTURE: Removed component: 4 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 4
-[00:09:48] [trace] FRACTURE: Removed component: 4 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 4
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 5 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 5
-[00:09:48] [trace] FRACTURE: Removed component: 5 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 5
-[00:09:48] [trace] FRACTURE: Removed component: 5 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 5
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 6 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 6
-[00:09:48] [trace] FRACTURE: Removed component: 6 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 6
-[00:09:48] [trace] FRACTURE: Removed component: 6 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 6
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 7 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 7
-[00:09:48] [trace] FRACTURE: Removed component: 7 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 7
-[00:09:48] [trace] FRACTURE: Removed component: 7 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 7
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 8 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 8
-[00:09:48] [trace] FRACTURE: Removed component: 8 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 8
-[00:09:48] [trace] FRACTURE: Removed component: 8 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 8
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 9 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 9
-[00:09:48] [trace] FRACTURE: Removed component: 9 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 9
-[00:09:48] [trace] FRACTURE: Removed component: 9 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 9
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 10 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 10
-[00:09:48] [trace] FRACTURE: Removed component: 10 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 10
-[00:09:48] [trace] FRACTURE: Removed component: 10 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 10
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 11 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 11
-[00:09:48] [trace] FRACTURE: Removed component: 11 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 11
-[00:09:48] [trace] FRACTURE: Removed component: 11 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 11
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 12 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 12
-[00:09:48] [trace] FRACTURE: Removed component: 12 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 12
-[00:09:48] [trace] FRACTURE: Removed component: 12 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 12
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 13 of Type 3
-[00:09:48] [info] FRACTURE: Removing Component 13
-[00:09:48] [trace] FRACTURE: Removed component: 13 of Type 2
-[00:09:48] [info] FRACTURE: Removing Component 13
-[00:09:48] [trace] FRACTURE: Removed component: 13 of Type 7
-[00:09:48] [info] FRACTURE: Removing Component 13
-[00:09:48] [info] FRACTURE: Removing Rigidbody
-[00:09:48] [trace] FRACTURE: Removed component: 3 of Type 1
-[00:09:48] [info] FRACTURE: Removing Component 3
-[00:09:48] [trace] FRACTURE: Removed component: 3 of Type 6
-[00:09:48] [info] FRACTURE: Removing Component 3
-[00:09:48] [trace] FRACTURE: Removed component: 3 of Type 8
-[00:09:48] [info] FRACTURE: Removing Component 3
-[00:09:48] [info] FRACTURE: Removing COllider
-[00:10:32] [error] FRACTURE: ENTITY DOES NOT HAVE TRANSFORM COMPONENT
-[00:10:38] [trace] FRACTURE: Removed component: 17 of Type 2
-[00:10:38] [info] FRACTURE: Removing Component 17
-[00:10:38] [trace] FRACTURE: Removed component: 17 of Type 5
-[00:10:38] [info] FRACTURE: Removing Component 17
+[13:43:43] [info] FRACTURE: OpenGL loaded
+[13:43:43] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:43:43] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:43:43] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[13:43:43] [trace] FRACTURE: Loaded model: samus
+[13:43:43] [trace] FRACTURE: Loaded model: cube
+[13:43:43] [trace] FRACTURE: Loaded Texture: container
+[13:43:43] [trace] FRACTURE: Loaded Texture: specular
+[13:43:43] [trace] FRACTURE: Loaded Shader: default
+[13:43:43] [trace] FRACTURE: Loaded Material: default
+[13:43:43] [trace] FRACTURE: Loaded Material: samus
+[13:43:43] [trace] FRACTURE: Loaded Shader: DebugShader
+[13:43:43] [trace] FRACTURE: Loaded Shader: Primitives
+[13:43:43] [trace] FRACTURE: Loaded Material: DebugMaterial
+[13:43:43] [trace] FRACTURE: Loaded Material: Primitive Material
+[13:43:43] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: RotateIcon
+[13:43:43] [trace] FRACTURE: Loaded model: Plane
+[13:43:43] [trace] FRACTURE: Loaded model: Cube
+[13:43:43] [trace] FRACTURE: Loaded model: Sphere
+[13:43:43] [trace] FRACTURE: Loaded model: Cylinder
+[13:43:43] [trace] FRACTURE: Loaded model: Torus
+[13:43:43] [trace] FRACTURE: Loaded model: Suzane
+[13:43:43] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: CameraIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: LightIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: EyeIcon
+[13:43:43] [trace] FRACTURE: Loaded Texture: EyeIconC
+[13:43:43] [info] FRACTURE: Renderer Init
+[13:44:06] [trace] FRACTURE: Removed component: 14 of Type 2
+[13:44:06] [info] FRACTURE: Removing Component 14
+[13:44:06] [trace] FRACTURE: Removed component: 14 of Type 3
+[13:44:06] [info] FRACTURE: Removing Component 14
+[13:44:08] [trace] FRACTURE: Removed component: 13 of Type 2
+[13:44:08] [info] FRACTURE: Removing Component 13
+[13:44:08] [trace] FRACTURE: Removed component: 13 of Type 3
+[13:44:08] [info] FRACTURE: Removing Component 13
+[13:44:09] [trace] FRACTURE: Removed component: 12 of Type 2
+[13:44:09] [info] FRACTURE: Removing Component 12
+[13:44:09] [trace] FRACTURE: Removed component: 12 of Type 3
+[13:44:09] [info] FRACTURE: Removing Component 12
+[13:44:10] [trace] FRACTURE: Removed component: 11 of Type 2
+[13:44:10] [info] FRACTURE: Removing Component 11
+[13:44:10] [trace] FRACTURE: Removed component: 11 of Type 3
+[13:44:10] [info] FRACTURE: Removing Component 11
+[13:44:12] [trace] FRACTURE: Removed component: 10 of Type 2
+[13:44:12] [info] FRACTURE: Removing Component 10
+[13:44:12] [trace] FRACTURE: Removed component: 10 of Type 3
+[13:44:12] [info] FRACTURE: Removing Component 10
+[13:44:13] [trace] FRACTURE: Removed component: 9 of Type 2
+[13:44:13] [info] FRACTURE: Removing Component 9
+[13:44:13] [trace] FRACTURE: Removed component: 9 of Type 3
+[13:44:13] [info] FRACTURE: Removing Component 9
+[13:44:14] [trace] FRACTURE: Removed component: 8 of Type 2
+[13:44:14] [info] FRACTURE: Removing Component 8
+[13:44:14] [trace] FRACTURE: Removed component: 8 of Type 3
+[13:44:14] [info] FRACTURE: Removing Component 8
+[13:44:15] [trace] FRACTURE: Removed component: 7 of Type 2
+[13:44:15] [info] FRACTURE: Removing Component 7
+[13:44:15] [trace] FRACTURE: Removed component: 7 of Type 3
+[13:44:15] [info] FRACTURE: Removing Component 7
+[13:44:17] [trace] FRACTURE: Removed component: 6 of Type 2
+[13:44:17] [info] FRACTURE: Removing Component 6
+[13:44:17] [trace] FRACTURE: Removed component: 6 of Type 3
+[13:44:17] [info] FRACTURE: Removing Component 6
+[13:45:39] [trace] FRACTURE: Removed component: 5 of Type 2
+[13:45:39] [info] FRACTURE: Removing Component 5
+[13:45:39] [trace] FRACTURE: Removed component: 5 of Type 3
+[13:45:39] [info] FRACTURE: Removing Component 5

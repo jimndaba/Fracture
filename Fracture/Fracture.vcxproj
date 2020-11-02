@@ -148,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\AssetManager\DiffSpecMaterial.h" />
+    <ClInclude Include="src\AssetManager\DiffuseMaterial.h" />
+    <ClInclude Include="src\AssetManager\PBRMaterial.h" />
     <ClInclude Include="src\Component\BoxColliderComponent.h" />
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />

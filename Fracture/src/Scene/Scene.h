@@ -29,6 +29,11 @@ namespace Fracture
 
 		virtual void onLoad() {};
 
+		void Instance(std::shared_ptr<Entity> entity);
+		void Instance(std::shared_ptr<Entity> entity,glm::vec3 pos);
+		void Instance(std::shared_ptr<Entity> entity, glm::vec3 position, glm::vec3 scale);
+		void Instance(std::shared_ptr<Entity> entity, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
+
 		void addEntity(std::shared_ptr<Entity> entity);				
 		void Destroy(std::shared_ptr<Entity> entity);
 		void Destroy(uint32_t id);

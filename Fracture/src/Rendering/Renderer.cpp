@@ -29,7 +29,6 @@
 #define GLERROR_H
 
 void _check_gl_error(const char* file, int line);
-
 ///
 /// Usage
 /// [... some opengl calls]
@@ -145,8 +144,10 @@ void Fracture::Renderer::RenderDebugRetained()
 
 void Fracture::Renderer::EndFrame()
 {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     m_DebugDraws.clear();
     m_lights.clear();
+    glDisable(GL_DEPTH_TEST);
 }
 
 void Fracture::Renderer::Submit()
@@ -220,6 +221,83 @@ void Fracture::Renderer::Submit()
         SetupLighting(command.material);
        
         Draw(command);
+
+        command.material->getShader()->unbind();        
+        glUseProgram(0);       
+    }
+
+    for (auto& command : m_opaqueBucket->GetInstanced())
+    {
+        std::shared_ptr<Material> material = ComponentManager::GetComponent<RenderComponent>(command->ID)->material;
+        material->getShader()->use();
+        material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+        material->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+        material->getShader()->setVec3("viewPos", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->Position);
+        material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command->ID)->GetWorldTransform());
+
+        auto* uniforms = material->GetUniforms();
+        for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+        {
+            switch (it->second.Type)
+            {
+            case SHADER_TYPE_BOOL:
+                material->getShader()->setBool(it->first, it->second.Bool);
+                break;
+            case SHADER_TYPE_INT:
+                material->getShader()->setInt(it->first, it->second.Int);
+                break;
+            case SHADER_TYPE_FLOAT:
+                material->getShader()->setFloat(it->first, it->second.Float);
+                break;
+            case SHADER_TYPE_VEC2:
+                material->getShader()->setVec2(it->first, it->second.Vec2);
+                break;
+            case SHADER_TYPE_VEC3:
+                material->getShader()->setVec3(it->first, it->second.Vec3);
+                break;
+            case SHADER_TYPE_VEC4:
+                 material->getShader()->setVec4(it->first, it->second.Vec4);
+                break;
+            case SHADER_TYPE_MAT2:
+                material->getShader()->setMat2(it->first, it->second.Mat2);
+                break;
+            case SHADER_TYPE_MAT3:
+                material->getShader()->setMat3(it->first, it->second.Mat3);
+                break;
+            case SHADER_TYPE_MAT4:
+                material->getShader()->setMat4(it->first, it->second.Mat4);
+                break;
+            default:
+                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+                break;
+            }
+        }
+
+        std::unordered_map<std::string, UniformValueSampler>* uniformsSamplers = material->GetSamplerUniforms();
+        for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+        {
+            switch (it->second.Type)
+            {
+            case SHADER_TYPE_SAMPLER2D:
+                material->getShader()->setTexture(it->first, it->second.texture, it->second.Unit);
+                break;
+                //Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+                break;
+            }
+        }
+
+        //for (int i = 0; i < Textures.size(); i++)
+        //{
+        //    material->getShader()->setTexture(command.Textures[i]->type, command.Textures[i].get(), (int)command.Textures[i]->textureType);
+        // }
+
+        SetupLighting(material.get());
+
+        DrawInstancedElement(command);
+
+        material->getShader()->unbind();
+        glUseProgram(0);
+
     }
 }
 
@@ -230,13 +308,20 @@ void Fracture::Renderer::Draw(RenderCommand command)
     glBindVertexArray(0);
 }
 
-void Fracture::Renderer::DrawInstanced(RenderCommand command)
+void Fracture::Renderer::DrawInstancedElement(std::shared_ptr<RenderInstancedElementsCommand> command)
 {
-    glMultiDrawElementsIndirect(GL_TRIANGLES, //type
-        GL_UNSIGNED_INT,                   //indices represented as unsigned ints
-        (GLvoid*)0,                        //start with the first draw command
-        100,                               //draw 100 objects
-        0);
+    glBindVertexArray(command->VAO);
+    check_gl_error();
+    glDrawElementsInstancedBaseVertexBaseInstance(
+        GL_TRIANGLES,
+        command->count,
+        GL_UNSIGNED_INT, (GLvoid*)(sizeof(uint32_t) * command->firstIndex),
+        command->primCount,
+        command->baseVertex,
+        command->baseInstance);
+    check_gl_error();
+    glBindVertexArray(0);
+
 }
 
 void Fracture::Renderer::clear()
@@ -267,10 +352,14 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
     */
 }
 
+void Fracture::Renderer::PushInstancedElementsCommand(std::shared_ptr<RenderInstancedElementsCommand> command)
+{
+    m_opaqueBucket->pushInstancedElementCommand(command);
+}
+
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
     m_opaqueBucket->pushCommand(mesh,material,transform);
-
 }
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)
@@ -343,7 +432,6 @@ void Fracture::Renderer::SetupLighting(Material* material)
 
 }
 
-
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
     ProfilerTimer timer("Render Entity");
@@ -354,21 +442,36 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
     std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
     std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
-    std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);
-  
+    std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);  
     if (render && tag->isVisible)
-    {
-      
+    {      
         for (auto mesh : render->model->GetMeshes())
         {            
-            PushCommand(mesh, render->material, transform);
+            
+            if (render->getRenderType() == RenderType::Normal)
+            {
+                PushCommand(mesh, render->material, transform);
+            }
+            if (render->getRenderType() == RenderType::InstancedElementsIndirect)
+            {               
+                for (auto instanceCommand : mesh->GetInstanceCommands())
+                {
+                    instanceCommand->ID = render->EntityID;
+                    PushInstancedElementsCommand(instanceCommand);
+                }              
+            }
+            if (render->getRenderType() == RenderType::InstancedArrayIndirect)
+            {
+                //PushInstancedArrayCommand(); TODO
+            }
         }   
     }
-
     if (lightcomponent && tag->isVisible)
     {
         AddLight(lightcomponent->GetLight());
     }
+
+
 }
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
@@ -378,6 +481,7 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
     {
         RenderEntity(entity);
     }
+
     
 }
 
@@ -389,3 +493,21 @@ void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
 
 
 
+void _check_gl_error(const char* file, int line) {
+    GLenum err(glGetError());
+
+    while (err != GL_NO_ERROR) {
+        std::string error;
+
+        switch (err) {
+        case GL_INVALID_OPERATION:      error = "INVALID_OPERATION";      break;
+        case GL_INVALID_ENUM:           error = "INVALID_ENUM";           break;
+        case GL_INVALID_VALUE:          error = "INVALID_VALUE";          break;
+        case GL_OUT_OF_MEMORY:          error = "OUT_OF_MEMORY";          break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:  error = "INVALID_FRAMEBUFFER_OPERATION";  break;
+        }
+
+        std::cerr << "GL_" << error.c_str() << " - " << file << ":" << line << std::endl;
+        err = glGetError();
+    }
+}

@@ -47,4 +47,29 @@ void Fracture::Mesh::setupMesh()
 
     glBindVertexArray(0);
 
+    int numFaces = m_indices.size() / 3;
+    int currMaterialFirstFaceIndex = 0;
+
+    for (int faceIdx = 0; faceIdx < numFaces; faceIdx++)
+    {
+        bool isLastFace = faceIdx + 1 == numFaces;
+        bool isNextFaceDifferent = isLastFace;//|| meshToAdd.material_ids[faceIdx + 1] != meshToAdd.material_ids[faceIdx];
+        if (isNextFaceDifferent)
+        {
+            std::shared_ptr<RenderInstancedElementsCommand> currDrawCommand = std::make_shared<RenderInstancedElementsCommand>();
+            currDrawCommand->VAO = VAO;
+            currDrawCommand->count = (faceIdx + 1) * 3;
+            currDrawCommand->primCount = 1;
+            currDrawCommand->firstIndex = faceIdx * 3;
+            currDrawCommand->baseVertex = 0;
+            currDrawCommand->baseInstance = 0;
+
+            //uint32_t currMaterialID = newMaterialIDs[meshToAdd.material_ids[faceIdx]];
+
+            m_instanceCommands.push_back(currDrawCommand);
+            currMaterialFirstFaceIndex = faceIdx + 1;
+        }
+    }
+
+
 }
