@@ -1,43 +1,7 @@
 ﻿  Editor.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(405,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(414,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  TabbedElement.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-  AssetBrowserPanel.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(71,71): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-  Inspector.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-  SceneviewPanel.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(92,60): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(96,59): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(100,64): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(149,69): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(157,7): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-  TabbedPanel.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-  ViewPanel.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(51,95): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
-  main.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\Fracture\src\Component\ILight.h(199,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Generating Code...
-  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+C:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+C:\Dev\Fracture\Fracture\src\Component\ILight.h(199,24): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(424,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(433,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

@@ -74,8 +74,6 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 	ImVec2 size = ImVec2(16.0f,16.0f);
 	std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity);
 
-	
-
 	if (ComponentManager::HasComponent<RelationShipComponent>(entity) && tag)
 	{
 		ImTextureID icon;

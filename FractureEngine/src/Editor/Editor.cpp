@@ -8,6 +8,7 @@
 #include "Panels/TabbedPanel.h"
 #include "Panels/AssetBrowserPanel.h"
 #include "SandboxScene.h"
+#include "Entity/EntityFactory.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -15,7 +16,7 @@ bool Fracture::Editor::opt_fullscreen;
 
 std::shared_ptr<Fracture::SandboxScene> sandboxScene;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
-
+std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 
 inline void Style();
 
@@ -40,6 +41,7 @@ void Fracture::Editor::onInit()
     m_PhysicsManger = std::make_unique<PhysicsManager>();
     m_SceneManager = std::make_unique<SceneManager>();
     m_Profiler = std::make_unique<Profiler>();
+    m_EntityFactory = std::make_unique<EntityFactory>();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -286,9 +288,26 @@ void Fracture::Editor::Render()
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Empty", NULL);
-                ImGui::MenuItem("Camera", NULL);
-                ImGui::MenuItem("Light", NULL);
+                if(ImGui::MenuItem("Empty", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateEmpty(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Camera", NULL)) {};
+                if (ImGui::MenuItem("Sunlight", NULL))
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateSunlight(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Pointlight", NULL)) {};
+                if (ImGui::MenuItem("Spotlight", NULL)) {};
+                if (ImGui::MenuItem("Cube", NULL)) {};
+                if (ImGui::MenuItem("Sphere", NULL)) {};
+                if (ImGui::MenuItem("Plane", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreatePlane(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Torus", NULL)) {};
+                if (ImGui::MenuItem("Cylinder", NULL)) {};
+                if (ImGui::MenuItem("Torus", NULL)) {};
                 ImGui::EndMenu();
             }
             

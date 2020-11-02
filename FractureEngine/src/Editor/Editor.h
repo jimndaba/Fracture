@@ -16,6 +16,7 @@ namespace Fracture
 	class ViewPanel;
 	class TabbedPanel;
 	class AssetBrowserPanel;
+	class EntityFactory;
 
 	class Editor
 	{
@@ -46,7 +47,7 @@ namespace Fracture
 		std::unique_ptr<AssetManager> m_AssetManger;
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 		std::unique_ptr<SceneManager> m_SceneManager;
-		
+		static std::unique_ptr<EntityFactory> m_EntityFactory;
 		static std::shared_ptr<Scene> m_ActiveScene;
 
 
