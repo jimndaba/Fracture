@@ -93,6 +93,12 @@ namespace Fracture
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
 				AssetManager::getShader("PrimitiveMaterial")
 				);
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
+
 			AssetManager::AddMaterial("cubeMat", material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id,"Cube", name);
 			materialCount++;
@@ -111,6 +117,12 @@ namespace Fracture
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
 				AssetManager::getShader("PrimitiveMaterial")
 				);
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
+
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Plane", name);
 			materialCount++;
@@ -128,8 +140,13 @@ namespace Fracture
 
 			std::string name = "SphereMat" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+				AssetManager::getShader("PrimitiveMaterial"));
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
+
 			AssetManager::AddMaterial(name , material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", name);
 			materialCount++;
@@ -146,8 +163,13 @@ namespace Fracture
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "Suzane" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+				AssetManager::getShader("PrimitiveMaterial"));
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
+
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Suzane", name);
 			materialCount++;
@@ -164,8 +186,13 @@ namespace Fracture
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "Cylinder" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+				AssetManager::getShader("PrimitiveMaterial"));
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
+
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Cylinder", name);
 			materialCount++;
@@ -184,6 +211,11 @@ namespace Fracture
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
 				AssetManager::getShader("PrimitiveMaterial")
 				);
+
+			material->setVec3("material.diffuse", glm::vec3(1.0f));
+			material->setVec3("material.ambient", glm::vec3(1.0f));
+			material->setVec3("material.specular", glm::vec3(1.0f));
+
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Torus", name);
 			materialCount++;

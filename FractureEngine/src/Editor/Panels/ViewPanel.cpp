@@ -83,7 +83,6 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
 		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
 	if(m_ViewportFocused && m_camera)
@@ -122,7 +121,6 @@ void Fracture::ViewPanel::onUpdate(float dt)
 
 			m_camera->onUpdate(dt);
 		}
-		
-		
+			
 	}
 }

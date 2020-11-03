@@ -26,7 +26,8 @@ namespace Fracture
 
 		void onInit();
 		void run();
-		void onUpdate();
+		void onUpdate(float dt);
+		void onRender();
 		void onShutdown();
 		void Render();
 

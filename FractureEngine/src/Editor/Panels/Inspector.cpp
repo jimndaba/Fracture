@@ -36,8 +36,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		strcpy_s(buffer, sizeof(buffer), tag->Name.c_str());
 
 		if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
-		{
-	
+		{	
 			tag->Name = std::string(buffer);
 		}		
 	}
@@ -589,6 +588,8 @@ void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::ve
 void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, UniformValue& value, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
+	ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
+
 	auto boldFont = io.Fonts->Fonts[0];
 	ImGui::PushID(label.c_str());
 	
@@ -598,25 +599,211 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 	char buffer[256];
 	memset(buffer, 0, sizeof(buffer));
 	strcpy_s(buffer, sizeof(buffer), value.Name.c_str());
-	if (ImGui::InputText("#uniformText", buffer, sizeof(buffer)))
+	ImGui::PushItemWidth(-1);
+	if (ImGui::InputText("##uniformText", buffer, sizeof(buffer),flags))
 	{
 		std::string str(buffer);
 		value.Name = str;
 	}
-
+	ImGui::PopItemWidth();	
 	ImGui::NextColumn();
+
 
 	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
-
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("-", buttonSize))
 		value.Float = resetValue;
 	ImGui::PopFont();
-	ImGui::SameLine();
-	ImGui::DragFloat("##X", &value.Float, 0.1f, 0.0f, 0.0f, "%.2f");
-	ImGui::Columns(1);
 
+	ImGui::SameLine();
+	switch (value.Type)
+	{
+	case SHADER_TYPE_BOOL:
+	{		
+		ImGui::Checkbox(label.c_str(), &value.Bool);
+
+		break;
+	}		
+	case SHADER_TYPE_INT:
+	{
+		ImGui::InputInt("##X", &value.Int);
+		break;
+	}
+	case SHADER_TYPE_FLOAT:
+	{
+		ImGui::DragFloat("##uniform", &value.Float, 0.1f, 0.0f, 0.0f, "%.2f");
+	
+		break;
+	}
+	case SHADER_TYPE_VEC2:
+	{
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("X", buttonSize))
+			value.Vec2.x = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &value.Vec2.x, 0.1f, 0.0f, 0.0f, "%.2f");
+
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Y", buttonSize))
+			value.Vec2.y = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &value.Vec2.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::PopStyleVar();
+		break;
+	}
+	case SHADER_TYPE_VEC3:
+	{
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("X", buttonSize))
+			value.Vec3.x = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &value.Vec3.x, 0.1f, 0.0f, 0.0f, "%.2f");
+
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Y", buttonSize))
+			value.Vec3.y= resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &value.Vec3.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Z", buttonSize))
+			value.Vec3.z = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &value.Vec3.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::PopStyleVar();
+	
+		break;
+	}
+	case SHADER_TYPE_VEC4:
+	{
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("X", buttonSize))
+			value.Vec4.x = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &value.Vec4.x, 0.1f, 0.0f, 0.0f, "%.2f");
+
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Y", buttonSize))
+			value.Vec4.y = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &value.Vec4.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Z", buttonSize))
+			value.Vec4.z = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &value.Vec4.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.84f, 0.84f, 0.84f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.95f, 0.95f, 0.95f, 1.0f });
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("w", buttonSize))
+			value.Vec4.z = resetValue;
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		ImGui::DragFloat("##w", &value.Vec4.w, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::PopStyleVar();
+	
+		break;
+	}
+	case SHADER_TYPE_MAT2:
+	{
+		//ImGui::SameLine();
+		//DrawBoolControl(value.Name, value.Bool);
+		break;
+	}
+	case SHADER_TYPE_MAT3:
+	{
+		//ImGui::SameLine();
+		//DrawBoolControl(value.Name, value.Bool);
+		break;
+	}
+	case SHADER_TYPE_MAT4:
+	{
+		//ImGui::SameLine();
+		//DrawBoolControl(value.Name, value.Bool);
+		break;
+	}
+	default:
+		//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+		break;
+	}
+
+	
+	ImGui::Columns(1);
 	ImGui::PopID();
 	ImGui::Separator();
 }
@@ -655,7 +842,7 @@ void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float&
 		value = resetValue;
 	ImGui::PopFont();
 	ImGui::SameLine();
-	ImGui::DragFloat("#uniform", &value, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat("##uniform", &value, 0.1f, 0.0f, 0.0f, "%.2f");
 	ImGui::Columns(1);
 
 	ImGui::PopID();

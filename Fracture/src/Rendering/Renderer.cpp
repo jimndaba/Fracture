@@ -49,12 +49,7 @@ Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(heig
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width,m_Height,GL_FLOAT,1,true));
-   
-    
-    glClearColor(0.3f, 0.4f, 0.6f,1.0f);
-    glEnable(GL_DEPTH_TEST);
- 
-}
+  }
 
 Fracture::Renderer::~Renderer()
 {
@@ -70,7 +65,7 @@ void Fracture::Renderer::onInit()
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Begin Frame");
-    clear();
+
     glEnable(GL_DEPTH_TEST);	
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -91,7 +86,7 @@ void Fracture::Renderer::RenderPasses()
     m_opaqueBucket->sort();   
     SceneRenderTarget->bind();
     glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    clear();
 
     for (const auto& command : m_opaqueBucket->getCommands())
     {
@@ -156,6 +151,7 @@ void Fracture::Renderer::RenderDebugRetained()
 
 void Fracture::Renderer::EndFrame()
 {
+    ProfilerTimer timer("End Frame");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glUseProgram(0);
     glDisable(GL_DEPTH_TEST);
@@ -243,7 +239,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
     SetupLighting(command.material);
        
     Draw(command);
-    glActiveTexture(GL_TEXTURE0);
+   
     command.material->getShader()->unbind();
 }
 
@@ -271,9 +267,19 @@ void Fracture::Renderer::setViewport(int width, int height)
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
 {
-    
-	m_opaqueBucket->pushCommand(command);
-   
+    if (command.material->IsTransparent())
+    {
+        m_transparentBucket->pushCommand(command);
+    }
+    else
+    {
+        m_opaqueBucket->pushCommand(command);
+    }
+
+    if (command.material->CastShadows())
+    {
+        m_shadowBucket->pushCommand(command);
+    }   
 }
 
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
@@ -356,12 +362,8 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].outerCutOff", m_lights[i]->GetOuterCutOff());
                 break;
             }
-
-        }
-       
+        }       
     }
-
-
 }
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)

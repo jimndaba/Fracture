@@ -123,14 +123,19 @@ void Fracture::Editor::run()
 {
     Profiler::Get().BeginSession("EditorProfile");
     onInit();
+    double lastTime = SDL_GetTicks() / 1000.0;
     while (!done)
     {
-        onUpdate();
+        double current = SDL_GetTicks() / 1000.0;
+        double elapsed = current - lastTime;
+        onUpdate((float)elapsed);
+        onRender();
+        lastTime = current;
     }
     onShutdown();
 }
 
-void Fracture::Editor::onUpdate()
+void Fracture::Editor::onUpdate(float dt)
 {
     ProfilerTimer timer("onUpdate");
     done = false;
@@ -151,10 +156,13 @@ void Fracture::Editor::onUpdate()
     
     m_PhysicsManger->startPhysics();
 
-    m_viewpanel->onUpdate(1 / 60.0f);
+    m_viewpanel->onUpdate(dt);
 
-  
+    
+}
 
+void Fracture::Editor::onRender()
+{
     m_frame->begin(m_window->Context());
     Render();
     m_frame->end();

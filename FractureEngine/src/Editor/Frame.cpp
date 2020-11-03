@@ -3,6 +3,7 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Panels/Panel.h"
+#include "Profiling/Profiler.h"
 
 Fracture::Frame::Frame()
 {
@@ -22,6 +23,7 @@ void Fracture::Frame::begin(SDL_Window* window)
 
 void Fracture::Frame::render()
 {
+    ProfilerTimer timer("Render Frame");
     for (int i = 0; i < m_panels.size(); i++)
     {
         m_panels[i]->begin();

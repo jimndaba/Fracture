@@ -73,19 +73,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
-    //FragColor = texture(texture_diffuse1, TexCoords);
-    // diffuse
-   //vec3 I = normalize(FragPos - viewPos);
-    //vec3 R = reflect(I, normalize(Normal));
     vec3 norm = normalize(Normal);
-    //vec3 lightDir = normalize(-dirLight.direction);
 
-    // specular
     vec3 viewDir = normalize(viewPos- FragPos);
-    //vec3 reflectDir = reflect(-lightDir, norm);
-    //vec3 reflCol = texture(skybox, R).rgb;
-    //vec3 reflTex = texture(material.reflection, TexCoords).rgb;
-    //vec3 coltextResult = reflCol * reflTex;
 
     vec3 result;
 
@@ -115,8 +105,7 @@ void main()
       }
       result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
     }
-    //vec3 result = ambient + diffuse + specular;
-    //result += coltextResult;
+  
     FragColor = vec4(result,1.0);
 }
 
