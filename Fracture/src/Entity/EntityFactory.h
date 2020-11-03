@@ -89,9 +89,9 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "CubeMat" + materialCount;
+			std::string name = "CubeMat" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("Primitives")
+				AssetManager::getShader("PrimitiveMaterial")
 				);
 			AssetManager::AddMaterial("cubeMat", material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id,"Cube", name);
@@ -107,9 +107,9 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "PlaneMat" + materialCount;
+			std::string name = "PlaneMat" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("Primitives")
+				AssetManager::getShader("PrimitiveMaterial")
 				);
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Plane", name);
@@ -126,9 +126,9 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 
-			std::string name = "SphereMat" + materialCount;
+			std::string name = "SphereMat" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("Primitives")
+				AssetManager::getShader("PrimitiveMaterial")
 				);
 			AssetManager::AddMaterial(name , material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", name);
@@ -139,17 +139,53 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateSuzane(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cube");
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Suzane");
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "Suzane" + materialCount;
+			std::string name = "Suzane" + std::to_string(materialCount);
 			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("Primitives")
+				AssetManager::getShader("PrimitiveMaterial")
 				);
 			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Cube", name);
+			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Suzane", name);
+			materialCount++;
+			return newEntity;
+		}
+
+		static std::shared_ptr<Entity> CreateCylinder(std::shared_ptr<Scene> scene)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cylinder");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+			std::string name = "Cylinder" + std::to_string(materialCount);
+			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
+				AssetManager::getShader("PrimitiveMaterial")
+				);
+			AssetManager::AddMaterial(name, material);
+			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Cylinder", name);
+			materialCount++;
+			return newEntity;
+		}
+		
+		static std::shared_ptr<Entity> CreateTorus(std::shared_ptr<Scene> scene)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Torus");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+			std::string name = "Torus" + std::to_string(materialCount);
+			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
+				AssetManager::getShader("PrimitiveMaterial")
+				);
+			AssetManager::AddMaterial(name, material);
+			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Torus", name);
 			materialCount++;
 			return newEntity;
 		}

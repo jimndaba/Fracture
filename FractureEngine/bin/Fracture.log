@@ -1,31 +1,4 @@
-[00:57:50] [info] FRACTURE: OpenGL loaded
-[00:57:50] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[00:57:50] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[00:57:50] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[00:57:50] [trace] FRACTURE: Loaded model: samus
-[00:57:50] [trace] FRACTURE: Loaded model: cube
-[00:57:50] [trace] FRACTURE: Loaded Texture: container
-[00:57:50] [trace] FRACTURE: Loaded Texture: specular
-[00:57:50] [trace] FRACTURE: Loaded Shader: default
-[00:57:50] [trace] FRACTURE: Loaded Material: default
-[00:57:50] [trace] FRACTURE: Loaded Material: samus
-[00:57:50] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
- Fragment shader failed to compile with the following errors:
-ERROR: 0:8: error(#132) Syntax error: ".0" parse error
-ERROR: error(#273) 1 compilation errors.  No code generated
-
-
-[00:57:50] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
- Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-[00:57:50] [trace] FRACTURE: Loaded Shader: DebugShader
-[00:57:50] [trace] FRACTURE: Loaded Material: DebugMaterial
-[00:57:50] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: RotateIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: CameraIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: LightIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: EyeIcon
-[00:57:50] [trace] FRACTURE: Loaded Texture: EyeIconC
-[00:57:50] [info] FRACTURE: Renderer Init
+[23:11:03] [info] FRACTURE: OpenGL loaded
+[23:11:03] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[23:11:03] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[23:11:03] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000

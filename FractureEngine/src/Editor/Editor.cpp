@@ -81,17 +81,17 @@ void Fracture::Editor::onInit()
    
 
     m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
-    m_AssetManger->AddShader("Primitives", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
+    m_AssetManger->AddShader("PrimitiveMaterial", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
 
     m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
 
-    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("Primitive Material",m_AssetManger->getShader("Primitives"));
+    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial",m_AssetManger->getShader("PrimitiveMaterial"));
 
     primitivesMaterial->setVec3("material.diffuse",glm::vec3(0.9,0.3,0.5));
     primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
 
-    m_AssetManger->AddMaterial("Primitive Material",primitivesMaterial);
+    m_AssetManger->AddMaterial("PrimitiveMaterial",primitivesMaterial);
 
     m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
@@ -297,17 +297,38 @@ void Fracture::Editor::Render()
                 {
                     m_ActiveScene->addEntity(EntityFactory::CreateSunlight(m_ActiveScene));
                 };
-                if (ImGui::MenuItem("Pointlight", NULL)) {};
-                if (ImGui::MenuItem("Spotlight", NULL)) {};
-                if (ImGui::MenuItem("Cube", NULL)) {};
-                if (ImGui::MenuItem("Sphere", NULL)) {};
+                if (ImGui::MenuItem("Pointlight", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreatePointlight(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Spotlight", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateSpotlight(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Cube", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateCube(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Sphere", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateSphere(m_ActiveScene));
+                };
                 if (ImGui::MenuItem("Plane", NULL)) 
                 {
                     m_ActiveScene->addEntity(EntityFactory::CreatePlane(m_ActiveScene));
                 };
-                if (ImGui::MenuItem("Torus", NULL)) {};
-                if (ImGui::MenuItem("Cylinder", NULL)) {};
-                if (ImGui::MenuItem("Torus", NULL)) {};
+                if (ImGui::MenuItem("Torus", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateTorus(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Cylinder", NULL)) 
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateCylinder(m_ActiveScene));
+                };
+                if (ImGui::MenuItem("Suzane", NULL))
+                {
+                    m_ActiveScene->addEntity(EntityFactory::CreateSuzane(m_ActiveScene));
+                };
                 ImGui::EndMenu();
             }
             

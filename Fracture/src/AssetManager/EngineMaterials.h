@@ -26,7 +26,11 @@ namespace Fracture
 	{
 	public:
 		UnTexturedMaterial(std::string name, std::shared_ptr<Shader> shader) :Material(name, shader)
-		{			
+		{		
+			setVec3("material.diffuse", m_diffuse);
+			setVec3("material.diffuse", m_ambient);
+			setVec3("material.diffuse", m_specular);
+			setFloat("material.shininess", m_shininess);
 		}
 
 		void SetDiffuse(glm::vec3 diffuse)
