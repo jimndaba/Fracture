@@ -132,7 +132,15 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 pos)
 	if (ComponentManager::HasComponent<RenderComponent>(entity->Id))
 	{
 		std::shared_ptr<RenderComponent> oldcomponent = ComponentManager::GetComponent<RenderComponent>(entity->Id);
-		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, oldcomponent->material->Name);
+		std::shared_ptr<Material> oldMaterial = AssetManager::getMaterial(oldcomponent->material->Name);
+		
+		
+		std::shared_ptr<Material> material = std::make_shared<Material>(oldMaterial->Name + std::to_string(newEntity->Id),oldMaterial->getShader());
+		material->CopyUniforms(oldMaterial->GetUniforms());
+		material->CopySampleUniforms(oldMaterial->GetSamplerUniforms());
+		AssetManager::AddMaterial(material->Name, material);
+		
+		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, material->Name);
 		component->SetRenderType(RenderType::Normal);
 		ComponentManager::AddComponent(component);
 	}

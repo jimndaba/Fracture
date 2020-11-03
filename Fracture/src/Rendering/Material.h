@@ -109,13 +109,24 @@ namespace Fracture
         std::unordered_map<std::string, UniformValue>* GetUniforms();
         std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>*GetSamplerUniforms();
 
+        void CopyUniforms(std::unordered_map<std::string, UniformValue>* copy);
+        void CopySampleUniforms(std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* copy );
+
         bool IsTransparent()
         {
             return m_IsTransparent;
         }
+        void setIsTransparent(bool istransparent)
+        {
+            m_IsTransparent = istransparent;
+        }
         bool CastShadows()
         {
             return m_CastShadows;
+        }
+        void setCastShadows(bool castshadows)
+        {
+            m_CastShadows = castshadows;
         }
 
 

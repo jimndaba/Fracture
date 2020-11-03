@@ -8,6 +8,8 @@
 
 namespace Fracture
 {
+	struct UniformValue;
+
 	class InspectorPanel: public Panel
 	{
 	public:
@@ -23,10 +25,13 @@ namespace Fracture
 		template<class T, typename UIFunction>
 		void DrawComponent(const std::string& name,Entity entity, UIFunction uiFunction);
 
+		static void DrawTextInputControl(const std::string& label, std::string& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawMaterialUniform(const std::string& label, UniformValue& value, float resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawColourControl(const std::string& label, glm::vec4& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawfloatControl(const std::string& label, float& values, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawIntControl(const std::string& label, int& value, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawIntControl(const std::string& label, int& value, int resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawBoolControl(const std::string& label, bool& value, float columnWidth = 100.0f);
 		static void DrawTexture2DControl(const std::string& label, unsigned int& value, float resetValue = 0.0f, float columnWidth = 100.0f);
 	};
 

@@ -282,14 +282,16 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     {
         m_transparentBucket->pushCommand(mesh, material, transform);
     }
+    else
+    {
+        m_opaqueBucket->pushCommand(mesh, material, transform);
+    }
+
     if (material->CastShadows())
     {
         m_shadowBucket->pushCommand(mesh, material, transform);
     }
-    else
-    {
-        m_opaqueBucket->pushCommand(mesh, material, transform);
-    }   
+   
 }
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)

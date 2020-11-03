@@ -3,6 +3,7 @@
 #include <utility>
 #include <functional>
 #include "AssetManager/AssetManager.h"
+#include "Logging/Logger.h"
 
 Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):Name(name),m_shader(shader)
 {
@@ -159,4 +160,52 @@ std::unordered_map<std::string, Fracture::UniformValue>* Fracture::Material::Get
 std::unordered_map<std::string, std::shared_ptr<Fracture::UniformValueSampler>>* Fracture::Material::GetSamplerUniforms()
 {
     return m_SamplerUniforms;
+}
+
+void Fracture::Material::CopyUniforms(std::unordered_map<std::string, UniformValue>* copy)
+{
+	for (auto value = copy->begin(); value != copy->end(); ++value)
+	{
+		switch (value->second.Type)
+		{
+		case SHADER_TYPE_BOOL:
+			setBool(value->first, value->second.Bool);
+			break;
+		case SHADER_TYPE_INT:
+			setInt(value->first, value->second.Int);
+			break;
+		case SHADER_TYPE_FLOAT:
+			setFloat(value->first, value->second.Float);
+			break;
+		case SHADER_TYPE_VEC2:
+			setVec2(value->first, value->second.Vec2);
+			break;
+		case SHADER_TYPE_VEC3:
+			setVec3(value->first, value->second.Vec3);
+			break;
+		case SHADER_TYPE_VEC4:
+			setVec4(value->first, value->second.Vec4);
+			break;
+		case SHADER_TYPE_MAT2:
+			setMat2(value->first, value->second.Mat2);
+			break;
+		case SHADER_TYPE_MAT3:
+			setMat3(value->first, value->second.Mat3);
+			break;
+		case SHADER_TYPE_MAT4:
+			setMat4(value->first, value->second.Mat4);
+			break;
+		default:
+			FRACTURE_ERROR("Unrecognized Uniform type set.");
+			break;
+		}
+	}
+}
+
+void Fracture::Material::CopySampleUniforms(std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* copy)
+{
+	for (auto it = copy->begin(); it != copy->end(); ++it)
+	{
+		SetTexture(it->first,AssetManager::getTexture(it->second->texture->Name),it->second->Unit);
+	}
 }

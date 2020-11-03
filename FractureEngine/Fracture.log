@@ -1,30 +1,40 @@
-[14:42:32] [info] FRACTURE: OpenGL loaded
-[14:42:32] [info] FRACTURE: Vendor: Intel
-[14:42:32] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[14:42:32] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[14:42:32] [trace] FRACTURE: Loaded model: samus
-[14:42:32] [trace] FRACTURE: Loaded model: cube
-[14:42:32] [trace] FRACTURE: Loaded Texture: container
-[14:42:32] [trace] FRACTURE: Loaded Texture: specular
-[14:42:32] [trace] FRACTURE: Loaded Shader: default
-[14:42:32] [trace] FRACTURE: Loaded Material: default
-[14:42:32] [trace] FRACTURE: Loaded Material: samus
-[14:42:32] [trace] FRACTURE: Loaded Shader: DebugShader
-[14:42:32] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[14:42:32] [trace] FRACTURE: Loaded Material: DebugMaterial
-[14:42:32] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[14:42:32] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: RotateIcon
-[14:42:32] [trace] FRACTURE: Loaded model: Plane
-[14:42:32] [trace] FRACTURE: Loaded model: Cube
-[14:42:32] [trace] FRACTURE: Loaded model: Sphere
-[14:42:32] [trace] FRACTURE: Loaded model: Cylinder
-[14:42:32] [trace] FRACTURE: Loaded model: Torus
-[14:42:32] [trace] FRACTURE: Loaded model: Suzane
-[14:42:32] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: CameraIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: LightIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: EyeIcon
-[14:42:32] [trace] FRACTURE: Loaded Texture: EyeIconC
-[14:42:33] [info] FRACTURE: Renderer Init
+[18:24:36] [info] FRACTURE: OpenGL loaded
+[18:24:36] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[18:24:36] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[18:24:36] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[18:24:37] [trace] FRACTURE: Loaded model: samus
+[18:24:37] [trace] FRACTURE: Loaded model: cube
+[18:24:37] [trace] FRACTURE: Loaded Texture: container
+[18:24:37] [trace] FRACTURE: Loaded Texture: specular
+[18:24:37] [trace] FRACTURE: Loaded Shader: default
+[18:24:37] [trace] FRACTURE: Loaded Material: default
+[18:24:37] [trace] FRACTURE: Loaded Material: samus
+[18:24:37] [trace] FRACTURE: Loaded Material: default5
+[18:24:37] [trace] FRACTURE: Loaded Material: default6
+[18:24:37] [trace] FRACTURE: Loaded Material: default7
+[18:24:37] [trace] FRACTURE: Loaded Material: default8
+[18:24:37] [trace] FRACTURE: Loaded Material: default9
+[18:24:37] [trace] FRACTURE: Loaded Material: default10
+[18:24:37] [trace] FRACTURE: Loaded Material: default11
+[18:24:37] [trace] FRACTURE: Loaded Material: default12
+[18:24:37] [trace] FRACTURE: Loaded Material: default13
+[18:24:37] [trace] FRACTURE: Loaded Material: default14
+[18:24:37] [trace] FRACTURE: Loaded Shader: DebugShader
+[18:24:37] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[18:24:37] [trace] FRACTURE: Loaded Material: DebugMaterial
+[18:24:37] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[18:24:37] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: RotateIcon
+[18:24:37] [trace] FRACTURE: Loaded model: Plane
+[18:24:37] [trace] FRACTURE: Loaded model: Cube
+[18:24:37] [trace] FRACTURE: Loaded model: Sphere
+[18:24:37] [trace] FRACTURE: Loaded model: Cylinder
+[18:24:37] [trace] FRACTURE: Loaded model: Torus
+[18:24:37] [trace] FRACTURE: Loaded model: Suzane
+[18:24:37] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: CameraIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: LightIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: EyeIcon
+[18:24:37] [trace] FRACTURE: Loaded Texture: EyeIconC
+[18:24:37] [info] FRACTURE: Renderer Init
