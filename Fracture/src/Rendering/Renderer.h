@@ -16,18 +16,19 @@ namespace Fracture
 {
 	class RenderBucket;
 	class RenderCommand;
-	struct RenderInstancedElementsCommand;
 	class TransformComponent;
 	class LightComponent;
 	class ILight;
 	class Mesh;
+	class Shader;
 	class Material;
 	class Entity;
 	class EntityInstance;
 	class Scene;
 	class RenderTarget;
 	class DebugLine;
-
+	struct UniformValue;
+	struct UniformValueSampler;
 
 	class Renderer
 	{
@@ -40,27 +41,25 @@ namespace Fracture
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderPasses();
 		void RenderDebug();
-		void RenderDebugRetained();
-		void EndFrame();
-		void Submit();
-
+		void RenderDebugRetained();				
+		void Submit(RenderCommand command);
+		void WriteUniformData(Shader shader, std::string name, UniformValue value);
+		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 		void Draw(RenderCommand command);
-		void DrawInstancedElement(std::shared_ptr<RenderInstancedElementsCommand> command);
-
+		void EndFrame();
 
 		void clear();
 		void clearColor(float r, float g, float b);
 		void setViewport(int width,int height);
 		
 		void PushCommand(RenderCommand command);
-		void PushInstancedElementsCommand(std::shared_ptr<RenderInstancedElementsCommand> command);
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end);
 		static void IsDebugRender(bool debug);
 
-		void AddLight(const std::shared_ptr<ILight>& light);
+		void AddLight(const std::shared_ptr<ILight> light);
 		void SetupLighting(Material* material);
 
 		void RenderEntity(std::shared_ptr<Entity> entity);		
@@ -75,6 +74,7 @@ namespace Fracture
 		static bool m_isDebugRender;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
+		std::shared_ptr<RenderBucket> m_shadowBucket;
 		std::vector<std::shared_ptr<Fracture::ILight>> m_lights;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;

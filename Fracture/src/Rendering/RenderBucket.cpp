@@ -2,6 +2,7 @@
 #include "RenderCommand.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
+#include "Logging/Logger.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "Shader.h"
@@ -24,24 +25,19 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 
 void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
-	RenderCommand command = {};	
-	command.material = material.get();
-
+	RenderCommand command = RenderCommand(material.get());
+	
 	for (int i = 0; i < mesh->Textures().size(); i++)
 	{
-		command.Textures.push_back(mesh->Textures()[i]);
+		//command.material->SetTexture(mesh->Textures()[i]->type, mesh->Textures()[i], (int)mesh->Textures()[i]->textureType);
+		command.TextureNames.push_back(mesh->Textures()[i]->Name);
 	}
 
 	command.VAO = mesh->VAO;
-	command.HasTransparency = 0;
+	command.HasTransparency = material->IsTransparent();
 	command.indiceSize = (GLint)mesh->GetIndices().size();
 	command.ID= transform->EntityID;
 	m_commands.push_back(command);
-}
-
-void Fracture::RenderBucket::pushInstancedElementCommand(std::shared_ptr<RenderInstancedElementsCommand> command)
-{
-	m_InstancedElemtcommands.push_back(command);
 }
 
 void Fracture::RenderBucket::sort()
@@ -59,10 +55,6 @@ std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cu
 	return m_commands;
 }
 
-std::vector<std::shared_ptr<Fracture::RenderInstancedElementsCommand>> Fracture::RenderBucket::GetInstanced(bool cull)
-{
-	return m_InstancedElemtcommands;
-}
 
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)
 {

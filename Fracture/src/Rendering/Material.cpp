@@ -7,7 +7,7 @@
 Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):Name(name),m_shader(shader)
 {
 	m_Uniforms = new  std::unordered_map<std::string, UniformValue>();
-	m_SamplerUniforms =new  std::unordered_map<std::string, UniformValueSampler>();
+	m_SamplerUniforms =new std::unordered_map<std::string,std::shared_ptr<UniformValueSampler>>();
 }
 
 Fracture::Material::~Material()
@@ -134,20 +134,20 @@ void Fracture::Material::setMat4(std::string name, const glm::mat4& mat) const
 
 void Fracture::Material::SetTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit)
 {
-	UniformValueSampler sample;
-	sample.Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
-	sample.texture = value.get();
-	sample.Unit = unit;
+	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
+	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
+	sample->texture = value.get();
+	sample->Unit = unit;
 	m_SamplerUniforms->emplace(name,sample);
 }
 
 void Fracture::Material::ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit)
 {
 	m_SamplerUniforms->erase(name);
-	UniformValueSampler sample;
-	sample.Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
-	sample.texture = value.get();
-	sample.Unit = unit;
+	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
+	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
+	sample->texture = value.get();
+	sample->Unit = unit;
 	m_SamplerUniforms->emplace(name, sample);
 }
 
@@ -156,7 +156,7 @@ std::unordered_map<std::string, Fracture::UniformValue>* Fracture::Material::Get
     return m_Uniforms;
 }
 
-std::unordered_map<std::string, Fracture::UniformValueSampler>* Fracture::Material::GetSamplerUniforms()
+std::unordered_map<std::string, std::shared_ptr<Fracture::UniformValueSampler>>* Fracture::Material::GetSamplerUniforms()
 {
     return m_SamplerUniforms;
 }

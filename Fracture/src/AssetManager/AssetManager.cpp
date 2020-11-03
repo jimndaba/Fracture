@@ -305,6 +305,50 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	filename = directory + '/' + filename;
 
 	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
+
+	switch (texType)
+	{
+		case TextureType::Diffuse:
+		{
+			texture->type = "material.diffuse";
+			break;
+		}
+		case TextureType::Specular:
+		{
+			texture->type = "material.specular";
+			break;
+		}
+		case TextureType::Normal:
+		{
+			texture->type = "material.normal";
+			break;
+		}
+		case TextureType::Height:
+		{
+			texture->type = "material.height";
+			break;
+		}
+		case TextureType::Bump:
+		{
+			texture->type = "material.bump";
+			break;
+		}
+		case TextureType::Reflection:
+		{
+			texture->type = "material.reflection";
+			break;
+		}
+		case TextureType::ColorAttachment:
+		{
+			texture->type = "ColorAttachment";
+			break;
+		}
+		case TextureType::DepthStencilAttachment:
+		{
+			texture->type = "DepthStencilAttachment";
+			break;
+		}
+	}
 	
 	texture->Name = path;
 	texture->path = filename;

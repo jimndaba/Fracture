@@ -107,12 +107,24 @@ namespace Fracture
         void ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
 
         std::unordered_map<std::string, UniformValue>* GetUniforms();
-        std::unordered_map<std::string, UniformValueSampler>*GetSamplerUniforms();
+        std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>*GetSamplerUniforms();
+
+        bool IsTransparent()
+        {
+            return m_IsTransparent;
+        }
+        bool CastShadows()
+        {
+            return m_CastShadows;
+        }
+
 
 	private:
 		std::shared_ptr<Shader> m_shader;
         std::unordered_map<std::string, UniformValue>* m_Uniforms;
-        std::unordered_map<std::string, UniformValueSampler>* m_SamplerUniforms;
+        std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* m_SamplerUniforms;
+        bool m_CastShadows;
+        bool m_IsTransparent;
 	};
 }
 

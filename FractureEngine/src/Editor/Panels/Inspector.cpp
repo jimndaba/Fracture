@@ -1,6 +1,8 @@
 #include "Inspector.h"
 #include "../Elements/TagComponentElement.h"
 #include "SceneviewPanel.h"
+#include "Rendering/Shader.h"
+#include "Rendering/Material.h"
 
 
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
@@ -188,6 +190,53 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					}
 				}
 				ImGui::EndCombo();
+			}
+
+			ImGui::Separator();
+
+			auto uniforms = render->material->GetUniforms();
+			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
+			{
+				switch (value->second.Type)
+				{
+				case SHADER_TYPE_BOOL:
+				
+					break;
+				case SHADER_TYPE_INT:
+					DrawIntControl(value->first, value->second.Int);
+					break;
+				case SHADER_TYPE_FLOAT:
+					DrawfloatControl(value->first, value->second.Float);
+					break;
+				case SHADER_TYPE_VEC2:
+				
+					break;
+				case SHADER_TYPE_VEC3:
+					DrawVec3Control(value->first, value->second.Vec3);
+					break;
+				case SHADER_TYPE_VEC4:
+					
+					break;
+				case SHADER_TYPE_MAT2:
+				
+					break;
+				case SHADER_TYPE_MAT3:
+				
+					break;
+				case SHADER_TYPE_MAT4:
+
+					break;
+				default:
+					//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+					break;
+				}
+			}
+
+			ImGui::Separator();
+			std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = render->material->GetSamplerUniforms();
+			for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+			{
+				DrawTexture2DControl(it->first, it->second->texture->id);
 			}
 
 	});	
@@ -576,4 +625,42 @@ void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float&
 	ImGui::Columns(1);
 
 	ImGui::PopID();
+}
+
+void Fracture::InspectorPanel::DrawIntControl(const std::string& label, int& value, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+
+	ImGui::PushID(label.c_str());
+	ImGui::Columns(2);
+	ImGui::SetColumnWidth(0, columnWidth);
+	ImGui::Text(label.c_str());
+	ImGui::NextColumn();
+
+	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("-", buttonSize))
+		value = resetValue;
+	ImGui::PopFont();
+	ImGui::SameLine();
+	ImGui::InputInt("##X", &value);
+	ImGui::Columns(1);
+
+	ImGui::PopID();
+}
+
+void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,unsigned int& value, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+	ImTextureID texture = (void*)value;
+	ImGui::PushID("##sample");
+	ImGui::ImageButton(texture, ImVec2(64, 64));
+	ImGui::SameLine();
+	ImGui::Text(label.c_str());
+	ImGui::PopID();
+	ImGui::Separator();
 }
