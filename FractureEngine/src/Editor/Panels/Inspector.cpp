@@ -652,7 +652,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &value.Vec2.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##X", &value.Vec2.x, 0.05f, 0.0f, 1.0f, "%.2f");
 
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -665,7 +665,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &value.Vec2.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Y", &value.Vec2.y, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
 		break;
@@ -686,7 +686,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &value.Vec3.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##X", &value.Vec3.x, 0.05f, 0.0f, 1.0f, "%.2f");
 
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -699,7 +699,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &value.Vec3.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Y", &value.Vec3.y, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 		
 		ImGui::SameLine();
@@ -712,7 +712,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Z", &value.Vec3.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Z", &value.Vec3.z, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
 	
@@ -734,7 +734,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &value.Vec4.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##X", &value.Vec4.x, 0.05f, 0.0f, 1.0f, "%.2f");
 
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -747,7 +747,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &value.Vec4.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Y", &value.Vec4.y, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 		ImGui::SameLine();
@@ -760,7 +760,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##Z", &value.Vec4.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##Z", &value.Vec4.z, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 		ImGui::SameLine();
@@ -773,7 +773,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##w", &value.Vec4.w, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##w", &value.Vec4.w, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
 	

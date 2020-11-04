@@ -125,8 +125,7 @@ namespace Fracture
 		virtual void SetConstant(float constant) { m_constant = constant; };
 		virtual void SetLinear(float linear) { m_linear = linear; };
 		virtual void SetQuadratic(float quad) { m_quadratic = quad; };
-		//virtual void SetCutoff(float Coff) {};
-		//virtual void SetOuterCutOff(float outerCoff) {};
+		
 
 		virtual glm::vec4 GetAmbient() { return m_ambient; };
 		virtual glm::vec4 GetDiffuse() { return m_diffuse; };
@@ -136,8 +135,7 @@ namespace Fracture
 		virtual float GetConstant() { return m_constant; };
 		virtual float GetLinear() { return m_linear; };
 		virtual float GetQuadratic() { return m_quadratic; };
-		//virtual float GetCutoff() {};
-		//virtual float GetOuterCutOff() {};
+		
 		virtual LightType GetLightType()
 		{
 			return LightType::Point;
@@ -196,7 +194,7 @@ namespace Fracture
 		glm::vec4 m_specular = glm::vec4(0.6f);
 		glm::vec3 m_position = glm::vec3(0.0f);
 		glm::vec3 m_rotation = glm::vec3(0.0f);;
-		float m_cutoff = 0.91;
+		float m_cutoff = 0.91f;
 		float m_outerCutOff = 0.82f;
 		float m_constant = 1.0f;
 		float m_linear = 0.09f;

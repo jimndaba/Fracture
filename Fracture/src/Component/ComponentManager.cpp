@@ -60,7 +60,6 @@ void Fracture::ComponentManager::onUpdate(float dt)
 
 void Fracture::ComponentManager::ClearComponents()
 {
-	PhysicsManager::ClearScene();
 	m_Components.clear();
 }
 
@@ -110,7 +109,6 @@ void Fracture::ComponentManager::RemoveComponent(std::shared_ptr<Component> comp
 	}
 	
 }
-
 
 std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetComponents(uint32_t enitytId)
 {

@@ -8,6 +8,7 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/RenderComponent.h"
 #include "Component/RigidBodyComponent.h"
+#include "Component/LightComponent.h"
 #include "Rendering/Material.h"
 #include "Rendering/Model.h"
 #include "Rendering/Shader.h"
@@ -136,6 +137,59 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		json c;
 		c["Material"] = component->material->Name;
+		json serialised_unfiorms= json::array_t();
+		auto* uniforms = component->material->GetUniforms();
+		for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
+		{
+			json b;
+			switch (value->second.Type)
+			{
+			case SHADER_TYPE_BOOL:	
+				b["Type"] = "bool";
+				b["Name"] = value->first;
+				b["value"] = value->second.Bool;
+				break;
+			case SHADER_TYPE_INT:
+				b["Type"] = "Int";
+				b["Name"] = value->first;
+				b["value"] = value->second.Int;
+				break;
+			case SHADER_TYPE_FLOAT:
+				b["Type"] = "float";
+				b["Name"] = value->first;
+				b["value"] = value->second.Float;
+				break;
+			case SHADER_TYPE_VEC2:
+				b["Type"] = "Vec2";
+				b["Name"] = value->first;
+				b["value"] = { value->second.Vec2.x,value->second.Vec2.y };
+				break;
+			case SHADER_TYPE_VEC3:
+				b["Type"] = "Vec3";
+				b["Name"] = value->first;
+				b["value"] = { value->second.Vec3.x,value->second.Vec3.y,value->second.Vec3.z };
+				break;
+			case SHADER_TYPE_VEC4:
+				b["Type"] = "Vec4";
+				b["Name"] = value->first;
+				b["value"] = { value->second.Vec4.x,value->second.Vec4.y,value->second.Vec4.z,value->second.Vec4.w };
+				break;
+			case SHADER_TYPE_MAT2:
+				
+				break;
+			case SHADER_TYPE_MAT3:
+			
+				break;
+			case SHADER_TYPE_MAT4:
+				
+				break;
+			default:
+				//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+				break;
+			}
+			serialised_unfiorms.push_back(b);
+		}
+		c["MaterialUniforms"] = serialised_unfiorms;
 		c["Shader"]= component->material->getShader()->Name ;
 		c["Model"] =component->model->Name ;
 		j["Render Component"] = c;
@@ -155,6 +209,54 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		json c;		
 		c["Dimensions"] = {component->X,component->Y,component->Z };
 		j["Box Collider Component"] =c; 
+	}
+
+	if (ComponentManager::HasComponent<LightComponent>(entity->Id))
+	{
+		std::shared_ptr<LightComponent> component = ComponentManager::GetComponent<LightComponent>(entity->Id);
+		json c;
+
+		switch (component->GetLightType())
+		{
+			case LightType::Sun:
+			{
+				c["Direction"] = { component->GetLight()->GetDirection().x,component->GetLight()->GetDirection().y,component->GetLight()->GetDirection().z };
+				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
+				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
+				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
+				break;
+			}
+			case LightType::Spot:
+			{
+				c["Position"] = { component->GetLight()->GetPosition().x,component->GetLight()->GetPosition().y,component->GetLight()->GetPosition().z };
+				c["Direction"] = { component->GetLight()->GetDirection().x,component->GetLight()->GetDirection().y,component->GetLight()->GetDirection().z };
+				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
+				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
+				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
+
+				c["Linear"] = component->GetLight()->GetLinear();
+				c["Constant"] = component->GetLight()->GetConstant();
+				c["Qaudratic"] = component->GetLight()->GetQuadratic();
+				c["Cutoff"] = component->GetLight()->GetCutoff();
+				c["OuterCutoff"] = component->GetLight()->GetOuterCutOff();
+
+				break;
+			}
+			case LightType::Point:
+			{
+				c["Position"] = { component->GetLight()->GetPosition().x,component->GetLight()->GetPosition().y,component->GetLight()->GetPosition().z };
+				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
+				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
+				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
+
+				c["Linear"] = component->GetLight()->GetLinear();
+				c["Constant"] = component->GetLight()->GetConstant();
+				c["Qaudratic"] = component->GetLight()->GetQuadratic();
+				break;
+			}
+		}
+		j["Light Type"] = component->GetLightType();
+		j["Light Component"] = c;
 	}
 
 	j["Entity ID"] = entity->Id;
@@ -231,7 +333,6 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			auto renderComponent = j["Render Component"];
 			std::string model = renderComponent["Model"];
 			std::string material = renderComponent["Material"];
-
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id,model,material);
 			ComponentManager::AddComponent(component);
 
@@ -257,6 +358,62 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			ComponentManager::AddComponent(component);
 		}
 		
+		if (exists(j, "Light Component"))
+		{
+			auto lightComponent = j["Light Component"];
+			std::array<float, 4> diffuse = lightComponent["Diffuse"];
+			std::array<float, 4> ambient = lightComponent["Ambient"];
+			std::array<float, 4> specular = lightComponent["Specular"];
+
+			LightType lType = (LightType)j["Light Type"];
+
+			switch (lType)
+			{
+			case LightType::Sun:
+			{											
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id,lType);
+				std::array<float, 3> direction = lightComponent["Direction"];
+				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
+				ComponentManager::AddComponent(component);
+				break;
+			}
+			case LightType::Spot:
+			{
+				std::array<float, 3> direction = lightComponent["Direction"];
+				std::array<float, 3> position = lightComponent["Position"];
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
+				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
+				component->SetLinear(lightComponent["Linear"]);
+				component->SetConstant(lightComponent["Constant"]);
+				component->SetQuadratic(lightComponent["Qaudratic"]);
+				component->SetCutoff(lightComponent["Cutoff"]);
+				component->SetOuterCutOff(lightComponent["OuterCutoff"]);
+				ComponentManager::AddComponent(component);
+				break;
+			}
+			case LightType::Point:
+			{				
+				std::array<float, 3> position = lightComponent["Position"];
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
+				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
+				component->SetLinear(lightComponent["Linear"]);
+				component->SetConstant(lightComponent["Constant"]);
+				component->SetQuadratic(lightComponent["Qaudratic"]);
+				ComponentManager::AddComponent(component);
+				break;
+			}
+			}
+		}
 		
 
 		m_scene->addEntity(entity);

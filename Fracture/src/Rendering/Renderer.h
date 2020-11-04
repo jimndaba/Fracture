@@ -57,7 +57,11 @@ namespace Fracture
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end);
-		static void IsDebugRender(bool debug);
+		static bool IsDebugDraw()
+		{
+			return m_isDebugRender;
+		}
+		static void SetDebugRender(bool debug);
 
 		void AddLight(const std::shared_ptr<ILight> light);
 		void SetupLighting(Material* material);

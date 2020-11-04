@@ -13,6 +13,11 @@
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
 bool Fracture::Editor::opt_fullscreen;
+bool Fracture::Editor::showRenderConfig;
+bool Fracture::Editor::showAudioConfig;
+bool Fracture::Editor::showPhysicsConfig;
+bool Fracture::Editor::showInputConfig;
+bool Fracture::Editor::showProjectConfig;
 
 std::shared_ptr<Fracture::SandboxScene> sandboxScene;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
@@ -43,6 +48,12 @@ void Fracture::Editor::onInit()
     m_Profiler = std::make_unique<Profiler>();
     m_EntityFactory = std::make_unique<EntityFactory>();
 
+    showRenderConfig  = false;
+    showAudioConfig   = false;
+    showPhysicsConfig = false;
+    showInputConfig   = false;
+    showProjectConfig = false;
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -70,8 +81,8 @@ void Fracture::Editor::onInit()
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
-    sandboxScene = std::make_shared<SandboxScene>();
-    SetScene(sandboxScene);
+    //sandboxScene = std::make_shared<SandboxScene>();
+    SetScene(std::make_shared<Scene>());
 
     m_frame->AddPanel(m_sceneview);
     m_frame->AddPanel(m_inspectorpanel);
@@ -165,8 +176,14 @@ void Fracture::Editor::onRender()
 {
     m_frame->begin(m_window->Context());
     Render();
-    m_frame->end();
+    
 
+    if (showRenderConfig) showRenderManager(&showRenderConfig,m_Renderer);
+    if (showAudioConfig) showAudioManager(&showRenderConfig);
+    if (showPhysicsConfig) showPhysicsManager(&showRenderConfig);
+    if (showInputConfig) showInputManager(&showRenderConfig);
+    if (showProjectConfig) showProjectSettings(&showRenderConfig);
+    m_frame->end();
     //m_PhysicsManger->DrawDebug();
     m_window->swapBuffers();
 }
@@ -177,8 +194,7 @@ void Fracture::Editor::onShutdown()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
-    m_Renderer.reset();
-    m_PhysicsManger->ClearScene();
+    m_Renderer.reset();  
     m_PhysicsManger.reset();
     m_window.reset();
     Profiler::Get().EndSession();
@@ -238,7 +254,7 @@ void Fracture::Editor::Render()
                 ImGui::Separator();        
                 if (ImGui::MenuItem("New Scene", NULL))
                 {
-                    sandboxScene->clearScene();
+                    m_ActiveScene->clearScene();
                 }
                 if(ImGui::MenuItem("Open Scene", NULL))
                 {
@@ -275,7 +291,7 @@ void Fracture::Editor::Render()
                 ImGui::Separator();
                 ImGui::MenuItem("Select All", "CTRL+A");
                 ImGui::Separator();
-                ImGui::MenuItem("Project Settings", NULL);
+                ImGui::MenuItem("Project Settings", NULL,&showProjectConfig);
                 ImGui::EndMenu();
             }
 
@@ -344,10 +360,10 @@ void Fracture::Editor::Render()
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Render System", NULL);
-                ImGui::MenuItem("Audio System", NULL);
-                ImGui::MenuItem("Physics System", NULL);
-                ImGui::MenuItem("Input System", NULL);
+                ImGui::MenuItem("Render System", NULL, &showRenderConfig);
+                ImGui::MenuItem("Audio System", NULL,&showAudioConfig);
+                ImGui::MenuItem("Physics System", NULL,&showPhysicsConfig);
+                ImGui::MenuItem("Input System", NULL,&showInputConfig);
                 ImGui::EndMenu();
             }
 
@@ -384,6 +400,104 @@ void Fracture::Editor::SetScene(std::shared_ptr<Scene> scene)
 std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
 {
     return m_ActiveScene;
+}
+
+void Fracture::Editor::showRenderManager(bool* p_open,std::unique_ptr<Fracture::Renderer>& _renderer)
+{
+    ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
+    if (ImGui::Begin("Render System", p_open,ImGuiWindowFlags_NoDocking|ImGuiWindowFlags_NoCollapse))
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        auto boldFont = io.Fonts->Fonts[0];
+
+        float width,  height;
+        ImGui::PushID("renderConfig");
+        ImGui::Columns(2);
+        ImGui::SetColumnWidth(0, 200.0f);
+        ImGui::Text("Resolution");
+        ImGui::NextColumn();
+        ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+        float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        ImVec2 buttonSize = { lineHeight + 20.0f, lineHeight };
+
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        ImGui::PushFont(boldFont);
+        if (ImGui::Button("Width", buttonSize))
+        {
+
+        }         
+        ImGui::PopFont();
+        ImGui::PopStyleColor(3);
+        ImGui::SameLine();
+        ImGui::DragFloat("##X", &width, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+        ImGui::PushFont(boldFont);
+        if (ImGui::Button("Height", buttonSize))
+        {
+        }
+        ImGui::PopFont();
+        ImGui::PopStyleColor(3);
+        ImGui::SameLine();
+        ImGui::DragFloat("##Y", &height, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+        ImGui::PopStyleVar();
+
+        ImGui::Separator();
+        bool bloom ;
+        ImGui::NextColumn();
+        ImGui::Text("Bloom");
+        ImGui::NextColumn();
+
+        ImGui::PushFont(boldFont);
+        ImGui::Checkbox("##Bloom", &bloom);
+        ImGui::PopFont();
+
+        ImGui::Separator();
+        bool DebugDraw = _renderer->IsDebugDraw();
+        ImGui::NextColumn();
+        ImGui::Text("Draw Debug");
+        ImGui::NextColumn();
+
+        ImGui::PushFont(boldFont);
+        ImGui::Checkbox("##drawdebug", &DebugDraw);
+        _renderer->SetDebugRender(DebugDraw);
+        ImGui::PopFont();
+
+        ImGui::Separator();
+
+
+        ImGui::Columns(1);
+        ImGui::PopID();
+        ImGui::End();
+        return;
+    }
+    ImGui::End();
+}
+
+void Fracture::Editor::showAudioManager(bool* p_open)
+{
+}
+
+void Fracture::Editor::showPhysicsManager(bool* p_open)
+{
+}
+
+void Fracture::Editor::showInputManager(bool* p_open)
+{
+}
+
+void Fracture::Editor::showProjectSettings(bool* p_open)
+{
 }
 
 inline void Style()
@@ -477,3 +591,5 @@ inline void Style()
     }
 #endif
 }
+
+

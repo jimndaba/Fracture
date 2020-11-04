@@ -310,7 +310,7 @@ void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end)
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end));
 }
 
-void Fracture::Renderer::IsDebugRender(bool debug)
+void Fracture::Renderer::SetDebugRender(bool debug)
 {
     m_isDebugRender = debug;
 }

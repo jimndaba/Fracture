@@ -35,19 +35,7 @@ Fracture::PhysicsManager::~PhysicsManager()
 {
 
 
-	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
-	{
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		dynamicsWorld->removeCollisionObject(obj);
-		delete obj;
-	}
-
-	collisionShapes.clear();
+	ClearScene();
 
 	delete collisionConfiguration;
 	delete dispatcher;

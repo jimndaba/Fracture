@@ -67,6 +67,18 @@ namespace Fracture
 		static bool opt_fullscreen;
 		static bool opt_padding;		
 		int display_width, display_height;
+
+		static bool showRenderConfig;
+		static bool showAudioConfig;
+		static bool showPhysicsConfig;
+		static bool showInputConfig;
+		static bool showProjectConfig;
+
+		static void showRenderManager(bool* p_open, std::unique_ptr<Fracture::Renderer>& _renderer);
+		static void showAudioManager(bool* p_open);
+		static void showPhysicsManager(bool* p_open);
+		static void showInputManager(bool* p_open);
+		static void showProjectSettings(bool* p_open);
 	};
 }
 

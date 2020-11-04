@@ -48,6 +48,7 @@ namespace Fracture
 
 	private:
 		std::shared_ptr<Entity> m_root;
+		std::shared_ptr<Entity> main_sunlight;
 		static std::shared_ptr<Entity> main_Camera;
 		static std::vector<std::shared_ptr<Entity>> m_entities;
 		
