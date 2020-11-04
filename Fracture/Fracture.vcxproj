@@ -131,6 +131,7 @@
     <ClCompile Include="src\Profiling\Profiler.cpp" />
     <ClCompile Include="src\Rendering\DebugLine.cpp" />
     <ClCompile Include="src\Rendering\DebugRenderer.cpp" />
+    <ClCompile Include="src\Rendering\Grid.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="src\Profiling\Profiler.h" />
     <ClInclude Include="src\Rendering\DebugLine.h" />
     <ClInclude Include="src\Rendering\DebugRenderer.h" />
+    <ClInclude Include="src\Rendering\Grid.h" />
     <ClInclude Include="src\Rendering\Material.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />

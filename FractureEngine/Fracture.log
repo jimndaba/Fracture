@@ -1,49 +1,109 @@
-[16:36:08] [info] FRACTURE: OpenGL loaded
-[16:36:08] [info] FRACTURE: Vendor: Intel
-[16:36:08] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[16:36:08] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[16:36:08] [trace] FRACTURE: Loaded Shader: DebugShader
-[16:36:08] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[16:36:08] [trace] FRACTURE: Loaded Shader: default
-[16:36:08] [trace] FRACTURE: Loaded Material: DebugMaterial
-[16:36:08] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[16:36:08] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: RotateIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: container
-[16:36:08] [trace] FRACTURE: Loaded Texture: specular
-[16:36:08] [trace] FRACTURE: Loaded model: Plane
-[16:36:08] [trace] FRACTURE: Loaded model: Cube
-[16:36:08] [trace] FRACTURE: Loaded model: Sphere
-[16:36:08] [trace] FRACTURE: Loaded model: Cylinder
-[16:36:08] [trace] FRACTURE: Loaded model: Torus
-[16:36:08] [trace] FRACTURE: Loaded model: Suzane
-[16:36:08] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: CameraIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: LightIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: EyeIcon
-[16:36:08] [trace] FRACTURE: Loaded Texture: EyeIconC
-[16:36:08] [info] FRACTURE: Renderer Init
-[16:36:09] [trace] FRACTURE: WINDOW RESIZE
-[16:36:09] [trace] FRACTURE: WINDOW RESIZE
-[16:36:11] [trace] FRACTURE: Fracture DeSerializing Scene
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[16:36:11] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[16:36:11] [trace] FRACTURE: Loaded Material: Suzane0
-[16:36:11] [trace] FRACTURE: Loaded Material: PlaneMat1
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
-[16:36:12] [info] FRACTURE: No Hit 
+[22:31:27] [info] FRACTURE: OpenGL loaded
+[22:31:27] [info] FRACTURE: Vendor: Intel
+[22:31:27] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[22:31:27] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[22:31:27] [trace] FRACTURE: Loaded Shader: DebugShader
+[22:31:28] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[22:31:28] [trace] FRACTURE: Loaded Shader: default
+[22:31:28] [trace] FRACTURE: Loaded Material: DebugMaterial
+[22:31:28] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[22:31:28] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: RotateIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: container
+[22:31:28] [trace] FRACTURE: Loaded Texture: specular
+[22:31:28] [trace] FRACTURE: Loaded model: Plane
+[22:31:28] [trace] FRACTURE: Loaded model: Cube
+[22:31:28] [trace] FRACTURE: Loaded model: Sphere
+[22:31:28] [trace] FRACTURE: Loaded model: Cylinder
+[22:31:28] [trace] FRACTURE: Loaded model: Torus
+[22:31:28] [trace] FRACTURE: Loaded model: Suzane
+[22:31:28] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: CameraIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: LightIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: EyeIcon
+[22:31:28] [trace] FRACTURE: Loaded Texture: EyeIconC
+[22:31:28] [info] FRACTURE: Renderer Init
+[22:31:29] [trace] FRACTURE: WINDOW RESIZE
+[22:31:29] [trace] FRACTURE: WINDOW RESIZE
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:30] [info] FRACTURE: No Hit 
+[22:31:40] [trace] FRACTURE: WINDOW RESIZE
+[22:31:40] [trace] FRACTURE: WINDOW RESIZE
+[22:31:40] [trace] FRACTURE: WINDOW RESIZE
+[22:31:40] [trace] FRACTURE: WINDOW RESIZE
+[22:31:59] [trace] FRACTURE: WINDOW RESIZE
+[22:31:59] [trace] FRACTURE: WINDOW RESIZE
+[22:31:59] [trace] FRACTURE: WINDOW RESIZE
+[22:32:00] [trace] FRACTURE: WINDOW RESIZE
+[22:32:00] [trace] FRACTURE: WINDOW RESIZE
+[22:32:00] [trace] FRACTURE: WINDOW RESIZE
+[22:32:14] [trace] FRACTURE: Fracture DeSerializing Scene
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
+[22:32:14] [trace] FRACTURE: Loaded Material: Suzane0
+[22:32:14] [trace] FRACTURE: Loaded Material: PlaneMat1
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 4
+[22:32:14] [trace] FRACTURE: Loaded Material: Suzane0
+[22:32:14] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 5
+[22:32:14] [trace] FRACTURE: Loaded Material: PlaneMat1
+[22:32:14] [trace] FRACTURE: Loaded Material: Torus2
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:17] [info] FRACTURE: No Hit 
+[22:32:19] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:32] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:32:45] [info] FRACTURE: No Hit 
+[22:33:03] [info] FRACTURE: No Hit 
+[22:33:03] [info] FRACTURE: No Hit 
+[22:33:03] [info] FRACTURE: No Hit 
+[22:33:03] [info] FRACTURE: No Hit 
+[22:33:03] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 
+[22:33:08] [info] FRACTURE: No Hit 

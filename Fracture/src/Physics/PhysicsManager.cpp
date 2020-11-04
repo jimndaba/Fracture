@@ -151,16 +151,14 @@ bool Fracture::PhysicsManager::RayCast(Ray rayIn, RayHit& out)
 		btVector3(rayIn.GetOrigin().x, rayIn.GetOrigin().y, rayIn.GetOrigin().z),
 		btVector3(out_end.x, out_end.y, out_end.z)
 	);
-
+	RayCallback.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	
 	dynamicsWorld->rayTest(
 		btVector3(rayIn.GetOrigin().x, rayIn.GetOrigin().y, rayIn.GetOrigin().z),
 		btVector3(out_end.x, out_end.y, out_end.z),
 		RayCallback
 	);
-
-
-
+	
 
 	if (RayCallback.hasHit()) {
 		
@@ -169,6 +167,7 @@ bool Fracture::PhysicsManager::RayCast(Ray rayIn, RayHit& out)
 		return true;
 	}	
 	FRACTURE_INFO("No Hit ");
+
 	return false;
 }
 
@@ -247,6 +246,12 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 	}
 	
 
+}
+
+void Fracture::PhysicsManager::stepUpdate()
+{
+	dynamicsWorld->updateAabbs();
+	dynamicsWorld->computeOverlappingPairs();
 }
 
 void Fracture::PhysicsManager::DrawDebug()

@@ -2,8 +2,7 @@
 #include "Rendering/RenderTarget.h"
 #include "SceneviewPanel.h"
 #include "../Editor.h"
-
-
+#include <glm/gtx/matrix_decompose.hpp>
 
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
@@ -28,12 +27,12 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-	int gizmoMode = 1;
-	ImGui::RadioButton("Translate (W)", &gizmoMode);
+	static int gizmoMode = 0;
+	if (ImGui::RadioButton("Translate (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
-	ImGui::RadioButton("Rotate (E)", &gizmoMode);
+	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
-	ImGui::RadioButton("Scale (R)", &gizmoMode);
+	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
 
 	static const float identityMatrix[16] =
 	{ 1.f, 0.f, 0.f, 0.f,
@@ -41,12 +40,11 @@ void Fracture::ViewPanel::render()
 		0.f, 0.f, 1.f, 0.f,
 		0.f, 0.f, 0.f, 1.f };
 	ImGuizmo::SetOrthographic(false);
-	ImGuizmo::BeginFrame();
+
 	
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-	ImGui::BeginChild("SceneView");
-	
+	ImGui::BeginChild("SceneView");	
 
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
@@ -62,32 +60,37 @@ void Fracture::ViewPanel::render()
 	ImVec2 screen_pos = ImGui::GetMousePos();
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 
+	if (gizmoMode == ImGuizmo::OPERATION::TRANSLATE) {SetImGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE); }
+	if (gizmoMode == ImGuizmo::OPERATION::ROTATE) { SetImGuizmoOperation(ImGuizmo::OPERATION::ROTATE); }
+	if (gizmoMode == ImGuizmo::OPERATION::SCALE) { SetImGuizmoOperation(ImGuizmo::OPERATION::SCALE); }
+
 
 	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft) && m_ViewportFocused)
 	{
-
-		RayHit hit;
-
-		float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
-		float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
-
-		float region_x = screen_pos.x - pos.x;
-		float region_y = pos.y - screen_pos.y;
-
-		Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
-
-		m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000));
-		if (PhysicsManager::RayCast(ray, hit))
+		if (IsGizmoValid())
 		{
-			FRACTURE_INFO("Ray Hit");
+		
 		}
-
+		else
+		{
+			RayHit hit;
+			float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
+			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+			float region_x = screen_pos.x - pos.x;
+			float region_y = pos.y - screen_pos.y;
+			Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
+			//m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000),glm::vec4(1.0f,0.0f,0.0f,1.0f));
+			if (PhysicsManager::RayCast(ray, hit))
+			{
+				FRACTURE_INFO("Ray Hit");
+			}
+		}	
 	}
 		
 
 	if (SceneView::SelectedEntity())
 	{
-		
+
 		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
 
 		if (transform)
@@ -108,18 +111,25 @@ void Fracture::ViewPanel::render()
 
 			if (ImGuizmo::IsUsing())
 			{
-
+				glm::vec3 scale = transform->Scale;
+				glm::quat rotation = glm::quat(transform->Rotation);
+				glm::vec3 position = transform->Position;
+				glm::vec3 skew;
+				glm::vec4 perspective;
+				glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
+				
+				//rotation = glm::conjugate(rotation);
+				transform->Scale = scale;
+				transform->Rotation = glm::eulerAngles(rotation);
+				transform->Position = position;
+				
 			}
-
 		}
-
 	}
-	
-
-	ImGuizmo::DrawGrid(&m_camera->getViewMatrix()[0][0], &m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y)[0][0], identityMatrix, 100.f);
-
 
 	
+	//ImGuizmo::DrawGrid(&m_camera->getViewMatrix()[0][0], &m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y)[0][0], identityMatrix, 100.f);
+
     ImGui::PopStyleVar();
     ImGui::EndChild();
 

@@ -9,6 +9,9 @@ Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):N
 {
 	m_Uniforms = new  std::unordered_map<std::string, UniformValue>();
 	m_SamplerUniforms =new std::unordered_map<std::string,std::shared_ptr<UniformValueSampler>>();
+
+	m_IsTransparent = false;
+	m_CastShadows = false;
 }
 
 Fracture::Material::~Material()

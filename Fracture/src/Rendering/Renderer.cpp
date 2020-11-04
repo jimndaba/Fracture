@@ -24,6 +24,7 @@
 #include "Event/Eventbus.h"
 #include "Physics/PhysicsManager.h"
 #include "DebugLine.h"
+#include "Grid.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -41,14 +42,18 @@ void _check_gl_error(const char* file, int line);
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDraws;
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDrawsRetained;
 bool Fracture::Renderer::m_isDebugRender;
+bool Fracture::Renderer::m_drawgrid;
 
 Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
 {
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    
+    m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());    
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width,m_Height,GL_FLOAT,1,true));
+    m_grid = std::make_shared<Grid>(100, 100, 1, 1,0.5f);
+    m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f,2.0f));
+   DrawDebugLineRetained(glm::vec3(-50.0f,0.0f,0.0f), glm::vec3(50.0f, 0.0f, 0.0f),glm::vec4(0.0f,0.0f,1.0f,1.0f));
+   DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
   }
 
 Fracture::Renderer::~Renderer()
@@ -60,6 +65,7 @@ void Fracture::Renderer::onInit()
     FRACTURE_INFO("Renderer Init");
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
     m_isDebugRender = false;
+    m_drawgrid = true;
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -93,6 +99,10 @@ void Fracture::Renderer::RenderPasses()
         Submit(command);
     }
    
+    if (m_drawgrid)
+    {
+        m_grid->Draw(AssetManager::getShader("DebugShader"), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix(), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+    }
     
     if (m_isDebugRender)
     {
@@ -100,6 +110,8 @@ void Fracture::Renderer::RenderPasses()
         RenderDebug();
         RenderDebugRetained();
     }
+
+    
    
     SceneRenderTarget->Unbind();
   
@@ -136,14 +148,14 @@ void Fracture::Renderer::RenderDebugRetained()
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
  
-
+    glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
     m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
     m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
-    m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f, 0.7f, 0.0f, 1.0f));
     for (int i = 0; i <m_DebugDrawsRetained.size(); i++)
     {
+        m_DebugMaterial->getShader()->setVec4("Color", m_DebugDrawsRetained[i]->GetColor());
         m_DebugDrawsRetained[i]->Render();
     }
     m_DebugMaterial->getShader()->unbind();
@@ -300,14 +312,14 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
    
 }
 
-void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end)
+void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color)
 {
-    m_DebugDraws.push_back(std::make_shared<DebugLine>(start,end));
+    m_DebugDraws.push_back(std::make_shared<DebugLine>(start,end,color));
 }
 
-void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end)
+void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end, glm::vec4 color)
 {
-    m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end));
+    m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end,color));
 }
 
 void Fracture::Renderer::SetDebugRender(bool debug)

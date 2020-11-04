@@ -151,6 +151,7 @@ void Fracture::Editor::run()
         double current = SDL_GetTicks() / 1000.0;
         double elapsed = current - lastTime;
         onUpdate((float)elapsed);
+        m_PhysicsManger->stepUpdate();
         onRender();
         lastTime = current;
     }

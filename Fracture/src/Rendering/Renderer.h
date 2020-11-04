@@ -29,6 +29,7 @@ namespace Fracture
 	class DebugLine;
 	struct UniformValue;
 	struct UniformValueSampler;
+	class Grid;
 
 	class Renderer
 	{
@@ -55,12 +56,18 @@ namespace Fracture
 		void PushCommand(RenderCommand command);
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
-		static void DrawDebugLine(glm::vec3 start, glm::vec3 end);
-		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end);
+		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
+		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
 		static bool IsDebugDraw()
 		{
 			return m_isDebugRender;
 		}
+
+		static bool IsDrawGrid(bool drawgrid)
+		{
+			m_drawgrid = drawgrid;
+		}
+
 		static void SetDebugRender(bool debug);
 
 		void AddLight(const std::shared_ptr<ILight> light);
@@ -76,6 +83,7 @@ namespace Fracture
 		int m_width;
 		int m_Height;
 		static bool m_isDebugRender;
+		static bool m_drawgrid;
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
 		std::shared_ptr<RenderBucket> m_transparentBucket;
 		std::shared_ptr<RenderBucket> m_shadowBucket;
@@ -83,6 +91,7 @@ namespace Fracture
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;
 		std::shared_ptr<Material> m_DebugMaterial;
+		std::shared_ptr<Grid> m_grid;
 	};
 
 }

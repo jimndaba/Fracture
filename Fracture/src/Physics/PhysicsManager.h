@@ -43,6 +43,7 @@ namespace Fracture
 		void startPhysics();
 
 		void onUpdate(float dt);
+		void stepUpdate();
 
 		static void DrawDebug();
 

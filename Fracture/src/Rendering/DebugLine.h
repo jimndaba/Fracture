@@ -8,6 +8,12 @@ namespace Fracture
 {
 	class DebugLine
 	{
+	public:
+
+		DebugLine(glm::vec3 start, glm::vec3 end,glm::vec4 color);
+		void Render();
+		glm::vec4 GetColor();
+
 	private:
 		glm::vec3 m_start;
 		glm::vec3 m_end;
@@ -15,11 +21,6 @@ namespace Fracture
 
 		unsigned int VAO;
 		unsigned int VBO;
-
-	public:
-
-		DebugLine(glm::vec3 start, glm::vec3 end);
-		void Render();
 
 
 	};
