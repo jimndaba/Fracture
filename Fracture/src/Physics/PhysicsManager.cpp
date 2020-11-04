@@ -152,14 +152,15 @@ bool Fracture::PhysicsManager::RayCast(Ray rayIn, RayHit& out)
 		btVector3(out_end.x, out_end.y, out_end.z)
 	);
 
-	dynamicsWorld->updateAabbs();
-	dynamicsWorld->computeOverlappingPairs();
-
+	
 	dynamicsWorld->rayTest(
 		btVector3(rayIn.GetOrigin().x, rayIn.GetOrigin().y, rayIn.GetOrigin().z),
 		btVector3(out_end.x, out_end.y, out_end.z),
 		RayCallback
 	);
+
+
+
 
 	if (RayCallback.hasHit()) {
 		

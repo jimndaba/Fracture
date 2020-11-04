@@ -1,5 +1,6 @@
 #include "CameraControllerComponent.h"
 #include "Physics/Ray.h"
+#include "Logging/Logger.h"
 
 Fracture::CameraControllerComponent::CameraControllerComponent(uint32_t id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
 {
@@ -119,11 +120,11 @@ void Fracture::CameraControllerComponent::Translate(glm::vec3 position)
 Fracture::Ray Fracture::CameraControllerComponent::ScreenPointToRay(glm::vec2 mousePosition, int viewWidth, int viewHeight)
 {
     // these positions must be in range [-1, 1] (!!!), not [0, width] and [0, height]
-
-    float mouseX = (2.0f * mousePosition.x) / viewWidth - 1.0f;
-    float mouseY = 1.0f - (2.0f * mousePosition.y) / viewHeight;
-
+    float mouseX = (mousePosition.x / viewWidth - 0.5f) * 2;//(2.0f * mousePosition.x) / viewWidth - 1.0f;
+    float mouseY = (mousePosition.y / viewHeight - 0.5f) * 2;///1.0f - (2.0f * mousePosition.y) / viewHeight;
+   
     glm::vec4 ray_clip = glm::vec4(mouseX, mouseY, -1.0, 1.0);
+
     glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix(viewWidth,viewHeight)) * ray_clip;
     toEyeCoords = glm::vec4(toEyeCoords.x, toEyeCoords.y, -1.0, 0.0);
 

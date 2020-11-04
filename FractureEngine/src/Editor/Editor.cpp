@@ -53,6 +53,10 @@ void Fracture::Editor::onInit()
     showPhysicsConfig = false;
     showInputConfig   = false;
     showProjectConfig = false;
+    done = false;
+    p_open = true;
+    opt_fullscreen = true;
+    opt_padding = false;
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -93,6 +97,9 @@ void Fracture::Editor::onInit()
 
     m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
     m_AssetManger->AddShader("PrimitiveMaterial", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
+    //textures
+
+    Fracture::AssetManager::AddShader("default", "bin/content/shaders/model/vertex.glsl", "bin/content/shaders/model/fragment.glsl");
 
     m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
 
@@ -107,6 +114,9 @@ void Fracture::Editor::onInit()
     m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
+    Fracture::AssetManager::AddTexture("container", "bin/content/textures/container.png", Fracture::TextureType::Diffuse);
+    Fracture::AssetManager::AddTexture("specular", "bin/content/textures/container_specular.png", Fracture::TextureType::Specular);
+
 
     m_AssetManger->AddModel("Plane", "bin/content/models/primitives/plane.fbx");
     m_AssetManger->AddModel("Cube", "bin/content/models/primitives/cube.fbx");
@@ -135,6 +145,7 @@ void Fracture::Editor::run()
     Profiler::Get().BeginSession("EditorProfile");
     onInit();
     double lastTime = SDL_GetTicks() / 1000.0;
+
     while (!done)
     {
         double current = SDL_GetTicks() / 1000.0;
@@ -149,10 +160,8 @@ void Fracture::Editor::run()
 void Fracture::Editor::onUpdate(float dt)
 {
     ProfilerTimer timer("onUpdate");
-    done = false;
-    p_open = true;
-    opt_fullscreen = true;
-    opt_padding = false;
+
+    
    
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -168,23 +177,22 @@ void Fracture::Editor::onUpdate(float dt)
     m_PhysicsManger->startPhysics();
 
     m_viewpanel->onUpdate(dt);
-
-    
 }
 
 void Fracture::Editor::onRender()
 {
     m_frame->begin(m_window->Context());
-    Render();
-    
 
-    if (showRenderConfig) showRenderManager(&showRenderConfig,m_Renderer);
+    if (showRenderConfig) showRenderManager(&showRenderConfig, m_Renderer);
     if (showAudioConfig) showAudioManager(&showRenderConfig);
     if (showPhysicsConfig) showPhysicsManager(&showRenderConfig);
     if (showInputConfig) showInputManager(&showRenderConfig);
     if (showProjectConfig) showProjectSettings(&showRenderConfig);
+   
+    Render();
+   
     m_frame->end();
-    //m_PhysicsManger->DrawDebug();
+ 
     m_window->swapBuffers();
 }
 
@@ -225,7 +233,6 @@ void Fracture::Editor::Render()
     if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
         window_flags |= ImGuiWindowFlags_NoBackground;
 
-
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
@@ -243,150 +250,14 @@ void Fracture::Editor::Render()
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("New Project", NULL);  
-                ImGui::MenuItem("Open Project", NULL);   
-                ImGui::Separator();        
-                if (ImGui::MenuItem("New Scene", NULL))
-                {
-                    m_ActiveScene->clearScene();
-                }
-                if(ImGui::MenuItem("Open Scene", NULL))
-                {
-                    SceneSerializer serializer(sandboxScene);
-                    if (!serializer.DeSerialize("bin/content/Sandbox.json"))
-                    {
-                        FRACTURE_ERROR("FAILED TO LOAD SCENE");
-                    }
-                }
-                ImGui::Separator();
-                if (ImGui::MenuItem("Save", NULL))
-                {
-                    SceneSerializer serializer(sandboxScene);
-                    serializer.Serialize("bin/content/Sandbox.json");
-                }
-                ImGui::MenuItem("Save As", NULL);
-                if (ImGui::MenuItem("Exit", NULL))
-                {
-                    done = true;
-                }
-                ImGui::EndMenu();
-            }
 
-            if (ImGui::BeginMenu("Edit"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Undo", "CTRL+Z");
-                ImGui::MenuItem("Redo", "CTRL+Y");
-                ImGui::MenuItem("Cut", "CTRL+X");
-                ImGui::MenuItem("Copy", "CTRL+C");
-                ImGui::MenuItem("Paste", "CTRL+V");
-                ImGui::MenuItem("Delete", "Del");
-                ImGui::Separator();
-                ImGui::MenuItem("Select All", "CTRL+A");
-                ImGui::Separator();
-                ImGui::MenuItem("Project Settings", NULL,&showProjectConfig);
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("View"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Toolbar", NULL);
-                ImGui::MenuItem("Hierachy View", NULL);
-                ImGui::MenuItem("Inspector", NULL);
-                ImGui::MenuItem("Asset Viewer", NULL);
-                ImGui::MenuItem("Logging", NULL);
-                ImGui::MenuItem("Project Settings", NULL);
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Create"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                if(ImGui::MenuItem("Empty", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateEmpty(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Camera", NULL)) {};
-                if (ImGui::MenuItem("Sunlight", NULL))
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateSunlight(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Pointlight", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreatePointlight(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Spotlight", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateSpotlight(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Cube", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateCube(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Sphere", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateSphere(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Plane", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreatePlane(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Torus", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateTorus(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Cylinder", NULL)) 
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateCylinder(m_ActiveScene));
-                };
-                if (ImGui::MenuItem("Suzane", NULL))
-                {
-                    m_ActiveScene->addEntity(EntityFactory::CreateSuzane(m_ActiveScene));
-                };
-                ImGui::EndMenu();
-            }
-            
-            if (ImGui::BeginMenu("Systems"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Render System", NULL, &showRenderConfig);
-                ImGui::MenuItem("Audio System", NULL,&showAudioConfig);
-                ImGui::MenuItem("Physics System", NULL,&showPhysicsConfig);
-                ImGui::MenuItem("Input System", NULL,&showInputConfig);
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Help"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("View Help", NULL);
-                ImGui::MenuItem("About Fracture", NULL);
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMainMenuBar();
-        }
-   
-        //m_Renderer->DrawDebugLine(glm::vec3(0), glm::vec3(500));
-
+        DrawMenuBar();
+       
         m_Renderer->BeginFrame(m_ActiveScene);
         m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
 
         m_frame->render();
-
         ImGui::End();
 }
 
@@ -395,6 +266,146 @@ void Fracture::Editor::SetScene(std::shared_ptr<Scene> scene)
     scene->onLoad();
     m_ActiveScene = scene;
     m_sceneview->setScene(m_ActiveScene);
+}
+
+void Fracture::Editor::DrawMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("New Project", NULL);
+            ImGui::MenuItem("Open Project", NULL);
+            ImGui::Separator();
+            if (ImGui::MenuItem("New Scene", NULL))
+            {
+                m_ActiveScene->clearScene();
+            }
+            if (ImGui::MenuItem("Open Scene", NULL))
+            {
+                SceneSerializer serializer(sandboxScene);
+                if (!serializer.DeSerialize("bin/content/Sandbox.json"))
+                {
+                    FRACTURE_ERROR("FAILED TO LOAD SCENE");
+                }
+            }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Save", NULL))
+            {
+                SceneSerializer serializer(sandboxScene);
+                serializer.Serialize("bin/content/Sandbox.json");
+            }
+            ImGui::MenuItem("Save As", NULL);
+            if (ImGui::MenuItem("Exit", NULL))
+            {
+                done = true;
+            }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Edit"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("Undo", "CTRL+Z");
+            ImGui::MenuItem("Redo", "CTRL+Y");
+            ImGui::MenuItem("Cut", "CTRL+X");
+            ImGui::MenuItem("Copy", "CTRL+C");
+            ImGui::MenuItem("Paste", "CTRL+V");
+            ImGui::MenuItem("Delete", "Del");
+            ImGui::Separator();
+            ImGui::MenuItem("Select All", "CTRL+A");
+            ImGui::Separator();
+            ImGui::MenuItem("Project Settings", NULL, &showProjectConfig);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("View"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("Toolbar", NULL);
+            ImGui::MenuItem("Hierachy View", NULL);
+            ImGui::MenuItem("Inspector", NULL);
+            ImGui::MenuItem("Asset Viewer", NULL);
+            ImGui::MenuItem("Logging", NULL);
+            ImGui::MenuItem("Project Settings", NULL);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Create"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            if (ImGui::MenuItem("Empty", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateEmpty(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Camera", NULL)) {};
+            if (ImGui::MenuItem("Sunlight", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateSunlight(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Pointlight", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreatePointlight(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Spotlight", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateSpotlight(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Cube", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateCube(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Sphere", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateSphere(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Plane", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreatePlane(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Torus", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateTorus(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Cylinder", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateCylinder(m_ActiveScene));
+            };
+            if (ImGui::MenuItem("Suzane", NULL))
+            {
+                m_ActiveScene->addEntity(EntityFactory::CreateSuzane(m_ActiveScene));
+            };
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Systems"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("Render System", NULL, &showRenderConfig);
+            ImGui::MenuItem("Audio System", NULL, &showAudioConfig);
+            ImGui::MenuItem("Physics System", NULL, &showPhysicsConfig);
+            ImGui::MenuItem("Input System", NULL, &showInputConfig);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Help"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("View Help", NULL);
+            ImGui::MenuItem("About Fracture", NULL);
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()

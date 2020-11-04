@@ -6,7 +6,7 @@
 #include <vector>
 #include "SDL2/SDL.h"
 #include "imgui/imgui.h"
-
+#include "ImGuizmo/ImGuizmo.h"
 
 namespace Fracture
 {

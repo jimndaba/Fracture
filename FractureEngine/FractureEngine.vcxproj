@@ -103,6 +103,8 @@
     <ClInclude Include="src\Editor\Frame.h" />
     <ClInclude Include="src\Editor\Panels\UIStyle.h" />
     <ClInclude Include="src\Editor\SandboxScene.h" />
+    <ClInclude Include="src\Editor\utils\FileDialogs.h" />
+    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h" />
@@ -126,6 +128,7 @@
     <ClCompile Include="src\Editor\Frame.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Editor\SandboxScene.cpp" />
+    <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
     <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp" />

@@ -19,6 +19,7 @@ void Fracture::Frame::begin(SDL_Window* window)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(window);
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 }
 
 void Fracture::Frame::render()
@@ -64,5 +65,5 @@ void Fracture::Frame::clearPanel()
 
 std::vector<std::shared_ptr<Fracture::Panel>> Fracture::Frame::GetElements()
 {
-    return std::vector<std::shared_ptr<Panel>>();
+    return m_panels;
 }

@@ -2,6 +2,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 #include "imgui/imgui.h"
+#include "ImGuizmo/ImGuizmo.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Fracture.h"
@@ -30,10 +31,11 @@ namespace Fracture
 		void onRender();
 		void onShutdown();
 		void Render();
-
 		void SetScene(std::shared_ptr<Scene> scene);
 
 		bool done;
+
+		void DrawMenuBar();
 
 		static std::shared_ptr<Scene> ActiveScene();
 
