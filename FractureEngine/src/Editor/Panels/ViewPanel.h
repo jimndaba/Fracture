@@ -40,6 +40,11 @@ namespace Fracture
 		ImGuizmo::MODE GetImGuizmoMode() const;
 
 		bool IsGizmoValid() const;
+
+		glm::vec2 ViewportSize()
+		{
+			return m_ViewportSize;
+		}
 	private:
 		Renderer* m_renderer;
 

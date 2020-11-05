@@ -21,6 +21,7 @@ bool Fracture::Editor::showProjectConfig;
 
 std::shared_ptr<Fracture::SandboxScene> sandboxScene;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
+std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 
 inline void Style();
@@ -85,8 +86,10 @@ void Fracture::Editor::onInit()
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
-    //sandboxScene = std::make_shared<SandboxScene>();
-    SetScene(std::make_shared<Scene>());
+    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+    m_SceneManager->AddScene("empty", scene);
+    m_SceneManager->SetScene("empty");
+    SetScene();
 
     m_frame->AddPanel(m_sceneview);
     m_frame->AddPanel(m_inspectorpanel);
@@ -97,8 +100,8 @@ void Fracture::Editor::onInit()
 
     m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
     m_AssetManger->AddShader("PrimitiveMaterial", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
-    //textures
 
+    //textures
     Fracture::AssetManager::AddShader("default", "bin/content/shaders/model/vertex.glsl", "bin/content/shaders/model/fragment.glsl");
 
     m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
@@ -132,7 +135,7 @@ void Fracture::Editor::onInit()
     m_AssetManger->AddTexture("EyeIconC", "bin/content/textures/EyeIconC.png", TextureType::Diffuse);
 
     m_PhysicsManger->Init();
-
+  
     m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
     m_Renderer->onInit();
@@ -254,7 +257,8 @@ void Fracture::Editor::Render()
 
         DrawMenuBar();
        
-        m_Renderer->BeginFrame(m_ActiveScene);
+       
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
         m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
 
@@ -262,11 +266,10 @@ void Fracture::Editor::Render()
         ImGui::End();
 }
 
-void Fracture::Editor::SetScene(std::shared_ptr<Scene> scene)
-{
-    scene->onLoad();
-    m_ActiveScene = scene;
-    m_sceneview->setScene(m_ActiveScene);
+void Fracture::Editor::SetScene()
+{    
+    m_ActiveScene = m_SceneManager->GetActiveScene();
+    m_sceneview->setScene(m_ActiveScene);    
 }
 
 void Fracture::Editor::DrawMenuBar()
@@ -283,14 +286,23 @@ void Fracture::Editor::DrawMenuBar()
             if (ImGui::MenuItem("New Scene", NULL))
             {
                 m_ActiveScene->clearScene();
+                IDManager::ResetIDs();
+                m_SceneManager->AddScene("newScene", std::make_shared<Scene>());
+                m_SceneManager->SetScene("newScene");
+               
             }
             if (ImGui::MenuItem("Open Scene", NULL))
             {
-                SceneSerializer serializer(sandboxScene);
+                IDManager::ResetIDs();
+                std::shared_ptr<Scene> newscene = std::make_shared<Scene>();
+                SceneSerializer serializer(newscene);
                 if (!serializer.DeSerialize("bin/content/Sandbox.json"))
                 {
                     FRACTURE_ERROR("FAILED TO LOAD SCENE");
                 }
+                m_SceneManager->AddScene(newscene->Name, newscene);
+                m_SceneManager->SetScene(newscene->Name);
+                SetScene();                
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Save", NULL))
@@ -411,7 +423,7 @@ void Fracture::Editor::DrawMenuBar()
 
 std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
 {
-    return m_ActiveScene;
+    return m_SceneManager->GetActiveScene();
 }
 
 void Fracture::Editor::showRenderManager(bool* p_open,std::unique_ptr<Fracture::Renderer>& _renderer)

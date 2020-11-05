@@ -46,6 +46,8 @@ namespace Fracture
 
 		static std::shared_ptr<Entity> GetEntity(uint32_t id);
 
+		std::string Name;
+
 	private:
 		std::shared_ptr<Entity> m_root;
 		std::shared_ptr<Entity> main_sunlight;

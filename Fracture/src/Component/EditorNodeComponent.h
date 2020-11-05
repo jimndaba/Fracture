@@ -25,11 +25,16 @@ namespace Fracture
 		glm::vec3 GetRotation();
 		glm::vec3 GetScale();
 
+		glm::mat4 GetLocalTranform();
+		glm::mat4 GetWorldTransform();
+
 	private:
 
 		glm::vec3 m_Position;
 		glm::vec3 m_Rotation;
 		glm::vec3 m_Scale;
+		glm::mat4 m_LocalTransform;
+		glm::mat4 m_WorldTransform;
 	};
 }
 

@@ -3,6 +3,7 @@
 #include "SceneviewPanel.h"
 #include "../Editor.h"
 #include <glm/gtx/matrix_decompose.hpp>
+#include <Component\EditorNodeComponent.h>
 
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
@@ -49,14 +50,15 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };   
+	
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); 
 	ImVec2 viewPosition = { ImGui::GetWindowPos().x ,ImGui::GetWindowPos().y };
-	ImGuizmo::SetRect(viewPosition.x, viewPosition.y, m_ViewportSize.x, m_ViewportSize.y);	
-
+	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y};
+	
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-        ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0, 1}, ImVec2{ 1, 0 });
-
+		viewportPanelSize, ImVec2{0, 1}, ImVec2{ 1, 0 });
+	
+	
 	ImVec2 screen_pos = ImGui::GetMousePos();
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 
@@ -91,38 +93,88 @@ void Fracture::ViewPanel::render()
 	if (SceneView::SelectedEntity())
 	{
 
-		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
-
-		if (transform)
+		if (ComponentManager::HasComponent<TransformComponent>(SceneView::SelectedEntity().Id))
 		{
-			glm::mat4 viewMatrix = m_camera->getViewMatrix();
-			glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y);
-			glm::mat4 transformMatrix = transform->GetWorldTransform();
-			//transformMatrix = transformMatrix.tras
+			
 
-			ImGuizmo::MODE mode = currentImGuizmoMode;
-			if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
-				mode = ImGuizmo::MODE::LOCAL;
-
-			ImGuizmo::Manipulate(
-				&viewMatrix[0][0], &projectionMatrix[0][0],
-				currentImGuizmoOperation, mode, &transformMatrix[0][0]
-			);
-
-			if (ImGuizmo::IsUsing())
+			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
+			if (transform)
 			{
-				glm::vec3 scale = transform->Scale;
-				glm::quat rotation = glm::quat(transform->Rotation);
-				glm::vec3 position = transform->Position;
-				glm::vec3 skew;
-				glm::vec4 perspective;
-				glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
-				
-				//rotation = glm::conjugate(rotation);
-				transform->Scale = scale;
-				transform->Rotation = glm::eulerAngles(rotation);
-				transform->Position = position;
-				
+				float rw = (float)ImGui::GetWindowWidth();
+				float rh = (float)ImGui::GetWindowHeight();
+				ImGuizmo::SetDrawlist();
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
+
+				glm::mat4 viewMatrix = m_camera->getViewMatrix();
+				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(viewportPanelSize.x, viewportPanelSize.y);
+				glm::mat4 transformMatrix = transform->GetWorldTransform();
+				//transformMatrix = transformMatrix.tras
+
+				ImGuizmo::MODE mode = currentImGuizmoMode;
+				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
+					mode = ImGuizmo::MODE::LOCAL;
+
+				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
+					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
+				);
+
+				if (ImGuizmo::IsUsing())
+				{
+					glm::vec3 scale = transform->Scale;
+					glm::quat rotation = glm::quat(transform->Rotation);
+					glm::vec3 position = transform->Position;
+					glm::vec3 skew;
+					glm::vec4 perspective;
+					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
+
+					//rotation = glm::conjugate(rotation);
+					transform->Scale = scale;
+					transform->Rotation = glm::eulerAngles(rotation);
+					transform->Position = position;
+
+				}
+			}
+		}
+
+		if (ComponentManager::HasComponent<EditorNode>(SceneView::SelectedEntity().Id))
+		{
+			
+
+			std::shared_ptr<EditorNode> node = ComponentManager::GetComponent<EditorNode>(SceneView::SelectedEntity().Id);
+			if (node)
+			{
+				float rw = (float)ImGui::GetWindowWidth();
+				float rh = (float)ImGui::GetWindowHeight();
+				ImGuizmo::SetDrawlist();
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
+
+				glm::mat4 viewMatrix = m_camera->getViewMatrix();
+				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(viewportPanelSize.x, viewportPanelSize.y);
+				glm::mat4 transformMatrix = node->GetWorldTransform();
+				//transformMatrix = transformMatrix.tras
+
+				ImGuizmo::MODE mode = currentImGuizmoMode;
+				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
+					mode = ImGuizmo::MODE::LOCAL;
+
+				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
+					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
+				);
+
+				if (ImGuizmo::IsUsing())
+				{
+					glm::vec3 scale = node->GetScale();
+					glm::quat rotation = glm::quat(node->GetRotation());
+					glm::vec3 position = node->GetPosition();
+					glm::vec3 skew;
+					glm::vec4 perspective;
+					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
+					//rotation = glm::conjugate(rotation);
+					node->SetScale(scale);
+					node->SetRotation(glm::eulerAngles(rotation));
+					node->SetPosition(position);
+
+				}
 			}
 		}
 	}
@@ -144,7 +196,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
 		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		Eventbus::Publish(new WindowResizeEvent((int)m_ViewportSize.x, (int)m_ViewportSize.y));
+		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
 	if(m_ViewportFocused && m_camera)

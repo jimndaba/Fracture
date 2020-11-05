@@ -14,3 +14,8 @@ void Fracture::IDManager::ResetIDs()
 {
 	m_currentID = 1;
 }
+
+void Fracture::IDManager::NextID()
+{
+	m_currentID++;
+}

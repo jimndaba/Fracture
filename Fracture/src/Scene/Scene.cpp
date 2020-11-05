@@ -11,6 +11,7 @@
 #include "Component/TagComponent.h"
 #include "Component/RenderComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/EditorNodeComponent.h"
 #include "Rendering/Model.h"
 #include "Rendering/Material.h"
 #include "Logging/Logger.h"
@@ -42,6 +43,7 @@ Fracture::Scene::Scene()
 	std::shared_ptr<RelationShipComponent> sun_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_sunlight->Id));
 	sun_rel->SetParent(m_root->Id);	
 	ComponentManager::AddComponent(sun_rel);
+	ComponentManager::AddComponent<EditorNode>(main_sunlight->Id);
 	ComponentManager::AddComponent<LightComponent>(main_sunlight->Id, LightType::Sun);
 	
 

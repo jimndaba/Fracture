@@ -16,6 +16,7 @@ Fracture::SceneManager::~SceneManager()
 
 void Fracture::SceneManager::AddScene(std::string name,std::shared_ptr<Scene> scene)
 {
+	scene->Name = name;
 	m_scenes.emplace(name, scene);
 }
 
@@ -27,6 +28,19 @@ void Fracture::SceneManager::RemoveScene(std::string name)
 void Fracture::SceneManager::SetScene(std::string name)
 {
 	m_activeScene = m_scenes[name];
+	m_activeScene->onLoad();
+}
+
+void Fracture::SceneManager::SetSceneName(std::shared_ptr<Scene> scene,std::string name)
+{	
+	auto entry = m_scenes.find(scene->Name);
+	if (entry != end(m_scenes))
+	{
+		auto const value = std::move(entry->second);
+		m_scenes.erase(entry);
+		m_scenes.insert({ name,std::move(value) });
+	}
+	m_activeScene->Name = name;
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::GetActiveScene()

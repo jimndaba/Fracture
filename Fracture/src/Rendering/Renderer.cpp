@@ -101,20 +101,27 @@ void Fracture::Renderer::RenderPasses()
     m_ShadowPass->Begin();
     for (const auto& command : m_shadowBucket->getCommands())
     {
-        SetupLighting(command.material);
+        //SetupLighting(command.material);
         Submit(command);
     }
     m_ShadowPass->End();
 
-    //setViewport(m_width, m_Height);
+    setViewport(m_width, m_Height);
     SceneRenderTarget->bind();
-    glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+    clearColor(0.08f, 0.07f, 0.16f);
     clear();
     for (const auto& command : m_opaqueBucket->getCommands())
     {
-        SetupLighting(command.material);
+        //SetupLighting(command.material);
         Submit(command);
     }   
+
+    for (const auto& command : m_transparentBucket->getCommands())
+    {
+        //SetupLighting(command.material);
+        Submit(command);
+    }
+
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix(), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
@@ -160,6 +167,7 @@ void Fracture::Renderer::RenderDebugRetained()
     ProfilerTimer timer("debug retained");
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
  
     glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
@@ -261,7 +269,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
         command.material->getShader()->setTexture(texture->type, texture.get(), (int)texture->textureType);
     }
 
-   
+    SetupLighting(command.material);
        
     Draw(command);
    
@@ -288,6 +296,9 @@ void Fracture::Renderer::clearColor(float r, float g, float b)
 void Fracture::Renderer::setViewport(int width, int height)
 {
 	glViewport(0, 0, width, height);
+    
+    //m_width = width;
+    //m_Height = height;
 }
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
@@ -347,8 +358,9 @@ void Fracture::Renderer::AddLight(const std::shared_ptr<ILight> light)
 
 void Fracture::Renderer::SetupLighting(Material* material)
 {
+    material->getShader()->use();
     for (int i = 0; i < m_lights.size(); i++)
-    {
+    {        
         switch(m_lights[i]->GetLightType())
         {
             case LightType::Sun:
@@ -389,7 +401,9 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 break;
             }
         }       
+        
     }
+    //material->getShader()->unbind();
 }
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)

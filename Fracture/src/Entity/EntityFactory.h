@@ -18,6 +18,7 @@
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/EditorNodeComponent.h"
 #include "AssetManager/EngineMaterials.h"
 #include "Rendering/Material.h"
 #include "Scene/Scene.h"
@@ -50,6 +51,12 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sun);
+			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
+			>(newEntity->Id);
+
+			node->SetRotation(light->GetDirection());
+
+			ComponentManager::AddComponent(node);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent(light);
 
@@ -63,8 +70,11 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);
+			//node->SetPosition(light->GetPosition());			
+			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent(light);
+			
 			return newEntity;
 		}
 
@@ -75,6 +85,13 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Spot);
+			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
+			>(newEntity->Id);
+
+			node->SetPosition(light->GetPosition());
+			node->SetRotation(light->GetDirection());
+
+			ComponentManager::AddComponent(node);
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent(light);
 

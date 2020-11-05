@@ -192,8 +192,8 @@ namespace Fracture
 		glm::vec4 m_ambient = glm::vec4(1.0f);
 		glm::vec4 m_diffuse = glm::vec4(0.6f);
 		glm::vec4 m_specular = glm::vec4(0.6f);
-		glm::vec3 m_position = glm::vec3(0.0f);
-		glm::vec3 m_rotation = glm::vec3(0.0f);;
+		glm::vec3 m_position = glm::vec3(0.0f, 5.0f, 0.0);
+		glm::vec3 m_rotation = glm::vec3(0.0f,-1.0f,0.0f);
 		float m_cutoff = 0.91f;
 		float m_outerCutOff = 0.82f;
 		float m_constant = 1.0f;

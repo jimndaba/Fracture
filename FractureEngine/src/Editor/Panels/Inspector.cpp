@@ -68,6 +68,49 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		});
 
+	DrawComponent<EditorNode>("Editor Node", entity, [](auto& component)
+		{
+			std::shared_ptr<EditorNode> m_node = std::dynamic_pointer_cast<EditorNode>(component);
+			glm::vec3 position = m_node->GetPosition();			
+			glm::vec3 scale = m_node->GetScale();
+			glm::vec3 rotation = m_node->GetRotation();
+
+			if (ComponentManager::HasComponent<LightComponent>(m_node->EntityID))
+			{			
+				std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(m_node->EntityID);
+				m_node->SetPosition(light->GetPosition());
+				m_node->SetScale(glm::vec3(1.0f));
+				m_node->SetRotation(light->GetDirection());
+			}
+			
+			
+			DrawVec3Control("Position", position);
+			DrawVec3Control("Scale", scale, 1);
+			DrawVec3Control("Rotation",rotation);
+			m_node->SetPosition(position);
+			m_node->SetScale(scale);
+			m_node->SetRotation(rotation);
+
+			if (ComponentManager::HasComponent<LightComponent>(m_node->EntityID))
+			{
+				std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(m_node->EntityID);
+				if (light)
+				{
+					light->SetDirection(m_node->GetRotation());
+					light->SetPosition(m_node->GetPosition());
+				}				
+			}
+			
+			if (ComponentManager::HasComponent<RigidBodyComponent>(m_node->EntityID))
+			{
+				std::shared_ptr<RigidBodyComponent> body = ComponentManager::GetComponent<RigidBodyComponent>(m_node->EntityID);
+				body->setPosition(m_node->GetPosition());
+				body->setRotation(m_node->GetRotation());
+			}
+
+
+		});
+
 	DrawComponent<CameraControllerComponent>("Camera Controller",entity,[](auto& component)
 	{
 			std::shared_ptr<CameraControllerComponent> camera = std::dynamic_pointer_cast<CameraControllerComponent>(component);
@@ -254,8 +297,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<LightComponent>("Light", entity, [](auto& component)
 	{
-			std::shared_ptr<LightComponent> light = std::dynamic_pointer_cast<LightComponent>(component);
 			
+			std::shared_ptr<LightComponent> light = std::dynamic_pointer_cast<LightComponent>(component);
 			const char* lType = "None";
 
 			if (light->GetLightType() == LightType::Sun)
@@ -401,6 +444,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		if (ImGui::MenuItem("Transform"))
 		{
 			ComponentManager::AddComponent<TransformComponent>(entity.Id);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::MenuItem("Editor Node"))
+		{
+			ComponentManager::AddComponent<EditorNode>(entity.Id);
 			ImGui::CloseCurrentPopup();
 		}
 

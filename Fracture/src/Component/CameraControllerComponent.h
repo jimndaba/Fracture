@@ -37,11 +37,11 @@ namespace Fracture
 	{
 
 	public:
-		CameraControllerComponent(uint32_t id, glm::vec3 position = glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+		CameraControllerComponent(uint32_t id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 		~CameraControllerComponent();
 
 		// Camera Attributes
-		glm::vec3 Position = glm::vec3(0.0f, 0.0f, 15.0f);
+		glm::vec3 Position = glm::vec3(0.0f, 5.0f, 15.0f);
 		glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::vec3 Right = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -79,7 +79,7 @@ namespace Fracture
 
 		Ray ScreenPointToRay(glm::vec2 mousePosition, int viewWidth,int viewHeight);
 
-		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 0.0f, 15.0f);
+		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 5.0f, 15.0f);
 
 	private:
 		void UpdateCameraVectors();
