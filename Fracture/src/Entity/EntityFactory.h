@@ -99,7 +99,7 @@ namespace Fracture
 			material->setVec3("material.specular", glm::vec3(1.0f));
 
 
-			AssetManager::AddMaterial("cubeMat", material);
+			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id,"Cube", name);
 			materialCount++;
 			return newEntity;
