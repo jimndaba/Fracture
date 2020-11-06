@@ -28,8 +28,10 @@ inline void Style();
 
 
 Fracture::Editor::Editor()
-{
-   
+{        
+    m_logger = std::make_shared<Logger>();
+    m_AssetManger = std::make_unique<AssetManager>();   
+    m_SceneManager = std::make_unique<SceneManager>();
 }
 
 Fracture::Editor::~Editor()
@@ -39,16 +41,27 @@ Fracture::Editor::~Editor()
 
 void Fracture::Editor::onInit()
 {
-    m_logger = std::make_unique<Logger>();
-    m_Eventbus = std::make_unique<Eventbus>();
-    m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine");
-    m_InputManager = std::make_unique<InputManager>();
-    m_AssetManger = std::make_unique<AssetManager>();
-    m_PhysicsManger = std::make_unique<PhysicsManager>();
-    m_SceneManager = std::make_unique<SceneManager>();
-    m_Profiler = std::make_unique<Profiler>();
-    m_EntityFactory = std::make_unique<EntityFactory>();
+    m_properties = std::make_shared<ProjectProperties>();
+    m_properties->ProjectName = "Untitled";
+    m_properties->ProjectDirectory = "Untitled";
+    m_properties->ContentDirectory = "Untitled";
+    m_properties->GameConfigPath = "Untitled";
+    m_properties->ModelsPath = "Untitled";
+    m_properties->ScenesPath = "Untitled";
+    m_properties->ShadersPath = "Untitled";
+    m_properties->TexturesPath = "Untitled";
 
+
+    
+    m_Eventbus = std::make_unique<Eventbus>();
+    m_InputManager = std::make_unique<InputManager>();
+    m_PhysicsManger = std::make_unique<PhysicsManager>();
+    m_EntityFactory = std::make_unique<EntityFactory>();
+    m_Profiler = std::make_unique<Profiler>();
+
+
+    m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    m_window->MaximiseWindow();
     showRenderConfig  = false;
     showAudioConfig   = false;
     showPhysicsConfig = false;
@@ -188,10 +201,10 @@ void Fracture::Editor::onRender()
     m_frame->begin(m_window->Context());
 
     if (showRenderConfig) showRenderManager(&showRenderConfig, m_Renderer);
-    if (showAudioConfig) showAudioManager(&showRenderConfig);
-    if (showPhysicsConfig) showPhysicsManager(&showRenderConfig);
-    if (showInputConfig) showInputManager(&showRenderConfig);
-    if (showProjectConfig) showProjectSettings(&showRenderConfig);
+    if (showAudioConfig) showAudioManager(&showAudioConfig);
+    if (showPhysicsConfig) showPhysicsManager(&showPhysicsConfig);
+    if (showInputConfig) showInputManager(&showInputConfig);
+    if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
    
     Render();
    
@@ -282,6 +295,11 @@ void Fracture::Editor::DrawMenuBar()
             // which we can't undo at the moment without finer window depth/z control.
             ImGui::MenuItem("New Project", NULL);
             ImGui::MenuItem("Open Project", NULL);
+            if(ImGui::MenuItem("Save Project", NULL))
+            {
+                ProjectSerializer project(m_properties);
+                project.Serialize(m_properties->ProjectDirectory+m_properties->ProjectName+".Fracture");
+            }
             ImGui::Separator();
             if (ImGui::MenuItem("New Scene", NULL))
             {
@@ -305,12 +323,12 @@ void Fracture::Editor::DrawMenuBar()
                 SetScene();                
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Save", NULL))
+            if (ImGui::MenuItem("Save Scene", NULL))
             {
-                SceneSerializer serializer(sandboxScene);
-                serializer.Serialize("bin/content/Sandbox.json");
+                SceneSerializer serializer(m_ActiveScene);
+                serializer.Serialize(m_properties->ScenesPath+m_ActiveScene->Name+".scene");
             }
-            ImGui::MenuItem("Save As", NULL);
+            ImGui::MenuItem("Save Scene As", NULL);
             if (ImGui::MenuItem("Exit", NULL))
             {
                 done = true;
@@ -426,6 +444,11 @@ std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
     return m_SceneManager->GetActiveScene();
 }
 
+std::shared_ptr<Fracture::Logger> Fracture::Editor::GetLogger()
+{
+    return m_logger;
+}
+
 void Fracture::Editor::showRenderManager(bool* p_open,std::unique_ptr<Fracture::Renderer>& _renderer)
 {
     ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
@@ -520,11 +543,32 @@ void Fracture::Editor::showInputManager(bool* p_open)
 {
 }
 
-void Fracture::Editor::showProjectSettings(bool* p_open)
+void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fracture::ProjectProperties>& _properties)
 {
+    ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
+    if (ImGui::Begin("Project Settings", p_open,ImGuiWindowFlags_NoDocking|ImGuiWindowFlags_NoCollapse))
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        auto boldFont = io.Fonts->Fonts[0];
+
+        InspectorPanel::DrawTextInputControl("Project Name",_properties->ProjectName);
+        InspectorPanel::DrawTextInputControl("Project Directory", _properties->ProjectDirectory);
+        InspectorPanel::DrawTextInputControl("Content Directory", _properties->ContentDirectory);
+        InspectorPanel::DrawTextInputControl("Scenes Path", _properties->ScenesPath);
+        InspectorPanel::DrawTextInputControl("Shaders Path", _properties->ShadersPath);
+        InspectorPanel::DrawTextInputControl("Textures Path", _properties->TexturesPath);
+        InspectorPanel::DrawTextInputControl("Models Path", _properties->ModelsPath);
+        InspectorPanel::DrawTextInputControl("Game Config Path", _properties->GameConfigPath);
+      
+        ImGui::End();
+        return;
+    }
+    ImGui::End();
+
+
 }
 
-inline void Style()
+void Style()
 {
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec4* colors = style.Colors;

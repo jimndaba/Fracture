@@ -145,6 +145,7 @@
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scripting\GameLogic.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\ProjectSerializer.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerializer.cpp" />
     <ClCompile Include="src\Serialisation\Serializer.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
@@ -212,6 +213,8 @@
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
+    <ClInclude Include="src\Serialisation\ProjectProperties.h" />
+    <ClInclude Include="src\Serialisation\ProjectSerializer.h" />
     <ClInclude Include="src\Serialisation\SceneSerializer.h" />
     <ClInclude Include="src\Serialisation\Serializer.h" />
     <ClInclude Include="vendor\glad\glad.h" />

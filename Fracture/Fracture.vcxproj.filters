@@ -147,6 +147,9 @@
     <ClCompile Include="src\Rendering\ShadowPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Serialisation\ProjectSerializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -528,6 +531,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\ShadowPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\ProjectSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\ProjectProperties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

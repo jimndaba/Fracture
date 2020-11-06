@@ -14,8 +14,10 @@ namespace Fracture
 	{
 
 	public:
-		GameWindow(int width, int height,std::string title);
+		GameWindow(int width, int height,std::string title, Uint32 flags = SDL_WINDOW_SHOWN);
 		~GameWindow();
+
+		void MaximiseWindow();
 
 		void pollEvents(Game& game);
 		void swapBuffers();
@@ -24,7 +26,7 @@ namespace Fracture
 		int Height;
 		std::string Title;
 
-		SDL_Window* Context()
+		static SDL_Window* Context()
 		{
 			return m_window;
 		}
@@ -35,7 +37,7 @@ namespace Fracture
 		}
 
 	private:
-		SDL_Window* m_window;
+		static SDL_Window* m_window;
 		SDL_Event m_event;
 		SDL_GLContext maincontext;
 	};

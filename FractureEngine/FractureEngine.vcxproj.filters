@@ -81,10 +81,13 @@
     <ClInclude Include="src\Editor\Panels\AssetBrowserPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\utils\FileDialogs.h">
+    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h">
+    <ClInclude Include="src\Editor\FractureSplash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\utils\FileDialogue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -144,6 +147,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\FractureSplash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\utils\FileDialogue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

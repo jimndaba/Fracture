@@ -94,6 +94,7 @@
     <ClInclude Include="src\Editor\Elements\Element.h" />
     <ClInclude Include="src\Editor\Elements\TabbedElement.h" />
     <ClInclude Include="src\Editor\Elements\TagComponentElement.h" />
+    <ClInclude Include="src\Editor\FractureSplash.h" />
     <ClInclude Include="src\Editor\Panels\AssetBrowserPanel.h" />
     <ClInclude Include="src\Editor\Panels\Inspector.h" />
     <ClInclude Include="src\Editor\Panels\Panel.h" />
@@ -103,7 +104,7 @@
     <ClInclude Include="src\Editor\Frame.h" />
     <ClInclude Include="src\Editor\Panels\UIStyle.h" />
     <ClInclude Include="src\Editor\SandboxScene.h" />
-    <ClInclude Include="src\Editor\utils\FileDialogs.h" />
+    <ClInclude Include="src\Editor\utils\FileDialogue.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="src\Editor\Elements\Element.cpp" />
     <ClCompile Include="src\Editor\Elements\TabbedElement.cpp" />
     <ClCompile Include="src\Editor\Elements\TagComponentElement.cpp" />
+    <ClCompile Include="src\Editor\FractureSplash.cpp" />
     <ClCompile Include="src\Editor\Panels\AssetBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\Inspector.cpp" />
     <ClCompile Include="src\Editor\Panels\Panel.cpp" />
@@ -126,6 +128,7 @@
     <ClCompile Include="src\Editor\Panels\TabbedPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\ViewPanel.cpp" />
     <ClCompile Include="src\Editor\Frame.cpp" />
+    <ClCompile Include="src\Editor\utils\FileDialogue.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Editor\SandboxScene.cpp" />
     <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp" />

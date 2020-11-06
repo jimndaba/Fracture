@@ -67,3 +67,8 @@ std::shared_ptr<Fracture::Entity> Fracture::SceneManager::getEntity(uint32_t id)
 {
 	return m_activeScene->GetEntity(id);
 }
+
+std::map<std::string, std::shared_ptr<Fracture::Scene>> Fracture::SceneManager::GetScenes()
+{
+	return m_scenes;
+}

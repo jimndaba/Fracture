@@ -18,6 +18,7 @@ namespace Fracture
 	class TabbedPanel;
 	class AssetBrowserPanel;
 	class EntityFactory;
+	struct ProjectProperties;
 
 	class Editor
 	{
@@ -39,9 +40,11 @@ namespace Fracture
 
 		static std::shared_ptr<Scene> ActiveScene();
 
+		std::shared_ptr<Logger> GetLogger();
+
 	private:
 
-		std::unique_ptr<Logger> m_logger;
+		std::shared_ptr<Logger> m_logger;
 		std::unique_ptr<Profiler> m_Profiler;
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<GameWindow> m_window;
@@ -64,6 +67,7 @@ namespace Fracture
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
 		std::shared_ptr<AssetBrowserPanel> m_AssetBrowser;
+		std::shared_ptr<ProjectProperties> m_properties;
 
 		static bool p_open;
 		static bool opt_fullscreen;
@@ -80,7 +84,7 @@ namespace Fracture
 		static void showAudioManager(bool* p_open);
 		static void showPhysicsManager(bool* p_open);
 		static void showInputManager(bool* p_open);
-		static void showProjectSettings(bool* p_open);
+		static void showProjectSettings(bool* p_open,std::shared_ptr<Fracture::ProjectProperties>& m_properties);
 	};
 }
 

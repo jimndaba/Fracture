@@ -574,6 +574,7 @@ void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::ve
 	ImGui::PushID(label.c_str());
 
 	ImGui::Columns(2);
+	ImGui::AlignTextToFramePadding();
 	ImGui::SetColumnWidth(0, columnWidth);
 	ImGui::Text(label.c_str());
 	ImGui::NextColumn();

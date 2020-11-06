@@ -4,7 +4,9 @@
 #include "Event/WindowEvents.h";
 #include "Logging/Logger.h"
 
-Fracture::GameWindow::GameWindow(int width, int height, std::string title):
+SDL_Window* Fracture::GameWindow::m_window;
+
+Fracture::GameWindow::GameWindow(int width, int height, std::string title,Uint32 flags):
 	Width(width),Height(height),Title(title)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -19,7 +21,9 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 
-	m_window = SDL_CreateWindow(Title.c_str(), 100, 100, Width, Height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	//SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+
+	m_window = SDL_CreateWindow(Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Width, Height, flags);
 	if (m_window == nullptr) {
 		FRACTURE_CRITICAL("FAILED TO INIT WINDOW : {}" , SDL_GetError());
 		SDL_Quit();
@@ -32,7 +36,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 		FRACTURE_CRITICAL("FAILED TO create OpenGL context {}" ,SDL_GetError());
 	}
 		
-	SDL_MaximizeWindow(m_window);
+
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 	// Check OpenGL properties
 	FRACTURE_INFO("OpenGL loaded");
@@ -45,6 +49,11 @@ Fracture::GameWindow::~GameWindow()
 {
 	SDL_DestroyWindow(m_window);
 	SDL_Quit();
+}
+
+void Fracture::GameWindow::MaximiseWindow()
+{
+	SDL_MaximizeWindow(m_window);
 }
 
 void Fracture::GameWindow::pollEvents(Game& game)

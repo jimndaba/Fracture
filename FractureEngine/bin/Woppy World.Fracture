@@ -1,0 +1,117 @@
+{
+  
+  "DrawDebug": false,
+  "DrawShadows": true,
+  "Game Config Path": "Untitled",
+  "Gravity": "PhysicsSettings",
+  "IsMaximised": true,
+  "Models": [
+    {
+      "Model Directory": "bin/content/models/primitives/cube.fbx",
+      "Model Name": "Cube",
+      "Model Path": ""
+    },
+    {
+      "Model Directory": "bin/content/models/primitives/cylinder.fbx",
+      "Model Name": "Cylinder",
+      "Model Path": ""
+    },
+    {
+      "Model Directory": "bin/content/models/primitives/plane.fbx",
+      "Model Name": "Plane",
+      "Model Path": ""
+    },
+    {
+      "Model Directory": "bin/content/models/primitives/sphere.fbx",
+      "Model Name": "Sphere",
+      "Model Path": ""
+    },
+    {
+      "Model Directory": "bin/content/models/primitives/suzane.fbx",
+      "Model Name": "Suzane",
+      "Model Path": ""
+    },
+    {
+      "Model Directory": "bin/content/models/primitives/torus.fbx",
+      "Model Name": "Torus",
+      "Model Path": ""
+    }
+  ],
+  "Models Path": "Untitled",
+  "Physics Settings": "------------------------------------",
+  "Project": "Woppy World",
+  "Render Settings": "------------------------------------",
+  "Scenes": [ { "Scene Name": "empty" } ],
+  "Scenes Path": "Untitled",
+  "Shaders": [
+    {
+      "Fragment": "bin/content/shaders/debug/fragment.glsl",
+      "Shader Name": "DebugShader",
+      "Vertex": "bin/content/shaders/debug/vertex.glsl"
+    },
+    {
+      "Fragment": "bin/content/shaders/primitives/fragment.glsl",
+      "Shader Name": "PrimitiveMaterial",
+      "Vertex": "bin/content/shaders/primitives/vertex.glsl"
+    },
+    {
+      "Fragment": "bin/content/shaders/model/fragment.glsl",
+      "Shader Name": "default",
+      "Vertex": "bin/content/shaders/model/vertex.glsl"
+    }
+  ],
+  "Shaders Path": "Untitled",
+  "Textures": [
+    {
+      "Texture Name": "CameraIcon",
+      "Texture Path": "bin/content/textures/CameraIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "EyeIcon",
+      "Texture Path": "bin/content/textures/EyeIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "EyeIconC",
+      "Texture Path": "bin/content/textures/EyeIconC.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "GameObjectIcon",
+      "Texture Path": "bin/content/textures/GameObjectIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "LightIcon",
+      "Texture Path": "bin/content/textures/LightIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "RotateIcon",
+      "Texture Path": "bin/content/textures/RotateIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "ScaleIcon",
+      "Texture Path": "bin/content/textures/ScaleIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "TranslateIcon",
+      "Texture Path": "bin/content/textures/TranslateIcon.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "container",
+      "Texture Path": "bin/content/textures/container.png",
+      "Texture Type": 0
+    },
+    {
+      "Texture Name": "specular",
+      "Texture Path": "bin/content/textures/container_specular.png",
+      "Texture Type": 1
+    }
+  ],
+  "Textures Path": "Untitled"
+}

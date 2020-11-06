@@ -65,5 +65,8 @@
 #include "Scripting/GameLogic.h"
 
 #include "Serialisation/SceneSerializer.h"
+#include "Serialisation/ProjectSerializer.h"
+#include "Serialisation/ProjectProperties.h"
+
 
 #endif

@@ -30,6 +30,8 @@ namespace Fracture
 		static void RemoveEntity(uint32_t entity);
 		static std::shared_ptr<Entity> getEntity(uint32_t id);
 
+		static std::map<std::string, std::shared_ptr<Scene>> GetScenes();
+
 	private:
 
 		static std::map<std::string,std::shared_ptr<Scene>> m_scenes;

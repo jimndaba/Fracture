@@ -521,5 +521,4 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 
 		m_scene->addEntity(entity);
 	}
-
 }
