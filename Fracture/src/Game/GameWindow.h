@@ -36,6 +36,8 @@ namespace Fracture
 			return maincontext;
 		}
 
+		void close();
+
 	private:
 		static SDL_Window* m_window;
 		SDL_Event m_event;

@@ -92,7 +92,14 @@ Fracture::Shader::~Shader()
 
 void Fracture::Shader::use()
 {
-    glUseProgram(m_program);
+    if (m_program)
+    {
+        glUseProgram(m_program);
+    }
+    else
+    {
+        FRACTURE_ERROR("{} : SHADER IS NULL",Name);
+    }
 }
 
 void Fracture::Shader::unbind()

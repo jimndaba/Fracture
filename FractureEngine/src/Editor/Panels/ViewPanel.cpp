@@ -179,9 +179,6 @@ void Fracture::ViewPanel::render()
 		}
 	}
 
-	
-	//ImGuizmo::DrawGrid(&m_camera->getViewMatrix()[0][0], &m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y)[0][0], identityMatrix, 100.f);
-
     ImGui::PopStyleVar();
     ImGui::EndChild();
 

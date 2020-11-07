@@ -15,6 +15,7 @@
 #include "Rendering/Shader.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
+#include <Fracture.h>
 
 
 Fracture::SceneSerializer::SceneSerializer(std::shared_ptr<Scene> scene) : m_scene(scene)
@@ -477,9 +478,10 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id,lType);
 				std::array<float, 3> direction = lightComponent["Direction"];
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
 				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
+				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				ComponentManager::AddComponent(component);
 				break;
 			}
@@ -489,8 +491,8 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				std::array<float, 3> position = lightComponent["Position"];
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
 				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
 				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
 				component->SetLinear(lightComponent["Linear"]);
@@ -498,6 +500,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetQuadratic(lightComponent["Qaudratic"]);
 				component->SetCutoff(lightComponent["Cutoff"]);
 				component->SetOuterCutOff(lightComponent["OuterCutoff"]);
+				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				ComponentManager::AddComponent(component);
 				break;
 			}
@@ -506,12 +509,13 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				std::array<float, 3> position = lightComponent["Position"];
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetAmbient(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetAmbient(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
+				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
 				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
 				component->SetLinear(lightComponent["Linear"]);
 				component->SetConstant(lightComponent["Constant"]);
 				component->SetQuadratic(lightComponent["Qaudratic"]);
+				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				ComponentManager::AddComponent(component);
 				break;
 			}

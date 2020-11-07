@@ -8,6 +8,15 @@
 namespace Fracture
 {
 
+	enum class CurrentAssetType
+	{
+		Models,
+		Textures,
+		Scenes,
+		Materials,
+		Shaders
+	};
+
 	class AssetBrowserPanel: public Panel
 	{
 	public:

@@ -21,10 +21,12 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	j["IsMaximised"] = true;
 
 	j["Game Config Path"] = m_properties->GameConfigPath;
+	j["Content Path"] = m_properties->ContentDirectory;
 	j["Textures Path"] = m_properties->TexturesPath;
 	j["Shaders Path"] = m_properties->ShadersPath;
 	j["Models Path"] = m_properties->ModelsPath;
 	j["Scenes Path"] = m_properties->ScenesPath;
+	j["Active Scene"] = SceneManager::GetActiveScene()->Name;
 
 	json scenes = json::array_t();
 	std::map<std::string, std::shared_ptr<Scene>> m_scenes = SceneManager::GetScenes();
@@ -32,6 +34,8 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	{
 		json a;
 		a["Scene Name"] = scene->first;
+		SceneSerializer serializer(scene->second);
+		serializer.Serialize(m_properties->ScenesPath + "/" + scene->first + ".scene");
 		scenes.push_back(a);
 	}
 	j["Scenes"] = scenes;
@@ -103,6 +107,16 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		FRACTURE_ERROR("File is either non-json file or corrupt;");
 		return false;
 	}
+
+	
+	m_properties->ProjectName = input["Project"];
+	m_properties->GameConfigPath = input["Game Config Path"];
+	m_properties->TexturesPath = input["Textures Path"];
+	m_properties->ShadersPath = input["Shaders Path"];
+	m_properties->ModelsPath = input["Models Path"];
+	m_properties->ScenesPath = input["Scenes Path"];
+	m_properties->ActiveScene = input["Active Scene"];
+
 	if (exists(input, "Models"))
 	{
 		for (auto model : input["Models"])
@@ -131,6 +145,9 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 			DeSerializeScene(scene);
 		}
 	}
+
+	
+
 	return true;
 }
 
@@ -161,7 +178,11 @@ void Fracture::ProjectSerializer::DeSerializeScene(nlohmann::json s)
 {
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 	SceneSerializer serializer(scene);
-	std::string name = s["Name"];
+	std::string name = s["Scene Name"];
+	if (!serializer.DeSerialize(m_properties->ScenesPath + "/" + name + ".scene"))
+	{
+		FRACTURE_ERROR("Failed to Load Scene : {}", name);
+	}
 	SceneManager::AddScene(name,scene);
 }
 

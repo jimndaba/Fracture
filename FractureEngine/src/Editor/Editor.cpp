@@ -12,6 +12,7 @@
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
+bool Fracture::Editor::m_loadNewProject;
 bool Fracture::Editor::opt_fullscreen;
 bool Fracture::Editor::showRenderConfig;
 bool Fracture::Editor::showAudioConfig;
@@ -30,8 +31,10 @@ inline void Style();
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
-    m_AssetManger = std::make_unique<AssetManager>();   
+    m_AssetManger = std::make_shared<AssetManager>();   
     m_SceneManager = std::make_unique<SceneManager>();
+    m_properties = std::make_shared<ProjectProperties>();
+    m_loadNewProject = false;
 }
 
 Fracture::Editor::~Editor()
@@ -40,19 +43,7 @@ Fracture::Editor::~Editor()
 }
 
 void Fracture::Editor::onInit()
-{
-    m_properties = std::make_shared<ProjectProperties>();
-    m_properties->ProjectName = "Untitled";
-    m_properties->ProjectDirectory = "Untitled";
-    m_properties->ContentDirectory = "Untitled";
-    m_properties->GameConfigPath = "Untitled";
-    m_properties->ModelsPath = "Untitled";
-    m_properties->ScenesPath = "Untitled";
-    m_properties->ShadersPath = "Untitled";
-    m_properties->TexturesPath = "Untitled";
-
-
-    
+{      
     m_Eventbus = std::make_unique<Eventbus>();
     m_InputManager = std::make_unique<InputManager>();
     m_PhysicsManger = std::make_unique<PhysicsManager>();
@@ -67,6 +58,7 @@ void Fracture::Editor::onInit()
     showPhysicsConfig = false;
     showInputConfig   = false;
     showProjectConfig = false;
+
     done = false;
     p_open = true;
     opt_fullscreen = true;
@@ -79,7 +71,6 @@ void Fracture::Editor::onInit()
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
-    ImFont* pFont = io.Fonts->AddFontFromFileTTF("bin/content/fonts/Roboto-Regular.TTF",14.0f);
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -99,10 +90,12 @@ void Fracture::Editor::onInit()
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
-    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
-    m_SceneManager->AddScene("empty", scene);
-    m_SceneManager->SetScene("empty");
-    SetScene();
+
+    
+
+   
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
+   
 
     m_frame->AddPanel(m_sceneview);
     m_frame->AddPanel(m_inspectorpanel);
@@ -110,58 +103,126 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_TabbedPanel);
     m_frame->AddPanel(m_AssetBrowser);
    
-
-    m_AssetManger->AddShader("DebugShader", "bin/content/shaders/debug/vertex.glsl", "bin/content/shaders/debug/fragment.glsl");
-    m_AssetManger->AddShader("PrimitiveMaterial", "bin/content/shaders/primitives/vertex.glsl", "bin/content/shaders/primitives/fragment.glsl");
-
-    //textures
-    Fracture::AssetManager::AddShader("default", "bin/content/shaders/model/vertex.glsl", "bin/content/shaders/model/fragment.glsl");
-
-    m_AssetManger->AddMaterial("DebugMaterial",std::shared_ptr<Material>(new Material("DebugMaterial",AssetManager::getShader("DebugShader"))));
-
-    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial",m_AssetManger->getShader("PrimitiveMaterial"));
-
-    primitivesMaterial->setVec3("material.diffuse",glm::vec3(0.9,0.3,0.5));
-    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
-    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
-
-    m_AssetManger->AddMaterial("PrimitiveMaterial",primitivesMaterial);
-
-    m_AssetManger->AddTexture("TranslateIcon", "bin/content/textures/TranslateIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("ScaleIcon", "bin/content/textures/ScaleIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("RotateIcon", "bin/content/textures/RotateIcon.png", TextureType::Diffuse);
-    Fracture::AssetManager::AddTexture("container", "bin/content/textures/container.png", Fracture::TextureType::Diffuse);
-    Fracture::AssetManager::AddTexture("specular", "bin/content/textures/container_specular.png", Fracture::TextureType::Specular);
-
-
-    m_AssetManger->AddModel("Plane", "bin/content/models/primitives/plane.fbx");
-    m_AssetManger->AddModel("Cube", "bin/content/models/primitives/cube.fbx");
-    m_AssetManger->AddModel("Sphere", "bin/content/models/primitives/sphere.fbx");
-    m_AssetManger->AddModel("Cylinder", "bin/content/models/primitives/cylinder.fbx");
-    m_AssetManger->AddModel("Torus", "bin/content/models/primitives/torus.fbx");
-    m_AssetManger->AddModel("Suzane", "bin/content/models/primitives/suzane.fbx");
-
-    m_AssetManger->AddTexture("GameObjectIcon", "bin/content/textures/GameObjectIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("CameraIcon", "bin/content/textures/CameraIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("LightIcon", "bin/content/textures/LightIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIcon", "bin/content/textures/EyeIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIconC", "bin/content/textures/EyeIconC.png", TextureType::Diffuse);
-
     m_PhysicsManger->Init();
   
     m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
     m_Renderer->onInit();
-    m_viewpanel->setRenderer(m_Renderer.get());
+    
+ 
+}
+
+bool Fracture::Editor::onLoad()
+{   
+
+    ProjectSerializer seriliazer(m_properties);
+    if (!seriliazer.DeSerialize(m_properties->ProjectFilePath))
+    {
+        FRACTURE_ERROR("FAiLED to load Project");
+        return false;
+    }   
+
+    m_SceneManager->SetScene(m_properties->ActiveScene);
     m_viewpanel->init();
+    m_viewpanel->setRenderer(m_Renderer.get());
+    SetScene();
+    /*
+    m_AssetManger->AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
+    m_AssetManger->AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
+
+    //textures
+    Fracture::AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
+
+   
+
+    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
+
+    primitivesMaterial->setVec3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
+
+    m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);
+
+   
+    Fracture::AssetManager::AddTexture("container", "content/textures/container.png", Fracture::TextureType::Diffuse);
+    Fracture::AssetManager::AddTexture("specular", "content/textures/container_specular.png", Fracture::TextureType::Specular);
+
+    m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
+    m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
+    m_AssetManger->AddModel("Sphere", "content/models/primitives/sphere.fbx");
+    m_AssetManger->AddModel("Cylinder", "content/models/primitives/cylinder.fbx");
+    m_AssetManger->AddModel("Torus", "content/models/primitives/torus.fbx");
+    m_AssetManger->AddModel("Suzane", "content/models/primitives/suzane.fbx");
+    */
+   
+    return true;
+}
+
+void Fracture::Editor::onLoadNew()
+{
+    m_AssetManger->AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
+
+    m_AssetManger->AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
+    m_AssetManger->AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
+
+    //textures
+    m_AssetManger->AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
+
+
+    m_AssetManger->AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
+
+    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
+
+    primitivesMaterial->setVec3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
+
+    m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);
+
+
+    //Fracture::AssetManager::AddTexture("container", "content/textures/container.png", Fracture::TextureType::Diffuse);
+   // Fracture::AssetManager::AddTexture("specular", "content/textures/container_specular.png", Fracture::TextureType::Specular);
+
+    m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
+    m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
+    m_AssetManger->AddModel("Sphere", "content/models/primitives/sphere.fbx");
+    m_AssetManger->AddModel("Cylinder", "content/models/primitives/cylinder.fbx");
+    m_AssetManger->AddModel("Torus", "content/models/primitives/torus.fbx");
+    m_AssetManger->AddModel("Suzane", "content/models/primitives/suzane.fbx");
+
+    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+    m_SceneManager->AddScene("empty", scene);
+    m_SceneManager->SetScene("empty");
+    SetScene();
+    m_viewpanel->init();
+    m_viewpanel->setRenderer(m_Renderer.get());
 }
 
 void Fracture::Editor::run()
 {
     Profiler::Get().BeginSession("EditorProfile");
     onInit();
-    double lastTime = SDL_GetTicks() / 1000.0;
 
+    if (m_loadNewProject)
+    {
+        onLoadNew();
+    }
+    else
+    {
+        if (!onLoad())
+        {
+            FRACTURE_INFO("Failed to Loaded Program");
+            done = true;
+        }
+    }
+    double lastTime = SDL_GetTicks() / 1000.0;
     while (!done)
     {
         double current = SDL_GetTicks() / 1000.0;
@@ -177,9 +238,6 @@ void Fracture::Editor::run()
 void Fracture::Editor::onUpdate(float dt)
 {
     ProfilerTimer timer("onUpdate");
-
-    
-   
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -206,8 +264,7 @@ void Fracture::Editor::onRender()
     if (showInputConfig) showInputManager(&showInputConfig);
     if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
    
-    Render();
-   
+    Render();   
     m_frame->end();
  
     m_window->swapBuffers();
@@ -285,6 +342,12 @@ void Fracture::Editor::SetScene()
     m_sceneview->setScene(m_ActiveScene);    
 }
 
+void Fracture::Editor::onChangeTitleName(std::string title)
+{
+    std::string newTitle = "Fracture Engine: " + title;
+    SDL_SetWindowTitle(GameWindow::Context(),newTitle.c_str());
+}
+
 void Fracture::Editor::DrawMenuBar()
 {
     if (ImGui::BeginMainMenuBar())
@@ -298,7 +361,7 @@ void Fracture::Editor::DrawMenuBar()
             if(ImGui::MenuItem("Save Project", NULL))
             {
                 ProjectSerializer project(m_properties);
-                project.Serialize(m_properties->ProjectDirectory+m_properties->ProjectName+".Fracture");
+                project.Serialize(m_properties->ProjectDirectory+"/"+m_properties->ProjectName+".Fracture");
             }
             ImGui::Separator();
             if (ImGui::MenuItem("New Scene", NULL))
@@ -314,7 +377,7 @@ void Fracture::Editor::DrawMenuBar()
                 IDManager::ResetIDs();
                 std::shared_ptr<Scene> newscene = std::make_shared<Scene>();
                 SceneSerializer serializer(newscene);
-                if (!serializer.DeSerialize("bin/content/Sandbox.json"))
+                if (!serializer.DeSerialize("bin/content/Sandbox.json"))//todo
                 {
                     FRACTURE_ERROR("FAILED TO LOAD SCENE");
                 }
@@ -326,7 +389,7 @@ void Fracture::Editor::DrawMenuBar()
             if (ImGui::MenuItem("Save Scene", NULL))
             {
                 SceneSerializer serializer(m_ActiveScene);
-                serializer.Serialize(m_properties->ScenesPath+m_ActiveScene->Name+".scene");
+                serializer.Serialize(m_properties->ScenesPath+"/"+m_ActiveScene->Name+".scene");
             }
             ImGui::MenuItem("Save Scene As", NULL);
             if (ImGui::MenuItem("Exit", NULL))
@@ -439,6 +502,11 @@ void Fracture::Editor::DrawMenuBar()
 
 }
 
+void Fracture::Editor::isNewProject(bool isnew)
+{
+    m_loadNewProject = isnew;
+}
+
 std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
 {
     return m_SceneManager->GetActiveScene();
@@ -447,6 +515,16 @@ std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
 std::shared_ptr<Fracture::Logger> Fracture::Editor::GetLogger()
 {
     return m_logger;
+}
+
+std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::Properties()
+{
+    return m_properties;
+}
+
+std::shared_ptr<Fracture::AssetManager> Fracture::Editor::GetAssetManager()
+{
+    return m_AssetManger;
 }
 
 void Fracture::Editor::showRenderManager(bool* p_open,std::unique_ptr<Fracture::Renderer>& _renderer)
@@ -551,7 +629,10 @@ void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fractur
         ImGuiIO& io = ImGui::GetIO();
         auto boldFont = io.Fonts->Fonts[0];
 
-        InspectorPanel::DrawTextInputControl("Project Name",_properties->ProjectName);
+        std::string title = _properties->ProjectName;
+        InspectorPanel::DrawTextInputControl("Project Name",title);
+        onChangeTitleName(title);
+        _properties->ProjectName = title;
         InspectorPanel::DrawTextInputControl("Project Directory", _properties->ProjectDirectory);
         InspectorPanel::DrawTextInputControl("Content Directory", _properties->ContentDirectory);
         InspectorPanel::DrawTextInputControl("Scenes Path", _properties->ScenesPath);

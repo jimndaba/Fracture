@@ -346,17 +346,18 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				case LightType::Sun:
 				{
 					glm::vec3 direction = light->GetDirection();
-					DrawVec3Control("Direction", direction);
-					light->SetDirection(direction);
-			
 					glm::vec4 ambient = light->GetAmbient();
-					DrawColourControl("Ambient", ambient, 1.0f);
-					light->SetAmbient(ambient);
 					glm::vec4 diffuse = light->GetDiffuse();
-					DrawColourControl("Diffuse", diffuse, 1.0f);
-					light->SetDiffuse(diffuse);
 					glm::vec4 specular = light->GetSpecular();
+
+					DrawVec3Control("Direction", direction);					
+					DrawColourControl("Ambient", ambient, 1.0f);					
+					DrawColourControl("Diffuse", diffuse, 1.0f);					
 					DrawColourControl("Specular", specular, 1.0f);
+
+					light->SetDirection(direction);
+					light->SetAmbient(ambient);
+					light->SetDiffuse(diffuse);
 					light->SetSpecular(specular);
 					break;
 				}
@@ -469,7 +470,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					modelName = model.first;
 					if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
 					{
-						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, "default");
+						std::string mat_name = modelName + "Materail";
+						std::shared_ptr<Material> material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
+						AssetManager::AddMaterial(mat_name,material);
+						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
 					}
 					else
 					{

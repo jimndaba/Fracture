@@ -27,6 +27,8 @@ namespace Fracture
 		~Editor();
 
 		void onInit();
+		bool onLoad();
+		void onLoadNew();
 		void run();
 		void onUpdate(float dt);
 		void onRender();
@@ -34,14 +36,19 @@ namespace Fracture
 		void Render();
 		void SetScene();
 
+		static void onChangeTitleName(std::string title);
+
 		bool done;
 
 		void DrawMenuBar();
 
+		static void isNewProject(bool isnew);
+
 		static std::shared_ptr<Scene> ActiveScene();
 
 		std::shared_ptr<Logger> GetLogger();
-
+		std::shared_ptr<ProjectProperties> Properties();
+		std::shared_ptr<AssetManager> GetAssetManager();
 	private:
 
 		std::shared_ptr<Logger> m_logger;
@@ -50,8 +57,9 @@ namespace Fracture
 		std::unique_ptr<GameWindow> m_window;
 		std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
-		std::unique_ptr<AssetManager> m_AssetManger;
+		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
+		std::shared_ptr<AssetManager> m_AssetManger;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::unique_ptr<EntityFactory> m_EntityFactory;
 		static std::shared_ptr<Scene> m_ActiveScene;
@@ -69,6 +77,7 @@ namespace Fracture
 		std::shared_ptr<AssetBrowserPanel> m_AssetBrowser;
 		std::shared_ptr<ProjectProperties> m_properties;
 
+		static bool m_loadNewProject;
 		static bool p_open;
 		static bool opt_fullscreen;
 		static bool opt_padding;		

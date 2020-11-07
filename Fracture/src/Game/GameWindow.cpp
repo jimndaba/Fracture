@@ -114,3 +114,9 @@ void Fracture::GameWindow::swapBuffers()
 {
 	SDL_GL_SwapWindow(m_window);
 }
+
+void Fracture::GameWindow::close()
+{
+	SDL_DestroyWindow(m_window);
+	SDL_Quit();
+}

@@ -1,0 +1,55 @@
+{
+  "Base Models": [
+    {
+      "folderName": "primitives",
+      "Model": "cube.fbx",
+      "Name": "Cube"
+    },
+    {
+      "folderName": "primitives",
+      "Model": "cylinder.fbx",
+      "Name": "Cylinder"
+    },
+    {
+      "folderName": "primitives",
+      "Model": "plane.fbx",
+      "Name": "Plane"
+    },
+    {
+      "folderName": "primitives",
+      "Model": "sphere.fbx",
+      "Name": "Sphere"
+    },
+    {
+      "folderName": "primitives",
+      "Model": "suzane.fbx",
+      "Name": "Suzane"
+    },
+    {
+      "folderName": "primitives",
+      "Model": "torus.fbx",
+      "Name": "Torus"
+    }
+  ],
+  "Base Shaders": [
+    {
+      "folderName": "primitives",
+      "Vertex": "vertex.glsl",
+      "Fragment": "fragment.glsl",
+      "Name": "PrimitiveMaterial"
+    },
+    {
+      "folderName": "model",
+      "Vertex": "vertex.glsl",
+      "Fragment": "fragment.glsl",
+      "Name": "default"
+    },
+    {
+      "folderName": "debug",
+      "Vertex": "vertex.glsl",
+      "Fragment": "fragment.glsl",
+      "Name": "DebugShader"
+    }
+  ],
+  "Base Textures": []
+}

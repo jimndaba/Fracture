@@ -1,14 +1,16 @@
 #include "FractureSplash.h"
+#include <sys/stat.h>
+
+
 
 bool Fracture::FractureSplash::p_open;
 
-Fracture::FractureSplash::FractureSplash(Editor& editor) :m_editor(editor)
+Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 {
 	m_isShow = true;
     m_run = false;
-    m_logger = m_editor.GetLogger();
+    m_logger = m_editor->GetLogger();
 	m_window = std::unique_ptr<GameWindow>(new GameWindow(800,400,"Splash", SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL|SDL_WINDOW_BORDERLESS));
-	//m_Renderer = std::unique_ptr<Renderer>(new Renderer());
     m_AssetManger = std::unique_ptr<AssetManager>();  
 
 	// Setup Dear ImGui context
@@ -17,7 +19,7 @@ Fracture::FractureSplash::FractureSplash(Editor& editor) :m_editor(editor)
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
 
-	ImFont* pFont = io.Fonts->AddFontFromFileTTF("bin/content/fonts/Roboto-Regular.TTF", 14.0f);
+	ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -29,8 +31,8 @@ Fracture::FractureSplash::FractureSplash(Editor& editor) :m_editor(editor)
 	ImGui_ImplSDL2_InitForOpenGL(m_window->Context(), m_window->glContext());
 	ImGui_ImplOpenGL3_Init("#version 400");
 
-    m_AssetManger->AddTexture("splash","bin/content/textures/splashtest.png",TextureType::Diffuse);
-    m_AssetManger->AddTexture("title", "bin/content/textures/title.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("splash","content/textures/splashtest.png",TextureType::Diffuse);
+    m_AssetManger->AddTexture("title", "content/textures/title.png", TextureType::Diffuse);
 
 }
 
@@ -52,13 +54,13 @@ bool Fracture::FractureSplash::Show()
 }
 
 void Fracture::FractureSplash::Close()
-{
-    
+{   
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL2_Shutdown();
-  ImGui::DestroyContext();
-   m_window.release();
-   m_AssetManger.release();
+  ImGui::DestroyContext(); 
+  m_window->close();
+  m_window.release();
+  m_AssetManger.release();
 }
 
 void Fracture::FractureSplash::onUpdate()
@@ -121,16 +123,15 @@ void Fracture::FractureSplash::onRender()
     ImGui::Image((void*)m_AssetManger->getTexture("title")->id, ImVec2(500, 190));
 
     if (ImGui::Button("New Project...", ImVec2(160, 100)))
-    {
-
-        m_isShow = false;
-        m_run = true;
-        //std::string filepath = FileDialogue::OpenFile("Fracture Project (*.fracture)\0*.fracture\0)");
-       // if (!filepath.empty())
-       // {
-       //  
-       // }    
-
+    {       
+        std::string filepath = FileDialogue::SelectDirectory();
+        if (!filepath.empty())
+        {
+            createNewProject(filepath);
+            m_editor->isNewProject(true);
+            m_isShow = false;
+            m_run = true;
+        }    
     }
     ImGui::SameLine();
     if (ImGui::Button("Open Project...", ImVec2(160, 100)))
@@ -138,12 +139,17 @@ void Fracture::FractureSplash::onRender()
        std::string filepath =  FileDialogue::OpenFile("Fracture Project (*.fracture)\0*.fracture\0)");
        if (!filepath.empty())
        {
-           //std::shared_ptr<ProjectProperties> propertise = std::make_shared<ProjectProperties>();
-           //ProjectSerializer project(propertise);
-           //project.DeSerialize(filepath);
+           //ProjectSerializer serializer();
+           openProject(filepath);
            m_isShow = false;
            m_run = true;
        }
+        else
+        {
+            FRACTURE_CRITICAL("Failed to Load Project");
+            m_isShow = true;
+            m_run = false;      
+        }
     }
     ImGui::SameLine();
     if (ImGui::Button("Exit", ImVec2(160, 100)))
@@ -171,6 +177,35 @@ void Fracture::FractureSplash::onEndFrame()
 	}
     m_window->swapBuffers();
 }
+
+void Fracture::FractureSplash::createNewProject(std::string filepath)
+{  
+    m_editor->Properties()->ProjectDirectory = filepath;
+    m_editor->Properties()->ProjectName ="Untitled";
+    m_editor->Properties()->ProjectFilePath = filepath +"\\"+m_editor->Properties()->ProjectName+".fracture";
+    m_editor->Properties()->ContentDirectory = filepath + "\\content";
+    m_editor->Properties()->GameConfigPath = filepath;      
+    m_editor->Properties()->ScenesPath = filepath + "\\content\\scenes";
+    m_editor->Properties()->ModelsPath = filepath + "\\content\\models";
+    m_editor->Properties()->TexturesPath = filepath + "\\content\\textures";
+    m_editor->Properties()->ShadersPath = filepath + "\\content\\shaders";
+    m_editor->Properties()->FontsPath = filepath + "\\content\\fonts";
+
+
+    int content = mkdir(m_editor->Properties()->ContentDirectory.c_str());
+    int models = mkdir(m_editor->Properties()->ModelsPath.c_str());
+    int scenes = mkdir(m_editor->Properties()->ScenesPath.c_str());
+    int shaders = mkdir(m_editor->Properties()->ShadersPath.c_str());
+    int textures = mkdir(m_editor->Properties()->TexturesPath.c_str());
+    int fonts = mkdir(m_editor->Properties()->FontsPath.c_str());
+
+}
+
+void Fracture::FractureSplash::openProject(std::string filepath)
+{
+    m_editor->Properties()->ProjectFilePath = filepath;    
+}
+
 
 inline void Fracture::FractureSplash::Style()
 {

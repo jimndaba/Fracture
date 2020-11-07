@@ -1,6 +1,6 @@
 #include "AssetBrowserPanel.h"
 #include <imgui/imgui_internal.h>
-
+#include "../utils/FileDialogue.h"
 
 Fracture::AssetBrowserPanel::AssetBrowserPanel():Panel("AssetBrowser")
 {
@@ -19,7 +19,12 @@ void Fracture::AssetBrowserPanel::render()
     ImVec2 buttonSize = { lineHeight + 50.0f, lineHeight };
     if (ImGui::Button("AddModel", buttonSize))
     {
-
+        std::string name;
+        std::string filepath = FileDialogue::OpenFile("Model (*.fbx)\0*.fbx\0  Model (*.obj)\0*.obj\0)", name);
+        if (!filepath.empty())
+        {
+            AssetManager::AddModel(name, filepath);
+        }
     }
 
     ImGui::SameLine();

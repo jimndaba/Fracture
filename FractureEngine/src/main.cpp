@@ -6,12 +6,12 @@
 
 int main(int argc, char* args[])
 {
-	Fracture::Editor FractureEngine;
-	Fracture::FractureSplash splash(FractureEngine);
-	
-	if (splash.Show())
+	std::unique_ptr<Fracture::Editor> FractureEngine = std::make_unique<Fracture::Editor>();
+	Fracture::FractureSplash splash(FractureEngine.get());	
+	if (!splash.Show())
 	{
-		FractureEngine.run();
+		return 0;
 	}
+	FractureEngine->run();
 	return 0;
 }
