@@ -1,71 +1,9 @@
-[00:50:10] [info] FRACTURE: OpenGL loaded
-[00:50:10] [info] FRACTURE: Vendor: Intel
-[00:50:10] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[00:50:10] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[00:50:10] [trace] FRACTURE: Loaded Texture: splash
-[00:50:10] [trace] FRACTURE: Loaded Texture: title
-[00:50:22] [info] FRACTURE: OpenGL loaded
-[00:50:22] [info] FRACTURE: Vendor: Intel
-[00:50:22] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[00:50:22] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[00:50:22] [info] FRACTURE: Renderer Init
-[00:50:22] [trace] FRACTURE: Loaded model: Cube
-[00:50:22] [trace] FRACTURE: Loaded model: Cylinder
-[00:50:22] [trace] FRACTURE: Loaded model: Plane
-[00:50:22] [trace] FRACTURE: Loaded model: Sphere
-[00:50:22] [trace] FRACTURE: Loaded model: Suzane
-[00:50:22] [trace] FRACTURE: Loaded model: Torus
-[00:50:23] [trace] FRACTURE: Loaded model: mushroom
-[00:50:23] [trace] FRACTURE: Loaded Shader: DebugShader
-[00:50:23] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[00:50:23] [trace] FRACTURE: Loaded Shader: default
-[00:50:23] [trace] FRACTURE: Loaded Texture: CameraIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: EyeIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: EyeIconC
-[00:50:23] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: LightIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: RotateIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[00:50:23] [trace] FRACTURE: Loaded Texture: splash
-[00:50:23] [trace] FRACTURE: Loaded Texture: title
-[00:50:23] [trace] FRACTURE: Fracture DeSerializing Scene
-[00:50:23] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 2
-[00:50:23] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 3
-[00:50:23] [trace] FRACTURE: Loaded Material: PlaneMat0
-[00:50:24] [trace] FRACTURE: Loaded Material: Suzane1
-[00:50:24] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[00:50:25] [info] FRACTURE: No Hit 
-[00:50:25] [info] FRACTURE: No Hit 
-[00:50:25] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:32] [info] FRACTURE: No Hit 
-[00:50:53] [info] FRACTURE: No Hit 
-[00:50:53] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:50:54] [info] FRACTURE: No Hit 
-[00:51:02] [info] FRACTURE: No Hit 
-[00:51:02] [info] FRACTURE: No Hit 
-[00:51:02] [info] FRACTURE: No Hit 
-[00:51:15] [info] FRACTURE: No Hit 
-[00:51:15] [info] FRACTURE: No Hit 
-[00:51:15] [info] FRACTURE: No Hit 
-[00:51:15] [info] FRACTURE: No Hit 
-[00:51:15] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
-[00:51:16] [info] FRACTURE: No Hit 
+[14:26:24] [info] FRACTURE: Initializing Splash
+[14:26:24] [info] FRACTURE: OpenGL loaded
+[14:26:24] [info] FRACTURE: Vendor: Intel
+[14:26:24] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[14:26:24] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[14:26:24] [trace] FRACTURE: Loaded Texture: splash
+[14:26:24] [trace] FRACTURE: Loaded Texture: title
+[14:26:24] [info] FRACTURE: Completed Init
+[14:26:24] [info] FRACTURE: Show Splash

@@ -1,5 +1,6 @@
 #include "FractureSplash.h"
 #include <sys/stat.h>
+#include <imgui\imgui_internal.h>
 
 
 
@@ -7,6 +8,7 @@ bool Fracture::FractureSplash::p_open;
 
 Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 {
+    FRACTURE_INFO("Initializing Splash");
 	m_isShow = true;
     m_run = false;
     m_logger = m_editor->GetLogger();
@@ -33,7 +35,7 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 
     m_AssetManger->AddTexture("splash","content/textures/splashtest.png",TextureType::Diffuse);
     m_AssetManger->AddTexture("title", "content/textures/title.png", TextureType::Diffuse);
-
+    FRACTURE_INFO("Completed Init");
 }
 
 Fracture::FractureSplash::~FractureSplash()
@@ -42,8 +44,10 @@ Fracture::FractureSplash::~FractureSplash()
 
 bool Fracture::FractureSplash::Show()
 {
+    FRACTURE_INFO("Show Splash");
 	while (m_isShow)
 	{
+
 		onUpdate();
 		onBeginFrame();
 		onRender();
@@ -89,15 +93,14 @@ void Fracture::FractureSplash::onRender()
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 
 
-    //if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-       // window_flags |= ImGuiWindowFlags_NoBackground;
+    dockspace_flags |= ImGuiDockNodeFlags_NoTabBar;
 
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->GetWorkPos());
     ImGui::SetNextWindowSize(viewport->GetWorkSize());
     ImGui::SetNextWindowViewport(viewport->ID);
    
-    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
     window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 

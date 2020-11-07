@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FractureEngine", "..\Fractu
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504} = {47AFA82F-B3AD-4F3B-8D34-84C97A852504}
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Fracture Setup", "..\..\Releases\Fracture Setup\Fracture Setup.vdproj", "{09E129B6-598B-43A0-9CE5-14D2F630B991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,6 +35,8 @@ Global
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Debug|x64.Build.0 = Debug|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.ActiveCfg = Release|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.Build.0 = Release|x64
+		{09E129B6-598B-43A0-9CE5-14D2F630B991}.Debug|x64.ActiveCfg = Debug
+		{09E129B6-598B-43A0-9CE5-14D2F630B991}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
