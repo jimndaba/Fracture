@@ -512,15 +512,6 @@
     <ClInclude Include="src\Component\ILight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\AssetManager\PBRMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetManager\DiffSpecMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AssetManager\EngineMaterials.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entity\EntityFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>

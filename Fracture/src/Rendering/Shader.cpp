@@ -137,6 +137,16 @@ void Fracture::Shader::setVec4(const std::string& name, glm::vec4 value) const
     glUniform4fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
 }
 
+void Fracture::Shader::setColor3(const std::string& name, glm::vec3 value) const
+{
+    glUniform3fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
+}
+
+void Fracture::Shader::setColor4(const std::string& name, glm::vec4 value) const
+{
+    glUniform4fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
+}
+
 void Fracture::Shader::setMat2(const std::string& name, glm::mat2 value) const
 {
     glUniformMatrix2fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, &value[0][0]);

@@ -86,6 +86,13 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 	{
 		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);		
 		json c;
+
+		//Ealy Exit we do not want to serialize the Root Entity.
+		if (tag->Name == "Root")
+		{
+			return j;
+		}
+
 		c["Entity Name"] = tag->Name;
 		j["Tag Component"] = c;
 	}
@@ -131,6 +138,10 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		c["FOV"] = component->foV ;
 		c["Near Clip"] = component->nearClip ;
 		c["Far Clip"] =  component->farClip ;
+		c["Front"] = { component->Front.x, component->Front.y, component->Front.z };
+		c["Up"] = { component->Up.x,component->Up.y,component->Up.z };
+		c["Right"] = { component->Right.x,component->Right.y,component->Right.z };
+		c["Target Position"] = { component->m_TargetPosition.x, component->m_TargetPosition.y, component->m_TargetPosition.z };
 		j["Camera Component"] = c;
 	}
 
@@ -177,6 +188,16 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				b["Type"] = value->second.Type;
 				b["Name"] = value->first;
 				b["value"] = { value->second.Vec4.x,value->second.Vec4.y,value->second.Vec4.z,value->second.Vec4.w };
+				break;
+			case SHADER_TYPE_COLOR3:
+				b["Type"] = value->second.Type;
+				b["Name"] = value->first;
+				b["value"] = { value->second.Color3.x,value->second.Color3.y,value->second.Color3.z};
+				break;
+			case SHADER_TYPE_COLOR4:
+				b["Type"] = value->second.Type;
+				b["Name"] = value->first;
+				b["value"] = { value->second.Color4.x,value->second.Color4.y,value->second.Color4.z,value->second.Color4.w };
 				break;
 			case SHADER_TYPE_MAT2:
 				
@@ -290,13 +311,18 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 {
 	if (exists(j, "Tag Component"))
-	{		
-		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(j["Entity ID"]);
+	{
+		//Early Exit if it is Root Entity.
+		auto tagComponent = j["Tag Component"];
+		if (tagComponent["Entity Name"] == "Root")
+		{
+			return;
+		}
 
-		auto tagComponent = j["Tag Component"];	
-		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->Id);
+		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(j["Entity ID"]);		
+		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->Id);		
 		component->SetName(tagComponent["Entity Name"]);
-		ComponentManager::AddComponent(component);			
+		ComponentManager::AddComponent(component);
 
 		if (exists(j, "Relationship Component"))
 		{
@@ -328,13 +354,22 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			float Near = cameraComponent["Near Clip"];
 			float Far = cameraComponent["Far Clip"];
 			std::array<float, 3> pos = cameraComponent["Position"];
+			std::array<float, 3> up = cameraComponent["Up"];
+			std::array<float, 3> front = cameraComponent["Front"];
+			std::array<float, 3> right = cameraComponent["Right"];
+			std::array<float, 3> targetpos = cameraComponent["Target Position"];
 
 			std::shared_ptr<CameraControllerComponent> component = std::make_shared<CameraControllerComponent>(entity->Id);
 			component->foV = fov;
 			component->farClip = Far;
 			component->nearClip = Near;
 			component->Position = glm::vec3(pos[0], pos[1], pos[2]);
+			component->Up = glm::vec3(up[0], up[1], up[2]);
+			component->Right = glm::vec3(right[0], right[1], right[2]);
+			component->Front= glm::vec3(front[0], front[1], front[2]);
+			component->m_TargetPosition = glm::vec3(targetpos[0], targetpos[1], targetpos[2]);
 			ComponentManager::AddComponent(component);
+			m_scene->setCamera(entity);
 		}
 		
 		if (exists(j, "Transform Component"))
@@ -402,7 +437,21 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 					glm::vec4 value = glm::vec4(vec4[0], vec4[1], vec4[2], vec4[3]);
 					material->setVec4(uniform["Name"], value);
 					break;
-				}					
+				}		
+				case SHADER_TYPE_COLOR3:
+				{
+					std::array<float, 3> color3 = uniform["value"];
+					glm::vec3 value = glm::vec3(color3[0], color3[1], color3[2]);
+					material->setColor3(uniform["Name"], value);
+					break;
+				}
+				case SHADER_TYPE_COLOR4:
+				{
+					std::array<float, 4> color4 = uniform["value"];
+					glm::vec4 value = glm::vec4(color4[0], color4[1], color4[2], color4[3]);
+					material->setColor4(uniform["Name"], value);
+					break;
+				}
 				case SHADER_TYPE_MAT2:
 
 					break;

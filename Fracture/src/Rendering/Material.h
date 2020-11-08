@@ -29,6 +29,8 @@ namespace Fracture
         SHADER_TYPE_VEC2,
         SHADER_TYPE_VEC3,
         SHADER_TYPE_VEC4,
+        SHADER_TYPE_COLOR3,
+        SHADER_TYPE_COLOR4,
         SHADER_TYPE_MAT2,
         SHADER_TYPE_MAT3,
         SHADER_TYPE_MAT4,
@@ -56,6 +58,8 @@ namespace Fracture
             glm::vec2 Vec2;
             glm::vec3 Vec3;
             glm::vec4 Vec4;
+            glm::vec3 Color3;
+            glm::vec4 Color4;
             glm::mat2 Mat2;
             glm::mat3 Mat3;
             glm::mat4 Mat4;
@@ -99,6 +103,10 @@ namespace Fracture
         void setVec3(std::string name, float x, float y, float z) const;
         void setVec4(std::string name, const glm::vec4& value) const;
         void setVec4(std::string name, float x, float y, float z, float w) const;
+        void setColor3(std::string name, const glm::vec3& value) const;
+        void setColor3(std::string name, float x, float y, float z) const;
+        void setColor4(std::string name, const glm::vec4& value) const;
+        void setColor4(std::string name, float x, float y, float z, float w) const;
         void setMat2(std::string name, const glm::mat2& mat) const;
         void setMat3(std::string name, const glm::mat3& mat) const;
         void setMat4(std::string name, const glm::mat4& mat) const;

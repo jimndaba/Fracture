@@ -28,6 +28,8 @@ std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 inline void Style();
 
 
+
+
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
@@ -35,6 +37,7 @@ Fracture::Editor::Editor()
     m_SceneManager = std::make_unique<SceneManager>();
     m_properties = std::make_shared<ProjectProperties>();
     m_loadNewProject = false;
+    currentTime = SDL_GetTicks() / 1000.0;
 }
 
 Fracture::Editor::~Editor()
@@ -125,36 +128,7 @@ bool Fracture::Editor::onLoad()
     m_SceneManager->SetScene(m_properties->ActiveScene);
     m_viewpanel->init();
     m_viewpanel->setRenderer(m_Renderer.get());
-    SetScene();
-    /*
-    m_AssetManger->AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
-    m_AssetManger->AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
-
-    //textures
-    Fracture::AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
-
-   
-
-    std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
-
-    primitivesMaterial->setVec3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
-    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
-    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
-
-    m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);
-
-   
-    Fracture::AssetManager::AddTexture("container", "content/textures/container.png", Fracture::TextureType::Diffuse);
-    Fracture::AssetManager::AddTexture("specular", "content/textures/container_specular.png", Fracture::TextureType::Specular);
-
-    m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
-    m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
-    m_AssetManger->AddModel("Sphere", "content/models/primitives/sphere.fbx");
-    m_AssetManger->AddModel("Cylinder", "content/models/primitives/cylinder.fbx");
-    m_AssetManger->AddModel("Torus", "content/models/primitives/torus.fbx");
-    m_AssetManger->AddModel("Suzane", "content/models/primitives/suzane.fbx");
-    */
-   
+    SetScene();   
     return true;
 }
 
@@ -180,15 +154,11 @@ void Fracture::Editor::onLoadNew()
 
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
 
-    primitivesMaterial->setVec3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
-    primitivesMaterial->setVec3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
-    primitivesMaterial->setVec3("material.specular", glm::vec3(1.0, 1.0, 1.0));
-
+    primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setColor3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
+    primitivesMaterial->setColor3("material.specular", glm::vec3(1.0, 1.0, 1.0));
+    primitivesMaterial->setFloat("material.specular", 64.0f);
     m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);
-
-
-    //Fracture::AssetManager::AddTexture("container", "content/textures/container.png", Fracture::TextureType::Diffuse);
-   // Fracture::AssetManager::AddTexture("specular", "content/textures/container_specular.png", Fracture::TextureType::Specular);
 
     m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
     m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
@@ -197,7 +167,7 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddModel("Torus", "content/models/primitives/torus.fbx");
     m_AssetManger->AddModel("Suzane", "content/models/primitives/suzane.fbx");
 
-    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+    std::shared_ptr<Scene> scene = m_SceneManager->NewScene();
     m_SceneManager->AddScene("empty", scene);
     m_SceneManager->SetScene("empty");
     SetScene();
@@ -222,15 +192,25 @@ void Fracture::Editor::run()
             done = true;
         }
     }
-    double lastTime = SDL_GetTicks() / 1000.0;
+
     while (!done)
     {
-        double current = SDL_GetTicks() / 1000.0;
-        double elapsed = current - lastTime;
-        onUpdate((float)elapsed);
-        m_PhysicsManger->stepUpdate();
+        double newTime = SDL_GetTicks() / 1000.0;
+        double frameTime = newTime - currentTime;
+        currentTime = newTime;
+
+        accumulator += frameTime;
+
+        while (accumulator >= dt)
+        {
+            onUpdate((float)dt);
+            m_PhysicsManger->stepUpdate();
+            accumulator -= dt;
+            time += dt;
+        }
+
         onRender();
-        lastTime = current;
+      
     }
     onShutdown();
 }
@@ -265,8 +245,7 @@ void Fracture::Editor::onRender()
     if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
    
     Render();   
-    m_frame->end();
- 
+    m_frame->end(); 
     m_window->swapBuffers();
 }
 
@@ -713,7 +692,7 @@ void Style()
     style.WindowBorderSize = 1;
     style.ChildBorderSize = 1;
     style.PopupBorderSize = 1;
-    style.FrameBorderSize = is3D;
+    style.FrameBorderSize = (float)is3D;
 
     style.WindowRounding = 2;
     style.ChildRounding = 2;
@@ -722,7 +701,7 @@ void Style()
     style.GrabRounding = 2;
 
 #ifdef IMGUI_HAS_DOCK 
-    style.TabBorderSize = is3D;
+    style.TabBorderSize = (float)is3D;
     style.TabRounding = 3;
 
     colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.22f, 0.23f, 0.25f, 1.00f);

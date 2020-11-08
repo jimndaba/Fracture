@@ -664,13 +664,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 
 
 	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
-	ImGui::PushFont(boldFont);
-	if (ImGui::Button("-", buttonSize))
-		value.Float = resetValue;
-	ImGui::PopFont();
-
-	ImGui::SameLine();
+	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };	
 	switch (value.Type)
 	{
 	case SHADER_TYPE_BOOL:
@@ -681,11 +675,21 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 	}		
 	case SHADER_TYPE_INT:
 	{
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("-", buttonSize))
+			value.Int =(int)resetValue;
+		ImGui::PopFont();
+		ImGui::SameLine();
 		ImGui::InputInt("##X", &value.Int);
 		break;
 	}
 	case SHADER_TYPE_FLOAT:
 	{
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("-", buttonSize))
+			value.Float = resetValue;
+		ImGui::PopFont();
+		ImGui::SameLine();
 		ImGui::DragFloat("##uniform", &value.Float, 0.1f, 0.0f, 0.0f, "%.2f");
 	
 		break;
@@ -830,7 +834,19 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::DragFloat("##w", &value.Vec4.w, 0.05f, 0.0f, 1.0f, "%.2f");
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
-	
+
+		break;
+	}
+	case SHADER_TYPE_COLOR3:
+	{
+		glm::vec4 color = glm::vec4(value.Color3, 1.0f);
+		DrawColourControl(label, color, 1.0f);
+		value.Color3 = glm::vec3(color.x, color.y, color.z);
+		break;
+	}
+	case SHADER_TYPE_COLOR4:
+	{
+		DrawColourControl(label,value.Color4,1.0f);
 		break;
 	}
 	case SHADER_TYPE_MAT2:

@@ -51,6 +51,11 @@ namespace Fracture
 		std::shared_ptr<AssetManager> GetAssetManager();
 	private:
 
+		double time = 0.0;
+		const double dt = 0.01;
+		double currentTime;
+		double accumulator = 0.0;
+
 		std::shared_ptr<Logger> m_logger;
 		std::unique_ptr<Profiler> m_Profiler;
 		std::unique_ptr<Renderer> m_Renderer;

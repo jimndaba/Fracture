@@ -100,8 +100,7 @@ void Fracture::Renderer::RenderPasses()
 
     m_ShadowPass->Begin();
     for (const auto& command : m_shadowBucket->getCommands())
-    {
-        //SetupLighting(command.material);
+    {   
         Submit(command);
     }
     m_ShadowPass->End();
@@ -133,6 +132,7 @@ void Fracture::Renderer::RenderPasses()
         RenderDebug();
         RenderDebugRetained();
     }   
+    
     SceneRenderTarget->Unbind();
   
     //glDisable(GL_DEPTH_TEST);   
@@ -214,6 +214,10 @@ void Fracture::Renderer::WriteUniformData(Shader shader,std::string name, Unifor
         break;
     case SHADER_TYPE_VEC4:
         shader.setVec4(name, value.Vec4);
+    case SHADER_TYPE_COLOR3:
+        shader.setColor3(name, value.Color3);
+    case SHADER_TYPE_COLOR4:
+        shader.setColor4(name, value.Color4);
         break;
     case SHADER_TYPE_MAT2:
         shader.setMat2(name, value.Mat2);

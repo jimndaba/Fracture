@@ -29,7 +29,7 @@ void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
 	static int gizmoMode = 0;
-	if (ImGui::RadioButton("Translate (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
+	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
@@ -67,7 +67,7 @@ void Fracture::ViewPanel::render()
 	if (gizmoMode == ImGuizmo::OPERATION::SCALE) { SetImGuizmoOperation(ImGuizmo::OPERATION::SCALE); }
 
 
-	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft) && m_ViewportFocused)
+	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft) && m_ViewportFocused || InputManager::IsMouseDown(MOUSECODE::ButtonLeft)&& m_ViewportHovered)
 	{
 		if (IsGizmoValid())
 		{
@@ -108,7 +108,7 @@ void Fracture::ViewPanel::render()
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y);
 				glm::mat4 transformMatrix = transform->GetWorldTransform();
-				//transformMatrix = transformMatrix.tras
+			
 
 				ImGuizmo::MODE mode = currentImGuizmoMode;
 				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
@@ -196,7 +196,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
-	if(m_ViewportFocused && m_camera)
+	if(m_ViewportFocused || m_ViewportHovered && m_camera)
 	{ 
 		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 		{

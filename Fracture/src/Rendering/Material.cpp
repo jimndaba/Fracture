@@ -109,6 +109,42 @@ void Fracture::Material::setVec4(std::string name, float x, float y, float z, fl
 	m_Uniforms->emplace(name, uniform);
 }
 
+void Fracture::Material::setColor3(std::string name, const glm::vec3& value) const
+{
+	UniformValue uniform;
+	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR3;
+	uniform.Vec3 = value;
+	uniform.Name = name;
+	m_Uniforms->emplace(name, uniform);
+}
+
+void Fracture::Material::setColor3(std::string name, float x, float y, float z) const
+{
+	UniformValue uniform;
+	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR3;
+	uniform.Vec3 = glm::vec3(x, y, z);
+	uniform.Name = name;
+	m_Uniforms->emplace(name, uniform);
+}
+
+void Fracture::Material::setColor4(std::string name, const glm::vec4& value) const
+{
+	UniformValue uniform;
+	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR4;
+	uniform.Vec4 = value;
+	uniform.Name = name;
+	m_Uniforms->emplace(name, uniform);
+}
+
+void Fracture::Material::setColor4(std::string name, float x, float y, float z, float w) const
+{
+	UniformValue uniform;
+	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR4;
+	uniform.Vec4 = glm::vec4(x, y, z, w);
+	uniform.Name = name;
+	m_Uniforms->emplace(name, uniform);
+}
+
 void Fracture::Material::setMat2(std::string name, const glm::mat2& mat) const
 {
 	UniformValue uniform;
@@ -188,6 +224,12 @@ void Fracture::Material::CopyUniforms(std::unordered_map<std::string, UniformVal
 			break;
 		case SHADER_TYPE_VEC4:
 			setVec4(value->first, value->second.Vec4);
+			break;
+		case SHADER_TYPE_COLOR3:
+			setColor3(value->first, value->second.Color3);
+			break;
+		case SHADER_TYPE_COLOR4:
+			setColor4(value->first, value->second.Color4);
 			break;
 		case SHADER_TYPE_MAT2:
 			setMat2(value->first, value->second.Mat2);

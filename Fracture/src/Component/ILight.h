@@ -53,6 +53,14 @@ namespace Fracture
 		{
 		}
 
+		~SunLight()
+		{
+			m_ambient = glm::vec4(0.0f);
+			m_diffuse = glm::vec4(0.0f);
+			m_specular = glm::vec4(0.0f);
+			m_direction = glm::vec3(0.0f);
+		}
+
 		virtual void SetAmbient(glm::vec4 ambient) 
 		{
 			m_ambient = ambient;

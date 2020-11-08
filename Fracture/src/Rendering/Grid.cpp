@@ -59,7 +59,7 @@ void Fracture::Grid::Draw(std::shared_ptr<Shader> shader,glm::mat4 view,glm::mat
 	shader->setVec4("Color", m_color);
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
-	glLineWidth(m_thickness);
+	glLineWidth((GLfloat)m_thickness);
 	glBindVertexArray(vao);
 	glDrawElements(GL_LINES, lenght, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
