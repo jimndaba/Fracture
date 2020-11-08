@@ -1,286 +1,91 @@
-[15:07:51] [info] FRACTURE: Initializing Splash
-[15:07:51] [info] FRACTURE: OpenGL loaded
-[15:07:51] [info] FRACTURE: Vendor: Intel
-[15:07:51] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[15:07:51] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[15:07:51] [trace] FRACTURE: Loaded Texture: splash
-[15:07:51] [trace] FRACTURE: Loaded Texture: title
-[15:07:51] [info] FRACTURE: Completed Init
-[15:07:51] [info] FRACTURE: Show Splash
-[15:07:58] [info] FRACTURE: OpenGL loaded
-[15:07:58] [info] FRACTURE: Vendor: Intel
-[15:07:58] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[15:07:58] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[15:07:59] [info] FRACTURE: Renderer Init
-[15:07:59] [trace] FRACTURE: Loaded model: Cube
-[15:07:59] [trace] FRACTURE: Loaded model: Cylinder
-[15:07:59] [trace] FRACTURE: Loaded model: Plane
-[15:07:59] [trace] FRACTURE: Loaded model: Sphere
-[15:07:59] [trace] FRACTURE: Loaded model: Suzane
-[15:07:59] [trace] FRACTURE: Loaded model: Torus
-[15:07:59] [trace] FRACTURE: Loaded Shader: DebugShader
-[15:07:59] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[15:07:59] [trace] FRACTURE: Loaded Shader: default
-[15:07:59] [trace] FRACTURE: Loaded Texture: CameraIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: EyeIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: EyeIconC
-[15:07:59] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: LightIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: RotateIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[15:07:59] [trace] FRACTURE: Loaded Texture: splash
-[15:07:59] [trace] FRACTURE: Loaded Texture: title
-[15:07:59] [trace] FRACTURE: Fracture DeSerializing Scene
-[15:07:59] [trace] FRACTURE: Loaded Material: Suzane0
-[15:07:59] [trace] FRACTURE: Loaded Material: PlaneMat1
-[15:08:04] [trace] FRACTURE: Loaded Material: Torus0
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:14] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:27] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:08:45] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:08] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:09] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:49] [info] FRACTURE: No Hit 
-[15:09:53] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:13] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:14] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:17] [info] FRACTURE: No Hit 
-[15:10:18] [info] FRACTURE: No Hit 
-[15:10:18] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:10:37] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:01] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
-[15:11:14] [info] FRACTURE: No Hit 
+[15:36:55] [info] FRACTURE: Initializing Splash
+[15:36:55] [info] FRACTURE: OpenGL loaded
+[15:36:55] [info] FRACTURE: Vendor: Intel
+[15:36:55] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[15:36:55] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[15:36:55] [trace] FRACTURE: Loaded Texture: splash
+[15:36:55] [trace] FRACTURE: Loaded Texture: title
+[15:36:55] [info] FRACTURE: Completed Init
+[15:36:55] [info] FRACTURE: Show Splash
+[15:36:59] [info] FRACTURE: OpenGL loaded
+[15:36:59] [info] FRACTURE: Vendor: Intel
+[15:36:59] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[15:36:59] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[15:36:59] [info] FRACTURE: Renderer Init
+[15:36:59] [trace] FRACTURE: Loaded model: Cube
+[15:36:59] [trace] FRACTURE: Loaded model: Cylinder
+[15:36:59] [trace] FRACTURE: Loaded model: Plane
+[15:36:59] [trace] FRACTURE: Loaded model: Sphere
+[15:36:59] [trace] FRACTURE: Loaded model: Suzane
+[15:36:59] [trace] FRACTURE: Loaded model: Torus
+[15:36:59] [trace] FRACTURE: Loaded Shader: DebugShader
+[15:37:00] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[15:37:00] [trace] FRACTURE: Loaded Shader: default
+[15:37:00] [trace] FRACTURE: Loaded Texture: CameraIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: EyeIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: EyeIconC
+[15:37:00] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: LightIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: RotateIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[15:37:00] [trace] FRACTURE: Loaded Texture: splash
+[15:37:00] [trace] FRACTURE: Loaded Texture: title
+[15:37:00] [trace] FRACTURE: Fracture DeSerializing Scene
+[15:37:00] [trace] FRACTURE: Loaded Material: Suzane0
+[15:37:00] [trace] FRACTURE: Loaded Material: PlaneMat1
+[15:37:00] [trace] FRACTURE: Loaded Material: Torus0
+[15:37:00] [trace] FRACTURE: Loaded Material: CubeMat0
+[15:37:00] [trace] FRACTURE: Loaded Material: CubeMat1
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:37:01] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:06] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:25] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 
+[15:38:38] [info] FRACTURE: No Hit 

@@ -5,8 +5,11 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <Component\EditorNodeComponent.h>
 
+int Fracture::ViewPanel::gizmoMode;
+
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
+	gizmoMode = 0;
 }
 
 Fracture::ViewPanel::~ViewPanel()
@@ -28,7 +31,7 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-	static int gizmoMode = 0;
+	
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
@@ -233,6 +236,18 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			m_camera->onUpdate(dt);
 		}
 			
+		if (InputManager::IsKeyDown(KeyCode::W))
+		{
+			gizmoMode = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		if (InputManager::IsKeyDown(KeyCode::E))
+		{
+			gizmoMode = ImGuizmo::OPERATION::SCALE;
+		}
+		if (InputManager::IsKeyDown(KeyCode::R))
+		{
+			gizmoMode = ImGuizmo::OPERATION::ROTATE;
+		}
 	}
 }
 
