@@ -30,6 +30,8 @@ namespace Fracture
 
 		static void onUpdate(float dt);
 
+		static void onDebugDraw();
+
 		static void ClearComponents();
 	
 		template< class T, typename... Args >

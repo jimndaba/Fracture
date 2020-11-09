@@ -1,6 +1,8 @@
 #include "LightComponent.h"
 #include "ComponentManager.h"
 #include "TransformComponent.h"
+#include "Rendering/Renderer.h"
+#include "AssetManager/AssetManager.h"
 
 Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Component(id,ComponentType::Light),m_type(lightType)
 {
@@ -26,6 +28,23 @@ Fracture::LightComponent::~LightComponent()
 
 void Fracture::LightComponent::onStart()
 {
+}
+
+void Fracture::LightComponent::OnDebug()
+{
+	switch (m_type)
+	{
+	case LightType::Sun:
+		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
+		break;
+	case LightType::Point:
+
+		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
+		break;
+	case LightType::Spot:
+		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
+		break;
+	}
 }
 
 void Fracture::LightComponent::SetAmbient(glm::vec4 amb)

@@ -51,12 +51,18 @@ namespace Fracture
 		std::shared_ptr<AssetManager> GetAssetManager();
 	private:
 
+		double time = 0.0;
+		const double dt = 0.01;
+		double currentTime;
+		double accumulator = 0.0;
+
 		std::shared_ptr<Logger> m_logger;
 		std::unique_ptr<Profiler> m_Profiler;
-		std::unique_ptr<Renderer> m_Renderer;
+		std::shared_ptr<Renderer> m_Renderer;
 		std::unique_ptr<GameWindow> m_window;
 		std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
+		std::unique_ptr<ComponentManager> m_ComponentManager;
 		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 		std::shared_ptr<AssetManager> m_AssetManger;
@@ -89,7 +95,7 @@ namespace Fracture
 		static bool showInputConfig;
 		static bool showProjectConfig;
 
-		static void showRenderManager(bool* p_open, std::unique_ptr<Fracture::Renderer>& _renderer);
+		static void showRenderManager(bool* p_open, std::shared_ptr<Fracture::Renderer>& _renderer);
 		static void showAudioManager(bool* p_open);
 		static void showPhysicsManager(bool* p_open);
 		static void showInputManager(bool* p_open);

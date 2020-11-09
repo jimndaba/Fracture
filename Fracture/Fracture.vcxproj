@@ -65,7 +65,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include</AdditionalUsingDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -112,7 +112,6 @@
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\EditorNodeComponent.cpp" />
     <ClCompile Include="src\Component\LightComponent.cpp" />
-    <ClCompile Include="src\Component\PointLightComponent.cpp" />
     <ClCompile Include="src\Component\RelationshipComponent.cpp" />
     <ClCompile Include="src\Component\RenderComponent.cpp" />
     <ClCompile Include="src\Component\RigidBodyComponent.cpp" />
@@ -131,6 +130,7 @@
     <ClCompile Include="src\Physics\PhysicsDebugDraw.cpp" />
     <ClCompile Include="src\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Profiling\Profiler.cpp" />
+    <ClCompile Include="src\Rendering\Billboard.cpp" />
     <ClCompile Include="src\Rendering\DebugLine.cpp" />
     <ClCompile Include="src\Rendering\DebugRenderer.cpp" />
     <ClCompile Include="src\Rendering\Grid.cpp" />
@@ -154,9 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
-    <ClInclude Include="src\AssetManager\DiffSpecMaterial.h" />
-    <ClInclude Include="src\AssetManager\EngineMaterials.h" />
-    <ClInclude Include="src\AssetManager\PBRMaterial.h" />
     <ClInclude Include="src\Component\BoxColliderComponent.h" />
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
@@ -167,7 +164,6 @@
     <ClInclude Include="src\Component\LightComponent.h" />
     <ClInclude Include="src\Entity\EntityFactory.h" />
     <ClInclude Include="src\Physics\PhysicsUtility.h" />
-    <ClInclude Include="src\Component\PointLightComponent.h" />
     <ClInclude Include="src\Component\RelationshipComponent.h" />
     <ClInclude Include="src\Component\RenderComponent.h" />
     <ClInclude Include="src\Component\RigidBodyComponent.h" />
@@ -196,6 +192,7 @@
     <ClInclude Include="src\Physics\Ray.h" />
     <ClInclude Include="src\Physics\RayHit.h" />
     <ClInclude Include="src\Profiling\Profiler.h" />
+    <ClInclude Include="src\Rendering\Billboard.h" />
     <ClInclude Include="src\Rendering\DebugLine.h" />
     <ClInclude Include="src\Rendering\DebugRenderer.h" />
     <ClInclude Include="src\Rendering\Grid.h" />

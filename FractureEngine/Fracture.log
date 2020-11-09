@@ -1,8 +1,5 @@
-[14:09:43] [info] FRACTURE: OpenGL loaded
-[14:09:43] [info] FRACTURE: Vendor: Intel
-[14:09:43] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[14:09:43] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[14:09:43] [error] FRACTURE: Failed to load texture
-[14:09:43] [trace] FRACTURE: Loaded Texture: splash
-[14:09:43] [error] FRACTURE: Failed to load texture
-[14:09:43] [trace] FRACTURE: Loaded Texture: title
+[20:12:11] [info] FRACTURE: Initializing Splash
+[20:12:11] [info] FRACTURE: OpenGL loaded
+[20:12:11] [info] FRACTURE: Vendor: Intel
+[20:12:11] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[20:12:11] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986

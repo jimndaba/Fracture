@@ -22,6 +22,7 @@ namespace Fracture
 	class Mesh;
 	class Shader;
 	class Material;
+	class Texture;
 	class Entity;
 	class EntityInstance;
 	class Scene;
@@ -35,7 +36,7 @@ namespace Fracture
 	class Renderer
 	{
 	public:
-		Renderer(int width,int height);
+		Renderer();
 		~Renderer();	
 
 		void onInit();
@@ -43,7 +44,7 @@ namespace Fracture
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderPasses();
 		void RenderDebug();
-		void RenderDebugRetained();				
+		void RenderDebugRetained();		
 		void Submit(RenderCommand command);
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
@@ -59,16 +60,15 @@ namespace Fracture
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
+		static void DrawBillboard(int id, std::shared_ptr<Texture> texture);
 		static bool IsDebugDraw()
 		{
 			return m_isDebugRender;
 		}
-
 		static bool IsDrawGrid(bool drawgrid)
 		{
 			m_drawgrid = drawgrid;
 		}
-
 		static void SetDebugRender(bool debug);
 
 		void AddLight(const std::shared_ptr<ILight> light);
@@ -83,12 +83,13 @@ namespace Fracture
 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 		
-
+		static std::shared_ptr<Renderer> getInstance();
 	private:
 		int m_width;
 		int m_Height;
 		static bool m_isDebugRender;
 		static bool m_drawgrid;
+		static std::shared_ptr<Renderer> instance;
 
 		//render buckets
 		std::shared_ptr<RenderBucket> m_opaqueBucket;

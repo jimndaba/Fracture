@@ -58,6 +58,14 @@ void Fracture::ComponentManager::onUpdate(float dt)
 	}
 }
 
+void Fracture::ComponentManager::onDebugDraw()
+{
+	for (auto& component : m_Components)
+	{
+		component->OnDebug();
+	}
+}
+
 void Fracture::ComponentManager::ClearComponents()
 {
 	m_Components.clear();

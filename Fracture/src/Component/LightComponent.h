@@ -18,6 +18,8 @@ namespace Fracture
 
 		virtual void onStart();
 
+		virtual void OnDebug();
+
 		void SetAmbient(glm::vec4 amb);
 		void SetDiffuse(glm::vec4 diff);
 		void SetSpecular(glm::vec4 spec);

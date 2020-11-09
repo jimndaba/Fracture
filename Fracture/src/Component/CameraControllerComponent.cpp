@@ -67,17 +67,12 @@ void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
 bool firstMouse = true;
 void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
 {
-    if (firstMouse)
-    {        
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
+    static double lastX = xpos;
+    static double lastY = ypos;
     
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-    lastX = xpos;
-    lastY = ypos;
+   
 
     if (m_TargetYaw == 0.0f) m_TargetYaw = 0.01f;
     if (m_TargetPitch == 0.0f) m_TargetPitch = 0.01f;
@@ -100,6 +95,9 @@ void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, flo
             m_TargetPitch += MouseSensitivity * yoffset;
         }
     }
+
+    lastX = xpos;
+    lastY = ypos;
 
 }
 

@@ -18,6 +18,7 @@ namespace Fracture
 		SceneManager();
 		~SceneManager();
 
+		static std::shared_ptr<Scene> NewScene();
 		static void AddScene(std::string name, std::shared_ptr<Scene> scene);
 		static void RemoveScene(std::string name);
 

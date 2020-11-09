@@ -19,7 +19,7 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/EditorNodeComponent.h"
-#include "AssetManager/EngineMaterials.h"
+#include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
 #include "Scene/Scene.h"
 
@@ -51,14 +51,16 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sun);
+
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent(light);
+
 			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
 			>(newEntity->Id);
 
 			node->SetRotation(light->GetDirection());
-
 			ComponentManager::AddComponent(node);
-			ComponentManager::AddComponent(relationship);
-			ComponentManager::AddComponent(light);
+			
 
 			return newEntity;
 		}
@@ -69,12 +71,11 @@ namespace Fracture
 			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Pointlight");
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);
-			//node->SetPosition(light->GetPosition());			
-			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);	
+			
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent(light);
-			
+			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
 			return newEntity;
 		}
 
@@ -85,15 +86,17 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Spot);
+			
+		
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent(light);
+
 			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
 			>(newEntity->Id);
 
 			node->SetPosition(light->GetPosition());
 			node->SetRotation(light->GetDirection());
-
 			ComponentManager::AddComponent(node);
-			ComponentManager::AddComponent(relationship);
-			ComponentManager::AddComponent(light);
 
 			return newEntity;
 		}
@@ -107,14 +110,13 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "CubeMat" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
+				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
-
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id,"Cube", name);
@@ -131,14 +133,13 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "PlaneMat" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
+				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
-
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Plane", name);
@@ -156,13 +157,13 @@ namespace Fracture
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 
 			std::string name = "SphereMat" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
 				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
-
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name , material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", name);
@@ -179,13 +180,13 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "Suzane" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
 				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
-
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Suzane", name);
@@ -202,13 +203,13 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "Cylinder" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
 				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
-
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Cylinder", name);
@@ -225,20 +226,19 @@ namespace Fracture
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			std::string name = "Torus" + std::to_string(materialCount);
-			std::shared_ptr<UnTexturedMaterial> material = std::make_shared<UnTexturedMaterial>(name,
-				AssetManager::getShader("PrimitiveMaterial")
-				);
+			std::shared_ptr<Material> material = std::make_shared<Material>(name,
+				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setVec3("material.diffuse", glm::vec3(1.0f));
-			material->setVec3("material.ambient", glm::vec3(1.0f));
-			material->setVec3("material.specular", glm::vec3(1.0f));
+			material->setColor3("material.diffuse", glm::vec3(1.0f));
+			material->setColor3("material.ambient", glm::vec3(1.0f));
+			material->setColor3("material.specular", glm::vec3(1.0f));
+			material->setFloat("material.shininess", 64.0f);
 
 			AssetManager::AddMaterial(name, material);
 			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Torus", name);
 			materialCount++;
 			return newEntity;
 		}
-
 
 	private:
 		static int materialCount;

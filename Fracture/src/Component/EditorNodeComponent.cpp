@@ -3,12 +3,31 @@
 #include <glm\gtx\quaternion.hpp>
 #include <Component\RelationshipComponent.h>
 #include <Component\TransformComponent.h>
+#include <Component\LightComponent.h>
 
 Fracture::EditorNode::EditorNode(uint32_t id):Component(id,ComponentType::Transform)
 {
-	m_Position = glm::vec3(0.0f);
-	m_Scale = glm::vec3(1.0f);
-	m_Rotation = glm::vec3(0.0f);
+	if (ComponentManager::HasComponent<TransformComponent>(id))
+	{
+			std::shared_ptr<TransformComponent> transform=										ComponentManager::GetComponent<TransformComponent>(id);
+			m_Position = transform->Position;
+			m_Scale = transform->Scale;
+			m_Rotation = transform->Rotation;
+	}
+	else if (ComponentManager::HasComponent<LightComponent>(id))
+	{
+		std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(id);
+		m_Position = light->GetPosition();
+		m_Scale = glm::vec3(1.0f);
+		m_Rotation = light->GetDirection();
+	}
+	else
+	{
+		m_Position = glm::vec3(0.0f);
+		m_Scale = glm::vec3(1.0f);
+		m_Rotation = glm::vec3(0.0f);
+	}
+	
 }
 
 Fracture::EditorNode::~EditorNode()

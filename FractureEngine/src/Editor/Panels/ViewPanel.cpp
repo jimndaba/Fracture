@@ -5,14 +5,16 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <Component\EditorNodeComponent.h>
 
+int Fracture::ViewPanel::gizmoMode;
+
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
+	gizmoMode = 0;
 }
 
 Fracture::ViewPanel::~ViewPanel()
 {
 }
-
 
 void Fracture::ViewPanel::init()
 {
@@ -28,8 +30,8 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-	static int gizmoMode = 0;
-	if (ImGui::RadioButton("Translate (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
+	
+	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
@@ -40,7 +42,7 @@ void Fracture::ViewPanel::render()
 		0.f, 1.f, 0.f, 0.f,
 		0.f, 0.f, 1.f, 0.f,
 		0.f, 0.f, 0.f, 1.f };
-	ImGuizmo::SetOrthographic(false);
+
 
 	
 
@@ -50,13 +52,16 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
-	
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); 
-	ImVec2 viewPosition = { ImGui::GetWindowPos().x ,ImGui::GetWindowPos().y };
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y};
-	
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();	
+	ImVec2 content_area_max_point = ImGui::GetWindowContentRegionMax();
+
+	float width = content_area_max_point.x - ImGui::GetCursorPos().x;
+	float height = content_area_max_point.y - ImGui::GetCursorPos().y;
+	m_ViewportSize = { width, height };
+
+
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		viewportPanelSize, ImVec2{0, 1}, ImVec2{ 1, 0 });
+		ImVec2{ width,height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	
 	ImVec2 screen_pos = ImGui::GetMousePos();
@@ -67,7 +72,7 @@ void Fracture::ViewPanel::render()
 	if (gizmoMode == ImGuizmo::OPERATION::SCALE) { SetImGuizmoOperation(ImGuizmo::OPERATION::SCALE); }
 
 
-	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft) && m_ViewportFocused)
+	if (InputManager::IsMouseDown(MOUSECODE::ButtonLeft) && m_ViewportFocused || InputManager::IsMouseDown(MOUSECODE::ButtonLeft)&& m_ViewportHovered)
 	{
 		if (IsGizmoValid())
 		{
@@ -102,17 +107,22 @@ void Fracture::ViewPanel::render()
 			{
 				float rw = (float)ImGui::GetWindowWidth();
 				float rh = (float)ImGui::GetWindowHeight();
+				
+				
+				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y);
 				glm::mat4 transformMatrix = transform->GetWorldTransform();
-				//transformMatrix = transformMatrix.tras
+			
 
 				ImGuizmo::MODE mode = currentImGuizmoMode;
 				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
 					mode = ImGuizmo::MODE::LOCAL;
+
+				
 
 				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
 					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
@@ -125,9 +135,11 @@ void Fracture::ViewPanel::render()
 					glm::vec3 position = transform->Position;
 					glm::vec3 skew;
 					glm::vec4 perspective;
+
+					glm::transpose(transformMatrix);
 					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
 
-					//rotation = glm::conjugate(rotation);
+
 					transform->Scale = scale;
 					transform->Rotation = glm::eulerAngles(rotation);
 					transform->Position = position;
@@ -138,8 +150,6 @@ void Fracture::ViewPanel::render()
 
 		if (ComponentManager::HasComponent<EditorNode>(SceneView::SelectedEntity().Id))
 		{
-			
-
 			std::shared_ptr<EditorNode> node = ComponentManager::GetComponent<EditorNode>(SceneView::SelectedEntity().Id);
 			if (node)
 			{
@@ -192,11 +202,10 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
-		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+			m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
-	if(m_ViewportFocused && m_camera)
+	if(m_ViewportFocused && m_ViewportHovered && m_camera)
 	{ 
 		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 		{
@@ -233,6 +242,18 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			m_camera->onUpdate(dt);
 		}
 			
+		if (InputManager::IsKeyDown(KeyCode::W))
+		{
+			gizmoMode = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		if (InputManager::IsKeyDown(KeyCode::E))
+		{
+			gizmoMode = ImGuizmo::OPERATION::SCALE;
+		}
+		if (InputManager::IsKeyDown(KeyCode::R))
+		{
+			gizmoMode = ImGuizmo::OPERATION::ROTATE;
+		}
 	}
 }
 

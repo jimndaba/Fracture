@@ -59,7 +59,7 @@ namespace Fracture
 		ImGuizmo::OPERATION currentImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE currentImGuizmoMode = ImGuizmo::MODE::WORLD;
 		
-
+		static int gizmoMode;
 		int lastUsing = 0;
 	};
 
