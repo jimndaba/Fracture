@@ -43,7 +43,7 @@ Fracture::Game::Game(int width, int height)
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer(width,height));
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
@@ -93,7 +93,7 @@ void Fracture::Game::init()
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer(m_GameWindow->Width, m_GameWindow->Height));
+	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
 	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
@@ -183,14 +183,12 @@ void Fracture::Game::render()
 	ProfilerTimer timer("Render");
 	m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
 	m_Renderer->RenderPasses();
-	//DebugRenderer::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
 	m_Renderer->EndFrame();
 }
 
 void Fracture::Game::unloadContent()
 {
 	m_SceneManager->GetActiveScene()->clearScene();
-	//m_currentScene.reset();
 }
 
 void Fracture::Game::shutdown()
@@ -205,7 +203,6 @@ void Fracture::Game::shutdown()
 
 void Fracture::Game::addScene(std::string name,std::shared_ptr<Fracture::Scene> scene)
 {
-	//m_currentScene = scene;
 	m_SceneManager->AddScene(name, scene);
 }
 
@@ -253,7 +250,7 @@ void Fracture::Game::onQuit()
 
 void Fracture::Game::onWindowResize(int width, int height)
 {
-	//m_Renderer->setViewport(width, height);
+	m_Renderer->setViewport(width, height);
 }
 
 Fracture::Renderer* Fracture::Game::GetRenderer()

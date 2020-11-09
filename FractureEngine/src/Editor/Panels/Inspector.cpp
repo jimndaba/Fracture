@@ -71,22 +71,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	DrawComponent<EditorNode>("Editor Node", entity, [](auto& component)
 		{
 			std::shared_ptr<EditorNode> m_node = std::dynamic_pointer_cast<EditorNode>(component);
-			glm::vec3 position = m_node->GetPosition();			
+			glm::vec3 position = m_node->GetPosition();
 			glm::vec3 scale = m_node->GetScale();
 			glm::vec3 rotation = m_node->GetRotation();
-
-			if (ComponentManager::HasComponent<LightComponent>(m_node->EntityID))
-			{			
-				std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(m_node->EntityID);
-				m_node->SetPosition(light->GetPosition());
-				m_node->SetScale(glm::vec3(1.0f));
-				m_node->SetRotation(light->GetDirection());
-			}
-			
 			
 			DrawVec3Control("Position", position);
 			DrawVec3Control("Scale", scale, 1);
 			DrawVec3Control("Rotation",rotation);
+
 			m_node->SetPosition(position);
 			m_node->SetScale(scale);
 			m_node->SetRotation(rotation);
@@ -313,6 +305,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			{
 				lType = "Spotlight";
 			}
+
 			static ImGuiComboFlags flags = 0;
 			const char* items[] = { "Sunlight","Pointlight","Spotlight" };
 			LightType lighttypes[] = {LightType::Sun,LightType::Point ,LightType::Spot };

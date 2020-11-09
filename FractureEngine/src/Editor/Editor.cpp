@@ -36,6 +36,7 @@ Fracture::Editor::Editor()
     m_AssetManger = std::make_shared<AssetManager>();   
     m_SceneManager = std::make_unique<SceneManager>();
     m_properties = std::make_shared<ProjectProperties>();
+
     m_loadNewProject = false;
     currentTime = SDL_GetTicks() / 1000.0;
 }
@@ -52,7 +53,7 @@ void Fracture::Editor::onInit()
     m_PhysicsManger = std::make_unique<PhysicsManager>();
     m_EntityFactory = std::make_unique<EntityFactory>();
     m_Profiler = std::make_unique<Profiler>();
-
+    m_ComponentManager = std::make_unique<ComponentManager>();
 
     m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     m_window->MaximiseWindow();
@@ -108,7 +109,7 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
   
-    m_Renderer = std::unique_ptr<Renderer>(new Renderer(1280, 720));
+    m_Renderer = Renderer::getInstance();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
     m_Renderer->onInit();
     
@@ -146,13 +147,20 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
     m_AssetManger->AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
 
-    //textures
+    //billboards
+    m_AssetManger->AddShader("BillboardShader", "content/shaders/Billboards/vertex.glsl", "content/shaders/Billboards/fragment.glsl");
+
+    //textured models
     m_AssetManger->AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
 
 
     m_AssetManger->AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
 
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
+
+    std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
+
+    m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);
 
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setColor3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
@@ -243,7 +251,7 @@ void Fracture::Editor::onRender()
     if (showPhysicsConfig) showPhysicsManager(&showPhysicsConfig);
     if (showInputConfig) showInputManager(&showInputConfig);
     if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
-   
+    m_ComponentManager->onDebugDraw();
     Render();   
     m_frame->end(); 
     m_window->swapBuffers();
@@ -307,7 +315,7 @@ void Fracture::Editor::Render()
         DrawMenuBar();
        
        
-        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());        
         m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
 
@@ -506,7 +514,7 @@ std::shared_ptr<Fracture::AssetManager> Fracture::Editor::GetAssetManager()
     return m_AssetManger;
 }
 
-void Fracture::Editor::showRenderManager(bool* p_open,std::unique_ptr<Fracture::Renderer>& _renderer)
+void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::Renderer>& _renderer)
 {
     ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Render System", p_open,ImGuiWindowFlags_NoDocking|ImGuiWindowFlags_NoCollapse))

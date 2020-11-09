@@ -35,6 +35,8 @@ namespace Fracture
 
 		virtual void onStart() = 0;
 
+		virtual void OnDebug() {};
+
 		uint32_t EntityID;
 		ComponentType componentType = ComponentType::None;		
 	};

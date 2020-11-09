@@ -26,6 +26,7 @@
 #include "DebugLine.h"
 #include "ShadowPass.h"
 
+#include "BillBoard.h"
 #include "Grid.h"
 
 #ifndef GLERROR_H
@@ -45,13 +46,16 @@ std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDra
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDrawsRetained;
 bool Fracture::Renderer::m_isDebugRender;
 bool Fracture::Renderer::m_drawgrid;
+std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
 
-Fracture::Renderer::Renderer(int width, int height):m_width(width),m_Height(height)
+Fracture::Renderer::Renderer()
 {
+    m_width = 1280;
+    m_Height = 720;
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());    
-    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, GL_FLOAT, 1, true));
+    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1, true));
    
     m_grid = std::make_shared<Grid>(100, 100, 1, 1,0.5f);
     m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f,2.0f));
@@ -307,7 +311,7 @@ void Fracture::Renderer::setViewport(int width, int height)
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
 {
-    if (command.material->IsTransparent())
+    if (command.HasTransparency)
     {
         m_transparentBucket->pushCommand(command);
     }
@@ -348,6 +352,20 @@ void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4
 void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end, glm::vec4 color)
 {
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end,color));
+}
+
+void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Texture> texture)
+{
+    std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");
+    std::shared_ptr<Billboard> billboard = std::shared_ptr<Billboard>(new Billboard());
+    RenderCommand command(billbaordMaterial.get());
+    command.VAO = billboard->VAO();
+    command.ID = id;
+    command.HasTransparency = true;
+    command.indiceSize = billboard->Indicies();
+    billbaordMaterial->SetTexture("IconTexture", texture, 0);
+    Renderer::getInstance()->PushCommand(command);
+    
 }
 
 void Fracture::Renderer::SetDebugRender(bool debug)
@@ -449,6 +467,16 @@ void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
 {
     FRACTURE_TRACE("WINDOW RESIZE");
     setViewport(mevent->Width, mevent->Height);
+}
+
+std::shared_ptr<Fracture::Renderer> Fracture::Renderer::getInstance()
+{
+    if (instance == 0)
+    {
+        FRACTURE_ERROR("RENDERER HAS NOT BEEN INITIALISED");
+        instance = std::make_shared<Renderer>();
+    }
+    return instance;
 }
 
 void _check_gl_error(const char* file, int line) {

@@ -51,14 +51,16 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sun);
+
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent(light);
+
 			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
 			>(newEntity->Id);
 
 			node->SetRotation(light->GetDirection());
-
 			ComponentManager::AddComponent(node);
-			ComponentManager::AddComponent(relationship);
-			ComponentManager::AddComponent(light);
+			
 
 			return newEntity;
 		}
@@ -69,12 +71,11 @@ namespace Fracture
 			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Pointlight");
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);
-			//node->SetPosition(light->GetPosition());			
-			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);	
+			
 			ComponentManager::AddComponent(relationship);
 			ComponentManager::AddComponent(light);
-			
+			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
 			return newEntity;
 		}
 
@@ -85,15 +86,17 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Spot);
+			
+		
+			ComponentManager::AddComponent(relationship);
+			ComponentManager::AddComponent(light);
+
 			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
 			>(newEntity->Id);
 
 			node->SetPosition(light->GetPosition());
 			node->SetRotation(light->GetDirection());
-
 			ComponentManager::AddComponent(node);
-			ComponentManager::AddComponent(relationship);
-			ComponentManager::AddComponent(light);
 
 			return newEntity;
 		}

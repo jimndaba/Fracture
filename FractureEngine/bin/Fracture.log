@@ -1,91 +1,78 @@
-[15:36:55] [info] FRACTURE: Initializing Splash
-[15:36:55] [info] FRACTURE: OpenGL loaded
-[15:36:55] [info] FRACTURE: Vendor: Intel
-[15:36:55] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[15:36:55] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[15:36:55] [trace] FRACTURE: Loaded Texture: splash
-[15:36:55] [trace] FRACTURE: Loaded Texture: title
-[15:36:55] [info] FRACTURE: Completed Init
-[15:36:55] [info] FRACTURE: Show Splash
-[15:36:59] [info] FRACTURE: OpenGL loaded
-[15:36:59] [info] FRACTURE: Vendor: Intel
-[15:36:59] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[15:36:59] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
-[15:36:59] [info] FRACTURE: Renderer Init
-[15:36:59] [trace] FRACTURE: Loaded model: Cube
-[15:36:59] [trace] FRACTURE: Loaded model: Cylinder
-[15:36:59] [trace] FRACTURE: Loaded model: Plane
-[15:36:59] [trace] FRACTURE: Loaded model: Sphere
-[15:36:59] [trace] FRACTURE: Loaded model: Suzane
-[15:36:59] [trace] FRACTURE: Loaded model: Torus
-[15:36:59] [trace] FRACTURE: Loaded Shader: DebugShader
-[15:37:00] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[15:37:00] [trace] FRACTURE: Loaded Shader: default
-[15:37:00] [trace] FRACTURE: Loaded Texture: CameraIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: EyeIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: EyeIconC
-[15:37:00] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: LightIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: RotateIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[15:37:00] [trace] FRACTURE: Loaded Texture: splash
-[15:37:00] [trace] FRACTURE: Loaded Texture: title
-[15:37:00] [trace] FRACTURE: Fracture DeSerializing Scene
-[15:37:00] [trace] FRACTURE: Loaded Material: Suzane0
-[15:37:00] [trace] FRACTURE: Loaded Material: PlaneMat1
-[15:37:00] [trace] FRACTURE: Loaded Material: Torus0
-[15:37:00] [trace] FRACTURE: Loaded Material: CubeMat0
-[15:37:00] [trace] FRACTURE: Loaded Material: CubeMat1
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:37:01] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:06] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:25] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
-[15:38:38] [info] FRACTURE: No Hit 
+[00:34:46] [info] FRACTURE: Initializing Splash
+[00:34:46] [info] FRACTURE: OpenGL loaded
+[00:34:46] [info] FRACTURE: Vendor: Intel
+[00:34:46] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[00:34:46] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[00:34:46] [trace] FRACTURE: Loaded Texture: splash
+[00:34:46] [trace] FRACTURE: Loaded Texture: title
+[00:34:46] [info] FRACTURE: Completed Init
+[00:34:46] [info] FRACTURE: Show Splash
+[00:34:56] [info] FRACTURE: OpenGL loaded
+[00:34:56] [info] FRACTURE: Vendor: Intel
+[00:34:56] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[00:34:56] [info] FRACTURE: Version: 4.0.0 - Build 26.20.100.7986
+[00:34:56] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[00:34:56] [info] FRACTURE: Renderer Init
+[00:34:56] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: RotateIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: CameraIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: LightIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: EyeIcon
+[00:34:56] [trace] FRACTURE: Loaded Texture: EyeIconC
+[00:34:56] [trace] FRACTURE: Loaded Shader: DebugShader
+[00:34:56] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[00:34:56] [trace] FRACTURE: Loaded Shader: BillboardShader
+[00:34:56] [trace] FRACTURE: Loaded Shader: default
+[00:34:56] [trace] FRACTURE: Loaded Material: DebugMaterial
+[00:34:56] [trace] FRACTURE: Loaded Material: billboardIcons
+[00:34:56] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[00:34:56] [trace] FRACTURE: Loaded model: Plane
+[00:34:56] [trace] FRACTURE: Loaded model: Cube
+[00:34:56] [trace] FRACTURE: Loaded model: Sphere
+[00:34:56] [trace] FRACTURE: Loaded model: Cylinder
+[00:34:56] [trace] FRACTURE: Loaded model: Torus
+[00:34:56] [trace] FRACTURE: Loaded model: Suzane
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:57] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:34:58] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 
+[00:35:20] [info] FRACTURE: No Hit 

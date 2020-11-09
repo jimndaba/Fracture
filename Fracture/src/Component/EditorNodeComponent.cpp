@@ -14,7 +14,7 @@ Fracture::EditorNode::EditorNode(uint32_t id):Component(id,ComponentType::Transf
 			m_Scale = transform->Scale;
 			m_Rotation = transform->Rotation;
 	}
-	if (ComponentManager::HasComponent<LightComponent>(id))
+	else if (ComponentManager::HasComponent<LightComponent>(id))
 	{
 		std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(id);
 		m_Position = light->GetPosition();

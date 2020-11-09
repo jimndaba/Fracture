@@ -16,7 +16,6 @@ Fracture::ViewPanel::~ViewPanel()
 {
 }
 
-
 void Fracture::ViewPanel::init()
 {
 	m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->MainCamera()->Id);
@@ -43,7 +42,7 @@ void Fracture::ViewPanel::render()
 		0.f, 1.f, 0.f, 0.f,
 		0.f, 0.f, 1.f, 0.f,
 		0.f, 0.f, 0.f, 1.f };
-	ImGuizmo::SetOrthographic(false);
+
 
 	
 
@@ -53,13 +52,16 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
-	
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); 
-	ImVec2 viewPosition = { ImGui::GetWindowPos().x ,ImGui::GetWindowPos().y };
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y};
-	
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();	
+	ImVec2 content_area_max_point = ImGui::GetWindowContentRegionMax();
+
+	float width = content_area_max_point.x - ImGui::GetCursorPos().x;
+	float height = content_area_max_point.y - ImGui::GetCursorPos().y;
+	m_ViewportSize = { width, height };
+
+
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		viewportPanelSize, ImVec2{0, 1}, ImVec2{ 1, 0 });
+		ImVec2{ width,height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	
 	ImVec2 screen_pos = ImGui::GetMousePos();
@@ -105,6 +107,9 @@ void Fracture::ViewPanel::render()
 			{
 				float rw = (float)ImGui::GetWindowWidth();
 				float rh = (float)ImGui::GetWindowHeight();
+				
+				
+				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
@@ -117,6 +122,8 @@ void Fracture::ViewPanel::render()
 				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
 					mode = ImGuizmo::MODE::LOCAL;
 
+				
+
 				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
 					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
 				);
@@ -128,9 +135,11 @@ void Fracture::ViewPanel::render()
 					glm::vec3 position = transform->Position;
 					glm::vec3 skew;
 					glm::vec4 perspective;
+
+					glm::transpose(transformMatrix);
 					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
 
-					//rotation = glm::conjugate(rotation);
+
 					transform->Scale = scale;
 					transform->Rotation = glm::eulerAngles(rotation);
 					transform->Position = position;
@@ -141,8 +150,6 @@ void Fracture::ViewPanel::render()
 
 		if (ComponentManager::HasComponent<EditorNode>(SceneView::SelectedEntity().Id))
 		{
-			
-
 			std::shared_ptr<EditorNode> node = ComponentManager::GetComponent<EditorNode>(SceneView::SelectedEntity().Id);
 			if (node)
 			{
@@ -195,11 +202,10 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
-		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+			m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 
-	if(m_ViewportFocused || m_ViewportHovered && m_camera)
+	if(m_ViewportFocused && m_ViewportHovered && m_camera)
 	{ 
 		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 		{
