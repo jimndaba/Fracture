@@ -437,104 +437,132 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 		if (ImGui::MenuItem("Transform"))
 		{
-			ComponentManager::AddComponent<TransformComponent>(entity.Id);
+			if (SceneView::SelectedEntity())
+			{
+				ComponentManager::AddComponent<TransformComponent>(entity.Id);
+			}			
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Editor Node"))
 		{
-			ComponentManager::AddComponent<EditorNode>(entity.Id);
+			if (SceneView::SelectedEntity())
+			{
+				ComponentManager::AddComponent<EditorNode>(entity.Id);
+			}
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Camera"))
 		{
-			ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+
+			if (SceneView::SelectedEntity())
+			{
+				ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+			}
+			
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::BeginMenu("Render"))
 		{
-			std::string modelName;
-			for (auto const& model : AssetManager::GetModels())
+			if (SceneView::SelectedEntity())
 			{
-				if (ImGui::MenuItem(model.first.c_str()))
+				std::string modelName;
+				for (auto const& model : AssetManager::GetModels())
 				{
-					modelName = model.first;
-					if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
+					if (ImGui::MenuItem(model.first.c_str()))
 					{
-						std::string mat_name = modelName + "Materail";
-						std::shared_ptr<Material> material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
-						AssetManager::AddMaterial(mat_name,material);
-						ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
-					}
-					else
-					{
-						FRACTURE_ERROR("ENTITY DOES NOT HAVE TRANSFORM COMPONENT");
-					}
+						modelName = model.first;
+						if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
+						{
+							std::string mat_name = modelName + "Materail";
+							std::shared_ptr<Material> material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
+							AssetManager::AddMaterial(mat_name, material);
 
+							ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+						}
+						else
+						{
+							FRACTURE_ERROR("ENTITY DOES NOT HAVE TRANSFORM COMPONENT");
+						}
+
+					}
 				}
+				ImGui::EndMenu();
 			}
-			ImGui::EndMenu();
 		}
 
 		if (ImGui::MenuItem("Audio"))
 		{
-			//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);			
+			if (SceneView::SelectedEntity())
+			{
+				//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);		
+			}
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Light"))
 		{
-			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			if (SceneView::SelectedEntity())
 			{
-				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				{
+					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
 
+				}
+				else
+				{
+					ComponentManager::AddComponent<LightComponent>(entity.Id, LightType::Sun);
+				}
 			}
-			else
-			{
-				ComponentManager::AddComponent<LightComponent>(entity.Id, LightType::Sun);
-			}
-			
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Collision"))
 		{
-			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			if (SceneView::SelectedEntity())
 			{
-				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				{
+					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
 
+				}
+				else
+				{
+					ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-			{
-				ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
-			}		
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Rigidbody"))
 		{
-			if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+			if (SceneView::SelectedEntity())
 			{
-				FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				{
+					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
+				}
+				else if (!ComponentManager::HasComponent<BoxColliderComponent>(entity.Id))
+				{
+					ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+					ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+				}
+				else
+				{
+					ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+				}
 			}
-			else if (!ComponentManager::HasComponent<BoxColliderComponent>(entity.Id))
-			{
-				ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f,1.0f,1.0f);
-				ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
-			}
-			else
-			{
-				ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
-			}
-			
 			ImGui::CloseCurrentPopup();
 		}
 
 		if (ImGui::MenuItem("Script"))
 		{
-			//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
+			if (SceneView::SelectedEntity())
+			{
+				//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
+			}
 			ImGui::CloseCurrentPopup();
 		}
 

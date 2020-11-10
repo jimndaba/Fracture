@@ -281,7 +281,9 @@ void Fracture::Renderer::Submit(RenderCommand command)
        
     Draw(command);
    
-    command.material->getShader()->unbind();
+    command.material->getShader()->unbind(); 
+    glActiveTexture(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Fracture::Renderer::Draw(RenderCommand command)

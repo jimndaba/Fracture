@@ -134,7 +134,7 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	}
 
 	m_model = std::shared_ptr<Model>(new Model());
-	m_model->directory = path.substr(0, path.find_last_of('/'));
+	m_model->directory = path.substr(0, path.find_last_of('\\'));
 	// process ASSIMP's root node recursively
 	ProcessNode(m_model, scene->mRootNode, scene);
 	return m_model;
