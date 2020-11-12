@@ -4,137 +4,167 @@
 #include "IUpdatable.h"
 #include "Game/Game.h"
 #include "Scripting/ScriptManager.h"
+#include "Rendering/Renderer.h"
 #include "ScriptComponent.h"
-
+#include "BoxColliderComponent.h"
+#include "RigidBodyComponent.h"
+#include "RelationshipComponent.h"
+#include "TransformComponent.h"
+#include "LightComponent.h"
+#include "EditorNodeComponent.h"
+#include "CameraControllerComponent.h"
+#include "RelationshipComponent.h"
+#include "RenderComponent.h"
 #include <iostream>
 #include "Profiling/Profiler.h"
 
-std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::m_Components;
 
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_tagComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RelationshipComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_TransformerComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_CameraControllerComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RenderComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_EditorNodeComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_LightComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RigidBodyComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BoxColliderComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_ScriptComponents;
+
+std::map<std::type_index, std::shared_ptr<Fracture::ComponentSet>> Fracture::ComponentManager::Register;
 
 Fracture::ComponentManager::ComponentManager()
 {
+
 }
 
 Fracture::ComponentManager::~ComponentManager()
 {
-	m_Components.clear();
+	
+}
+
+void Fracture::ComponentManager::onInit()
+{
+	m_tagComponents				 = std::make_shared<ComponentSet>();
+	m_RelationshipComponents	 = std::make_shared<ComponentSet>();
+	m_TransformerComponents		 = std::make_shared<ComponentSet>();
+	m_CameraControllerComponents = std::make_shared<ComponentSet>();
+	m_RenderComponents			 = std::make_shared<ComponentSet>();
+	m_EditorNodeComponents		 = std::make_shared<ComponentSet>();
+	m_LightComponents			 = std::make_shared<ComponentSet>();
+	m_RigidBodyComponents		 = std::make_shared<ComponentSet>();
+	m_BoxColliderComponents		 = std::make_shared<ComponentSet>();
+	m_ScriptComponents			 = std::make_shared<ComponentSet>();
+
+	Register.emplace(typeid(TagComponent),m_tagComponents);
+	Register.emplace(typeid(RelationShipComponent), m_RelationshipComponents);
+	Register.emplace(typeid(TransformComponent), m_TransformerComponents);
+	Register.emplace(typeid(CameraControllerComponent), m_CameraControllerComponents);
+	Register.emplace(typeid(RenderComponent), m_RenderComponents);
+	Register.emplace(typeid(EditorNode), m_EditorNodeComponents);
+	Register.emplace(typeid(LightComponent), m_LightComponents);
+	Register.emplace(typeid(RigidBodyComponent), m_RigidBodyComponents);
+	Register.emplace(typeid(BoxColliderComponent), m_BoxColliderComponents);
+	Register.emplace(typeid(ScriptComponent), m_ScriptComponents);
+	
 }
 
 void Fracture::ComponentManager::onLoad()
-{
-	
-	for (auto& component : m_Components)
-	{
+{	
+	for (auto& component :m_BoxColliderComponents->Components())
+	{		
 		std::shared_ptr<BoxColliderComponent> c = std::dynamic_pointer_cast<BoxColliderComponent>(component);
-		if (c)
-			PhysicsManager::AddCollider(c->EntityID,c->m_boxCollider);
+		PhysicsManager::AddCollider(c->EntityID,c->m_boxCollider);
 	}
 
-	for (auto& component : m_Components)
+	for (auto& component : m_RigidBodyComponents->Components())
 	{
 		std::shared_ptr<RigidBodyComponent> c = std::dynamic_pointer_cast<RigidBodyComponent>(component);
-		if (c)
-			PhysicsManager::AddRigidBody(c->EntityID,c->m_rigid,c->collisionGroup,c->collisionMask);
+		PhysicsManager::AddRigidBody(c->EntityID, c->m_rigid, c->collisionGroup, c->collisionMask);
 	}
-	
 }
 
 void Fracture::ComponentManager::onUpdate(float dt)
 {	
+
 	ProfilerTimer timer("Component OnUpdate");
-	for (auto& component : m_Components)
+	for (auto& component :m_CameraControllerComponents->Components())
 	{
-		std::shared_ptr<IUPDATABLE> c = std::dynamic_pointer_cast<IUPDATABLE>(component);
-		if (c)
-			c->onUpdate(dt);			
+		std::shared_ptr<CameraControllerComponent> c = std::dynamic_pointer_cast<CameraControllerComponent>(component);
+		c->onUpdate(dt);			
 	}
 
-	for (auto& component : m_Components)
-	{
+	for (auto& component : m_ScriptComponents->Components())
+	{	
 		std::shared_ptr<ScriptComponent> c = std::dynamic_pointer_cast<ScriptComponent>(component);
 		if(c)
 			Game::AddScript(c->GetScript());
 	}
+	for (auto& component : m_RenderComponents->Components())
+	{
+		std::shared_ptr<RenderComponent> c = std::dynamic_pointer_cast<RenderComponent>(component);
+		if (c)
+		{
+			//Renderer::getInstance()->PushCommand(component->model,com)
+		}
+			
+	}	
 }
 
 void Fracture::ComponentManager::onDebugDraw()
 {
-	for (auto& component : m_Components)
+	/*
+	for (auto& component : m_tagComponents)
 	{
 		component->OnDebug();
 	}
+	for (auto& component : m_RelationshipComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_TransformerComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_CameraControllerComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_LightComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_RigidBodyComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_BoxColliderComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_ScriptComponents)
+	{
+		component->OnDebug();
+	}
+	for (auto& component : m_EditorNodeComponents)
+	{
+		component->OnDebug();
+	}
+	*/
+
 }
 
 void Fracture::ComponentManager::ClearComponents()
 {
-	m_Components.clear();
-}
-
-void Fracture::ComponentManager::AddComponent(std::shared_ptr<Component> component)
-{
-	m_Components.push_back(component);
+	for (auto it = Register.begin(); it != Register.end(); ++it)
+	{
+		it->second->Clear();
+	}
 }
 
 void Fracture::ComponentManager::RemoveComponentsbyID(uint32_t id)
 {	
-	for (auto& component : m_Components) 
+	for (auto it = Register.begin(); it != Register.end(); ++it)
 	{
-		if (component != nullptr && component->EntityID == id)
-		{
-			FRACTURE_TRACE("Removed component: {} of Type {}", component->EntityID, component->componentType);
-			RemoveComponent(component);
-		}
+		it->second->RemoveComponent(id);
 	}
-}
-
-void Fracture::ComponentManager::RemoveComponent(std::shared_ptr<Component> component)
-{
-	FRACTURE_INFO("Removing Component {}",component->EntityID);
-
-	if (component->componentType == ComponentType::BoxCollider)
-	{
-		FRACTURE_INFO("Removing COllider");
-		std::shared_ptr<BoxColliderComponent> collider = std::dynamic_pointer_cast<BoxColliderComponent>(component);
-		PhysicsManager::RemoveCollider(collider->m_boxCollider);
-	}
-
-	if (component->componentType == ComponentType::Rigidbody)
-	{
-		FRACTURE_INFO("Removing Rigidbody");
-		std::shared_ptr<RigidBodyComponent> rigidbody = std::dynamic_pointer_cast<RigidBodyComponent>(component);
-		PhysicsManager::RemoveRigidBody(rigidbody->m_rigid);
-	}
-
-	auto it = std::find_if(std::begin(m_Components), std::end(m_Components), [component](std::shared_ptr<Component>& p) { return p == component; });
-
-	if (it != m_Components.end())
-	{
-		m_Components.erase(
-			std::remove(std::begin(m_Components),
-				std::end(m_Components), component),
-			std::end(m_Components));
-	}
-	
-}
-
-std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetComponents(uint32_t enitytId)
-{
-	ProfilerTimer timer("Component GetComponents");
-	std::vector<std::shared_ptr<Component>> components;
-
-	for (int i = 0; i < m_Components.size(); i++)
-	{
-
-		if (m_Components[i] != NULL && m_Components[i]->EntityID == enitytId)
-		{
-			components.push_back(m_Components[i]);
-		}
-	}
-	return components;
-}
-
-std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentManager::GetAllComponents()
-{
-	return m_Components;
 }

@@ -31,6 +31,52 @@ void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,st
 	{
 		//command.material->SetTexture(mesh->Textures()[i]->type, mesh->Textures()[i], (int)mesh->Textures()[i]->textureType);
 		command.TextureNames.push_back(mesh->Textures()[i]->Name);
+		std::string sampleType;
+		switch (mesh->Textures()[i]->textureType)
+		{
+		case TextureType::Diffuse:
+		{
+			sampleType = "material.diffuse";
+			break;
+		}
+		case TextureType::Specular:
+		{
+			sampleType = "material.specular";
+			break;
+		}
+		case TextureType::Normal:
+		{
+			sampleType = "material.normal";
+			break;
+		}
+		case TextureType::Height:
+		{
+			sampleType = "material.height";
+			break;
+		}
+		case TextureType::Bump:
+		{
+			sampleType = "material.bump";
+			break;
+		}
+		case TextureType::Reflection:
+		{
+			sampleType = "material.reflection";
+			break;
+		}
+		case TextureType::ColorAttachment:
+		{
+			sampleType = "ColorAttachment";
+			break;
+		}
+		case TextureType::DepthStencilAttachment:
+		{
+			sampleType = "DepthStencilAttachment";
+			break;
+		}
+		}
+
+		material->SetTexture(sampleType, mesh->Textures()[i], (int)mesh->Textures()[i]->textureType);
 	}
 
 	command.VAO = mesh->VAO;

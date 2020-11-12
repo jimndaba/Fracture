@@ -28,7 +28,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 	std::shared_ptr<Entity> main_Camera = EntityManager::CreateEntity<Entity>();
 	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));
 	m_camera_rel->SetParent(newScene->Root()->Id);
-	ComponentManager::AddComponent(m_camera_rel);
+	ComponentManager::AddComponent<RelationShipComponent>(m_camera_rel);
 	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->Id);
 	ComponentManager::AddComponent<TagComponent>(main_Camera->Id, "Main Camera");
 
@@ -37,7 +37,8 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 	ComponentManager::AddComponent<TagComponent>(main_sunlight->Id, "Sun");
 	std::shared_ptr<RelationShipComponent> sun_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_sunlight->Id));
 	sun_rel->SetParent(newScene->Root()->Id);
-	ComponentManager::AddComponent(sun_rel);
+	ComponentManager::AddComponent<RelationShipComponent
+	>(sun_rel);
 	ComponentManager::AddComponent<EditorNode>(main_sunlight->Id);
 	ComponentManager::AddComponent<LightComponent>(main_sunlight->Id, LightType::Sun);
 

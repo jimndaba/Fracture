@@ -1,1 +1,106 @@
-﻿  FractureEngine.vcxproj -> C:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe
+﻿  SceneviewPanel.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(88,60): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(92,59): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(96,64): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(145,69): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(153,7): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+  SandboxScene.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Program Files (x86)\Visual Studio IDE\VC\Tools\MSVC\14.27.29110\include\xmemory(230,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Program Files (x86)\Visual Studio IDE\VC\Tools\MSVC\14.27.29110\include\memory(1427): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,uint32_t&,int&,int&,int&>(_Ty &,uint32_t &,int &,int &,int &) noexcept(false)' being compiled
+          with
+          [
+              _Ty=Fracture::BoxColliderComponent
+          ]
+D:\Program Files (x86)\Visual Studio IDE\VC\Tools\MSVC\14.27.29110\include\memory(2071): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<uint32_t&,int&,int&,int&>(uint32_t &,int &,int &,int &)' being compiled
+          with
+          [
+              _Ty=Fracture::BoxColliderComponent
+          ]
+D:\Program Files (x86)\Visual Studio IDE\VC\Tools\MSVC\14.27.29110\include\memory(2072): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<uint32_t&,int&,int&,int&>(uint32_t &,int &,int &,int &)' being compiled
+          with
+          [
+              _Ty=Fracture::BoxColliderComponent
+          ]
+D:\Dev\Fracture\Fracture\src\Component\ComponentManager.h(67): message : see reference to function template instantiation 'std::shared_ptr<name> std::make_shared<name,uint32_t&,int&,int&,int&>(uint32_t &,int &,int &,int &)' being compiled
+          with
+          [
+              name=Fracture::BoxColliderComponent
+          ]
+D:\Dev\Fracture\Fracture\src\Component\ComponentManager.h(226): message : see reference to function template instantiation 'void Fracture::ComponentSet::AddComponent<T,int&,int&,int&>(uint32_t,int &,int &,int &)' being compiled
+          with
+          [
+              T=Fracture::BoxColliderComponent
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\SandboxScene.cpp(57): message : see reference to function template instantiation 'void Fracture::ComponentManager::AddComponent<Fracture::BoxColliderComponent,int,int,int>(uint32_t,int &&,int &&,int &&)' being compiled
+  Generating Code...
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
+Editor.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:REF' specification
+Fracture.lib(btVector3.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btVector3.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
+Fracture.lib(btQuickprof.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btQuickprof.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
+Fracture.lib(btGeometryUtil.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btGeometryUtil.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
+Fracture.lib(btConvexHullComputer.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btConvexHullComputer.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
+Fracture.lib(btAlignedAllocator.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btAlignedAllocator.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
+Fracture.lib(btPolyhedralContactClipping.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btPolyhedralContactClipping.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btVoronoiSimplexSolver.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btVoronoiSimplexSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSubSimplexConvexCast.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSubSimplexConvexCast.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btRaycastCallback.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btRaycastCallback.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btPersistentManifold.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btPersistentManifold.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btMinkowskiPenetrationDepthSolver.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btMinkowskiPenetrationDepthSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btGjkPairDetector.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btGjkPairDetector.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btGjkEpaPenetrationDepthSolver.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btGjkEpaPenetrationDepthSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btGjkEpa2.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btGjkEpa2.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btGjkConvexCast.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btGjkConvexCast.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexCast.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexCast.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btContinuousConvexCollision.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btContinuousConvexCollision.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btTriangleMeshShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btTriangleMeshShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btTriangleCallback.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btTriangleCallback.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSphereShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSphereShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSdfCollisionShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSdfCollisionShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btPolyhedralConvexShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btPolyhedralConvexShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btOptimizedBvh.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btOptimizedBvh.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btMiniSDF.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btMiniSDF.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btHeightfieldTerrainShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btHeightfieldTerrainShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexPolyhedron.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexPolyhedron.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexInternalShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexInternalShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConcaveShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConcaveShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCollisionShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCollisionShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btBvhTriangleMeshShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btBvhTriangleMeshShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btBoxShape.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btBoxShape.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(SphereTriangleDetector.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(SphereTriangleDetector.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btUnionFind.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btUnionFind.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSphereTriangleCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSphereTriangleCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSphereSphereCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSphereSphereCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btSimulationIslandManager.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSimulationIslandManager.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btManifoldResult.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btManifoldResult.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btHashedSimplePairCache.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btHashedSimplePairCache.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btEmptyCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btEmptyCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btDefaultCollisionConfiguration.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btDefaultCollisionConfiguration.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexPlaneCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexPlaneCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexConvexAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexConvexAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btConvexConcaveCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btConvexConcaveCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCompoundCompoundCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCompoundCompoundCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCompoundCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCompoundCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCollisionWorld.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCollisionWorld.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCollisionObject.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCollisionObject.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCollisionDispatcher.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCollisionDispatcher.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btBoxBoxDetector.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btBoxBoxDetector.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btBoxBoxCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btBoxBoxCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btActivatingCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btActivatingCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btQuantizedBvh.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btQuantizedBvh.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btOverlappingPairCache.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btOverlappingPairCache.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btDispatcher.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btDispatcher.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btDbvtBroadphase.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btDbvtBroadphase.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btDbvt.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btDbvt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btCollisionAlgorithm.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btCollisionAlgorithm.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
+Fracture.lib(btRigidBody.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btRigidBody.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+Fracture.lib(btDiscreteDynamicsWorld.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btDiscreteDynamicsWorld.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+Fracture.lib(btTypedConstraint.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btTypedConstraint.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+Fracture.lib(btSequentialImpulseConstraintSolver.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btSequentialImpulseConstraintSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+Fracture.lib(btGeneric6DofConstraint.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btGeneric6DofConstraint.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+Fracture.lib(btConeTwistConstraint.obj) : warning LNK4099: PDB 'BulletDynamics.pdb' was not found with 'Fracture.lib(btConeTwistConstraint.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletDynamics.pdb'; linking object as if no debug info
+  FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

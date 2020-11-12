@@ -2,6 +2,7 @@
 #include "ComponentManager.h"
 #include "Component/RelationshipComponent.h"
 #include "Entity/Entity.h"
+#include <glm\gtx\quaternion.hpp>
 
 Fracture::TransformComponent::TransformComponent(uint32_t entityID):Component(entityID,ComponentType::Transform)
 {

@@ -1,5 +1,6 @@
 #include "PhysicsManager.h"
 #include "Component/RigidBodyComponent.h"
+#include "Component/BoxColliderComponent.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Collisions.h"
@@ -174,9 +175,10 @@ bool Fracture::PhysicsManager::RayCast(Ray rayIn, RayHit& out)
 void Fracture::PhysicsManager::startPhysics()
 {
 	
-	std::vector<std::shared_ptr<Component>> components = ComponentManager::GetAllComponents();	
+	std::vector<std::shared_ptr<RigidBodyComponent>> RigidbodyComponents = ComponentManager::GetAllComponents<RigidBodyComponent>();	
+	std::vector<std::shared_ptr<BoxColliderComponent>> BoxColliderComponents = ComponentManager::GetAllComponents<BoxColliderComponent>();
 
-	for (auto& component : components)
+	for (auto& component : RigidbodyComponents)
 	{
 		std::shared_ptr<RigidBodyComponent> c = std::dynamic_pointer_cast<RigidBodyComponent>(component);
 		if (c)
@@ -187,7 +189,7 @@ void Fracture::PhysicsManager::startPhysics()
 			}
 		}			
 	}
-	for (auto& component : components)
+	for (auto& component : BoxColliderComponents)
 	{
 		std::shared_ptr<BoxColliderComponent> c = std::dynamic_pointer_cast<BoxColliderComponent>(component);
 		if (c)

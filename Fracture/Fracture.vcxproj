@@ -168,7 +168,6 @@
     <ClInclude Include="src\Component\RenderComponent.h" />
     <ClInclude Include="src\Component\RigidBodyComponent.h" />
     <ClInclude Include="src\Component\ScriptComponent.h" />
-    <ClInclude Include="src\Component\SpotLightComponent.h" />
     <ClInclude Include="src\Component\TagComponent.h" />
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
