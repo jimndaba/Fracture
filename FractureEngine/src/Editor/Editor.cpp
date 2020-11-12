@@ -55,6 +55,8 @@ void Fracture::Editor::onInit()
     m_Profiler = std::make_unique<Profiler>();
     m_ComponentManager = std::make_unique<ComponentManager>();
 
+    m_ComponentManager->onInit();
+
     m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     m_window->MaximiseWindow();
     showRenderConfig  = false;

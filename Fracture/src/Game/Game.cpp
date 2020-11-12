@@ -71,7 +71,7 @@ void Fracture::Game::run()
 		
 		while (accumulator >= dt)
 		{
-			update(dt);
+			update((float)dt);
 			accumulator -= dt;
 			t += dt;
 			m_ScriptManager->onEndFrame();

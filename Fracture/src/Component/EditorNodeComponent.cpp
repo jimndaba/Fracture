@@ -5,11 +5,11 @@
 #include <Component\TransformComponent.h>
 #include <Component\LightComponent.h>
 
-Fracture::EditorNode::EditorNode(uint32_t id):Component(id,ComponentType::Transform)
+Fracture::EditorNode::EditorNode(uint32_t id):Component(id,ComponentType::EditorNode)
 {
 	if (ComponentManager::HasComponent<TransformComponent>(id))
 	{
-			std::shared_ptr<TransformComponent> transform=										ComponentManager::GetComponent<TransformComponent>(id);
+			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(id);
 			m_Position = transform->Position;
 			m_Scale = transform->Scale;
 			m_Rotation = transform->Rotation;

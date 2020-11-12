@@ -322,7 +322,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(j["Entity ID"]);		
 		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->Id);		
 		component->SetName(tagComponent["Entity Name"]);
-		ComponentManager::AddComponent(component);
+		ComponentManager::AddComponent<TagComponent>(component);
 
 		if (exists(j, "Relationship Component"))
 		{
@@ -344,7 +344,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->AddChild(child["Child ID"].get<uint32_t>());
 			}
 
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<RelationShipComponent>(component);
 		}
 
 		if (exists(j, "Camera Component"))
@@ -368,7 +368,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			component->Right = glm::vec3(right[0], right[1], right[2]);
 			component->Front= glm::vec3(front[0], front[1], front[2]);
 			component->m_TargetPosition = glm::vec3(targetpos[0], targetpos[1], targetpos[2]);
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<CameraControllerComponent>(component);
 			m_scene->setCamera(entity);
 		}
 		
@@ -383,7 +383,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			component->Position = glm::vec3(pos[0], pos[1], pos[2]);
 			component->Scale = glm::vec3(sc[0], sc[1], sc[2]);
 			component->Rotation = glm::vec3(rot[0], rot[1], rot[2]);
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<TransformComponent>(component);
 
 		}
 
@@ -487,7 +487,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			AssetManager::AddMaterial(material_name,material);
 
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id,model, material_name);
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<RenderComponent>(component);
 
 		}
 		
@@ -500,7 +500,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				dimensions[0],
 				dimensions[1],
 				dimensions[2]);
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<BoxColliderComponent>(component);
 		}
 
 		if (exists(j, "Rigidbody Component"))
@@ -508,7 +508,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			auto rigidbodyComponent = j["Rigidbody Component"];
 			int mass = rigidbodyComponent["Mass"];
 			std::shared_ptr<RigidBodyComponent> component = std::make_shared<RigidBodyComponent>(entity->Id, mass);
-			ComponentManager::AddComponent(component);
+			ComponentManager::AddComponent<RigidBodyComponent>(component);
 		}
 		
 		if (exists(j, "Light Component"))
@@ -530,7 +530,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
 				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
 				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
-				ComponentManager::AddComponent(component);
+				ComponentManager::AddComponent<LightComponent>(component);
 				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				break;
 			}
@@ -549,7 +549,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetQuadratic(lightComponent["Qaudratic"]);
 				component->SetCutoff(lightComponent["Cutoff"]);
 				component->SetOuterCutOff(lightComponent["OuterCutoff"]);			
-				ComponentManager::AddComponent(component);
+				ComponentManager::AddComponent<LightComponent>(component);
 				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				break;
 			}
@@ -564,7 +564,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetLinear(lightComponent["Linear"]);
 				component->SetConstant(lightComponent["Constant"]);
 				component->SetQuadratic(lightComponent["Qaudratic"]);			
-				ComponentManager::AddComponent(component);
+				ComponentManager::AddComponent<LightComponent>(component);
 				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				break;
 			}

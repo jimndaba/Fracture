@@ -25,7 +25,7 @@ Fracture::Scene::Scene()
 	//ROOT ENTITY
 	m_root = EntityManager::CreateEntity<Entity>();	
 	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->Id));
-	ComponentManager::AddComponent(m_root_rel);
+	ComponentManager::AddComponent<RelationShipComponent>(m_root_rel);
 	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
 	ComponentManager::AddComponent<TagComponent>(m_root->Id, "Root");
 	addEntity(m_root);
@@ -63,7 +63,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity)
 				Instance(GetEntity(child));
 			}
 		}
-		ComponentManager::AddComponent(newRel);
+		ComponentManager::AddComponent<RelationShipComponent>(newRel);
 	}	
 
 	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
@@ -75,7 +75,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity)
 		std::shared_ptr<RenderComponent> oldcomponent = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, oldcomponent->material->Name);
 		component->SetRenderType(RenderType::Normal);
-		ComponentManager::AddComponent(component);
+		ComponentManager::AddComponent<RenderComponent>(component);
 	}
 	/* TODO PHYSICS LIGHT AND AUDIO
 	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
@@ -117,7 +117,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 pos)
 				Instance(GetEntity(child));
 			}			
 		}
-		ComponentManager::AddComponent(newRel);
+		ComponentManager::AddComponent<RelationShipComponent>(newRel);
 	}
 
 	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
@@ -137,7 +137,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 pos)
 		
 		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, material->Name);
 		component->SetRenderType(RenderType::Normal);
-		ComponentManager::AddComponent(component);
+		ComponentManager::AddComponent<RenderComponent>(component);
 	}
 	addEntity(newEntity);
 }
@@ -157,7 +157,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 positio
 		std::shared_ptr<RelationShipComponent> oldRel = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 		std::shared_ptr<RelationShipComponent> newRel = oldRel;
 		newRel->EntityID = newEntity->Id;
-		ComponentManager::AddComponent(newRel);
+		ComponentManager::AddComponent<RelationShipComponent>(newRel);
 	}
 
 	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
@@ -171,7 +171,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 positio
 		std::shared_ptr<RenderComponent> component = oldcomponent;
 		component->EntityID = newEntity->Id;
 		component->SetRenderType(RenderType::Normal);
-		ComponentManager::AddComponent(component);
+		ComponentManager::AddComponent<RenderComponent>(component);
 
 	}
 
@@ -200,7 +200,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 positio
 				Instance(GetEntity(child));
 			}
 		}
-		ComponentManager::AddComponent(newRel);
+		ComponentManager::AddComponent<RelationShipComponent>(newRel);
 	}
 
 	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
@@ -213,7 +213,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity, glm::vec3 positio
 		std::shared_ptr<RenderComponent> oldcomponent = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, oldcomponent->material->Name);
 		component->SetRenderType(RenderType::InstancedElementsIndirect);
-		ComponentManager::AddComponent(component);
+		ComponentManager::AddComponent<RenderComponent>(component);
 	}
 
 	addEntity(newEntity);

@@ -9,7 +9,6 @@
 #include <glm/gtx/transform.hpp> 
 #include <glm/gtc/quaternion.hpp>
 
-
 #include <cstdint>
 
 namespace Fracture

@@ -1,38 +1,170 @@
-[15:27:29] [info] FRACTURE: Initializing Splash
-[15:27:30] [info] FRACTURE: OpenGL loaded
-[15:27:30] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[15:27:30] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[15:27:30] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[15:27:30] [trace] FRACTURE: Loaded Texture: splash
-[15:27:30] [trace] FRACTURE: Loaded Texture: title
-[15:27:30] [info] FRACTURE: Completed Init
-[15:27:30] [info] FRACTURE: Show Splash
-[15:27:39] [info] FRACTURE: OpenGL loaded
-[15:27:39] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[15:27:39] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[15:27:39] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[15:27:39] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[15:27:39] [info] FRACTURE: Renderer Init
-[15:27:39] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: RotateIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: CameraIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: LightIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: EyeIcon
-[15:27:39] [trace] FRACTURE: Loaded Texture: EyeIconC
-[15:27:39] [trace] FRACTURE: Loaded Shader: DebugShader
-[15:27:39] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[15:27:39] [trace] FRACTURE: Loaded Shader: BillboardShader
-[15:27:39] [trace] FRACTURE: Loaded Shader: default
-[15:27:39] [trace] FRACTURE: Loaded Material: DebugMaterial
-[15:27:39] [trace] FRACTURE: Loaded Material: billboardIcons
-[15:27:39] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[15:27:39] [trace] FRACTURE: Loaded model: Plane
-[15:27:39] [trace] FRACTURE: Loaded model: Cube
-[15:27:39] [trace] FRACTURE: Loaded model: Sphere
-[15:27:39] [trace] FRACTURE: Loaded model: Cylinder
-[15:27:39] [trace] FRACTURE: Loaded model: Torus
-[15:27:39] [trace] FRACTURE: Loaded model: Suzane
-[15:28:14] [trace] FRACTURE: Loaded model: sponza
-[15:28:19] [trace] FRACTURE: Loaded Material: sponzaMaterail
+[12:36:37] [info] FRACTURE: Initializing Splash
+[12:36:37] [info] FRACTURE: OpenGL loaded
+[12:36:37] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:36:37] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:36:37] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[12:36:38] [trace] FRACTURE: Loaded Texture: splash
+[12:36:38] [trace] FRACTURE: Loaded Texture: title
+[12:36:38] [info] FRACTURE: Completed Init
+[12:36:38] [info] FRACTURE: Show Splash
+[12:36:40] [info] FRACTURE: OpenGL loaded
+[12:36:40] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:36:40] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:36:40] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[12:36:40] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[12:36:40] [info] FRACTURE: Renderer Init
+[12:36:40] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: RotateIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: CameraIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: LightIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: EyeIcon
+[12:36:40] [trace] FRACTURE: Loaded Texture: EyeIconC
+[12:36:40] [trace] FRACTURE: Loaded Shader: DebugShader
+[12:36:40] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[12:36:40] [trace] FRACTURE: Loaded Shader: BillboardShader
+[12:36:40] [trace] FRACTURE: Loaded Shader: default
+[12:36:40] [trace] FRACTURE: Loaded Material: DebugMaterial
+[12:36:40] [trace] FRACTURE: Loaded Material: billboardIcons
+[12:36:40] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[12:36:40] [trace] FRACTURE: Loaded model: Plane
+[12:36:40] [trace] FRACTURE: Loaded model: Cube
+[12:36:40] [trace] FRACTURE: Loaded model: Sphere
+[12:36:40] [trace] FRACTURE: Loaded model: Cylinder
+[12:36:40] [trace] FRACTURE: Loaded model: Torus
+[12:36:40] [trace] FRACTURE: Loaded model: Suzane
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:40] [info] FRACTURE: No Hit 
+[12:36:59] [trace] FRACTURE: Loaded model: sponza
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:02] [info] FRACTURE: No Hit 
+[12:37:03] [info] FRACTURE: No Hit 
+[12:37:10] [trace] FRACTURE: Loaded Material: sponzaMaterail

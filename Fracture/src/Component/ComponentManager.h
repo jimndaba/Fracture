@@ -13,18 +13,163 @@
 #include <typeindex>
 #include "Component.h"
 #include "Logging/Logger.h"
-#include "BoxColliderComponent.h"
-#include "RigidBodyComponent.h"
 #include "Physics/PhysicsManager.h"
+
+
 
 namespace Fracture
 {
+	class TagComponent;
+	class RelationShipComponent;
+	class TransformComponent;
+	class CameraControllerComponent;
+	class RigidBodyComponent;
+	class RenderComponent;
+	class ScriptComponent;
+	class LightComponent;
+	class EditorNode;
+	class BoxColliderComponent;
+	//class ColliderComponent; TODO
+
 	
+	class ComponentSet
+	{
+	public:
+		ComponentSet() {
+		
+		}
+
+		template <typename name>
+		bool HasComponent(uint32_t id)
+		{
+			std::shared_ptr<Component> c = GetComponent<name>(id);
+			if (c)
+				return true;
+
+			return false;
+		}
+
+		template <typename name>
+		std::shared_ptr<name> GetComponent(uint32_t entitytId)
+		{
+			for (std::shared_ptr<Component> component : m_components)
+			{
+				if (component != nullptr && component->EntityID == entitytId)
+				{
+					return std::dynamic_pointer_cast<name>(component);
+				}
+			}
+			return nullptr;
+		}
+
+		template <class name,typename... Args>
+		void AddComponent(uint32_t entity, Args && ...params)
+		{
+			std::shared_ptr<name>component = std::make_shared<name>(entity, params...);
+			m_components.push_back(component);
+		}
+
+		void AddComponent(std::shared_ptr<Component> component)
+		{
+			m_components.push_back(component);
+		}
+
+		template <typename name>
+		std::vector<std::shared_ptr<name>> GetComponents()
+		{
+			std::vector<std::shared_ptr<name>> set;
+
+			for (std::shared_ptr<Component> component : m_components)
+			{
+				set.push_back(std::dynamic_pointer_cast<name>(component));
+			}
+
+			return set;
+		}
+				
+		std::vector<std::shared_ptr<Component>> GetComponents(uint32_t id)
+		{
+			std::vector<std::shared_ptr<Component>>  set;
+
+			if (!m_components.empty())
+			{
+				for (std::shared_ptr<Component> component : m_components)
+				{
+					if (component != NULL && component->EntityID == id)
+					{
+						set.push_back(component);
+					}
+				}
+			}			
+			return set;
+		}
+		
+		void RemoveComponent(std::shared_ptr<Component> component)
+		{
+			if (!m_components.empty())
+			{
+				auto it = std::find_if(std::begin(m_components), std::end(m_components), [component](std::shared_ptr<Component>& p) { return p == component; });
+				if (it != m_components.end())
+				{
+					m_components.erase(
+						std::remove(std::begin(m_components),
+							std::end(m_components), component),
+						std::end(m_components));
+
+				}
+			}
+			else
+			{
+				FRACTURE_ERROR("COMPONENT SET OF TYPE: {} IS EMPTY", typeid(Component).name());
+			}
+		}
+
+		void RemoveComponent(uint32_t id)
+		{
+			for (auto& component : m_components)
+			{
+				if (component != nullptr && component->EntityID == id)
+				{
+					RemoveComponent(component);
+				}
+			}
+		}
+
+		template <typename name>
+		void RemoveComponent(uint32_t id)
+		{
+			std::shared_ptr<name> c = GetComponent<name>(id);
+			if (c)
+			{
+				RemoveComponent(c);
+			}
+
+		}		
+
+		void Clear()
+		{
+			m_components.clear();
+		}
+				
+
+		std::vector<std::shared_ptr<Component>> Components()
+		{
+			return m_components;
+		}
+		
+	private:
+		std::vector<std::shared_ptr<Component>> m_components;
+
+	};
+		
+
 	class ComponentManager
 	{
 	public:
 		ComponentManager();
 		~ComponentManager();
+
+		void onInit();
 
 		void onLoad();
 
@@ -36,72 +181,102 @@ namespace Fracture
 	
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
+		template< class T>
 		static void AddComponent(std::shared_ptr<Component> component);
 
 		template<class T>
 		static void RemoveComponent(uint32_t id);
 		static void RemoveComponentsbyID(uint32_t id);
-		static void RemoveComponent(std::shared_ptr<Component> component);
+		//static void RemoveComponent(std::shared_ptr<Component> component);
+		template<class T>
+		static void RemoveComponent(std::shared_ptr<T> component);
 
 		template <class T>
 		static std::shared_ptr<T>GetComponent(uint32_t enitytId);
-		static std::vector<std::shared_ptr<Component>> GetComponents(uint32_t enitytId);
-		static std::vector<std::shared_ptr<Component>> GetAllComponents();
+		
+		template <class T>
+		static std::vector<std::shared_ptr<T>>GetAllComponents();
+
+		template <class T>
+		static std::vector<std::shared_ptr<T>>GetComponents(uint32_t enitytId);
 
 		template<class T>
 		static bool HasComponent(uint32_t id);
 	
 	private:
-		static std::vector<std::shared_ptr<Component>> m_Components;
+		//static std::vector<std::shared_ptr<Component>> m_Components;
+
+		
+		static std::shared_ptr<ComponentSet> m_tagComponents;
+		static std::shared_ptr<ComponentSet> m_RelationshipComponents;
+		static std::shared_ptr<ComponentSet> m_TransformerComponents;
+		static std::shared_ptr<ComponentSet> m_CameraControllerComponents;
+		static std::shared_ptr<ComponentSet> m_RenderComponents;
+		static std::shared_ptr<ComponentSet> m_EditorNodeComponents;
+		static std::shared_ptr<ComponentSet> m_LightComponents;
+		static std::shared_ptr<ComponentSet> m_RigidBodyComponents;
+		static std::shared_ptr<ComponentSet> m_BoxColliderComponents;
+		static std::shared_ptr<ComponentSet> m_ScriptComponents;
+
+		static std::map<std::type_index, std::shared_ptr<ComponentSet>> Register;
 	};
 
 	template<class T, typename ...Args>
 	inline void ComponentManager::AddComponent(uint32_t entity, Args && ...params)
-	{		
-		m_Components.push_back(std::make_shared<T>(entity, params...));
+	{				
+		Register[typeid(T)]->AddComponent<T>(entity, params...);
 	}
+
+	template<class T>
+	inline void ComponentManager::AddComponent(std::shared_ptr<Component> component)
+	{
+		Register[typeid(T)]->AddComponent(component);
+	}
+
 
 	template<class T>
 	inline void ComponentManager::RemoveComponent(uint32_t id)
 	{
-		std::vector<std::shared_ptr<Component>>::const_iterator it;
-		for (it = m_Components.begin(); it != m_Components.end(); ++it)
-		{
-			if ((*it)->EntityID == id && std::dynamic_pointer_cast<T>(*it) != nullptr)
-			{
-				FRACTURE_TRACE("Removed component: {} of Type {}", (*it)->EntityID, (*it)->componentType);
-				RemoveComponent(*it);				
-			}
-			
-		}
+		Register[typeid(T)]->RemoveComponent<T>(id);
 	} 
+
+	template<class T>
+	inline void ComponentManager::RemoveComponent(std::shared_ptr<T> component)
+	{
+		Register[typeid(T)]->RemoveComponent(component);
+	}
 
 	template<class T>
 	inline std::shared_ptr<T> Fracture::ComponentManager::GetComponent(uint32_t entitytId)
 	{
-		for (const auto& component : m_Components)
-		{						
-				if (component != nullptr && component->EntityID == entitytId && std::dynamic_pointer_cast<T>(component) != nullptr)
-				{						
-					return std::dynamic_pointer_cast<T>(component);
-				}							
-		}
+		std::shared_ptr<T> c = Register[typeid(T)]->GetComponent<T>(entitytId);
+		if(c)
+			return c;
 		return nullptr;
+	}
+
+	template<class T>
+	inline std::vector<std::shared_ptr<T>> ComponentManager::GetAllComponents()
+	{
+		return Register[typeid(T)]->GetComponents<T>();
+	}
+	
+	template<class T>
+	inline std::vector<std::shared_ptr<T>> ComponentManager::GetComponents(uint32_t entitytId)
+	{		
+		return Register[typeid(T)]->GetComponents(entitytId);
 	}
 
 	template<class T>
 	inline bool ComponentManager::HasComponent(uint32_t id)
 	{
-		for (auto& component : m_Components)
+		if (Register[typeid(T)]->HasComponent<T>(id))
 		{
-			std::shared_ptr<T> c = GetComponent<T>(id);
-
-			if (c)
-				return true;
+			return true;
 		}
+			
 		return false;
 	}
-
 	
 }
 

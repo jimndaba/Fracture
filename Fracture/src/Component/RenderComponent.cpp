@@ -5,7 +5,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/RenderCommand.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID,std::string modelname,std::string materialname):Component(entityID,ComponentType::Mesh),m_modelName(modelname),m_materialName(materialname)
+Fracture::RenderComponent::RenderComponent(uint32_t entityID,std::string modelname,std::string materialname):Component(entityID,ComponentType::Render),m_modelName(modelname),m_materialName(materialname)
 {
 	model = AssetManager::getModel(m_modelName);
 	material = AssetManager::getMaterial(m_materialName);

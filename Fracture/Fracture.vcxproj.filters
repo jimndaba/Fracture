@@ -356,9 +356,6 @@
     <ClInclude Include="src\Component\ScriptComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Component\SpotLightComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Component\TagComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
