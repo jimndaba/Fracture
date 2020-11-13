@@ -40,15 +40,18 @@ void Fracture::SceneView::render()
 			ComponentManager::AddComponent<TagComponent>(empty->Id, "Empty");
 			std::shared_ptr<RelationShipComponent> relation = std::make_shared<RelationShipComponent>(empty->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relation);
+
 			if (m_selection.Id != NULL)
 			{
 				relation->SetParent(m_selection.Id);
 				m_scene->addEntity(empty);
+				setSelectEntity(*empty);
 			}
 			else
 			{
 				relation->SetParent(m_scene->Root()->Id);
 				m_scene->addEntity(empty);
+				setSelectEntity(*empty);
 			}
 			
 		}

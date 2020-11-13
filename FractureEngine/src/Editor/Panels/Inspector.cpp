@@ -203,29 +203,26 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				ImGui::EndCombo();
 			}
 
-			if (ImGui::BeginCombo("Shader", current_Shader.c_str()))
+			const char* combo_label = current_Shader.c_str();
+			static int item_current_idx = 0;
+			if (ImGui::BeginCombo("Shader", combo_label))
 			{
-
-				for (auto const& shader: AssetManager::GetShaders())
+				std::vector<std::shared_ptr<Shader>> m_shaders = AssetManager::GetShaders();
+				for (int i = 0; i < m_shaders.size(); i++)
 				{
-					bool is_selected = (current_Shader.c_str() == shader.first.c_str());
-
-					if (ImGui::Selectable(current_Shader.c_str(), is_selected))
-					{
-						current_Shader = shader.first;
-						render->material->setShader(shader.first);
-					}
+					const bool is_selected = (item_current_idx == i);
+					if (ImGui::Selectable(m_shaders[i]->Name.c_str(), is_selected))
+						render->material->setShader(m_shaders[i]->Name);
+						item_current_idx = i;
 
 					if (is_selected)
-					{
-						ImGui::SetItemDefaultFocus();						
-					}
+						ImGui::SetItemDefaultFocus();
+				
+
 				}
 				ImGui::EndCombo();
 			}
-
-			ImGui::Separator();
-
+		
 			bool isTransparent = render->material->IsTransparent();
 			DrawBoolControl("Is Transparent", isTransparent);
 			render->material->setIsTransparent(isTransparent);
