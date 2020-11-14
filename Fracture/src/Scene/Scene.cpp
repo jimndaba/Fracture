@@ -253,7 +253,7 @@ void Fracture::Scene::Destroy(uint32_t id)
 void Fracture::Scene::clearScene()
 {	
 	m_entities.clear();
-	ComponentManager::ClearComponents();
+	//ComponentManager::ClearComponents();
 	IDManager::ResetIDs();
 }
 

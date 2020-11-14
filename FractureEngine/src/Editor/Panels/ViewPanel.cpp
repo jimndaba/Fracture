@@ -159,7 +159,7 @@ void Fracture::ViewPanel::render()
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
-				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(viewportPanelSize.x, viewportPanelSize.y);
+				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix((int)viewportPanelSize.x, (int)viewportPanelSize.y);
 				glm::mat4 transformMatrix = node->GetWorldTransform();
 				//transformMatrix = transformMatrix.tras
 

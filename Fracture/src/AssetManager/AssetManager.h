@@ -42,7 +42,7 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
 		static std::map<std::string, std::shared_ptr<Texture>> GetTextures();
 		static std::map<std::string, std::shared_ptr<Model>> GetModels();
-		static std::map<std::string, std::shared_ptr<Shader>> GetShaders();
+		static std::vector<std::shared_ptr<Fracture::Shader>>  GetShaders();
 		static std::map<std::string, std::shared_ptr<Material>> GetMaterials();
 
 

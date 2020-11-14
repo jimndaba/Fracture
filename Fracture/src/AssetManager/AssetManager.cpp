@@ -44,10 +44,19 @@ void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std
 void Fracture::AssetManager::AddModel(std::string name, std::string path)
 {
 	std::shared_ptr<Model> model = loadModel(path);
-	model->Name = name;
-	model->directory = path;
-	m_Models.emplace(name, model);
-	FRACTURE_TRACE("Loaded model: {}", name);
+
+	if (model)
+	{
+		model->Name = name;
+		model->directory = path;
+		m_Models.emplace(name, model);
+		FRACTURE_TRACE("Loaded model: {}", name);
+	}
+	else
+	{
+		FRACTURE_ERROR("Failed to Load Model: {} ", name);
+	}
+	
 }
 
 
@@ -112,9 +121,16 @@ std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::
 	return m_Models;
 }
 
-std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::GetShaders()
+std::vector<std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::GetShaders()
 {
-	return m_Shaders;
+	std::vector<std::shared_ptr<Shader>> shaders;
+
+	for (auto shader : m_Shaders)
+	{
+		shaders.push_back(shader.second);
+	}
+
+	return shaders;
 }
 
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::GetMaterials()
@@ -223,8 +239,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// process material
-	// 1. diffuse maps
-	
+	// 1. diffuse maps	
 	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, TextureType::Diffuse);
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps

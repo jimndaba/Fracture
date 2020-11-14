@@ -54,13 +54,13 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	j["Models"] = models;
 
 	json shaders = json::array_t();
-	std::map<std::string, std::shared_ptr<Shader>> m_shaders = AssetManager::GetShaders();
-	for (auto shader = m_shaders.begin(); shader != m_shaders.end(); ++shader)
+	std::vector<std::shared_ptr<Shader>> m_shaders = AssetManager::GetShaders();
+	for (auto shader : m_shaders)
 	{
 		json a;
-		a["Shader Name"] = shader->first;
-		a["Vertex"] = shader->second->vertexPath;
-		a["Fragment"] = shader->second->fragPath;
+		a["Shader Name"] = shader->Name;
+		a["Vertex"] = shader->vertexPath;
+		a["Fragment"] = shader->fragPath;
 		shaders.push_back(a);
 	}
 	j["Shaders"] = shaders;
