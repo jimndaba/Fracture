@@ -21,7 +21,8 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
 
-	ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
+	ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 20.0f);
+
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -47,8 +48,7 @@ bool Fracture::FractureSplash::Show()
     FRACTURE_INFO("Show Splash");
 	while (m_isShow)
 	{
-
-		onUpdate();
+        onUpdate();
 		onBeginFrame();
 		onRender();
 		onEndFrame();
@@ -92,6 +92,8 @@ void Fracture::FractureSplash::onRender()
 {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 
+    ImGuiIO& io = ImGui::GetIO();
+    auto boldFont = io.Fonts->Fonts[0];
 
     dockspace_flags |= ImGuiDockNodeFlags_NoTabBar;
 
@@ -106,7 +108,7 @@ void Fracture::FractureSplash::onRender()
 
     ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 
-    ImGuiIO& io = ImGui::GetIO();
+  
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -123,9 +125,18 @@ void Fracture::FractureSplash::onRender()
 
     ImGui::Begin("Project", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-    ImGui::Image((void*)m_AssetManger->getTexture("title")->id, ImVec2(500, 190));
 
-    if (ImGui::Button("New Project...", ImVec2(160, 100)))
+    ImGui::Image((void*)m_AssetManger->getTexture("title")->id, ImVec2(500, 200));
+    ImGui::PushID("##project");
+    ImGui::Columns(3);
+    ImGui::AlignTextToFramePadding();
+    ImGui::SetColumnWidth(0, 160);
+
+    ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+    ImGui::PushFont(boldFont);
+
+    if (ImGui::Button("New Project...", ImVec2(160, 200)))
     {       
         std::string filepath = FileDialogue::SelectDirectory();
         if (!filepath.empty())
@@ -137,7 +148,9 @@ void Fracture::FractureSplash::onRender()
         }    
     }
     ImGui::SameLine();
-    if (ImGui::Button("Open Project...", ImVec2(160, 100)))
+    ImGui::NextColumn();
+
+    if (ImGui::Button("Open Project...", ImVec2(160, 200)))
     {
        std::string filepath =  FileDialogue::OpenFile("Fracture Project (*.fracture)\0*.fracture\0)");
        if (!filepath.empty())
@@ -155,11 +168,20 @@ void Fracture::FractureSplash::onRender()
         }
     }
     ImGui::SameLine();
-    if (ImGui::Button("Exit", ImVec2(160, 100)))
+
+    ImGui::NextColumn();
+    if (ImGui::Button("Exit", ImVec2(160, 200)))
     {
         m_isShow = false;
         m_run = false;
     }
+    ImGui::NextColumn();
+    ImGui::Columns(1);
+
+    ImGui::PopFont();
+    ImGui::PopItemWidth();
+    ImGui::PopStyleVar();
+    ImGui::PopID();
     ImGui::End();
 
     ImGui::End();

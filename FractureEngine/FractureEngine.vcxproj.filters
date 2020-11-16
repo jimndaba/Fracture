@@ -90,6 +90,9 @@
     <ClInclude Include="src\Editor\utils\FileDialogue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\EditorCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -153,6 +156,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\utils\FileDialogue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -13,6 +13,7 @@
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
 #include "Component/TagComponent.h"
+#include "Component/ICamera.h"
 
 #include "Game/Game.h"
 #include "Scene/Scene.h"
@@ -50,15 +51,14 @@ std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
 
 Fracture::Renderer::Renderer()
 {
-    m_width = 1280;
-    m_Height = 720;
-    m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());    
-    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1, true));
-   
-    m_grid = std::make_shared<Grid>(100, 100, 1, 1,0.5f);
-    m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f,2.0f));
+   m_width = 1280;
+   m_Height = 720;
+   m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+   m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+   m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());    
+   SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1, true));   
+   m_grid = std::make_shared<Grid>(100, 100, 1, 1,0.5f);
+   m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f,2.0f));
    DrawDebugLineRetained(glm::vec3(-50.0f,0.0f,0.0f), glm::vec3(50.0f, 0.0f, 0.0f),glm::vec4(0.0f,0.0f,1.0f,1.0f));
    DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
   }
@@ -127,7 +127,7 @@ void Fracture::Renderer::RenderPasses()
 
     if (m_drawgrid)
     {
-        m_grid->Draw(AssetManager::getShader("DebugShader"), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix(), ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
+        m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
     }
     
     if (m_isDebugRender)
@@ -155,8 +155,8 @@ void Fracture::Renderer::RenderDebug()
 
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
-    m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+    m_DebugMaterial->getShader()->setMat4("projection",m_camera->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("view", m_camera->getViewMatrix());
     m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f,0.7f,0.0f,1.0f));
     for (int i = 0; i < m_DebugDraws.size(); i++)
     {
@@ -176,8 +176,8 @@ void Fracture::Renderer::RenderDebugRetained()
     glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
-    m_DebugMaterial->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
+    m_DebugMaterial->getShader()->setMat4("projection", m_camera->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("view", m_camera->getViewMatrix());
     for (int i = 0; i <m_DebugDrawsRetained.size(); i++)
     {
         m_DebugMaterial->getShader()->setVec4("Color", m_DebugDrawsRetained[i]->GetColor());
@@ -254,10 +254,8 @@ void Fracture::Renderer::Submit(RenderCommand command)
 {
     ProfilerTimer timer("Submit");    
     command.material->getShader()->use();
-    command.material->getShader()->setMat4("projection", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getProjectionMatrix(m_width, m_Height));
-    command.material->getShader()->setMat4("view", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->getViewMatrix());
-    command.material->getShader()->setVec3("viewPos", ComponentManager::GetComponent<CameraControllerComponent>(Scene::MainCamera()->Id)->Position);
-    command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+  
+   
 
     auto* uniforms = command.material->GetUniforms();
     for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
@@ -278,7 +276,11 @@ void Fracture::Renderer::Submit(RenderCommand command)
     }
 
     SetupLighting(command.material);
-       
+    command.material->getShader()->setMat4("view", m_camera->getViewMatrix());   
+    command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(m_width, m_Height));
+    command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
+    command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+
     Draw(command);
    
     command.material->getShader()->unbind(); 
@@ -464,6 +466,18 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
         RenderEntity(entity);
     }   
 }
+
+void Fracture::Renderer::SetCamera(std::shared_ptr<ICamera> camera)
+{
+    m_camera = camera;
+}
+
+std::shared_ptr<Fracture::ICamera> Fracture::Renderer::ActiveCamera()
+{
+    return m_camera;
+}
+
+
 
 void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
 {

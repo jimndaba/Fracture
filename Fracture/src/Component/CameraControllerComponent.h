@@ -10,19 +10,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "glm/gtx/compatibility.hpp"
 #include "Game/GameWindow.h"
+#include "ICamera.h"
 #include <vector>
 #include <math.h>
 
 namespace Fracture
 {
-	enum class Camera_Movement {
-		FORWARD,
-		BACKWARD,
-		LEFT,
-		RIGHT,
-		UP,
-		DOWN
-	};
+	
 
 	const float YAW = -90.0f;
 	const float PITCH = 0.0f;
@@ -33,7 +27,7 @@ namespace Fracture
 	class Ray;
 
 
-	class CameraControllerComponent :public Component,public IUPDATABLE
+	class CameraControllerComponent :public Component,public IUPDATABLE,public ICamera
 	{
 
 	public:
@@ -64,9 +58,11 @@ namespace Fracture
 
 		virtual void onStart();
 
-		glm::mat4 getViewMatrix();
+		glm::mat4 getViewMatrix() override;
 
-		glm::mat4 getProjectionMatrix(int width,int height);
+		glm::mat4 getProjectionMatrix(int width,int height) override;
+
+		glm::vec3 getPosition() override;
 
 		virtual void onUpdate(float dt);
 

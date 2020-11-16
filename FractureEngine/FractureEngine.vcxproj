@@ -92,6 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\EditorCamera.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Editor\Editor.h" />
     <ClInclude Include="src\Editor\Elements\Element.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\EditorCamera.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Editor\Elements\Element.cpp" />
     <ClCompile Include="src\Editor\Elements\TabbedElement.cpp" />

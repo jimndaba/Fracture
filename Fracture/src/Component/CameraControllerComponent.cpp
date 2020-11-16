@@ -31,6 +31,11 @@ glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, in
     return glm::perspective(glm::radians(foV), float(width) / float(height), nearClip, farClip);
 }
 
+glm::vec3 Fracture::CameraControllerComponent::getPosition()
+{
+    return Position;
+}
+
 void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);

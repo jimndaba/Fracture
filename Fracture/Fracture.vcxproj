@@ -159,6 +159,7 @@
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
     <ClInclude Include="src\Component\EditorNodeComponent.h" />
+    <ClInclude Include="src\Component\ICamera.h" />
     <ClInclude Include="src\Component\ILight.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
     <ClInclude Include="src\Component\LightComponent.h" />

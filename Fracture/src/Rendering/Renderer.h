@@ -32,6 +32,7 @@ namespace Fracture
 	struct UniformValueSampler;
 	class ShadowPass;
 	class Grid;
+	class ICamera;
 
 	class Renderer
 	{
@@ -76,6 +77,9 @@ namespace Fracture
 
 		void RenderEntity(std::shared_ptr<Entity> entity);		
 		void RenderScene(std::shared_ptr<Scene> scene);
+
+		void SetCamera(std::shared_ptr<ICamera> camera);
+		std::shared_ptr<ICamera> ActiveCamera();
 			
 
 		void onWindowResize(WindowResizeEvent* mevent);
@@ -90,6 +94,10 @@ namespace Fracture
 		static bool m_isDebugRender;
 		static bool m_drawgrid;
 		static std::shared_ptr<Renderer> instance;
+
+		//camera
+
+		std::shared_ptr<ICamera> m_camera;
 
 		//render buckets
 		std::shared_ptr<RenderBucket> m_opaqueBucket;
