@@ -63,6 +63,7 @@
 #include "Physics/RayHit.h"
 #include "Physics/Ray.h"
 
+#include "Scripting/ScriptManager.h"
 #include "Scripting/GameLogic.h"
 
 #include "Serialisation/SceneSerializer.h"

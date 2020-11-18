@@ -55,6 +55,8 @@ void Fracture::Editor::onInit()
     m_EntityFactory = std::make_unique<EntityFactory>();
     m_Profiler = std::make_unique<Profiler>();
     m_ComponentManager = std::make_unique<ComponentManager>();
+    m_ScriptManger = std::make_shared<ScriptManager>();
+
 
     m_ComponentManager->onInit();
 
@@ -223,7 +225,7 @@ void Fracture::Editor::run()
         {
             onUpdate((float)dt);
             m_PhysicsManger->stepUpdate();
-         
+            m_ScriptManger->OnUpdate(dt);
             accumulator -= dt;
             time += dt;
         }

@@ -385,6 +385,16 @@ void Fracture::Renderer::AddLight(const std::shared_ptr<ILight> light)
 void Fracture::Renderer::SetupLighting(Material* material)
 {
     material->getShader()->use();
+    material->getShader()->setBool("sunLights[0].enabled", false);
+    material->getShader()->setBool("sunLights[1].enabled", false);
+
+    for (int i = 0; i < 10; i++)
+    {
+        material->getShader()->setBool("pointLights[" + std::to_string(i) + "].enabled", false);
+        material->getShader()->setBool("spotLights[" + std::to_string(i) + "].enabled", false);
+    }
+
+
     for (int i = 0; i < m_lights.size(); i++)
     {        
         switch(m_lights[i]->GetLightType())
@@ -429,7 +439,6 @@ void Fracture::Renderer::SetupLighting(Material* material)
         }       
         
     }
-    //material->getShader()->unbind();
 }
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)

@@ -305,7 +305,7 @@ inline void Fracture::FractureSplash::Style()
     style.GrabRounding = 2;
 
 #ifdef IMGUI_HAS_DOCK 
-    style.TabBorderSize = is3D;
+    style.TabBorderSize = (float)is3D;
     style.TabRounding = 3;
 
     colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.22f, 0.23f, 0.25f, 1.00f);

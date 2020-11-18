@@ -63,8 +63,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -76,7 +76,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -87,8 +87,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -102,7 +102,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\libRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib</AdditionalDependencies>
+      <AdditionalDependencies>lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,6 +146,8 @@
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scripting\GameLogic.cpp" />
+    <ClCompile Include="src\Scripting\LuaScriptHandle.cpp" />
+    <ClCompile Include="src\Scripting\NativeScriptHandle.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
     <ClCompile Include="src\Serialisation\ProjectSerializer.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerializer.cpp" />
@@ -211,6 +213,8 @@
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scripting\GameLogic.h" />
+    <ClInclude Include="src\Scripting\LuaScriptHandle.h" />
+    <ClInclude Include="src\Scripting\NativeScriptHandle.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
     <ClInclude Include="src\Serialisation\ProjectProperties.h" />
     <ClInclude Include="src\Serialisation\ProjectSerializer.h" />

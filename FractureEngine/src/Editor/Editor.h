@@ -67,6 +67,7 @@ namespace Fracture
 		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 		std::shared_ptr<AssetManager> m_AssetManger;
+		std::shared_ptr<ScriptManager> m_ScriptManger;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::unique_ptr<EntityFactory> m_EntityFactory;
 		static std::shared_ptr<Scene> m_ActiveScene;

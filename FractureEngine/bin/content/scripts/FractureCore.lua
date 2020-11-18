@@ -1,7 +1,1 @@
-local Core ={
-
-Transform = {}
-Render = {}
-
-}
-return Core
+local Core = {}

@@ -1,37 +1,36 @@
-[10:35:00] [info] FRACTURE: Initializing Splash
-[10:35:00] [info] FRACTURE: OpenGL loaded
-[10:35:00] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:35:00] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:35:00] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[10:35:00] [trace] FRACTURE: Loaded Texture: splash
-[10:35:00] [trace] FRACTURE: Loaded Texture: title
-[10:35:00] [info] FRACTURE: Completed Init
-[10:35:00] [info] FRACTURE: Show Splash
-[10:35:06] [info] FRACTURE: OpenGL loaded
-[10:35:06] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:35:06] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:35:06] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
-[10:35:06] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[10:35:06] [info] FRACTURE: Renderer Init
-[10:35:06] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: RotateIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: CameraIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: LightIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: EyeIcon
-[10:35:06] [trace] FRACTURE: Loaded Texture: EyeIconC
-[10:35:06] [trace] FRACTURE: Loaded Shader: DebugShader
-[10:35:06] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[10:35:06] [trace] FRACTURE: Loaded Shader: BillboardShader
-[10:35:06] [trace] FRACTURE: Loaded Shader: default
-[10:35:06] [trace] FRACTURE: Loaded Material: DebugMaterial
-[10:35:06] [trace] FRACTURE: Loaded Material: billboardIcons
-[10:35:06] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[10:35:06] [trace] FRACTURE: Loaded model: Plane
-[10:35:06] [trace] FRACTURE: Loaded model: Cube
-[10:35:06] [trace] FRACTURE: Loaded model: Sphere
-[10:35:06] [trace] FRACTURE: Loaded model: Cylinder
-[10:35:07] [trace] FRACTURE: Loaded model: Torus
-[10:35:07] [trace] FRACTURE: Loaded model: Suzane
-[10:35:14] [trace] FRACTURE: Loaded Material: Suzane0
+[13:03:59] [info] FRACTURE: Initializing Splash
+[13:03:59] [info] FRACTURE: OpenGL loaded
+[13:03:59] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:03:59] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:03:59] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[13:03:59] [trace] FRACTURE: Loaded Texture: splash
+[13:03:59] [trace] FRACTURE: Loaded Texture: title
+[13:03:59] [info] FRACTURE: Completed Init
+[13:03:59] [info] FRACTURE: Show Splash
+[13:04:00] [info] FRACTURE: OpenGL loaded
+[13:04:00] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:04:00] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:04:00] [info] FRACTURE: Version: 4.0.14736 Core Profile Context 20.9.2 27.20.12031.1000
+[13:04:00] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[13:04:00] [info] FRACTURE: Renderer Init
+[13:04:00] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: RotateIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: CameraIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: LightIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: EyeIcon
+[13:04:00] [trace] FRACTURE: Loaded Texture: EyeIconC
+[13:04:00] [trace] FRACTURE: Loaded Shader: DebugShader
+[13:04:01] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[13:04:01] [trace] FRACTURE: Loaded Shader: BillboardShader
+[13:04:01] [trace] FRACTURE: Loaded Shader: default
+[13:04:01] [trace] FRACTURE: Loaded Material: DebugMaterial
+[13:04:01] [trace] FRACTURE: Loaded Material: billboardIcons
+[13:04:01] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[13:04:01] [trace] FRACTURE: Loaded model: Plane
+[13:04:01] [trace] FRACTURE: Loaded model: Cube
+[13:04:01] [trace] FRACTURE: Loaded model: Sphere
+[13:04:01] [trace] FRACTURE: Loaded model: Cylinder
+[13:04:01] [trace] FRACTURE: Loaded model: Torus
+[13:04:01] [trace] FRACTURE: Loaded model: Suzane
