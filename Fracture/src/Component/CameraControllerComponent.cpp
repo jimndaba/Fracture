@@ -31,6 +31,11 @@ glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, in
     return glm::perspective(glm::radians(foV), float(width) / float(height), nearClip, farClip);
 }
 
+glm::vec3 Fracture::CameraControllerComponent::getPosition()
+{
+    return Position;
+}
+
 void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);
@@ -67,8 +72,8 @@ void Fracture::CameraControllerComponent::Move(Camera_Movement td, float dt)
 bool firstMouse = true;
 void Fracture::CameraControllerComponent::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
 {
-    static double lastX = xpos;
-    static double lastY = ypos;
+    static float lastX = xpos;
+    static float lastY = ypos;
     
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top

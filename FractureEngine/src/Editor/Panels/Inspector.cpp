@@ -315,10 +315,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				{
 					const bool is_selected = (item_current_idx == n);
 					if (ImGui::Selectable(items[n], is_selected))
-					{
+					{						
 						m_LightType = lighttypes[n];
 						light->ChangeLightType(m_LightType);
-						item_current_idx = n;
+						item_current_idx = n;						
 					}			
 
 					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)

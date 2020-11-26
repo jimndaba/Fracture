@@ -1,9 +1,10 @@
-﻿  Inspector.cpp
+﻿  Editor.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(994,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(228,38): warning C4244: 'argument': conversion from 'const double' to 'float', possible loss of data
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
-Editor.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:REF' specification
+EditorCamera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:REF' specification
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
 Fracture.lib(btVector3.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btVector3.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
 Fracture.lib(btQuickprof.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btQuickprof.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
 Fracture.lib(btGeometryUtil.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btGeometryUtil.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info

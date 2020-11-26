@@ -17,7 +17,7 @@
 #include "Logging/Logger.h"
 #include <iostream>
 
-std::shared_ptr<Fracture::Entity> Fracture::Scene::main_Camera;
+std::shared_ptr<Fracture::Entity> Fracture::Scene::active_Camera;
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::m_entities;
 
 Fracture::Scene::Scene()
@@ -257,16 +257,16 @@ void Fracture::Scene::clearScene()
 	IDManager::ResetIDs();
 }
 
-std::shared_ptr<Fracture::Entity> Fracture::Scene::MainCamera()
+std::shared_ptr<Fracture::Entity> Fracture::Scene::ActiveCamera()
 {
-	if (main_Camera)
-		return main_Camera;
+	if (active_Camera)
+		return active_Camera;
 	return nullptr;
 }
 
 void Fracture::Scene::setCamera(std::shared_ptr<Entity> camera)
 {
-	main_Camera = camera;
+	active_Camera = camera;
 }
 
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::Entities()

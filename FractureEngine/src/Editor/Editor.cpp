@@ -9,6 +9,7 @@
 #include "Panels/AssetBrowserPanel.h"
 #include "SandboxScene.h"
 #include "Entity/EntityFactory.h"
+#include "EditorCamera.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -54,6 +55,8 @@ void Fracture::Editor::onInit()
     m_EntityFactory = std::make_unique<EntityFactory>();
     m_Profiler = std::make_unique<Profiler>();
     m_ComponentManager = std::make_unique<ComponentManager>();
+    m_ScriptManger = std::make_shared<ScriptManager>();
+
 
     m_ComponentManager->onInit();
 
@@ -111,6 +114,8 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
   
+
+    camera = std::make_shared<EditorCamera>();//TODO - update init of camera;
     m_Renderer = Renderer::getInstance();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
     m_Renderer->onInit();
@@ -130,7 +135,8 @@ bool Fracture::Editor::onLoad()
 
     m_SceneManager->SetScene(m_properties->ActiveScene);
     m_viewpanel->init();
-    m_viewpanel->setRenderer(m_Renderer.get());
+    m_Renderer->SetCamera(camera);
+    m_viewpanel->setRenderer(m_Renderer.get());   
     SetScene();   
     return true;
 }
@@ -182,7 +188,9 @@ void Fracture::Editor::onLoadNew()
     m_SceneManager->SetScene("empty");
     SetScene();
     m_viewpanel->init();
+    m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());
+   
 }
 
 void Fracture::Editor::run()
@@ -202,6 +210,8 @@ void Fracture::Editor::run()
             done = true;
         }
     }
+    //TODO - Set Editor Camera as camera;
+  
 
     while (!done)
     {
@@ -215,6 +225,7 @@ void Fracture::Editor::run()
         {
             onUpdate((float)dt);
             m_PhysicsManger->stepUpdate();
+            m_ScriptManger->OnUpdate(dt);
             accumulator -= dt;
             time += dt;
         }
@@ -240,7 +251,6 @@ void Fracture::Editor::onUpdate(float dt)
     InputManager::PollEvents();
     
     m_PhysicsManger->startPhysics();
-
     m_viewpanel->onUpdate(dt);
 }
 
@@ -315,9 +325,9 @@ void Fracture::Editor::Render()
         }
 
         DrawMenuBar();
-       
-       
-        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());        
+              
+
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
         m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
 

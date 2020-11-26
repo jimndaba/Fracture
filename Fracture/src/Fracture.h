@@ -49,6 +49,7 @@
 #include "Component/TagComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/CameraControllerComponent.h"
+#include "Component/ICamera.h"
 #include "Component/ScriptComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/BoxColliderComponent.h"
@@ -62,6 +63,7 @@
 #include "Physics/RayHit.h"
 #include "Physics/Ray.h"
 
+#include "Scripting/ScriptManager.h"
 #include "Scripting/GameLogic.h"
 
 #include "Serialisation/SceneSerializer.h"

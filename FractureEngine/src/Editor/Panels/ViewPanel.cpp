@@ -18,13 +18,13 @@ Fracture::ViewPanel::~ViewPanel()
 
 void Fracture::ViewPanel::init()
 {
-	m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->MainCamera()->Id);
-	m_camera->onStart();
+	//m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->ActiveCamera()->Id);
 }
 
 void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 {
     m_renderer = renderer;
+	m_camera = m_renderer->ActiveCamera();
 }
 
 void Fracture::ViewPanel::render()
@@ -80,17 +80,17 @@ void Fracture::ViewPanel::render()
 		}
 		else
 		{
-			RayHit hit;
-			float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
-			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
-			float region_x = screen_pos.x - pos.x;
-			float region_y = pos.y - screen_pos.y;
-			Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
+			//RayHit hit;
+			//float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
+			//float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+			//float region_x = screen_pos.x - pos.x;
+			//float region_y = pos.y - screen_pos.y;
+			//Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
 			//m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000),glm::vec4(1.0f,0.0f,0.0f,1.0f));
-			if (PhysicsManager::RayCast(ray, hit))
-			{
-				FRACTURE_INFO("Ray Hit");
-			}
+			//if (PhysicsManager::RayCast(ray, hit))
+			//{
+			//	FRACTURE_INFO("Ray Hit");
+			//}
 		}	
 	}
 		
@@ -240,8 +240,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			}
 
 			m_camera->onUpdate(dt);
-		}
-			
+		}			
 		if (InputManager::IsKeyDown(KeyCode::W))
 		{
 			gizmoMode = ImGuizmo::OPERATION::TRANSLATE;

@@ -39,7 +39,7 @@ namespace Fracture
 		void Destroy(uint32_t id);
 		void clearScene();		
 
-		static std::shared_ptr<Entity> MainCamera();
+		static std::shared_ptr<Entity> ActiveCamera();
 		static void setCamera(std::shared_ptr<Entity> camera);
 
 		std::vector<std::shared_ptr<Entity>> Entities();
@@ -48,7 +48,7 @@ namespace Fracture
 
 	private:
 		std::shared_ptr<Entity> m_root;
-		static std::shared_ptr<Entity> main_Camera;
+		static std::shared_ptr<Entity> active_Camera;
 		static std::vector<std::shared_ptr<Entity>> m_entities;
 		
 	};

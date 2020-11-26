@@ -136,7 +136,7 @@ void Fracture::Game::update(float dt)
 	m_PhysicsManager->onUpdate(dt);
 
 		
-	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->MainCamera()->Id);
+	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->ActiveCamera()->Id);
 
 	float mouseX = m_InputManager->GetMousePosition().x;
 	float mouseY = m_InputManager->GetMousePosition().y;

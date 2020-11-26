@@ -19,6 +19,7 @@ namespace Fracture
 	class AssetBrowserPanel;
 	class EntityFactory;
 	struct ProjectProperties;
+	class EditorCamera;
 
 	class Editor
 	{
@@ -66,9 +67,11 @@ namespace Fracture
 		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 		std::shared_ptr<AssetManager> m_AssetManger;
+		std::shared_ptr<ScriptManager> m_ScriptManger;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::unique_ptr<EntityFactory> m_EntityFactory;
 		static std::shared_ptr<Scene> m_ActiveScene;
+		std::shared_ptr<EditorCamera> camera;
 
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
