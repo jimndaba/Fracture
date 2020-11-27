@@ -3,22 +3,17 @@
 #include "Profiling/Profiler.h"
 #include "Event/Eventbus.h"
 
-sol::state* Fracture::ScriptManager::lua;
+
 
 Fracture::ScriptManager::ScriptManager()
 {
 	Eventbus::Subscribe(this, &Fracture::ScriptManager::OnCollision);
-	lua = new sol::state();
-	lua->open_libraries(sol::lib::base, sol::lib::math);
 
-	sol::load_result script1 = lua->load_file("content/scripts/script.lua");
-	//execute
-	//script1();
 }
 
 Fracture::ScriptManager::~ScriptManager()
 {
-	delete lua;
+
 }
 
 void Fracture::ScriptManager::AddScript(std::shared_ptr<GameLogic> script)
@@ -55,8 +50,7 @@ void Fracture::ScriptManager::OnUpdate(float dt)
 		}
 		script->onUpdate(dt);
 	}
-	lua->set("dt",dt);
-	lua->script("update(dt)");
+
 }
 
 void Fracture::ScriptManager::OnCollision(CollisionEvent* collision)
@@ -80,7 +74,3 @@ void Fracture::ScriptManager::update(float dt)
 {
 }
 
-sol::state* Fracture::ScriptManager::GetState()
-{
-	return lua;
-}
