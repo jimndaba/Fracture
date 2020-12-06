@@ -97,52 +97,55 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 void Fracture::Renderer::RenderPasses()
 {
     ProfilerTimer timer("RenderPass");
-    // for each render pass ->DrawScene();
+  
     m_opaqueBucket->sort();   
     m_shadowBucket->sort();
     m_transparentBucket->sort();
 
-    m_ShadowPass->Begin();
-    for (const auto& command : m_shadowBucket->getCommands())
-    {   
-        Submit(command);
+    glCullFace(GL_FRONT);  
+    glDisable(GL_CULL_FACE);
+    m_ShadowPass->Begin();      
+    for (auto light : m_lights)
+    {
+        if (light->GetLightType() == LightType::Sun)
+        {
+            m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));            
+        }  
     }
+    m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
     m_ShadowPass->End();
+    
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    setViewport(m_width, m_Height);        
+    SceneRenderTarget->bind(); 
 
-    setViewport(m_width, m_Height);
-    SceneRenderTarget->bind();
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, SceneRenderTarget->GetColorTexture(0)->id);
+
     clearColor(0.08f, 0.07f, 0.16f);
     clear();
+
     for (const auto& command : m_opaqueBucket->getCommands())
-    {
-        //SetupLighting(command.material);
+    {       
         Submit(command);
     }   
-
     for (const auto& command : m_transparentBucket->getCommands())
-    {
-        //SetupLighting(command.material);
-        Submit(command);
+    {       
+       Submit(command);
     }
-
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
-    }
-    
+    }    
     if (m_isDebugRender)
     {
         PhysicsManager::DrawDebug();  
         RenderDebug();
         RenderDebugRetained();
-    }   
-    
-    SceneRenderTarget->Unbind();
-  
-    //glDisable(GL_DEPTH_TEST);   
-    //clearColor(0.3f, 0.5f, 0.6f);
-    //glClear(GL_COLOR_BUFFER_BIT);   
-    //Submit();
+    }       
+    SceneRenderTarget->Unbind();  
+
 }
 
 void Fracture::Renderer::RenderDebug()
@@ -254,8 +257,6 @@ void Fracture::Renderer::Submit(RenderCommand command)
 {
     ProfilerTimer timer("Submit");    
     command.material->getShader()->use();
-  
-   
 
     auto* uniforms = command.material->GetUniforms();
     for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
@@ -276,6 +277,9 @@ void Fracture::Renderer::Submit(RenderCommand command)
     }
 
     SetupLighting(command.material);
+
+    command.material->getShader()->setMat4("lightSpaceMatrix", m_ShadowPass->GetLightSpaceMatrix());
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(),(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
     command.material->getShader()->setMat4("view", m_camera->getViewMatrix());   
     command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(m_width, m_Height));
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
@@ -307,10 +311,9 @@ void Fracture::Renderer::clearColor(float r, float g, float b)
 
 void Fracture::Renderer::setViewport(int width, int height)
 {
-	glViewport(0, 0, width, height);
-    
-    //m_width = width;
-    //m_Height = height;
+	glViewport(0, 0, width, height);    
+    m_width = width;
+    m_Height = height;
 }
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
@@ -319,7 +322,8 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
     {
         m_transparentBucket->pushCommand(command);
     }
-    else
+    
+    if(!command.HasTransparency)
     {
         m_opaqueBucket->pushCommand(command);
     }
@@ -377,6 +381,11 @@ void Fracture::Renderer::SetDebugRender(bool debug)
     m_isDebugRender = debug;
 }
 
+void Fracture::Renderer::SetDrawGrid(bool value)
+{
+    m_drawgrid = value;
+}
+
 void Fracture::Renderer::AddLight(const std::shared_ptr<ILight> light)
 {
     m_lights.push_back(light);
@@ -400,8 +409,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
         switch(m_lights[i]->GetLightType())
         {
             case LightType::Sun:
-            {
-                m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(m_lights[i]));
+            {               
                 material->getShader()->setBool("sunLights[" + std::to_string(i) + "].enabled", true);
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].direction", m_lights[i]->GetDirection());
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].ambient", m_lights[i]->GetAmbient());
@@ -485,8 +493,6 @@ std::shared_ptr<Fracture::ICamera> Fracture::Renderer::ActiveCamera()
 {
     return m_camera;
 }
-
-
 
 void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
 {

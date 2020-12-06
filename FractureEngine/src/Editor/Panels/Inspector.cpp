@@ -54,15 +54,25 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
-			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);	
-			DrawVec3Control("Position", transform->Position);
-			DrawVec3Control("Scale", transform->Scale, 1);
-			DrawVec3Control("Rotation", transform->Rotation);
+			std::shared_ptr<TransformComponent> transform = std::dynamic_pointer_cast<TransformComponent>(component);
+
+			glm::vec3 position = transform->Position();
+			glm::vec3 scale = transform->Scale();
+			glm::vec3 rotation = transform->Rotation();
+
+			DrawVec3Control("Position", position);
+			DrawVec3Control("Scale", scale, 1);
+			DrawVec3Control("Rotation",rotation);
+
+			transform->setPosition(position);
+			transform->setScale(scale);
+			transform->setRotation(rotation);
+
 			if (ComponentManager::HasComponent<RigidBodyComponent>(transform->EntityID))
 			{
 				std::shared_ptr<RigidBodyComponent> body = ComponentManager::GetComponent<RigidBodyComponent>(transform->EntityID);
-				body->setPosition(transform->Position);
-				body->setRotation(transform->Rotation);
+				body->setPosition(transform->Position());
+				body->setRotation(transform->Rotation());
 			}
 
 

@@ -238,8 +238,8 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 
 				if(transcomponent)				
 				{
-					transcomponent->Position = glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
-					transcomponent->Rotation = glm::vec3(orientation.getX(), orientation.getY(), orientation.getZ());
+					transcomponent->setPosition(  glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ()));
+					transcomponent->setRotation(  glm::vec3(orientation.getX(), orientation.getY(), orientation.getZ()));
 				}
 				
 			}

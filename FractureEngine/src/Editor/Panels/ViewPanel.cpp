@@ -52,16 +52,18 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();	
-	ImVec2 content_area_max_point = ImGui::GetWindowContentRegionMax();
+	
+	//ImVec2 content_area_max_point = ImGui::GetWindowContentRegionMax();
 
-	float width = content_area_max_point.x - ImGui::GetCursorPos().x;
-	float height = content_area_max_point.y - ImGui::GetCursorPos().y;
-	m_ViewportSize = { width, height };
+	//float width = content_area_max_point.x - ImGui::GetCursorPos().x;
+	//float height = content_area_max_point.y - ImGui::GetCursorPos().y;
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
 
+	m_renderer->setViewport(viewportPanelSize.x, viewportPanelSize.y);
 
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		ImVec2{ width,height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	
 	ImVec2 screen_pos = ImGui::GetMousePos();
@@ -130,9 +132,9 @@ void Fracture::ViewPanel::render()
 
 				if (ImGuizmo::IsUsing())
 				{
-					glm::vec3 scale = transform->Scale;
-					glm::quat rotation = glm::quat(transform->Rotation);
-					glm::vec3 position = transform->Position;
+					glm::vec3 scale = transform->Scale();
+					glm::quat rotation = glm::quat(transform->Rotation());
+					glm::vec3 position = transform->Position();
 					glm::vec3 skew;
 					glm::vec4 perspective;
 
@@ -140,9 +142,9 @@ void Fracture::ViewPanel::render()
 					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
 
 
-					transform->Scale = scale;
-					transform->Rotation = glm::eulerAngles(rotation);
-					transform->Position = position;
+					transform->setScale(scale);
+					transform->setRotation(glm::eulerAngles(rotation));
+					transform->setPosition(position);
 
 				}
 			}
@@ -202,7 +204,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
-			m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);			
 	}
 
 	if(m_ViewportFocused && m_ViewportHovered && m_camera)

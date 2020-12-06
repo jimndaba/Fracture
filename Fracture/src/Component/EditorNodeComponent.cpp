@@ -10,9 +10,9 @@ Fracture::EditorNode::EditorNode(uint32_t id):Component(id,ComponentType::Editor
 	if (ComponentManager::HasComponent<TransformComponent>(id))
 	{
 			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(id);
-			m_Position = transform->Position;
-			m_Scale = transform->Scale;
-			m_Rotation = transform->Rotation;
+			m_Position = transform->Position();
+			m_Scale = transform->Scale();
+			m_Rotation = transform->Rotation();
 	}
 	else if (ComponentManager::HasComponent<LightComponent>(id))
 	{

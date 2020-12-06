@@ -124,9 +124,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		std::shared_ptr<TransformComponent> component = ComponentManager::GetComponent<TransformComponent>(entity->Id);
 		json c;	
 		
-		c["Position"] = { component->Position.x,component->Position.y,component->Position.z } ;
-		c[ "Scale"] = { component->Scale.x,component->Scale.y ,component->Scale.z } ;
-		c["Rotation"] =  { component->Rotation.x,component->Rotation.y ,component->Rotation.z } ;		
+		c["Position"] = { component->Position().x,component->Position().y,component->Position().z } ;
+		c[ "Scale"] = { component->Scale().x,component->Scale().y ,component->Scale().z } ;
+		c["Rotation"] =  { component->Rotation().x,component->Rotation().y ,component->Rotation().z } ;		
 		j["Transform Component"] = c;
 	}
 
@@ -380,9 +380,9 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			std::array<float, 3>rot = transformComponent["Rotation"];
 
 			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(entity->Id);
-			component->Position = glm::vec3(pos[0], pos[1], pos[2]);
-			component->Scale = glm::vec3(sc[0], sc[1], sc[2]);
-			component->Rotation = glm::vec3(rot[0], rot[1], rot[2]);
+			component->setPosition(glm::vec3(pos[0], pos[1], pos[2]));
+			component->setScale(glm::vec3(sc[0], sc[1], sc[2]));
+			component->setRotation(glm::vec3(rot[0], rot[1], rot[2]));
 			ComponentManager::AddComponent<TransformComponent>(component);
 
 		}

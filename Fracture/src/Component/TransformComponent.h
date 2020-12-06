@@ -24,9 +24,13 @@ namespace Fracture
 
 		virtual void onStart();
 
-		glm::vec3 Position;
-		glm::vec3 Scale;
-		glm::vec3 Rotation;
+		void setPosition(const glm::vec3& value);
+		void setScale(const glm::vec3& value);
+		void setRotation(const glm::vec3& value);
+
+		glm::vec3 Position();
+		glm::vec3 Scale();
+		glm::vec3 Rotation();
 
 		glm::mat4 GetLocalTranform();
 		glm::mat4 GetWorldTransform();
@@ -34,6 +38,9 @@ namespace Fracture
 	private:
 		glm::mat4 m_LocalTransform;
 		glm::mat4 m_WorldTransform; 		
+		glm::vec3 m_Position;
+		glm::vec3 m_Scale;
+		glm::vec3 m_Rotation;
 	};
 
 }

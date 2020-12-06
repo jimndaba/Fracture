@@ -10,7 +10,7 @@
 Fracture::RigidBodyComponent::RigidBodyComponent(uint32_t id,float _mass):Component(id,ComponentType::Rigidbody),Mass(_mass)
 {
 	m_Transform.setIdentity();
-	glm::vec3 position = ComponentManager::GetComponent<TransformComponent>(id)->Position;
+	glm::vec3 position = ComponentManager::GetComponent<TransformComponent>(id)->Position();
 	m_Transform.setOrigin(btVector3(position.x, position.y, position.z));
 
 	collisionGroup = CollisionGroup::COLGROUP_NONE;

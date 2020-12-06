@@ -47,10 +47,11 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
     HasDepthAndStencil = depthAndStencil;
     if (depthAndStencil)
     {
-        std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH_STENCIL, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
+        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, TextureType::DepthStencilAttachment));
        
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture->id, 0);
-        m_DepthStencil = texture;
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, dtexture->id, 0);
+        m_DepthStencil = dtexture;
+
     }
 
 
@@ -72,7 +73,7 @@ Fracture::RenderTarget::~RenderTarget()
 
 std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetDepthStencilTexture()
 {
-	return std::shared_ptr<Texture>();
+    return m_DepthStencil;
 }
 
 std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetColorTexture(unsigned int index)
@@ -89,10 +90,12 @@ std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetColorTexture(unsig
 void Fracture::RenderTarget::bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, ID);
+
 }
 
 void Fracture::RenderTarget::Unbind()
 {
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

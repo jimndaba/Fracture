@@ -6,6 +6,8 @@
 #include "Panels/Inspector.h"
 #include "Panels/ViewPanel.h"
 #include "Panels/TabbedPanel.h"
+#include "Rendering/ShadowPass.h"
+#include "Rendering/RenderTarget.h"
 #include "Panels/AssetBrowserPanel.h"
 #include "SandboxScene.h"
 #include "Entity/EntityFactory.h"
@@ -158,11 +160,15 @@ void Fracture::Editor::onLoadNew()
     //billboards
     m_AssetManger->AddShader("BillboardShader", "content/shaders/Billboards/vertex.glsl", "content/shaders/Billboards/fragment.glsl");
 
+    //depthShader
+    m_AssetManger->AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
+
     //textured models
     m_AssetManger->AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
 
 
     m_AssetManger->AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
+    m_AssetManger->AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
 
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
 
@@ -611,13 +617,49 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::NextColumn();
         ImGui::Text("Draw Debug");
         ImGui::NextColumn();
-
         ImGui::PushFont(boldFont);
         ImGui::Checkbox("##drawdebug", &DebugDraw);
         _renderer->SetDebugRender(DebugDraw);
         ImGui::PopFont();
-
         ImGui::Separator();
+
+        bool DebugGrid = _renderer->IsDrawGrid();
+        ImGui::NextColumn();
+        ImGui::Text("Draw Debug");
+        ImGui::NextColumn();
+        ImGui::PushFont(boldFont);
+        ImGui::Checkbox("##drawdebug", &DebugGrid);
+        _renderer->SetDrawGrid(DebugGrid);
+        ImGui::PopFont();
+        ImGui::Separator();
+        ImGui::NextColumn();
+        ImGui::BeginChild("ShadowMap");
+        ImGui::Image((void*)_renderer->m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->id, ImVec2(200,200));
+        ImGui::EndChild();
+        ImGui::NextColumn();
+        static float vnear;
+        static float vfar;
+        static float vleft;
+        static float vright;
+        static float vtop;
+        static float vbottom;
+
+        vnear = _renderer->m_ShadowPass->GetNearFarPlanes().x;
+        vfar = _renderer->m_ShadowPass->GetNearFarPlanes().y;
+        vleft = _renderer->m_ShadowPass->GetOrthor().x;
+        vright = _renderer->m_ShadowPass->GetOrthor().y;
+        vtop = _renderer->m_ShadowPass->GetOrthor().z;
+        vbottom = _renderer->m_ShadowPass->GetOrthor().w;
+
+        ImGui::DragFloat("##vn", &vnear, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##vf", &vfar, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##vl", &vleft, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##vr", &vright, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##vt", &vtop, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##vb", &vbottom, 0.1f, 0.0f, 0.0f, "%.2f");
+        _renderer->m_ShadowPass->SetNearFarPlanes(vnear, vfar);
+        _renderer->m_ShadowPass->SetOrthor(vleft, vright, vtop, vbottom);
+
 
 
         ImGui::Columns(1);

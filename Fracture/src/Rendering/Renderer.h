@@ -66,11 +66,12 @@ namespace Fracture
 		{
 			return m_isDebugRender;
 		}
-		static bool IsDrawGrid(bool drawgrid)
+		static bool IsDrawGrid()
 		{
-			m_drawgrid = drawgrid;
+			return m_drawgrid;
 		}
 		static void SetDebugRender(bool debug);
+		static void SetDrawGrid(bool value);
 
 		void AddLight(const std::shared_ptr<ILight> light);
 		void SetupLighting(Material* material);
@@ -84,7 +85,8 @@ namespace Fracture
 
 		void onWindowResize(WindowResizeEvent* mevent);
 
-
+		//Render Passes
+		std::shared_ptr<ShadowPass> m_ShadowPass;
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 		
 		static std::shared_ptr<Renderer> getInstance();
@@ -111,9 +113,7 @@ namespace Fracture
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;
 
-		//Render Passes
-		std::shared_ptr<ShadowPass> m_ShadowPass;
-
+	
 		std::shared_ptr<Material> m_DebugMaterial;
 		std::shared_ptr<Grid> m_grid;
 	};
