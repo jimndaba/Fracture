@@ -687,7 +687,7 @@ namespace ImGuizmo
    static const ImU32 directionColor[3] = { 0xFF0000AA, 0xFF00AA00, 0xFFAA0000 };
 
    // Alpha: 100%: FF, 87%: DE, 70%: B3, 54%: 8A, 50%: 80, 38%: 61, 12%: 1F
-   static const ImU32 planeColor[3] = { 0x610000AA, 0x6100AA00, 0x61AA0000 };
+   static const ImU32 planeColor[3] = { 0xFF7A68D8, 0xFF55AB55, 0xFFD96742 };
    static const ImU32 selectionColor = 0x8A1080FF;
    static const ImU32 inactiveColor = 0x99999999;
    static const ImU32 translationLineColor = 0xAAAAAAAA;
@@ -1118,7 +1118,8 @@ namespace ImGuizmo
       cameraToModelNormalized.TransformVector(gContext.mModelInverse);
 
       gContext.mRadiusSquareCenter = screenRotateSize * gContext.mHeight;
-
+      constexpr float circleLineThickness = 4.0f;
+      constexpr float lineThickness = 4.0f;
       for (int axis = 0; axis < 3; axis++)
       {
          ImVec2 circlePos[halfCircleSegmentCount];
@@ -1139,9 +1140,9 @@ namespace ImGuizmo
             gContext.mRadiusSquareCenter = radiusAxis;
          }
 
-         drawList->AddPolyline(circlePos, halfCircleSegmentCount, colors[3 - axis], false, 2);
+         drawList->AddPolyline(circlePos, halfCircleSegmentCount, colors[3 - axis], false, lineThickness);
       }
-      drawList->AddCircle(worldToPos(gContext.mModel.v.position, gContext.mViewProjection), gContext.mRadiusSquareCenter, colors[0], 64, 3.f);
+      drawList->AddCircle(worldToPos(gContext.mModel.v.position, gContext.mViewProjection), gContext.mRadiusSquareCenter, colors[0], 64, circleLineThickness);
 
       if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID))
       {
@@ -1194,7 +1195,8 @@ namespace ImGuizmo
       {
          scaleDisplay = gContext.mScale;
       }
-
+      constexpr float lineThickness = 4.0f;
+      constexpr float circleSize = 12.0f;
       for (unsigned int i = 0; i < 3; i++)
       {
          vec_t dirPlaneX, dirPlaneY, dirAxis;
@@ -1211,11 +1213,11 @@ namespace ImGuizmo
             if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID))
             {
                drawList->AddLine(baseSSpace, worldDirSSpaceNoScale, 0xFF404040, 3.f);
-               drawList->AddCircleFilled(worldDirSSpaceNoScale, 6.f, 0xFF404040);
+               drawList->AddCircleFilled(worldDirSSpaceNoScale,circleSize, 0xFF404040);
             }
 
-            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], 3.f);
-            drawList->AddCircleFilled(worldDirSSpace, 6.f, colors[i + 1]);
+            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], lineThickness);
+            drawList->AddCircleFilled(worldDirSSpace, circleSize, colors[i + 1]);
 
             if (gContext.mAxisFactor[i] < 0.f)
             {
@@ -1225,7 +1227,7 @@ namespace ImGuizmo
       }
 
       // draw screen cirle
-      drawList->AddCircleFilled(gContext.mScreenSquareCenter, 6.f, colors[0], 32);
+      drawList->AddCircleFilled(gContext.mScreenSquareCenter, circleSize, colors[0], 32);
 
       if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID))
       {
@@ -1265,6 +1267,8 @@ namespace ImGuizmo
       // draw
       bool belowAxisLimit = false;
       bool belowPlaneLimit = false;
+      constexpr float arrowSize = 6.0f;
+      constexpr float lineThickness = 4.0f;
       for (unsigned int i = 0; i < 3; ++i)
       {
          vec_t dirPlaneX, dirPlaneY, dirAxis;
@@ -1276,14 +1280,14 @@ namespace ImGuizmo
             ImVec2 baseSSpace = worldToPos(dirAxis * 0.1f * gContext.mScreenFactor, gContext.mMVP);
             ImVec2 worldDirSSpace = worldToPos(dirAxis * gContext.mScreenFactor, gContext.mMVP);
 
-            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], 3.f);
+            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1],lineThickness);
 
             // Arrow head begin
             ImVec2 dir(origin - worldDirSSpace);
 
             float d = sqrtf(ImLengthSqr(dir));
             dir /= d; // Normalize
-            dir *= 6.0f;
+            dir *= arrowSize;
 
             ImVec2 ortogonalDir(dir.y, -dir.x); // Perpendicular vector
             ImVec2 a(worldDirSSpace + dir);

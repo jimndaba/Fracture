@@ -44,10 +44,9 @@ struct SpotLight {
 
 };
 
-in VS_OUT {    
-    vec3 T;
-    vec3 B;
-    vec3 N;
+in VS_OUT {  
+  	vec3 TangentViewPos;
+	vec3 TangentFragPos;
 } fs_in;
 
 
@@ -66,6 +65,8 @@ uniform sampler2D aoMap;
 
 uniform vec3 viewPos;
 
+uniform float heightScale;
+
 // lights
 #define NR_SUN_LIGHTS 1
 uniform SunLight sunLights[NR_SUN_LIGHTS];
@@ -77,15 +78,14 @@ uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 
 
-uniform float heightScale;
+
 
 const float PI = 3.14159265359;
-vec3 getNormalFromMap()
-{
-    vec3 normal = texture(normalMap, TexCoords).rgb;
-    normal = normalize(normal * 2.0 - 1.0); 
 
-    return normal;
+vec3 getNormalFromMap(vec2 texcoords)
+{    
+    vec3 normal = texture(normalMap,  texcoords).rgb;    
+    return normal = normalize(normal * 2.0 - 1.0);  
 }
 
 // ----------------------------------------------------------------------------
@@ -131,10 +131,40 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 }
 // ----------------------------------------------------------------------------
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
-{ 
-    float height = texture(displacementMap, texCoords).r;
-	vec2 p = viewDir.xy / viewDir.z * (height * heightScale);
-	return texCoords - p;     
+{
+  
+    // Steep Parallax Mapping
+	const float minLayers = 8.0f;
+	const float maxLayers = 32.0f;
+	float numLayers = mix(maxLayers, minLayers, max(dot(vec3(0.0, 0.0, 1.0), viewDir), 0.0));
+
+	float layerDepth = 1.0 / numLayers;
+	
+	float currentLayerDepth = 0.0f;
+	
+	vec2 P = viewDir.xy * heightScale;
+	vec2 deltaTexCoords = P / numLayers;
+
+	vec2 currentTexCoords = texCoords;
+	float currentDepthMapValue = texture(displacementMap, currentTexCoords).r;
+
+	while (currentLayerDepth < currentDepthMapValue)
+	{
+		currentTexCoords -= deltaTexCoords;
+		currentDepthMapValue = texture(displacementMap, currentTexCoords).r;
+		currentLayerDepth += layerDepth;
+	}
+
+	// Parallax Occlusion Mapping
+	vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+	float afterDepth = currentDepthMapValue - currentLayerDepth; // depth after collision
+	float beforeDepth = texture(displacementMap, prevTexCoords).r - currentLayerDepth + layerDepth; // depth before collision
+
+	float weight = afterDepth / (afterDepth - beforeDepth);
+	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight); // interpolation of texcoords
+
+	return finalTexCoords;
 } 
 // ----------------------------------------------------------------------------
 
@@ -143,17 +173,19 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
-{		
+{	   
+    vec3 viewDir = normalize(fs_in.TangentViewPos  - fs_in.TangentFragPos);   
+    //vec2 texCoords = TexCoords;
+    vec2 texCoords = ParallaxMapping(TexCoords,viewDir);
+    if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
+    discard;
     
-    mat3 TBN = transpose(mat3(fs_in.T, fs_in.B, fs_in.N));
-    vec3 TangentViewPos  = TBN * viewPos;
-    vec3 TangentFragPos  = TBN * FragPos;   
-    vec3 N = getNormalFromMap();
-    vec3 V = normalize(TangentViewPos - TangentFragPos);  
-   
+    vec3 N = getNormalFromMap(texCoords);
     
-    vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    float ao        = texture(aoMap, TexCoords).r;
+	
+
+    vec3 albedo     = pow(texture(albedoMap, texCoords).rgb, vec3(2.2));
+    float ao        = texture(aoMap, texCoords).r;
     
     // reflectance equation
     vec3 Lo = vec3(0.0);
@@ -164,44 +196,15 @@ void main()
       {
         continue;
       }
-      Lo += CalcPointLight(pointLights[i], N, FragPos, V,TexCoords);
+      Lo += CalcPointLight(pointLights[i], N, FragPos,viewDir, texCoords);
     }
 
-/*
-    for(int i = 0; i < 4; ++i) 
-    {
-        // calculate per-light radiance
-        vec3 L = normalize(lightPositions[i] - WorldPos);
-        vec3 H = normalize(V + L);
-        float distance    = length(lightPositions[i] - WorldPos);
-        float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = lightColors[i] * attenuation;        
-        
-        // cook-torrance brdf
-        float NDF = DistributionGGX(N, H, roughness);        
-        float G   = GeometrySmith(N, V, L, roughness);      
-        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);       
-        
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - metallic;	  
-        
-        vec3 numerator    = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
-        vec3 specular     = numerator / max(denominator, 0.001);  
-            
-        // add to outgoing radiance Lo
-        float NdotL = max(dot(N, L), 0.0);                
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL; 
-    }   
-*/
     vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
-	
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));  
     FragColor = vec4(color, 1.0);
-    //FragColor = vec4(fs_in.B , 1.0);
+  
 }
 
 vec3 CalcDirLight(SunLight light, vec3 normal, vec3 viewDir)
@@ -211,11 +214,12 @@ vec3 CalcDirLight(SunLight light, vec3 normal, vec3 viewDir)
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec2 uvs)
 {   
-    vec3 F0 = vec3(0.04); 
+    vec3 F0 = light.ambient; 
     vec3 albedo     = pow(texture(albedoMap, uvs).rgb, vec3(2.2));
     float metallic  = texture(metallicMap, uvs).r;
     float roughness = texture(roughnessMap, uvs).r;
     float ao        = texture(aoMap, uvs).r;
+
 
     F0 = mix(F0, albedo, metallic);
 
@@ -240,7 +244,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     // for energy conservation, the diffuse and specular light can't
     // be above 1.0 (unless the surface emits light); to preserve this
     // relationship the diffuse component (kD) should equal 1.0 - kS.
-    vec3 kD = vec3(1.0) - kS;
+    vec3 kD = light.specular - kS;
     // multiply kD by the inverse metalness such that only non-metals 
     // have diffuse lighting, or a linear blend if partly metal (pure metals
     // have no diffuse light).

@@ -122,9 +122,7 @@ void Fracture::ViewPanel::render()
 
 				ImGuizmo::MODE mode = currentImGuizmoMode;
 				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
-					mode = ImGuizmo::MODE::LOCAL;
-
-				
+					mode = ImGuizmo::MODE::LOCAL;				
 
 				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
 					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
@@ -132,18 +130,15 @@ void Fracture::ViewPanel::render()
 
 				if (ImGuizmo::IsUsing())
 				{
-					glm::vec3 scale = transform->Scale();
-					glm::quat rotation = glm::quat(transform->Rotation());
-					glm::vec3 position = transform->Position();
-					glm::vec3 skew;
-					glm::vec4 perspective;
-
-					glm::transpose(transformMatrix);
-					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
-
-
+					glm::vec3 scale; //= transform->Scale();
+					glm::vec3 rotation; //= transform->Rotation();
+					glm::vec3 position; //= transform->Position();
+		
+					Math::DecomposeTransform(transformMatrix, position, rotation, scale);
+					
+					glm::vec3 deltaRotation = rotation - transform->Rotation();
 					transform->setScale(scale);
-					transform->setRotation(glm::eulerAngles(rotation));
+					transform->setRotation(deltaRotation += transform->Rotation());
 					transform->setPosition(position);
 
 				}
@@ -163,7 +158,7 @@ void Fracture::ViewPanel::render()
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix((int)viewportPanelSize.x, (int)viewportPanelSize.y);
 				glm::mat4 transformMatrix = node->GetWorldTransform();
-				//transformMatrix = transformMatrix.tras
+			
 
 				ImGuizmo::MODE mode = currentImGuizmoMode;
 				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
@@ -174,16 +169,17 @@ void Fracture::ViewPanel::render()
 				);
 
 				if (ImGuizmo::IsUsing())
-				{
-					glm::vec3 scale = node->GetScale();
-					glm::quat rotation = glm::quat(node->GetRotation());
-					glm::vec3 position = node->GetPosition();
-					glm::vec3 skew;
-					glm::vec4 perspective;
-					glm::decompose(transformMatrix, scale, rotation, position, skew, perspective);
-					//rotation = glm::conjugate(rotation);
+				{					
+
+					glm::vec3 scale;
+					glm::vec3 rotation;
+					glm::vec3 position;
+
+					Math::DecomposeTransform(transformMatrix, position, rotation, scale);
+					
+					glm::vec3 deltaRotation = rotation - node->GetRotation();
 					node->SetScale(scale);
-					node->SetRotation(glm::eulerAngles(rotation));
+					node->SetRotation(deltaRotation += node->GetRotation());
 					node->SetPosition(position);
 
 				}

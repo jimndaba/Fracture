@@ -30,6 +30,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "glm/gtx/compatibility.hpp"
+#include "Math/Math.h"
 
 #include "Rendering/RenderCommand.h"
 #include "Rendering/RenderBucket.h"

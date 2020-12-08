@@ -98,6 +98,7 @@
     <ClInclude Include="src\Editor\Elements\Element.h" />
     <ClInclude Include="src\Editor\Elements\TabbedElement.h" />
     <ClInclude Include="src\Editor\Elements\TagComponentElement.h" />
+    <ClInclude Include="src\Editor\Factories\MaterialFactory.h" />
     <ClInclude Include="src\Editor\FractureSplash.h" />
     <ClInclude Include="src\Editor\Panels\AssetBrowserPanel.h" />
     <ClInclude Include="src\Editor\Panels\Inspector.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="src\Editor\Elements\Element.cpp" />
     <ClCompile Include="src\Editor\Elements\TabbedElement.cpp" />
     <ClCompile Include="src\Editor\Elements\TagComponentElement.cpp" />
+    <ClCompile Include="src\Editor\Factories\MaterialFactory.cpp" />
     <ClCompile Include="src\Editor\FractureSplash.cpp" />
     <ClCompile Include="src\Editor\Panels\AssetBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\Inspector.cpp" />
