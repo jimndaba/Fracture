@@ -126,6 +126,7 @@ void Fracture::AssetBrowserPanel::render()
             if (!name.empty())
             {
                 std::shared_ptr<Material> material = std::make_shared<Material>(name, AssetManager::getShader("default"));
+
                 AssetManager::AddMaterial(name, material);
                 ImGui::CloseCurrentPopup();
             }            

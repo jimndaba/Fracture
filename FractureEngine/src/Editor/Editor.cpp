@@ -197,15 +197,13 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
 
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
-
-    std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
-
-    m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setColor3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setColor3("material.specular", glm::vec3(1.0, 1.0, 1.0));
-    primitivesMaterial->setFloat("material.specular", 64.0f);
     m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);
+    
+    std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
+    m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);    
 
     std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", m_AssetManger->getShader("PBRPlaneShader")));
     pbrPrimitive->setColor3("albedo",glm::vec3(1.0f,0.0f,0.0f));
@@ -239,6 +237,7 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddMaterial("PBRPlane",pbrPrimitive );
     m_AssetManger->AddMaterial("PBRTextured",pbrTextured );
     m_AssetManger->AddMaterial("PBRWood", pbrWood);
+
     m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
     m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
     m_AssetManger->AddModel("Sphere", "content/models/primitives/sphere.fbx");

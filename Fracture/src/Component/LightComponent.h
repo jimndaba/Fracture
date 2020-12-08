@@ -46,6 +46,8 @@ namespace Fracture
 		LightType GetLightType();
 		void ChangeLightType(LightType new_type);
 
+		bool CastShadow();
+		void SetCastShadow(bool value);
 
 	private:
 		LightType m_type;

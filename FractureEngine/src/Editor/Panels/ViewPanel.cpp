@@ -206,12 +206,15 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if(m_ViewportFocused && m_ViewportHovered && m_camera)
 	{ 
 		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
-		{
-			float mouseX = InputManager::GetMousePosition().x;
-			float mouseY = InputManager::GetMousePosition().y;
+		{	
+			const glm::vec2& mouse{ InputManager::GetMousePosition().x,InputManager::GetMousePosition().y };
+			glm::vec2 delta = (mouse - m_InitialMousePosition);
+			m_InitialMousePosition = mouse;
+
+
 
 			//SDL_WarpMouseInWindow(m_GameWindow->Context(), m_GameWindow->Width / 2, m_GameWindow->Height / 2);
-			m_camera->InputMouse(mouseX, mouseY, dt);
+			m_camera->InputMouse(mouse.x, mouse.y, dt);
 			if (InputManager::IsKeyDown(KeyCode::W))
 			{
 				m_camera->Move(Camera_Movement::FORWARD, dt);

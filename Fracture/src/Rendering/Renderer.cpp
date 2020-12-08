@@ -84,7 +84,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     glEnable(GL_DEPTH_TEST);	
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
+ 
     //Clear All Buckets
 	m_opaqueBucket->clear();
     m_transparentBucket->clear();
@@ -102,12 +102,13 @@ void Fracture::Renderer::RenderPasses()
     m_shadowBucket->sort();
     m_transparentBucket->sort();
 
-    glCullFace(GL_FRONT);  
+    //glCullFace(GL_FRONT);  
     glDisable(GL_CULL_FACE);
+    
     m_ShadowPass->Begin();      
     for (auto light : m_lights)
     {
-        if (light->GetLightType() == LightType::Sun)
+        if (light->GetLightType() == LightType::Sun && light->CastShadows())
         {
             m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));            
         }  
@@ -115,7 +116,8 @@ void Fracture::Renderer::RenderPasses()
     m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
     m_ShadowPass->End();
     
-    glCullFace(GL_BACK);
+
+    //glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
     setViewport(m_width, m_Height);        
     SceneRenderTarget->bind(); 
@@ -125,15 +127,28 @@ void Fracture::Renderer::RenderPasses()
 
     clearColor(0.08f, 0.07f, 0.16f);
     clear();
+ 
+    glEnable(GL_CULL_FACE);
+    // do scene rendering stuff using shadowmap
 
     for (const auto& command : m_opaqueBucket->getCommands())
     {       
         Submit(command);
     }   
-    for (const auto& command : m_transparentBucket->getCommands())
-    {       
-       Submit(command);
+
+    if (m_transparentBucket->getCommands().size() > 0)
+    {
+        glDepthMask(GL_TRUE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        for (const auto& command : m_transparentBucket->getCommands())
+        {
+            Submit(command);
+        }
+        
     }
+    glBlendFunc(GL_NONE, GL_NONE);
+    glDisable(GL_BLEND);
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));

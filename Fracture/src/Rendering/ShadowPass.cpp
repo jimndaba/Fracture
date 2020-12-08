@@ -38,19 +38,16 @@ void Fracture::ShadowPass::Prepare(std::shared_ptr<SunLight> light)
 {
 	if (light->GetLightType() == LightType::Sun)
 	{
-		glm::mat4 lightSpaceMatrix;
 		glm::mat4 lightProjection;
 		glm::mat4 lightView;
 		lightProjection = glm::ortho(m_left, m_right, m_bottom, m_top, near_plane, far_plane);
 		lightView = glm::lookAt(-light->GetDirection(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-		lightSpaceMatrix = lightProjection * lightView;
-		m_lightspaceMatrix = lightSpaceMatrix;
+		m_lightspaceMatrix = lightProjection * lightView;
 	}	
 }
 
 void Fracture::ShadowPass::Render(std::shared_ptr<Material> material, RenderBucket& bucket)
 {
-	
 	for (const auto& command : bucket.getCommands())
 	{
 		material->getShader()->use();

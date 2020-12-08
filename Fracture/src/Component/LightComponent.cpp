@@ -182,3 +182,13 @@ void Fracture::LightComponent::ChangeLightType(LightType new_type)
 		}
 	}	
 }
+
+bool Fracture::LightComponent::CastShadow()
+{
+	return m_light->CastShadows();
+}
+
+void Fracture::LightComponent::SetCastShadow(bool value)
+{
+	m_light->SetCastShadows(value);
+}

@@ -320,6 +320,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				ImGui::EndCombo();
 			}
 
+			bool shadow = light->CastShadow();
+			DrawBoolControl("CastShadows", shadow);
+			light->SetCastShadow(shadow);
+
 			switch(light->GetLightType())
 			{
 				case LightType::Sun:

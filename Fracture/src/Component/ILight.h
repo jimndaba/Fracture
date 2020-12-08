@@ -43,6 +43,17 @@ namespace Fracture
 		virtual float GetOuterCutOff() { return 0.0f; };
 
 		virtual LightType GetLightType() = 0;
+		void SetCastShadows(bool value)
+		{
+			m_castShadows = value;
+		}
+		bool CastShadows()
+		{
+			return m_castShadows;
+		}
+
+	private:
+		bool m_castShadows = true;
 	
 	};
 

@@ -1196,7 +1196,7 @@ namespace ImGuizmo
          scaleDisplay = gContext.mScale;
       }
       constexpr float lineThickness = 4.0f;
-      constexpr float circleSize = 12.0f;
+      constexpr float circleSize = 8.0f;
       for (unsigned int i = 0; i < 3; i++)
       {
          vec_t dirPlaneX, dirPlaneY, dirAxis;
