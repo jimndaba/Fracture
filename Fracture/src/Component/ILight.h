@@ -30,6 +30,7 @@ namespace Fracture
 		virtual void SetQuadratic(float quad) {};
 		virtual void SetCutoff(float Coff) {};
 		virtual void SetOuterCutOff(float outerCoff) {};
+		void SetIntensity(float value);
 
 		virtual glm::vec4 GetAmbient() = 0;
 		virtual glm::vec4 GetDiffuse() = 0;
@@ -41,6 +42,7 @@ namespace Fracture
 		virtual float GetQuadratic() { return 0.0f; };
 		virtual float GetCutoff() { return 0.0f; };
 		virtual float GetOuterCutOff() { return 0.0f; };
+		float Intensity();
 
 		virtual LightType GetLightType() = 0;
 		void SetCastShadows(bool value)
@@ -54,7 +56,7 @@ namespace Fracture
 
 	private:
 		bool m_castShadows = true;
-	
+		float m_intensity = 100.0f;
 	};
 
 	class SunLight :public ILight

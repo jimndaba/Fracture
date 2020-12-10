@@ -191,6 +191,15 @@ void Fracture::Material::ChangeTexture(std::string name, std::shared_ptr<Texture
 	m_SamplerUniforms->emplace(name, sample);
 }
 
+void Fracture::Material::setCubeMap(const std::string& name, const unsigned int value, unsigned int unit) const
+{
+	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
+	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLERCUBE;
+	sample->id = value;
+	sample->Unit = unit;
+	m_SamplerUniforms->emplace(name, sample);
+}
+
 std::unordered_map<std::string, Fracture::UniformValue>* Fracture::Material::GetUniforms()
 {
     return m_Uniforms;

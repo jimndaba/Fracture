@@ -97,6 +97,11 @@ void Fracture::LightComponent::SetOuterCutOff(float outer)
 	m_light->SetOuterCutOff(outer);
 }
 
+void Fracture::LightComponent::SetIntensity(float value)
+{
+	m_light->SetIntensity(value);
+}
+
 glm::vec4 Fracture::LightComponent::GetAmbient()
 {
 	return m_light->GetAmbient();
@@ -145,6 +150,11 @@ float Fracture::LightComponent::GetCutoff()
 float Fracture::LightComponent::GetOuterCutOff()
 {
 	return m_light->GetOuterCutOff();
+}
+
+float Fracture::LightComponent::Intensity()
+{
+	return m_light->Intensity();
 }
 
 std::shared_ptr<Fracture::ILight> Fracture::LightComponent::GetLight()

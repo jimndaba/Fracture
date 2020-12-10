@@ -49,6 +49,7 @@ namespace Fracture
 		static void AddShader(std::string name, std::string vertex, std::string fragment);
 		static void AddModel(std::string name, std::string path);
 		static void AddTexture(std::string name, std::string path, TextureType mtype);
+		static void AddEnvironmentMap(std::string name, std::string path);
 		static void AddMesh(std::string name, std::string path);
 		static void AddMaterial(std::string name, std::shared_ptr<Shader> shader);
 		static void AddMaterial(std::string name, std::shared_ptr<Material> material);
@@ -82,7 +83,7 @@ namespace Fracture
 		static std::vector<std::shared_ptr<Texture>> loadMaterialTextures(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 
-	
+		static std::shared_ptr<Fracture::Texture> HDRFromFile(const char* path,Fracture::TextureType texType, bool gamma = false);
 	};
 
 

@@ -42,6 +42,7 @@
 #include "Rendering/Material.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
+#include "Rendering/Environment.h"
 
 #include "Entity/Entity.h"
 #include "Entity/IDManager.h"

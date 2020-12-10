@@ -33,6 +33,7 @@ namespace Fracture
 	class ShadowPass;
 	class Grid;
 	class ICamera;
+	class Environment;
 
 	class Renderer
 	{
@@ -85,8 +86,13 @@ namespace Fracture
 
 		void onWindowResize(WindowResizeEvent* mevent);
 
-		//Render Passes
+		//Shadows
 		std::shared_ptr<ShadowPass> m_ShadowPass;
+
+		//Environment 
+		std::shared_ptr<Environment> m_environment;
+
+		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 		
 		static std::shared_ptr<Renderer> getInstance();
@@ -113,7 +119,6 @@ namespace Fracture
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;
 
-	
 		std::shared_ptr<Material> m_DebugMaterial;
 		std::shared_ptr<Grid> m_grid;
 	};

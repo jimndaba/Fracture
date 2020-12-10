@@ -73,6 +73,9 @@ namespace Fracture
 		static std::shared_ptr<Scene> m_ActiveScene;
 		std::shared_ptr<EditorCamera> camera;
 
+		std::shared_ptr<Texture> m_irradiance;
+		std::shared_ptr<Texture> m_prefilter;
+		
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		ImGuiWindowFlags panel_flags = ImGuiWindowFlags_MenuBar;

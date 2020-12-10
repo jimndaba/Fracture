@@ -78,7 +78,6 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, GLenum inter
 
 }
 
-
 void Fracture::Texture::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, id);

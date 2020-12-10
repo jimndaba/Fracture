@@ -234,7 +234,11 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = render->material->GetSamplerUniforms();
 			for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
 			{
-				DrawTexture2DControl(it->first, it->second->texture->id);
+				if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
+				{
+					DrawTexture2DControl(it->first, it->second->texture->id);
+				}
+				
 			}
 			ImGui::Separator();
 	});	
@@ -323,6 +327,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			bool shadow = light->CastShadow();
 			DrawBoolControl("CastShadows", shadow);
 			light->SetCastShadow(shadow);
+
+			float intensity = light->Intensity();
+			DrawfloatControl("Intensity",intensity);
+			light->SetIntensity(intensity);
 
 			switch(light->GetLightType())
 			{

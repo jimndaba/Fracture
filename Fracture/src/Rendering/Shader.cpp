@@ -169,6 +169,13 @@ void Fracture::Shader::setTexture(const std::string& name, const Texture* value,
     glBindTexture(GL_TEXTURE_2D, value->id);   
 }
 
+void Fracture::Shader::setCubeMap(const std::string& name, const unsigned int value, unsigned int unit) const
+{
+    glActiveTexture(GL_TEXTURE0 + unit);
+    glUniform1i(glGetUniformLocation(m_program, name.c_str()), unit);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, value);
+}
+
 unsigned int Fracture::Shader::ID()
 {
     return m_program;

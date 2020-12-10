@@ -72,6 +72,7 @@ namespace Fracture
     {
         SHADER_TYPE  Type;
         unsigned int Unit;
+        unsigned int id;
         union
         {
             Texture* texture;
@@ -113,6 +114,8 @@ namespace Fracture
 
         void SetTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
         void ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
+        void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
+
 
         std::unordered_map<std::string, UniformValue>* GetUniforms();
         std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>*GetSamplerUniforms();

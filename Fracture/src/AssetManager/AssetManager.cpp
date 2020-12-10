@@ -67,6 +67,13 @@ void Fracture::AssetManager::AddTexture(std::string name, std::string path, Text
 	FRACTURE_TRACE("Loaded Texture: {}",name);
 }
 
+void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string path)
+{
+	std::shared_ptr<Texture> texture = HDRFromFile(path.c_str(),TextureType::Environment);
+	m_Textures.emplace(name, texture);
+	FRACTURE_TRACE("Loaded HDR Environment: {}", name);
+}
+
 
 void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 {
@@ -405,6 +412,40 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	else
 	{
 		FRACTURE_ERROR("Failed to load texture {}",path);
+		stbi_image_free(texture->m_data);
+	}
+	texture->Unbind();
+	return texture;
+}
+
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const char* path, Fracture::TextureType texType, bool gamma)
+{
+	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
+	texture->path = path;	
+	stbi_set_flip_vertically_on_load(true);
+	float* data = stbi_loadf(path, &texture->width, &texture->height, &texture->channel, 0);
+	if (data)
+	{
+		GLenum format;
+		if (texture->channel == 1)
+			format = GL_RED;
+		else if (texture->channel == 3)
+			format = GL_RGB;
+		else if (texture->channel == 4)
+			format = GL_RGBA;
+		texture->Bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, texture->width, texture->height, 0, format, GL_FLOAT, data);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		stbi_image_free(data);
+
+	}
+	else
+	{
+		FRACTURE_ERROR("Failed to load texture {}", path);
 		stbi_image_free(texture->m_data);
 	}
 	texture->Unbind();

@@ -30,6 +30,7 @@ namespace Fracture
 		void SetQuadratic(float quad);
 		void SetCutoff(float coff);
 		void SetOuterCutOff(float outer);
+		void SetIntensity(float value);
 
 		glm::vec4 GetAmbient();
 		glm::vec4 GetDiffuse();
@@ -41,6 +42,7 @@ namespace Fracture
 		float GetQuadratic();
 		float GetCutoff();
 		float GetOuterCutOff();
+		float Intensity();
 
 		std::shared_ptr<ILight> GetLight();
 		LightType GetLightType();

@@ -26,7 +26,7 @@
 #include "Physics/PhysicsManager.h"
 #include "DebugLine.h"
 #include "ShadowPass.h"
-
+#include "Environment.h"
 #include "BillBoard.h"
 #include "Grid.h"
 
@@ -52,16 +52,8 @@ std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
 Fracture::Renderer::Renderer()
 {
    m_width = 1280;
-   m_Height = 720;
-   m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-   m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-   m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());    
-   SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1, true));   
-   m_grid = std::make_shared<Grid>(100, 100, 1, 1,0.5f);
-   m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f,2.0f));
-   DrawDebugLineRetained(glm::vec3(-50.0f,0.0f,0.0f), glm::vec3(50.0f, 0.0f, 0.0f),glm::vec4(0.0f,0.0f,1.0f,1.0f));
-   DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-  }
+   m_Height = 720;  
+}
 
 Fracture::Renderer::~Renderer()
 {
@@ -71,10 +63,33 @@ void Fracture::Renderer::onInit()
 {    
     FRACTURE_INFO("Renderer Init");
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
-
+    m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1, true));
+    m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
+    m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f, 2.0f));
+    DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());
+    m_environment = std::shared_ptr<Environment>(new Environment(AssetManager::getTexture("Loft"),AssetManager::getShader("CubeMap")));
+
+    std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
+    pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
+    pbrPrimitive->setFloat("metallic", 0.4f);
+    pbrPrimitive->setFloat("roughness", 0.2f);
+    pbrPrimitive->setFloat("intensity", 100.0f);
+    pbrPrimitive->setFloat("ao", 1.0f);
+    pbrPrimitive->setCubeMap("irradianceMap", m_environment->irradianceMap, 0);
+    pbrPrimitive->setCubeMap("prefilterMap", m_environment->prefilterMap, 1);
+    pbrPrimitive->SetTexture("brdfLUT",m_environment->m_bdrfTexture, 2);
+    AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
+
     m_isDebugRender = false;
     m_drawgrid = true;
+
+
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -84,7 +99,8 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     glEnable(GL_DEPTH_TEST);	
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
- 
+    glDepthMask(GL_TRUE);
+
     //Clear All Buckets
 	m_opaqueBucket->clear();
     m_transparentBucket->clear();
@@ -102,9 +118,7 @@ void Fracture::Renderer::RenderPasses()
     m_shadowBucket->sort();
     m_transparentBucket->sort();
 
-    //glCullFace(GL_FRONT);  
-    glDisable(GL_CULL_FACE);
-    
+    glDisable(GL_CULL_FACE);    
     m_ShadowPass->Begin();      
     for (auto light : m_lights)
     {
@@ -116,26 +130,19 @@ void Fracture::Renderer::RenderPasses()
     m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
     m_ShadowPass->End();
     
-
-    //glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);
-    setViewport(m_width, m_Height);        
-    SceneRenderTarget->bind(); 
-
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, SceneRenderTarget->GetColorTexture(0)->id);
-
-    clearColor(0.08f, 0.07f, 0.16f);
-    clear();
+ 
  
     glEnable(GL_CULL_FACE);
-    // do scene rendering stuff using shadowmap
+    glCullFace(GL_BACK);
+    setViewport(m_width, m_Height);        
+    SceneRenderTarget->bind();    
+    clearColor(0.08f, 0.07f, 0.16f);
+    clear();
 
     for (const auto& command : m_opaqueBucket->getCommands())
     {       
         Submit(command);
     }   
-
     if (m_transparentBucket->getCommands().size() > 0)
     {
         glDepthMask(GL_TRUE);
@@ -147,6 +154,7 @@ void Fracture::Renderer::RenderPasses()
         }
         
     }
+
     glBlendFunc(GL_NONE, GL_NONE);
     glDisable(GL_BLEND);
     if (m_drawgrid)
@@ -158,7 +166,11 @@ void Fracture::Renderer::RenderPasses()
         PhysicsManager::DrawDebug();  
         RenderDebug();
         RenderDebugRetained();
-    }       
+    }  
+
+   
+    m_environment->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
+   
     SceneRenderTarget->Unbind();  
 
 }
@@ -262,6 +274,9 @@ void Fracture::Renderer::WriteUniformSampler(Shader shader, std::string name, st
     {
     case SHADER_TYPE_SAMPLER2D:
         shader.setTexture(name,value->texture,value->Unit);
+        break;
+    case SHADER_TYPE_SAMPLERCUBE:
+        shader.setCubeMap(name, value->id, value->Unit);
         break;
         FRACTURE_ERROR("Unrecognized Uniform type set");
         break;
@@ -446,6 +461,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].constant", m_lights[i]->GetConstant());
                 material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].linear", m_lights[i]->GetLinear());
                 material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].quadratic", m_lights[i]->GetQuadratic());
+                material->getShader()->setFloat("pointLights[" + std::to_string(i) + "].intensity", m_lights[i]->Intensity());
                 break;
             }
             case LightType::Spot:

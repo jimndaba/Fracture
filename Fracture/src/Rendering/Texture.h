@@ -18,6 +18,7 @@ namespace Fracture
 		Reflection,
 		ColorAttachment,
 		DepthStencilAttachment,
+		Environment,
 	};
 
 	class Texture
