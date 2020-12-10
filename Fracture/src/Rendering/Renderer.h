@@ -88,10 +88,6 @@ namespace Fracture
 
 		//Shadows
 		std::shared_ptr<ShadowPass> m_ShadowPass;
-
-		//Environment 
-		std::shared_ptr<Environment> m_environment;
-
 		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 		

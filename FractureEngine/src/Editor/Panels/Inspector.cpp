@@ -3,6 +3,7 @@
 #include "SceneviewPanel.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Material.h"
+#include "../utils/FileDialogue.h"
 
 
 Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
@@ -295,10 +296,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			{
 				lType = "Spotlight";
 			}
+			if (light->GetLightType() == LightType::Sky)
+			{
+				lType = "Skylight";
+			}
 
 			static ImGuiComboFlags flags = 0;
-			const char* items[] = { "Sunlight","Pointlight","Spotlight" };
-			LightType lighttypes[] = {LightType::Sun,LightType::Point ,LightType::Spot };
+			const char* items[] = { "Sunlight","Pointlight","Spotlight","SkyLigh" };
+			LightType lighttypes[] = {LightType::Sun,LightType::Point ,LightType::Spot,LightType::Sky };
 			static int item_current_idx = 0;                    // Here our selection data is an index.
 			static LightType m_LightType = LightType::Point;
 			const char* combo_label = items[item_current_idx];  // Label to preview before opening the combo (technically it could be anything)
@@ -419,6 +424,22 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					float ocutoff = light->GetOuterCutOff();
 					DrawfloatControl("OuterCutoff", ocutoff, 1.0f);
 					light->SetOuterCutOff(ocutoff);
+					break;
+				}
+				case LightType::Sky:
+				{
+					ImGui::Text("Change Environment");
+					ImGui::SameLine();
+					if (ImGui::Button("-", ImVec2{ 30, 30}))
+					{
+						std::string name;
+						std::string filepath = FileDialogue::OpenFile("HDR(*.hdr)\0*.hdr\0", name);
+						if (!filepath.empty())
+						{
+							AssetManager::AddEnvironmentMap(name, filepath);
+							light->ChangeEnvironment(name);
+						}
+					}
 					break;
 				}
 			}

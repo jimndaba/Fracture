@@ -47,7 +47,7 @@ namespace Fracture
 		std::shared_ptr<ILight> GetLight();
 		LightType GetLightType();
 		void ChangeLightType(LightType new_type);
-
+		void ChangeEnvironment(const std::string& name);
 		bool CastShadow();
 		void SetCastShadow(bool value);
 

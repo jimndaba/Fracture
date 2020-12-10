@@ -15,9 +15,11 @@ Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Compo
 		
 		m_light = std::make_shared<PointLight>();
 		break;
-	case LightType::Spot:
-		
+	case LightType::Spot:		
 		m_light = std::make_shared<SpotLight>();
+		break;
+	case LightType::Sky:
+		m_light = std::make_shared<SkyLight>();
 		break;
 	}
 }
@@ -191,6 +193,12 @@ void Fracture::LightComponent::ChangeLightType(LightType new_type)
 			break;
 		}
 	}	
+}
+
+void Fracture::LightComponent::ChangeEnvironment(const std::string& name)
+{
+	std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_light);
+	sky->ChangeEnvironment(name);
 }
 
 bool Fracture::LightComponent::CastShadow()

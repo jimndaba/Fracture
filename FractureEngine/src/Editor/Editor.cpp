@@ -115,8 +115,6 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_AssetBrowser);
    
     m_PhysicsManger->Init();
-  
-
     camera = std::make_shared<EditorCamera>();//TODO - update init of camera;
     m_Renderer = Renderer::getInstance();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
@@ -146,83 +144,74 @@ bool Fracture::Editor::onLoad()
 
 void Fracture::Editor::onLoadNew()
 {
-    m_AssetManger->AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
+    AssetManager::AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
+    AssetManager::AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
+    AssetManager::
+    AssetManager::AddTexture("Rust_albedo", "content/textures/pbrRust/albedo.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Rust_normal", "content/textures/pbrRust/normal.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Rust_metallic", "content/textures/pbrRust/metallic.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Rust_roughness", "content/textures/pbrRust/roughness.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Rust_ao", "content/textures/pbrRust/ao.png", TextureType::Diffuse);
+    AssetManager::
+    AssetManager::AddTexture("Wood_albedo", "content/textures/pbrWood/albedo.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Wood_normal", "content/textures/pbrWood/normal.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Wood_metallic", "content/textures/pbrWood/metallic.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Wood_roughness", "content/textures/pbrWood/roughness.png", TextureType::Diffuse);
+    AssetManager::AddTexture("Wood_ao", "content/textures/pbrWood/ao.png", TextureType::Diffuse);
+    AssetManager::
+    AssetManager::AddTexture("Brick_albedo", "content/textures/pbrBrick/albedo.jpg", TextureType::Diffuse);
+    AssetManager::AddTexture("Brick_normal", "content/textures/pbrBrick/normal.jpg", TextureType::Diffuse);
+    AssetManager::AddTexture("Brick_bump", "content/textures/pbrBrick/bump.jpg", TextureType::Diffuse);
+    AssetManager::AddTexture("Brick_roughness", "content/textures/pbrBrick/roughness.jpg", TextureType::Diffuse);
+    AssetManager::AddTexture("Brick_ao", "content/textures/pbrBrick/ao.jpg", TextureType::Diffuse);
 
-    m_AssetManger->AddTexture("Rust_albedo", "content/textures/pbrRust/albedo.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Rust_normal", "content/textures/pbrRust/normal.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Rust_metallic", "content/textures/pbrRust/metallic.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Rust_roughness", "content/textures/pbrRust/roughness.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Rust_ao", "content/textures/pbrRust/ao.png", TextureType::Diffuse);
 
-    m_AssetManger->AddTexture("Wood_albedo", "content/textures/pbrWood/albedo.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Wood_normal", "content/textures/pbrWood/normal.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Wood_metallic", "content/textures/pbrWood/metallic.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Wood_roughness", "content/textures/pbrWood/roughness.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Wood_ao", "content/textures/pbrWood/ao.png", TextureType::Diffuse);
-
-    m_AssetManger->AddTexture("Brick_albedo", "content/textures/pbrBrick/albedo.jpg", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Brick_normal", "content/textures/pbrBrick/normal.jpg", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Brick_bump", "content/textures/pbrBrick/bump.jpg", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Brick_roughness", "content/textures/pbrBrick/roughness.jpg", TextureType::Diffuse);
-    m_AssetManger->AddTexture("Brick_ao", "content/textures/pbrBrick/ao.jpg", TextureType::Diffuse);
-
-
-    m_AssetManger->AddEnvironmentMap("Loft",  "content/textures/Environment/Newport_Loft_Env.hdr");
+    AssetManager::AddEnvironmentMap("Loft",  "content/textures/Environment/Newport_Loft_Env.hdr");
 
     //Environment
-    m_AssetManger->AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
+    AssetManager::AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
 
     //Irradiance
-    m_AssetManger->AddShader("irradiance", "content/shaders/irradiance/vertex.glsl", "content/shaders/irradiance/fragment.glsl");
+    AssetManager::AddShader("irradiance", "content/shaders/irradiance/vertex.glsl", "content/shaders/irradiance/fragment.glsl");
 
     //prefilter
-    m_AssetManger->AddShader("prefilter", "content/shaders/prefilter/vertex.glsl", "content/shaders/prefilter/fragment.glsl");
+    AssetManager::AddShader("prefilter", "content/shaders/prefilter/vertex.glsl", "content/shaders/prefilter/fragment.glsl");
 
     //bdrf
-    m_AssetManger->AddShader("bdrf", "content/shaders/bdrf/vertex.glsl", "content/shaders/bdrf/fragment.glsl");
-
+    AssetManager::AddShader("bdrf", "content/shaders/bdrf/vertex.glsl", "content/shaders/bdrf/fragment.glsl");
 
     //Skybox
-    m_AssetManger->AddShader("Skybox", "content/shaders/Environment/vertex.glsl", "content/shaders/Environment/fragment.glsl");
+    AssetManager::AddShader("Skybox", "content/shaders/Environment/vertex.glsl", "content/shaders/Environment/fragment.glsl");
 
-    m_AssetManger->AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
+    AssetManager::AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
 
 
-    m_AssetManger->AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
+    AssetManager::AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
 
     //billboards
-    m_AssetManger->AddShader("BillboardShader", "content/shaders/Billboards/vertex.glsl", "content/shaders/Billboards/fragment.glsl");
+    AssetManager::AddShader("BillboardShader", "content/shaders/Billboards/vertex.glsl", "content/shaders/Billboards/fragment.glsl");
 
     //depthShader
-    m_AssetManger->AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
+    AssetManager::AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
 
     //PBR Shader
-    m_AssetManger->AddShader("PBRTexturedShader", "content/shaders/pbrTexture/vertex.glsl", "content/shaders/pbrTexture/fragment.glsl");
+    AssetManager::AddShader("PBRTexturedShader", "content/shaders/pbrTexture/vertex.glsl", "content/shaders/pbrTexture/fragment.glsl");
 
     //PBR Primitives
-    m_AssetManger->AddShader("PBRPlaneShader", "content/shaders/PBRPrimitive/vertex.glsl", "content/shaders/PBRPrimitive/fragment.glsl");
+    AssetManager::AddShader("PBRPlaneShader", "content/shaders/PBRPrimitive/vertex.glsl", "content/shaders/PBRPrimitive/fragment.glsl");
     
     //depthShader
-    m_AssetManger->AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
+    AssetManager::AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
 
     //textured models
-    m_AssetManger->AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
-
-    m_AssetManger->AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
-    m_AssetManger->AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
-    std::shared_ptr<Material> Environment = std::shared_ptr<Material>(new Material("CubeMap", m_AssetManger->getShader("CubeMap")));
-    Environment->SetTexture("equirectangularMap", AssetManager::getTexture("Loft"), 0);
-    m_AssetManger->AddMaterial("Environment", Environment);
-
-    m_Renderer->onInit();
-
+    AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
+    
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setColor3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
@@ -231,52 +220,47 @@ void Fracture::Editor::onLoadNew()
     std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
     m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);    
 
-
-
-
+    std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
+    pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
+    pbrPrimitive->setFloat("metallic", 0.4f);
+    pbrPrimitive->setFloat("roughness", 0.2f);
+    pbrPrimitive->setFloat("ao", 1.0f);
+    
     std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),0);
-    pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 1);
-    pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"), 2);
-    pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),4);
-    pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"), 5);
-    pbrTextured->setCubeMap("irradianceMap",m_Renderer->m_environment->irradianceMap, 6);
-    pbrTextured->setCubeMap("prefilterMap", m_Renderer->m_environment->prefilterMap, 7);
-    pbrTextured->SetTexture("brdfLUT", m_Renderer->m_environment->m_bdrfTexture, 8);
+    pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
+    pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
+    pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
+    pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),6);
+    pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"),7);
 
     std::shared_ptr<Material> pbrWood = std::shared_ptr<Material>(new Material("PBRWood", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrWood->SetTexture("albedoMap", AssetManager::getTexture("Wood_albedo"), 0);
-    pbrWood->SetTexture("normalMap", AssetManager::getTexture("Wood_normal"), 1);
-    pbrWood->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 3);
-    pbrWood->SetTexture("roughnessMap", AssetManager::getTexture("Wood_roughness"), 4);
-    pbrWood->SetTexture("aoMap", AssetManager::getTexture("Wood_ao"), 5);
-    pbrWood->setCubeMap("irradianceMap", m_Renderer->m_environment->irradianceMap, 6);
-    pbrWood->setCubeMap("prefilterMap", m_Renderer->m_environment->prefilterMap, 7);
-    pbrWood->SetTexture("brdfLUT", m_Renderer->m_environment->m_bdrfTexture, 8);
+    pbrWood->SetTexture("albedoMap", AssetManager::getTexture("Wood_albedo"), 3);
+    pbrWood->SetTexture("normalMap", AssetManager::getTexture("Wood_normal"), 4);
+    pbrWood->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
+    pbrWood->SetTexture("roughnessMap", AssetManager::getTexture("Wood_roughness"), 6);
+    pbrWood->SetTexture("aoMap", AssetManager::getTexture("Wood_ao"), 7);
 
     std::shared_ptr<Material> pbrBrick = std::shared_ptr<Material>(new Material("PBRBrick", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrBrick->SetTexture("albedoMap", AssetManager::getTexture("Brick_albedo"), 0);
-    pbrBrick->SetTexture("normalMap", AssetManager::getTexture("Brick_normal"), 1);
-    pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"), 3);
-    pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),4);
-    pbrBrick->setCubeMap("irradianceMap", m_Renderer->m_environment->irradianceMap, 6);
-    pbrBrick->setCubeMap("prefilterMap", m_Renderer->m_environment->prefilterMap, 7);
-    pbrBrick->SetTexture("brdfLUT", m_Renderer->m_environment->m_bdrfTexture, 8);
-
+    pbrBrick->SetTexture("albedoMap", AssetManager::getTexture("Brick_albedo"),3);
+    pbrBrick->SetTexture("normalMap", AssetManager::getTexture("Brick_normal"),4);
+    pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"),5);
+    pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),6);
    
+    AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
+    AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
+    AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
+    AssetManager::AddMaterial("PBRBrick", pbrBrick);
+    AssetManager::AddMaterial("PBRTextured",pbrTextured );
+    AssetManager::AddMaterial("PBRWood", pbrWood);
 
-    m_AssetManger->AddMaterial("PBRBrick", pbrBrick); 
-    m_AssetManger->AddMaterial("PBRTextured",pbrTextured );
-    m_AssetManger->AddMaterial("PBRWood", pbrWood);
-    
+    AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
+    AssetManager::AddModel("Cube", "content/models/primitives/cube.fbx");
+    AssetManager::AddModel("Sphere", "content/models/primitives/sphere.fbx");
+    AssetManager::AddModel("Cylinder", "content/models/primitives/cylinder.fbx");
+    AssetManager::AddModel("Torus", "content/models/primitives/torus.fbx");
+    AssetManager::AddModel("Suzane", "content/models/primitives/suzane.fbx");
 
-    m_AssetManger->AddModel("Plane", "content/models/primitives/plane.fbx");
-    m_AssetManger->AddModel("Cube", "content/models/primitives/cube.fbx");
-    m_AssetManger->AddModel("Sphere", "content/models/primitives/sphere.fbx");
-    m_AssetManger->AddModel("Cylinder", "content/models/primitives/cylinder.fbx");
-    m_AssetManger->AddModel("Torus", "content/models/primitives/torus.fbx");
-    m_AssetManger->AddModel("Suzane", "content/models/primitives/suzane.fbx");
-
+    m_Renderer->onInit();
     std::shared_ptr<Scene> scene = m_SceneManager->NewScene();
     m_SceneManager->AddScene("empty", scene);
     m_SceneManager->SetScene("empty");
@@ -551,6 +535,12 @@ void Fracture::Editor::DrawMenuBar()
                 m_ActiveScene->addEntity(entity);
                 SceneView::setSelectEntity(*entity);
             };
+            if (ImGui::MenuItem("Skylight", NULL))
+            {
+                std::shared_ptr<Entity> entity = EntityFactory::CreateSkylight(m_ActiveScene);
+                m_ActiveScene->addEntity(entity);
+                SceneView::setSelectEntity(*entity);
+            };
             if (ImGui::MenuItem("Cube", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateCube(m_ActiveScene);
@@ -748,11 +738,6 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         _renderer->m_ShadowPass->SetNearFarPlanes(vnear, vfar);
         _renderer->m_ShadowPass->SetOrthor(vleft, vright, vtop, vbottom);
         ImGui::Separator();
-
-        ImGui::BeginChild("Environment Map");
-        ImGui::Image((void*)_renderer->m_environment->m_enviroment->id, ImVec2(512, 512));
-        ImGui::EndChild();
-        
 
         ImGui::Columns(1);
         ImGui::PopID();

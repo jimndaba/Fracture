@@ -3,6 +3,12 @@
 #define ILIGHTCOMPONENT_H
 
 #include "glm/glm.hpp"
+#include <memory>
+#include <string>
+#include "AssetManager/AssetManager.h"
+#include "Rendering/Environment.h"
+#include "Rendering/Texture.h"
+#include "Logging/Logger.h"
 
 namespace Fracture
 {
@@ -10,7 +16,8 @@ namespace Fracture
 	{
 		Sun,
 		Point,
-		Spot
+		Spot,
+		Sky
 	};
 
 	class ILight
@@ -220,6 +227,65 @@ namespace Fracture
 		float m_constant = 1.0f;
 		float m_linear = 0.09f;
 		float m_quadratic = 0.032f;
+	};
+
+	class SkyLight: public ILight
+	{
+
+	public:
+		SkyLight() :ILight() {
+		
+			m_environment = std::shared_ptr<Environment>(new Environment(AssetManager::getTexture("Loft"), AssetManager::getShader("CubeMap")));
+		
+		}
+		~SkyLight() {}
+		virtual void SetAmbient(glm::vec4 ambient) { m_ambient = ambient; };
+		virtual void SetDiffuse(glm::vec4 diffuse) { m_diffuse = diffuse; };
+		virtual void SetSpecular(glm::vec4 specular) { m_specular = specular; };
+		virtual glm::vec4 GetAmbient() { return m_ambient; };
+		virtual glm::vec4 GetDiffuse() { return m_diffuse; };
+		virtual glm::vec4 GetSpecular() { return m_specular; };
+		virtual LightType GetLightType()
+		{
+			return LightType::Sky;
+		}
+
+		unsigned int GetIrradianceMap()
+		{
+			return m_environment->irradianceMap;
+		}
+		unsigned int GetPreFilterMap()
+		{
+			return m_environment->prefilterMap;
+		}
+		std::shared_ptr<Texture> GetBDRFMap()
+		{
+			return m_environment->m_bdrfTexture;
+		}
+
+		std::shared_ptr<Environment> GetEnvironment()
+		{
+			return m_environment;
+		}
+		void ChangeEnvironment(const std::string& name)
+		{
+			std::shared_ptr<Environment> newEnvironment = std::shared_ptr<Environment>(new Environment(AssetManager::getTexture(name), AssetManager::getShader("CubeMap")));
+			if (newEnvironment)
+			{
+				m_environment.reset();
+				m_environment = newEnvironment;
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO LOAD ENVIRONMENT: {}", name);
+			}			
+		}
+
+	private:
+		std::shared_ptr<Environment> m_environment;
+		glm::vec4 m_ambient = glm::vec4(1.0f);
+		glm::vec4 m_diffuse = glm::vec4(0.6f);
+		glm::vec4 m_specular = glm::vec4(0.6f);
 	};
 
 }

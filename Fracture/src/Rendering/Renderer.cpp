@@ -71,20 +71,7 @@ void Fracture::Renderer::onInit()
     m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f, 2.0f));
     DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());
-    m_environment = std::shared_ptr<Environment>(new Environment(AssetManager::getTexture("Loft"),AssetManager::getShader("CubeMap")));
-
-    std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
-    pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
-    pbrPrimitive->setFloat("metallic", 0.4f);
-    pbrPrimitive->setFloat("roughness", 0.2f);
-    pbrPrimitive->setFloat("intensity", 100.0f);
-    pbrPrimitive->setFloat("ao", 1.0f);
-    pbrPrimitive->setCubeMap("irradianceMap", m_environment->irradianceMap, 0);
-    pbrPrimitive->setCubeMap("prefilterMap", m_environment->prefilterMap, 1);
-    pbrPrimitive->SetTexture("brdfLUT",m_environment->m_bdrfTexture, 2);
-    AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
-
+    m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass()); 
     m_isDebugRender = false;
     m_drawgrid = true;
 
@@ -169,7 +156,14 @@ void Fracture::Renderer::RenderPasses()
     }  
 
    
-    m_environment->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
+    for (auto light : m_lights)
+    {
+        if (light->GetLightType() == LightType::Sky)
+        {
+            std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(light);
+            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
+        }
+    }  
    
     SceneRenderTarget->Unbind();  
 
@@ -449,6 +443,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].ambient", m_lights[i]->GetAmbient());
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
+                material->getShader()->setFloat("sunLights[" + std::to_string(i) + "].intensity", m_lights[i]->Intensity());
                 break;
             }
             case LightType::Point:
@@ -477,6 +472,15 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].quadratic", m_lights[i]->GetQuadratic());
                 material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].cutOff", m_lights[i]->GetCutoff());
                 material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].outerCutOff", m_lights[i]->GetOuterCutOff());
+                material->getShader()->setFloat("spotLights[" + std::to_string(i) + "].intensity", m_lights[i]->Intensity());
+                break;
+            }
+            case LightType::Sky:
+            {
+                std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_lights[i]);
+                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap(),0);
+                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap(), 1);
+                material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), 2);
                 break;
             }
         }       

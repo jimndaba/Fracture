@@ -101,6 +101,21 @@ namespace Fracture
 			return newEntity;
 		}
 
+		static std::shared_ptr<Entity> CreateSkylight(std::shared_ptr<Scene> scene)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Skylight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+			relationship->SetParent(scene->Root()->Id);
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sky);
+
+
+			ComponentManager::AddComponent<RelationShipComponent>(relationship);
+			ComponentManager::AddComponent<LightComponent>(light);
+
+			return newEntity;
+		}
+
 		static std::shared_ptr<Entity> CreateCube(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();

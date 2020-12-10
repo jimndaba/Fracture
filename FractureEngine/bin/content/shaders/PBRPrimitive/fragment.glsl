@@ -26,6 +26,7 @@ struct PointLight {
     float constant;
     float linear;
     float quadratic;
+    float intensity;
 };
 
 struct SpotLight {
@@ -190,7 +191,7 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         vec3 H = normalize(viewDir+ L);
         float distance = length(light.position - fragPos);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance = (light.diffuse* intensity ) * attenuation;
+        vec3 radiance = (light.diffuse* light.intensity ) * attenuation;
 
         // Cook-Torrance BRDF
         float NDF = DistributionGGX(normal, H, roughness);   
