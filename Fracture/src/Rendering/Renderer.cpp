@@ -294,11 +294,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
         WriteUniformSampler(*command.material->getShader(), it->first, it->second);
     }
 
-    for (auto it : command.TextureNames)
-    {
-        std::shared_ptr<Texture> texture =  AssetManager::getTexture(it);
-        command.material->getShader()->setTexture(texture->type, texture.get(), (int)texture->textureType);
-    }
+    
 
     SetupLighting(command.material);
 

@@ -58,6 +58,19 @@ uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
 
+// material parameters
+uniform vec3  u_albedo;
+uniform float u_metallic;
+uniform float u_roughness;
+uniform float u_ao;
+
+//material flags
+uniform float albedoFlag;
+uniform float normalFlag;
+uniform float metallicFlag;
+uniform float roughnessFlag;
+uniform float aoFlag;
+
 // IBL
 uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
@@ -90,19 +103,22 @@ const float Epsilon = 0.00001;
 // technique somewhere later in the normal mapping tutorial.
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
+    vec3 tangentNormal = normalize(Normal);
+    if(normalFlag > 0.5)
+    {
+        tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
+        vec3 Q1  = dFdx(FragPos);
+        vec3 Q2  = dFdy(FragPos);
+        vec2 st1 = dFdx(TexCoords);
+        vec2 st2 = dFdy(TexCoords);
 
-    vec3 Q1  = dFdx(FragPos);
-    vec3 Q2  = dFdy(FragPos);
-    vec2 st1 = dFdx(TexCoords);
-    vec2 st2 = dFdy(TexCoords);
-
-    vec3 N   = normalize(Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
+        vec3 N   = normalize(Normal);
+        vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+        vec3 B  = -normalize(cross(N, T));
+        mat3 TBN = mat3(T, B, N);
+        tangentNormal = normalize(TBN * tangentNormal);
+    }
+    return tangentNormal;
 }
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
@@ -201,18 +217,50 @@ float ShadowCalculation(vec4 fragPosLightSpace,SunLight light)
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light,vec3 alb,vec3 F0, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
-vec3 albedo;
+
+vec3  albedo;
 float metallic;
-float roughness ;
-float ao ;
+float roughness;
+float ao;
 
 void main()
 {		
     // material properties
-    albedo = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
+    if(albedoFlag > 0.5)
+    {
+        albedo = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
+    }
+    else
+    {
+        albedo = u_albedo; 
+    }
+   
+    if(metallicFlag > 0.5)
+    {
     metallic = texture(metallicMap, TexCoords).r;
-    roughness = texture(roughnessMap, TexCoords).r;
+    }
+    else{
+    metallic = u_metallic;
+    }
+
+    if(roughnessFlag > 0.5)
+    {
+        roughness = texture(roughnessMap, TexCoords).r;
+    }
+    else
+    {
+        roughness = u_roughness;
+    }
+
+    if(aoFlag >0.5)
+    {
     ao = texture(aoMap, TexCoords).r;
+    }
+    else
+    {
+    ao = u_ao;
+    }
+
 
     vec3 N = getNormalFromMap();
     vec3 V = normalize(viewPos - FragPos);

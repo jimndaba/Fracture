@@ -349,23 +349,16 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			{
 				case LightType::Sun:
 				{
-					glm::vec3 direction = light->GetDirection();
-					glm::vec4 ambient = light->GetAmbient();
-					glm::vec4 diffuse = light->GetDiffuse();
-					glm::vec4 specular = light->GetSpecular();
-					float radiance = light->GetRadiance();
-					
+					glm::vec3 direction = light->GetDirection();					
+					glm::vec4 diffuse = light->GetDiffuse();					
+					float radiance = light->GetRadiance();	
 
-					DrawVec3Control("Direction", direction);
-					DrawfloatControl("Radiance", radiance);					
-					//DrawColourControl("Ambient", ambient, 1.0f);					
-					DrawColourControl("Colour", diffuse, 1.0f);					
-					//DrawColourControl("Specular", specular, 1.0f);
+					DrawfloatControl("Radiance", radiance);
+					DrawVec3Control("Direction", direction);								
+					DrawColourControl("Colour", diffuse, 1.0f);			
 
-					light->SetDirection(direction);
-					light->SetAmbient(ambient);
-					light->SetDiffuse(diffuse);
-					light->SetSpecular(specular);					
+					light->SetDirection(direction);			
+					light->SetDiffuse(diffuse);							
 					light->SetRadiance(radiance);
 					break;
 				}
@@ -1014,7 +1007,10 @@ void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uns
 	auto boldFont = io.Fonts->Fonts[0];
 	ImTextureID texture = (void*)value;
 	ImGui::PushID("##sample");
-	ImGui::ImageButton(texture, ImVec2(64, 64));
+	if (ImGui::ImageButton(texture, ImVec2(64, 64)))
+	{
+
+	}
 	ImGui::SameLine();
 	ImGui::Text(label.c_str());
 	ImGui::PopID();

@@ -232,8 +232,18 @@ void Fracture::Editor::onLoadNew()
     pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
     pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),6);
     pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"),7);
+    pbrTextured->setFloat("albedoFlag", 1.0f);
+    pbrTextured->setFloat("normalFlag", 1.0f);
+    pbrTextured->setFloat("metallicFlag", 1.0f);
+    pbrTextured->setFloat("roughnessFlag", 1.0f);
+    pbrTextured->setFloat("aoFlag", 1.0f);
 
     std::shared_ptr<Material> pbrWood = std::shared_ptr<Material>(new Material("PBRWood", m_AssetManger->getShader("PBRTexturedShader")));
+    pbrWood->setFloat("albedoFlag", 1.0f);
+    pbrWood->setFloat("normalFlag", 1.0f);
+    pbrWood->setFloat("metallicFlag", 1.0f);
+    pbrWood->setFloat("roughnessFlag", 1.0f);
+    pbrWood->setFloat("aoFlag", 1.0f);
     pbrWood->SetTexture("albedoMap", AssetManager::getTexture("Wood_albedo"), 3);
     pbrWood->SetTexture("normalMap", AssetManager::getTexture("Wood_normal"), 4);
     pbrWood->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
@@ -246,6 +256,11 @@ void Fracture::Editor::onLoadNew()
     pbrBrick->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
     pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"),6);
     pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),7);
+    pbrBrick->setFloat("albedoFlag", 1.0f);
+    pbrBrick->setFloat("normalFlag", 1.0f);
+    pbrBrick->setFloat("metallicFlag", 1.0f);
+    pbrBrick->setFloat("roughnessFlag", 1.0f);
+    pbrBrick->setFloat("aoFlag", 1.0f);
    
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));

@@ -146,13 +146,12 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 {
 	std::shared_ptr<Model> m_model = nullptr;
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);//| aiProcess_CalcTangentSpace
+	const aiScene* scene = importer.ReadFile(path, s_MeshImportFlags);//| aiProcess_CalcTangentSpace
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
 		FRACTURE_ERROR("ERROR::ASSIMP:: {}", importer.GetErrorString());	
 		return 0;
 	}
-
 
 	m_model = std::shared_ptr<Model>(new Model());
 	m_model->Name = scene->GetShortFilename(path.c_str());
@@ -258,104 +257,137 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	for (uint32_t i = 0; i < scene->mNumMaterials; i++)
 	{
-		std::shared_ptr<Material> mi = std::shared_ptr<Material>(new Material(model->Name, getShader("PBRTexturedShader")));
+		std::shared_ptr<Material> mi = std::shared_ptr<Material>(new Material(mesh->mName.data, getShader("PBRTexturedShader")));
 		aiString aiTexPath;
 		// process materials
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		aiColor3D aiColor;
 		material->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
 
+
 		// process material
 		// 1. diffuse maps	
 		if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)
 		{
-			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Diffuse);
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.data, model->directory, TextureType::Diffuse);
 			if (texture)
 			{
+				mi->setFloat("albedoFlag", 1.0f);
 				AddTexture(texture->Name, texture->path, texture->textureType);
-				mi->SetTexture("albedoMap", texture, 3);
+				mi->SetTexture("albedoMap", getTexture(texture->Name), 3);
 				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 			}
 			else
 			{
 				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
 				// Fallback to albedo color
-				mi->setColor4("albedoMap", glm::vec4{ aiColor.r, aiColor.g, aiColor.b,1.0f });
+				mi->setFloat("albedoFlag", 0.0f);
+				mi->setColor4("u_albedo", glm::vec4{ 1.0f,1.0f,1.0f,1.0f });
 			}
 		}
-
-		// 1. normal maps	
-		if (material->GetTexture(aiTextureType::aiTextureType_NORMALS, 0, &aiTexPath) == AI_SUCCESS)
+		else
 		{
-			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Normal);
+			mi->setFloat("albedoFlag", 0.0f);
+			mi->setColor4("u_albedo", glm::vec4{ 1.0f,1.0f,1.0f,1.0f });
+		}
+
+		// 2. normal maps	
+		if (material->GetTexture(aiTextureType::aiTextureType_HEIGHT, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.data, model->directory, TextureType::Normal);
 			if (texture)
 			{
 				AddTexture(texture->Name, texture->path, texture->textureType);
-				mi->SetTexture("normalMap", texture, 4);
+				mi->SetTexture("normalMap", getTexture(texture->Name), 4);
+				mi->setFloat("normalFlag",1.0f);
 				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 			}
 			else
 			{
 				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				mi->setFloat("normalFlag", 0.0f);
 				// Fallback to albedo color				
 			}
 		}
+		else
+		{
+			mi->setFloat("normalFlag", 0.0f);
+			//mi->setColor4("albedoMap", glm::vec4{ aiColor.r, aiColor.g, aiColor.b,1.0f });
+		}
 
-		// 1. Roughness map
+		// 3. Roughness map
 		if (material->GetTexture(aiTextureType::aiTextureType_SHININESS, 0, &aiTexPath) == AI_SUCCESS)
 		{
-			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Roughness);
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.data, model->directory, TextureType::Roughness);
 			if (texture)
 			{
+				mi->setFloat("roughnessFlag", 1.0f);
 				AddTexture(texture->Name, texture->path, texture->textureType);
-				mi->SetTexture("roughnessMap", texture, 5);
+				mi->SetTexture("roughnessMap", getTexture(texture->Name), 5);
 				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 			}
 			else
 			{
 				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				mi->setFloat("roughness", 0.0f);
+				mi->setFloat("roughnessFlag", 0.0f);
+				mi->setFloat("u_roughness", 0.0f);
 				// Fallback to albedo color				
 			}
+		}
+		else
+		{
+			mi->setFloat("roughnessFlag", 0.0f);
+			mi->setFloat("u_roughness", 1.0f);
 		}
 
 		// 1. Metallic map
 		if (material->GetTexture(aiTextureType::aiTextureType_METALNESS, 0, &aiTexPath) == AI_SUCCESS)
 		{
-			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Metallic);
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.data, model->directory, TextureType::Metallic);
 			if (texture)
 			{
+				mi->setFloat("metallicFlag", 1.0f);
 				AddTexture(texture->Name, texture->path, texture->textureType);
-				mi->SetTexture("metallicMap", texture, 6);
-				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+				mi->SetTexture("metallicMap", getTexture(texture->Name), 6);
 			}
 			else
 			{
 				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				mi->setFloat("metallic", 0.0f);
+				mi->setFloat("metallicFlag", 0.0f);
+				mi->setFloat("u_metallic", 0.0f);
 				// Fallback to albedo color				
 			}
+		}
+		else
+		{
+			mi->setFloat("metallicFlag", 0.0f);
+			mi->setFloat("u_metallic", 1.0f);
 		}
 
 		// 1. ao map
 		if (material->GetTexture(aiTextureType::aiTextureType_AMBIENT_OCCLUSION, 0, &aiTexPath) == AI_SUCCESS)
 		{
-			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::AO);
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.data, model->directory, TextureType::AO);
 			if (texture)
 			{
+				mi->setFloat("aoFlag", 1.0f);
 				AddTexture(texture->Name, texture->path, texture->textureType);
-				mi->SetTexture("aoMap", texture,7);
+				mi->SetTexture("aoMap", getTexture(texture->Name),7);
 				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 			}
 			else
 			{
 				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				
+				mi->setFloat("aoFlag", 0.0f);
+				mi->setFloat("u_ao", 1.0f);
 				// Fallback to albedo color				
 			}
 		}
-
-
+		else
+		{
+			mi->setFloat("aoFlag", 0.0f);
+			mi->setFloat("u_ao", 1.0f);
+		}
 
 		/*
 
@@ -483,6 +515,21 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 		case TextureType::DepthStencilAttachment:
 		{
 			texture->type = "DepthStencilAttachment";
+			break;
+		}
+		case TextureType::AO:
+		{
+			texture->type = "material.AO";
+			break;
+		}
+		case TextureType::Metallic:
+		{
+			texture->type = "material.metallic";
+			break;
+		}
+		case TextureType::Roughness:
+		{
+			texture->type = "material.roughness";
 			break;
 		}
 	}
