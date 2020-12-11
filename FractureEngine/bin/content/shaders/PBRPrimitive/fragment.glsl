@@ -11,7 +11,10 @@ struct Material {
 
 struct SunLight {
     bool enabled;
-    vec3 direction;
+    vec3 direction; // is l
+
+    vec3 Radiance;
+    float intensity;
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -60,6 +63,10 @@ uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
 uniform sampler2D brdfLUT;
 
+//Shadows
+uniform sampler2D shadowMap;
+in vec4 FragPosLightSpace;
+
 // lights
 #define NR_SUN_LIGHTS 1
 uniform SunLight sunLights[NR_SUN_LIGHTS];
@@ -74,6 +81,8 @@ uniform vec3 viewPos;
 uniform float intensity;
 
 const float PI = 3.14159265359;
+const float Epsilon = 0.00001;
+
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -116,15 +125,62 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 // ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 } 
 
-vec3 CalcDirLight(SunLight light, vec3 normal, vec3 viewDir);
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+float ShadowFade = 0.8;
+
+float GetShadowBias(SunLight light)
+{
+	const float MINIMUM_SHADOW_BIAS = 0.005;
+	float bias = max(MINIMUM_SHADOW_BIAS * (1.0 - dot(Normal, light.direction)), MINIMUM_SHADOW_BIAS);
+	return bias;
+}
+
+
+
+float ShadowCalculation(vec4 fragPosLightSpace,SunLight light)
+{
+// perform perspective divide
+    const float NUM_SAMPLES = 8.0;
+    const float SAMPLES_START = (NUM_SAMPLES- 1)/2.0;
+    const float NUM_SAMPLES_SQ = NUM_SAMPLES*NUM_SAMPLES;
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;   
+
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;   
+    float shadow = 0.0;   
+
+    float bias = GetShadowBias(light);
+  
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(float x = -SAMPLES_START; x <= SAMPLES_START;x +=1.0)
+    {
+        for(float y = -SAMPLES_START; y <= SAMPLES_START;y +=1.0)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - GetShadowBias(light) > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    if(projCoords.z > 1.0)
+        shadow = 1.0;
+
+	return  shadow/NUM_SAMPLES_SQ;
+
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light,vec3 alb,vec3 F0, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 void main()
 {		
@@ -139,6 +195,17 @@ void main()
     
     vec3 Lo = vec3(0.0);
 
+    for(int i = 0; i < NR_SUN_LIGHTS; i++)
+    {
+      if (!sunLights[i].enabled)
+      {
+        continue;
+      }
+      
+      Lo += CalcDirLight(sunLights[i],F0, N,V);
+      
+    }
+
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
       if (!pointLights[i].enabled)
@@ -146,6 +213,7 @@ void main()
         continue;
       }
       Lo += CalcPointLight(pointLights[i],albedo, F0, N, FragPos, V);
+    
     }
 
     // ambient lighting (we now use IBL as the ambient term)
@@ -162,13 +230,10 @@ void main()
     vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
-
-
-    //vec3 ambient = vec3(0.03) * albedo * ao;
+    
     vec3 ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient  + Lo ;
-
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct
@@ -177,15 +242,40 @@ void main()
     FragColor = vec4(color  , 1.0);
 }
 
-vec3 CalcDirLight(SunLight light, vec3 normal, vec3 viewDir)
+vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
 {
-   return vec3(0.0);
+
+    vec3 radiance = (light.diffuse * light.intensity) * 0.5;
+    vec3 l = normalize(-light.direction);
+    vec3 H = normalize(viewDir+ l);
+    float NoL = clamp(dot(normal, l), 0.0, 1.0);
+    
+    
+  
+
+    vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
+	float G = GeometrySmith(normal, viewDir, l, roughness); 
+
+    float NDF = DistributionGGX(normal, H, roughness);   
+    vec3 nominator    = NDF * G * F;
+    float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, l), 0.0) + 0.001; // 0.001 to prevent divide by zero.
+    vec3 specular = nominator / denominator;
+
+    vec3 kS = F;
+	vec3 kd = vec3(1.0) - kS;
+    kd *= 1.0 - metallic;	
+	vec3 diffuseBRDF = kd * albedo;
+
+	// Cook-Torrance
+    float NdotL = max(dot(normal, l), 0.0);  
+    float shadow = ShadowCalculation(FragPosLightSpace,light);    
+    vec3 result = (diffuseBRDF / PI + specular) * radiance * NoL;
+    result *= ((1.0 - shadow)  * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
+    return result;  
 }
 
 vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos, vec3 viewDir)
 {   
-    
- 
      // calculate per-light radiance
         vec3 L = normalize(light.position - fragPos);
         vec3 H = normalize(viewDir+ L);

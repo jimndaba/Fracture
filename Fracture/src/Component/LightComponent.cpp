@@ -104,6 +104,12 @@ void Fracture::LightComponent::SetIntensity(float value)
 	m_light->SetIntensity(value);
 }
 
+void Fracture::LightComponent::SetRadiance(float value)
+{
+	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
+	sun->SetRadiance(value);
+}
+
 glm::vec4 Fracture::LightComponent::GetAmbient()
 {
 	return m_light->GetAmbient();
@@ -157,6 +163,12 @@ float Fracture::LightComponent::GetOuterCutOff()
 float Fracture::LightComponent::Intensity()
 {
 	return m_light->Intensity();
+}
+
+float Fracture::LightComponent::GetRadiance()
+{
+	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
+	return sun->GetRadiance();
 }
 
 std::shared_ptr<Fracture::ILight> Fracture::LightComponent::GetLight()

@@ -243,8 +243,9 @@ void Fracture::Editor::onLoadNew()
     std::shared_ptr<Material> pbrBrick = std::shared_ptr<Material>(new Material("PBRBrick", m_AssetManger->getShader("PBRTexturedShader")));
     pbrBrick->SetTexture("albedoMap", AssetManager::getTexture("Brick_albedo"),3);
     pbrBrick->SetTexture("normalMap", AssetManager::getTexture("Brick_normal"),4);
-    pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"),5);
-    pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),6);
+    pbrBrick->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
+    pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"),6);
+    pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),7);
    
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));

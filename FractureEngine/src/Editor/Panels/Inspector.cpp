@@ -225,6 +225,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			render->material->setCastShadows(castShadows);
 
 			ImGui::Separator();
+			if (ImGui::Button("reload",ImVec2(100,20)))
+			{
+				render->material->getShader()->reloadShader();
+			
+				FRACTURE_INFO("Reloaded Shader: {}", render->material->getShader()->Name);
+			}
+
+			ImGui::Separator();
 
 			auto uniforms = render->material->GetUniforms();
 			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
@@ -345,16 +353,20 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					glm::vec4 ambient = light->GetAmbient();
 					glm::vec4 diffuse = light->GetDiffuse();
 					glm::vec4 specular = light->GetSpecular();
+					float radiance = light->GetRadiance();
+					
 
-					DrawVec3Control("Direction", direction);					
-					DrawColourControl("Ambient", ambient, 1.0f);					
-					DrawColourControl("Diffuse", diffuse, 1.0f);					
-					DrawColourControl("Specular", specular, 1.0f);
+					DrawVec3Control("Direction", direction);
+					DrawfloatControl("Radiance", radiance);					
+					//DrawColourControl("Ambient", ambient, 1.0f);					
+					DrawColourControl("Colour", diffuse, 1.0f);					
+					//DrawColourControl("Specular", specular, 1.0f);
 
 					light->SetDirection(direction);
 					light->SetAmbient(ambient);
 					light->SetDiffuse(diffuse);
-					light->SetSpecular(specular);
+					light->SetSpecular(specular);					
+					light->SetRadiance(radiance);
 					break;
 				}
 				case LightType::Point:

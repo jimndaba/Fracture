@@ -59,7 +59,7 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	{
 		json a;
 		a["Shader Name"] = shader->Name;
-		a["Vertex"] = shader->vertexPath;
+		a["Vertex"] = shader->vertPath;
 		a["Fragment"] = shader->fragPath;
 		shaders.push_back(a);
 	}

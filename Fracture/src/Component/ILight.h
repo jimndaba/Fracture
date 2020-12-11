@@ -49,7 +49,9 @@ namespace Fracture
 		virtual float GetQuadratic() { return 0.0f; };
 		virtual float GetCutoff() { return 0.0f; };
 		virtual float GetOuterCutOff() { return 0.0f; };
+		virtual float GetRadiance() { return 0.0f; };
 		float Intensity();
+	
 
 		virtual LightType GetLightType() = 0;
 		void SetCastShadows(bool value)
@@ -98,6 +100,11 @@ namespace Fracture
 		{
 			m_direction = direction;
 		};
+
+		void SetRadiance(float value)
+		{
+			radiance = value;
+		}
 		//virtual void SetConstant(float constant) {};
 		//virtual void SetLinear(float linear) {};
 		//virtual void SetQuadratic(float quad) {};
@@ -121,6 +128,11 @@ namespace Fracture
 		{
 			return m_direction;
 		};
+
+		virtual float GetRadiance()
+		{
+			return radiance;
+		}
 		//virtual float GetConstant() {};
 		//virtual float GetLinear() {};
 		//virtual float GetQuadratic() {};
@@ -136,6 +148,7 @@ namespace Fracture
 		glm::vec4 m_diffuse = glm::vec4(0.6f);
 		glm::vec4 m_specular = glm::vec4(1.0f);
 		glm::vec3 m_direction = glm::vec3(0.0f,-1.0f,0.0f);
+		float radiance = 1.0f;
 	};
 
 	class PointLight : public ILight

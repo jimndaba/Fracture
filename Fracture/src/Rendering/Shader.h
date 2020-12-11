@@ -17,11 +17,13 @@ namespace Fracture {
 	class Shader
 	{
 	public:
-		Shader(std::string name, std::string vertexPath, std::string fragmentPath);
+		Shader(const std::string& name,const std::string& vertexPath,const std::string& fragmentPath);
 		~Shader();
 
 		void use();
 		void unbind();
+
+		void reloadShader();
 
 		void setBool(const std::string& name, bool value) const;
 		void setInt(const std::string& name, int value) const;
@@ -39,16 +41,16 @@ namespace Fracture {
 		void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
 
 		std::string Name;
-		std::string vertexPath;
+		std::string vertPath;
 		std::string fragPath;
 
 		unsigned int ID();
 
 	private:
-		unsigned int m_vertex;
-		unsigned int m_fragment;
 		unsigned int m_program;
+	
 
+		unsigned int createShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath);
 		void checkCompileErrors(unsigned int shader, std::string type);
 	};
 

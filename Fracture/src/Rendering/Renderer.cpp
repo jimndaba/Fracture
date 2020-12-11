@@ -444,6 +444,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
                 material->getShader()->setFloat("sunLights[" + std::to_string(i) + "].intensity", m_lights[i]->Intensity());
+                material->getShader()->setFloat("sunLights[" + std::to_string(i) + "].Radiance", m_lights[i]->GetRadiance());
                 break;
             }
             case LightType::Point:

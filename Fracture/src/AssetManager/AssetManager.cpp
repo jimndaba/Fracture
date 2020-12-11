@@ -32,10 +32,7 @@ Fracture::AssetManager::~AssetManager()
 
 void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std::string fragment)
 {
-	std::shared_ptr<Shader> m_shader = std::shared_ptr<Shader>(new Shader(name,vertex, fragment));
-	m_shader->Name = name;
-	m_shader->vertexPath = vertex;
-	m_shader->fragPath = fragment;
+	std::shared_ptr<Shader> m_shader = std::shared_ptr<Shader>(new Shader(name,vertex, fragment));	
 	m_Shaders.emplace(name, m_shader);
 	FRACTURE_TRACE("Loaded Shader: {}", name);
 }
@@ -156,7 +153,9 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 		return 0;
 	}
 
+
 	m_model = std::shared_ptr<Model>(new Model());
+	m_model->Name = scene->GetShortFilename(path.c_str());
 	m_model->directory = path.substr(0, path.find_last_of('\\'));
 	// process ASSIMP's root node recursively
 	ProcessNode(m_model, scene->mRootNode, scene);
@@ -256,24 +255,127 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
-	// process materials
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	// process material
-	// 1. diffuse maps	
-	std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, TextureType::Diffuse);
-	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	// 2. specular maps
-	std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, TextureType::Specular);
-	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-	// 3. normal maps
-	std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model, material, aiTextureType_HEIGHT, TextureType::Height);
-	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-	// 4. height maps
-	std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, TextureType::Height);
-	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	// return a mesh object created from the extracted mesh data
-	
+	for (uint32_t i = 0; i < scene->mNumMaterials; i++)
+	{
+		std::shared_ptr<Material> mi = std::shared_ptr<Material>(new Material(model->Name, getShader("PBRTexturedShader")));
+		aiString aiTexPath;
+		// process materials
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		aiColor3D aiColor;
+		material->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+
+		// process material
+		// 1. diffuse maps	
+		if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Diffuse);
+			if (texture)
+			{
+				AddTexture(texture->Name, texture->path, texture->textureType);
+				mi->SetTexture("albedoMap", texture, 3);
+				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			}
+			else
+			{
+				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				// Fallback to albedo color
+				mi->setColor4("albedoMap", glm::vec4{ aiColor.r, aiColor.g, aiColor.b,1.0f });
+			}
+		}
+
+		// 1. normal maps	
+		if (material->GetTexture(aiTextureType::aiTextureType_NORMALS, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Normal);
+			if (texture)
+			{
+				AddTexture(texture->Name, texture->path, texture->textureType);
+				mi->SetTexture("normalMap", texture, 4);
+				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			}
+			else
+			{
+				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				// Fallback to albedo color				
+			}
+		}
+
+		// 1. Roughness map
+		if (material->GetTexture(aiTextureType::aiTextureType_SHININESS, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Roughness);
+			if (texture)
+			{
+				AddTexture(texture->Name, texture->path, texture->textureType);
+				mi->SetTexture("roughnessMap", texture, 5);
+				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			}
+			else
+			{
+				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				mi->setFloat("roughness", 0.0f);
+				// Fallback to albedo color				
+			}
+		}
+
+		// 1. Metallic map
+		if (material->GetTexture(aiTextureType::aiTextureType_METALNESS, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::Metallic);
+			if (texture)
+			{
+				AddTexture(texture->Name, texture->path, texture->textureType);
+				mi->SetTexture("metallicMap", texture, 6);
+				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			}
+			else
+			{
+				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				mi->setFloat("metallic", 0.0f);
+				// Fallback to albedo color				
+			}
+		}
+
+		// 1. ao map
+		if (material->GetTexture(aiTextureType::aiTextureType_AMBIENT_OCCLUSION, 0, &aiTexPath) == AI_SUCCESS)
+		{
+			std::shared_ptr<Texture> texture = TextureFromFile(aiTexPath.C_Str(), model->directory, TextureType::AO);
+			if (texture)
+			{
+				AddTexture(texture->Name, texture->path, texture->textureType);
+				mi->SetTexture("aoMap", texture,7);
+				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			}
+			else
+			{
+				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
+				
+				// Fallback to albedo color				
+			}
+		}
+
+
+
+		/*
+
+		std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(model,material, aiTextureType_DIFFUSE, TextureType::Diffuse);
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+		// 2. specular maps
+		std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(model,material, aiTextureType_SPECULAR, TextureType::Specular);
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		// 3. normal maps
+		std::vector<std::shared_ptr<Texture>> normalMaps = loadMaterialTextures(model, material, aiTextureType_HEIGHT, TextureType::Height);
+		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		// 4. height maps
+		std::vector<std::shared_ptr<Texture>> heightMaps = loadMaterialTextures(model,material, aiTextureType_AMBIENT, TextureType::Height);
+		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+		// return a mesh object created from the extracted mesh data
+		*/
+		AddMaterial(mi->Name, mi);
+	}
 	return std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 }
 

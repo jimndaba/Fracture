@@ -8,12 +8,15 @@
 namespace Fracture
 {
 
-	enum class TextureType 
+	enum class TextureType
 	{
 		Diffuse,
 		Specular,
 		Normal,
 		Height,
+		Roughness,
+		Metallic,
+		AO,
 		Bump,
 		Reflection,
 		ColorAttachment,
