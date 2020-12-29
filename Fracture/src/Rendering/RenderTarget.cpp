@@ -54,6 +54,7 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
 
     }
 
+    glReadBuffer(GL_NONE);
 
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

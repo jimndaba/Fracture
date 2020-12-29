@@ -351,9 +351,9 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				{
 					glm::vec3 direction = light->GetDirection();					
 					glm::vec4 diffuse = light->GetDiffuse();					
-					float radiance = light->GetRadiance();	
+					glm::vec3 radiance = light->GetRadiance();
 
-					DrawfloatControl("Radiance", radiance);
+					DrawVec3Control("Radiance", radiance);
 					DrawVec3Control("Direction", direction);								
 					DrawColourControl("Colour", diffuse, 1.0f);			
 
@@ -500,11 +500,19 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 						modelName = model.first;
 						if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
 						{
-							std::string mat_name = modelName + "Materail";
-							std::shared_ptr<Material> material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
-							AssetManager::AddMaterial(mat_name, material);
-
-							ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+							std::string mat_name = model.second->Material_Name;
+							std::shared_ptr<Material> material = AssetManager::getMaterial(mat_name);
+							if (material)
+							{
+								ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+							}
+							else
+							{
+								material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
+								AssetManager::AddMaterial(mat_name, material);
+								ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+							}							
+							
 						}
 						else
 						{

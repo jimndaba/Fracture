@@ -20,6 +20,7 @@ namespace Fracture
 	class ScriptManager;
 	class GameLogic;
 	class PhysicsManager;
+	class phPhysicsManager;
 	class Logger;
 	class DebugRenderer;
 	class Eventbus;
@@ -74,6 +75,7 @@ namespace Fracture
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<IDManager> m_IDManager;
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
+		//std::unique_ptr<phPhysicsManager> m_pyPhysicsManager;
 		std::unique_ptr<Logger> m_logger;
 		std::unique_ptr<DebugRenderer> m_debug;
 		static std::unique_ptr<SceneManager> m_SceneManager;

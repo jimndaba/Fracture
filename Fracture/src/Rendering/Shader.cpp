@@ -22,8 +22,7 @@ void Fracture::Shader::use()
     }
     else
     {
-        FRACTURE_ERROR("{} : SHADER IS NULL",Name);
-        reloadShader();
+        FRACTURE_ERROR("{} : SHADER IS NULL",Name);        
     }
 }
 
@@ -57,8 +56,16 @@ void Fracture::Shader::setInt(const std::string& name, int value) const
 }
 
 void Fracture::Shader::setFloat(const std::string& name, float value) const
-{
-    glUniform1f(glGetUniformLocation(m_program, name.c_str()), value);
+{  
+    glUseProgram(m_program);
+    auto location = glGetUniformLocation(m_program, name.c_str());
+    if (location != -1)
+        glUniform1f(location, value);
+    else
+    {
+    }
+        //FRACTURE_ERROR("Uniform '{0}' not found!", name);
+
 }
 
 void Fracture::Shader::setVec2(const std::string& name, glm::vec2 value) const
@@ -67,13 +74,27 @@ void Fracture::Shader::setVec2(const std::string& name, glm::vec2 value) const
 }
 
 void Fracture::Shader::setVec3(const std::string& name, glm::vec3 value) const
-{
-    glUniform3fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
+{   
+    glUseProgram(m_program);
+    auto location = glGetUniformLocation(m_program, name.c_str());
+    if (location != -1)
+        glUniform3fv(location, 1, &value[0]);
+    else
+    {
+    }
+        //FRACTURE_ERROR("Uniform '{0}' not found!", name);
 }
 
 void Fracture::Shader::setVec4(const std::string& name, glm::vec4 value) const
 {
-    glUniform4fv(glGetUniformLocation(m_program, name.c_str()), 1, &value[0]);
+    glUseProgram(m_program);
+    auto location = glGetUniformLocation(m_program, name.c_str());
+    if (location != -1)
+        glUniform4fv(location, 1, &value[0]);
+    else
+    {
+    }
+        //FRACTURE_ERROR("Uniform '{0}' not found!", name);
 }
 
 void Fracture::Shader::setColor3(const std::string& name, glm::vec3 value) const

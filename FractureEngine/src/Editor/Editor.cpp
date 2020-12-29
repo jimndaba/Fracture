@@ -217,14 +217,17 @@ void Fracture::Editor::onLoadNew()
     primitivesMaterial->setColor3("material.ambient", glm::vec3(0.9, 0.3, 0.5));
     primitivesMaterial->setColor3("material.specular", glm::vec3(1.0, 1.0, 1.0));
     m_AssetManger->AddMaterial("PrimitiveMaterial", primitivesMaterial);    
+    
     std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
     m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);    
 
+   
     std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
     pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
     pbrPrimitive->setFloat("metallic", 0.4f);
     pbrPrimitive->setFloat("roughness", 0.2f);
     pbrPrimitive->setFloat("ao", 1.0f);
+    
     
     std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
     pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
@@ -237,7 +240,7 @@ void Fracture::Editor::onLoadNew()
     pbrTextured->setFloat("metallicFlag", 1.0f);
     pbrTextured->setFloat("roughnessFlag", 1.0f);
     pbrTextured->setFloat("aoFlag", 1.0f);
-
+    /*
     std::shared_ptr<Material> pbrWood = std::shared_ptr<Material>(new Material("PBRWood", m_AssetManger->getShader("PBRTexturedShader")));
     pbrWood->setFloat("albedoFlag", 1.0f);
     pbrWood->setFloat("normalFlag", 1.0f);
@@ -261,13 +264,13 @@ void Fracture::Editor::onLoadNew()
     pbrBrick->setFloat("metallicFlag", 1.0f);
     pbrBrick->setFloat("roughnessFlag", 1.0f);
     pbrBrick->setFloat("aoFlag", 1.0f);
-   
+   */
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
-    AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
-    AssetManager::AddMaterial("PBRBrick", pbrBrick);
-    AssetManager::AddMaterial("PBRTextured",pbrTextured );
-    AssetManager::AddMaterial("PBRWood", pbrWood);
+    //AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
+    //AssetManager::AddMaterial("PBRBrick", pbrBrick);
+    //AssetManager::AddMaterial("PBRTextured",pbrTextured );
+    //AssetManager::AddMaterial("PBRWood", pbrWood);
 
     AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
     AssetManager::AddModel("Cube", "content/models/primitives/cube.fbx");
@@ -343,6 +346,15 @@ void Fracture::Editor::onUpdate(float dt)
             done = true;
     }
     InputManager::PollEvents();
+
+    if (InputManager::IsKeyDown(KeyCode::Delete))
+    {
+        if (SceneView::SelectedEntity())
+        {
+            FRACTURE_INFO("Deleting Entity :  {}", SceneView::SelectedEntity().Id);
+            m_SceneManager->GetActiveScene()->Destroy(SceneView::SelectedEntity().Id);
+        }
+    }
     
     m_PhysicsManger->startPhysics();
     m_viewpanel->onUpdate(dt);

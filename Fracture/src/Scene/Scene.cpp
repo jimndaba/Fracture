@@ -76,21 +76,7 @@ void Fracture::Scene::Instance(std::shared_ptr<Entity> entity)
 		std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(newEntity->Id, oldcomponent->model->Name, oldcomponent->material->Name);
 		component->SetRenderType(RenderType::Normal);
 		ComponentManager::AddComponent<RenderComponent>(component);
-	}
-	/* TODO PHYSICS LIGHT AND AUDIO
-	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
-	{
-		ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-	}
-	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
-	{
-		ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-	}
-	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
-	{
-		ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-	}
-	*/
+	}	
 
 	addEntity(newEntity);
 }
@@ -226,8 +212,17 @@ void Fracture::Scene::addEntity(std::shared_ptr<Entity> entity)
 
 void Fracture::Scene::Destroy(std::shared_ptr<Entity> entity)
 {
-	auto it = std::find_if(std::begin(m_entities), std::end(m_entities), [entity](std::shared_ptr<Entity>& p) { return p == entity; });
+	
+	std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+	if (relationship->GetChildren().size() > 0)
+	{
+		for (auto& child : relationship->GetChildren())
+		{
+			Destroy(child);
+		}
+	}
 
+	auto it = std::find_if(std::begin(m_entities), std::end(m_entities), [entity](std::shared_ptr<Entity>& p) { return p == entity; });
 	if (it != m_entities.end())
 	{
 		m_entities.erase(

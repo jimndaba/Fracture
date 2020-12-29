@@ -169,20 +169,9 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-
-			std::string name = "SphereMat" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
-
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
-
-			AssetManager::AddMaterial(name , material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", name);
-			materialCount++;
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);			
+			std::shared_ptr<Material> material = AssetManager::getMaterial("Sphere_material");			
+			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", material->Name);
 			return newEntity;
 		}
 		

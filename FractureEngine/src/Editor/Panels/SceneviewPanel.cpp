@@ -108,7 +108,9 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 		if (ImGui::IsItemClicked())
 		{
 			m_selection.Id = entity;
+			setSelectEntity(m_selection);
 		}
+
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
@@ -117,21 +119,13 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 				if (m_selection != NULL)
 				{
 					entityDeleted = true;
-
 				}
 			}
 			ImGui::EndPopup();
 		}
 
 		if (entityDeleted)
-		{
-			if (relationship->GetChildren().size() > 0)
-			{
-				for (auto& child : relationship->GetChildren())
-				{
-					m_scene->Destroy(child);
-				}
-			}
+		{			
 			m_scene->Destroy(entity);
 			
 			if (m_selection.Id == entity)

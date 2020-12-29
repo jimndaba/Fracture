@@ -80,9 +80,10 @@ namespace Fracture
 		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
 		static void ProcessNode(aiNode* node, const aiScene* scene);
 		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene);
-		static std::vector<std::shared_ptr<Texture>> loadMaterialTextures(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, TextureType typeName);
+		static std::shared_ptr<Texture> loadMaterialTexture(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 		static std::shared_ptr<Fracture::Texture> HDRFromFile(const char* path,Fracture::TextureType texType, bool gamma = false);
+
 
 		static const uint32_t s_MeshImportFlags =
 			aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case

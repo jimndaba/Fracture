@@ -9,8 +9,14 @@
 #include <fstream>
 #include <iostream>
 
+extern "C" {
+# include "lua.h"
+# include "lauxlib.h"
+# include "lualib.h"
+}
 
-
+#define SOL_ALL_SAFETIES_ON 1
+#include <sol/sol.hpp>
 
 namespace Fracture
 {
@@ -50,7 +56,7 @@ namespace Fracture
 	private:
 
 		std::vector<std::shared_ptr<GameLogic>> m_scripts;
-
+		sol::state lua;
 	};
 
 }

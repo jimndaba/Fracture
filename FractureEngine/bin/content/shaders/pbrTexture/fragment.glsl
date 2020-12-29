@@ -12,7 +12,6 @@ struct Material {
 struct SunLight {
     bool enabled;
     vec3 direction;
-    vec3 Radiance;
     float intensity;
     vec3 ambient;
     vec3 diffuse;
@@ -104,6 +103,7 @@ const float Epsilon = 0.00001;
 vec3 getNormalFromMap()
 {
     vec3 tangentNormal = normalize(Normal);
+
     if(normalFlag > 0.5)
     {
         tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
@@ -118,6 +118,7 @@ vec3 getNormalFromMap()
         mat3 TBN = mat3(T, B, N);
         tangentNormal = normalize(TBN * tangentNormal);
     }
+
     return tangentNormal;
 }
 // ----------------------------------------------------------------------------
@@ -133,9 +134,7 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
     denom = PI * denom * denom;
    
     return nom / denom;
-}
-
-  
+}  
 // ----------------------------------------------------------------------------
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
@@ -168,7 +167,6 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 } 
-
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 float ShadowFade = 0.8;
@@ -179,8 +177,6 @@ float GetShadowBias(SunLight light)
 	float bias = max(MINIMUM_SHADOW_BIAS * (1.0 - dot(Normal, light.direction)), MINIMUM_SHADOW_BIAS);
 	return bias;
 }
-
-
 
 float ShadowCalculation(vec4 fragPosLightSpace,SunLight light)
 {
@@ -218,49 +214,25 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light,vec3 alb,vec3 F0, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-vec3  albedo;
-float metallic;
-float roughness;
-float ao;
+vec3 albedo = vec3(0.0);
+float metallic = 0.0;
+float roughness = 0.0;
+float ao = 0.0;
+vec3 ambient =  vec3(0.0);
 
 void main()
 {		
-    // material properties
-    if(albedoFlag > 0.5)
-    {
-        albedo = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    }
-    else
-    {
-        albedo = u_albedo; 
-    }
-   
-    if(metallicFlag > 0.5)
-    {
-    metallic = texture(metallicMap, TexCoords).r;
-    }
-    else{
-    metallic = u_metallic;
-    }
+    // material properties 
 
-    if(roughnessFlag > 0.5)
-    {
-        roughness = texture(roughnessMap, TexCoords).r;
-    }
-    else
-    {
-        roughness = u_roughness;
-    }
 
-    if(aoFlag >0.5)
-    {
-    ao = texture(aoMap, TexCoords).r;
-    }
-    else
-    {
-    ao = u_ao;
-    }
 
+    vec3 tex = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
+    
+
+    albedo = albedoFlag > 0.5 ?  tex : u_albedo; 
+    metallic = metallicFlag > 0.5 ? texture(metallicMap, TexCoords).r : u_metallic; 
+    roughness = roughnessFlag > 0.5 ? texture(roughnessMap, TexCoords).r : u_roughness; 
+    ao = aoFlag > 0.5 ?  texture(aoMap, TexCoords).r :u_ao;    
 
     vec3 N = getNormalFromMap();
     vec3 V = normalize(viewPos - FragPos);
@@ -272,6 +244,7 @@ void main()
     F0 = mix(F0, albedo, metallic);
     
     vec3 Lo = vec3(0.0);
+    ambient =  vec3(0.0);
 
     for(int i = 0; i < NR_SUN_LIGHTS; i++)
     {
@@ -279,9 +252,8 @@ void main()
       {
         continue;
       }
-      
+     
       Lo += CalcDirLight(sunLights[i],F0, N,V);
-      
     }
 
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
@@ -310,7 +282,7 @@ void main()
 
 
     //vec3 ambient = vec3(0.03) * albedo * ao;
-    vec3 ambient = (kD * diffuse + specular) * ao;
+    ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient  + Lo ;
 
@@ -319,7 +291,7 @@ void main()
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
-    FragColor = vec4(color  , 1.0);
+    FragColor = vec4(color, 1.0);
 }
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
@@ -328,6 +300,9 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     vec3 l = normalize(-light.direction);
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
+    //ambient += light.ambient;
+
+
 
     vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
 	float G = GeometrySmith(normal, viewDir, l, roughness); 
@@ -335,7 +310,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     float NDF = DistributionGGX(normal, H, roughness);   
     vec3 nominator    = NDF * G * F;
     float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, l), 0.0) + 0.001; // 0.001 to prevent divide by zero.
-    vec3 specular = nominator / denominator;
+    vec3 specular = nominator / denominator * light.specular;
 
     vec3 kS = F;
 	vec3 kd = vec3(1.0) - kS;
@@ -360,6 +335,7 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         float distance = length(light.position - fragPos);
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = (light.diffuse* light.intensity ) * attenuation;
+        //ambient += light.ambient;
 
         // Cook-Torrance BRDF
         float NDF = DistributionGGX(normal, H, roughness);   
@@ -391,5 +367,6 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
+    //ambient += light.ambient;
    return vec3(0.0);
 }

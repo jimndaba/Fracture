@@ -23,10 +23,12 @@ namespace Fracture
 		static Entity SelectedEntity();
 		static void setSelectEntity(Entity selection);
 
+		static Entity m_selection;
+
 	private:
 
 		std::shared_ptr<Scene> m_scene;
-		static Entity m_selection;
+		
 
 		void DrawEntityNode(uint32_t entity);
 	};

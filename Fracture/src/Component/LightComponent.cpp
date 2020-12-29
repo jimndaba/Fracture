@@ -104,7 +104,7 @@ void Fracture::LightComponent::SetIntensity(float value)
 	m_light->SetIntensity(value);
 }
 
-void Fracture::LightComponent::SetRadiance(float value)
+void Fracture::LightComponent::SetRadiance(glm::vec3 value)
 {
 	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
 	sun->SetRadiance(value);
@@ -165,7 +165,7 @@ float Fracture::LightComponent::Intensity()
 	return m_light->Intensity();
 }
 
-float Fracture::LightComponent::GetRadiance()
+glm::vec3 Fracture::LightComponent::GetRadiance()
 {
 	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
 	return sun->GetRadiance();

@@ -28,6 +28,11 @@ void Fracture::Material::setShader(std::string shader)
 	m_shader = AssetManager::getShader(shader);
 }
 
+void Fracture::Material::use()
+{
+	m_shader->use();
+}
+
 void Fracture::Material::setBool(std::string name, bool value) const
 {
 	UniformValue uniform;

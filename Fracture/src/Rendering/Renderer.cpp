@@ -116,11 +116,11 @@ void Fracture::Renderer::RenderPasses()
     }
     m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
     m_ShadowPass->End();
-    
- 
- 
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+
+ 
+ 
+    
     setViewport(m_width, m_Height);        
     SceneRenderTarget->bind();    
     clearColor(0.08f, 0.07f, 0.16f);
@@ -130,24 +130,26 @@ void Fracture::Renderer::RenderPasses()
     {       
         Submit(command);
     }   
+
     if (m_transparentBucket->getCommands().size() > 0)
     {
-        glDepthMask(GL_TRUE);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //glDepthMask(GL_TRUE);
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (const auto& command : m_transparentBucket->getCommands())
         {
             Submit(command);
         }
-        
+        //glBlendFunc(GL_NONE, GL_NONE);
+        //glDisable(GL_BLEND);
     }
 
-    glBlendFunc(GL_NONE, GL_NONE);
-    glDisable(GL_BLEND);
+   
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
     }    
+
     if (m_isDebugRender)
     {
         PhysicsManager::DrawDebug();  
@@ -280,7 +282,7 @@ void Fracture::Renderer::WriteUniformSampler(Shader shader, std::string name, st
 void Fracture::Renderer::Submit(RenderCommand command)
 {
     ProfilerTimer timer("Submit");    
-    command.material->getShader()->use();
+    command.material->use();
 
     auto* uniforms = command.material->GetUniforms();
     for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
@@ -440,7 +442,6 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].diffuse", m_lights[i]->GetDiffuse());
                 material->getShader()->setVec3("sunLights[" + std::to_string(i) + "].specular", m_lights[i]->GetSpecular());
                 material->getShader()->setFloat("sunLights[" + std::to_string(i) + "].intensity", m_lights[i]->Intensity());
-                material->getShader()->setFloat("sunLights[" + std::to_string(i) + "].Radiance", m_lights[i]->GetRadiance());
                 break;
             }
             case LightType::Point:
@@ -475,7 +476,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
             case LightType::Sky:
             {
                 std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_lights[i]);
-                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap(),0);
+                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap(),10);
                 material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap(), 1);
                 material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), 2);
                 break;

@@ -47,9 +47,7 @@ namespace Fracture
     struct UniformValue
     {
         SHADER_TYPE Type;
-        std::string Name;
-        // TODO(Joey): now each element takes up the space of its largest 
-        // element (mat4) which is 64 bytes; come up with a better solution!
+        std::string Name;       
         union
         {
             bool       Bool;
@@ -93,8 +91,9 @@ namespace Fracture
 		~Material();
 		std::shared_ptr<Shader> getShader();
         void setShader(std::string shader);
-
+        void use();
 		std::string Name;
+
         void setBool(std::string name, bool value) const;
         void setInt(std::string name, int value) const;
         void setFloat(std::string name, float value) const;

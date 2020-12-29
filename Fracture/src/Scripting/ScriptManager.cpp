@@ -8,7 +8,7 @@
 Fracture::ScriptManager::ScriptManager()
 {
 	Eventbus::Subscribe(this, &Fracture::ScriptManager::OnCollision);
-
+	lua.open_libraries(sol::lib::base, sol::lib::package);
 }
 
 Fracture::ScriptManager::~ScriptManager()
