@@ -501,10 +501,7 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
    
     if (render && tag->isVisible)
     {      
-        for (auto mesh : render->model->GetMeshes())
-        {            
-            PushCommand(mesh, render->material, transform);          
-        }   
+        PushCommand(render->m_mesh, render->material, transform);
     }
     if (lightcomponent && tag->isVisible)
     {

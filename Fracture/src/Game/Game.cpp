@@ -16,7 +16,6 @@
 #include "Scripting/ScriptManager.h"
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
-#include "pyPhysx/pyPhysicManager.h"
 #include "Rendering/DebugRenderer.h"
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
@@ -102,7 +101,6 @@ void Fracture::Game::init()
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
 	m_debug = std::make_unique<DebugRenderer>();
-	//m_pyPhysicsManager = std::make_unique<phPhysicsManager>();
 	m_Renderer->onInit();
 	m_PhysicsManager->Init();
 	

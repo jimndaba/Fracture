@@ -29,6 +29,8 @@ namespace Fracture
 		unsigned int VAO, VBO, IBO;
 		std::shared_ptr<Material> m_material;
 
+		std::string ModelName;
+		std::string Name;
 
 		std::vector<unsigned int> GetIndices()
 		{
@@ -44,6 +46,8 @@ namespace Fracture
 		{
 			return m_instanceCommands;
 		}
+
+
 		
 	private:
 		void setupMesh();

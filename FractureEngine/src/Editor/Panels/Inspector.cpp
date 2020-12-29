@@ -167,7 +167,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
-			std::string current_Model = render->model->Name;
+			std::string current_Model = render->m_mesh->Name;
 			std::string current_Material = render->material->Name;
 			std::string current_Shader = render->material->getShader()->Name;
 
@@ -504,13 +504,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 							std::shared_ptr<Material> material = AssetManager::getMaterial(mat_name);
 							if (material)
 							{
-								ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+								//ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
 							}
 							else
 							{
-								material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
-								AssetManager::AddMaterial(mat_name, material);
-								ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+								//material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
+								//AssetManager::AddMaterial(mat_name, material);
+								//ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
 							}							
 							
 						}

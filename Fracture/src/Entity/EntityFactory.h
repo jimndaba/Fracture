@@ -21,7 +21,10 @@
 #include "Component/EditorNodeComponent.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
+#include "Rendering/Model.h"
+#include "Rendering/Mesh.h"
 #include "Scene/Scene.h"
+#include "Logging/Logger.h"
 
 namespace Fracture
 {
@@ -124,18 +127,38 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "CubeMat" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
 
-			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id,"Cube", name);
-			materialCount++;
+			std::shared_ptr<Model> model = AssetManager::getModel("Cube");
+
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Cube");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
+
+
+					std::string name = mesh->m_material->Name;
+					std::shared_ptr<Material> material = std::make_shared<Material>(name,
+						AssetManager::getShader("PrimitiveMaterial"));
+
+					material->setColor3("material.diffuse", glm::vec3(1.0f));
+					material->setColor3("material.ambient", glm::vec3(1.0f));
+					material->setColor3("material.specular", glm::vec3(1.0f));
+					material->setFloat("material.shininess", 64.0f);
+
+					AssetManager::AddMaterial(name, material);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
+
 			return newEntity;
 		}
 
@@ -147,18 +170,37 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "PlaneMat" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
+			
+			std::shared_ptr<Model> model = AssetManager::getModel("Plane");
 
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Plane");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
 
-			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Plane", name);
-			materialCount++;
+
+					std::string name = mesh->m_material->Name;
+					std::shared_ptr<Material> material = std::make_shared<Material>(name,
+						AssetManager::getShader("PrimitiveMaterial"));
+
+					material->setColor3("material.diffuse", glm::vec3(1.0f));
+					material->setColor3("material.ambient", glm::vec3(1.0f));
+					material->setColor3("material.specular", glm::vec3(1.0f));
+					material->setFloat("material.shininess", 64.0f);
+
+					AssetManager::AddMaterial(name, material);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
+			
 			return newEntity;
 		}
 		
@@ -169,9 +211,25 @@ namespace Fracture
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);			
-			std::shared_ptr<Material> material = AssetManager::getMaterial("Sphere_material");			
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Sphere", material->Name);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);	
+
+			std::shared_ptr<Model> model = AssetManager::getModel("Sphere");
+
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Sphere");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, mesh->m_material->Name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
 			return newEntity;
 		}
 		
@@ -183,18 +241,24 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "Suzane" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
 
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
+			std::shared_ptr<Model> model = AssetManager::getModel("Suzane");
 
-			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Suzane", name);
-			materialCount++;
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Suzane");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, mesh->m_material->Name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
 			return newEntity;
 		}
 
@@ -206,18 +270,24 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "Cylinder" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
+			
+			std::shared_ptr<Model> model = AssetManager::getModel("Cylinder");
 
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
-
-			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Cylinder", name);
-			materialCount++;
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Cylinder");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, mesh->m_material->Name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
 			return newEntity;
 		}
 		
@@ -229,18 +299,55 @@ namespace Fracture
 			relationship->SetParent(scene->Root()->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			std::string name = "Torus" + std::to_string(materialCount);
-			std::shared_ptr<Material> material = std::make_shared<Material>(name,
-				AssetManager::getShader("PrimitiveMaterial"));
+			std::shared_ptr<Model> model = AssetManager::getModel("Torus");
 
-			material->setColor3("material.diffuse", glm::vec3(1.0f));
-			material->setColor3("material.ambient", glm::vec3(1.0f));
-			material->setColor3("material.specular", glm::vec3(1.0f));
-			material->setFloat("material.shininess", 64.0f);
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(shape->Id, "Torus");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(shape->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(shape->Id);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, mesh->m_material->Name);
+					scene->addEntity(shape);
+					materialCount++;
+				}
+			}
+			return newEntity;
+		}
 
-			AssetManager::AddMaterial(name, material);
-			ComponentManager::AddComponent<RenderComponent>(newEntity->Id, "Torus", name);
-			materialCount++;
+		static std::shared_ptr<Entity> CreateModel(std::shared_ptr<Scene> scene, std::string ModelName)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, ModelName);
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent<RelationShipComponent>(relationship);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+		
+			std::shared_ptr<Model> model = AssetManager::getModel(ModelName);
+
+			if (model)
+			{
+				for (auto mesh : model->GetMeshes())
+				{
+					std::shared_ptr<Entity> childMesh = EntityManager::CreateEntity<Entity>();
+					ComponentManager::AddComponent<TagComponent>(childMesh->Id, mesh->Name);
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(childMesh->Id);
+					relationship->SetParent(newEntity->Id);
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(childMesh->Id);
+					ComponentManager::AddComponent<RenderComponent>(childMesh->Id,mesh, mesh->m_material->Name);
+				}
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", ModelName);
+			}
+			
 			return newEntity;
 		}
 

@@ -11,6 +11,7 @@ namespace Fracture
 {
 
 	class Model;
+	class Mesh;
 	class Material;
 
 	enum class RenderType
@@ -23,7 +24,7 @@ namespace Fracture
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(uint32_t entityID, std::string model,std::string material);
+		RenderComponent(uint32_t entityID, std::shared_ptr<Mesh> mesh,std::string material);
 		~RenderComponent();
 
 
@@ -34,7 +35,7 @@ namespace Fracture
 		void SetRenderType(RenderType m_type);
 		RenderType getRenderType();
 
-		std::shared_ptr<Model> model;
+		std::shared_ptr<Mesh> m_mesh;
 		std::shared_ptr<Material> material;
 
 	private:

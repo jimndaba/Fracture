@@ -236,7 +236,8 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		c["MaterialUniforms"] = serialised_unfiorms;
 		c["MaterialSampleUniforms"] = serialised_sampleunfiorms;
 		c["Shader"]= component->material->getShader()->Name ;
-		c["Model"] =component->model->Name ;
+		c["Model"] = component->m_mesh->ModelName;
+		c["Mesh"] = component->m_mesh->Name ;
 		j["Render Component"] = c;
 	}
 
@@ -391,6 +392,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		{
 			auto renderComponent = j["Render Component"];
 			std::string model = renderComponent["Model"];
+			std::string mesh = renderComponent["Mesh"];
 			std::string shader_name = renderComponent["Shader"];
 			std::string material_name = renderComponent["Material"];
 
@@ -486,7 +488,9 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 
 			AssetManager::AddMaterial(material_name,material);
 
-			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id,model, material_name);
+			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
+			std::shared_ptr<Mesh> m_mesh = m_model->GetMesh(mesh);			
+			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id,m_mesh, material_name);
 			ComponentManager::AddComponent<RenderComponent>(component);
 
 		}

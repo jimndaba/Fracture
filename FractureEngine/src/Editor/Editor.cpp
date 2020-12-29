@@ -9,7 +9,6 @@
 #include "Rendering/ShadowPass.h"
 #include "Rendering/RenderTarget.h"
 #include "Panels/AssetBrowserPanel.h"
-#include "SandboxScene.h"
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
 
@@ -23,7 +22,6 @@ bool Fracture::Editor::showPhysicsConfig;
 bool Fracture::Editor::showInputConfig;
 bool Fracture::Editor::showProjectConfig;
 
-std::shared_ptr<Fracture::SandboxScene> sandboxScene;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
@@ -600,6 +598,12 @@ void Fracture::Editor::DrawMenuBar()
                 SceneView::setSelectEntity(*entity);
             };
             if (ImGui::MenuItem("Suzane", NULL))
+            {
+                std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_ActiveScene);
+                m_ActiveScene->addEntity(entity);
+                SceneView::setSelectEntity(*entity);
+            };
+            if (ImGui::MenuItem("Model", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);

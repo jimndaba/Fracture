@@ -37,7 +37,6 @@ void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std
 	FRACTURE_TRACE("Loaded Shader: {}", name);
 }
 
-
 void Fracture::AssetManager::AddModel(std::string name, std::string path)
 {
 	std::shared_ptr<Model> model = loadModel(path);
@@ -56,7 +55,6 @@ void Fracture::AssetManager::AddModel(std::string name, std::string path)
 	
 }
 
-
 void Fracture::AssetManager::AddTexture(std::string name, std::string path, TextureType mtype)
 {
 	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
@@ -74,6 +72,7 @@ void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string pat
 
 void Fracture::AssetManager::AddMesh(std::string name, std::string path)
 {
+
 }
 
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
@@ -398,7 +397,11 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	AddMaterial(mat_name, mi);
 	model->Material_Name = mat_name;
-	return std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures,mi));
+	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, mi));
+	new_mesh->Name = mesh->mName.data;
+	new_mesh->ModelName = model->Name;
+
+	return new_mesh;
 }
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(std::shared_ptr<Fracture::Model> model,aiMaterial* mat, aiTextureType type, Fracture::TextureType typeName)

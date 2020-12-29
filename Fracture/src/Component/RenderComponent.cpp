@@ -5,9 +5,8 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/RenderCommand.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID,std::string modelname,std::string materialname):Component(entityID,ComponentType::Render),m_modelName(modelname),m_materialName(materialname)
+Fracture::RenderComponent::RenderComponent(uint32_t entityID, std::shared_ptr<Mesh> mesh,std::string materialname):Component(entityID,ComponentType::Render),m_mesh(mesh),m_materialName(materialname)
 {
-	model = AssetManager::getModel(m_modelName);
 	material = AssetManager::getMaterial(m_materialName);
 	m_Rendertype = RenderType::Normal;
 }
@@ -27,7 +26,7 @@ void Fracture::RenderComponent::SetMaterial(std::string name)
 
 void Fracture::RenderComponent::SetModel(std::string name)
 {
-	model = AssetManager::getModel(name);
+	//model = AssetManager::getModel(name);
 }
 
 void Fracture::RenderComponent::SetRenderType(RenderType m_type)
