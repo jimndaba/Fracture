@@ -205,6 +205,14 @@ void Fracture::Material::setCubeMap(const std::string& name, const unsigned int 
 	m_SamplerUniforms->emplace(name, sample);
 }
 
+void Fracture::Material::ClearSamples()
+{
+	for (int i = 0; i < m_SamplerUniforms->size(); i++)
+	{
+
+	}
+}
+
 std::unordered_map<std::string, Fracture::UniformValue>* Fracture::Material::GetUniforms()
 {
     return m_Uniforms;

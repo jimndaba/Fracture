@@ -9,6 +9,7 @@
 #include "Math/Math.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
+#include <assimp/pbrmaterial.h>
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
 
@@ -61,6 +62,12 @@ void Fracture::AssetManager::AddTexture(std::string name, std::string path, Text
 	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
 	m_Textures.emplace(name, texture);
 	FRACTURE_TRACE("Loaded Texture: {}",name);
+}
+
+void Fracture::AssetManager::AddTexture(std::shared_ptr<Texture> texture)
+{
+	m_Textures.emplace(texture->Name, texture);
+	FRACTURE_TRACE("Loaded Texture: {}", texture->Name);
 }
 
 void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string path)
@@ -261,6 +268,8 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	aiString aiTexPath;
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+
 	
 	aiColor3D aiColor;
 	if (material->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor) != aiReturn_SUCCESS)
@@ -278,15 +287,13 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	// process material
 	// 1. diffuse maps	
-	
 	if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)
 	{
 		std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
 		if (texture)
 		{
-			mi->setFloat("albedoFlag", 1.0f);
-			AddTexture(texture->Name, texture->path, texture->textureType);
-			mi->SetTexture("albedoMap", getTexture(texture->Name), 3);
+			mi->setFloat("albedoFlag", 1.0f);			
+			mi->SetTexture("albedoMap", texture, 3);
 			if (texture->Format == GL_RGBA)
 			{
 				mi->setIsTransparent(true);				
@@ -297,25 +304,26 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 		{
 			FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
 			// Fallback to albedo color
+			mi->setFloat("TransparencyFlag", 0.0f);
 			mi->setFloat("albedoFlag", 0.0f);
 			mi->setColor3("u_albedo", glm::vec3(aiColor.r, aiColor.g, aiColor.b));
 		}
 	}
 	else
 	{
+		mi->setFloat("albedoFlag", 0.0f);
+		mi->setFloat("TransparencyFlag", 0.0f);
 		mi->setColor3("u_albedo", glm::vec3(aiColor.r, aiColor.g, aiColor.b));
 	}
 
 	// 2. normal maps
-	if (material->GetTexture(aiTextureType::aiTextureType_HEIGHT, 0, &aiTexPath) == AI_SUCCESS)
+	if (material->GetTexture(aiTextureType::aiTextureType_NORMALS, 0, &aiTexPath) == AI_SUCCESS)
 	{	
-		std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType_HEIGHT, TextureType::Normal);
+		std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_NORMALS, TextureType::Normal);
 		if (texture)
-		{
-			AddTexture(texture->Name, texture->path, texture->textureType);
-			mi->SetTexture("normalMap", getTexture(texture->Name), 4);
-			mi->setFloat("normalFlag",1.0f);
-			//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+		{			
+			mi->SetTexture("normalMap", texture, 4);
+			mi->setFloat("normalFlag",1.0f);			
 		}
 		else
 		{
@@ -324,6 +332,10 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			// Fallback to albedo color				
 		}
 	}
+	else
+	{
+		mi->setFloat("normalFlag", 0.0f);
+	}
 	
 	// 3. Roughness map
 	if (material->GetTexture(aiTextureType::aiTextureType_SHININESS, 0, &aiTexPath) == AI_SUCCESS)
@@ -331,10 +343,8 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 		std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_SHININESS, TextureType::Roughness);
 		if (texture)
 		{
-			mi->setFloat("roughnessFlag", 1.0f);
-			AddTexture(texture->Name, texture->path, texture->textureType);
-			mi->SetTexture("roughnessMap", getTexture(texture->Name), 5);
-			//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
+			mi->setFloat("roughnessFlag", 1.0f);			
+			mi->SetTexture("roughnessMap", texture, 5);
 		}
 		else
 		{
@@ -358,9 +368,8 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 		std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_METALNESS, TextureType::Metallic);
 		if (texture)
 		{
-			mi->setFloat("metallicFlag", 1.0f);
-			AddTexture(texture->Name, texture->path, texture->textureType);
-			mi->SetTexture("metallicMap", getTexture(texture->Name), 6);
+			mi->setFloat("metallicFlag", 1.0f);		
+			mi->SetTexture("metallicMap", texture, 6);
 		}
 		else
 		{
@@ -383,7 +392,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 		if (texture)
 		{
 			mi->setFloat("aoFlag", 1.0f);
-			AddTexture(texture->Name, texture->path, texture->textureType);
+			AddTexture(texture);
 			mi->SetTexture("aoMap", getTexture(texture->Name),7);
 			//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 		}
@@ -402,6 +411,8 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	AddMaterial(mat_name, mi);
 	model->Material_Name = mat_name;
+	
+	
 	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, mi));
 
 	glm::vec3 scale; //= transform->Scale();
@@ -409,10 +420,9 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	glm::vec3 position; //= transform->Position();
 
 	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);
-	new_mesh->position = position *= 0.01;
-	new_mesh->scale = scale *= 0.01;
+	new_mesh->position = position;
+	new_mesh->scale = scale;
 	new_mesh->rotation = rotation;
-
 	new_mesh->Name = mesh->mName.data;
 	new_mesh->ModelName = model->Name;
 
@@ -475,10 +485,8 @@ void Fracture::AssetManager::ProcessNode(aiNode* node, const aiScene* scene)
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma)
 {
 	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
-
+	filename = directory + '\\' + filename;
 	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
-
 
 	switch (texType)
 	{
@@ -552,11 +560,12 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 			format = GL_RGB;
 		else if (texture->channel == 4)
 			format = GL_RGBA;
+		
 		texture->Format = format;
 		texture->Bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, texture->m_data);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,  GL_REPEAT); // format == GL_RGBA ? GL_CLAMP_TO_EDGE : for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); //format == GL_RGBA ? GL_CLAMP_TO_EDGE :
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	

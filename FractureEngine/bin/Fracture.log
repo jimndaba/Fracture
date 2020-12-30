@@ -1,71 +1,72 @@
-[16:33:06] [info] FRACTURE: Initializing Splash
-[16:33:06] [info] FRACTURE: OpenGL loaded
-[16:33:06] [info] FRACTURE: Vendor: Intel
-[16:33:06] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[16:33:06] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
-[16:33:06] [trace] FRACTURE: Loaded Texture: splash
-[16:33:06] [trace] FRACTURE: Loaded Texture: title
-[16:33:06] [info] FRACTURE: Completed Init
-[16:33:06] [info] FRACTURE: Show Splash
-[16:33:11] [critical] FRACTURE: Failed to Load Project
-[16:33:16] [info] FRACTURE: OpenGL loaded
-[16:33:16] [info] FRACTURE: Vendor: Intel
-[16:33:16] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[16:33:16] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
-[16:33:16] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[16:33:16] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: RotateIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: CameraIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: LightIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: EyeIcon
-[16:33:16] [trace] FRACTURE: Loaded Texture: EyeIconC
-[16:33:18] [trace] FRACTURE: Loaded Texture: Rust_albedo
-[16:33:19] [trace] FRACTURE: Loaded Texture: Rust_normal
-[16:33:20] [trace] FRACTURE: Loaded Texture: Rust_metallic
-[16:33:20] [trace] FRACTURE: Loaded Texture: Rust_roughness
-[16:33:20] [trace] FRACTURE: Loaded Texture: Rust_ao
-[16:33:23] [trace] FRACTURE: Loaded Texture: Wood_albedo
-[16:33:25] [trace] FRACTURE: Loaded Texture: Wood_normal
-[16:33:25] [trace] FRACTURE: Loaded Texture: Wood_metallic
-[16:33:27] [trace] FRACTURE: Loaded Texture: Wood_roughness
-[16:33:27] [trace] FRACTURE: Loaded Texture: Wood_ao
-[16:33:28] [trace] FRACTURE: Loaded Texture: Brick_albedo
-[16:33:30] [trace] FRACTURE: Loaded Texture: Brick_normal
-[16:33:30] [trace] FRACTURE: Loaded Texture: Brick_bump
-[16:33:30] [trace] FRACTURE: Loaded Texture: Brick_roughness
-[16:33:30] [trace] FRACTURE: Loaded Texture: Brick_ao
-[16:33:31] [trace] FRACTURE: Loaded HDR Environment: Loft
-[16:33:31] [trace] FRACTURE: Loaded Shader: CubeMap
-[16:33:31] [trace] FRACTURE: Loaded Shader: irradiance
-[16:33:31] [trace] FRACTURE: Loaded Shader: prefilter
-[16:33:32] [trace] FRACTURE: Loaded Shader: bdrf
-[16:33:32] [trace] FRACTURE: Loaded Shader: Skybox
-[16:33:32] [trace] FRACTURE: Loaded Shader: DebugShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[16:33:32] [trace] FRACTURE: Loaded Shader: BillboardShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: DepthShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: DepthShader
-[16:33:32] [trace] FRACTURE: Loaded Shader: default
-[16:33:32] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[16:33:32] [trace] FRACTURE: Loaded Material: billboardIcons
-[16:33:32] [trace] FRACTURE: Loaded Material: DebugMaterial
-[16:33:32] [trace] FRACTURE: Loaded Material: DepthMaterial
-[16:33:32] [trace] FRACTURE: Loaded Material: Plane.001_material
-[16:33:32] [trace] FRACTURE: Loaded model: Plane
-[16:33:32] [trace] FRACTURE: Loaded Material: Cube_material
-[16:33:32] [trace] FRACTURE: Loaded model: Cube
-[16:33:32] [trace] FRACTURE: Loaded Material: Sphere_material
-[16:33:32] [trace] FRACTURE: Loaded model: Sphere
-[16:33:32] [trace] FRACTURE: Loaded Material: Cylinder_material
-[16:33:32] [trace] FRACTURE: Loaded model: Cylinder
-[16:33:32] [trace] FRACTURE: Loaded Material: Torus_material
-[16:33:32] [trace] FRACTURE: Loaded model: Torus
-[16:33:32] [trace] FRACTURE: Loaded Material: Suzanne_material
-[16:33:32] [trace] FRACTURE: Loaded model: Suzane
-[16:33:32] [info] FRACTURE: Renderer Init
-[16:34:06] [trace] FRACTURE: Loaded Material: Plane.001_material
-[16:35:44] [trace] FRACTURE: Loaded HDR Environment: Newport_Loft_Env
+[23:09:58] [info] FRACTURE: Initializing Splash
+[23:09:58] [info] FRACTURE: OpenGL loaded
+[23:09:58] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[23:09:58] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[23:09:58] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[23:09:58] [trace] FRACTURE: Loaded Texture: splash
+[23:09:58] [trace] FRACTURE: Loaded Texture: title
+[23:09:58] [info] FRACTURE: Completed Init
+[23:09:58] [info] FRACTURE: Show Splash
+[23:10:03] [info] FRACTURE: OpenGL loaded
+[23:10:03] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[23:10:03] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[23:10:03] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[23:10:03] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[23:10:03] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: RotateIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: CameraIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: LightIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: EyeIcon
+[23:10:03] [trace] FRACTURE: Loaded Texture: EyeIconC
+[23:10:04] [trace] FRACTURE: Loaded Texture: Rust_albedo
+[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_normal
+[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_metallic
+[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_roughness
+[23:10:07] [trace] FRACTURE: Loaded Texture: Rust_ao
+[23:10:08] [trace] FRACTURE: Loaded Texture: Wood_albedo
+[23:10:10] [trace] FRACTURE: Loaded Texture: Wood_normal
+[23:10:10] [trace] FRACTURE: Loaded Texture: Wood_metallic
+[23:10:11] [trace] FRACTURE: Loaded Texture: Wood_roughness
+[23:10:11] [trace] FRACTURE: Loaded Texture: Wood_ao
+[23:10:12] [trace] FRACTURE: Loaded Texture: Brick_albedo
+[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_normal
+[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_bump
+[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_roughness
+[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_ao
+[23:10:13] [trace] FRACTURE: Loaded HDR Environment: Loft
+[23:10:13] [trace] FRACTURE: Loaded Shader: CubeMap
+[23:10:13] [trace] FRACTURE: Loaded Shader: irradiance
+[23:10:13] [trace] FRACTURE: Loaded Shader: prefilter
+[23:10:13] [trace] FRACTURE: Loaded Shader: bdrf
+[23:10:13] [trace] FRACTURE: Loaded Shader: Skybox
+[23:10:13] [trace] FRACTURE: Loaded Shader: DebugShader
+[23:10:13] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[23:10:13] [trace] FRACTURE: Loaded Shader: BillboardShader
+[23:10:13] [trace] FRACTURE: Loaded Shader: DepthShader
+[23:10:13] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[23:10:13] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[23:10:13] [trace] FRACTURE: Loaded Shader: DepthShader
+[23:10:14] [trace] FRACTURE: Loaded Shader: default
+[23:10:14] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[23:10:14] [trace] FRACTURE: Loaded Material: billboardIcons
+[23:10:14] [trace] FRACTURE: Loaded Material: DebugMaterial
+[23:10:14] [trace] FRACTURE: Loaded Material: DepthMaterial
+[23:10:14] [trace] FRACTURE: Loaded Material: Plane.001_material
+[23:10:14] [trace] FRACTURE: Loaded model: Plane
+[23:10:14] [trace] FRACTURE: Loaded Material: Cube_material
+[23:10:14] [trace] FRACTURE: Loaded model: Cube
+[23:10:14] [trace] FRACTURE: Loaded Material: Sphere_material
+[23:10:14] [trace] FRACTURE: Loaded model: Sphere
+[23:10:14] [trace] FRACTURE: Loaded Material: Cylinder_material
+[23:10:14] [trace] FRACTURE: Loaded model: Cylinder
+[23:10:14] [trace] FRACTURE: Loaded Material: Torus_material
+[23:10:14] [trace] FRACTURE: Loaded model: Torus
+[23:10:14] [trace] FRACTURE: Loaded Material: Suzanne_material
+[23:10:14] [trace] FRACTURE: Loaded model: Suzane
+[23:10:14] [info] FRACTURE: Renderer Init
+[23:10:24] [trace] FRACTURE: Loaded Material: Plane_material
+[23:10:24] [trace] FRACTURE: Loaded Material: Cube.001_Cube.002_material
+[23:10:24] [trace] FRACTURE: Loaded Material: Cube.007_Cube.009_material
+[23:10:24] [trace] FRACTURE: Loaded model: hills

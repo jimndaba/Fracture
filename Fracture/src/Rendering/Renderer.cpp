@@ -316,14 +316,18 @@ void Fracture::Renderer::Submit(RenderCommand command)
     command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
 
     Draw(command);
-   
-    command.material->getShader()->unbind(); 
 
+    /*
     for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
     {
         glActiveTexture(it->second->Unit);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+    */
+   
+    //command.material->getShader()->unbind(); 
+
+   
 }
 
 void Fracture::Renderer::Draw(RenderCommand command)

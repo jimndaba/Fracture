@@ -15,7 +15,7 @@ Index of this file:
 // [SECTION] Widgets: SliderScalar, SliderFloat, SliderInt, etc.
 // [SECTION] Widgets: InputScalar, InputFloat, InputInt, etc.
 // [SECTION] Widgets: InputText, InputTextMultiline
-// [SECTION] Widgets: ColorEdit, ColorPicker, ColorButton, etc.
+// [SECTION] Widgets: ColorEdit, ColorPicker, ColorButton, etc.`
 // [SECTION] Widgets: TreeNode, CollapsingHeader, etc.
 // [SECTION] Widgets: Selectable
 // [SECTION] Widgets: ListBox

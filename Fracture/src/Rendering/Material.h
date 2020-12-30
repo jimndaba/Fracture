@@ -115,6 +115,7 @@ namespace Fracture
         void ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
         void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
 
+        void ClearSamples();
 
         std::unordered_map<std::string, UniformValue>* GetUniforms();
         std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>*GetSamplerUniforms();
