@@ -1,5 +1,6 @@
 #include "RenderTarget.h"
 #include "Texture.h"
+#include "Logging/Logger.h"
 #include <iostream>
 
 
@@ -14,24 +15,6 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
     // generate all requested color attachments
     for (unsigned int i = 0; i < nrColorAttachments; ++i)
     {
-        /*
-        //texture.FilterMin = GL_LINEAR;
-        //texture.FilterMax = GL_LINEAR;
-        //texture.WrapS = GL_CLAMP_TO_EDGE;
-        //texture.WrapT = GL_CLAMP_TO_EDGE;
-        //texture.Mipmapping = false;
-      
-        */
-
-        /*
-       texture.FilterMin = GL_LINEAR;
-       texture.FilterMax = GL_LINEAR;
-       texture.WrapS = GL_CLAMP_TO_EDGE;
-       texture.WrapT = GL_CLAMP_TO_EDGE;
-       texture.Mipmapping = false;
-       texture.Generate(width, height, GL_DEPTH_STENCIL, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
-       */
-
         GLenum internalFormat = GL_RGBA;
         if (type == GL_HALF_FLOAT)
             internalFormat = GL_RGBA16F;
@@ -40,7 +23,7 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
                 
         std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(new Texture("cAttachment" + i, width, height, internalFormat, GL_RGBA, GL_FLOAT, TextureType::ColorAttachment));
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->id, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D,texture->id, 0);
         m_ColorAttachments.push_back(texture);
     }
     // then generate Depth/Stencil texture if requested
@@ -49,17 +32,14 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
     {
         std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, TextureType::DepthStencilAttachment));
        
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dtexture->id, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,dtexture->id, 0);
         m_DepthStencil = dtexture;
 
     }
 
-    glReadBuffer(GL_NONE);
-
-
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        std::cout << "Framebuffer not complete!" << std::endl;
+        FRACTURE_ERROR("Framebuffer not complete!");
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -91,7 +71,6 @@ std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetColorTexture(unsig
 void Fracture::RenderTarget::bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, ID);
-
 }
 
 void Fracture::RenderTarget::Unbind()

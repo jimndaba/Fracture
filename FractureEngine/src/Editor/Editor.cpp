@@ -170,7 +170,7 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddTexture("Brick_ao", "content/textures/pbrBrick/ao.jpg", TextureType::Diffuse);
 
 
-    AssetManager::AddEnvironmentMap("Loft",  "content/textures/Environment/Newport_Loft_Env.hdr");
+    AssetManager::AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
 
     //Environment
     AssetManager::AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
