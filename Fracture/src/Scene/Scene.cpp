@@ -33,7 +33,7 @@ Fracture::Scene::Scene()
 
 Fracture::Scene::~Scene()
 {	
-	clearScene();
+
 }
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::Root()
@@ -84,7 +84,7 @@ void Fracture::Scene::Destroy(uint32_t id)
 void Fracture::Scene::clearScene()
 {	
 	m_entities.clear();
-	//ComponentManager::ClearComponents();
+	ComponentManager::ClearComponents();
 	IDManager::ResetIDs();
 }
 

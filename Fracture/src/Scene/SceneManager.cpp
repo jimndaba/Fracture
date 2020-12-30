@@ -37,15 +37,14 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 	ComponentManager::AddComponent<TagComponent>(main_sunlight->Id, "Sun");
 	std::shared_ptr<RelationShipComponent> sun_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_sunlight->Id));
 	sun_rel->SetParent(newScene->Root()->Id);
-	ComponentManager::AddComponent<RelationShipComponent
-	>(sun_rel);
+	ComponentManager::AddComponent<RelationShipComponent>(sun_rel);
 	ComponentManager::AddComponent<EditorNode>(main_sunlight->Id);
 	ComponentManager::AddComponent<LightComponent>(main_sunlight->Id, LightType::Sun);
 
 	newScene->addEntity(main_Camera);
 	newScene->addEntity(main_sunlight);
-
 	newScene->setCamera(main_Camera);
+
 	return newScene;
 }
 

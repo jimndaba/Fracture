@@ -69,6 +69,7 @@ uniform float normalFlag;
 uniform float metallicFlag;
 uniform float roughnessFlag;
 uniform float aoFlag;
+uniform float TransparencyFlag;
 
 // IBL
 uniform samplerCube irradianceMap;
@@ -220,14 +221,12 @@ float roughness = 0.0;
 float ao = 0.0;
 vec3 ambient =  vec3(0.0);
 
+
 void main()
 {		
-    // material properties 
-
-
-
-    vec3 tex = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    
+    // material properties     
+    vec3 tex = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));    
+    float alpha = 1.0;  
 
     albedo = albedoFlag > 0.5 ?  tex : u_albedo; 
     metallic = metallicFlag > 0.5 ? texture(metallicMap, TexCoords).r : u_metallic; 
@@ -280,18 +279,27 @@ void main()
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-
-    //vec3 ambient = vec3(0.03) * albedo * ao;
     ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient  + Lo ;
-
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
-    FragColor = vec4(color, 1.0);
+    
+  
+
+    if(TransparencyFlag > 0.5)
+    {      
+        vec4 alphaTex =  texture(albedoMap, TexCoords);
+        alpha = alphaTex.a;
+    }
+    vec4 final = vec4(color,alpha);
+
+    if(final.a < 0.5)
+        discard;
+    FragColor = final;
 }
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)

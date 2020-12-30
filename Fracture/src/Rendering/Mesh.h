@@ -32,6 +32,12 @@ namespace Fracture
 		std::string ModelName;
 		std::string Name;
 
+		//temp
+		glm::vec3 position;
+		glm::vec3 scale;
+		glm::vec3 rotation;
+
+
 		std::vector<unsigned int> GetIndices()
 		{
 			return m_indices;

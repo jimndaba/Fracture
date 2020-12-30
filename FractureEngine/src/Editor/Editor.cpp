@@ -469,10 +469,12 @@ void Fracture::Editor::DrawMenuBar()
             ImGui::Separator();
             if (ImGui::MenuItem("New Scene", NULL))
             {
+
                 m_ActiveScene->clearScene();
                 IDManager::ResetIDs();
-                m_SceneManager->AddScene("newScene", std::make_shared<Scene>());
-                m_SceneManager->SetScene("newScene");
+                m_SceneManager->AddScene("Untitled", m_SceneManager->NewScene());
+                m_SceneManager->SetScene("Untitled");
+                SetScene();
                
             }
             if (ImGui::MenuItem("Open Scene", NULL))
@@ -603,11 +605,18 @@ void Fracture::Editor::DrawMenuBar()
                 m_ActiveScene->addEntity(entity);
                 SceneView::setSelectEntity(*entity);
             };
-            if (ImGui::MenuItem("Model", NULL))
+            if (ImGui::BeginMenu("Model"))
             {
-                std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_ActiveScene);
-                m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                for (auto model : AssetManager::GetModels())
+                {
+                    if (ImGui::MenuItem(model.second->Name.c_str()))
+                    {
+                        std::shared_ptr<Entity> entity = EntityFactory::CreateModel(m_ActiveScene, model.second->Name.c_str());
+                        m_ActiveScene->addEntity(entity);
+                        SceneView::setSelectEntity(*entity);
+                    }
+                }        
+                ImGui::EndMenu();
             };
             ImGui::EndMenu();
         }

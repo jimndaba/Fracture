@@ -104,44 +104,52 @@ void Fracture::Renderer::RenderPasses()
     m_opaqueBucket->sort();   
     m_shadowBucket->sort();
     m_transparentBucket->sort();
-
-    glDisable(GL_CULL_FACE);    
-    m_ShadowPass->Begin();      
-    for (auto light : m_lights)
+    
     {
-        if (light->GetLightType() == LightType::Sun && light->CastShadows())
+        ProfilerTimer timer("ShadowPass");
+        glDisable(GL_CULL_FACE);    
+        m_ShadowPass->Begin();
+    
+        for (auto light : m_lights)
         {
-            m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));            
-        }  
+            if (light->GetLightType() == LightType::Sun && light->CastShadows())
+            {
+                m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));            
+            }  
+        }
+        m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
+        m_ShadowPass->End();
+        glEnable(GL_CULL_FACE);
     }
-    m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
-    m_ShadowPass->End();
-    glEnable(GL_CULL_FACE);
-
- 
- 
+   
     
     setViewport(m_width, m_Height);        
     SceneRenderTarget->bind();    
     clearColor(0.08f, 0.07f, 0.16f);
     clear();
 
-    for (const auto& command : m_opaqueBucket->getCommands())
-    {       
-        Submit(command);
-    }   
-
-    if (m_transparentBucket->getCommands().size() > 0)
     {
-        //glDepthMask(GL_TRUE);
-        //glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        for (const auto& command : m_transparentBucket->getCommands())
-        {
+        ProfilerTimer timer("Opaque Draw");
+        for (const auto& command : m_opaqueBucket->getCommands())
+        {       
             Submit(command);
+        }   
+    }
+
+    {
+        ProfilerTimer timer("Transparent Draw");
+        if (m_transparentBucket->getCommands().size() > 0)
+        {           
+            glDisable(GL_CULL_FACE);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            for (const auto& command : m_transparentBucket->getCommands())
+            {
+                Submit(command);
+            }       
+            glEnable(GL_CULL_FACE);
+            glDisable(GL_BLEND);
         }
-        //glBlendFunc(GL_NONE, GL_NONE);
-        //glDisable(GL_BLEND);
     }
 
    
@@ -347,13 +355,11 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
     if (command.HasTransparency)
     {
         m_transparentBucket->pushCommand(command);
-    }
-    
+    }    
     if(!command.HasTransparency)
     {
         m_opaqueBucket->pushCommand(command);
     }
-
     if (command.material->CastShadows())
     {
         m_shadowBucket->pushCommand(command);
@@ -366,7 +372,7 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     {
         m_transparentBucket->pushCommand(mesh, material, transform);
     }
-    else
+    if (!material->IsTransparent())
     {
         m_opaqueBucket->pushCommand(mesh, material, transform);
     }

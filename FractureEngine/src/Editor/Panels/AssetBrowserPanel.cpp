@@ -1,6 +1,7 @@
 #include "AssetBrowserPanel.h"
 #include <imgui/imgui_internal.h>
 #include "../utils/FileDialogue.h"
+#include "Math/Math.h"
 
 Fracture::AssetBrowserPanel::AssetBrowserPanel():Panel("AssetBrowser")
 {

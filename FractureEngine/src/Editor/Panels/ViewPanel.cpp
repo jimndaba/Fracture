@@ -52,20 +52,16 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
-	
-	//ImVec2 content_area_max_point = ImGui::GetWindowContentRegionMax();
-
-	//float width = content_area_max_point.x - ImGui::GetCursorPos().x;
-	//float height = content_area_max_point.y - ImGui::GetCursorPos().y;
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
-
 	m_renderer->setViewport(viewportPanelSize.x, viewportPanelSize.y);
 
+
+	//Draw Final Image from Render Target
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
 		ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
-	
+	//IMGUIZMO STUFF STARTS HERE
 	ImVec2 screen_pos = ImGui::GetMousePos();
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 
@@ -105,19 +101,20 @@ void Fracture::ViewPanel::render()
 			
 
 			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
+			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(SceneView::SelectedEntity().Id);
 			if (transform)
 			{
 				float rw = (float)ImGui::GetWindowWidth();
 				float rh = (float)ImGui::GetWindowHeight();
-				
-				
+
+
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y);
-				glm::mat4 transformMatrix = transform->GetWorldTransform();
+				glm::mat4 transformMatrix = transform->GetLocalTranform();		
 			
 
 				ImGuizmo::MODE mode = currentImGuizmoMode;

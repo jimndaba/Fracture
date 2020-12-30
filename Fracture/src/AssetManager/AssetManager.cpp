@@ -6,6 +6,7 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Vertex.h"
 #include "Logging/Logger.h"
+#include "Math/Math.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 
@@ -197,7 +198,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	return newTex;
 }
 
-std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transform)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -286,7 +287,11 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			mi->setFloat("albedoFlag", 1.0f);
 			AddTexture(texture->Name, texture->path, texture->textureType);
 			mi->SetTexture("albedoMap", getTexture(texture->Name), 3);
-		
+			if (texture->Format == GL_RGBA)
+			{
+				mi->setIsTransparent(true);				
+				mi->setFloat("TransparencyFlag", 1.0f);
+			}		
 		}
 		else
 		{
@@ -398,6 +403,16 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	AddMaterial(mat_name, mi);
 	model->Material_Name = mat_name;
 	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, mi));
+
+	glm::vec3 scale; //= transform->Scale();
+	glm::vec3 rotation; //= transform->Rotation();
+	glm::vec3 position; //= transform->Position();
+
+	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);
+	new_mesh->position = position *= 0.01;
+	new_mesh->scale = scale *= 0.01;
+	new_mesh->rotation = rotation;
+
 	new_mesh->Name = mesh->mName.data;
 	new_mesh->ModelName = model->Name;
 
@@ -419,7 +434,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(s
 			if (std::strcmp(component_pair.first.c_str(), str.C_Str()) == 0)
 			{			
 				skip = true;
-				break;
+				return getTexture(str.C_Str());		
 			}
 		}
 		if (!skip)
@@ -435,9 +450,9 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(s
 void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
-	{
+	{		
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		model->addMesh(processMesh(model,mesh, scene));
+		model->addMesh(processMesh(model,mesh, scene, node->mTransformation));
 	}
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -527,6 +542,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	texture->Name = path;
 	texture->path = filename;
 	texture->m_data = stbi_load(filename.c_str(), &texture->width, &texture->height, &texture->channel, 0);
+	
 	if (texture->m_data)
 	{
 		GLenum format;
@@ -536,21 +552,21 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 			format = GL_RGB;
 		else if (texture->channel == 4)
 			format = GL_RGBA;
-
+		texture->Format = format;
 		texture->Bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, texture->m_data);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(texture->m_data);
 		
 	}
 	else
 	{
-		FRACTURE_ERROR("Failed to load texture {}",path);
+		FRACTURE_ERROR("Failed to load texture from file: {}",path);
 		stbi_image_free(texture->m_data);
 	}
 	texture->Unbind();
