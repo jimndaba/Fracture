@@ -6,6 +6,7 @@
 #include "Physics/CollisionFilter.h"
 #include <memory>
 #include <string>
+#include "glm/glm.hpp"
 
 namespace Fracture
 {
@@ -19,6 +20,29 @@ namespace Fracture
 		Normal,
 		InstancedElementsIndirect,
 		InstancedArrayIndirect,
+	};
+
+	struct BoundingBox
+	{
+		glm::vec3 min;
+		glm::vec3 max;
+
+		float Width() const
+		{
+			return max.x - min.x;
+		}
+
+		float Height() const
+		{
+			return max.y - min.y;
+		}
+
+		float Depth() const
+		{
+			return max.z - min.z;
+		}
+
+
 	};
 
 	class RenderComponent :public Component
@@ -42,6 +66,8 @@ namespace Fracture
 		std::string m_modelName;
 		std::string m_materialName;
 		RenderType m_Rendertype;
+		BoundingBox m_bounds;
+		
 
 	};
 
