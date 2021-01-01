@@ -21,13 +21,16 @@ namespace Fracture
 	class Shader;
 	class Model;
 	class Material; 
+
+	struct ProjectProperties;
+
 	enum class TextureType;
 
 	class AssetManager
 	{
 
 	public:
-		AssetManager();
+		AssetManager(std::shared_ptr<ProjectProperties> m_properties);
 		~AssetManager();
 
 
@@ -60,7 +63,7 @@ namespace Fracture
 		{
 			if (!m_instance)
 			{
-				std::unique_ptr<AssetManager> s_instance (new AssetManager());
+				std::unique_ptr<AssetManager> s_instance (new AssetManager(m_props));
 				return s_instance;
 			}		
 			return nullptr;
@@ -70,6 +73,7 @@ namespace Fracture
 		//static const aiScene* scene;
 		//static Assimp::Importer importer;
 		static std::unique_ptr<AssetManager> m_instance;
+		static std::shared_ptr<ProjectProperties> m_props;
 		//Libraries
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
 		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
@@ -81,7 +85,8 @@ namespace Fracture
 		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
 		static void ProcessNode(aiNode* node, const aiScene* scene);
 		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transform);
-		static std::shared_ptr<Texture> loadMaterialTexture(std::shared_ptr<Model> model, aiMaterial* mat, aiTextureType type, TextureType typeName);
+		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
+		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 		static std::shared_ptr<Fracture::Texture> HDRFromFile(const char* path,Fracture::TextureType texType, bool gamma = false);
 
@@ -90,10 +95,13 @@ namespace Fracture
 			aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case
 			aiProcess_Triangulate |             // Make sure we're triangles
 			aiProcess_SortByPType |             // Split meshes by primitive type
-			aiProcess_GenNormals |              // Make sure we have legit normals
+			aiProcess_GenSmoothNormals |              // Make sure we have legit normals
 			aiProcess_GenUVCoords |             // Convert UVs if required 
 			aiProcess_OptimizeMeshes |          // Batch draws where possible
-			aiProcess_ValidateDataStructure;    // Validation
+			aiProcess_ValidateDataStructure|
+			aiProcess_RemoveRedundantMaterials
+			;    // Validation
+
 
 	};
 

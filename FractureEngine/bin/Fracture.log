@@ -1,72 +1,150 @@
-[23:09:58] [info] FRACTURE: Initializing Splash
-[23:09:58] [info] FRACTURE: OpenGL loaded
-[23:09:58] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[23:09:58] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[23:09:58] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[23:09:58] [trace] FRACTURE: Loaded Texture: splash
-[23:09:58] [trace] FRACTURE: Loaded Texture: title
-[23:09:58] [info] FRACTURE: Completed Init
-[23:09:58] [info] FRACTURE: Show Splash
-[23:10:03] [info] FRACTURE: OpenGL loaded
-[23:10:03] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[23:10:03] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[23:10:03] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[23:10:03] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[23:10:03] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: RotateIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: CameraIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: LightIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: EyeIcon
-[23:10:03] [trace] FRACTURE: Loaded Texture: EyeIconC
-[23:10:04] [trace] FRACTURE: Loaded Texture: Rust_albedo
-[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_normal
-[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_metallic
-[23:10:06] [trace] FRACTURE: Loaded Texture: Rust_roughness
-[23:10:07] [trace] FRACTURE: Loaded Texture: Rust_ao
-[23:10:08] [trace] FRACTURE: Loaded Texture: Wood_albedo
-[23:10:10] [trace] FRACTURE: Loaded Texture: Wood_normal
-[23:10:10] [trace] FRACTURE: Loaded Texture: Wood_metallic
-[23:10:11] [trace] FRACTURE: Loaded Texture: Wood_roughness
-[23:10:11] [trace] FRACTURE: Loaded Texture: Wood_ao
-[23:10:12] [trace] FRACTURE: Loaded Texture: Brick_albedo
-[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_normal
-[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_bump
-[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_roughness
-[23:10:13] [trace] FRACTURE: Loaded Texture: Brick_ao
-[23:10:13] [trace] FRACTURE: Loaded HDR Environment: Loft
-[23:10:13] [trace] FRACTURE: Loaded Shader: CubeMap
-[23:10:13] [trace] FRACTURE: Loaded Shader: irradiance
-[23:10:13] [trace] FRACTURE: Loaded Shader: prefilter
-[23:10:13] [trace] FRACTURE: Loaded Shader: bdrf
-[23:10:13] [trace] FRACTURE: Loaded Shader: Skybox
-[23:10:13] [trace] FRACTURE: Loaded Shader: DebugShader
-[23:10:13] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[23:10:13] [trace] FRACTURE: Loaded Shader: BillboardShader
-[23:10:13] [trace] FRACTURE: Loaded Shader: DepthShader
-[23:10:13] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[23:10:13] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[23:10:13] [trace] FRACTURE: Loaded Shader: DepthShader
-[23:10:14] [trace] FRACTURE: Loaded Shader: default
-[23:10:14] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[23:10:14] [trace] FRACTURE: Loaded Material: billboardIcons
-[23:10:14] [trace] FRACTURE: Loaded Material: DebugMaterial
-[23:10:14] [trace] FRACTURE: Loaded Material: DepthMaterial
-[23:10:14] [trace] FRACTURE: Loaded Material: Plane.001_material
-[23:10:14] [trace] FRACTURE: Loaded model: Plane
-[23:10:14] [trace] FRACTURE: Loaded Material: Cube_material
-[23:10:14] [trace] FRACTURE: Loaded model: Cube
-[23:10:14] [trace] FRACTURE: Loaded Material: Sphere_material
-[23:10:14] [trace] FRACTURE: Loaded model: Sphere
-[23:10:14] [trace] FRACTURE: Loaded Material: Cylinder_material
-[23:10:14] [trace] FRACTURE: Loaded model: Cylinder
-[23:10:14] [trace] FRACTURE: Loaded Material: Torus_material
-[23:10:14] [trace] FRACTURE: Loaded model: Torus
-[23:10:14] [trace] FRACTURE: Loaded Material: Suzanne_material
-[23:10:14] [trace] FRACTURE: Loaded model: Suzane
-[23:10:14] [info] FRACTURE: Renderer Init
-[23:10:24] [trace] FRACTURE: Loaded Material: Plane_material
-[23:10:24] [trace] FRACTURE: Loaded Material: Cube.001_Cube.002_material
-[23:10:24] [trace] FRACTURE: Loaded Material: Cube.007_Cube.009_material
-[23:10:24] [trace] FRACTURE: Loaded model: hills
+[08:10:17] [info] FRACTURE: Initializing Splash
+[08:10:17] [info] FRACTURE: OpenGL loaded
+[08:10:17] [info] FRACTURE: Vendor: Intel
+[08:10:17] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[08:10:17] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
+[08:10:18] [trace] FRACTURE: Loaded Texture: splash
+[08:10:18] [trace] FRACTURE: Loaded Texture: title
+[08:10:18] [info] FRACTURE: Completed Init
+[08:10:18] [info] FRACTURE: Show Splash
+[08:10:23] [info] FRACTURE: OpenGL loaded
+[08:10:23] [info] FRACTURE: Vendor: Intel
+[08:10:23] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[08:10:23] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
+[08:10:23] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[08:10:23] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: RotateIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: CameraIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: LightIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: EyeIcon
+[08:10:23] [trace] FRACTURE: Loaded Texture: EyeIconC
+[08:10:25] [trace] FRACTURE: Loaded Texture: Rust_albedo
+[08:10:26] [trace] FRACTURE: Loaded Texture: Rust_normal
+[08:10:27] [trace] FRACTURE: Loaded Texture: Rust_metallic
+[08:10:27] [trace] FRACTURE: Loaded Texture: Rust_roughness
+[08:10:27] [trace] FRACTURE: Loaded Texture: Rust_ao
+[08:10:29] [trace] FRACTURE: Loaded Texture: Wood_albedo
+[08:10:30] [trace] FRACTURE: Loaded Texture: Wood_normal
+[08:10:31] [trace] FRACTURE: Loaded Texture: Wood_metallic
+[08:10:32] [trace] FRACTURE: Loaded Texture: Wood_roughness
+[08:10:33] [trace] FRACTURE: Loaded Texture: Wood_ao
+[08:10:34] [trace] FRACTURE: Loaded Texture: Brick_albedo
+[08:10:35] [trace] FRACTURE: Loaded Texture: Brick_normal
+[08:10:35] [trace] FRACTURE: Loaded Texture: Brick_bump
+[08:10:36] [trace] FRACTURE: Loaded Texture: Brick_roughness
+[08:10:36] [trace] FRACTURE: Loaded Texture: Brick_ao
+[08:10:37] [trace] FRACTURE: Loaded HDR Environment: Loft
+[08:10:37] [trace] FRACTURE: Loaded Shader: CubeMap
+[08:10:37] [trace] FRACTURE: Loaded Shader: irradiance
+[08:10:37] [trace] FRACTURE: Loaded Shader: prefilter
+[08:10:37] [trace] FRACTURE: Loaded Shader: bdrf
+[08:10:37] [trace] FRACTURE: Loaded Shader: Skybox
+[08:10:37] [trace] FRACTURE: Loaded Shader: DebugShader
+[08:10:37] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[08:10:37] [trace] FRACTURE: Loaded Shader: BillboardShader
+[08:10:37] [trace] FRACTURE: Loaded Shader: DepthShader
+[08:10:38] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[08:10:38] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[08:10:38] [trace] FRACTURE: Loaded Shader: DepthShader
+[08:10:38] [trace] FRACTURE: Loaded Shader: default
+[08:10:38] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[08:10:38] [trace] FRACTURE: Loaded Material: billboardIcons
+[08:10:38] [trace] FRACTURE: Loaded Material: DebugMaterial
+[08:10:38] [trace] FRACTURE: Loaded Material: DepthMaterial
+[08:10:38] [trace] FRACTURE: Loaded Material: Plane.001_material
+[08:10:38] [trace] FRACTURE: Loaded model: Plane
+[08:10:38] [trace] FRACTURE: Loaded Material: Cube_material
+[08:10:38] [trace] FRACTURE: Loaded model: Cube
+[08:10:38] [trace] FRACTURE: Loaded Material: Sphere_material
+[08:10:38] [trace] FRACTURE: Loaded model: Sphere
+[08:10:38] [trace] FRACTURE: Loaded Material: Cylinder_material
+[08:10:38] [trace] FRACTURE: Loaded model: Cylinder
+[08:10:38] [trace] FRACTURE: Loaded Material: Torus_material
+[08:10:38] [trace] FRACTURE: Loaded model: Torus
+[08:10:38] [trace] FRACTURE: Loaded Material: Suzanne_material
+[08:10:38] [trace] FRACTURE: Loaded model: Suzane
+[08:10:38] [info] FRACTURE: Renderer Init
+[08:11:44] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:11:47] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:05] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:12] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:12] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:12] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1.DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded Material: DolSzerosuitR1_material
+[08:14:13] [trace] FRACTURE: Loaded model: samus

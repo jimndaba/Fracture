@@ -34,9 +34,10 @@ inline void Style();
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
-    m_AssetManger = std::make_shared<AssetManager>();   
-    m_SceneManager = std::make_unique<SceneManager>();
     m_properties = std::make_shared<ProjectProperties>();
+    m_AssetManger = std::make_shared<AssetManager>(m_properties);   
+    m_SceneManager = std::make_unique<SceneManager>();
+   
 
     m_loadNewProject = false;
     currentTime = SDL_GetTicks() / 1000.0;

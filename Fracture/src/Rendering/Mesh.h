@@ -29,6 +29,8 @@ namespace Fracture
 		unsigned int VAO, VBO, IBO;
 		std::shared_ptr<Material> m_material;
 
+		std::vector<std::string> material_names;
+
 		std::string ModelName;
 		std::string Name;
 
