@@ -102,8 +102,9 @@ std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cu
 	return m_commands;
 }
 
-
 bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)
 {
 	return a < b;
 }
+
+

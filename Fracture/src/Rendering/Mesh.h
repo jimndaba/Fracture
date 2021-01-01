@@ -18,6 +18,19 @@ namespace Fracture
 	struct RenderInstancedElementsCommand;
 	class Material;
 
+	class Submesh
+	{
+	public:
+		unsigned int BaseVertex;
+		unsigned int BaseIndex;
+		unsigned int MaterialIndex;
+		unsigned int IndexCount;
+
+		glm::mat4 Transform;
+		std::string MeshName;
+	};
+
+
 	class Mesh
 	{
 
@@ -59,7 +72,7 @@ namespace Fracture
 		
 	private:
 		void setupMesh();
-
+		std::vector<Submesh> m_submeshes;
 		std::vector<Vertex> m_vertices;
 		std::vector<std::shared_ptr<Texture>> m_textures;
 		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> m_instanceCommands;

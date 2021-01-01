@@ -20,6 +20,7 @@ namespace Fracture
 		{
 
 		}
+
 		~RenderCommand()
 		{
 
@@ -34,6 +35,28 @@ namespace Fracture
 		std::vector<std::string> TextureNames;
 
 		bool operator < (const RenderCommand& other) const
+		{
+			if (HasTransparency < other.HasTransparency) return true;
+			if (other.HasTransparency < HasTransparency) return false;
+
+			//Nearer objects are drawn first, since they hide further objects
+			//Recall that GL view depth is along the negative Z direction,
+			//so nearer objects have a greater Z.
+			//if (ViewDepth > other.ViewDepth) return true;
+			//if (other.ViewDepth > ViewDepth) return false;
+
+			if (material->getShader()->ID() < other.material->getShader()->ID())
+				return true;
+			if (other.material->getShader()->ID() < material->getShader()->ID())
+				return false;
+
+			if (ID < other.ID) return true;
+			if (other.ID < ID) return false;
+
+			return false;
+		}
+
+		bool operator > (const RenderCommand& other) const
 		{
 			if (HasTransparency < other.HasTransparency) return true;
 			if (other.HasTransparency < HasTransparency) return false;

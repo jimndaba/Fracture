@@ -229,202 +229,31 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			indices.push_back(face.mIndices[j]);
 	}
 
-	/*
-	{
-		std::string mat_name = mesh->mName.data;
-		mat_name = mat_name + "_material";
-		std::shared_ptr<Material> mi = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
-
-
-		aiString aiTexPath;
-		// process materials
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-
-
-		aiColor3D aiColor;
-		if (material->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor) != aiReturn_SUCCESS)
-			aiColor = aiColor3D{ 1.0f,1.0f,1.0f };
-
-		float shininess, metalness;
-		if (material->Get(AI_MATKEY_SHININESS, shininess) != aiReturn_SUCCESS)
-			shininess = 80.0f; // Default value
-
-		if (material->Get(AI_MATKEY_REFLECTIVITY, metalness) != aiReturn_SUCCESS)
-			metalness = 0.0f;
-
-
-		float roughness = 1.0f - glm::sqrt(shininess / 100.0f);
-
-		// process material
-		// 1. diffuse maps	
-		if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)
-		{
-			std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
-			if (texture)
-			{
-				mi->setFloat("albedoFlag", 1.0f);
-				mi->SetTexture("albedoMap", texture, 3);
-				if (texture->Format == GL_RGBA)
-				{
-					mi->setIsTransparent(true);
-					mi->setFloat("TransparencyFlag", 1.0f);
-				}
-			}
-			else
-			{
-				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				// Fallback to albedo color
-				mi->setFloat("TransparencyFlag", 0.0f);
-				mi->setFloat("albedoFlag", 0.0f);
-				mi->setColor3("u_albedo", glm::vec3(aiColor.r, aiColor.g, aiColor.b));
-			}
-		}
-		else
-		{
-			mi->setFloat("albedoFlag", 0.0f);
-			mi->setFloat("TransparencyFlag", 0.0f);
-			mi->setColor3("u_albedo", glm::vec3(aiColor.r, aiColor.g, aiColor.b));
-		}
-
-		// 2. normal maps
-		if (material->GetTexture(aiTextureType::aiTextureType_NORMALS, 0, &aiTexPath) == AI_SUCCESS)
-		{
-			std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_NORMALS, TextureType::Normal);
-			if (texture)
-			{
-				mi->SetTexture("normalMap", texture, 4);
-				mi->setFloat("normalFlag", 1.0f);
-			}
-			else
-			{
-				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				mi->setFloat("normalFlag", 0.0f);
-				// Fallback to albedo color				
-			}
-		}
-		else
-		{
-			mi->setFloat("normalFlag", 0.0f);
-		}
-
-		// 3. Roughness map
-		if (material->GetTexture(aiTextureType::aiTextureType_SHININESS, 0, &aiTexPath) == AI_SUCCESS)
-		{
-			std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_SHININESS, TextureType::Roughness);
-			if (texture)
-			{
-				mi->setFloat("roughnessFlag", 1.0f);
-				mi->SetTexture("roughnessMap", texture, 5);
-			}
-			else
-			{
-				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-
-				mi->setFloat("roughnessFlag", 0.0f);
-				mi->setFloat("u_roughness", roughness);
-
-				// Fallback to albedo color				
-			}
-		}
-		else
-		{
-			mi->setFloat("roughnessFlag", 0.0f);
-			mi->setFloat("u_roughness", roughness);
-		}
-
-		// 1. Metallic map
-		if (material->GetTexture(aiTextureType::aiTextureType_METALNESS, 0, &aiTexPath) == AI_SUCCESS)
-		{
-			std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_METALNESS, TextureType::Metallic);
-			if (texture)
-			{
-				mi->setFloat("metallicFlag", 1.0f);
-				mi->SetTexture("metallicMap", texture, 6);
-			}
-			else
-			{
-				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				mi->setFloat("metallicFlag", 0.0f);
-				mi->setFloat("u_metallic", metalness);
-				// Fallback to albedo color				
-			}
-		}
-		else
-		{
-			mi->setFloat("metallicFlag", 0.0f);
-			mi->setFloat("u_metallic", metalness);
-		}
-
-		// 1. ao map
-		if (material->GetTexture(aiTextureType::aiTextureType_AMBIENT_OCCLUSION, 0, &aiTexPath) == AI_SUCCESS)
-		{
-			std::shared_ptr<Texture> texture = loadMaterialTexture(model, material, aiTextureType::aiTextureType_AMBIENT_OCCLUSION, TextureType::AO);
-			if (texture)
-			{
-				mi->setFloat("aoFlag", 1.0f);
-				AddTexture(texture);
-				mi->SetTexture("aoMap", getTexture(texture->Name), 7);
-				//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
-			}
-			else
-			{
-				FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
-				mi->setFloat("aoFlag", 0.0f);
-				mi->setFloat("u_ao", 1.0f);
-				// Fallback to albedo color				
-			}
-		}
-		else
-		{
-			mi->setFloat("aoFlag", 0.0f);
-			mi->setFloat("u_ao", 1.0f);
-		}
-
-
-		AddMaterial(mat_name, mi);
-		model->Material_Name = mat_name;
-	}
-	*/
-
-
-	std::string tmat_name = mesh->mName.data;
-	tmat_name = tmat_name + "_material";
-	std::shared_ptr<Material> mi = std::shared_ptr<Material>(new Material(tmat_name, getShader("PBRTexturedShader")));
-
-	std::vector<std::string> m_matNames;
+	aiMaterial* currentMaterial(scene->mMaterials[mesh->mMaterialIndex]);
 	
-	if (scene->HasMaterials())
-	{
-		for (int i = 0 ; i < scene->mNumMaterials;i++)
-		{
-			aiMaterial* currentMaterial(scene->mMaterials[i]);
-			if (nullptr == currentMaterial) {
-				continue;
-			}
+	std::string mesh_name = mesh->mName.data;
+	std::string mat_name;
 
-			std::string mat_name = mesh->mName.data;
-			mat_name = mat_name + "_material";
-			std::shared_ptr<Material> m_material = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
+	std::string temp = mesh->mName.data;
+	mat_name = temp + "_material" + std::to_string(mesh->mMaterialIndex);
 
-			ImportMaterial(currentMaterial,m_material);
+	std::shared_ptr<Material> m_material = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
 
-			AddMaterial(mat_name, m_material);
-			m_matNames.push_back(mat_name);
-		}
-	}
+	ImportMaterial(currentMaterial, m_material);
+
+	AddMaterial(mat_name, m_material);
 	
-	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, mi));
-	new_mesh->material_names = m_matNames;
-	glm::vec3 scale; //= transform->Scale();
-	glm::vec3 rotation; //= transform->Rotation();
-	glm::vec3 position; //= transform->Position();
+	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, m_material));
+	glm::vec3 scale;
+	glm::vec3 rotation;
+	glm::vec3 position; 
 
 	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);
+	
 	new_mesh->position = position;
 	new_mesh->scale = scale;
 	new_mesh->rotation = rotation;
-	new_mesh->Name = mesh->mName.data;
+	new_mesh->Name = mesh->mName.C_Str();
 	new_mesh->ModelName = model->Name;
 
 	return new_mesh;
@@ -611,7 +440,7 @@ void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* n
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{		
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		aiMesh* mesh = scene->mMeshes[i];
 		model->addMesh(processMesh(model,mesh, scene, node->mTransformation));
 	}
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes

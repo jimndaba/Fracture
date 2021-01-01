@@ -151,19 +151,17 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
-    AssetManager::
+    AssetManager::AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
     AssetManager::AddTexture("Rust_albedo", "content/textures/pbrRust/albedo.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_normal", "content/textures/pbrRust/normal.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_metallic", "content/textures/pbrRust/metallic.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_roughness", "content/textures/pbrRust/roughness.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_ao", "content/textures/pbrRust/ao.png", TextureType::Diffuse);
-    AssetManager::
     AssetManager::AddTexture("Wood_albedo", "content/textures/pbrWood/albedo.png", TextureType::Diffuse);
     AssetManager::AddTexture("Wood_normal", "content/textures/pbrWood/normal.png", TextureType::Diffuse);
     AssetManager::AddTexture("Wood_metallic", "content/textures/pbrWood/metallic.png", TextureType::Diffuse);
     AssetManager::AddTexture("Wood_roughness", "content/textures/pbrWood/roughness.png", TextureType::Diffuse);
     AssetManager::AddTexture("Wood_ao", "content/textures/pbrWood/ao.png", TextureType::Diffuse);
-    AssetManager::
     AssetManager::AddTexture("Brick_albedo", "content/textures/pbrBrick/albedo.jpg", TextureType::Diffuse);
     AssetManager::AddTexture("Brick_normal", "content/textures/pbrBrick/normal.jpg", TextureType::Diffuse);
     AssetManager::AddTexture("Brick_bump", "content/textures/pbrBrick/bump.jpg", TextureType::Diffuse);
@@ -239,37 +237,9 @@ void Fracture::Editor::onLoadNew()
     pbrTextured->setFloat("metallicFlag", 1.0f);
     pbrTextured->setFloat("roughnessFlag", 1.0f);
     pbrTextured->setFloat("aoFlag", 1.0f);
-    /*
-    std::shared_ptr<Material> pbrWood = std::shared_ptr<Material>(new Material("PBRWood", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrWood->setFloat("albedoFlag", 1.0f);
-    pbrWood->setFloat("normalFlag", 1.0f);
-    pbrWood->setFloat("metallicFlag", 1.0f);
-    pbrWood->setFloat("roughnessFlag", 1.0f);
-    pbrWood->setFloat("aoFlag", 1.0f);
-    pbrWood->SetTexture("albedoMap", AssetManager::getTexture("Wood_albedo"), 3);
-    pbrWood->SetTexture("normalMap", AssetManager::getTexture("Wood_normal"), 4);
-    pbrWood->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
-    pbrWood->SetTexture("roughnessMap", AssetManager::getTexture("Wood_roughness"), 6);
-    pbrWood->SetTexture("aoMap", AssetManager::getTexture("Wood_ao"), 7);
 
-    std::shared_ptr<Material> pbrBrick = std::shared_ptr<Material>(new Material("PBRBrick", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrBrick->SetTexture("albedoMap", AssetManager::getTexture("Brick_albedo"),3);
-    pbrBrick->SetTexture("normalMap", AssetManager::getTexture("Brick_normal"),4);
-    pbrBrick->SetTexture("metallicMap", AssetManager::getTexture("Wood_metallic"), 5);
-    pbrBrick->SetTexture("roughnessMap", AssetManager::getTexture("Brick_roughness"),6);
-    pbrBrick->SetTexture("aoMap", AssetManager::getTexture("Brick_ao"),7);
-    pbrBrick->setFloat("albedoFlag", 1.0f);
-    pbrBrick->setFloat("normalFlag", 1.0f);
-    pbrBrick->setFloat("metallicFlag", 1.0f);
-    pbrBrick->setFloat("roughnessFlag", 1.0f);
-    pbrBrick->setFloat("aoFlag", 1.0f);
-   */
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
-    //AssetManager::AddMaterial("PBRPlane", pbrPrimitive);
-    //AssetManager::AddMaterial("PBRBrick", pbrBrick);
-    //AssetManager::AddMaterial("PBRTextured",pbrTextured );
-    //AssetManager::AddMaterial("PBRWood", pbrWood);
 
     AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
     AssetManager::AddModel("Cube", "content/models/primitives/cube.fbx");
