@@ -39,12 +39,12 @@ namespace Fracture
 	private:
 		const unsigned int SHADOW_WIDTH = 1024;
 		const unsigned int SHADOW_HEIGHT = 1024;
-		float near_plane = 1.00f;
-		float far_plane = 7.5f;
-		float m_left = -10.0f;
-		float m_right = 10.0f;
-		float m_bottom = 10.0f;
-		float m_top = -10.0f;
+		float near_plane = -10.00f;
+		float far_plane = 100.0f;
+		float m_left = -100.0f;
+		float m_right = 100.0f;
+		float m_bottom = -100.0f;
+		float m_top = 100.0f;
 		glm::mat4 m_lightspaceMatrix;
 
 		std::shared_ptr<RenderTarget> m_renderTarget;

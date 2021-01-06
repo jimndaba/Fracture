@@ -83,8 +83,7 @@ namespace Fracture
 		
 		//Functions
 		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
-		static void ProcessNode(aiNode* node, const aiScene* scene);
-		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transform);
+		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiNode* node);
 		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
 		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
@@ -93,16 +92,14 @@ namespace Fracture
 
 		static const uint32_t s_MeshImportFlags =
 			aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case
-			aiProcess_Triangulate |             // Make sure we're triangles
-			aiProcess_SortByPType |             // Split meshes by primitive type
+			aiProcess_Triangulate |             // Make sure we're triangles			
 			aiProcess_GenSmoothNormals |              // Make sure we have legit normals
-			aiProcess_GenUVCoords |             // Convert UVs if required 
-			aiProcess_OptimizeMeshes |          // Batch draws where possible
+			aiProcess_GenUVCoords |            // Convert UVs if required 			
 			aiProcess_ValidateDataStructure|
 			aiProcess_RemoveRedundantMaterials
 			;    // Validation
-
-
+		//aiProcess_OptimizeMeshes |          // Batch draws where possible
+		//aiProcess_SortByPType |             // Split meshes by primitive type
 	};
 
 

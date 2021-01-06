@@ -79,9 +79,10 @@ void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,st
 		material->SetTexture(sampleType, mesh->Textures()[i], (int)mesh->Textures()[i]->textureType);
 	}
 
+
 	command.VAO = mesh->VAO;
 	command.material = material.get();
-	command.HasTransparency = mesh->m_material.get()->IsTransparent();
+	command.HasTransparency = material.get()->IsTransparent();
 	command.indiceSize = (GLint)mesh->GetIndices().size();
 	command.ID= transform->EntityID;
 	m_commands.push_back(command);

@@ -500,7 +500,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 						modelName = model.first;
 						if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
 						{
-							std::string mat_name = model.second->Material_Name;
+							std::string mat_name = model.second->Name;
 							std::shared_ptr<Material> material = AssetManager::getMaterial(mat_name);
 							if (material)
 							{

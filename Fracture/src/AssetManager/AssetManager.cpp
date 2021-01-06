@@ -155,6 +155,7 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	std::shared_ptr<Model> m_model = nullptr;
 	Assimp::Importer importer;
 	
+
 	const aiScene* scene = importer.ReadFile(path, s_MeshImportFlags);//| aiProcess_CalcTangentSpace
 	
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
@@ -168,16 +169,19 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	m_model->directory = path.substr(0, path.find_last_of('\\'));
 	
 	// process ASSIMP's root node recursively
+	FRACTURE_TRACE("|-----------------------------------------------------------------------|");
+	FRACTURE_TRACE("loading Model: {}", m_model->Name);
+	FRACTURE_TRACE("Number of Materials: {}", scene->mNumMaterials);
 	ProcessNode(m_model, scene->mRootNode, scene);
+	FRACTURE_TRACE("|-----------------------------------------------------------------------|");
 	return m_model;
 }
 
-std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transform)
+std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene, aiNode* node)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<std::shared_ptr<Texture>> textures;
-	
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
@@ -229,13 +233,13 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			indices.push_back(face.mIndices[j]);
 	}
 
-	aiMaterial* currentMaterial(scene->mMaterials[mesh->mMaterialIndex]);
 	
-	std::string mesh_name = mesh->mName.data;
+	aiMaterial* currentMaterial(scene->mMaterials[mesh->mMaterialIndex]);	
+	std::string mesh_name = node->mName.data;
 	std::string mat_name;
 
-	std::string temp = mesh->mName.data;
-	mat_name = temp + "_material" + std::to_string(mesh->mMaterialIndex);
+	std::string temp = node->mName.data;
+	mat_name = temp + "_material_" + std::to_string(mesh->mMaterialIndex);
 
 	std::shared_ptr<Material> m_material = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
 
@@ -243,17 +247,20 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	AddMaterial(mat_name, m_material);
 	
-	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, m_material));
+
+	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
+
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::vec3 position; 
 
+	aiMatrix4x4 transform = node->mTransformation;
 	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);
-	
+	new_mesh->MaterialName = mat_name;
 	new_mesh->position = position;
 	new_mesh->scale = scale;
-	new_mesh->rotation = rotation;
-	new_mesh->Name = mesh->mName.C_Str();
+	new_mesh->rotation =rotation;
+	new_mesh->Name = mesh_name;
 	new_mesh->ModelName = model->Name;
 
 	return new_mesh;
@@ -438,27 +445,29 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(a
 
 void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
 {
+	FRACTURE_TRACE("|##############|");
+	FRACTURE_TRACE("Number of Meshes: {}", node->mNumMeshes);
+	FRACTURE_TRACE("Number of Children: {}", node->mNumChildren);
+
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{		
-		aiMesh* mesh = scene->mMeshes[i];
-		model->addMesh(processMesh(model,mesh, scene, node->mTransformation));
+		aiMesh* mesh = scene->mMeshes[i];		
+		aiString meshname = node->mName;
+		FRACTURE_TRACE("loading Mesh: {}", meshname.C_Str());
+		std::shared_ptr<Mesh> m_mesh = processMesh(model, mesh, scene, node);
+		model->addMesh(m_mesh);	
 	}
+
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
+		FRACTURE_TRACE("loading Child: {}", node->mChildren[i]->mName.data);
 		ProcessNode(model, node->mChildren[i], scene);
 	}
+	
+	
+	FRACTURE_TRACE("|##############|");
 
-
-}
-
-void Fracture::AssetManager::ProcessNode(aiNode* node, const aiScene* scene)
-{
-	//after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		ProcessNode(node->mChildren[i], scene);
-	}
 }
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma)

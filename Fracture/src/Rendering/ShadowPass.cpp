@@ -35,7 +35,7 @@ void Fracture::ShadowPass::End()
 
 void Fracture::ShadowPass::Prepare(std::shared_ptr<SunLight> light)
 {
-	if (light->GetLightType() == LightType::Sun)
+	if (light)
 	{
 		glm::mat4 lightProjection;
 		glm::mat4 lightView;

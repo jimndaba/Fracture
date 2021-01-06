@@ -102,7 +102,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\libRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PhysX_64.lib;PhysXCommon_64.lib;lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib</AdditionalDependencies>
+      <AdditionalDependencies>lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

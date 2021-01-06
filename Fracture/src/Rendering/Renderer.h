@@ -86,6 +86,8 @@ namespace Fracture
 
 		void onWindowResize(WindowResizeEvent* mevent);
 
+		//DepthPass
+
 		//Shadows
 		std::shared_ptr<ShadowPass> m_ShadowPass;
 		//Scene 

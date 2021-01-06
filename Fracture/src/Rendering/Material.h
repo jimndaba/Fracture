@@ -93,6 +93,7 @@ namespace Fracture
         void setShader(std::string shader);
         void use();
 		std::string Name;
+        int MaterialCount;
 
         void setBool(std::string name, bool value) const;
         void setInt(std::string name, int value) const;

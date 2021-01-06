@@ -35,17 +35,15 @@ namespace Fracture
 	{
 
 	public:
-		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures, std::shared_ptr<Material> material);
+		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
 		~Mesh();
 
 		std::string director;		
 		unsigned int VAO, VBO, IBO;
-		std::shared_ptr<Material> m_material;
-
-		std::vector<std::string> material_names;
 
 		std::string ModelName;
 		std::string Name;
+		std::string MaterialName;
 
 		//temp
 		glm::vec3 position;

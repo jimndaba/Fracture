@@ -486,6 +486,7 @@ void Fracture::Renderer::SetupLighting(Material* material)
             case LightType::Sky:
             {
                 std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_lights[i]);
+                material->getShader()->setFloat("intensity", sky->Intensity());
                 material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap(),10);
                 material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap(), 1);
                 material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), 2);

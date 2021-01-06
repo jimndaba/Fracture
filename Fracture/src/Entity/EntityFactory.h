@@ -143,7 +143,7 @@ namespace Fracture
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
 
 
-					std::string name = mesh->m_material->Name;
+					std::string name = mesh->MaterialName;
 					std::shared_ptr<Material> material = std::make_shared<Material>(name,
 						AssetManager::getShader("PrimitiveMaterial"));
 
@@ -185,7 +185,7 @@ namespace Fracture
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
 
 
-					std::string name = mesh->m_material->Name;
+					std::string name = mesh->MaterialName;
 					std::shared_ptr<Material> material = std::make_shared<Material>(name,
 						AssetManager::getShader("PrimitiveMaterial"));
 
@@ -225,7 +225,7 @@ namespace Fracture
 					m_relationship->SetParent(newEntity->Id);
 					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->m_material->Name);
+					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
 					scene->addEntity(shape);
 					materialCount++;
 				}
@@ -254,7 +254,7 @@ namespace Fracture
 					m_relationship->SetParent(newEntity->Id);
 					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->m_material->Name);
+					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
 					scene->addEntity(shape);
 					materialCount++;
 				}
@@ -283,7 +283,7 @@ namespace Fracture
 					m_relationship->SetParent(newEntity->Id);
 					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->m_material->Name);
+					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
 					scene->addEntity(shape);
 					materialCount++;
 				}
@@ -311,7 +311,7 @@ namespace Fracture
 					m_relationship->SetParent(newEntity->Id);
 					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
 					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->m_material->Name);
+					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
 					scene->addEntity(shape);
 					materialCount++;
 				}
@@ -340,7 +340,7 @@ namespace Fracture
 					relationship->SetParent(newEntity->Id);
 					ComponentManager::AddComponent<RelationShipComponent>(relationship);
 					ComponentManager::AddComponent<TransformComponent>(childMesh->Id,mesh->position, mesh->scale, mesh->rotation);
-					ComponentManager::AddComponent<RenderComponent>(childMesh->Id,mesh, mesh->m_material->Name);
+					ComponentManager::AddComponent<RenderComponent>(childMesh->Id,mesh, mesh->MaterialName);
 					scene->addEntity(childMesh);
 				}
 			}
