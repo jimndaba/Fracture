@@ -38,3 +38,13 @@ Fracture::RenderType Fracture::RenderComponent::getRenderType()
 {
 	return m_Rendertype;
 }
+
+void Fracture::RenderComponent::SetAABB(std::shared_ptr<BoundingBox> aabb)
+{
+	m_mesh->SetAABB(aabb);
+}
+
+std::shared_ptr<Fracture::BoundingBox> Fracture::RenderComponent::GetAABB()
+{
+	return m_mesh->GetAABB();
+}

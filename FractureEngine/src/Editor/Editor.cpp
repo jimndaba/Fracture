@@ -152,6 +152,8 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
     AssetManager::AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
+    
+    /*
     AssetManager::AddTexture("Rust_albedo", "content/textures/pbrRust/albedo.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_normal", "content/textures/pbrRust/normal.png", TextureType::Diffuse);
     AssetManager::AddTexture("Rust_metallic", "content/textures/pbrRust/metallic.png", TextureType::Diffuse);
@@ -167,7 +169,7 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddTexture("Brick_bump", "content/textures/pbrBrick/bump.jpg", TextureType::Diffuse);
     AssetManager::AddTexture("Brick_roughness", "content/textures/pbrBrick/roughness.jpg", TextureType::Diffuse);
     AssetManager::AddTexture("Brick_ao", "content/textures/pbrBrick/ao.jpg", TextureType::Diffuse);
-
+    */
 
     AssetManager::AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
 
@@ -218,7 +220,7 @@ void Fracture::Editor::onLoadNew()
     std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
     m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);    
 
-   
+    /*
     std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
     pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
     pbrPrimitive->setFloat("metallic", 0.4f);
@@ -237,6 +239,7 @@ void Fracture::Editor::onLoadNew()
     pbrTextured->setFloat("metallicFlag", 1.0f);
     pbrTextured->setFloat("roughnessFlag", 1.0f);
     pbrTextured->setFloat("aoFlag", 1.0f);
+    */
 
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));

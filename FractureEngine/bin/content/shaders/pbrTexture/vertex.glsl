@@ -5,8 +5,6 @@ layout (location = 2) in vec2 aTexCoords;
 layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 
-layout (location = 5) in int draw_id;
-
 
 out vec2 TexCoords;
 out vec3 FragPos;
@@ -24,9 +22,6 @@ uniform mat4 view;
 uniform mat4 model;
 uniform vec3 viewPos;
 uniform mat4 lightSpaceMatrix;
-
-#define MAX_INSTANCES 100
-uniform mat4 tranform[MAX_INSTANCES];
 
 
 void main()

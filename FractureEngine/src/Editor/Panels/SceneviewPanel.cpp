@@ -22,7 +22,8 @@ void Fracture::SceneView::render()
 
 	float available_width = ImGui::GetContentRegionAvailWidth();
 	ImGui::Columns(2,"scene");
-	
+
+
 	ImGui::SetColumnWidth(0, available_width - 30);
 
 

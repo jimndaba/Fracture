@@ -14,6 +14,7 @@ namespace Fracture
 	class Model;
 	class Mesh;
 	class Material;
+	struct BoundingBox;
 
 	enum class RenderType
 	{
@@ -21,29 +22,7 @@ namespace Fracture
 		InstancedElementsIndirect,
 		InstancedArrayIndirect,
 	};
-
-	struct BoundingBox
-	{
-		glm::vec3 min;
-		glm::vec3 max;
-
-		float Width() const
-		{
-			return max.x - min.x;
-		}
-
-		float Height() const
-		{
-			return max.y - min.y;
-		}
-
-		float Depth() const
-		{
-			return max.z - min.z;
-		}
-
-
-	};
+	
 
 	class RenderComponent :public Component
 	{
@@ -62,13 +41,13 @@ namespace Fracture
 		std::shared_ptr<Mesh> m_mesh;
 		std::shared_ptr<Material> material;
 
+		void SetAABB(std::shared_ptr<BoundingBox> aabb);
+		std::shared_ptr<BoundingBox> GetAABB();
+
 	private:
 		std::string m_modelName;
 		std::string m_materialName;
 		RenderType m_Rendertype;
-		BoundingBox m_bounds;
-		
-
 	};
 
 }

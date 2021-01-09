@@ -20,6 +20,7 @@ namespace Fracture
 	class LightComponent;
 	class ILight;
 	class Mesh;
+	struct BoundingBox;
 	class Shader;
 	class Material;
 	class Texture;
@@ -63,6 +64,8 @@ namespace Fracture
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
 		static void DrawBillboard(int id, std::shared_ptr<Texture> texture);
+		static void DrawAABB(const BoundingBox& aabb, const glm::mat4& transform, const glm::vec4& color);
+
 		static bool IsDebugDraw()
 		{
 			return m_isDebugRender;
@@ -81,12 +84,13 @@ namespace Fracture
 		void RenderScene(std::shared_ptr<Scene> scene);
 
 		void SetCamera(std::shared_ptr<ICamera> camera);
-		std::shared_ptr<ICamera> ActiveCamera();
+		static std::shared_ptr<ICamera> ActiveCamera();
 			
 
 		void onWindowResize(WindowResizeEvent* mevent);
 
 		//DepthPass
+		int NumberDraw;
 
 		//Shadows
 		std::shared_ptr<ShadowPass> m_ShadowPass;
@@ -103,7 +107,7 @@ namespace Fracture
 
 		//camera
 
-		std::shared_ptr<ICamera> m_camera;
+		static std::shared_ptr<ICamera> m_camera;
 
 		//render buckets
 		std::shared_ptr<RenderBucket> m_opaqueBucket;

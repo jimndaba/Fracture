@@ -41,10 +41,10 @@ namespace Fracture
 		const unsigned int SHADOW_HEIGHT = 1024;
 		float near_plane = -10.00f;
 		float far_plane = 100.0f;
-		float m_left = -100.0f;
-		float m_right = 100.0f;
-		float m_bottom = -100.0f;
-		float m_top = 100.0f;
+		float m_left = -25.0f;
+		float m_right = 25.0f;
+		float m_bottom = -25.0f;
+		float m_top = 25.0f;
 		glm::mat4 m_lightspaceMatrix;
 
 		std::shared_ptr<RenderTarget> m_renderTarget;

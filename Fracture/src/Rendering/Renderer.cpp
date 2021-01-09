@@ -45,9 +45,11 @@ void _check_gl_error(const char* file, int line);
 
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDraws;
 std::vector<std::shared_ptr<Fracture::DebugLine>> Fracture::Renderer::m_DebugDrawsRetained;
+std::shared_ptr<Fracture::ICamera> Fracture::Renderer::m_camera;
 bool Fracture::Renderer::m_isDebugRender;
 bool Fracture::Renderer::m_drawgrid;
 std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
+
 
 Fracture::Renderer::Renderer()
 {
@@ -66,11 +68,11 @@ void Fracture::Renderer::onInit()
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(1280, 720, GL_FLOAT, 1,true));
+    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, GL_FLOAT, 1,true));
     m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
     m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f, 2.0f));
-    DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    //DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass()); 
     m_isDebugRender = false;
     m_drawgrid = true;
@@ -82,7 +84,7 @@ void Fracture::Renderer::onInit()
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Begin Frame");
-
+    NumberDraw = 0;
     glEnable(GL_DEPTH_TEST);	
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -184,16 +186,16 @@ void Fracture::Renderer::RenderDebug()
     ProfilerTimer timer("Render debug");
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_BLEND);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+    glEnable(GL_BLEND);   
+    glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
     m_DebugMaterial->getShader()->setMat4("projection",m_camera->getProjectionMatrix(m_width, m_Height));
     m_DebugMaterial->getShader()->setMat4("view", m_camera->getViewMatrix());
-    m_DebugMaterial->getShader()->setVec4("Color", glm::vec4(0.7f,0.7f,0.0f,1.0f));
+    
     for (int i = 0; i < m_DebugDraws.size(); i++)
     {
+        m_DebugMaterial->getShader()->setVec4("Color", m_DebugDraws[i]->GetColor());
         m_DebugDraws[i]->Render();
     }  
     m_DebugMaterial->getShader()->unbind();
@@ -228,6 +230,7 @@ void Fracture::Renderer::EndFrame()
     glDisable(GL_DEPTH_TEST);
     m_DebugDraws.clear();
     m_lights.clear();
+ 
    
 }
 
@@ -316,16 +319,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
     command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
 
     Draw(command);
-
-    /*
-    for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
-    {
-        glActiveTexture(it->second->Unit);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-    */
-   
-    //command.material->getShader()->unbind(); 
+ 
 
    
 }
@@ -356,6 +350,7 @@ void Fracture::Renderer::setViewport(int width, int height)
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
 {
+    NumberDraw += 1;
     if (command.HasTransparency)
     {
         m_transparentBucket->pushCommand(command);
@@ -372,6 +367,7 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
 
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
+    NumberDraw += 1;
     if (material->IsTransparent())
     {
         m_transparentBucket->pushCommand(mesh, material, transform);
@@ -410,6 +406,36 @@ void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Texture> texture)
     billbaordMaterial->SetTexture("IconTexture", texture, 0);
     Renderer::getInstance()->PushCommand(command);
     
+}
+
+void Fracture::Renderer::DrawAABB(const BoundingBox& aabb, const glm::mat4& transform, const glm::vec4& color)
+{
+    glm::vec4 min = { aabb.min.x, aabb.min.y, aabb.min.z, 1.0f };
+    glm::vec4 max = { aabb.max.x, aabb.max.y, aabb.max.z, 1.0f };
+
+    glm::vec4 corners[8] =
+    {
+        transform * glm::vec4 { aabb.min.x, aabb.min.y, aabb.max.z, 1.0f },
+        transform * glm::vec4 { aabb.min.x, aabb.max.y, aabb.max.z, 1.0f },
+        transform * glm::vec4 { aabb.max.x, aabb.max.y, aabb.max.z, 1.0f },
+        transform * glm::vec4 { aabb.max.x, aabb.min.y, aabb.max.z, 1.0f },
+                                                 
+        transform * glm::vec4 { aabb.min.x, aabb.min.y, aabb.min.z, 1.0f },
+        transform * glm::vec4 { aabb.min.x, aabb.max.y, aabb.min.z, 1.0f },
+        transform * glm::vec4 { aabb.max.x, aabb.max.y, aabb.min.z, 1.0f },
+        transform * glm::vec4 { aabb.max.x, aabb.min.y, aabb.min.z, 1.0f }
+    };
+
+    for (uint32_t i = 0; i < 4; i++)
+      DrawDebugLine(corners[i], corners[(i + 1) % 4], color);
+
+    for (uint32_t i = 0; i < 4; i++)
+       DrawDebugLine(corners[i + 4], corners[((i + 1) % 4) + 4], color);
+
+    for (uint32_t i = 0; i < 4; i++)
+       DrawDebugLine(corners[i], corners[i + 4], color);
+
+
 }
 
 void Fracture::Renderer::SetDebugRender(bool debug)
@@ -509,11 +535,17 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
     std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
     std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
-   
     if (render && tag->isVisible)
-    {      
-        PushCommand(render->m_mesh, render->material, transform);
+    {
+        
+        
+        if (m_camera->IsBoxInFrustum(render->GetAABB()->min, render->GetAABB()->max))
+        {
+            DrawAABB(*render->m_mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
+            PushCommand(render->m_mesh, render->material, transform);
+        }
     }
+    
     if (lightcomponent && tag->isVisible)
     {
         AddLight(lightcomponent->GetLight());

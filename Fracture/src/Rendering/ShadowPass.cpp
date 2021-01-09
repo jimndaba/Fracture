@@ -7,6 +7,8 @@
 #include "Component/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Renderer.h"
+#include "Component/ICamera.h"
 
 Fracture::ShadowPass::ShadowPass()
 {
@@ -40,7 +42,8 @@ void Fracture::ShadowPass::Prepare(std::shared_ptr<SunLight> light)
 		glm::mat4 lightProjection;
 		glm::mat4 lightView;
 		lightProjection = glm::ortho(m_left, m_right, m_bottom, m_top, near_plane, far_plane);
-		lightView = glm::lookAt(-light->GetDirection(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		//cameraPosition + (directionalLight.mLightDirection * Z_FAR / 2.0f)
+		lightView = glm::lookAt(-light->GetDirection(), glm::vec3(0) , glm::vec3(0.0, 1.0, 0.0));
 		m_lightspaceMatrix = lightProjection * lightView;
 	}	
 }

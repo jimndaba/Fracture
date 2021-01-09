@@ -60,6 +60,11 @@ void Fracture::ViewPanel::render()
 	//Draw Final Image from Render Target
     ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
 		ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+	ImGui::SetCursorPos(ImVec2{10,10});
+	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
+	ImGui::Text("RENDER STAT");
+	ImGui::Text("RENDER STAT");
 	
 	//IMGUIZMO STUFF STARTS HERE
 	ImVec2 screen_pos = ImGui::GetMousePos();

@@ -18,6 +18,27 @@ namespace Fracture
 	struct RenderInstancedElementsCommand;
 	class Material;
 
+	struct BoundingBox
+	{
+		glm::vec3 min;
+		glm::vec3 max;
+
+		float Width() const
+		{
+			return max.x - min.x;
+		}
+
+		float Height() const
+		{
+			return max.y - min.y;
+		}
+
+		float Depth() const
+		{
+			return max.z - min.z;
+		}
+	};
+
 	class Submesh
 	{
 	public:
@@ -66,6 +87,8 @@ namespace Fracture
 			return m_instanceCommands;
 		}
 
+		void SetAABB(std::shared_ptr<BoundingBox> aabb);
+		std::shared_ptr<BoundingBox> GetAABB();
 
 		
 	private:
@@ -75,7 +98,7 @@ namespace Fracture
 		std::vector<std::shared_ptr<Texture>> m_textures;
 		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> m_instanceCommands;
 		std::vector<unsigned int> m_indices;
-
+		std::shared_ptr<BoundingBox> m_bounds;
 
 	};
 

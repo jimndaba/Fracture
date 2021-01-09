@@ -15,6 +15,16 @@ Fracture::Mesh::~Mesh()
     glDeleteBuffers(1, &IBO);
 }
 
+void Fracture::Mesh::SetAABB(std::shared_ptr<BoundingBox> aabb)
+{
+    m_bounds = aabb;
+}
+
+std::shared_ptr<Fracture::BoundingBox> Fracture::Mesh::GetAABB()
+{
+    return  m_bounds;
+}
+
 void Fracture::Mesh::setupMesh()
 {
    

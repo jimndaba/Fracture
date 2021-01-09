@@ -111,6 +111,8 @@
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\EditorNodeComponent.cpp" />
+    <ClCompile Include="src\Component\FrustumPlane.cpp" />
+    <ClCompile Include="src\Component\ICamera.cpp" />
     <ClCompile Include="src\Component\ILight.cpp" />
     <ClCompile Include="src\Component\LightComponent.cpp" />
     <ClCompile Include="src\Component\RelationshipComponent.cpp" />
@@ -164,6 +166,7 @@
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
     <ClInclude Include="src\Component\EditorNodeComponent.h" />
+    <ClInclude Include="src\Component\FrustumPlane.h" />
     <ClInclude Include="src\Component\ICamera.h" />
     <ClInclude Include="src\Component\ILight.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />

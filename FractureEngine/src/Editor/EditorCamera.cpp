@@ -1,11 +1,17 @@
 #include "EditorCamera.h"
 
-Fracture::EditorCamera::EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+Fracture::EditorCamera::EditorCamera(glm::vec3 m_position, glm::vec3 m_up, float yaw, float pitch)
 {
     Yaw = -90.0f;
     Pitch = 0.0f;
-    WorldUp = up;
-    Right = glm::vec3(1.0f, 0.0f, 0.0f);
+    up = m_up;
+    right = glm::vec3(1.0f, 0.0f, 0.0f);
+    Znear = 0.5f;
+    Zfar = 1000.0f;
+    fov = 45.0f;
+    position = m_position;
+    UpdateCameraVectors();
+    CalcFrustumPlanes();
 }
 
 Fracture::EditorCamera::~EditorCamera()
@@ -14,13 +20,15 @@ Fracture::EditorCamera::~EditorCamera()
 
 glm::mat4 Fracture::EditorCamera::getProjectionMatrix(int width, int height)
 {
-    return glm::perspective(glm::radians(foV), float(width) / float(height), nearClip, farClip);
-}
+    _width = width;
+    _height = height;
+    return glm::perspective(glm::radians(fov), float(width) / float(height), Znear, Zfar);
 
+}
 
 glm::mat4 Fracture::EditorCamera::getViewMatrix()
 {
-    return glm::lookAt(Position, Position + Front, Up);//-Position
+    return glm::lookAt(position, position + front, up);//-Position
 }
 
 void Fracture::EditorCamera::onStart()
@@ -37,18 +45,19 @@ void Fracture::EditorCamera::Move(Camera_Movement td, float dt)
         m_TargetPosition += glm::vec3(0.0f, MovementSpeed, 0.0f) * dt;
         break;
     case Camera_Movement::LEFT:
-        m_TargetPosition -= Right * MovementSpeed * dt;
+        m_TargetPosition -= right * MovementSpeed * dt;
         break;
     case Camera_Movement::RIGHT:
-        m_TargetPosition += Right * MovementSpeed * dt;
+        m_TargetPosition += right * MovementSpeed * dt;
         break;
     case Camera_Movement::FORWARD:
-        m_TargetPosition += Front * MovementSpeed * dt;
+        m_TargetPosition += front * MovementSpeed * dt;
         break;
     case Camera_Movement::BACKWARD:
-        m_TargetPosition -= Front * MovementSpeed * dt;
+        m_TargetPosition -= front * MovementSpeed * dt;
         break;
     }
+    changed = true;
 }
 
 void Fracture::EditorCamera::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
@@ -84,21 +93,16 @@ void Fracture::EditorCamera::InputMouse(float xpos, float ypos, float dt, bool c
 
     lastX = xpos;
     lastY = ypos;
-
+    changed = true;
 }
 
 void Fracture::EditorCamera::ZoomCamera(glm::vec2 zoom, float dt)
 {
 }
 
-void Fracture::EditorCamera::LookAt(glm::vec3 target)
+void Fracture::EditorCamera::Translate(glm::vec3 m_position)
 {
-    LookTarget = target;
-}
-
-void Fracture::EditorCamera::Translate(glm::vec3 position)
-{
-    m_TargetPosition = position;
+    m_TargetPosition = m_position;
 }
 
 Fracture::Ray Fracture::EditorCamera::ScreenPointToRay(glm::vec2 mousePosition, int viewWidth, int viewHeight)
@@ -117,31 +121,35 @@ Fracture::Ray Fracture::EditorCamera::ScreenPointToRay(glm::vec2 mousePosition, 
     glm::vec3 mouse_ray = glm::vec3(toWorldCoords.x, toWorldCoords.y, toWorldCoords.z);
     mouse_ray = glm::normalize(mouse_ray);
 
-    return Ray(Position, mouse_ray);
+    return Ray(position, mouse_ray);
 }
 
 void Fracture::EditorCamera::UpdateCameraVectors()
 {
-    glm::vec3 front;
-    front.x = cos(glm::radians(Pitch)) * cos(glm::radians(Yaw));
-    front.y = sin(glm::radians(Pitch));
-    front.z = cos(glm::radians(Pitch)) * sin(glm::radians(Yaw));
-    Front = glm::normalize(front);
-    Right = glm::normalize(glm::cross(Front, WorldUp)); // Normalize the vectors, because their length 
-    Up = glm::normalize(glm::cross(Right, Front));
+    glm::vec3 m_front;
+    m_front.x = cos(glm::radians(Pitch)) * cos(glm::radians(Yaw));
+    m_front.y = sin(glm::radians(Pitch));
+    m_front.z = cos(glm::radians(Pitch)) * sin(glm::radians(Yaw));
+    front = glm::normalize(m_front);
+    right = glm::normalize(glm::cross(front, WorldUp)); // Normalize the vectors, because their length 
+    up = glm::normalize(glm::cross(right, front));
 }
-
 
 glm::vec3 Fracture::EditorCamera::getPosition()
 {
-    return Position;
+    return position;
 }
 
 void Fracture::EditorCamera::onUpdate(float dt)
 {
-    foV = glm::lerp(foV, targetZoom, dt * 3.0f);
-    Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
+    fov = glm::lerp(fov, targetZoom, dt * 3.0f);
+    position = glm::lerp(position, m_TargetPosition, dt * Damping);
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);
     Pitch = glm::lerp(Pitch, m_TargetPitch, dt * Damping * 5.0f);
     UpdateCameraVectors();
+    if (changed)
+    {
+        CalcFrustumPlanes();
+        changed = false;
+    }
 }

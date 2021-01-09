@@ -263,6 +263,22 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	new_mesh->Name = mesh_name;
 	new_mesh->ModelName = model->Name;
 
+	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
+	//process aabb
+	for (size_t i = 0; i < mesh->mNumVertices; i++)
+	{
+		Vertex vertex;
+		vertex.position = { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
+		aabb->min.x = glm::min(vertex.position.x, aabb->min.x);
+		aabb->min.y = glm::min(vertex.position.y, aabb->min.y);
+		aabb->min.z = glm::min(vertex.position.z, aabb->min.z);
+		aabb->max.x = glm::max(vertex.position.x, aabb->max.x);
+		aabb->max.y = glm::max(vertex.position.y, aabb->max.y);
+		aabb->max.z = glm::max(vertex.position.z, aabb->max.z);
+	}
+
+	new_mesh->SetAABB(aabb);
+
 	return new_mesh;
 }
 

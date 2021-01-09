@@ -170,19 +170,21 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 } 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-float ShadowFade = 0.8;
 
 float GetShadowBias(SunLight light)
 {
+    vec3 normal = normalize(Normal);
+    vec3 lightDir = normalize(light.direction - FragPos);
 	const float MINIMUM_SHADOW_BIAS = 0.005;
-	float bias = max(MINIMUM_SHADOW_BIAS * (1.0 - dot(Normal, light.direction)), MINIMUM_SHADOW_BIAS);
+	float bias = max(MINIMUM_SHADOW_BIAS * (1.0 - dot(normal, lightDir)), MINIMUM_SHADOW_BIAS);
 	return bias;
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace,SunLight light)
 {
 // perform perspective divide
-    const float NUM_SAMPLES = 8.0;
+
+    const float NUM_SAMPLES =9.0;
     const float SAMPLES_START = (NUM_SAMPLES- 1)/2.0;
     const float NUM_SAMPLES_SQ = NUM_SAMPLES*NUM_SAMPLES;
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -298,12 +300,14 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref)
     vec3 kS = F;
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metallic;
+    //
+
     vec3 irradiance = texture(irradianceMap, normal).rgb ;
     vec3 diffuse = irradiance * albedo ;
  
     // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
     const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(prefilterMap, ref,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec3 prefilteredColor =textureLod(prefilterMap, ref,  roughness * MAX_REFLECTION_LOD).rgb;//     
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(normal, viewDir), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
@@ -339,7 +343,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     float NdotL = max(dot(normal, l), 0.0);  
     float shadow = ShadowCalculation(FragPosLightSpace,light);    
     vec3 result = (diffuseBRDF / PI + specular) * radiance * NoL;
-    result *= ((1.0 - shadow)  * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
+    result *= ((1.0 - shadow) * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
     return result;  
 }
 
@@ -364,7 +368,7 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
         vec3 specular = nominator / denominator * light.specular;
         
-        vec3 mambient  = light.ambient * albedo;
+        vec3 mambient  = light.ambient * light.intensity * albedo;
      
         specular *= attenuation;
         mambient *= attenuation;
@@ -382,7 +386,7 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
     
         // scale light by NdotL
         float NdotL = max(dot(normal, L), 0.0);        
-    return  (kD * albedo / PI + specular) * radiance * NdotL + mambient; 
+    return  (kD * albedo / PI + specular) * radiance * NdotL + mambient ; 
 
 }
 
