@@ -18,17 +18,20 @@ Fracture::EditorCamera::~EditorCamera()
 {
 }
 
-glm::mat4 Fracture::EditorCamera::getProjectionMatrix(int width, int height)
+glm::mat4 Fracture::EditorCamera::getProjectionMatrix()
 {
-    _width = width;
-    _height = height;
-    return glm::perspective(glm::radians(fov), float(width) / float(height), Znear, Zfar);
-
+    return glm::perspective(glm::radians(fov), float(_width) / float(_height), Znear, Zfar);
 }
 
 glm::mat4 Fracture::EditorCamera::getViewMatrix()
 {
     return glm::lookAt(position, position + front, up);//-Position
+}
+
+void Fracture::EditorCamera::setProjection(int width, int height)
+{
+    _width = width;
+    _height = height;
 }
 
 void Fracture::EditorCamera::onStart()
@@ -113,7 +116,7 @@ Fracture::Ray Fracture::EditorCamera::ScreenPointToRay(glm::vec2 mousePosition, 
 
     glm::vec4 ray_clip = glm::vec4(mouseX, mouseY, -1.0, 1.0);
 
-    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix(viewWidth, viewHeight)) * ray_clip;
+    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix()) * ray_clip;
     toEyeCoords = glm::vec4(toEyeCoords.x, toEyeCoords.y, -1.0, 0.0);
 
     glm::vec4 toWorldCoords = glm::inverse(getViewMatrix()) * toEyeCoords;

@@ -1,6 +1,7 @@
 #include "ViewPanel.h"
 #include "Rendering/RenderTarget.h"
 #include "SceneviewPanel.h"
+#include "Rendering/PickingPass.h"
 #include "../Editor.h"
 #include <glm/gtx/matrix_decompose.hpp>
 #include <Component\EditorNodeComponent.h>
@@ -57,9 +58,13 @@ void Fracture::ViewPanel::render()
 	m_renderer->setViewport(viewportPanelSize.x, viewportPanelSize.y);
 
 
+	//Draw Screen Picking Window
+	ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
+		ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
 	//Draw Final Image from Render Target
-    ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
+		//ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 	ImGui::SetCursorPos(ImVec2{10,10});
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
@@ -83,9 +88,29 @@ void Fracture::ViewPanel::render()
 		}
 		else
 		{
+			float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
+			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+			float region_x = screen_pos.x - pos.x;
+			float region_y = pos.y - screen_pos.y;
+			 
+			// these positions must be in range [-1, 1] (!!!), not [0, width] and [0, height]
+			float mouseX = region_x - width;//(2.0f * mousePosition.x) / viewWidth - 1.0f;
+			float mouseY = region_y - height;///1.0f - (2.0f * mousePosition.y) / viewHeight;
+
+			
+			FRACTURE_INFO("Region X: {}", mouseX);
+			FRACTURE_INFO("Region Y: {}", mouseY);
+
+			//if((int)m_renderer->GetEntityID(region_x, region_y) > 0)
+			//{
+			//	FRACTURE_INFO("ENTITY CLICKED: {}", (int)m_renderer->GetEntityID(region_x, region_y));
+			//}
+
+			
+
+
 			//RayHit hit;
-			//float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
-			//float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+			
 			//float region_x = screen_pos.x - pos.x;
 			//float region_y = pos.y - screen_pos.y;
 			//Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
@@ -117,8 +142,9 @@ void Fracture::ViewPanel::render()
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
+				m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
-				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix(m_ViewportSize.x, m_ViewportSize.y);
+				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
 				glm::mat4 transformMatrix = transform->GetLocalTranform();		
 			
 
@@ -156,9 +182,9 @@ void Fracture::ViewPanel::render()
 				float rh = (float)ImGui::GetWindowHeight();
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
-
+				m_camera->setProjection((int)viewportPanelSize.x, (int)viewportPanelSize.y);
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
-				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix((int)viewportPanelSize.x, (int)viewportPanelSize.y);
+				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
 				glm::mat4 transformMatrix = node->GetWorldTransform();
 			
 
@@ -202,7 +228,8 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{
-		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);			
+		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);		
+		m_renderer->m_PickingPass->Resize(m_ViewportSize.x, m_ViewportSize.y);
 	}
 
 	if(m_ViewportFocused && m_ViewportHovered && m_camera)

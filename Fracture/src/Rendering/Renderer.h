@@ -32,6 +32,7 @@ namespace Fracture
 	struct UniformValue;
 	struct UniformValueSampler;
 	class ShadowPass;
+	class PickingPass;
 	class Grid;
 	class ICamera;
 	class Environment;
@@ -94,10 +95,17 @@ namespace Fracture
 
 		//Shadows
 		std::shared_ptr<ShadowPass> m_ShadowPass;
+
+		//Picking
+		std::shared_ptr<PickingPass> m_PickingPass;
+
 		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 		
 		static std::shared_ptr<Renderer> getInstance();
+
+		uint32_t GetEntityID(int mouseX, int mouseY);
+
 	private:
 		int m_width;
 		int m_Height;

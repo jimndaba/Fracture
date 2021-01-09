@@ -26,6 +26,7 @@
 #include "Physics/PhysicsManager.h"
 #include "DebugLine.h"
 #include "ShadowPass.h"
+#include "PickingPass.h"
 #include "Environment.h"
 #include "BillBoard.h"
 #include "Grid.h"
@@ -74,6 +75,7 @@ void Fracture::Renderer::onInit()
     //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass()); 
+    m_PickingPass = std::shared_ptr<PickingPass>(new PickingPass(m_width,m_Height));
     m_isDebugRender = false;
     m_drawgrid = true;
 
@@ -123,6 +125,14 @@ void Fracture::Renderer::RenderPasses()
         m_ShadowPass->End();
         glEnable(GL_CULL_FACE);
     }
+
+    //Picking Pass
+    {
+        m_PickingPass->Begin();
+        m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
+        m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
+        m_PickingPass->End();
+    }
    
     
     setViewport(m_width, m_Height);        
@@ -157,7 +167,7 @@ void Fracture::Renderer::RenderPasses()
    
     if (m_drawgrid)
     {
-        m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
+        m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
     }    
 
     if (m_isDebugRender)
@@ -173,7 +183,7 @@ void Fracture::Renderer::RenderPasses()
         if (light->GetLightType() == LightType::Sky)
         {
             std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(light);
-            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix(m_width, m_Height));
+            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
         }
     }  
    
@@ -190,7 +200,7 @@ void Fracture::Renderer::RenderDebug()
     glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection",m_camera->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("projection",m_camera->getProjectionMatrix());
     m_DebugMaterial->getShader()->setMat4("view", m_camera->getViewMatrix());
     
     for (int i = 0; i < m_DebugDraws.size(); i++)
@@ -212,7 +222,7 @@ void Fracture::Renderer::RenderDebugRetained()
     glLineWidth(1.0f);
     m_DebugMaterial = AssetManager::getMaterial("DebugMaterial");
     m_DebugMaterial->getShader()->use();
-    m_DebugMaterial->getShader()->setMat4("projection", m_camera->getProjectionMatrix(m_width, m_Height));
+    m_DebugMaterial->getShader()->setMat4("projection", m_camera->getProjectionMatrix());
     m_DebugMaterial->getShader()->setMat4("view", m_camera->getViewMatrix());
     for (int i = 0; i <m_DebugDrawsRetained.size(); i++)
     {
@@ -314,7 +324,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
     command.material->getShader()->setMat4("lightSpaceMatrix", m_ShadowPass->GetLightSpaceMatrix());
     command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(),(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
     command.material->getShader()->setMat4("view", m_camera->getViewMatrix());   
-    command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix(m_width, m_Height));
+    command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix());
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
 
@@ -346,6 +356,10 @@ void Fracture::Renderer::setViewport(int width, int height)
 	glViewport(0, 0, width, height);    
     m_width = width;
     m_Height = height;
+    if (m_camera)
+    {
+        m_camera->setProjection(width, height);
+    }
 }
 
 void Fracture::Renderer::PushCommand(RenderCommand command)
@@ -564,6 +578,7 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 void Fracture::Renderer::SetCamera(std::shared_ptr<ICamera> camera)
 {
     m_camera = camera;
+    m_camera->setProjection(m_width,m_Height);
 }
 
 std::shared_ptr<Fracture::ICamera> Fracture::Renderer::ActiveCamera()
@@ -585,6 +600,17 @@ std::shared_ptr<Fracture::Renderer> Fracture::Renderer::getInstance()
         instance = std::make_shared<Renderer>();
     }
     return instance;
+}
+
+uint32_t Fracture::Renderer::GetEntityID(int mouseX, int mouseY)
+{
+    int Pixel = m_PickingPass->GetPixelInfo(mouseX,mouseY);
+
+   FRACTURE_TRACE("Pixel ID: {}", Pixel);
+   if (Pixel > 0) {      
+       return  (uint32_t)Pixel;
+   }
+   return -1;
 }
 
 void _check_gl_error(const char* file, int line) {

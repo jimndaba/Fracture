@@ -26,9 +26,15 @@ glm::mat4 Fracture::CameraControllerComponent::getViewMatrix()
 
 }
 
-glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix(int width, int height)
+glm::mat4 Fracture::CameraControllerComponent::getProjectionMatrix()
 {
-    return glm::perspective(glm::radians(foV), float(width) / float(height), nearClip, farClip);
+    return glm::perspective(glm::radians(foV), float(_width) / float(_height), nearClip, farClip);
+}
+
+void Fracture::CameraControllerComponent::setProjection(int width, int height)
+{
+    _width = width;
+    _height = height;
 }
 
 glm::vec3 Fracture::CameraControllerComponent::getPosition()
@@ -127,8 +133,8 @@ Fracture::Ray Fracture::CameraControllerComponent::ScreenPointToRay(glm::vec2 mo
     float mouseY = (mousePosition.y / viewHeight - 0.5f) * 2;///1.0f - (2.0f * mousePosition.y) / viewHeight;
    
     glm::vec4 ray_clip = glm::vec4(mouseX, mouseY, -1.0, 1.0);
-
-    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix(viewWidth,viewHeight)) * ray_clip;
+    setProjection(viewWidth, viewHeight);
+    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix()) * ray_clip;
     toEyeCoords = glm::vec4(toEyeCoords.x, toEyeCoords.y, -1.0, 0.0);
 
     glm::vec4 toWorldCoords = glm::inverse(getViewMatrix()) * toEyeCoords;

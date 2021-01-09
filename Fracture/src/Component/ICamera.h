@@ -20,8 +20,12 @@ namespace Fracture
 	class ICamera
 	{
 	public:
-		virtual glm::mat4 getProjectionMatrix(int width,int height) = 0;
+		//view and projection Matricies
+		virtual glm::mat4 getProjectionMatrix() = 0;
 		virtual glm::mat4 getViewMatrix() = 0;
+		virtual void setProjection(int width, int height) = 0;
+
+		//movement
 		virtual glm::vec3 getPosition() = 0;
 		virtual void Move(Camera_Movement td, float dt) = 0;
 		virtual void InputMouse(float xpos, float ypos, float dt, bool constrainPitch = true) = 0;

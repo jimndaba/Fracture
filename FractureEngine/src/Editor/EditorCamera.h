@@ -11,8 +11,10 @@ namespace Fracture
 		EditorCamera(glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 		~EditorCamera();
 
-		glm::mat4 getProjectionMatrix(int width, int height) override;
+		glm::mat4 getProjectionMatrix() override;
 		glm::mat4 getViewMatrix() override;
+		void setProjection(int width, int height) override;
+
 		glm::vec3 getPosition() override;
 		void onUpdate(float dt);
 

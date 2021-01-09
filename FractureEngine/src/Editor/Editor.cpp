@@ -188,9 +188,10 @@ void Fracture::Editor::onLoadNew()
     //Skybox
     AssetManager::AddShader("Skybox", "content/shaders/Environment/vertex.glsl", "content/shaders/Environment/fragment.glsl");
 
+    //DebugShaders
     AssetManager::AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
-
-
+    
+    //Primite material
     AssetManager::AddShader("PrimitiveMaterial", "content/shaders/primitives/vertex.glsl", "content/shaders/primitives/fragment.glsl");
 
     //billboards
@@ -207,6 +208,9 @@ void Fracture::Editor::onLoadNew()
     
     //depthShader
     AssetManager::AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
+
+    //PickingShader
+    AssetManager::AddShader("PickingShader", "content/shaders/Picking/vertex.glsl", "content/shaders/Picking/fragment.glsl");
 
     //textured models
     AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
@@ -242,7 +246,10 @@ void Fracture::Editor::onLoadNew()
     */
 
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
+
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
+
+    AssetManager::AddMaterial("PickingMaterial", std::shared_ptr<Material>(new Material("PickingMaterial", AssetManager::getShader("PickingShader"))));
 
     AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
     AssetManager::AddModel("Cube", "content/models/primitives/cube.fbx");

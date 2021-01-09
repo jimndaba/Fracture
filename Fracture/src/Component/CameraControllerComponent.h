@@ -60,7 +60,8 @@ namespace Fracture
 
 		glm::mat4 getViewMatrix() override;
 
-		glm::mat4 getProjectionMatrix(int width,int height) override;
+		glm::mat4 getProjectionMatrix() override;
+		void setProjection(int width, int height) override;
 
 		glm::vec3 getPosition() override;
 
