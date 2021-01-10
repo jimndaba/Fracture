@@ -22,6 +22,7 @@ namespace Fracture
 
 		static Entity SelectedEntity();
 		static void setSelectEntity(Entity selection);
+		static void clearSelection();
 
 		static Entity m_selection;
 

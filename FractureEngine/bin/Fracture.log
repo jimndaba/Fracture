@@ -1,541 +1,436 @@
-[16:35:16] [info] FRACTURE: Initializing Splash
-[16:35:17] [info] FRACTURE: OpenGL loaded
-[16:35:17] [info] FRACTURE: Vendor: Intel
-[16:35:17] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[16:35:17] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
-[16:35:17] [trace] FRACTURE: Loaded Texture: splash
-[16:35:17] [trace] FRACTURE: Loaded Texture: title
-[16:35:17] [info] FRACTURE: Completed Init
-[16:35:17] [info] FRACTURE: Show Splash
-[16:35:30] [info] FRACTURE: OpenGL loaded
-[16:35:30] [info] FRACTURE: Vendor: Intel
-[16:35:30] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
-[16:35:30] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
-[16:35:30] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[16:35:30] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: RotateIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: CameraIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: LightIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: EyeIcon
-[16:35:30] [trace] FRACTURE: Loaded Texture: EyeIconC
-[16:35:30] [trace] FRACTURE: Loaded Texture: MeshIcon
-[16:35:30] [trace] FRACTURE: Loaded HDR Environment: Loft
-[16:35:30] [trace] FRACTURE: Loaded Shader: CubeMap
-[16:35:30] [trace] FRACTURE: Loaded Shader: irradiance
-[16:35:31] [trace] FRACTURE: Loaded Shader: prefilter
-[16:35:31] [trace] FRACTURE: Loaded Shader: bdrf
-[16:35:31] [trace] FRACTURE: Loaded Shader: Skybox
-[16:35:31] [trace] FRACTURE: Loaded Shader: DebugShader
-[16:35:31] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[16:35:31] [trace] FRACTURE: Loaded Shader: BillboardShader
-[16:35:31] [trace] FRACTURE: Loaded Shader: DepthShader
-[16:35:31] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[16:35:32] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[16:35:32] [trace] FRACTURE: Loaded Shader: DepthShader
-[16:35:32] [trace] FRACTURE: Loaded Shader: PickingShader
-[16:35:32] [trace] FRACTURE: Loaded Shader: default
-[16:35:32] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[16:35:32] [trace] FRACTURE: Loaded Material: billboardIcons
-[16:35:32] [trace] FRACTURE: Loaded Material: DebugMaterial
-[16:35:32] [trace] FRACTURE: Loaded Material: DepthMaterial
-[16:35:32] [trace] FRACTURE: Loaded Material: PickingMaterial
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: plane.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Plane
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Plane
-[16:35:32] [trace] FRACTURE: Loaded Material: Plane_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Plane
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: cube.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Cube
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Cube
-[16:35:32] [trace] FRACTURE: Loaded Material: Cube_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Cube
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: sphere.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Sphere
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Sphere
-[16:35:32] [trace] FRACTURE: Loaded Material: Sphere_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Sphere
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: cylinder.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Cylinder
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Cylinder
-[16:35:32] [trace] FRACTURE: Loaded Material: Cylinder_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Cylinder
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: torus.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Torus
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Torus
-[16:35:32] [trace] FRACTURE: Loaded Material: Torus_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Torus
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: loading Model: suzane.fbx
-[16:35:32] [trace] FRACTURE: Number of Materials: 1
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 3
-[16:35:32] [trace] FRACTURE: loading Child: Light
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Camera
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 0
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: loading Child: Suzanne
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: Number of Meshes: 1
-[16:35:32] [trace] FRACTURE: Number of Children: 0
-[16:35:32] [trace] FRACTURE: loading Mesh: Suzanne
-[16:35:32] [trace] FRACTURE: Loaded Material: Suzanne_material_0
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |##############|
-[16:35:32] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[16:35:32] [trace] FRACTURE: Loaded model: Suzane
-[16:35:32] [info] FRACTURE: Renderer Init
-[16:35:53] [info] FRACTURE: Width: 976
-[16:35:53] [info] FRACTURE: Height: 976
-[16:35:53] [info] FRACTURE: Pos X: 9
-[16:35:53] [info] FRACTURE: Pos Y: 4294967247
-[16:35:53] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:53] [info] FRACTURE: Width: 976
-[16:35:53] [info] FRACTURE: Height: 976
-[16:35:53] [info] FRACTURE: Pos X: 9
-[16:35:53] [info] FRACTURE: Pos Y: 4294967247
-[16:35:53] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:53] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:57] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:57] [info] FRACTURE: Width: 976
-[16:35:57] [info] FRACTURE: Height: 976
-[16:35:57] [info] FRACTURE: Pos X: 2147483648
-[16:35:57] [info] FRACTURE: Pos Y: 2147483648
-[16:35:57] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:58] [info] FRACTURE: Pos Y: 2147483648
-[16:35:58] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:58] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:58] [info] FRACTURE: Width: 976
-[16:35:58] [info] FRACTURE: Height: 976
-[16:35:58] [info] FRACTURE: Pos X: 2147483648
-[16:35:59] [info] FRACTURE: Pos Y: 2147483648
-[16:35:59] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:59] [info] FRACTURE: Width: 976
-[16:35:59] [info] FRACTURE: Height: 976
-[16:35:59] [info] FRACTURE: Pos X: 2147483648
-[16:35:59] [info] FRACTURE: Pos Y: 2147483648
-[16:35:59] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:59] [info] FRACTURE: ENTITY CLICKED: 13421772
-[16:35:59] [info] FRACTURE: Width: 976
-[16:35:59] [info] FRACTURE: Height: 976
-[16:35:59] [info] FRACTURE: Pos X: 2147483648
-[16:35:59] [info] FRACTURE: Pos Y: 2147483648
-[16:35:59] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:59] [info] FRACTURE: Width: 976
-[16:35:59] [info] FRACTURE: Height: 976
-[16:35:59] [info] FRACTURE: Pos X: 2147483648
-[16:35:59] [info] FRACTURE: Pos Y: 2147483648
-[16:35:59] [trace] FRACTURE: Pixel ID: 13421772
-[16:35:59] [info] FRACTURE: ENTITY CLICKED: 13421772
+[22:22:54] [info] FRACTURE: Initializing Splash
+[22:22:54] [info] FRACTURE: OpenGL loaded
+[22:22:54] [info] FRACTURE: Vendor: Intel
+[22:22:54] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[22:22:54] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
+[22:22:54] [trace] FRACTURE: Loaded Texture: splash
+[22:22:54] [trace] FRACTURE: Loaded Texture: title
+[22:22:54] [info] FRACTURE: Completed Init
+[22:22:54] [info] FRACTURE: Show Splash
+[22:23:52] [info] FRACTURE: OpenGL loaded
+[22:23:52] [info] FRACTURE: Vendor: Intel
+[22:23:52] [info] FRACTURE: Renderer: Intel(R) UHD Graphics 620
+[22:23:52] [info] FRACTURE: Version: 4.6.0 - Build 26.20.100.7986
+[22:23:52] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[22:23:52] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: RotateIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: CameraIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: LightIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: EyeIcon
+[22:23:52] [trace] FRACTURE: Loaded Texture: EyeIconC
+[22:23:52] [trace] FRACTURE: Loaded Texture: MeshIcon
+[22:23:52] [trace] FRACTURE: Loaded HDR Environment: Loft
+[22:23:52] [trace] FRACTURE: Loaded Shader: CubeMap
+[22:23:53] [trace] FRACTURE: Loaded Shader: irradiance
+[22:23:53] [trace] FRACTURE: Loaded Shader: prefilter
+[22:23:53] [trace] FRACTURE: Loaded Shader: bdrf
+[22:23:53] [trace] FRACTURE: Loaded Shader: Skybox
+[22:23:53] [trace] FRACTURE: Loaded Shader: DebugShader
+[22:23:53] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[22:23:53] [trace] FRACTURE: Loaded Shader: BillboardShader
+[22:23:53] [trace] FRACTURE: Loaded Shader: DepthShader
+[22:23:54] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[22:23:54] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[22:23:54] [trace] FRACTURE: Loaded Shader: DepthShader
+[22:23:54] [trace] FRACTURE: Loaded Shader: PickingShader
+[22:23:54] [trace] FRACTURE: Loaded Shader: default
+[22:23:54] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[22:23:54] [trace] FRACTURE: Loaded Material: billboardIcons
+[22:23:54] [trace] FRACTURE: Loaded Material: DebugMaterial
+[22:23:54] [trace] FRACTURE: Loaded Material: DepthMaterial
+[22:23:54] [trace] FRACTURE: Loaded Material: PickingMaterial
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: plane.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Plane
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Plane
+[22:23:54] [trace] FRACTURE: Loaded Material: Plane_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Plane
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: cube.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Cube
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Cube
+[22:23:54] [trace] FRACTURE: Loaded Material: Cube_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Cube
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: sphere.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Sphere
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Sphere
+[22:23:54] [trace] FRACTURE: Loaded Material: Sphere_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Sphere
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: cylinder.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Cylinder
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Cylinder
+[22:23:54] [trace] FRACTURE: Loaded Material: Cylinder_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Cylinder
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: torus.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Torus
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Torus
+[22:23:54] [trace] FRACTURE: Loaded Material: Torus_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Torus
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: loading Model: suzane.fbx
+[22:23:54] [trace] FRACTURE: Number of Materials: 1
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 3
+[22:23:54] [trace] FRACTURE: loading Child: Light
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Camera
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 0
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: loading Child: Suzanne
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: Number of Meshes: 1
+[22:23:54] [trace] FRACTURE: Number of Children: 0
+[22:23:54] [trace] FRACTURE: loading Mesh: Suzanne
+[22:23:54] [trace] FRACTURE: Loaded Material: Suzanne_material_0
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |##############|
+[22:23:54] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[22:23:54] [trace] FRACTURE: Loaded model: Suzane
+[22:23:54] [info] FRACTURE: Renderer Init
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:56] [info] FRACTURE: pos x: 721.0
+[22:23:56] [info] FRACTURE: pos y: 381.0
+[22:23:57] [info] FRACTURE: pos x: 743.0
+[22:23:57] [info] FRACTURE: pos y: 496.0
+[22:23:57] [info] FRACTURE: pos x: 743.0
+[22:23:57] [info] FRACTURE: pos y: 496.0
+[22:23:57] [info] FRACTURE: pos x: 746.0
+[22:23:57] [info] FRACTURE: pos y: 501.0
+[22:23:57] [info] FRACTURE: pos x: 746.0
+[22:23:57] [info] FRACTURE: pos y: 501.0
+[22:23:57] [info] FRACTURE: pos x: 746.0
+[22:23:57] [info] FRACTURE: pos y: 503.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 504.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:23:57] [info] FRACTURE: pos x: 747.0
+[22:23:57] [info] FRACTURE: pos y: 505.0
+[22:24:04] [info] FRACTURE: pos x: 418.0
+[22:24:04] [info] FRACTURE: pos y: 266.0
+[22:24:04] [info] FRACTURE: pos x: 418.0
+[22:24:04] [info] FRACTURE: pos y: 266.0
+[22:24:04] [info] FRACTURE: pos x: 418.0
+[22:24:04] [info] FRACTURE: pos y: 266.0
+[22:24:04] [info] FRACTURE: pos x: 418.0
+[22:24:04] [info] FRACTURE: pos y: 266.0
+[22:24:05] [info] FRACTURE: pos x: 611.0
+[22:24:05] [info] FRACTURE: pos y: 327.0
+[22:24:05] [info] FRACTURE: pos x: 614.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:05] [info] FRACTURE: pos x: 615.0
+[22:24:05] [info] FRACTURE: pos y: 329.0
+[22:24:06] [info] FRACTURE: pos x: 651.0
+[22:24:06] [info] FRACTURE: pos y: 351.0
+[22:24:06] [info] FRACTURE: pos x: 653.0
+[22:24:06] [info] FRACTURE: pos y: 351.0
+[22:24:06] [info] FRACTURE: pos x: 653.0
+[22:24:06] [info] FRACTURE: pos y: 352.0
+[22:24:06] [info] FRACTURE: pos x: 654.0
+[22:24:06] [info] FRACTURE: pos y: 352.0
+[22:24:06] [info] FRACTURE: pos x: 654.0
+[22:24:06] [info] FRACTURE: pos y: 353.0
+[22:24:06] [info] FRACTURE: pos x: 654.0
+[22:24:06] [info] FRACTURE: pos y: 353.0
+[22:24:06] [info] FRACTURE: pos x: 654.0
+[22:24:06] [info] FRACTURE: pos y: 353.0
+[22:24:06] [info] FRACTURE: pos x: 708.0
+[22:24:06] [info] FRACTURE: pos y: 410.0
+[22:24:06] [info] FRACTURE: pos x: 708.0
+[22:24:06] [info] FRACTURE: pos y: 410.0
+[22:24:06] [info] FRACTURE: pos x: 510.0
+[22:24:06] [info] FRACTURE: pos y: 562.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 563.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:06] [info] FRACTURE: pos x: 509.0
+[22:24:06] [info] FRACTURE: pos y: 565.0
+[22:24:07] [info] FRACTURE: pos x: 521.0
+[22:24:07] [info] FRACTURE: pos y: 586.0
+[22:24:07] [info] FRACTURE: pos x: 521.0
+[22:24:07] [info] FRACTURE: pos y: 586.0
+[22:24:07] [info] FRACTURE: pos x: 521.0
+[22:24:07] [info] FRACTURE: pos y: 586.0
+[22:24:07] [info] FRACTURE: pos x: 521.0
+[22:24:07] [info] FRACTURE: pos y: 586.0
+[22:24:07] [info] FRACTURE: pos x: 521.0
+[22:24:07] [info] FRACTURE: pos y: 586.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:08] [info] FRACTURE: pos x: 480.0
+[22:24:08] [info] FRACTURE: pos y: 288.0
+[22:24:09] [info] FRACTURE: pos x: 477.0
+[22:24:09] [info] FRACTURE: pos y: 313.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 313.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 314.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 314.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 314.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 314.0
+[22:24:09] [info] FRACTURE: pos x: 476.0
+[22:24:09] [info] FRACTURE: pos y: 314.0
+[22:24:09] [info] FRACTURE: pos x: 201.0
+[22:24:09] [info] FRACTURE: pos y: 255.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:10] [info] FRACTURE: pos x: 398.0
+[22:24:10] [info] FRACTURE: pos y: 273.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:12] [info] FRACTURE: pos x: 487.0
+[22:24:12] [info] FRACTURE: pos y: 672.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:33] [info] FRACTURE: pos x: 819.0
+[22:24:33] [info] FRACTURE: pos y: 413.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:24:39] [info] FRACTURE: pos x: 817.0
+[22:24:39] [info] FRACTURE: pos y: 331.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 751.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 750.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 750.0
+[22:25:17] [info] FRACTURE: pos y: 585.0
+[22:25:17] [info] FRACTURE: pos x: 749.0
+[22:25:17] [info] FRACTURE: pos y: 585.0

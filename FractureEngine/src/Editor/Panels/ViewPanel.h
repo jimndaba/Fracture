@@ -51,7 +51,9 @@ namespace Fracture
 		Renderer* m_renderer;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+		bool m_MousePicking = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		glm::vec2 m_ViewportBounds[2];
 		glm::vec2 m_Mousepos = { 0.0f, 0.0f };
 		glm::vec2 m_InitialMousePosition = glm::vec2(0.0f);
 		std::shared_ptr<ICamera> m_camera;
@@ -61,7 +63,8 @@ namespace Fracture
 		//Gizmo_Mode m_gizmoMode;
 		ImGuizmo::OPERATION currentImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE currentImGuizmoMode = ImGuizmo::MODE::WORLD;
-		
+
+	
 		static int gizmoMode;
 		int lastUsing = 0;
 	};

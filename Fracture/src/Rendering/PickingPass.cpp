@@ -24,6 +24,8 @@ Fracture::PickingPass::~PickingPass()
 void Fracture::PickingPass::Begin()
 {
 	m_renderTarget->bind();
+	int clearValue= -1;
+	glClearTexImage(m_renderTarget->GetColorTexture(0)->id,0,GL_RED_INTEGER,GL_INT,&clearValue);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DITHER);
 }
@@ -67,11 +69,12 @@ unsigned int Fracture::PickingPass::GetPixelInfo(unsigned int x, unsigned int y)
 {
 	m_renderTarget->bind();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
-
-	FRACTURE_INFO("Width: {}", SCREEN_WIDTH);
-	FRACTURE_INFO("Height: {}", SCREEN_WIDTH);
 	FRACTURE_INFO("Pos X: {}",x);
 	FRACTURE_INFO("Pos Y: {}",y);
+
+	FRACTURE_INFO("width: {}", m_renderTarget->Width);
+	FRACTURE_INFO("height: {}", m_renderTarget->Height);
+
 
 	unsigned char id[4];
 	glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &id);
@@ -82,7 +85,7 @@ unsigned int Fracture::PickingPass::GetPixelInfo(unsigned int x, unsigned int y)
 		id[2] * 256 * 256;
 
 	if (pickedID == 0x00ffffff) { // Full white, must be the background !
-		FRACTURE_INFO("background");
+		return -1;
 	}
 
 	glReadBuffer(GL_NONE);

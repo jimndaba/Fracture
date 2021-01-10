@@ -107,7 +107,7 @@ std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::Entities()
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::GetEntity(uint32_t id)
 {
-	return std::shared_ptr<Entity>();
+	
 	for (auto& entity : m_entities)
 	{
 		if (entity->Id == id)

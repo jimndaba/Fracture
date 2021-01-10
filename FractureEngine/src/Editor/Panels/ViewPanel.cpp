@@ -8,6 +8,7 @@
 
 int Fracture::ViewPanel::gizmoMode;
 
+
 Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
 {
 	gizmoMode = 0;
@@ -31,7 +32,7 @@ void Fracture::ViewPanel::setRenderer(Renderer* renderer)
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-	
+
 	/*
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
@@ -61,19 +62,18 @@ void Fracture::ViewPanel::render()
 
 
 	//Draw Screen Picking Window
-	ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
-		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+	//ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
+	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 	//Draw Final Image from Render Target
-    //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		//viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
+		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	
 
 	ImGui::SetCursorPos(ImVec2{10,10});
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
-	ImGui::Text("RENDER STAT");
-	ImGui::Text("RENDER STAT");
+
 	
 	//IMGUIZMO STUFF STARTS HERE
 	ImVec2 screen_pos = ImGui::GetMousePos();
@@ -95,27 +95,35 @@ void Fracture::ViewPanel::render()
 			float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
 			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
 			float region_x = screen_pos.x-pos.x;
-			float region_y = screen_pos.y-pos.y;
+			float region_y = (pos.y - screen_pos.y)-1 ;
 
-			
-			if((int)m_renderer->GetEntityID(region_x, region_y) > 0)
+			FRACTURE_INFO("pos x: {}", screen_pos.x);
+			FRACTURE_INFO("pos y: {}", screen_pos.y);
+
+
+
+			ImVec2 minBound = ImGui::GetCursorScreenPos();
+			ImVec2 maxBound = ImVec2{minBound.x + width, minBound.y + height};
+
+
+			if (region_x > 0 && region_x < maxBound.x && region_y > 0 && region_y < maxBound.y)
 			{
-				FRACTURE_INFO("ENTITY CLICKED: {}", (int)m_renderer->GetEntityID(region_x, region_y));
+				FRACTURE_INFO("Mouse in Bounds");
+				int id = (int)m_renderer->GetEntityID(region_x, region_y);
+				if(id > 0)
+				{
+					Entity m_entity = *SceneManager::getEntity(id).get();
+				
+					if (m_entity)
+					{
+						SceneView::setSelectEntity(m_entity);
+					}
+				}
+				else
+				{
+					SceneView::clearSelection();
+				}
 			}
-
-			
-
-
-			//RayHit hit;
-			
-			//float region_x = screen_pos.x - pos.x;
-			//float region_y = pos.y - screen_pos.y;
-			//Ray ray = m_camera->ScreenPointToRay(glm::vec2(region_x, region_y), width, height);
-			//m_renderer->DrawDebugLineRetained(ray.GetOrigin(), ray.GetEndPoint(1000),glm::vec4(1.0f,0.0f,0.0f,1.0f));
-			//if (PhysicsManager::RayCast(ray, hit))
-			//{
-			//	FRACTURE_INFO("Ray Hit");
-			//}
 		}	
 	}		
 
