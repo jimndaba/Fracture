@@ -37,7 +37,7 @@ namespace Fracture
 
 		void Resize(int screenWidth, int screenHeight);
 
-		int GetPixelInfo(unsigned int x, unsigned int y);
+		unsigned int GetPixelInfo(unsigned int x, unsigned int y);
 		std::shared_ptr<RenderTarget> m_renderTarget;
 	private:
 		

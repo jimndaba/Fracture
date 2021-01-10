@@ -32,11 +32,13 @@ void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
 	
+	/*
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
+	*/
 
 	static const float identityMatrix[16] =
 	{ 1.f, 0.f, 0.f, 0.f,
@@ -60,11 +62,13 @@ void Fracture::ViewPanel::render()
 
 	//Draw Screen Picking Window
 	ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
-		ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 	//Draw Final Image from Render Target
     //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		//ImVec2{ m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		//viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+	
+	
 
 	ImGui::SetCursorPos(ImVec2{10,10});
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
@@ -90,21 +94,14 @@ void Fracture::ViewPanel::render()
 		{
 			float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
 			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
-			float region_x = screen_pos.x - pos.x;
-			float region_y = pos.y - screen_pos.y;
-			 
-			// these positions must be in range [-1, 1] (!!!), not [0, width] and [0, height]
-			float mouseX = region_x - width;//(2.0f * mousePosition.x) / viewWidth - 1.0f;
-			float mouseY = region_y - height;///1.0f - (2.0f * mousePosition.y) / viewHeight;
+			float region_x = screen_pos.x-pos.x;
+			float region_y = screen_pos.y-pos.y;
 
 			
-			FRACTURE_INFO("Region X: {}", mouseX);
-			FRACTURE_INFO("Region Y: {}", mouseY);
-
-			//if((int)m_renderer->GetEntityID(region_x, region_y) > 0)
-			//{
-			//	FRACTURE_INFO("ENTITY CLICKED: {}", (int)m_renderer->GetEntityID(region_x, region_y));
-			//}
+			if((int)m_renderer->GetEntityID(region_x, region_y) > 0)
+			{
+				FRACTURE_INFO("ENTITY CLICKED: {}", (int)m_renderer->GetEntityID(region_x, region_y));
+			}
 
 			
 
@@ -120,8 +117,7 @@ void Fracture::ViewPanel::render()
 			//	FRACTURE_INFO("Ray Hit");
 			//}
 		}	
-	}
-		
+	}		
 
 	if (SceneView::SelectedEntity())
 	{

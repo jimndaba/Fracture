@@ -1,35 +1,38 @@
 ﻿  ViewPanel.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(58,64): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(58,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(62,104): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(145,61): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(60,64): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(60,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(64,104): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(101,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(101,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(103,5): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(141,61): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(145,43): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(141,43): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(231,73): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(227,73): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
           with
           [
               T=float
           ]
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(231,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(227,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
           with
           [
               T=float
           ]
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(232,69): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(228,69): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(232,51): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+C:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(228,51): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float

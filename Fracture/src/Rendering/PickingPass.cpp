@@ -63,16 +63,30 @@ void Fracture::PickingPass::Resize(int screenWidth, int screenHeight)
 	SCREEN_WIDTH = screenWidth;
 }
 
-int Fracture::PickingPass::GetPixelInfo(unsigned int x, unsigned int y)
+unsigned int Fracture::PickingPass::GetPixelInfo(unsigned int x, unsigned int y)
 {
 	m_renderTarget->bind();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-	int id;
-	glReadPixels(x,y, 1, 1, GL_RGB, GL_INT, &id);
+	FRACTURE_INFO("Width: {}", SCREEN_WIDTH);
+	FRACTURE_INFO("Height: {}", SCREEN_WIDTH);
+	FRACTURE_INFO("Pos X: {}",x);
+	FRACTURE_INFO("Pos Y: {}",y);
+
+	unsigned char id[4];
+	glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &id);
+
+	unsigned int pickedID =
+		id[0] +
+		id[1] * 256 +
+		id[2] * 256 * 256;
+
+	if (pickedID == 0x00ffffff) { // Full white, must be the background !
+		FRACTURE_INFO("background");
+	}
 
 	glReadBuffer(GL_NONE);
 	m_renderTarget->Unbind();
 
-	return id;
+	return pickedID;
 }

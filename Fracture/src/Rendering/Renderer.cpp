@@ -126,6 +126,7 @@ void Fracture::Renderer::RenderPasses()
         glEnable(GL_CULL_FACE);
     }
 
+    setViewport(m_width, m_Height);
     //Picking Pass
     {
         m_PickingPass->Begin();
@@ -133,13 +134,10 @@ void Fracture::Renderer::RenderPasses()
         m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
         m_PickingPass->End();
     }
-   
-    
-    setViewport(m_width, m_Height);        
+       
     SceneRenderTarget->bind();    
     clearColor(0.08f, 0.07f, 0.16f);
     clear();
-
     {
         ProfilerTimer timer("Opaque Draw");
         for (const auto& command : m_opaqueBucket->getCommands())
@@ -163,7 +161,6 @@ void Fracture::Renderer::RenderPasses()
             glDisable(GL_BLEND);
         }
     }
-
    
     if (m_drawgrid)
     {
