@@ -24,10 +24,12 @@ Fracture::PickingPass::~PickingPass()
 void Fracture::PickingPass::Begin()
 {
 	m_renderTarget->bind();
-	int clearValue= -1;
-	glClearTexImage(m_renderTarget->GetColorTexture(0)->id,0,GL_RED_INTEGER,GL_INT,&clearValue);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1f, 0.1f, 0.1f,1.0f);
 	glDisable(GL_DITHER);
+
+	int clearValue = -1;
+	glClearTexImage(m_renderTarget->GetColorTexture(0)->id, 0, GL_RGBA, GL_UNSIGNED_BYTE, &clearValue);
 }
 
 void Fracture::PickingPass::End()
@@ -69,8 +71,6 @@ unsigned int Fracture::PickingPass::GetPixelInfo(unsigned int x, unsigned int y)
 {
 	m_renderTarget->bind();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	FRACTURE_INFO("Pos X: {}",x);
-	FRACTURE_INFO("Pos Y: {}",y);
 
 	FRACTURE_INFO("width: {}", m_renderTarget->Width);
 	FRACTURE_INFO("height: {}", m_renderTarget->Height);

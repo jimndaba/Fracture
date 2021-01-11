@@ -88,8 +88,12 @@ void Fracture::Texture::Unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Fracture::Texture::Resize(int width, int height)
+void Fracture::Texture::Resize(int mwidth, int mheight)
 {
 	Bind();	
-	glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, width, height, 0, Format, Type, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, mwidth, mheight, 0, Format, Type, 0);
+
+	width = mwidth;
+	height = mheight;
+	
 }
