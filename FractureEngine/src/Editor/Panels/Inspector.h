@@ -46,13 +46,17 @@ namespace Fracture
 		{
 			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.Id);
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.10f, 0.10f, 0.10f, 1.00f));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			ImGui::BeginChild("tras",ImVec2(0,0),false,window_flags);
+			
 			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 			ImGui::Separator();
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
-			ImGui::PopStyleVar(
-			);
+			
+			
 			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 			{
@@ -78,7 +82,10 @@ namespace Fracture
 			{
 				ComponentManager::RemoveComponent<T>(entity.Id);
 			}
-				
+			ImGui::EndChild();
+			ImGui::PopStyleVar();
+			ImGui::PopStyleColor(1);
+			ImGui::Separator();
 		}
 
 	}

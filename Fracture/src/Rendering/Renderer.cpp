@@ -71,7 +71,7 @@ void Fracture::Renderer::onInit()
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, GL_FLOAT, 1,true));
     m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
-    m_grid->SetColor(glm::vec4(0.50f, 0.50f, 0.50f, 2.0f));
+    m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass()); 
@@ -136,7 +136,7 @@ void Fracture::Renderer::RenderPasses()
     }
        
     SceneRenderTarget->bind();    
-    clearColor(0.08f, 0.07f, 0.16f);
+    clearColor(0.05f, 0.05f, 0.05f);
     clear();
     {
         ProfilerTimer timer("Opaque Draw");

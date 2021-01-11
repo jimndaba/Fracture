@@ -135,14 +135,6 @@ namespace Fracture
 			{
 				for (auto mesh : model->GetMeshes())
 				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "CubeMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-
-
 					std::string name = mesh->MaterialName;
 					std::shared_ptr<Material> material = std::make_shared<Material>(name,
 						AssetManager::getShader("PrimitiveMaterial"));
@@ -153,8 +145,7 @@ namespace Fracture
 					material->setFloat("material.shininess", 64.0f);
 
 					AssetManager::AddMaterial(name, material);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, name);
-					scene->addEntity(shape);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, name);
 					materialCount++;
 				}
 			}

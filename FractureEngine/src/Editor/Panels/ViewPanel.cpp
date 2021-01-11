@@ -101,24 +101,8 @@ void Fracture::ViewPanel::render()
 			float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
 			float region_x = screen_pos.x-pos.x;
 			float region_y = height - ((pos.y - screen_pos.y)*-1) ;
-			region_y = region_y - 50.0f;
+			region_y = region_y - 50.0f; //remove Offset from menubar
 			
-
-
-			ImVec2 minBound = ImGui::GetCursorScreenPos();
-			ImVec2 maxBound = ImVec2{minBound.x + width, minBound.y + height};
-
-			FRACTURE_INFO("image x: {}", m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->width);
-			FRACTURE_INFO("image y: {}", m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->height);
-
-
-			FRACTURE_INFO("screen x: {}", pos.x);
-			FRACTURE_INFO("screen y: {}", pos.y);
-
-			FRACTURE_INFO("r x: {}", region_x);
-			FRACTURE_INFO("r y: {}", region_y);
-
-
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
 				int id = (int)m_renderer->GetEntityID(region_x, region_y);

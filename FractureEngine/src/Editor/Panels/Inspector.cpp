@@ -60,11 +60,11 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			glm::vec3 position = transform->Position();
 			glm::vec3 scale = transform->Scale();
 			glm::vec3 rotation = transform->Rotation();
-
+			
 			DrawVec3Control("Position", position);
 			DrawVec3Control("Scale", scale, 1);
 			DrawVec3Control("Rotation",rotation);
-
+			
 			transform->setPosition(position);
 			transform->setScale(scale);
 			transform->setRotation(rotation);
@@ -645,15 +645,28 @@ void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::ve
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.00f));
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("X", buttonSize))
 		values.x = resetValue;
-	ImGui::PopFont();
-	ImGui::PopStyleColor(3);
-
 	ImGui::SameLine();
+	ImGui::PopStyleColor(4);
+
+
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.85f, 0.85f, 0.85f, 1.00f));
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.15f, 0.15f, 0.15f, 1.00f));
 	ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+	int push = 2;
+	const bool buttonHovered = ImGui::IsItemHovered();
+	if (buttonHovered)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.9f, 0.9f, 1.00f));
+		push = 3;
+	}
+
 	
+	ImGui::PopStyleColor(push);
+	ImGui::PopFont();
 	
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
@@ -661,29 +674,36 @@ void Fracture::InspectorPanel::DrawVec3Control(const std::string& label, glm::ve
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.85f, 0.85f, 0.85f, 1.00f));
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.15f, 0.15f, 0.15f, 1.00f));
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Y", buttonSize))
 		values.y = resetValue;
-	ImGui::PopFont();
-	ImGui::PopStyleColor(3);
-
+	
 	ImGui::SameLine();
 	ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
+	ImGui::PopFont();
+	ImGui::PopStyleColor(5);
 
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.34f, 0.58f, 0.97f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.4f, 0.6f, 1.0f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.34f, 0.58f, 0.97f, 1.0f });
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.85f, 0.85f, 0.85f, 1.00f));
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.15f, 0.15f, 0.15f, 1.00f));
+	ImGui::PushStyleColor(ImGuiCol_TextSelectedBg,ImVec4(1.0f, 1.0f, 1.0f, 1.00f));
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Z", buttonSize))
 		values.z = resetValue;
-	ImGui::PopFont();
-	ImGui::PopStyleColor(3);
+	
 
 	ImGui::SameLine();
 	ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
 	ImGui::PopItemWidth();
+	ImGui::PopFont();
+	ImGui::PopStyleColor(6);
 
 	ImGui::PopStyleVar();
 
