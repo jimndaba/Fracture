@@ -6,6 +6,7 @@
 #include "Vertex.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Component/EditorNodeComponent.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
@@ -14,6 +15,7 @@
 #include "Component/CameraControllerComponent.h"
 #include "Component/TagComponent.h"
 #include "Component/ICamera.h"
+#include "Component/BillboardComponent.h"
 
 #include "Game/Game.h"
 #include "Scene/Scene.h"
@@ -323,11 +325,16 @@ void Fracture::Renderer::Submit(RenderCommand command)
     command.material->getShader()->setMat4("view", m_camera->getViewMatrix());   
     command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix());
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
-    command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-
+    if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+    {
+        command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+    }
+    if (ComponentManager::HasComponent<EditorNode>(command.ID))
+    {
+        command.material->getShader()->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
+    }
+    
     Draw(command);
- 
-
    
 }
 
@@ -405,10 +412,9 @@ void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end, g
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end,color));
 }
 
-void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Texture> texture)
+void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billboard, std::shared_ptr<Texture> texture)
 {
-    std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");
-    std::shared_ptr<Billboard> billboard = std::shared_ptr<Billboard>(new Billboard());
+    std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");   
     RenderCommand command(billbaordMaterial.get());
     command.VAO = billboard->VAO();
     command.ID = id;
@@ -546,6 +552,8 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
     std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
     std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
+    std::shared_ptr<BillboardComponent> m_billboard = ComponentManager::GetComponent<BillboardComponent>(entity->Id);
+
     if (render && tag->isVisible)
     {
         for (auto mesh : render->m_model->GetMeshes())
@@ -555,11 +563,9 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
             {
                 for (auto material : render->m_model->GetMaterials())
                 {
-                    //DrawAABB(*mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
                     PushCommand(mesh,AssetManager::getMaterial(material), transform);
                 }
-               // DrawAABB(*mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
-                //PushCommand(mesh, render->material, transform);
+            
             }
         }
         
@@ -569,6 +575,11 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     if (lightcomponent && tag->isVisible)
     {
         AddLight(lightcomponent->GetLight());
+    }
+
+    if (m_billboard && tag->isVisible)
+    {
+        DrawBillboard(entity->Id,m_billboard->GetBillboard(),AssetManager::getTexture("LightIcon"));
     }
 }
 

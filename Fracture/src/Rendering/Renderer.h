@@ -36,6 +36,7 @@ namespace Fracture
 	class Grid;
 	class ICamera;
 	class Environment;
+	class Billboard;
 
 	class Renderer
 	{
@@ -64,7 +65,7 @@ namespace Fracture
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
-		static void DrawBillboard(int id, std::shared_ptr<Texture> texture);
+		static void DrawBillboard(int id, std::shared_ptr<Billboard> billboard, std::shared_ptr<Texture> texture);
 		static void DrawAABB(const BoundingBox& aabb, const glm::mat4& transform, const glm::vec4& color);
 
 		static bool IsDebugDraw()

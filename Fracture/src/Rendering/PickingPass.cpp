@@ -7,6 +7,7 @@
 #include "Component/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Component/EditorNodeComponent.h"
 #include "Renderer.h"
 #include "Component/ICamera.h"
 
@@ -53,7 +54,15 @@ void Fracture::PickingPass::Render(std::shared_ptr<ICamera> camera,std::shared_p
 		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
 		material->getShader()->setMat4("view", camera->getViewMatrix());
 		material->getShader()->setMat4("projection", camera->getProjectionMatrix());
-		material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+		{
+			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+		}
+		if (ComponentManager::HasComponent<EditorNode>(command.ID))
+		{
+			material->getShader()->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
+		}
+		
 		glBindVertexArray(command.VAO);
 		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

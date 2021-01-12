@@ -34,19 +34,7 @@ void Fracture::LightComponent::onStart()
 
 void Fracture::LightComponent::OnDebug()
 {
-	switch (m_type)
-	{
-	case LightType::Sun:
-		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
-		break;
-	case LightType::Point:
-
-		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
-		break;
-	case LightType::Spot:
-		Renderer::DrawBillboard(EntityID, AssetManager::getTexture("LightIcon"));
-		break;
-	}
+	
 }
 
 void Fracture::LightComponent::SetAmbient(glm::vec4 amb)

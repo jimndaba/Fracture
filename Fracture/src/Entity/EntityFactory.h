@@ -18,6 +18,7 @@
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/BillboardComponent.h"
 #include "Component/EditorNodeComponent.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
@@ -78,6 +79,7 @@ namespace Fracture
 			
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
+			ComponentManager::AddComponent<BillboardComponent>(newEntity->Id);
 			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
 			return newEntity;
 		}

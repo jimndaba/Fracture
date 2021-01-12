@@ -13,6 +13,7 @@
 #include "LightComponent.h"
 #include "EditorNodeComponent.h"
 #include "CameraControllerComponent.h"
+#include "BillboardComponent.h"
 #include "RelationshipComponent.h"
 #include "RenderComponent.h"
 #include <iostream>
@@ -29,6 +30,7 @@ std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_LightCompo
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RigidBodyComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BoxColliderComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_ScriptComponents;
+std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BillboardComponents;
 
 std::map<std::type_index, std::shared_ptr<Fracture::ComponentSet>> Fracture::ComponentManager::Register;
 
@@ -54,17 +56,20 @@ void Fracture::ComponentManager::onInit()
 	m_RigidBodyComponents		 = std::make_shared<ComponentSet>();
 	m_BoxColliderComponents		 = std::make_shared<ComponentSet>();
 	m_ScriptComponents			 = std::make_shared<ComponentSet>();
+	m_BillboardComponents		 = std::make_shared<ComponentSet>();
 
 	Register.emplace(typeid(TagComponent),m_tagComponents);
 	Register.emplace(typeid(RelationShipComponent), m_RelationshipComponents);
 	Register.emplace(typeid(TransformComponent), m_TransformerComponents);
 	Register.emplace(typeid(CameraControllerComponent), m_CameraControllerComponents);
 	Register.emplace(typeid(RenderComponent), m_RenderComponents);
+	Register.emplace(typeid(BillboardComponent), m_BillboardComponents);
 	Register.emplace(typeid(EditorNode), m_EditorNodeComponents);
 	Register.emplace(typeid(LightComponent), m_LightComponents);
 	Register.emplace(typeid(RigidBodyComponent), m_RigidBodyComponents);
 	Register.emplace(typeid(BoxColliderComponent), m_BoxColliderComponents);
 	Register.emplace(typeid(ScriptComponent), m_ScriptComponents);
+
 	
 }
 

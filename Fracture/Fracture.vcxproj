@@ -107,6 +107,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
+    <ClCompile Include="src\Component\BillboardComponent.cpp" />
     <ClCompile Include="src\Component\BoxColliderComponent.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
+    <ClInclude Include="src\Component\BillboardComponent.h" />
     <ClInclude Include="src\Component\BoxColliderComponent.h" />
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />

@@ -29,6 +29,7 @@ namespace Fracture
 	class LightComponent;
 	class EditorNode;
 	class BoxColliderComponent;
+	class BillboardComponent;
 	//class ColliderComponent; TODO
 
 	
@@ -217,6 +218,7 @@ namespace Fracture
 		static std::shared_ptr<ComponentSet> m_RigidBodyComponents;
 		static std::shared_ptr<ComponentSet> m_BoxColliderComponents;
 		static std::shared_ptr<ComponentSet> m_ScriptComponents;
+		static std::shared_ptr<ComponentSet> m_BillboardComponents;
 
 		static std::map<std::type_index, std::shared_ptr<ComponentSet>> Register;
 	};

@@ -1,1233 +1,335 @@
-[14:14:13] [info] FRACTURE: Initializing Splash
-[14:14:13] [info] FRACTURE: OpenGL loaded
-[14:14:13] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[14:14:13] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[14:14:13] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[14:14:13] [trace] FRACTURE: Loaded Texture: splash
-[14:14:13] [trace] FRACTURE: Loaded Texture: title
-[14:14:13] [info] FRACTURE: Completed Init
-[14:14:13] [info] FRACTURE: Show Splash
-[14:14:27] [info] FRACTURE: OpenGL loaded
-[14:14:27] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[14:14:27] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[14:14:27] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[14:14:27] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[14:14:27] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: RotateIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: CameraIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: LightIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: EyeIcon
-[14:14:27] [trace] FRACTURE: Loaded Texture: EyeIconC
-[14:14:27] [trace] FRACTURE: Loaded Texture: MeshIcon
-[14:14:27] [trace] FRACTURE: Loaded HDR Environment: Loft
-[14:14:27] [trace] FRACTURE: Loaded Shader: CubeMap
-[14:14:27] [trace] FRACTURE: Loaded Shader: irradiance
-[14:14:27] [trace] FRACTURE: Loaded Shader: prefilter
-[14:14:27] [trace] FRACTURE: Loaded Shader: bdrf
-[14:14:27] [trace] FRACTURE: Loaded Shader: Skybox
-[14:14:27] [trace] FRACTURE: Loaded Shader: DebugShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[14:14:27] [trace] FRACTURE: Loaded Shader: BillboardShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: DepthShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: DepthShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: PickingShader
-[14:14:27] [trace] FRACTURE: Loaded Shader: default
-[14:14:27] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[14:14:27] [trace] FRACTURE: Loaded Material: billboardIcons
-[14:14:27] [trace] FRACTURE: Loaded Material: DebugMaterial
-[14:14:27] [trace] FRACTURE: Loaded Material: DepthMaterial
-[14:14:27] [trace] FRACTURE: Loaded Material: PickingMaterial
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: plane.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Plane
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Plane
-[14:14:27] [trace] FRACTURE: Loaded Material: Plane_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Plane
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: cube.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Cube
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Cube
-[14:14:27] [trace] FRACTURE: Loaded Material: Cube_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Cube
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: sphere.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Sphere
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Sphere
-[14:14:27] [trace] FRACTURE: Loaded Material: Sphere_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Sphere
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: cylinder.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Cylinder
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Cylinder
-[14:14:27] [trace] FRACTURE: Loaded Material: Cylinder_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Cylinder
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: torus.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Torus
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Torus
-[14:14:27] [trace] FRACTURE: Loaded Material: Torus_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Torus
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: loading Model: suzane.fbx
-[14:14:27] [trace] FRACTURE: Number of Materials: 1
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 3
-[14:14:27] [trace] FRACTURE: loading Child: Light
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Camera
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 0
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: loading Child: Suzanne
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: Number of Meshes: 1
-[14:14:27] [trace] FRACTURE: Number of Children: 0
-[14:14:27] [trace] FRACTURE: loading Mesh: Suzanne
-[14:14:27] [trace] FRACTURE: Loaded Material: Suzanne_material_0
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |##############|
-[14:14:27] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[14:14:27] [trace] FRACTURE: Loaded model: Suzane
-[14:14:27] [info] FRACTURE: Renderer Init
-[14:14:49] [trace] FRACTURE: Loaded HDR Environment: birchwood_1k
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:03] [info] FRACTURE: width: 1167
-[14:15:03] [info] FRACTURE: height: 805
-[14:15:03] [trace] FRACTURE: Pixel ID: -1
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:08] [info] FRACTURE: width: 1167
-[14:15:08] [info] FRACTURE: height: 805
-[14:15:08] [trace] FRACTURE: Pixel ID: 6
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:14] [info] FRACTURE: width: 1167
-[14:15:14] [info] FRACTURE: height: 805
-[14:15:14] [trace] FRACTURE: Pixel ID: 7
-[14:15:29] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:30] [info] FRACTURE: width: 1167
-[14:15:30] [info] FRACTURE: height: 805
-[14:15:30] [trace] FRACTURE: Pixel ID: -1
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:38] [info] FRACTURE: width: 1167
-[14:15:38] [info] FRACTURE: height: 805
-[14:15:38] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:48] [info] FRACTURE: width: 1167
-[14:15:48] [info] FRACTURE: height: 805
-[14:15:48] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:55] [info] FRACTURE: width: 1167
-[14:15:55] [info] FRACTURE: height: 805
-[14:15:55] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:15:57] [info] FRACTURE: width: 1167
-[14:15:57] [info] FRACTURE: height: 805
-[14:15:57] [trace] FRACTURE: Pixel ID: 7
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:19] [info] FRACTURE: width: 1167
-[14:16:19] [info] FRACTURE: height: 805
-[14:16:19] [trace] FRACTURE: Pixel ID: 40
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:37] [info] FRACTURE: width: 1167
-[14:16:37] [info] FRACTURE: height: 805
-[14:16:37] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 7
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:38] [info] FRACTURE: width: 1167
-[14:16:38] [info] FRACTURE: height: 805
-[14:16:38] [trace] FRACTURE: Pixel ID: 41
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:48] [info] FRACTURE: width: 1167
-[14:16:48] [info] FRACTURE: height: 805
-[14:16:48] [trace] FRACTURE: Pixel ID: 7
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:49] [info] FRACTURE: width: 1167
-[14:16:49] [info] FRACTURE: height: 805
-[14:16:49] [trace] FRACTURE: Pixel ID: 41
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:16:54] [info] FRACTURE: width: 1167
-[14:16:54] [info] FRACTURE: height: 805
-[14:16:54] [trace] FRACTURE: Pixel ID: 7
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:01] [info] FRACTURE: width: 1167
-[14:17:01] [info] FRACTURE: height: 805
-[14:17:01] [trace] FRACTURE: Pixel ID: 6
-[14:17:04] [info] FRACTURE: width: 1167
-[14:17:04] [info] FRACTURE: height: 805
-[14:17:04] [trace] FRACTURE: Pixel ID: 40
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:05] [info] FRACTURE: width: 1167
-[14:17:05] [info] FRACTURE: height: 805
-[14:17:05] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:57] [info] FRACTURE: width: 1167
-[14:17:57] [info] FRACTURE: height: 805
-[14:17:57] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:58] [info] FRACTURE: width: 1167
-[14:17:58] [info] FRACTURE: height: 805
-[14:17:58] [trace] FRACTURE: Pixel ID: 7
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:17:59] [info] FRACTURE: width: 1167
-[14:17:59] [info] FRACTURE: height: 805
-[14:17:59] [trace] FRACTURE: Pixel ID: -1
-[14:18:09] [info] FRACTURE: width: 1167
-[14:18:09] [info] FRACTURE: height: 805
-[14:18:09] [trace] FRACTURE: Pixel ID: 40
-[14:18:09] [info] FRACTURE: width: 1167
-[14:18:09] [info] FRACTURE: height: 805
-[14:18:09] [trace] FRACTURE: Pixel ID: 40
-[14:18:10] [info] FRACTURE: width: 1167
-[14:18:10] [info] FRACTURE: height: 805
-[14:18:10] [trace] FRACTURE: Pixel ID: 40
-[14:18:10] [info] FRACTURE: width: 1167
-[14:18:10] [info] FRACTURE: height: 805
-[14:18:10] [trace] FRACTURE: Pixel ID: 40
-[14:18:10] [info] FRACTURE: width: 1167
-[14:18:10] [info] FRACTURE: height: 805
-[14:18:10] [trace] FRACTURE: Pixel ID: 40
-[14:18:10] [info] FRACTURE: width: 1167
-[14:18:10] [info] FRACTURE: height: 805
-[14:18:10] [trace] FRACTURE: Pixel ID: 40
-[14:18:10] [info] FRACTURE: width: 1167
-[14:18:10] [info] FRACTURE: height: 805
-[14:18:10] [trace] FRACTURE: Pixel ID: 40
-[14:18:17] [info] FRACTURE: width: 1167
-[14:18:17] [info] FRACTURE: height: 805
-[14:18:17] [trace] FRACTURE: Pixel ID: 6
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:19] [info] FRACTURE: width: 1167
-[14:18:19] [info] FRACTURE: height: 805
-[14:18:19] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 7
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:20] [info] FRACTURE: width: 1167
-[14:18:20] [info] FRACTURE: height: 805
-[14:18:20] [trace] FRACTURE: Pixel ID: 6
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
-[14:18:27] [info] FRACTURE: width: 1167
-[14:18:27] [info] FRACTURE: height: 805
-[14:18:27] [trace] FRACTURE: Pixel ID: 7
+[18:42:18] [info] FRACTURE: Initializing Splash
+[18:42:18] [info] FRACTURE: OpenGL loaded
+[18:42:18] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[18:42:18] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[18:42:18] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[18:42:18] [trace] FRACTURE: Loaded Texture: splash
+[18:42:18] [trace] FRACTURE: Loaded Texture: title
+[18:42:18] [info] FRACTURE: Completed Init
+[18:42:18] [info] FRACTURE: Show Splash
+[18:42:26] [info] FRACTURE: OpenGL loaded
+[18:42:26] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[18:42:26] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[18:42:26] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[18:42:26] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[18:42:26] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: RotateIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: CameraIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: LightIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: EyeIcon
+[18:42:26] [trace] FRACTURE: Loaded Texture: EyeIconC
+[18:42:26] [trace] FRACTURE: Loaded Texture: MeshIcon
+[18:42:26] [trace] FRACTURE: Loaded HDR Environment: Loft
+[18:42:26] [trace] FRACTURE: Loaded Shader: CubeMap
+[18:42:26] [trace] FRACTURE: Loaded Shader: irradiance
+[18:42:26] [trace] FRACTURE: Loaded Shader: prefilter
+[18:42:26] [trace] FRACTURE: Loaded Shader: bdrf
+[18:42:26] [trace] FRACTURE: Loaded Shader: Skybox
+[18:42:26] [trace] FRACTURE: Loaded Shader: DebugShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[18:42:26] [trace] FRACTURE: Loaded Shader: BillboardShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: DepthShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: DepthShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: PickingShader
+[18:42:26] [trace] FRACTURE: Loaded Shader: default
+[18:42:26] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[18:42:26] [trace] FRACTURE: Loaded Material: billboardIcons
+[18:42:26] [trace] FRACTURE: Loaded Material: DebugMaterial
+[18:42:26] [trace] FRACTURE: Loaded Material: DepthMaterial
+[18:42:26] [trace] FRACTURE: Loaded Material: PickingMaterial
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: plane.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Plane
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Plane
+[18:42:26] [trace] FRACTURE: Loaded Material: Plane_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Plane
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: cube.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Cube
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Cube
+[18:42:26] [trace] FRACTURE: Loaded Material: Cube_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Cube
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: sphere.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Sphere
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Sphere
+[18:42:26] [trace] FRACTURE: Loaded Material: Sphere_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Sphere
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: cylinder.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Cylinder
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Cylinder
+[18:42:26] [trace] FRACTURE: Loaded Material: Cylinder_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Cylinder
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: torus.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Torus
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Torus
+[18:42:26] [trace] FRACTURE: Loaded Material: Torus_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Torus
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: loading Model: suzane.fbx
+[18:42:26] [trace] FRACTURE: Number of Materials: 1
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 3
+[18:42:26] [trace] FRACTURE: loading Child: Light
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Camera
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 0
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: loading Child: Suzanne
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: Number of Meshes: 1
+[18:42:26] [trace] FRACTURE: Number of Children: 0
+[18:42:26] [trace] FRACTURE: loading Mesh: Suzanne
+[18:42:26] [trace] FRACTURE: Loaded Material: Suzanne_material_0
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |##############|
+[18:42:26] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[18:42:26] [trace] FRACTURE: Loaded model: Suzane
+[18:42:26] [info] FRACTURE: Renderer Init
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:35] [info] FRACTURE: width: 1167
+[18:42:35] [info] FRACTURE: height: 805
+[18:42:35] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
+[18:42:45] [info] FRACTURE: width: 1167
+[18:42:45] [info] FRACTURE: height: 805
+[18:42:45] [trace] FRACTURE: Pixel ID: -1
