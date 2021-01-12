@@ -5,9 +5,8 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/RenderCommand.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID, std::shared_ptr<Mesh> mesh,std::string materialname):Component(entityID,ComponentType::Render),m_mesh(mesh),m_materialName(materialname)
+Fracture::RenderComponent::RenderComponent(uint32_t entityID, std::shared_ptr<Model> model):Component(entityID,ComponentType::Render),m_model(model)
 {
-	material = AssetManager::getMaterial(m_materialName);
 	m_Rendertype = RenderType::Normal;
 }
 
@@ -21,12 +20,12 @@ void Fracture::RenderComponent::onStart()
 
 void Fracture::RenderComponent::SetMaterial(std::string name)
 {
-	material = AssetManager::getMaterial(name);
+	//material = AssetManager::getMaterial(name);
 }
 
 void Fracture::RenderComponent::SetModel(std::string name)
 {
-	//model = AssetManager::getModel(name);
+	m_model = AssetManager::getModel(name);
 }
 
 void Fracture::RenderComponent::SetRenderType(RenderType m_type)
@@ -37,14 +36,4 @@ void Fracture::RenderComponent::SetRenderType(RenderType m_type)
 Fracture::RenderType Fracture::RenderComponent::getRenderType()
 {
 	return m_Rendertype;
-}
-
-void Fracture::RenderComponent::SetAABB(std::shared_ptr<BoundingBox> aabb)
-{
-	m_mesh->SetAABB(aabb);
-}
-
-std::shared_ptr<Fracture::BoundingBox> Fracture::RenderComponent::GetAABB()
-{
-	return m_mesh->GetAABB();
 }

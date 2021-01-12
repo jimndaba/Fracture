@@ -19,13 +19,15 @@ namespace Fracture
 		~Model();
 
 		void addMesh(std::shared_ptr<Mesh> mesh);
+		void addMaterial(std::string material_name);
+
 
 		std::string Name;
 		std::string Path;
 		std::string directory;
 
 		std::shared_ptr<Mesh> GetMesh(std::string name);
-
+		std::vector<std::string> GetMaterials();
 		std::vector<std::shared_ptr<Mesh>> GetMeshes();
 
 		int GetNextMaterialIndex()
@@ -37,7 +39,7 @@ namespace Fracture
 
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
-
+		std::vector<std::string> m_materials;
 		int m_materialIndex = 0;
 	};
 }

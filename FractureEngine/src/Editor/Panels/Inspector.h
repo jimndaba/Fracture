@@ -41,28 +41,34 @@ namespace Fracture
 	inline void InspectorPanel::DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
-
+	
 		if (Fracture::ComponentManager::HasComponent<T>(entity.Id))
 		{
-			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.Id);
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.10f, 0.10f, 0.10f, 1.00f));
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			
 
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			ImGui::BeginChild("tras",ImVec2(0,0),false,window_flags);
-			
 			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-			ImGui::Separator();
+			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.Id);
+		
+			ImGuiWindowFlags window_flags =ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_AlwaysAutoResize;
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.70f, 0.70f, 0.70f, 1.00f));
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 2.0f);			
+			
+
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
-			
-			
 			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
 
+			if (open)
+			{
+				uiFunction(component);
+				ImGui::TreePop();
+				ImGui::Separator();
+			}
 			bool removeComponent = false;
 			if (ImGui::BeginPopup("ComponentSettings"))
 			{
@@ -72,22 +78,20 @@ namespace Fracture
 				ImGui::EndPopup();
 			}
 
-			if (open)
-			{
-				uiFunction(component);
-				ImGui::TreePop();
-			}
-
 			if (removeComponent)
 			{
 				ComponentManager::RemoveComponent<T>(entity.Id);
 			}
-			ImGui::EndChild();
-			ImGui::PopStyleVar();
+		
+		
 			ImGui::PopStyleColor(1);
-			ImGui::Separator();
-		}
+			ImGui::PopStyleVar(2);
+			
+	
 
+		}
+	
+		
 	}
 
 }

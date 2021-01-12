@@ -25,33 +25,19 @@ void Fracture::InspectorPanel::render()
 
 void Fracture::InspectorPanel::DrawComponents(Entity entity)
 {
-	ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-
-	if (ComponentManager::HasComponent<TagComponent>(entity.Id))
+	DrawComponent<TagComponent>("Tag", entity, [](auto& component)
 	{
-		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity.Id);
+		std::shared_ptr<TagComponent> tag = std::dynamic_pointer_cast<TagComponent>(component);
 
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strcpy_s(buffer, sizeof(buffer), tag->Name.c_str());
 
 		if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
-		{	
+		{
 			tag->Name = std::string(buffer);
-		}		
-	}
-
-	ImGui::PushItemWidth(-1);
-	ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);	
-
-	if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-	{
-		ImGui::OpenPopup("ComponentSettings");
-	}	
-	
-	ImGui::PopItemWidth();
-
+		}
+	});
 
 	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
@@ -75,8 +61,6 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				body->setPosition(transform->Position());
 				body->setRotation(transform->Rotation());
 			}
-
-
 		});
 
 	DrawComponent<EditorNode>("Editor Node", entity, [](auto& component)
@@ -167,9 +151,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
-			std::string current_Model = render->m_mesh->Name;
-			std::string current_Material = render->material->Name;
-			std::string current_Shader = render->material->getShader()->Name;
+			std::string current_Model = render->m_model->Name;		
+			//std::string current_Shader = render->material->getShader()->Name;
 
 			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
@@ -187,69 +170,83 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					if (is_selected)
 					{
 						ImGui::SetItemDefaultFocus();
-						//render->SetModel(model.first);
-					}
-				}
-				ImGui::EndCombo();
-			}
-
-			if (ImGui::BeginCombo("Material", current_Material.c_str()))
-			{
-
-				for (auto const& material : AssetManager::GetMaterials())
-				{
-					bool is_selected = (current_Material.c_str() == material.first.c_str());
-
-					if (ImGui::Selectable(material.first.c_str(), is_selected))
-					{
-						current_Material = material.first;
-						render->SetMaterial(material.first);
-					}
-
-					if (is_selected)
-					{
-						ImGui::SetItemDefaultFocus();
+						render->SetModel(model.first);
 					}
 				}
 				ImGui::EndCombo();
 			}
 			
-			bool isTransparent = render->material->IsTransparent();
-			DrawBoolControl("Is Transparent", isTransparent);
-			render->material->setIsTransparent(isTransparent);
-
-			ImGui::Separator();
-
-			bool castShadows = render->material->CastShadows();
-			DrawBoolControl("Cast Shadows", castShadows);
-			render->material->setCastShadows(castShadows);
-
-			ImGui::Separator();
-			if (ImGui::Button("reload",ImVec2(100,20)))
-			{
-				render->material->getShader()->reloadShader();
+			// Model can have more that 1 material
+			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 			
-				FRACTURE_INFO("Reloaded Shader: {}", render->material->getShader()->Name);
-			}
-
-			ImGui::Separator();
-
-			auto uniforms = render->material->GetUniforms();
-			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
+			for (auto material : render->m_model->GetMaterials())
 			{
-				DrawMaterialUniform(value->first, value->second);
-			}
-			ImGui::Separator();
-			std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = render->material->GetSamplerUniforms();
-			for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
-			{
-				if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
-				{
-					DrawTexture2DControl(it->first, it->second->texture->id);
-				}
+				bool open = ImGui::TreeNodeEx((void*)typeid(material).hash_code(), treeNodeFlags, material.c_str());
+				std::string current_Material = material;
+
+				if (open)
+				{			
+					if (ImGui::BeginCombo("Material", current_Material.c_str()))
+					{
+
+						for (auto const& material : AssetManager::GetMaterials())
+						{
+							bool is_selected = (current_Material.c_str() == material.first.c_str());
+
+							if (ImGui::Selectable(material.first.c_str(), is_selected))
+							{
+								current_Material = material.first;
+								render->SetMaterial(material.first);
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+					
+					std::shared_ptr<Material> mMaterial = AssetManager::getMaterial(current_Material);
+
+					bool isTransparent = mMaterial->IsTransparent();
+					DrawBoolControl("Is Transparent", isTransparent);
+					mMaterial->setIsTransparent(isTransparent);
+
+					
+
+					bool castShadows = mMaterial->CastShadows();
+					DrawBoolControl("Cast Shadows", castShadows);
+					mMaterial->setCastShadows(castShadows);
+
+					if (ImGui::Button("reload", ImVec2(100, 20)))
+					{
+						mMaterial->getShader()->reloadShader();
+
+						FRACTURE_INFO("Reloaded Shader: {}", mMaterial->getShader()->Name);
+					}
+
+					ImGui::Separator();
+
+					auto uniforms = mMaterial->GetUniforms();
+					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
+					{
+						DrawMaterialUniform(value->first, value->second);
+					}
+					ImGui::Separator();
+					std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = mMaterial->GetSamplerUniforms();
+					for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+					{
+						if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
+						{
+							DrawTexture2DControl(it->first, it->second->texture->id);
+						}
+
+					}
+					ImGui::TreePop();
 				
+				}
 			}
-			ImGui::Separator();
 	});	
 
 	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
@@ -450,7 +447,6 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			}
 	});
 
-	ImGui::Separator();
 
 	if (ImGui::Button("Add Component"))
 	{

@@ -128,26 +128,15 @@ namespace Fracture
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 
-
 			std::shared_ptr<Model> model = AssetManager::getModel("Cube");
-
+			
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::string name = mesh->MaterialName;
-					std::shared_ptr<Material> material = std::make_shared<Material>(name,
-						AssetManager::getShader("PrimitiveMaterial"));
-
-					material->setColor3("material.diffuse", glm::vec3(1.0f));
-					material->setColor3("material.ambient", glm::vec3(1.0f));
-					material->setColor3("material.specular", glm::vec3(1.0f));
-					material->setFloat("material.shininess", 64.0f);
-
-					AssetManager::AddMaterial(name, material);
-					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, mesh, name);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);					
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 
 			return newEntity;
@@ -166,30 +155,11 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "PlaneMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-
-
-					std::string name = mesh->MaterialName;
-					std::shared_ptr<Material> material = std::make_shared<Material>(name,
-						AssetManager::getShader("PrimitiveMaterial"));
-
-					material->setColor3("material.diffuse", glm::vec3(1.0f));
-					material->setColor3("material.ambient", glm::vec3(1.0f));
-					material->setColor3("material.specular", glm::vec3(1.0f));
-					material->setFloat("material.shininess", 64.0f);
-
-					AssetManager::AddMaterial(name, material);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, name);
-					scene->addEntity(shape);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 			
 			return newEntity;
@@ -208,18 +178,11 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "SphereMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
-					scene->addEntity(shape);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 			return newEntity;
 		}
@@ -237,18 +200,11 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "SuzaneMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
-					scene->addEntity(shape);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 			return newEntity;
 		}
@@ -266,18 +222,11 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "CylinderMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
-					scene->addEntity(shape);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 			return newEntity;
 		}
@@ -294,18 +243,11 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> shape = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(shape->Id, "TorusMesh");
-					std::shared_ptr<RelationShipComponent> m_relationship = std::make_shared<RelationShipComponent>(shape->Id);
-					m_relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(m_relationship);
-					ComponentManager::AddComponent<TransformComponent>(shape->Id);
-					ComponentManager::AddComponent<RenderComponent>(shape->Id, mesh, mesh->MaterialName);
-					scene->addEntity(shape);
-					materialCount++;
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+			}
+			else
+			{
+				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
 			}
 			return newEntity;
 		}
@@ -323,17 +265,7 @@ namespace Fracture
 
 			if (model)
 			{
-				for (auto mesh : model->GetMeshes())
-				{
-					std::shared_ptr<Entity> childMesh = EntityManager::CreateEntity<Entity>();
-					ComponentManager::AddComponent<TagComponent>(childMesh->Id, mesh->Name);
-					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(childMesh->Id);
-					relationship->SetParent(newEntity->Id);
-					ComponentManager::AddComponent<RelationShipComponent>(relationship);
-					ComponentManager::AddComponent<TransformComponent>(childMesh->Id,mesh->position, mesh->scale, mesh->rotation);
-					ComponentManager::AddComponent<RenderComponent>(childMesh->Id,mesh, mesh->MaterialName);
-					scene->addEntity(childMesh);
-				}
+				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{

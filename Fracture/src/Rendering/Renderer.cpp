@@ -548,13 +548,22 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
     std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
     if (render && tag->isVisible)
     {
-        
-        
-        if (m_camera->IsBoxInFrustum(render->GetAABB()->min, render->GetAABB()->max))
+        for (auto mesh : render->m_model->GetMeshes())
         {
-            DrawAABB(*render->m_mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
-            PushCommand(render->m_mesh, render->material, transform);
+            
+            if (m_camera->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
+            {
+                for (auto material : render->m_model->GetMaterials())
+                {
+                    //DrawAABB(*mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
+                    PushCommand(mesh,AssetManager::getMaterial(material), transform);
+                }
+               // DrawAABB(*mesh->GetAABB(), transform->GetWorldTransform(), glm::vec4(1.0, 0.0, 0.0, 1.0));
+                //PushCommand(mesh, render->material, transform);
+            }
         }
+        
+        
     }
     
     if (lightcomponent && tag->isVisible)

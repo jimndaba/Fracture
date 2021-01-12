@@ -27,7 +27,7 @@ namespace Fracture
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(uint32_t entityID, std::shared_ptr<Mesh> mesh,std::string material);
+		RenderComponent(uint32_t entityID, std::shared_ptr<Model> model);
 		~RenderComponent();
 
 
@@ -38,15 +38,10 @@ namespace Fracture
 		void SetRenderType(RenderType m_type);
 		RenderType getRenderType();
 
-		std::shared_ptr<Mesh> m_mesh;
-		std::shared_ptr<Material> material;
-
-		void SetAABB(std::shared_ptr<BoundingBox> aabb);
-		std::shared_ptr<BoundingBox> GetAABB();
+		std::shared_ptr<Model> m_model;
 
 	private:
 		std::string m_modelName;
-		std::string m_materialName;
 		RenderType m_Rendertype;
 	};
 

@@ -472,6 +472,7 @@ void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* n
 		FRACTURE_TRACE("loading Mesh: {}", meshname.C_Str());
 		std::shared_ptr<Mesh> m_mesh = processMesh(model, mesh, scene, node);
 		model->addMesh(m_mesh);	
+		model->addMaterial(m_mesh->MaterialName);
 	}
 
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
