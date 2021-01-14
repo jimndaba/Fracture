@@ -144,6 +144,7 @@
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
     <ClCompile Include="src\Rendering\PickingPass.cpp" />
+    <ClCompile Include="src\Rendering\RenderBatch.cpp" />
     <ClCompile Include="src\Rendering\RenderBucket.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Rendering\RenderTarget.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\Model.h" />
     <ClInclude Include="src\Rendering\PickingPass.h" />
+    <ClInclude Include="src\Rendering\RenderBatch.h" />
     <ClInclude Include="src\Rendering\RenderBucket.h" />
     <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />

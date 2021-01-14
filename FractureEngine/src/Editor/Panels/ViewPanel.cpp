@@ -77,6 +77,7 @@ void Fracture::ViewPanel::render()
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
+	ImGui::Text("Number of Batches: %d ", m_renderer->NumberBatches);
 
 	
 	//IMGUIZMO STUFF STARTS HERE

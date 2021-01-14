@@ -30,6 +30,7 @@ namespace Fracture
 		uint32_t VAO;
 		float ViewDepth;
 		int HasTransparency;
+		bool IsOutlined;
 		GLint indiceSize;
 		Material* material;
 		std::vector<std::string> TextureNames;

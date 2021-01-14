@@ -80,11 +80,6 @@ void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string pat
 	FRACTURE_TRACE("Loaded HDR Environment: {}", name);
 }
 
-void Fracture::AssetManager::AddMesh(std::string name, std::string path)
-{
-
-}
-
 void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
 {
 	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,shader));
@@ -245,8 +240,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 	ImportMaterial(currentMaterial, m_material);
 
-	AddMaterial(mat_name, m_material);
-	
+	AddMaterial(mat_name, m_material);	
 
 	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 

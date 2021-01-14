@@ -177,6 +177,9 @@
     <ClCompile Include="src\Component\BillboardComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\RenderBatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -579,6 +582,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\BillboardComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderBatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

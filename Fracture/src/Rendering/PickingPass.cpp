@@ -2,6 +2,7 @@
 #include "RenderTarget.h"
 #include "RenderCommand.h"
 #include "RenderBucket.h"
+#include "RenderBatch.h"
 #include "Material.h"
 #include "Shader.h"
 #include "Component/ILight.h"
@@ -41,31 +42,35 @@ void Fracture::PickingPass::End()
 
 void Fracture::PickingPass::Render(std::shared_ptr<ICamera> camera,std::shared_ptr<Material> material, RenderBucket& bucket)
 {
-	for (const auto& command : bucket.getCommands())
-	{
-		material->getShader()->use();
-		//m_pickingEffect.SetObjectIndex(i);
-		// Convert "i", the integer mesh ID, into an RGB color
-		int r = ((int)command.ID & 0x000000FF) >> 0;
-		int g = ((int)command.ID & 0x0000FF00) >> 8;
-		int b = ((int)command.ID & 0x00FF0000) >> 16;
 
-		//material->getShader()->setInt("gObjectIndex",command.ID);
-		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-		material->getShader()->setMat4("view", camera->getViewMatrix());
-		material->getShader()->setMat4("projection", camera->getProjectionMatrix());
-		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+	for (const auto& batch : bucket.getRenderBatches())
+	{
+		for (const auto& command : batch.second->m_commnads)
 		{
-			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+			material->getShader()->use();
+			//m_pickingEffect.SetObjectIndex(i);
+			// Convert "i", the integer mesh ID, into an RGB color
+			int r = ((int)command.ID & 0x000000FF) >> 0;
+			int g = ((int)command.ID & 0x0000FF00) >> 8;
+			int b = ((int)command.ID & 0x00FF0000) >> 16;
+
+			//material->getShader()->setInt("gObjectIndex",command.ID);
+			material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+			material->getShader()->setMat4("view", camera->getViewMatrix());
+			material->getShader()->setMat4("projection", camera->getProjectionMatrix());
+			if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+			{
+				material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+			}
+			if (ComponentManager::HasComponent<EditorNode>(command.ID))
+			{
+				material->getShader()->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
+			}
+
+			glBindVertexArray(command.VAO);
+			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
 		}
-		if (ComponentManager::HasComponent<EditorNode>(command.ID))
-		{
-			material->getShader()->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
-		}
-		
-		glBindVertexArray(command.VAO);
-		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
 	}
 }
 

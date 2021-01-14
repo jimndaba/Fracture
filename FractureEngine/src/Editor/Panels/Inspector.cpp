@@ -183,7 +183,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			{
 				bool open = ImGui::TreeNodeEx((void*)typeid(material).hash_code(), treeNodeFlags, material.c_str());
 				std::string current_Material = material;
-
+				std::shared_ptr<Material> mMaterial = AssetManager::getMaterial(current_Material);
+				mMaterial->SetIsOutlined(true);
 				if (open)
 				{			
 					if (ImGui::BeginCombo("Material", current_Material.c_str()))
@@ -205,9 +206,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 							}
 						}
 						ImGui::EndCombo();
-					}
-					
-					std::shared_ptr<Material> mMaterial = AssetManager::getMaterial(current_Material);
+					}					
 
 					bool isTransparent = mMaterial->IsTransparent();
 					DrawBoolControl("Is Transparent", isTransparent);

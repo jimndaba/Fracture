@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <string>
 #include <memory>
+#include <map>
 
 namespace Fracture
 {
@@ -14,7 +15,8 @@ namespace Fracture
 	class TransformComponent;
 	class Mesh;
 	class Material;
-
+	class RenderBatch;
+	
 
 	class RenderBucket
 	{
@@ -27,11 +29,15 @@ namespace Fracture
 		void clear();
 
 		std::vector<RenderCommand> getCommands(bool cull = false);
+		std::map<std::string, std::shared_ptr<RenderBatch>> getRenderBatches();
 		std::vector<std::string> Materials;
 	
 
 	private:
 		std::vector<RenderCommand> m_commands;
+		std::map<std::string, std::shared_ptr<RenderBatch>> m_batches;
+
+
 	};
 
 }

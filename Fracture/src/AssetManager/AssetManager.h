@@ -54,7 +54,6 @@ namespace Fracture
 		static void AddTexture(std::string name, std::string path, TextureType mtype);
 		static void AddTexture(std::shared_ptr<Texture> texture);
 		static void AddEnvironmentMap(std::string name, std::string path);
-		static void AddMesh(std::string name, std::string path);
 		static void AddMaterial(std::string name, std::shared_ptr<Shader> shader);
 		static void AddMaterial(std::string name, std::shared_ptr<Material> material);
 

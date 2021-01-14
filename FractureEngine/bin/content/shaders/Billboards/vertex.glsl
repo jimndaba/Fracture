@@ -5,18 +5,29 @@ layout (location = 1) in vec2 aTexCoords;
 
 
 out vec2 TexCoords;
-out vec3 FragPos;
 
+uniform vec3 CameraRight_worldspace;
+uniform vec3 CameraUp_worldspace;
+uniform vec3 BillboardPos;
+uniform vec2 BillboardSize;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+
+
 void main()
 {
-	FragPos = vec3(model * vec4(aPos, 1.0));
+	vec3 billboardcenter = BillboardPos;
+
+	vec3 vertexPositionWorldSpace = CameraRight_worldspace  + CameraUp_worldspace;
+	vec3 FragPos = vec3(model * vec4(aPos, 1.0)) ;
+
+
+
+
 	TexCoords = aTexCoords;
-	gl_Position = projection * view *vec4(FragPos, 1.0f);
-	//gl_Position = vec4(aPos, 1.0);
+	gl_Position = projection * view * vec4(FragPos * vertexPositionWorldSpace, 1.0f);
 
 }

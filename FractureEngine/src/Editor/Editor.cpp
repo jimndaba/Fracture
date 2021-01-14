@@ -30,7 +30,6 @@ inline void Style();
 
 
 
-
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
@@ -214,6 +213,10 @@ void Fracture::Editor::onLoadNew()
 
     //textured models
     AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
+
+    //Outline Shader
+    AssetManager::AddShader("Outline", "content/shaders/outline/vertex.glsl", "content/shaders/outline/fragment.glsl");
+
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
@@ -251,6 +254,9 @@ void Fracture::Editor::onLoadNew()
 
     AssetManager::AddMaterial("PickingMaterial", std::shared_ptr<Material>(new Material("PickingMaterial", AssetManager::getShader("PickingShader"))));
 
+    AssetManager::AddMaterial("Outline", std::shared_ptr<Material>(new Material("Outline", AssetManager::getShader("Outline"))));
+
+
     AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
     AssetManager::AddModel("Cube", "content/models/primitives/cube.fbx");
     AssetManager::AddModel("Sphere", "content/models/primitives/sphere.fbx");
@@ -287,10 +293,14 @@ void Fracture::Editor::run()
         }
     }
     //TODO - Set Editor Camera as camera;
-  
+    double lastTime = SDL_GetTicks();
+    int nbFrames = 0;
+
+
 
     while (!done)
     {
+       
         double newTime = SDL_GetTicks() / 1000.0;
         double frameTime = newTime - currentTime;
         currentTime = newTime;

@@ -20,6 +20,7 @@
 #include "Game/Game.h"
 #include "Scene/Scene.h"
 #include "RenderTarget.h"
+#include "RenderBatch.h"
 #include "Entity/Entity.h"
 #include "AssetManager/AssetManager.h"
 #include "Profiling/Profiler.h"
@@ -54,6 +55,7 @@ bool Fracture::Renderer::m_drawgrid;
 std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
 
 
+
 Fracture::Renderer::Renderer()
 {
    m_width = 1280;
@@ -62,6 +64,7 @@ Fracture::Renderer::Renderer()
 
 Fracture::Renderer::~Renderer()
 {
+
 }
 
 void Fracture::Renderer::onInit()
@@ -71,6 +74,8 @@ void Fracture::Renderer::onInit()
     m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    m_outlineBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, GL_FLOAT, 1,true));
     m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
@@ -89,8 +94,22 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Begin Frame");
     NumberDraw = 0;
-    glEnable(GL_DEPTH_TEST);	
+    NumberBatches = 0;
+
     glEnable(GL_CULL_FACE);
+    
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+
+    //Set blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    //Initialize stencil clear value
+    glClearStencil(0);
+
+  
     glCullFace(GL_BACK);
     glDepthMask(GL_TRUE);
 
@@ -98,6 +117,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 	m_opaqueBucket->clear();
     m_transparentBucket->clear();
     m_shadowBucket->clear();
+    m_outlineBucket->clear();
 
 	//Collect Scene Data
     RenderScene(scene);
@@ -110,7 +130,8 @@ void Fracture::Renderer::RenderPasses()
     m_opaqueBucket->sort();   
     m_shadowBucket->sort();
     m_transparentBucket->sort();
-    
+    m_outlineBucket->sort();
+   
     {
         ProfilerTimer timer("ShadowPass");
         glDisable(GL_CULL_FACE);    
@@ -131,39 +152,46 @@ void Fracture::Renderer::RenderPasses()
     setViewport(m_width, m_Height);
     //Picking Pass
     {
+        glDisable(GL_CULL_FACE);
         m_PickingPass->Begin();
         m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
         m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
         m_PickingPass->End();
+        glEnable(GL_CULL_FACE);
     }
-       
+  
+    
+    
     SceneRenderTarget->bind();    
-    clearColor(0.05f, 0.05f, 0.05f);
+    clearColor(0.10f, 0.10f, 0.10f);
     clear();
+    
     {
         ProfilerTimer timer("Opaque Draw");
-        for (const auto& command : m_opaqueBucket->getCommands())
-        {       
-            Submit(command);
-        }   
+        for (const auto& batch : m_opaqueBucket->getRenderBatches())
+        {
+            NumberBatches += 1;
+            for (const auto& command : batch.second->m_commnads)
+            {
+                Submit(command);
+            }
+        }
     }
 
     {
-        ProfilerTimer timer("Transparent Draw");
-        if (m_transparentBucket->getCommands().size() > 0)
-        {           
-            glDisable(GL_CULL_FACE);
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            for (const auto& command : m_transparentBucket->getCommands())
+        ProfilerTimer timer("Transparent Draw");       
+        glDisable(GL_CULL_FACE);
+        for (const auto& batch : m_transparentBucket->getRenderBatches())
+        {          
+            NumberBatches += 1;
+            for (const auto& command : batch.second->m_commnads)
             {
                 Submit(command);
-            }       
-            glEnable(GL_CULL_FACE);
-            glDisable(GL_BLEND);
+            }
         }
+        glEnable(GL_CULL_FACE);
     }
-   
+      
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
@@ -186,6 +214,8 @@ void Fracture::Renderer::RenderPasses()
         }
     }  
    
+    // RenderOutlined(); TODO
+
     SceneRenderTarget->Unbind();  
 
 }
@@ -231,9 +261,51 @@ void Fracture::Renderer::RenderDebugRetained()
     m_DebugMaterial->getShader()->unbind();
 }
 
+void Fracture::Renderer::RenderOutlined()
+{
+    glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
+    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+    glStencilMask(0xFF); // enable writing to the stencil buffer
+    
+    for (auto command : m_outlineBucket->getCommands())
+    {
+        
+      Draw(command);
+    
+    }
+
+   
+    float scale = 1.2;
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00); // disable writing to the stencil buffer
+    glDisable(GL_DEPTH_TEST);
+    for (auto command : m_outlineBucket->getCommands())
+    {
+        std::shared_ptr<Material> material = AssetManager::getMaterial("Outline");
+        std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(command.ID);
+        glm::vec3 oldScale = transform->Scale();
+        transform->setScale(glm::vec3(scale) *= oldScale);
+        material->getShader()->use();
+        material->getShader()->setMat4("view", m_camera->getViewMatrix());
+        material->getShader()->setMat4("projection", m_camera->getProjectionMatrix());
+        material->getShader()->setMat4("model", transform->GetWorldTransform());  
+        Draw(command);
+        transform->setScale(oldScale);
+        material->SetIsOutlined(false);
+        material->getShader()->unbind();
+    }
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glDisable(GL_STENCIL_TEST);  
+    glEnable(GL_DEPTH_TEST);
+   
+}
+
 void Fracture::Renderer::EndFrame()
 {
     ProfilerTimer timer("End Frame");
+  
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glUseProgram(0);
     glDisable(GL_DEPTH_TEST);
@@ -347,7 +419,7 @@ void Fracture::Renderer::Draw(RenderCommand command)
 
 void Fracture::Renderer::clear()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT| GL_STENCIL_BUFFER_BIT);
 }
 
 void Fracture::Renderer::clearColor(float r, float g, float b)
@@ -381,6 +453,10 @@ void Fracture::Renderer::PushCommand(RenderCommand command)
     {
         m_shadowBucket->pushCommand(command);
     }   
+    if (command.IsOutlined)
+    {
+        m_outlineBucket->pushCommand(command);
+    }
 }
 
 void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
@@ -399,6 +475,10 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     {
         m_shadowBucket->pushCommand(mesh, material, transform);
     }
+    if (material->IsOutlined())
+    {
+        m_outlineBucket->pushCommand(mesh, material, transform);
+    }
    
 }
 
@@ -412,15 +492,20 @@ void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end, g
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end,color));
 }
 
-void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billboard, std::shared_ptr<Texture> texture)
+void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billboard, glm::vec4 color, std::shared_ptr<Texture> texture)
 {
     std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");   
+    billbaordMaterial->setColor4("mColor",color);
     RenderCommand command(billbaordMaterial.get());
     command.VAO = billboard->VAO();
     command.ID = id;
     command.HasTransparency = true;
     command.indiceSize = billboard->Indicies();
     billbaordMaterial->SetTexture("IconTexture", texture, 0);
+    billbaordMaterial->setVec3("CameraRight_worldspace",m_camera->Right());
+    billbaordMaterial->setVec3("CameraUp_worldspace", m_camera->Up());
+    billbaordMaterial->setVec3("BillboardPos",ComponentManager::GetComponent<EditorNode>(command.ID)->GetPosition());
+    billbaordMaterial->setVec2("BillboardSize",glm::vec2(0.5f));
     Renderer::getInstance()->PushCommand(command);
     
 }
@@ -561,15 +646,13 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
             
             if (m_camera->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
             {
+                
                 for (auto material : render->m_model->GetMaterials())
-                {
+                {                    
                     PushCommand(mesh,AssetManager::getMaterial(material), transform);
-                }
-            
+                }           
             }
-        }
-        
-        
+        }        
     }
     
     if (lightcomponent && tag->isVisible)
@@ -579,7 +662,7 @@ void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 
     if (m_billboard && tag->isVisible)
     {
-        DrawBillboard(entity->Id,m_billboard->GetBillboard(),AssetManager::getTexture("LightIcon"));
+        DrawBillboard(entity->Id,m_billboard->GetBillboard(),glm::vec4(1.0f),AssetManager::getTexture("LightIcon"));
     }
 }
 

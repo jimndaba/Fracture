@@ -124,21 +124,21 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateCube(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cube");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-
 			std::shared_ptr<Model> model = AssetManager::getModel("Cube");
 			
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cube");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);					
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
 
 			return newEntity;
@@ -147,21 +147,21 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreatePlane(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Plane");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-			
 			std::shared_ptr<Model> model = AssetManager::getModel("Plane");
 
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Plane");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
 			
 			return newEntity;
@@ -169,22 +169,26 @@ namespace Fracture
 		
 		static std::shared_ptr<Entity> CreateSphere(std::shared_ptr<Scene> scene)
 		{
-			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Sphere");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);	
-
 			std::shared_ptr<Model> model = AssetManager::getModel("Sphere");
-
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
 			if (model)
 			{
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				for (auto mesh : model->GetMeshes())
+				{
+					
+					ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Sphere");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+					relationship->SetParent(scene->Root()->Id);
+
+					ComponentManager::AddComponent<RelationShipComponent>(relationship);
+					ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				}
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
 			return newEntity;
 		}
@@ -192,21 +196,21 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateSuzane(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Suzane");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-
 			std::shared_ptr<Model> model = AssetManager::getModel("Suzane");
 
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Suzane");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
 			return newEntity;
 		}
@@ -214,64 +218,77 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateCylinder(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cylinder");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			
 			std::shared_ptr<Model> model = AssetManager::getModel("Cylinder");
 
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cylinder");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
 			return newEntity;
 		}
 		
 		static std::shared_ptr<Entity> CreateTorus(std::shared_ptr<Scene> scene)
 		{
-			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Torus");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();			
 			std::shared_ptr<Model> model = AssetManager::getModel("Torus");
 
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Torus");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", model->Name);
+				return nullptr;
 			}
+			return newEntity;
+		}
+	
+		static std::shared_ptr<Entity> CreateCamera(std::shared_ptr<Scene> scene)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Camera");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent<RelationShipComponent>(relationship);
+			ComponentManager::AddComponent<CameraControllerComponent>(newEntity->Id);
 			return newEntity;
 		}
 
 		static std::shared_ptr<Entity> CreateModel(std::shared_ptr<Scene> scene, std::string ModelName)
 		{
-			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, ModelName);
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-		
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();		
 			std::shared_ptr<Model> model = AssetManager::getModel(ModelName);
 
 			if (model)
 			{
+				ComponentManager::AddComponent<TagComponent>(newEntity->Id, ModelName);
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
+				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<RelationShipComponent>(relationship);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 			}
 			else
 			{
 				FRACTURE_ERROR("FAILED TO CREATE MODEL: {}", ModelName);
+				return nullptr;
 			}
 			
 			return newEntity;

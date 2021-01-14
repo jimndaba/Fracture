@@ -1,5 +1,6 @@
 #include "SceneviewPanel.h"
 #include "Scene/Scene.h"
+#include "Entity/EntityFactory.h"
 
 Fracture::Entity Fracture::SceneView::m_selection;
 
@@ -56,6 +57,125 @@ void Fracture::SceneView::render()
 			}
 			
 		}
+		if (ImGui::MenuItem("Create PointLight"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreatePointlight(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create SpotLight"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateSpotlight(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Sphere"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateSphere(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Cube"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateCube(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Plane"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreatePlane(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Suzane"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Cylinder"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateCylinder(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Torus"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateTorus(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		if (ImGui::MenuItem("Create Camera"))
+		{
+			std::shared_ptr<Entity> entity = EntityFactory::CreateCamera(m_scene);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+
+			if (m_selection.Id != NULL)
+			{
+				relation->ChangeParent(m_selection.Id);
+			}
+
+			m_scene->addEntity(entity);
+			setSelectEntity(*entity);
+		}
+		
 		ImGui::EndPopup();
 	}
 }
@@ -99,11 +219,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 		else if (ComponentManager::HasComponent<LightComponent>(entity))
 		{
 			icon = (void*)AssetManager::getTexture("LightIcon")->id;
-		}
-		else if (ComponentManager::HasComponent<RenderComponent>(entity))
-		{
-			icon = (void*)AssetManager::getTexture("MeshIcon")->id;
-		}
+		}		
 		else 
 		{
 			icon = (void*)AssetManager::getTexture("GameObjectIcon")->id;

@@ -30,17 +30,9 @@ namespace Fracture
 		std::vector<std::string> GetMaterials();
 		std::vector<std::shared_ptr<Mesh>> GetMeshes();
 
-		int GetNextMaterialIndex()
-		{
-			int currentIndex = m_materialIndex;
-			m_materialIndex += 1;
-			return currentIndex;
-		}
-
 	private:
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 		std::vector<std::string> m_materials;
-		int m_materialIndex = 0;
 	};
 }
 #endif

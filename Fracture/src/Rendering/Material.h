@@ -140,7 +140,8 @@ namespace Fracture
         {
             m_CastShadows = castshadows;
         }
-
+        bool IsOutlined() { return m_isOutlined; }
+        void SetIsOutlined(bool value) { m_isOutlined = value; }
 
 	private:
 		std::shared_ptr<Shader> m_shader;
@@ -148,6 +149,7 @@ namespace Fracture
         std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* m_SamplerUniforms;
         bool m_CastShadows = false;
         bool m_IsTransparent = false;
+        bool m_isOutlined = false;
 	};
 }
 

@@ -40,9 +40,13 @@ namespace Fracture
 
 		std::shared_ptr<Model> m_model;
 
+		bool IsOutlined() { return m_isOutlined; }
+		void SetIsOutlined(bool value) { m_isOutlined = value; }
+
 	private:
 		std::string m_modelName;
 		RenderType m_Rendertype;
+		bool m_isOutlined = false;
 	};
 
 }

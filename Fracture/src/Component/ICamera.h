@@ -36,6 +36,9 @@ namespace Fracture
 		bool IsPointInFrustum(const glm::vec3& point);
 		bool IsSphereInFrustum(const glm::vec3& center, const float	radius);
 		bool IsBoxInFrustum(const glm::vec3& min, const glm::vec3& max);
+
+		glm::vec3 Right() { return right; }
+		glm::vec3 Up() {return up;}
 			
 		//frustum points
 		glm::vec3 farPts[4];

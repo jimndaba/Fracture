@@ -43,7 +43,7 @@ namespace Fracture
 		virtual glm::vec4 GetDiffuse() = 0;
 		virtual glm::vec4 GetSpecular() = 0;
 		virtual glm::vec3 GetPosition() { return glm::vec3(0); };
-		virtual glm::vec3 GetDirection() { return glm::vec3(0); };
+		virtual glm::vec3 GetDirection() { return glm::vec3(0.0f,-1.0f,0.0f); };
 		virtual float GetConstant() { return 0.0f; };
 		virtual float GetLinear() { return 0.0f; };
 		virtual float GetQuadratic() { return 0.0f; };
@@ -65,7 +65,7 @@ namespace Fracture
 
 	private:
 		bool m_castShadows = true;
-		float m_intensity = 100.0f;
+		float m_intensity = 1.0f;
 	};
 
 	class SunLight :public ILight
@@ -95,7 +95,7 @@ namespace Fracture
 		{
 			m_specular = specular;
 		};
-		//virtual void SetPosition(glm::vec3 position) {};
+		
 		virtual void SetDirection(glm::vec3 direction)
 		{
 			m_direction = direction;
@@ -105,11 +105,6 @@ namespace Fracture
 		{
 			radiance = value;
 		}
-		//virtual void SetConstant(float constant) {};
-		//virtual void SetLinear(float linear) {};
-		//virtual void SetQuadratic(float quad) {};
-		//virtual void SetCutoff(float Coff) {};
-		//virtual void SetOuterCutOff(float outerCoff) {};
 
 		virtual glm::vec4 GetAmbient() 
 		{
@@ -123,7 +118,7 @@ namespace Fracture
 		{
 			return m_specular;
 		};
-		//virtual glm::vec3 GetPosition() {};
+
 		virtual glm::vec3 GetDirection()
 		{
 			return m_direction;
@@ -133,11 +128,7 @@ namespace Fracture
 		{
 			return radiance;
 		}
-		//virtual float GetConstant() {};
-		//virtual float GetLinear() {};
-		//virtual float GetQuadratic() {};
-		//virtual float GetCutoff() {};
-		//virtual float GetOuterCutOff() {};
+
 		virtual LightType GetLightType()
 		{
 			return LightType::Sun;
