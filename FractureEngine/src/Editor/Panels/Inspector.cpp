@@ -181,7 +181,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			
 			for (auto material : render->m_model->GetMaterials())
 			{
-				bool open = ImGui::TreeNodeEx((void*)typeid(material).hash_code(), treeNodeFlags, material.c_str());
+				
+				bool open = ImGui::TreeNodeEx(material.c_str(), treeNodeFlags, material.c_str());//(void*)typeid(material).hash_code()
 				std::string current_Material = material;
 				std::shared_ptr<Material> mMaterial = AssetManager::getMaterial(current_Material);
 				mMaterial->SetIsOutlined(true);
@@ -238,7 +239,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					{
 						if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
 						{
-							DrawTexture2DControl(it->first, it->second->texture->id);
+							DrawSample2DControl(it->first, it->second->texture->id,mMaterial);
 						}
 
 					}
@@ -1030,9 +1031,43 @@ void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uns
 	auto boldFont = io.Fonts->Fonts[0];
 	ImTextureID texture = (void*)value;
 	ImGui::PushID("##sample");
+	if (ImGui::ImageButton(texture, ImVec2(64, 64)) && ImGui::IsMouseDoubleClicked(0))
+	{
+		std::string name;
+		std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
+		if (!filepath.empty())
+		{
+			AssetManager::AddTexture(name,filepath,TextureType::Diffuse);
+			value = AssetManager::getTexture(name)->id;
+		}
+	}
+	ImGui::SameLine();
+	ImGui::Text(label.c_str());
+	ImGui::PopID();
+	ImGui::Separator();
+}
+
+void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, unsigned int& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue, float columnWidth)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[0];
+	ImTextureID texture = (void*)value;
+	ImGui::PushID("##sample");
 	if (ImGui::ImageButton(texture, ImVec2(64, 64)))
 	{
-
+		
+			if (ImGui::IsMouseDoubleClicked(0))
+			{
+				std::string name;
+				std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
+				if (!filepath.empty())
+				{
+					AssetManager::AddTexture(name, filepath, TextureType::Diffuse);
+					mMaterial->ChangeTexture(name, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
+				}
+			}
+			
+	
 	}
 	ImGui::SameLine();
 	ImGui::Text(label.c_str());

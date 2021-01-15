@@ -35,7 +35,7 @@ namespace Fracture
 		void setPosition(glm::vec3 pos);
 		void setRotation(glm::vec3 rot);
 		void Translate(glm::vec3 position);
-
+		void Accept(ISceneProbe* visitor) override;
 	};
 
 }

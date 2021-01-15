@@ -53,6 +53,8 @@ namespace Fracture
 		bool CastShadow();
 		void SetCastShadow(bool value);
 
+		void Accept(ISceneProbe* visitor) override;
+
 	private:
 		LightType m_type;
 		std::shared_ptr<ILight> m_light;

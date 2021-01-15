@@ -97,3 +97,7 @@ glm::mat4 Fracture::TransformComponent::GetWorldTransform()
 	return m_WorldTransform;
 }
 
+void Fracture::TransformComponent::Accept(ISceneProbe* visitor)
+{
+}
+

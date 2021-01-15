@@ -39,9 +39,11 @@ Fracture::Shader::Shader(const std::string& name,const std::string& vertexPath, 
 {
     m_program = createShaderFromFile(vertexPath, fragmentPath);
 
-    GLint numAttribs;
-    glGetProgramInterfaceiv(m_program, GL_PROGRAM_INPUT,GL_ACTIVE_RESOURCES, &numAttribs);
+    unsigned int uniformMatrices = glGetUniformBlockIndex(m_program, "FRAME_DATA");
+    glUniformBlockBinding(m_program, uniformMatrices, 0);
 
+    GLint numAttribs;
+    glGetProgramInterfaceiv(m_program, GL_PROGRAM_INPUT,GL_ACTIVE_RESOURCES, &numAttribs); 
     GLenum properties[] = { GL_NAME_LENGTH, GL_TYPE, GL_LOCATION };
     std::cout << "Active attributes" << std::endl;
     for (int i = 0; i < numAttribs; ++i) {

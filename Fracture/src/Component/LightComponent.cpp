@@ -210,3 +210,8 @@ void Fracture::LightComponent::SetCastShadow(bool value)
 {
 	m_light->SetCastShadows(value);
 }
+
+void Fracture::LightComponent::Accept(ISceneProbe* visitor)
+{
+	visitor->VisitLightComponent(this);
+}

@@ -27,7 +27,7 @@ namespace Fracture
 
 		glm::mat4 GetLocalTranform();
 		glm::mat4 GetWorldTransform();
-
+		void Accept(ISceneProbe* visitor) override;
 	private:
 
 		glm::vec3 m_Position;

@@ -29,7 +29,7 @@ namespace Fracture
 
 		bool hasChildren();
 		bool hasParent = false;
-
+		void Accept(ISceneProbe* visitor) override;
 	private:
 		
 		std::vector<uint32_t> m_children;

@@ -20,7 +20,12 @@ void Fracture::RenderComponent::onStart()
 
 void Fracture::RenderComponent::SetMaterial(std::string name)
 {
-	//material = AssetManager::getMaterial(name);
+	m_material = AssetManager::getMaterial(name);
+}
+
+std::shared_ptr<Fracture::Material> Fracture::RenderComponent::GetMaterial()
+{
+	return m_material;
 }
 
 void Fracture::RenderComponent::SetModel(std::string name)
@@ -36,4 +41,9 @@ void Fracture::RenderComponent::SetRenderType(RenderType m_type)
 Fracture::RenderType Fracture::RenderComponent::getRenderType()
 {
 	return m_Rendertype;
+}
+
+void Fracture::RenderComponent::Accept(ISceneProbe* visitor)
+{
+	visitor->VisitRenderComponent(this);
 }

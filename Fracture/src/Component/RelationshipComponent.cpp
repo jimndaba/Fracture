@@ -74,3 +74,7 @@ bool Fracture::RelationShipComponent::hasChildren()
 	}
 	return false;
 }
+
+void Fracture::RelationShipComponent::Accept(ISceneProbe* visitor)
+{
+}

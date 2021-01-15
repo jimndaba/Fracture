@@ -33,6 +33,7 @@ namespace Fracture
 
 		virtual void onStart();
 		void SetMaterial(std::string name);
+		std::shared_ptr<Material> GetMaterial();
 		void SetModel(std::string name);
 
 		void SetRenderType(RenderType m_type);
@@ -43,10 +44,13 @@ namespace Fracture
 		bool IsOutlined() { return m_isOutlined; }
 		void SetIsOutlined(bool value) { m_isOutlined = value; }
 
+		void Accept(ISceneProbe* visitor) override;
+
 	private:
 		std::string m_modelName;
 		RenderType m_Rendertype;
 		bool m_isOutlined = false;
+		std::shared_ptr<Material> m_material;
 	};
 
 }

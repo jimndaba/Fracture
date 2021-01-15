@@ -59,7 +59,7 @@ void Fracture::Mesh::setupMesh()
 
     glBindVertexArray(0);
 
-    
+    IndexCount = m_indices.size();
 
 
 }

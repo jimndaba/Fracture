@@ -95,3 +95,7 @@ glm::mat4 Fracture::EditorNode::GetWorldTransform()
 	return m_WorldTransform;
 }
 
+void Fracture::EditorNode::Accept(ISceneProbe* visitor)
+{
+}
+

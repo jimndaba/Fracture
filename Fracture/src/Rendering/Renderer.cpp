@@ -33,6 +33,7 @@
 #include "Environment.h"
 #include "BillBoard.h"
 #include "Grid.h"
+#include "SceneProbes.h"
 
 #ifndef GLERROR_H
 #define GLERROR_H
@@ -86,6 +87,16 @@ void Fracture::Renderer::onInit()
     m_isDebugRender = false;
     m_drawgrid = true;
 
+    mRenderProbe = new RenderOperation(*this);
+    mLightProbe = new LightOperation(*this);
+    mBillboardProbe = new BillboardOperation(*this);
+
+    glGenBuffers(1, &uboMatrices);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferData(GL_UNIFORM_BUFFER, (3 * sizeof(glm::mat4)) + sizeof(glm::vec3), NULL, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    // define the range of the buffer that links to a uniform binding point
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
 
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 }
@@ -101,6 +112,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     glDepthFunc(GL_LESS);
     glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_SCISSOR_TEST);
 
     //Set blending
     glEnable(GL_BLEND);
@@ -171,10 +183,29 @@ void Fracture::Renderer::RenderPasses()
         for (const auto& batch : m_opaqueBucket->getRenderBatches())
         {
             NumberBatches += 1;
+            std::shared_ptr<Material> material = AssetManager::getMaterial(batch.first);
+            material->use();
+
+            auto* uniforms = material->GetUniforms();
+            for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+            {
+                WriteUniformData(*material->getShader(), it->first, it->second);
+            }
+
+            std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+            for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+            {
+                WriteUniformSampler(*material->getShader(), it->first, it->second);
+            }
+
+            SetupLighting(material.get());
+
             for (const auto& command : batch.second->m_commnads)
             {
                 Submit(command);
             }
+            material->getShader()->unbind();
+    
         }
     }
 
@@ -373,30 +404,19 @@ void Fracture::Renderer::WriteUniformSampler(Shader shader, std::string name, st
 
 void Fracture::Renderer::Submit(RenderCommand command)
 {
-    ProfilerTimer timer("Submit");    
-    command.material->use();
+    ProfilerTimer timer("Submit");
+  
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(m_camera->getProjectionMatrix()));
+    glBufferSubData(GL_UNIFORM_BUFFER,  sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_camera->getViewMatrix()));   
+    glBufferSubData(GL_UNIFORM_BUFFER, (2 * sizeof(glm::mat4)), sizeof(glm::mat4), glm::value_ptr(m_ShadowPass->GetLightSpaceMatrix()));
+    glBufferSubData(GL_UNIFORM_BUFFER, (3 * sizeof(glm::mat4)), sizeof(glm::vec3), glm::value_ptr(m_camera->getPosition()));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    auto* uniforms = command.material->GetUniforms();
-    for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
-    {
-        WriteUniformData(*command.material->getShader(), it->first, it->second);
-    }
 
-    std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = command.material->GetSamplerUniforms();
-    for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
-    {  
-        WriteUniformSampler(*command.material->getShader(), it->first, it->second);
-    }
-
-    
-
-    SetupLighting(command.material);
-
-    command.material->getShader()->setMat4("lightSpaceMatrix", m_ShadowPass->GetLightSpaceMatrix());
-    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(),(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
-    command.material->getShader()->setMat4("view", m_camera->getViewMatrix());   
-    command.material->getShader()->setMat4("projection", m_camera->getProjectionMatrix());
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
+
     if (ComponentManager::HasComponent<TransformComponent>(command.ID))
     {
         command.material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
@@ -468,6 +488,7 @@ void Fracture::Renderer::PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::
     }
     if (!material->IsTransparent())
     {
+        ProfilerTimer timer("Push Command");
         m_opaqueBucket->pushCommand(mesh, material, transform);
     }
 
@@ -496,11 +517,12 @@ void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billbo
 {
     std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");   
     billbaordMaterial->setColor4("mColor",color);
-    RenderCommand command(billbaordMaterial.get());
+    RenderCommand command;
     command.VAO = billboard->VAO();
     command.ID = id;
     command.HasTransparency = true;
     command.indiceSize = billboard->Indicies();
+    command.material = billbaordMaterial.get();
     billbaordMaterial->SetTexture("IconTexture", texture, 0);
     billbaordMaterial->setVec3("CameraRight_worldspace",m_camera->Right());
     billbaordMaterial->setVec3("CameraUp_worldspace", m_camera->Up());
@@ -627,52 +649,35 @@ void Fracture::Renderer::SetupLighting(Material* material)
 
 void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
 {
-    ProfilerTimer timer("Render Entity");
-    if (!entity)
-    {
-        return;
-    }  
-
-    std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);
-    std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(entity->Id);
-    std::shared_ptr<RenderComponent> render = ComponentManager::GetComponent<RenderComponent>(entity->Id);
-    std::shared_ptr<LightComponent> lightcomponent = ComponentManager::GetComponent<LightComponent>(entity->Id);
-    std::shared_ptr<BillboardComponent> m_billboard = ComponentManager::GetComponent<BillboardComponent>(entity->Id);
-
-    if (render && tag->isVisible)
-    {
-        for (auto mesh : render->m_model->GetMeshes())
-        {
-            
-            if (m_camera->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
-            {
-                
-                for (auto material : render->m_model->GetMaterials())
-                {                    
-                    PushCommand(mesh,AssetManager::getMaterial(material), transform);
-                }           
-            }
-        }        
-    }
-    
-    if (lightcomponent && tag->isVisible)
-    {
-        AddLight(lightcomponent->GetLight());
-    }
-
-    if (m_billboard && tag->isVisible)
-    {
-        DrawBillboard(entity->Id,m_billboard->GetBillboard(),glm::vec4(1.0f),AssetManager::getTexture("LightIcon"));
-    }
+   
 }
 
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Render Scene");
-    for (std::shared_ptr<Entity> entity : scene->Entities())
     {
-        RenderEntity(entity);
-    }   
+        ProfilerTimer timer("Light Probe");
+        for (auto component : ComponentManager::GetAllComponents<LightComponent>())
+        {
+            component->Accept(mLightProbe);
+        }
+    }
+
+    {
+        ProfilerTimer timer("SceneProbe");
+        for (auto component : ComponentManager::GetAllComponents<RenderComponent>())
+        {
+            component->Accept(mRenderProbe);
+        }
+    }
+    {
+        ProfilerTimer timer("billboard Probe");
+        for (auto component : ComponentManager::GetAllComponents<BillboardComponent>())
+        {
+            component->Accept(mBillboardProbe);
+        }
+    }
+
 }
 
 void Fracture::Renderer::SetCamera(std::shared_ptr<ICamera> camera)

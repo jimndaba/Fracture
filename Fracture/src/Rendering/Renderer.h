@@ -37,6 +37,9 @@ namespace Fracture
 	class ICamera;
 	class Environment;
 	class Billboard;
+	class RenderOperation;
+	class LightOperation;
+	class BillboardOperation;
 
 	class Renderer
 	{
@@ -115,13 +118,12 @@ namespace Fracture
 	private:
 		int m_width;
 		int m_Height;
+		unsigned int uboMatrices;
 		static bool m_isDebugRender;
 		static bool m_drawgrid;
-		static std::shared_ptr<Renderer> instance;
-		
+		static std::shared_ptr<Renderer> instance;		
 
 		//camera
-
 		static std::shared_ptr<ICamera> m_camera;
 
 		//render buckets
@@ -136,6 +138,11 @@ namespace Fracture
 		//Debug Draw bucket
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDraws;
 		static std::vector<std::shared_ptr<DebugLine>> m_DebugDrawsRetained;
+
+		//Probes
+		RenderOperation* mRenderProbe;
+		LightOperation* mLightProbe;
+		BillboardOperation* mBillboardProbe;
 
 		std::shared_ptr<Material> m_DebugMaterial;
 		std::shared_ptr<Grid> m_grid;

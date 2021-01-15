@@ -16,9 +16,8 @@ namespace Fracture
 	class RenderCommand
 	{
 	public:
-		RenderCommand(Material* mat):material(mat)
+		RenderCommand()
 		{
-
 		}
 
 		~RenderCommand()
@@ -79,6 +78,15 @@ namespace Fracture
 			return false;
 		}
 	};
+
+	typedef struct {
+		GLuint vertexCount;
+		GLuint instanceCount;
+		GLuint firstIndex;
+		GLint  baseVertex;
+		GLuint baseInstance;
+	} DrawElementsIndirectCommand;
+	
 }
 
 #endif

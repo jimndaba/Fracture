@@ -18,3 +18,7 @@ std::shared_ptr<Fracture::Billboard> Fracture::BillboardComponent::GetBillboard(
 {
 	return m_billboard;
 }
+
+void Fracture::BillboardComponent::Accept(ISceneProbe* visitor)
+{
+}

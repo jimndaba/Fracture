@@ -177,6 +177,8 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<std::shared_ptr<Texture>> textures;
+
+
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
@@ -234,7 +236,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	std::string mat_name;
 
 	std::string temp = node->mName.data;
-	mat_name = temp + "_material_" + std::to_string(mesh->mMaterialIndex);
+	mat_name = temp + ".material_" + std::to_string(mesh->mMaterialIndex);
 
 	std::shared_ptr<Material> m_material = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
 

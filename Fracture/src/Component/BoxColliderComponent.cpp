@@ -26,3 +26,7 @@ void Fracture::BoxColliderComponent::setScale(glm::vec3 scale)
 	Y = scale.y;
 	Z = scale.z;
 }
+
+void Fracture::BoxColliderComponent::Accept(ISceneProbe* visitor)
+{
+}

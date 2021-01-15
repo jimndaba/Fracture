@@ -25,7 +25,7 @@ namespace Fracture
 		float X, Y, Z;
 
 		void setScale(glm::vec3 sale);
-
+		void Accept(ISceneProbe* visitor) override;
 	};
 
 

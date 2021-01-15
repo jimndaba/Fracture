@@ -3,6 +3,7 @@
 #define COMPONENT_H
 
 #include <cstdint>
+#include "Rendering/ISceneProbe.h"
 
 namespace Fracture
 {
@@ -33,7 +34,7 @@ namespace Fracture
 		virtual void onStart() = 0;
 
 		virtual void OnDebug() {};
-
+		virtual void Accept(ISceneProbe* visitor) = 0;		
 		uint32_t EntityID;
 		ComponentType componentType = ComponentType::None;		
 	};

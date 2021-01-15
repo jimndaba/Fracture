@@ -22,3 +22,7 @@ void Fracture::TagComponent::SetName(std::string name)
 {
 	Name = name;
 }
+
+void Fracture::TagComponent::Accept(ISceneProbe* visitor) 
+{
+}

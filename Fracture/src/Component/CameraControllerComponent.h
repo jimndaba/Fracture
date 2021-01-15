@@ -77,7 +77,7 @@ namespace Fracture
 		Ray ScreenPointToRay(glm::vec2 mousePosition, int viewWidth,int viewHeight);
 
 		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 5.0f, 15.0f);
-
+		void Accept(ISceneProbe* visitor) override;
 	private:
 		void UpdateCameraVectors();
 

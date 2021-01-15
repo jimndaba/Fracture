@@ -20,7 +20,7 @@ namespace Fracture
 
 		virtual void onStart();
 		std::shared_ptr<Billboard> GetBillboard();
-
+		void Accept(ISceneProbe* visitor) override;
 	private:
 
 		std::shared_ptr<Billboard> m_billboard;

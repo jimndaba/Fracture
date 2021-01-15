@@ -90,6 +90,8 @@ namespace Fracture
 		void SetAABB(std::shared_ptr<BoundingBox> aabb);
 		std::shared_ptr<BoundingBox> GetAABB();
 
+		unsigned int IndexCount;
+
 		
 	private:
 		void setupMesh();

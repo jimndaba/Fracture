@@ -82,3 +82,7 @@ void Fracture::RigidBodyComponent::Translate(glm::vec3 position)
 	m_rigid->translate(btVector3(position.x, position.y, position.z));
 
 }
+
+void Fracture::RigidBodyComponent::Accept(ISceneProbe* visitor)
+{
+}

@@ -587,6 +587,12 @@
     <ClInclude Include="src\Rendering\RenderBatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\ISceneProbe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\SceneProbes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\glm\CMakeLists.txt" />

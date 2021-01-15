@@ -16,13 +16,14 @@ namespace Fracture
 		TagComponent(uint32_t entityID,std::string name);
 		~TagComponent();
 
-
 		virtual void onStart();
 
 		int ID;
 		std::string Name;
 		bool isVisible = true;
 		void SetName(std::string name);
+
+		void Accept(ISceneProbe* visitor) override;
 	};
 
 }

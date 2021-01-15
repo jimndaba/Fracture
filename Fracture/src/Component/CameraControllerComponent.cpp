@@ -145,6 +145,10 @@ Fracture::Ray Fracture::CameraControllerComponent::ScreenPointToRay(glm::vec2 mo
     return Ray(Position, mouse_ray);
 }
 
+void Fracture::CameraControllerComponent::Accept(ISceneProbe* visitor)
+{
+}
+
 void Fracture::CameraControllerComponent::UpdateCameraVectors()
 {
     glm::vec3 front;

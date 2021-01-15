@@ -175,6 +175,7 @@
     <ClInclude Include="src\Component\ILight.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
     <ClInclude Include="src\Component\LightComponent.h" />
+    <ClInclude Include="src\Rendering\SceneProbes.h" />
     <ClInclude Include="src\Entity\EntityFactory.h" />
     <ClInclude Include="src\Math\Math.h" />
     <ClInclude Include="src\Physics\PhysicsUtility.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\Renderer.h" />
     <ClInclude Include="src\Rendering\Renderer2D.h" />
+    <ClInclude Include="src\Rendering\ISceneProbe.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\ShadowPass.h" />

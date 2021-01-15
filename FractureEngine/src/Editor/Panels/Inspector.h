@@ -27,7 +27,7 @@ namespace Fracture
 		static void DrawIntControl(const std::string& label, int& value, int resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawBoolControl(const std::string& label, bool& value, float columnWidth = 100.0f);
 		static void DrawTexture2DControl(const std::string& label, unsigned int& value, float resetValue = 0.0f, float columnWidth = 100.0f);
-
+		static void DrawSample2DControl(const std::string& label, unsigned int& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
 	private:
 		void DrawComponents(Entity entity);
 
