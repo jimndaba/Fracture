@@ -22,8 +22,6 @@ Fracture::RenderBucket::~RenderBucket()
 
 void Fracture::RenderBucket::pushCommand(RenderCommand command)
 {
-	//m_commands.push_back(command);	
-	
 	std::map<std::string, std::shared_ptr<RenderBatch>>::iterator it = m_batches.find(command.material->Name);
 	if (it != m_batches.end())
 	{

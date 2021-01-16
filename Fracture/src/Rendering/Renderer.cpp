@@ -147,8 +147,7 @@ void Fracture::Renderer::RenderPasses()
     {
         ProfilerTimer timer("ShadowPass");
         glDisable(GL_CULL_FACE);    
-        m_ShadowPass->Begin();
-    
+        m_ShadowPass->Begin();    
         for (auto light : m_lights)
         {
             if (light->GetLightType() == LightType::Sun && light->CastShadows())
@@ -171,8 +170,6 @@ void Fracture::Renderer::RenderPasses()
         m_PickingPass->End();
         glEnable(GL_CULL_FACE);
     }
-  
-    
     
     SceneRenderTarget->bind();    
     clearColor(0.10f, 0.10f, 0.10f);
@@ -245,7 +242,8 @@ void Fracture::Renderer::RenderPasses()
         }
     }  
    
-    // RenderOutlined(); TODO
+    
+   // RenderOutlined();//TODO
 
     SceneRenderTarget->Unbind();  
 
@@ -647,11 +645,6 @@ void Fracture::Renderer::SetupLighting(Material* material)
     }
 }
 
-void Fracture::Renderer::RenderEntity(std::shared_ptr<Entity> entity)
-{
-   
-}
-
 void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Render Scene");
@@ -662,7 +655,6 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
             component->Accept(mLightProbe);
         }
     }
-
     {
         ProfilerTimer timer("SceneProbe");
         for (auto component : ComponentManager::GetAllComponents<RenderComponent>())

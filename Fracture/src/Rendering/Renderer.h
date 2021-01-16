@@ -86,7 +86,7 @@ namespace Fracture
 		void AddLight(const std::shared_ptr<ILight> light);
 		void SetupLighting(Material* material);
 
-		void RenderEntity(std::shared_ptr<Entity> entity);		
+		
 		void RenderScene(std::shared_ptr<Scene> scene);
 
 		void SetCamera(std::shared_ptr<ICamera> camera);

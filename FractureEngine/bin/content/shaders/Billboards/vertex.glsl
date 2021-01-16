@@ -3,6 +3,13 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoords;
 
+layout (std140, binding = 0) uniform FRAME_DATA
+{
+    mat4 proj_matrix;
+    mat4 view_matrix;    
+    mat4 lightSpace_Matrix;
+    vec3 view_Position;
+};
 
 out vec2 TexCoords;
 
@@ -12,8 +19,6 @@ uniform vec3 BillboardPos;
 uniform vec2 BillboardSize;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
 
 
 
@@ -28,6 +33,6 @@ void main()
 
 
 	TexCoords = aTexCoords;
-	gl_Position = projection * view * vec4(FragPos * vertexPositionWorldSpace, 1.0f);
+	gl_Position =  proj_matrix * view_matrix * vec4(FragPos, 1.0f);
 
 }
