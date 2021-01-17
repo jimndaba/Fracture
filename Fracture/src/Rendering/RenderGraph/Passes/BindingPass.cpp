@@ -2,7 +2,7 @@
 #include "Rendering/Bindable.h"
 #include "Logging/Logger.h"
 
-Fracture::BindingPass::BindingPass(std::string name):RenderPass(name)
+Fracture::BindingPass::BindingPass(std::string name, std::vector<std::shared_ptr<Bindable>> binds):RenderPass(std::move(name)),m_bindables(std::move(binds))
 {
 }
 

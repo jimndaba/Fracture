@@ -55,6 +55,7 @@ Fracture::RenderSink& Fracture::RenderPass::GetSink(const std::string& name)
 			return *sink;
 		}
 	}	
+	FRACTURE_ERROR("Could Not Find Sink " + name);
 }
 
 void Fracture::RenderPass::RegisterSink(std::unique_ptr<RenderSink> sink)

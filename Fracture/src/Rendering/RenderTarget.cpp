@@ -107,12 +107,12 @@ void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer)
 
 void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* resource)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    bind();
 }
 
 void Fracture::RenderTarget::Clear(Renderer& renderer)
 {
-    //glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
     renderer.clearColor(1.0f,1.0f,1.0f);
     renderer.clear();
    
@@ -120,7 +120,7 @@ void Fracture::RenderTarget::Clear(Renderer& renderer)
 
 void Fracture::RenderTarget::Clear(Renderer& renderer, glm::vec3 color)
 {
-    //glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
     renderer.clearColor(color.r,color.g,color.b);
     renderer.clear();
     

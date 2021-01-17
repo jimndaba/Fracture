@@ -26,8 +26,8 @@ namespace Fracture
 
 	private:
 		std::string registeredName;
-		std::string sourceName;
-		std::string targetPass;
+		std::string passName;
+		std::string outputName;
 		
 
 	};
