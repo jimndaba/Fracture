@@ -37,6 +37,8 @@ void Fracture::RenderQueuePass::Execute(Renderer& renderer)
                 WriteUniformSampler(*material->getShader(), it->first, it->second);
             }
 
+            renderer.SetupLighting(material.get());
+
 		    for (auto command : batch.second->m_commnads)
 		    {
 			    renderer.Submit(command);
