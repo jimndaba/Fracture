@@ -135,6 +135,19 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     RenderScene(scene);
 }
 
+void Fracture::Renderer::RenderEnvironment()
+{
+    for (auto light : m_lights)
+    {
+        if (light->GetLightType() == LightType::Sky)
+        {
+            std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(light);
+            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
+        }
+    }
+
+}
+
 void Fracture::Renderer::RenderPasses()
 {
     ProfilerTimer timer("RenderPass");

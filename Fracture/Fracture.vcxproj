@@ -189,6 +189,7 @@
     <ClInclude Include="src\Rendering\RenderGraph\BufferResource.h" />
     <ClInclude Include="src\Rendering\RenderGraph\DirectBufferSink.h" />
     <ClInclude Include="src\Rendering\DrawCommand.h" />
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\EnvironmentPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\LambertianPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\RenderQueuePass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\RenderGraph.h" />

@@ -2,6 +2,7 @@
 #include "Rendering/Renderer.h"
 #include "Passes/BufferClearPass.h"
 #include "Passes/LambertianPass.h"
+#include "Passes/EnvironmentPass.h"
 
 Fracture::TestGraph::TestGraph(Renderer& renderer, std::string name):RenderGraph(renderer)
 {
@@ -11,9 +12,17 @@ Fracture::TestGraph::TestGraph(Renderer& renderer, std::string name):RenderGraph
 		AppendPass(std::move(pass));
 	}
 
+	
+	{
+		auto pass = std::unique_ptr<EnvironmentPass>(new EnvironmentPass("environment"));
+		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
+		AppendPass(std::move(pass));
+	}
+
+
 	{
 		auto pass = std::unique_ptr<LambertianPass>(new LambertianPass("lambertian",renderer.m_opaqueBucket.get(),renderer.m_transparentBucket.get()));
-		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
+		pass->SetSinkLinkage("renderTarget", "environment.renderTarget");
 		AppendPass(std::move(pass));
 	}
 

@@ -659,6 +659,9 @@
     <ClInclude Include="src\Rendering\Bindable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\EnvironmentPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\glm\CMakeLists.txt" />

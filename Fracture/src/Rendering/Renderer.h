@@ -50,6 +50,7 @@ namespace Fracture
 		void onInit();
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
+		void RenderEnvironment();
 		void RenderPasses();
 		void RenderDebug();
 		void RenderDebugRetained();		
