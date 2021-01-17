@@ -76,7 +76,7 @@ void Fracture::RenderPass::RegisterSource(std::unique_ptr<RenderSource> source)
 	{
 		if (src->GetName() == source->GetName())
 		{
-			FRACTURE_ERROR("Sink Alread Registered!" + source->GetName());
+			FRACTURE_ERROR("Source Alread Registered!" + source->GetName());
 			return;
 		}
 	}

@@ -109,6 +109,12 @@ namespace Fracture
 		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 
+		//render buckets
+		std::shared_ptr<RenderBucket> m_opaqueBucket;
+		std::shared_ptr<RenderBucket> m_transparentBucket;
+		std::shared_ptr<RenderBucket> m_shadowBucket;
+		std::shared_ptr<RenderBucket> m_outlineBucket;
+
 	
 		
 		static std::shared_ptr<Renderer> getInstance();
@@ -126,11 +132,7 @@ namespace Fracture
 		//camera
 		static std::shared_ptr<ICamera> m_camera;
 
-		//render buckets
-		std::shared_ptr<RenderBucket> m_opaqueBucket;
-		std::shared_ptr<RenderBucket> m_transparentBucket;
-		std::shared_ptr<RenderBucket> m_shadowBucket;
-		std::shared_ptr<RenderBucket> m_outlineBucket;
+		
 		
 		//Light  Bucket
 		std::vector<std::shared_ptr<Fracture::ILight>> m_lights;

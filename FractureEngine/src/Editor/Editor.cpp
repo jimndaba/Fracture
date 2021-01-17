@@ -422,18 +422,23 @@ void Fracture::Editor::Render()
         }
 
         DrawMenuBar();
-              
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
+
+      
+
         m_graph->Execute(*m_Renderer);
 
      
-
-        //m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
+        m_graph->Finalize();
+     
         //m_Renderer->RenderPasses();
-        //m_Renderer->EndFrame();
+        m_Renderer->EndFrame();
+        m_graph->Reset();
+
 
         m_frame->render();
 
-        m_graph->Reset();
+       
         ImGui::End();
 }
 

@@ -164,11 +164,9 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	m_model->directory = path.substr(0, path.find_last_of('\\'));
 	
 	// process ASSIMP's root node recursively
-	FRACTURE_TRACE("|-----------------------------------------------------------------------|");
-	FRACTURE_TRACE("loading Model: {}", m_model->Name);
-	FRACTURE_TRACE("Number of Materials: {}", scene->mNumMaterials);
+	
 	ProcessNode(m_model, scene->mRootNode, scene);
-	FRACTURE_TRACE("|-----------------------------------------------------------------------|");
+
 	return m_model;
 }
 
@@ -457,10 +455,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(a
 
 void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
 {
-	FRACTURE_TRACE("|##############|");
-	FRACTURE_TRACE("Number of Meshes: {}", node->mNumMeshes);
-	FRACTURE_TRACE("Number of Children: {}", node->mNumChildren);
-
+	
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{		
 		aiMesh* mesh = scene->mMeshes[i];		
@@ -477,10 +472,6 @@ void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* n
 		FRACTURE_TRACE("loading Child: {}", node->mChildren[i]->mName.data);
 		ProcessNode(model, node->mChildren[i], scene);
 	}
-	
-	
-	FRACTURE_TRACE("|##############|");
-
 }
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma)

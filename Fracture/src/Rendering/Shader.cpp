@@ -38,26 +38,6 @@ const char* getTypeString(GLenum type) {
 Fracture::Shader::Shader(const std::string& name,const std::string& vertexPath, const std::string& fragmentPath):Name(name),vertPath(vertexPath),fragPath(fragmentPath)
 {
     m_program = createShaderFromFile(vertexPath, fragmentPath);
-
-    unsigned int uniformMatrices = glGetUniformBlockIndex(m_program, "FRAME_DATA");
-    glUniformBlockBinding(m_program, uniformMatrices, 0);
-
-    GLint numAttribs;
-    glGetProgramInterfaceiv(m_program, GL_PROGRAM_INPUT,GL_ACTIVE_RESOURCES, &numAttribs); 
-    GLenum properties[] = { GL_NAME_LENGTH, GL_TYPE, GL_LOCATION };
-    std::cout << "Active attributes" << std::endl;
-    for (int i = 0; i < numAttribs; ++i) {
-        GLint results[3];
-        glGetProgramResourceiv(m_program, GL_PROGRAM_INPUT,
-            i, 3, properties, 3, NULL, results);
-        GLint nameBufSize = results[0] + 1;
-        char* name = new char[nameBufSize];
-        glGetProgramResourceName(m_program,
-            GL_PROGRAM_INPUT, i, nameBufSize, NULL, name);
-        printf("%-5d %s (%s)n", results[2], name,
-           getTypeString(results[1]));
-        delete[] name;
-    }
 }
 
 Fracture::Shader::~Shader()

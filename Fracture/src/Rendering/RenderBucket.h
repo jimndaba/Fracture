@@ -8,9 +8,11 @@
 #include <memory>
 #include <map>
 
+#include "DrawCommand.h"
+
 namespace Fracture
 {
-	class DrawCommand;
+
 	class RenderComponent;
 	class TransformComponent;
 	class Mesh;

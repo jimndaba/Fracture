@@ -198,6 +198,12 @@
     <ClCompile Include="src\Rendering\RenderGraph\Passes\RenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\RenderGraph\Passes\RenderQueuePass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\RenderGraph\Passes\BindingPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -642,6 +648,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderGraph\Passes\RenderQueuePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\LambertianPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\BindingPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

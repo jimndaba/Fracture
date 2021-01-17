@@ -2,18 +2,28 @@
 #ifndef RENDERQUEUEPASS_H
 #define RENDERQUEUEPASS_H
 
-#include "RenderPass.h"
+#include "BindingPass.h"
+
 
 namespace Fracture
 {
-	class RenderQueuePass : public RenderPass
+	class RenderBucket;
+	class Shader;
+	struct UniformValue;
+	struct UniformValueSampler;
+
+	class RenderQueuePass : public BindingPass
 	{
 	public:
-		//void Accept(Job job) noexcept;
-		//void Execute(Graphics& gfx) const noxnd override;
-		//void Reset() noxnd override;
+		RenderQueuePass(std::string Name);
+		void Execute(Renderer& renderer) override;
+		void Reset() override;
+		void AcceptBucket(RenderBucket* bucket);
 	private:
-		//std::vector<Job> jobs;
+		int NumberBatches = 0;
+		std::vector<RenderBucket*> m_buckets;
+		void WriteUniformData(Shader shader, std::string name, UniformValue value);
+		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 	};
 }
 
