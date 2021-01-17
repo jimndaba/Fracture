@@ -102,12 +102,12 @@ void Fracture::RenderTarget::SetTarget(GLenum target)
 
 void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    bind();
 }
 
 void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* resource)
 {
-    
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
 }
 
 void Fracture::RenderTarget::Clear(Renderer& renderer)

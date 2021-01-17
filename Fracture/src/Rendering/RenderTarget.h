@@ -7,13 +7,14 @@
 #include "GLAD/glad.h"
 #include "glm/glm.hpp"
 #include "RenderGraph/BufferResource.h"
+#include "Bindable.h"
 
 namespace Fracture
 {
 
 	class Texture;
 
-	class RenderTarget : public BufferResource
+	class RenderTarget : public BufferResource, public Bindable
 	{
 
 	public:
@@ -30,7 +31,7 @@ namespace Fracture
 		std::shared_ptr<Texture> GetDepthStencilTexture();
 		std::shared_ptr<Texture> GetColorTexture(unsigned int index);
 
-		void bind();
+		void bind() override;
 		void Unbind();
 
 		void Resize(unsigned int width, unsigned int height);

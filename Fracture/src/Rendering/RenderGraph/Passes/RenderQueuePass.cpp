@@ -7,6 +7,7 @@
 #include "Logging/Logger.h"
 #include "../DirectBufferSink.h"
 #include "../BufferResource.h"
+#include "Rendering/Bindable.h"
 
 Fracture::RenderQueuePass::RenderQueuePass(std::string Name):BindingPass(Name)
 {

@@ -12,7 +12,6 @@ Fracture::TestGraph::TestGraph(Renderer& renderer, std::string name):RenderGraph
 	}
 
 	{
-
 		auto pass = std::unique_ptr<LambertianPass>(new LambertianPass("lambertian",renderer.m_opaqueBucket.get(),renderer.m_transparentBucket.get()));
 		pass->SetSinkLinkage("renderTarget", "buffer.clearRT");
 		AppendPass(std::move(pass));

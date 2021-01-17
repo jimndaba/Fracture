@@ -19,14 +19,17 @@ namespace Fracture
 		{
 			AcceptBucket(opaque);
 			AcceptBucket(transparent);
-
+			
 			RegisterSink(DirectBufferSink<RenderTarget>::Make("renderTarget", renderTarget));
 			RegisterSource(DirectBufferSource<RenderTarget>::Make("renderTarget", renderTarget));
+
+			//AddBind(renderTarget);
+
 		}
 
 		void Execute(Renderer& renderer)
 		{
-			renderTarget->bind();
+			RenderQueuePass::Execute(renderer);
 		}
 	};
 

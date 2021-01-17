@@ -183,6 +183,7 @@
     <ClInclude Include="src\Component\ILight.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
     <ClInclude Include="src\Component\LightComponent.h" />
+    <ClInclude Include="src\Rendering\Bindable.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\BindingPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\BufferClearPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\BufferResource.h" />

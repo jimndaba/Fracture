@@ -275,6 +275,7 @@ void Fracture::Editor::onLoadNew()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());
     m_graph = std::shared_ptr<TestGraph>(new TestGraph(*m_Renderer, "TestGraph"));
+   
 }
 
 void Fracture::Editor::run()
@@ -428,9 +429,7 @@ void Fracture::Editor::Render()
 
         m_graph->Execute(*m_Renderer);
 
-     
-        m_graph->Finalize();
-     
+          
         //m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
         m_graph->Reset();

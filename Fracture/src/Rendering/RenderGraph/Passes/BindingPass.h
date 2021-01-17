@@ -7,14 +7,14 @@
 
 namespace Fracture
 {
-
+	class Bindable;
 	class BindingPass : public RenderPass
 	{
 
 	public:
 		BindingPass(std::string name);
 		void Execute(Renderer& renderer) override;
-		//void AddBind();
+		void AddBind(std::shared_ptr<Bindable> bindable);
 		void BindBufferResources(Renderer& renderer);
 		void BindAll(Renderer& renderer);
 		void Finalise() override;
@@ -25,7 +25,7 @@ namespace Fracture
 			
 		}
 		std::shared_ptr<RenderTarget> renderTarget;
-
+		std::vector<std::shared_ptr<Bindable>> m_bindables;
 	};
 
 }
