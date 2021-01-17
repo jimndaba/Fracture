@@ -12,6 +12,8 @@
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
 
+#include "Rendering/RenderGraph/TestGraph.h"
+
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
 bool Fracture::Editor::m_loadNewProject;
@@ -117,7 +119,7 @@ void Fracture::Editor::onInit()
     m_Renderer = Renderer::getInstance();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
    
-    
+   
  
 }
 
@@ -272,7 +274,7 @@ void Fracture::Editor::onLoadNew()
     m_viewpanel->init();
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());
-   
+    m_graph = std::shared_ptr<TestGraph>(new TestGraph(*m_Renderer, "TestGraph"));
 }
 
 void Fracture::Editor::run()
@@ -421,12 +423,17 @@ void Fracture::Editor::Render()
 
         DrawMenuBar();
               
+        m_graph->Execute(*m_Renderer);
 
-        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
-        m_Renderer->RenderPasses();
-        m_Renderer->EndFrame();
+     
+
+        //m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
+        //m_Renderer->RenderPasses();
+        //m_Renderer->EndFrame();
 
         m_frame->render();
+
+        m_graph->Reset();
         ImGui::End();
 }
 

@@ -14,17 +14,17 @@ void Fracture::RenderSink::SetTarget(std::string OutputSource, std::string Targe
 	targetPass = TargetPass;
 }
 
-std::string& Fracture::RenderSink::GetName()
+const std::string& Fracture::RenderSink::GetRegisteredName() const
 {
 	return registeredName;
 }
 
-std::string& Fracture::RenderSink::GetSourceName()
+const std::string& Fracture::RenderSink::GetSourceName() const
 {
 	return sourceName;
 }
 
-std::string& Fracture::RenderSink::GetTargetPassName()
+const std::string& Fracture::RenderSink::GetTargetPassName()const
 {
 	return targetPass;
 }

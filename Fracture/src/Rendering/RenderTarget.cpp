@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Logging/Logger.h"
 #include <iostream>
+#include "Renderer.h"
 
 
 Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
@@ -104,3 +105,33 @@ void Fracture::RenderTarget::SetTarget(GLenum target)
 {
     m_Target = target;
 }
+
+void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer)
+{
+}
+
+void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* resource)
+{
+
+}
+
+void Fracture::RenderTarget::Clear(Renderer& renderer)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    renderer.clearColor(1.0f,1.0f,1.0f);
+    renderer.clear();
+
+
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Fracture::RenderTarget::Clear(Renderer& renderer, glm::vec3 color)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    renderer.clearColor(color.r,color.g,color.b);
+    renderer.clear();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+

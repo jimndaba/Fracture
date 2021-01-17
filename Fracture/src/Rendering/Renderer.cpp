@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "RenderCommand.h"
+#include "DrawCommand.h"
 #include "RenderBucket.h"
 #include "Model.h"
 #include "Mesh.h"
@@ -400,7 +400,7 @@ void Fracture::Renderer::WriteUniformSampler(Shader shader, std::string name, st
     }
 }
 
-void Fracture::Renderer::Submit(RenderCommand command)
+void Fracture::Renderer::Submit(DrawCommand command)
 {
     ProfilerTimer timer("Submit");
   
@@ -428,7 +428,7 @@ void Fracture::Renderer::Submit(RenderCommand command)
    
 }
 
-void Fracture::Renderer::Draw(RenderCommand command)
+void Fracture::Renderer::Draw(DrawCommand command)
 {
     glBindVertexArray(command.VAO);
     glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
@@ -456,7 +456,7 @@ void Fracture::Renderer::setViewport(int width, int height)
     }
 }
 
-void Fracture::Renderer::PushCommand(RenderCommand command)
+void Fracture::Renderer::PushCommand(DrawCommand command)
 {
     NumberDraw += 1;
     if (command.HasTransparency)
@@ -515,7 +515,7 @@ void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billbo
 {
     std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");   
     billbaordMaterial->setColor4("mColor",color);
-    RenderCommand command;
+    DrawCommand command;
     command.VAO = billboard->VAO();
     command.ID = id;
     command.HasTransparency = true;

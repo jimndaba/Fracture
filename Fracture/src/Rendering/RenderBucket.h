@@ -10,7 +10,7 @@
 
 namespace Fracture
 {
-	class RenderCommand;
+	class DrawCommand;
 	class RenderComponent;
 	class TransformComponent;
 	class Mesh;
@@ -23,18 +23,18 @@ namespace Fracture
 	public:
 		RenderBucket();
 		~RenderBucket();
-		void pushCommand(RenderCommand command);
+		void pushCommand(DrawCommand command);
 		void pushCommand(std::shared_ptr<Mesh> mesh, std::shared_ptr<Fracture::Material> material,std::shared_ptr<TransformComponent> transform);
 		void sort();
 		void clear();
 
-		std::vector<RenderCommand> getCommands(bool cull = false);
+		std::vector<DrawCommand> getCommands(bool cull = false);
 		std::map<std::string, std::shared_ptr<RenderBatch>> getRenderBatches();
 		std::vector<std::string> Materials;
 	
 
 	private:
-		std::vector<RenderCommand> m_commands;
+		std::vector<DrawCommand> m_commands;
 		std::map<std::string, std::shared_ptr<RenderBatch>> m_batches;
 
 

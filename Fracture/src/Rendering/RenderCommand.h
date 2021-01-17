@@ -22,71 +22,13 @@ namespace Fracture
 
 		~RenderCommand()
 		{
+		}		
 
-		}
-		
-		uint32_t ID;
-		uint32_t VAO;
-		float ViewDepth;
-		int HasTransparency;
-		bool IsOutlined;
-		GLint indiceSize;
-		Material* material;
-		std::vector<std::string> TextureNames;
-
-		bool operator < (const RenderCommand& other) const
+		static void Clear(float r, float g, float b)
 		{
-			if (HasTransparency < other.HasTransparency) return true;
-			if (other.HasTransparency < HasTransparency) return false;
-
-			//Nearer objects are drawn first, since they hide further objects
-			//Recall that GL view depth is along the negative Z direction,
-			//so nearer objects have a greater Z.
-			//if (ViewDepth > other.ViewDepth) return true;
-			//if (other.ViewDepth > ViewDepth) return false;
-
-			if (material->getShader()->ID() < other.material->getShader()->ID())
-				return true;
-			if (other.material->getShader()->ID() < material->getShader()->ID())
-				return false;
-
-			if (ID < other.ID) return true;
-			if (other.ID < ID) return false;
-
-			return false;
+			glClearColor(r,g,b,1.0f);
 		}
-
-		bool operator > (const RenderCommand& other) const
-		{
-			if (HasTransparency < other.HasTransparency) return true;
-			if (other.HasTransparency < HasTransparency) return false;
-
-			//Nearer objects are drawn first, since they hide further objects
-			//Recall that GL view depth is along the negative Z direction,
-			//so nearer objects have a greater Z.
-			//if (ViewDepth > other.ViewDepth) return true;
-			//if (other.ViewDepth > ViewDepth) return false;
-
-			if (material->getShader()->ID() < other.material->getShader()->ID())
-				return true;
-			if (other.material->getShader()->ID() < material->getShader()->ID())
-				return false;
-
-			if (ID < other.ID) return true;
-			if (other.ID < ID) return false;
-
-			return false;
-		}
-	};
-
-	typedef struct {
-		GLuint vertexCount;
-		GLuint instanceCount;
-		GLuint firstIndex;
-		GLint  baseVertex;
-		GLuint baseInstance;
-	} DrawElementsIndirectCommand;
-	
+	};	
 }
 
 #endif

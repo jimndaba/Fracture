@@ -2,9 +2,16 @@
 #ifndef DIRECTBUFFERSINK_H
 #define DIRECTBUFFERSINK_H
 
+#include"Logging/Logger.h"
+
 #include "RenderSink.h"
 #include "RenderSource.h"
 #include <memory>
+#include <type_traits>
+#include <sstream>
+#include <cctype>
+#include <typeinfo>
+#include "../RenderTarget.h"
 
 namespace Fracture
 {
@@ -17,11 +24,11 @@ namespace Fracture
 			target(bind)
 		{}
 
-		void PostLinkValidate() const override
+		void PostLinkValidate() override
 		{
 			if (!linked)
 			{
-				throw RGC_EXCEPTION("Unlinked input: " + GetRegisteredName());
+				FRACTURE_ERROR("Unlinked input: " + GetRegisteredName());
 			}
 		}
 
@@ -36,7 +43,7 @@ namespace Fracture
 			if (!p)
 			{
 				std::ostringstream oss;
-				oss << "Binding input [" << GetRegisteredName() << "] to output [" << GetPassName() << "." << GetOutputName() << "] "
+				oss << "Binding input [" << GetRegisteredName() << "] to output [" << GetTargetPassName() << "." << GetSourceName() << "] "
 					<< " { " << typeid(T).name() << " } not compatible with { " << typeid(*source.YieldBuffer().get()).name() << " }";			
 			}
 			target = std::move(p);

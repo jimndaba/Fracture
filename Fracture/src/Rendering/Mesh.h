@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 #include <GLAD/glad.h>
-#include "RenderCommand.h"
+#include "DrawCommand.h"
 
 namespace Fracture
 {

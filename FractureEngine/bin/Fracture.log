@@ -1,253 +1,202 @@
-[18:35:19] [info] FRACTURE: Initializing Splash
-[18:35:19] [info] FRACTURE: OpenGL loaded
-[18:35:19] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[18:35:19] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[18:35:19] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[18:35:19] [trace] FRACTURE: Loaded Texture: splash
-[18:35:19] [trace] FRACTURE: Loaded Texture: title
-[18:35:19] [info] FRACTURE: Completed Init
-[18:35:19] [info] FRACTURE: Show Splash
-[18:35:21] [info] FRACTURE: OpenGL loaded
-[18:35:21] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[18:35:21] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[18:35:21] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[18:35:21] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[18:35:21] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[18:35:21] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[18:35:21] [trace] FRACTURE: Loaded Texture: RotateIcon
-[18:35:21] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[18:35:22] [trace] FRACTURE: Loaded Texture: CameraIcon
-[18:35:22] [trace] FRACTURE: Loaded Texture: LightIcon
-[18:35:22] [trace] FRACTURE: Loaded Texture: EyeIcon
-[18:35:22] [trace] FRACTURE: Loaded Texture: EyeIconC
-[18:35:22] [trace] FRACTURE: Loaded Texture: MeshIcon
-[18:35:22] [trace] FRACTURE: Loaded HDR Environment: Loft
-[18:35:22] [trace] FRACTURE: Loaded Shader: CubeMap
-[18:35:22] [trace] FRACTURE: Loaded Shader: irradiance
-[18:35:22] [trace] FRACTURE: Loaded Shader: prefilter
-[18:35:22] [trace] FRACTURE: Loaded Shader: bdrf
-[18:35:22] [trace] FRACTURE: Loaded Shader: Skybox
-[18:35:22] [trace] FRACTURE: Loaded Shader: DebugShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[18:35:22] [trace] FRACTURE: Loaded Shader: BillboardShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: DepthShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: DepthShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: PickingShader
-[18:35:22] [trace] FRACTURE: Loaded Shader: default
-[18:35:22] [trace] FRACTURE: Loaded Shader: Outline
-[18:35:22] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[18:35:22] [trace] FRACTURE: Loaded Material: billboardIcons
-[18:35:22] [trace] FRACTURE: Loaded Material: DebugMaterial
-[18:35:22] [trace] FRACTURE: Loaded Material: DepthMaterial
-[18:35:22] [trace] FRACTURE: Loaded Material: PickingMaterial
-[18:35:22] [trace] FRACTURE: Loaded Material: Outline
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: plane.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Plane
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Plane
-[18:35:22] [trace] FRACTURE: Loaded Material: Plane.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Plane
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: cube.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Cube
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Cube
-[18:35:22] [trace] FRACTURE: Loaded Material: Cube.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Cube
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: sphere.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Sphere
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Sphere
-[18:35:22] [trace] FRACTURE: Loaded Material: Sphere.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Sphere
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: cylinder.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Cylinder
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Cylinder
-[18:35:22] [trace] FRACTURE: Loaded Material: Cylinder.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Cylinder
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: torus.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Torus
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Torus
-[18:35:22] [trace] FRACTURE: Loaded Material: Torus.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Torus
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: loading Model: suzane.fbx
-[18:35:22] [trace] FRACTURE: Number of Materials: 1
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 3
-[18:35:22] [trace] FRACTURE: loading Child: Light
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Camera
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 0
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: loading Child: Suzanne
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: Number of Meshes: 1
-[18:35:22] [trace] FRACTURE: Number of Children: 0
-[18:35:22] [trace] FRACTURE: loading Mesh: Suzanne
-[18:35:22] [trace] FRACTURE: Loaded Material: Suzanne.material_0
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |##############|
-[18:35:22] [trace] FRACTURE: |-----------------------------------------------------------------------|
-[18:35:22] [trace] FRACTURE: Loaded model: Suzane
-[18:35:22] [info] FRACTURE: Renderer Init
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
-[18:35:25] [info] FRACTURE: width: 1266
-[18:35:25] [info] FRACTURE: height: 799
-[18:35:25] [trace] FRACTURE: Pixel ID: -1
+[00:32:27] [info] FRACTURE: Initializing Splash
+[00:32:27] [info] FRACTURE: OpenGL loaded
+[00:32:27] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[00:32:27] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[00:32:27] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[00:32:27] [trace] FRACTURE: Loaded Texture: splash
+[00:32:28] [trace] FRACTURE: Loaded Texture: title
+[00:32:28] [info] FRACTURE: Completed Init
+[00:32:28] [info] FRACTURE: Show Splash
+[00:32:30] [info] FRACTURE: OpenGL loaded
+[00:32:30] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[00:32:30] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[00:32:30] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[00:32:30] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[00:32:30] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: RotateIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: CameraIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: LightIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: EyeIcon
+[00:32:30] [trace] FRACTURE: Loaded Texture: EyeIconC
+[00:32:30] [trace] FRACTURE: Loaded Texture: MeshIcon
+[00:32:30] [trace] FRACTURE: Loaded HDR Environment: Loft
+[00:32:30] [trace] FRACTURE: Loaded Shader: CubeMap
+[00:32:30] [trace] FRACTURE: Loaded Shader: irradiance
+[00:32:30] [trace] FRACTURE: Loaded Shader: prefilter
+[00:32:30] [trace] FRACTURE: Loaded Shader: bdrf
+[00:32:30] [trace] FRACTURE: Loaded Shader: Skybox
+[00:32:30] [trace] FRACTURE: Loaded Shader: DebugShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[00:32:30] [trace] FRACTURE: Loaded Shader: BillboardShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: DepthShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: DepthShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: PickingShader
+[00:32:30] [trace] FRACTURE: Loaded Shader: default
+[00:32:30] [trace] FRACTURE: Loaded Shader: Outline
+[00:32:30] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[00:32:30] [trace] FRACTURE: Loaded Material: billboardIcons
+[00:32:30] [trace] FRACTURE: Loaded Material: DebugMaterial
+[00:32:30] [trace] FRACTURE: Loaded Material: DepthMaterial
+[00:32:30] [trace] FRACTURE: Loaded Material: PickingMaterial
+[00:32:30] [trace] FRACTURE: Loaded Material: Outline
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: plane.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Plane
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Plane
+[00:32:30] [trace] FRACTURE: Loaded Material: Plane.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Plane
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: cube.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Cube
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Cube
+[00:32:30] [trace] FRACTURE: Loaded Material: Cube.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Cube
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: sphere.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Sphere
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Sphere
+[00:32:30] [trace] FRACTURE: Loaded Material: Sphere.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Sphere
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: cylinder.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Cylinder
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Cylinder
+[00:32:30] [trace] FRACTURE: Loaded Material: Cylinder.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Cylinder
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: torus.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Torus
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Torus
+[00:32:30] [trace] FRACTURE: Loaded Material: Torus.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Torus
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: loading Model: suzane.fbx
+[00:32:30] [trace] FRACTURE: Number of Materials: 1
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 3
+[00:32:30] [trace] FRACTURE: loading Child: Light
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Camera
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 0
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: loading Child: Suzanne
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: Number of Meshes: 1
+[00:32:30] [trace] FRACTURE: Number of Children: 0
+[00:32:30] [trace] FRACTURE: loading Mesh: Suzanne
+[00:32:30] [trace] FRACTURE: Loaded Material: Suzanne.material_0
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |##############|
+[00:32:30] [trace] FRACTURE: |-----------------------------------------------------------------------|
+[00:32:30] [trace] FRACTURE: Loaded model: Suzane
+[00:32:30] [info] FRACTURE: Renderer Init

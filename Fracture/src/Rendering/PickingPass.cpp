@@ -1,6 +1,6 @@
 #include "PickingPass.h"
 #include "RenderTarget.h"
-#include "RenderCommand.h"
+#include "DrawCommand.h"
 #include "RenderBucket.h"
 #include "RenderBatch.h"
 #include "Material.h"

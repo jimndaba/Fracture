@@ -9,7 +9,7 @@ namespace Fracture
 {
 	class Material;
 	class RenderBucket;
-	class RenderCommand;
+	class DrawCommand;
 	class RenderTarget;
 	class ICamera;
 

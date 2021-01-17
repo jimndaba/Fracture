@@ -5,6 +5,7 @@
 namespace Fracture
 {
 	class Renderer;
+
 	class BufferResource
 	{
 	public:
@@ -12,6 +13,7 @@ namespace Fracture
 		virtual void BindAsBuffer(Renderer&) = 0;
 		virtual void BindAsBuffer(Renderer&, BufferResource*) = 0;
 		virtual void Clear(Renderer&) = 0;
+		virtual void Clear(Renderer& renderer, glm::vec3 color) = 0;
 	};
 }
 

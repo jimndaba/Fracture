@@ -4,7 +4,7 @@
 
 #include "GLAD/glad.h"
 #include <vector>
-#include "RenderCommand.h"
+#include "DrawCommand.h"
 
 namespace Fracture
 {
@@ -24,7 +24,7 @@ namespace Fracture
 		//each bacth will its own VAO VBO IBO
 
 
-		std::vector<RenderCommand> m_commnads;
+		std::vector<DrawCommand> m_commnads;
 		GLuint indirect_draw_buffer;
 		GLuint m_Vbo;
 		GLuint m_Ibo;

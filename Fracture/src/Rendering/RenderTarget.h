@@ -5,13 +5,15 @@
 #include <vector>
 #include <memory>
 #include "GLAD/glad.h"
+#include "glm/glm.hpp"
+#include "RenderGraph/BufferResource.h"
 
 namespace Fracture
 {
 
 	class Texture;
 
-	class RenderTarget
+	class RenderTarget : public BufferResource
 	{
 
 	public:
@@ -33,6 +35,12 @@ namespace Fracture
 
 		void Resize(unsigned int width, unsigned int height);
 		void SetTarget(GLenum target);
+
+		//RenderGraph Resource functions
+		virtual void BindAsBuffer(Renderer& renderer);
+		virtual void BindAsBuffer(Renderer& renderer, BufferResource* resource);
+		virtual void Clear(Renderer& renderer);
+		virtual void Clear(Renderer& renderer,glm::vec3 color);
 
 	private:		
 		GLenum									m_Target = GL_TEXTURE_2D;

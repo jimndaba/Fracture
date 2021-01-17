@@ -15,7 +15,7 @@
 namespace Fracture
 {
 	class RenderBucket;
-	class RenderCommand;
+	class DrawCommand;
 	class TransformComponent;
 	class LightComponent;
 	class ILight;
@@ -54,17 +54,17 @@ namespace Fracture
 		void RenderDebug();
 		void RenderDebugRetained();		
 		void RenderOutlined();
-		void Submit(RenderCommand command);
+		void Submit(DrawCommand command);
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
-		void Draw(RenderCommand command);
+		void Draw(DrawCommand command);
 		void EndFrame();
 
 		void clear();
 		void clearColor(float r, float g, float b);
 		void setViewport(int width,int height);
 		
-		void PushCommand(RenderCommand command);
+		void PushCommand(DrawCommand command);
 		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);

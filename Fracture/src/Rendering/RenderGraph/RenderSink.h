@@ -18,9 +18,9 @@ namespace Fracture
 
 		void SetTarget(std::string OutputSource, std::string TargetPass);
 
-		std::string& GetName();
-		std::string& GetSourceName();
-		std::string& GetTargetPassName();
+		const std::string& GetRegisteredName() const;
+		const  std::string& GetSourceName() const ;
+		const  std::string& GetTargetPassName() const;
 		virtual void PostLinkValidate();
 		virtual void Bind(RenderSource& source) = 0;
 

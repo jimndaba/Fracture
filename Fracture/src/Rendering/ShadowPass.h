@@ -12,7 +12,7 @@ namespace Fracture
 	class SunLight;
 	class Material;
 	class RenderTarget;
-	class RenderCommand;
+	class DrawCommand;
 	class RenderBucket;
 
 	class ShadowPass

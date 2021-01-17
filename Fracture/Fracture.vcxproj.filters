@@ -180,9 +180,6 @@
     <ClCompile Include="src\Rendering\RenderBatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\RenderGraph\RenderPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\RenderGraph\RenderSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -192,7 +189,13 @@
     <ClCompile Include="src\Rendering\RenderGraph\RenderGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\RenderGraph\BufferClearPass.cpp">
+    <ClCompile Include="src\Rendering\RenderGraph\TestGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\RenderGraph\Passes\BufferClearPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\RenderGraph\Passes\RenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -608,9 +611,6 @@
     <ClInclude Include="src\Rendering\SceneProbes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\RenderGraph\RenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\RenderGraph\RenderSink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -620,13 +620,28 @@
     <ClInclude Include="src\Rendering\RenderGraph\RenderGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\RenderGraph\BufferClearPass.h">
+    <ClInclude Include="src\Rendering\RenderGraph\DirectBufferSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\DrawCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\TestGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderGraph\BufferResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\RenderGraph\DirectBufferSink.h">
+    <ClInclude Include="src\Rendering\RenderGraph\RenderGraphUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\BufferClearPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\RenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderGraph\Passes\RenderQueuePass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

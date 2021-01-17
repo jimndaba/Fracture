@@ -1,5 +1,5 @@
 #include "RenderBucket.h"
-#include "RenderCommand.h"
+#include "DrawCommand.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "RenderBatch.h"
@@ -10,17 +10,18 @@
 #include "Material.h"
 #include "Profiling/Profiler.h"
 
-bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b);
+bool renderSortforward(const Fracture::DrawCommand& a, const Fracture::DrawCommand& b);
 
 Fracture::RenderBucket::RenderBucket()
 {
+	
 }
 
 Fracture::RenderBucket::~RenderBucket()
 {
 }
 
-void Fracture::RenderBucket::pushCommand(RenderCommand command)
+void Fracture::RenderBucket::pushCommand(DrawCommand command)
 {
 	std::map<std::string, std::shared_ptr<RenderBatch>>::iterator it = m_batches.find(command.material->Name);
 	if (it != m_batches.end())
@@ -38,7 +39,7 @@ void Fracture::RenderBucket::pushCommand(RenderCommand command)
 void Fracture::RenderBucket::pushCommand(std::shared_ptr<Fracture::Mesh> mesh,std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform)
 {
 	ProfilerTimer timer("Create Command");
-	RenderCommand command = RenderCommand{};	
+	DrawCommand command = DrawCommand{};	
 	command.VAO = mesh->VAO;
 	command.material = material.get();
 	command.HasTransparency = material.get()->IsTransparent();
@@ -77,7 +78,7 @@ void Fracture::RenderBucket::clear()
 	m_batches.clear();
 }
 
-std::vector<Fracture::RenderCommand> Fracture::RenderBucket::getCommands(bool cull)
+std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getCommands(bool cull)
 {
 	
 	return m_commands;
@@ -88,7 +89,7 @@ std::map<std::string, std::shared_ptr<Fracture::RenderBatch>> Fracture::RenderBu
 	return m_batches;
 }
 
-bool renderSortforward(const Fracture::RenderCommand& a, const Fracture::RenderCommand& b)
+bool renderSortforward(const Fracture::DrawCommand& a, const Fracture::DrawCommand& b)
 {
 	return a < b;
 }

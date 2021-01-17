@@ -3,7 +3,7 @@
 #include "Rendering/Mesh.h"
 #include "Rendering/Material.h"
 #include "AssetManager/AssetManager.h"
-#include "Rendering/RenderCommand.h"
+#include "Rendering/DrawCommand.h"
 
 Fracture::RenderComponent::RenderComponent(uint32_t entityID, std::shared_ptr<Model> model):Component(entityID,ComponentType::Render),m_model(model)
 {
