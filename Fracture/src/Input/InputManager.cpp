@@ -2,6 +2,7 @@
 #include <iostream>
 
 SDL_Event Fracture::InputManager::event;
+Fracture::Mouse Fracture::InputManager::m_mouse;
 
 Fracture::InputManager::InputManager()
 {
@@ -27,8 +28,10 @@ bool Fracture::InputManager::IsMouseDown(MOUSECODE key)
 {
 	if (SDL_GetMouseState(NULL, NULL)& SDL_BUTTON((Uint32)key))
 	{
+	
 		return true;
 	}
+	
 	return false;
 }
 
@@ -63,6 +66,11 @@ bool Fracture::InputManager::IsMouseScroll()
 glm::vec2 Fracture::InputManager::GetMouseScroll()
 {
 	return glm::vec2();
+}
+
+Fracture::Mouse Fracture::InputManager::GetMouse()
+{
+	return m_mouse;
 }
 
 void Fracture::InputManager::PollEvents()

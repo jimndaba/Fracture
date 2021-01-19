@@ -17,7 +17,7 @@ std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
 std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
 std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::m_Textures;
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
-std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
+std::unordered_map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::m_props;
 
@@ -37,9 +37,10 @@ Fracture::AssetManager::~AssetManager()
 
 void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std::string fragment)
 {
-	std::shared_ptr<Shader> m_shader = std::shared_ptr<Shader>(new Shader(name,vertex, fragment));	
+	std::shared_ptr<Shader> m_shader = std::make_shared<Shader>(name, vertex, fragment);
+
 	m_Shaders.emplace(name, m_shader);
-	FRACTURE_TRACE("Loaded Shader: {}", name);
+	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
 }
 
 void Fracture::AssetManager::AddModel(std::string name, std::string path)

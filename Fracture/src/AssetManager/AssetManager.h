@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <glm/glm.hpp>
 #include <string>
 #include <GLAD/glad.h>
@@ -77,7 +78,7 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
 		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
-		static std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
+		static std::unordered_map<std::string, std::shared_ptr<Shader>> m_Shaders;
 		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
 		
 		//Functions

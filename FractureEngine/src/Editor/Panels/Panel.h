@@ -78,7 +78,7 @@ namespace Fracture
 
 		std::string m_Name;
 		ImGuiWindowFlags window_flags;
-		bool p_open;
+		static bool p_open;
 	};
 }
 

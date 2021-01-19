@@ -15,6 +15,8 @@ namespace Fracture
 		ButtonMiddle = SDL_BUTTON_MIDDLE
 	};
 
+	
+
 
 }
 

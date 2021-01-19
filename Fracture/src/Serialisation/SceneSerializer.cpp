@@ -149,100 +149,105 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 	{
 		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		json c;
-		
-		/*
-		c["Material"] = component->m_model->GetMaterials(); material->Name;
-		json serialised_unfiorms= json::array_t();
-		json serialised_sampleunfiorms = json::array_t();
-
-		auto* uniforms = component->material->GetUniforms();
-		for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
-		{
-			json b;
-			switch (value->second.Type)
-			{
-			case SHADER_TYPE_BOOL:	
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = value->second.Bool;
-				break;
-			case SHADER_TYPE_INT:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = value->second.Int;
-				break;
-			case SHADER_TYPE_FLOAT:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = value->second.Float;
-				break;
-			case SHADER_TYPE_VEC2:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = { value->second.Vec2.x,value->second.Vec2.y };
-				break;
-			case SHADER_TYPE_VEC3:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = { value->second.Vec3.x,value->second.Vec3.y,value->second.Vec3.z };
-				break;
-			case SHADER_TYPE_VEC4:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = { value->second.Vec4.x,value->second.Vec4.y,value->second.Vec4.z,value->second.Vec4.w };
-				break;
-			case SHADER_TYPE_COLOR3:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = { value->second.Color3.x,value->second.Color3.y,value->second.Color3.z};
-				break;
-			case SHADER_TYPE_COLOR4:
-				b["Type"] = value->second.Type;
-				b["Name"] = value->first;
-				b["value"] = { value->second.Color4.x,value->second.Color4.y,value->second.Color4.z,value->second.Color4.w };
-				break;
-			case SHADER_TYPE_MAT2:
-				
-				break;
-			case SHADER_TYPE_MAT3:
-			
-				break;
-			case SHADER_TYPE_MAT4:
-				
-				break;
-			default:
-				//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
-				break;
-			}
-			serialised_unfiorms.push_back(b);
-		}
-
-		std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = component->material->GetSamplerUniforms();
-		for (auto value = uniformsSamplers->begin(); value != uniformsSamplers->end(); ++value)
-		{
-			json b;
-			switch (value->second->Type)
-			{
-			case SHADER_TYPE_SAMPLER2D:
-				b["Type"] = value->second->Type;
-				b["Name"] = value->first;
-				b["Texture"] = value->second->texture->Name;
-				b["Unit"] = value->second->Unit;
-				break;
-				FRACTURE_ERROR("Unrecognized Uniform type set");
-				break;
-			}
-			serialised_sampleunfiorms.push_back(b);
-		}
-		
-		c["MaterialUniforms"] = serialised_unfiorms;
-		c["MaterialSampleUniforms"] = serialised_sampleunfiorms;
-		c["Shader"]= component->material->getShader()->Name ;
-		*/
-
 		c["Model"] = component->m_model->Name;
-		j["Render Component"] = c;
+		json serialised_materials = json::array_t();
 
+		for (auto name : component->m_model->GetMaterials())
+		{
+			json m;
+			m["Material Name"] = name;
+			std::shared_ptr<Material> material = AssetManager::getMaterial(name);
+			json serialised_unfiorms = json::array_t();
+			json serialised_sampleunfiorms = json::array_t();
+
+			auto* uniforms = material->GetUniforms();
+			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
+			{
+				json b;
+				switch (value->second.Type)
+				{
+				case SHADER_TYPE_BOOL:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = value->second.Bool;
+					break;
+				case SHADER_TYPE_INT:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = value->second.Int;
+					break;
+				case SHADER_TYPE_FLOAT:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = value->second.Float;
+					break;
+				case SHADER_TYPE_VEC2:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = { value->second.Vec2.x,value->second.Vec2.y };
+					break;
+				case SHADER_TYPE_VEC3:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = { value->second.Vec3.x,value->second.Vec3.y,value->second.Vec3.z };
+					break;
+				case SHADER_TYPE_VEC4:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = { value->second.Vec4.x,value->second.Vec4.y,value->second.Vec4.z,value->second.Vec4.w };
+					break;
+				case SHADER_TYPE_COLOR3:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = { value->second.Color3.x,value->second.Color3.y,value->second.Color3.z };
+					break;
+				case SHADER_TYPE_COLOR4:
+					b["Type"] = value->second.Type;
+					b["Name"] = value->first;
+					b["value"] = { value->second.Color4.x,value->second.Color4.y,value->second.Color4.z,value->second.Color4.w };
+					break;
+				case SHADER_TYPE_MAT2:
+
+					break;
+				case SHADER_TYPE_MAT3:
+
+					break;
+				case SHADER_TYPE_MAT4:
+
+					break;
+				default:
+					//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+					break;
+				}
+				serialised_unfiorms.push_back(b);
+			}
+
+			std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+			for (auto value = uniformsSamplers->begin(); value != uniformsSamplers->end(); ++value)
+			{
+				json b;
+				switch (value->second->Type)
+				{
+				case SHADER_TYPE_SAMPLER2D:
+					b["Type"] = value->second->Type;
+					b["Name"] = value->first;
+					b["Texture"] = value->second->texture->Name;
+					b["Unit"] = value->second->Unit;
+					break;
+					FRACTURE_ERROR("Unrecognized Uniform type set");
+					break;
+				}
+				serialised_sampleunfiorms.push_back(b);
+			}
+
+			m["MaterialUniforms"] = serialised_unfiorms;
+			m["MaterialSampleUniforms"] = serialised_sampleunfiorms;		
+			m["Shader"] = material->getShader()->Name;
+			serialised_materials.push_back(m);
+		}
+		
+		c["Materials"] = serialised_materials;
+		j["Render Component"] = c;
 	}
 
 	if (ComponentManager::HasComponent<RigidBodyComponent>(entity->Id))
@@ -405,102 +410,107 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		{
 			auto renderComponent = j["Render Component"];
 			std::string model = renderComponent["Model"];
-			/*
-			std::string shader_name = renderComponent["Shader"];
-			std::string material_name = renderComponent["Material"];
 
-			std::shared_ptr<Material> material = std::make_shared<Material>(material_name, AssetManager::getShader(shader_name));
+			auto materials = renderComponent["Materials"];
 
-			auto uniforms = renderComponent["MaterialUniforms"];			
-			for (auto uniform : uniforms)
+			for (auto m_material : materials)
 			{
-				SHADER_TYPE shaderType = (SHADER_TYPE)uniform["Type"];
-				switch (shaderType)
-				{
-				case SHADER_TYPE_BOOL:
-				{
-					material->setBool(uniform["Name"], (bool)uniform["value"]);
-					break;
-				}
-				case SHADER_TYPE_INT:
-				{
-					material->setInt(uniform["Name"], (int)uniform["value"]);
-					break;
-				}
-				case SHADER_TYPE_FLOAT:
-				{
-					material->setFloat(uniform["Name"], (float)uniform["value"]);
-					break;
-				}					
-				case SHADER_TYPE_VEC2:					
-				{
-					std::array<float, 2> vec2 = uniform["value"];
-					glm::vec2 value = glm::vec2(vec2[0], vec2[1]);
-					material->setVec2(uniform["Name"], value);
-					break;
-				}
-				case SHADER_TYPE_VEC3:
-				{
-					std::array<float, 3> vec3 = uniform["value"];
-					glm::vec3 value = glm::vec3(vec3[0], vec3[1], vec3[2]);
-					material->setVec3(uniform["Name"], value);
-					break;
-				}					
-				case SHADER_TYPE_VEC4:
-				{
-					std::array<float, 4> vec4 = uniform["value"];
-					glm::vec4 value = glm::vec4(vec4[0], vec4[1], vec4[2], vec4[3]);
-					material->setVec4(uniform["Name"], value);
-					break;
-				}		
-				case SHADER_TYPE_COLOR3:
-				{
-					std::array<float, 3> color3 = uniform["value"];
-					glm::vec3 value = glm::vec3(color3[0], color3[1], color3[2]);
-					material->setColor3(uniform["Name"], value);
-					break;
-				}
-				case SHADER_TYPE_COLOR4:
-				{
-					std::array<float, 4> color4 = uniform["value"];
-					glm::vec4 value = glm::vec4(color4[0], color4[1], color4[2], color4[3]);
-					material->setColor4(uniform["Name"], value);
-					break;
-				}
-				case SHADER_TYPE_MAT2:
+				std::string m_Name = m_material["Material Name"];
+				std::string shader = m_material["Shader"];
+				std::shared_ptr<Shader> mShader = AssetManager::getShader(shader);
+				std::shared_ptr<Material> material = std::make_shared<Material>(m_Name,mShader);
 
-					break;
-				case SHADER_TYPE_MAT3:
+				auto uniforms = m_material["MaterialUniforms"];
+				for (auto uniform : uniforms)
+				{
+					SHADER_TYPE shaderType = (SHADER_TYPE)uniform["Type"];
+					switch (shaderType)
+					{
+					case SHADER_TYPE_BOOL:
+					{
+						material->setBool(uniform["Name"], (bool)uniform["value"]);
+						break;
+					}
+					case SHADER_TYPE_INT:
+					{
+						material->setInt(uniform["Name"], (int)uniform["value"]);
+						break;
+					}
+					case SHADER_TYPE_FLOAT:
+					{
+						material->setFloat(uniform["Name"], (float)uniform["value"]);
+						break;
+					}
+					case SHADER_TYPE_VEC2:
+					{
+						std::array<float, 2> vec2 = uniform["value"];
+						glm::vec2 value = glm::vec2(vec2[0], vec2[1]);
+						material->setVec2(uniform["Name"], value);
+						break;
+					}
+					case SHADER_TYPE_VEC3:
+					{
+						std::array<float, 3> vec3 = uniform["value"];
+						glm::vec3 value = glm::vec3(vec3[0], vec3[1], vec3[2]);
+						material->setVec3(uniform["Name"], value);
+						break;
+					}
+					case SHADER_TYPE_VEC4:
+					{
+						std::array<float, 4> vec4 = uniform["value"];
+						glm::vec4 value = glm::vec4(vec4[0], vec4[1], vec4[2], vec4[3]);
+						material->setVec4(uniform["Name"], value);
+						break;
+					}
+					case SHADER_TYPE_COLOR3:
+					{
+						std::array<float, 3> color3 = uniform["value"];
+						glm::vec3 value = glm::vec3(color3[0], color3[1], color3[2]);
+						material->setColor3(uniform["Name"], value);
+						break;
+					}
+					case SHADER_TYPE_COLOR4:
+					{
+						std::array<float, 4> color4 = uniform["value"];
+						glm::vec4 value = glm::vec4(color4[0], color4[1], color4[2], color4[3]);
+						material->setColor4(uniform["Name"], value);
+						break;
+					}
+					case SHADER_TYPE_MAT2:
 
-					break;
-				case SHADER_TYPE_MAT4:
+						break;
+					case SHADER_TYPE_MAT3:
 
-					break;
-				default:
-					//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
-					break;
+						break;
+					case SHADER_TYPE_MAT4:
+
+						break;
+					default:
+						//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
+						break;
+					}
+
 				}
-				
+
+				auto uniformSamples = m_material["MaterialSampleUniforms"];
+				for (auto sample : uniformSamples)
+				{
+					SHADER_TYPE shaderType = (SHADER_TYPE)sample["Type"];
+					switch (shaderType)
+					{
+					case SHADER_TYPE_SAMPLER2D:
+					{
+						material->SetTexture(sample["Name"], AssetManager::getTexture(sample["Texture"]), (int)sample["Unit"]);
+						break;
+					}
+					FRACTURE_ERROR("Unrecognized Uniform type set");
+					break;
+					}
+				}
+
+				AssetManager::AddMaterial(m_Name, material);
 			}
 
-			auto uniformSamples = renderComponent["MaterialSampleUniforms"];
-			for (auto sample : uniformSamples)
-			{
-				SHADER_TYPE shaderType = (SHADER_TYPE)sample["Type"];
-				switch(shaderType)
-				{
-				case SHADER_TYPE_SAMPLER2D:
-				{
-					material->SetTexture(sample["Name"],AssetManager::getTexture(sample["Texture"]), (int)sample["Unit"]);
-					break;
-				}
-				FRACTURE_ERROR("Unrecognized Uniform type set");
-				break;
-				}
-			}
-
-			AssetManager::AddMaterial(material_name,material);
-			*/
 			std::shared_ptr<Model> m_model = AssetManager::getModel(model);	
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id, m_model);
 			ComponentManager::AddComponent<RenderComponent>(component);

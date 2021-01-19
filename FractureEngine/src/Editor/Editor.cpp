@@ -62,7 +62,7 @@ void Fracture::Editor::onInit()
 
     m_ComponentManager->onInit();
 
-    m_window = std::make_unique<GameWindow>(1280, 720, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     m_window->MaximiseWindow();
     showRenderConfig  = false;
     showAudioConfig   = false;
@@ -133,6 +133,8 @@ bool Fracture::Editor::onLoad()
         return false;
     }   
 
+  
+
     m_Renderer->onInit();
     m_SceneManager->SetScene(m_properties->ActiveScene);
     m_viewpanel->init();
@@ -155,24 +157,7 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
     AssetManager::AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
-    
-    /*
-    AssetManager::AddTexture("Rust_albedo", "content/textures/pbrRust/albedo.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Rust_normal", "content/textures/pbrRust/normal.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Rust_metallic", "content/textures/pbrRust/metallic.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Rust_roughness", "content/textures/pbrRust/roughness.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Rust_ao", "content/textures/pbrRust/ao.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Wood_albedo", "content/textures/pbrWood/albedo.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Wood_normal", "content/textures/pbrWood/normal.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Wood_metallic", "content/textures/pbrWood/metallic.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Wood_roughness", "content/textures/pbrWood/roughness.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Wood_ao", "content/textures/pbrWood/ao.png", TextureType::Diffuse);
-    AssetManager::AddTexture("Brick_albedo", "content/textures/pbrBrick/albedo.jpg", TextureType::Diffuse);
-    AssetManager::AddTexture("Brick_normal", "content/textures/pbrBrick/normal.jpg", TextureType::Diffuse);
-    AssetManager::AddTexture("Brick_bump", "content/textures/pbrBrick/bump.jpg", TextureType::Diffuse);
-    AssetManager::AddTexture("Brick_roughness", "content/textures/pbrBrick/roughness.jpg", TextureType::Diffuse);
-    AssetManager::AddTexture("Brick_ao", "content/textures/pbrBrick/ao.jpg", TextureType::Diffuse);
-    */
+   
 
     AssetManager::AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
 
@@ -349,7 +334,8 @@ void Fracture::Editor::onUpdate(float dt)
             m_SceneManager->GetActiveScene()->Destroy(SceneView::SelectedEntity().Id);
         }
     }
-    
+
+   
     m_PhysicsManger->startPhysics();
     m_viewpanel->onUpdate(dt);
 }

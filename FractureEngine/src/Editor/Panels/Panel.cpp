@@ -1,6 +1,8 @@
 #include "Panel.h"
 #include "../Elements/Element.h"
 
+bool Fracture::Panel::p_open;
+
 Fracture::Panel::Panel(std::string name):m_Name(name)
 {
 	p_open = true;
