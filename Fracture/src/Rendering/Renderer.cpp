@@ -59,8 +59,8 @@ std::shared_ptr<Fracture::Renderer> Fracture::Renderer::instance;
 
 Fracture::Renderer::Renderer()
 {
-   m_width = 1280;
-   m_Height = 720;  
+   m_width = 1920;
+   m_Height = 1080;  
 }
 
 Fracture::Renderer::~Renderer()
@@ -106,20 +106,20 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     ProfilerTimer timer("Begin Frame");
     NumberDraw = 0;
     NumberBatches = 0;
-
+   
     glEnable(GL_CULL_FACE);
     
     glDepthFunc(GL_LESS);
-    glEnable(GL_STENCIL_TEST);
+    //glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_SCISSOR_TEST);
 
     //Set blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Initialize stencil clear value
-    glClearStencil(0);
+    //glClearStencil(0);
 
   
     glCullFace(GL_BACK);
@@ -137,6 +137,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 
 void Fracture::Renderer::RenderEnvironment()
 {
+    //setViewport(m_width, m_Height);
     for (auto light : m_lights)
     {
         if (light->GetLightType() == LightType::Sky)
@@ -173,93 +174,94 @@ void Fracture::Renderer::RenderPasses()
         glEnable(GL_CULL_FACE);
     }
 
-    setViewport(m_width, m_Height);
+    
     //Picking Pass
     {
         glDisable(GL_CULL_FACE);
+        setViewport(m_width, m_Height);
         m_PickingPass->Begin();
         m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
         m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
         m_PickingPass->End();
         glEnable(GL_CULL_FACE);
     }
-    
-    SceneRenderTarget->bind();    
-    clearColor(0.10f, 0.10f, 0.10f);
-    clear();
-    
     {
-        ProfilerTimer timer("Opaque Draw");
-        for (const auto& batch : m_opaqueBucket->getRenderBatches())
+        SceneRenderTarget->bind();    
+        setViewport(m_width, m_Height);      
+        clearColor(0.10f, 0.10f, 0.10f);
+        clear();
         {
-            NumberBatches += 1;
-            std::shared_ptr<Material> material = AssetManager::getMaterial(batch.first);
-            material->use();
-
-            auto* uniforms = material->GetUniforms();
-            for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+            ProfilerTimer timer("Opaque Draw");
+            for (const auto& batch : m_opaqueBucket->getRenderBatches())
             {
-                WriteUniformData(*material->getShader(), it->first, it->second);
-            }
+                NumberBatches += 1;
+                std::shared_ptr<Material> material = AssetManager::getMaterial(batch.first);
+                material->use();
 
-            std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
-            for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
-            {
-                WriteUniformSampler(*material->getShader(), it->first, it->second);
-            }
+                auto* uniforms = material->GetUniforms();
+                for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+                {
+                    WriteUniformData(*material->getShader(), it->first, it->second);
+                }
 
-            SetupLighting(material.get());
+                std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+                for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+                {
+                    WriteUniformSampler(*material->getShader(), it->first, it->second);
+                }
 
-            for (const auto& command : batch.second->m_commnads)
-            {
-                Submit(command);
-            }
-            material->getShader()->unbind();
+                SetupLighting(material.get());
+
+                for (const auto& command : batch.second->m_commnads)
+                {
+                    Submit(command);
+                }
+                material->getShader()->unbind();
     
-        }
-    }
-
-    {
-        ProfilerTimer timer("Transparent Draw");       
-        glDisable(GL_CULL_FACE);
-        for (const auto& batch : m_transparentBucket->getRenderBatches())
-        {          
-            NumberBatches += 1;
-            for (const auto& command : batch.second->m_commnads)
-            {
-                Submit(command);
             }
         }
-        glEnable(GL_CULL_FACE);
-    }
+
+        {
+            ProfilerTimer timer("Transparent Draw");       
+            glDisable(GL_CULL_FACE);
+            for (const auto& batch : m_transparentBucket->getRenderBatches())
+            {          
+                NumberBatches += 1;
+                for (const auto& command : batch.second->m_commnads)
+                {
+                    Submit(command);
+                }
+            }
+            glEnable(GL_CULL_FACE);
+        }
       
+        if (m_drawgrid)
+        {
+            m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
+        }    
+
+        if (m_isDebugRender)
+        {
+            PhysicsManager::DrawDebug();  
+            RenderDebug();
+            RenderDebugRetained();
+        }  
+
+   
+      
+        RenderEnvironment();
+        // RenderOutlined();//TODO
+
+        SceneRenderTarget->Unbind();  
+    }
+}
+
+void Fracture::Renderer::DrawGrid()
+{
     if (m_drawgrid)
     {
         m_grid->Draw(AssetManager::getShader("DebugShader"), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
-    }    
-
-    if (m_isDebugRender)
-    {
-        PhysicsManager::DrawDebug();  
-        RenderDebug();
-        RenderDebugRetained();
-    }  
-
-   
-    for (auto light : m_lights)
-    {
-        if (light->GetLightType() == LightType::Sky)
-        {
-            std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(light);
-            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
-        }
-    }  
-   
-    
-   // RenderOutlined();//TODO
-
-    SceneRenderTarget->Unbind();  
-
+    }
 }
 
 void Fracture::Renderer::RenderDebug()

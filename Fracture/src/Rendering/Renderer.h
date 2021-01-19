@@ -52,6 +52,7 @@ namespace Fracture
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderEnvironment();
 		void RenderPasses();
+		void DrawGrid();
 		void RenderDebug();
 		void RenderDebugRetained();		
 		void RenderOutlined();
@@ -121,6 +122,16 @@ namespace Fracture
 		static std::shared_ptr<Renderer> getInstance();
 
 		uint32_t GetEntityID(int mouseX, int mouseY);
+
+		int Width()
+		{
+			return m_width;
+		}
+
+		int Height()
+		{
+			return m_Height;
+		}
 
 	private:
 		int m_width;

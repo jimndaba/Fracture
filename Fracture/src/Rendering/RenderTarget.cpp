@@ -32,7 +32,7 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
     if (depthAndStencil)
     {
         
-        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT, TextureType::DepthStencilAttachment));
+        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height,GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT, TextureType::DepthStencilAttachment));
         glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_TEXTURE_2D,dtexture->id, 0);
         m_DepthStencil = dtexture;
 
@@ -102,7 +102,7 @@ void Fracture::RenderTarget::SetTarget(GLenum target)
 
 void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer)
 {
-    bind();
+   bind();
 }
 
 void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* resource)
@@ -112,17 +112,16 @@ void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* re
 
 void Fracture::RenderTarget::Clear(Renderer& renderer)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
-    renderer.clearColor(1.0f,1.0f,1.0f);
-    renderer.clear();
+    glBindFramebuffer(GL_FRAMEBUFFER, ID);          
+    renderer.clearColor(1.0f, 1.0f, 1.0f);
+    renderer.clear();   
    
 }
 
 void Fracture::RenderTarget::Clear(Renderer& renderer, glm::vec3 color)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
-    renderer.clearColor(color.r,color.g,color.b);
+    glBindFramebuffer(GL_FRAMEBUFFER, ID); 
     renderer.clear();
-    
+
 }
 

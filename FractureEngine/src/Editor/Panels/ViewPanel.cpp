@@ -58,9 +58,7 @@ void Fracture::ViewPanel::render()
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
-	m_renderer->setViewport(viewportPanelSize.x, viewportPanelSize.y);
-
-
+	
 	//Draw Screen Picking Window
 	//ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
 	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -147,7 +145,7 @@ void Fracture::ViewPanel::render()
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
-				m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
+				//m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
 				glm::mat4 transformMatrix = transform->GetLocalTranform();		
@@ -187,7 +185,7 @@ void Fracture::ViewPanel::render()
 				float rh = (float)ImGui::GetWindowHeight();
 				ImGuizmo::SetDrawlist();
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
-				m_camera->setProjection((int)viewportPanelSize.x, (int)viewportPanelSize.y);
+				//m_camera->setProjection((int)viewportPanelSize.x, (int)viewportPanelSize.y);
 				glm::mat4 viewMatrix = m_camera->getViewMatrix();
 				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
 				glm::mat4 transformMatrix = node->GetWorldTransform();
@@ -232,9 +230,10 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
-	{
-		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);		
-		m_renderer->m_PickingPass->Resize(m_ViewportSize.x, m_ViewportSize.y);
+	{		
+		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);
+		m_renderer->setViewport(m_ViewportSize.x, m_ViewportSize.y);	
+		m_renderer->m_PickingPass->Resize(m_ViewportSize.x, m_ViewportSize.y);	
 	}
 
 	if(m_ViewportFocused && m_ViewportHovered && m_camera)

@@ -14,7 +14,7 @@ bool renderSortforward(const Fracture::DrawCommand& a, const Fracture::DrawComma
 
 Fracture::RenderBucket::RenderBucket()
 {
-	
+	mType = BucketType::Opaque;
 }
 
 Fracture::RenderBucket::~RenderBucket()

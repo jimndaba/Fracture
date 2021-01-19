@@ -1,6 +1,7 @@
 #include "BufferClearPass.h"
 #include "../DirectBufferSink.h"
 #include "../BufferResource.h"
+#include "Rendering/Renderer.h"
 
 Fracture::BufferClearPass::BufferClearPass(std::string Name):RenderPass(std::move(Name))
 {
@@ -10,5 +11,5 @@ Fracture::BufferClearPass::BufferClearPass(std::string Name):RenderPass(std::mov
 
 void Fracture::BufferClearPass::Execute(Renderer& renderer)
 {
-	resource->Clear(renderer,glm::vec3(1.0f,0.0f,0.0f));
+	resource->Clear(renderer);
 }

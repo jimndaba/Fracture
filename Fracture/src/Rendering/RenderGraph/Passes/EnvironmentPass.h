@@ -21,7 +21,9 @@ namespace Fracture
 
 		virtual void Execute(Renderer& renderer) override
 		{
+			BindAll(renderer);
 			renderer.RenderEnvironment();
+
 		}
 
 	};

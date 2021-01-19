@@ -75,7 +75,7 @@ void Fracture::AssetManager::AddTexture(std::shared_ptr<Texture> texture)
 
 void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string path)
 {
-	std::shared_ptr<Texture> texture = HDRFromFile(path.c_str(),TextureType::Environment);
+	std::shared_ptr<Texture> texture = HDRFromFile(name,path.c_str(),TextureType::Environment);
 	m_Textures.emplace(name, texture);
 	FRACTURE_TRACE("Loaded HDR Environment: {}", name);
 }
@@ -612,10 +612,11 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	return newTex;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const char* path, Fracture::TextureType texType, bool gamma)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(std::string name, const char* path, Fracture::TextureType texType, bool gamma)
 {
 	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
 	texture->path = path;	
+	texture->Name = name;
 	stbi_set_flip_vertically_on_load(true);
 	float* data = stbi_loadf(path, &texture->width, &texture->height, &texture->channel, 0);
 	if (data)

@@ -139,6 +139,8 @@ bool Fracture::Editor::onLoad()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());   
     SetScene();   
+    m_graph = std::shared_ptr<TestGraph>(new TestGraph(*m_Renderer, "TestGraph"));
+
     return true;
 }
 
@@ -423,12 +425,9 @@ void Fracture::Editor::Render()
         }
 
         DrawMenuBar();
-        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
-
-      
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());      
 
         m_graph->Execute(*m_Renderer);
-
           
         //m_Renderer->RenderPasses();
         m_Renderer->EndFrame();

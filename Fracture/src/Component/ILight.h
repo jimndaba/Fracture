@@ -266,7 +266,6 @@ namespace Fracture
 		{
 			return m_environment->m_bdrfTexture;
 		}
-
 		std::shared_ptr<Environment> GetEnvironment()
 		{
 			return m_environment;

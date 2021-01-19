@@ -16,9 +16,20 @@ Fracture::RenderQueuePass::RenderQueuePass(std::string Name):BindingPass(Name)
 
 void Fracture::RenderQueuePass::Execute(Renderer& renderer)
 {
+   
     BindAll(renderer);
+    renderer.setViewport(renderer.Width(), renderer.Height());
     for(auto& bucket : m_buckets)
     {
+        if (bucket->mType == BucketType::Transparent)
+        {
+            glDisable(GL_CULL_FACE);
+        }
+        else
+        {
+            glEnable(GL_CULL_FACE);
+        }
+
 	    for (const auto& batch : bucket->getRenderBatches())
 	    {
             NumberBatches += 1;
@@ -44,7 +55,14 @@ void Fracture::RenderQueuePass::Execute(Renderer& renderer)
 			    renderer.Submit(command);
 		    }
 	    }
+        if (bucket->mType == BucketType::Transparent)
+        {
+            glEnable(GL_CULL_FACE);
+        }
     }
+
+    renderer.DrawGrid();
+
 }
 
 void Fracture::RenderQueuePass::Reset()

@@ -19,6 +19,11 @@ namespace Fracture
 	class Material;
 	class RenderBatch;
 	
+	enum BucketType
+	{
+		Opaque,
+		Transparent,
+	};
 
 	class RenderBucket
 	{
@@ -33,7 +38,8 @@ namespace Fracture
 		std::vector<DrawCommand> getCommands(bool cull = false);
 		std::map<std::string, std::shared_ptr<RenderBatch>> getRenderBatches();
 		std::vector<std::string> Materials;
-	
+		
+		BucketType mType;
 
 	private:
 		std::vector<DrawCommand> m_commands;

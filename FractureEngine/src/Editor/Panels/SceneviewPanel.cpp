@@ -3,6 +3,7 @@
 #include "Entity/EntityFactory.h"
 
 Fracture::Entity Fracture::SceneView::m_selection;
+std::shared_ptr<Fracture::Scene> Fracture::SceneView::m_scene;
 
 Fracture::SceneView::SceneView(std::string name):Panel(name)
 {
@@ -15,7 +16,7 @@ Fracture::SceneView::~SceneView()
 void Fracture::SceneView::setScene(std::shared_ptr<Scene> scene)
 {
 	m_scene = scene;
-	m_selection = NULL;
+	m_selection = *m_scene->Root();
 }
 
 void Fracture::SceneView::render()
@@ -31,7 +32,7 @@ void Fracture::SceneView::render()
 	DrawEntityNode(m_scene->Root()->Id);
 	
 	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) //
-		m_selection = NULL;
+		m_selection = *m_scene->Root();;
 
 	// Right-click on blank space
 	if (ImGui::BeginPopupContextWindow(0, 1, false))
@@ -193,7 +194,7 @@ void Fracture::SceneView::setSelectEntity(Entity selection)
 
 void Fracture::SceneView::clearSelection()
 {
-	m_selection = {};
+	m_selection = *m_scene->Root();
 }
 
 void Fracture::SceneView::DrawEntityNode(uint32_t entity)

@@ -149,8 +149,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 	{
 		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		json c;
+		
 		/*
-		c["Material"] = component->material->Name;
+		c["Material"] = component->m_model->GetMaterials(); material->Name;
 		json serialised_unfiorms= json::array_t();
 		json serialised_sampleunfiorms = json::array_t();
 
@@ -233,13 +234,15 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 			}
 			serialised_sampleunfiorms.push_back(b);
 		}
+		
+		c["MaterialUniforms"] = serialised_unfiorms;
+		c["MaterialSampleUniforms"] = serialised_sampleunfiorms;
+		c["Shader"]= component->material->getShader()->Name ;
 		*/
-		//c["MaterialUniforms"] = serialised_unfiorms;
-		//c["MaterialSampleUniforms"] = serialised_sampleunfiorms;
-		//c["Shader"]= component->material->getShader()->Name ;
+
 		c["Model"] = component->m_model->Name;
-		//c["Mesh"] = component->m_mesh->Name ;
 		j["Render Component"] = c;
+
 	}
 
 	if (ComponentManager::HasComponent<RigidBodyComponent>(entity->Id))
@@ -271,6 +274,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
 				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
 				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
+				c["Intensity"] = component->Intensity();
 				break;
 			}
 			case LightType::Spot:
@@ -286,7 +290,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				c["Qaudratic"] = component->GetLight()->GetQuadratic();
 				c["Cutoff"] = component->GetLight()->GetCutoff();
 				c["OuterCutoff"] = component->GetLight()->GetOuterCutOff();
-
+				c["Intensity"] = component->Intensity();
 				break;
 			}
 			case LightType::Point:
@@ -296,9 +300,17 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
 				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
 
+				c["Intensity"] = component->Intensity();
 				c["Linear"] = component->GetLight()->GetLinear();
 				c["Constant"] = component->GetLight()->GetConstant();
 				c["Qaudratic"] = component->GetLight()->GetQuadratic();
+				break;
+			}
+			case LightType::Sky:
+			{
+				std::shared_ptr<SkyLight> sky = std::static_pointer_cast<SkyLight>(component->GetLight());
+				c["Intensity"] = sky->Intensity();
+				c["Environment"] = sky->GetEnvironment()->m_enviroment->Name;			
 				break;
 			}
 		}
@@ -393,7 +405,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		{
 			auto renderComponent = j["Render Component"];
 			std::string model = renderComponent["Model"];
-			std::string mesh = renderComponent["Mesh"];
+			/*
 			std::string shader_name = renderComponent["Shader"];
 			std::string material_name = renderComponent["Material"];
 
@@ -488,9 +500,8 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			}
 
 			AssetManager::AddMaterial(material_name,material);
-
-			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
-			//std::shared_ptr<Mesh> m_mesh = m_model->GetMesh(mesh);			
+			*/
+			std::shared_ptr<Model> m_model = AssetManager::getModel(model);	
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id, m_model);
 			ComponentManager::AddComponent<RenderComponent>(component);
 
@@ -519,9 +530,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		if (exists(j, "Light Component"))
 		{
 			auto lightComponent = j["Light Component"];
-			std::array<float, 4> diffuse = lightComponent["Diffuse"];
-			std::array<float, 4> ambient = lightComponent["Ambient"];
-			std::array<float, 4> specular = lightComponent["Specular"];
+			
 
 			LightType lType = (LightType)j["Light Type"];
 
@@ -531,10 +540,14 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			{											
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id,lType);
 				std::array<float, 3> direction = lightComponent["Direction"];
+				std::array<float, 4> diffuse = lightComponent["Diffuse"];
+				std::array<float, 4> ambient = lightComponent["Ambient"];
+				std::array<float, 4> specular = lightComponent["Specular"];
 				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
 				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
+				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));		
+				component->SetIntensity(lightComponent["Intensity"]);
 				ComponentManager::AddComponent<LightComponent>(component);
 				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				break;
@@ -543,6 +556,9 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			{
 				std::array<float, 3> direction = lightComponent["Direction"];
 				std::array<float, 3> position = lightComponent["Position"];
+				std::array<float, 4> diffuse = lightComponent["Diffuse"];
+				std::array<float, 4> ambient = lightComponent["Ambient"];
+				std::array<float, 4> specular = lightComponent["Specular"];
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
 				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
@@ -562,6 +578,9 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			{				
 				std::array<float, 3> position = lightComponent["Position"];
 				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				std::array<float, 4> diffuse = lightComponent["Diffuse"];
+				std::array<float, 4> ambient = lightComponent["Ambient"];
+				std::array<float, 4> specular = lightComponent["Specular"];
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
 				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
 				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
@@ -569,6 +588,15 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetLinear(lightComponent["Linear"]);
 				component->SetConstant(lightComponent["Constant"]);
 				component->SetQuadratic(lightComponent["Qaudratic"]);			
+				ComponentManager::AddComponent<LightComponent>(component);
+				ComponentManager::AddComponent<EditorNode>(entity->Id);
+				break;
+			}
+			case LightType::Sky:
+			{
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				component->SetIntensity(lightComponent["Intensity"]);
+				component->ChangeEnvironment(lightComponent["Environment"]);
 				ComponentManager::AddComponent<LightComponent>(component);
 				ComponentManager::AddComponent<EditorNode>(entity->Id);
 				break;
