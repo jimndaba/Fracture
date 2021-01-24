@@ -37,7 +37,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 	{
-		ToneMap = std::make_shared<ToneMappingNode>("ToneMapPass");
+		ToneMap = std::make_shared<ToneMappingNode>("ToneMapPass", renderer.Width(), renderer.Height());
 		addnode(ToneMap);
 	}
 
@@ -52,15 +52,16 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 
-	addLink("global_output", "rendertarget", "mixPass", "outputColor");	
+	addLink("global_output", "rendertarget", "mixPass", "outputColor");
+	//addLink("global_output", "rendertarget", "thresholdPass", "colorTexture");
 
 	//Mix
 	addLink("mixPass", "colorB", "lamertianPass", "buffer");
 	addLink("mixPass", "colorA", "thresholdPass", "thresholdMap");
 	
-	addLink("thresholdPass", "colorTexture", "ToneMapPass", "buffer");
+	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 
-	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
+	addLink("ToneMapPass", "buffer", "lamertianPass", "buffer");
 
 	addLink("lamertianPass", "buffer", "clearframe", "buffer");
 	addLink("clearframe", "buffer","global_backbuffer", "rendertarget");	

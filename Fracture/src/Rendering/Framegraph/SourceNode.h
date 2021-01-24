@@ -10,6 +10,7 @@
 #include "Rendering/Texture.h"
 #include "AssetManager/AssetManager.h"
 #include "FullscreenNode.h"
+#include "Rendering/Renderer.h"
 
 namespace Fracture
 {
@@ -72,7 +73,9 @@ namespace Fracture
 
 		void execute(Renderer& renderer) override
 		{		
-			resources["OutputRender"]->bind();			
+			//renderer.clear();
+			glDisable(GL_DEPTH_TEST);
+			resources["OutputRender"]->bind();
 			m_shader->use();			
 			glBindVertexArray(quadVAO);
 			glBindTexture(GL_TEXTURE_2D, resources["rendertarget"]->GetColorTexture(0)->id);	// use the color attachment texture as the texture of the quad plane

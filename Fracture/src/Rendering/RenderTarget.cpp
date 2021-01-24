@@ -32,7 +32,7 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, GL
     if (depthAndStencil)
     {
         
-        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height,GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT, TextureType::DepthStencilAttachment));
+        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height,GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
         glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_TEXTURE_2D,dtexture->id, 0);
         m_DepthStencil = dtexture;
 

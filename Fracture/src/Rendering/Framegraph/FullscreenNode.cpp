@@ -29,12 +29,11 @@ Fracture::FullScreenNode::FullScreenNode(std::string name):FrameNode(name)
 
 void Fracture::FullScreenNode::execute(Renderer& renderer)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDisable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+    //glClear(GL_COLOR_BUFFER_BIT);
     //screenShader.use();
-    glBindVertexArray(quadVAO);
+    //glBindVertexArray(quadVAO);
     //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
    // glDrawArrays(GL_TRIANGLES, 0, 6);
 

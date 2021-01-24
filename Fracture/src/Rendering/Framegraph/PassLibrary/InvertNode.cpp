@@ -26,8 +26,8 @@ Fracture::InvertNode::InvertNode(std::string name):FullScreenNode(name)
 
 void Fracture::InvertNode::execute(Renderer& renderer)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_DEPTH_TEST);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glDisable(GL_DEPTH_TEST);
 	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
 	//glClear(GL_COLOR_BUFFER_BIT);
 	resources["buffer"]->bind();

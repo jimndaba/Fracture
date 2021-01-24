@@ -27,9 +27,10 @@ Fracture::ThresholdNode::ThresholdNode(std::string name,int width, int height):F
 void Fracture::ThresholdNode::execute(Renderer& renderer)
 {
 	resources["thresholdMap"]->bind();	
+	glBindVertexArray(quadVAO);
 	m_shader->use();
 	m_shader->setTexture("screenTexture",resources["colorTexture"]->GetColorTexture(0).get(), 0);
-	glBindVertexArray(quadVAO);	
+
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_shader->unbind();
 	resources["thresholdMap"]->Unbind();

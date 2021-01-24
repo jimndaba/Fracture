@@ -12,7 +12,7 @@ namespace Fracture
 	class ToneMappingNode : public FullScreenNode
 	{
 	public:
-		ToneMappingNode(std::string name);
+		ToneMappingNode(std::string name, int width, int height);
 
 		virtual void execute(Renderer& renderer);
 
@@ -22,6 +22,10 @@ namespace Fracture
 	private:
 		std::shared_ptr<Shader> m_toneShader;
 		std::shared_ptr<FrameResource> resource;
+		std::shared_ptr<RenderTarget> colorOut;
+
+		std::shared_ptr<InputSocket> m_Input;
+		std::shared_ptr<OutputSocket> m_output;
 
 	};
 
