@@ -30,7 +30,7 @@ namespace Fracture
 
 		static bool GetMouseState();
 
-		Mouse GetMouse();
+		static Mouse GetMouse();
 
 		static void PollEvents();
 		static SDL_Event event;

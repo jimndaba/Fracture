@@ -68,6 +68,11 @@ glm::vec2 Fracture::InputManager::GetMouseScroll()
 	return glm::vec2();
 }
 
+bool Fracture::InputManager::GetMouseState()
+{
+	return false;
+}
+
 Fracture::Mouse Fracture::InputManager::GetMouse()
 {
 	return m_mouse;

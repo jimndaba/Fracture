@@ -2,6 +2,8 @@
 #ifndef PICKINGPASS
 #define PICKINGPASS
 
+
+#include "RenderQueuePass.h"
 #include <vector>
 #include <memory>
 
@@ -25,22 +27,20 @@ namespace Fracture
 		}
 	};
 
-	class PickingPass
+	class PickingPass:public RenderQueuePass
 	{
 	public:
-		PickingPass(int screenWidth, int screenHeight);
+		PickingPass(std::string Name, int width, int height);
 		~PickingPass();
 
-		void Begin();
-		void End();
-		void Render(std::shared_ptr<ICamera> camera, std::shared_ptr<Material> material, RenderBucket& bucket);
-
+		void Execute(Renderer& renderer) override;
+		void Reset() override;
 		void Resize(int screenWidth, int screenHeight);
 
 		unsigned int GetPixelInfo(unsigned int x, unsigned int y);
-		std::shared_ptr<RenderTarget> m_renderTarget;
+		static std::shared_ptr<RenderTarget> m_renderTarget;
 	private:
-		
+
 		int SCREEN_WIDTH, SCREEN_HEIGHT;
 		std::shared_ptr<PixelInfo> m_pixelInfo;
 	};

@@ -19,9 +19,11 @@ namespace Fracture
 		void Execute(Renderer& renderer) override;
 		void Reset() override;
 		void AcceptBucket(RenderBucket* bucket);
+		std::vector<RenderBucket*> m_buckets;
+
 	private:
 		int NumberBatches = 0;
-		std::vector<RenderBucket*> m_buckets;
+	
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 	};

@@ -6,11 +6,18 @@
 
 namespace Fracture
 {
+	class PickingPass;
 
 	class TestGraph : public RenderGraph
 	{
-		public:
+	public:
 			TestGraph(Renderer& renderer, std::string name);
+
+			static int PixelID(int x, int y);
+			static void Resize(int width, int height);
+
+	private:
+			static std::unique_ptr<PickingPass> m_pickingPass;
 	};
 
 }

@@ -62,6 +62,8 @@ namespace Fracture
 		void Draw(DrawCommand command);
 		void EndFrame();
 
+		void SetPickingPass(PickingPass* pass);
+
 		void clear();
 		void clearColor(float r, float g, float b);
 		void setViewport(int width,int height);
@@ -106,7 +108,7 @@ namespace Fracture
 		std::shared_ptr<ShadowPass> m_ShadowPass;
 
 		//Picking
-		std::shared_ptr<PickingPass> m_PickingPass;
+		PickingPass* m_PickingPass;
 
 		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;

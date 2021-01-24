@@ -1,10 +1,12 @@
 #include "ViewPanel.h"
 #include "Rendering/RenderTarget.h"
 #include "SceneviewPanel.h"
-#include "Rendering/PickingPass.h"
 #include "../Editor.h"
+#include "Rendering/RenderGraph/Passes/PickingPass.h"
 #include <glm/gtx/matrix_decompose.hpp>
 #include <Component\EditorNodeComponent.h>
+#include "Rendering/Framegraph/FrameGraph.h"
+#include "Rendering/Framegraph/SourceNode.h"
 
 int Fracture::ViewPanel::gizmoMode;
 
@@ -51,22 +53,23 @@ void Fracture::ViewPanel::render()
 	
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-	ImGui::BeginChild("SceneView");	
-
-	m_ViewportFocused = ImGui::IsWindowFocused();
-	m_ViewportHovered = ImGui::IsWindowHovered();
+	ImGui::BeginChild("SceneView");
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
-	
+	m_ViewportFocused = ImGui::IsWindowFocused();
+	m_ViewportHovered = ImGui::IsWindowHovered();
 	//Draw Screen Picking Window
 	//ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
 	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 	//Draw Final Image from Render Target
-    ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
+	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
+	 ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->outputbuffer->outputColor->GetColorTexture(0)->id),
+		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
 
 	ImGui::SetCursorPos(ImVec2{10,10});
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
@@ -104,7 +107,7 @@ void Fracture::ViewPanel::render()
 			
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
-				int id = (int)m_renderer->GetEntityID(region_x, region_y);
+				int id = -1;// (int)TestGraph::PixelID(region_x, region_y);
 				if(id > 0)
 				{
 					Entity m_entity = *SceneManager::getEntity(id).get();
@@ -226,21 +229,23 @@ void Fracture::ViewPanel::render()
 void Fracture::ViewPanel::onUpdate(float dt)
 {
 	ProfilerTimer timer("ViewPanel update");
-	
+	Mouse m_mouse = InputManager::GetMouse();
+
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{		
 		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);
 		m_renderer->setViewport(m_ViewportSize.x, m_ViewportSize.y);	
-		m_renderer->m_PickingPass->Resize(m_ViewportSize.x, m_ViewportSize.y);	
+		Editor::m_graph->Resize(m_ViewportSize.x, m_ViewportSize.y);
+		//TestGraph::Resize(m_ViewportSize.x, m_ViewportSize.y);	
 	}
 
 	if(m_ViewportFocused && m_ViewportHovered && m_camera)
 	{ 
-		if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
+		if (m_mouse.IsButtonDown(MOUSECODE::ButtonRight))
 		{	
-			const glm::vec2& mouse{ InputManager::GetMousePosition().x,InputManager::GetMousePosition().y };
+			const glm::vec2& mouse{ m_mouse.GetPosition().x,m_mouse.GetPosition().y };
 			glm::vec2 delta = (mouse - m_InitialMousePosition);
 			m_InitialMousePosition = mouse;
 
@@ -275,15 +280,15 @@ void Fracture::ViewPanel::onUpdate(float dt)
 
 			m_camera->onUpdate(dt);
 		}			
-		if (InputManager::IsKeyDown(KeyCode::W))
+		if (InputManager::IsKeyDown(KeyCode::Q))
 		{
 			gizmoMode = ImGuizmo::OPERATION::TRANSLATE;
 		}
-		if (InputManager::IsKeyDown(KeyCode::E))
+		if (InputManager::IsKeyDown(KeyCode::W))
 		{
 			gizmoMode = ImGuizmo::OPERATION::SCALE;
 		}
-		if (InputManager::IsKeyDown(KeyCode::R))
+		if (InputManager::IsKeyDown(KeyCode::E))
 		{
 			gizmoMode = ImGuizmo::OPERATION::ROTATE;
 		}

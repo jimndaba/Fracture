@@ -138,8 +138,8 @@ Fracture::Environment::Environment(std::shared_ptr<Texture> environment, std::sh
     for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
     {
         // reisze framebuffer according to mip-level size.
-        unsigned int mipWidth = (int)128 * std::pow(0.5, mip);
-        unsigned int mipHeight = (int)128 * std::pow(0.5, mip);
+        unsigned int mipWidth = (int)(128 * std::pow(0.5, mip));
+        unsigned int mipHeight = (int)(128 * std::pow(0.5, mip));
         glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
         glViewport(0, 0, mipWidth, mipHeight);

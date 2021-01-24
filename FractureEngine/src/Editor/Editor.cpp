@@ -12,7 +12,9 @@
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
 
-#include "Rendering/RenderGraph/TestGraph.h"
+
+#include "Rendering/FrameGraph/FrameGraph.h"
+#include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -24,6 +26,8 @@ bool Fracture::Editor::showPhysicsConfig;
 bool Fracture::Editor::showInputConfig;
 bool Fracture::Editor::showProjectConfig;
 
+
+std::shared_ptr<Fracture::FrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
@@ -141,7 +145,7 @@ bool Fracture::Editor::onLoad()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());   
     SetScene();   
-    m_graph = std::shared_ptr<TestGraph>(new TestGraph(*m_Renderer, "TestGraph"));
+    //m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
 
     return true;
 }
@@ -206,6 +210,21 @@ void Fracture::Editor::onLoadNew()
     //Outline Shader
     AssetManager::AddShader("Outline", "content/shaders/outline/vertex.glsl", "content/shaders/outline/fragment.glsl");
 
+    //Invert Color Shader
+    AssetManager::AddShader("InvertColor", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/invert_frag.glsl");
+
+    //Tone Mapping Shader
+    AssetManager::AddShader("ToneMap", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/tonemapping_frag.glsl");
+
+    //Threshold Mapping Shader
+    AssetManager::AddShader("Threshold", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/threshold_frag.glsl");
+
+    //Threshold Mapping Shader
+    AssetManager::AddShader("AdditiveMix", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/AdditiveMix_frag.glsl");
+   
+    //Threshold Mapping Shader
+    AssetManager::AddShader("ColorMap", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/ColorMap_frag.glsl");
+
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
@@ -261,8 +280,8 @@ void Fracture::Editor::onLoadNew()
     m_viewpanel->init();
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());
-    m_graph = std::shared_ptr<TestGraph>(new TestGraph(*m_Renderer, "TestGraph"));
-   
+    m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
+    m_graph->Buildgraph();
 }
 
 void Fracture::Editor::run()
@@ -413,11 +432,11 @@ void Fracture::Editor::Render()
         DrawMenuBar();
         m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());      
 
-        m_graph->Execute(*m_Renderer);
+        m_graph->execute(*m_Renderer);
           
         //m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
-        m_graph->Reset();
+        //m_graph->Reset();
 
 
         m_frame->render();
@@ -711,11 +730,13 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::Separator();
         bool bloom ;
         ImGui::NextColumn();
-        ImGui::Text("Bloom");
+        ImGui::Text("Exposure /Gamma");
         ImGui::NextColumn();
 
         ImGui::PushFont(boldFont);
         ImGui::Checkbox("##Bloom", &bloom);
+        ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::PopFont();
 
         ImGui::Separator();

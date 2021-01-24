@@ -20,7 +20,7 @@ namespace Fracture
 	class EntityFactory;
 	struct ProjectProperties;
 	class EditorCamera;
-	class TestGraph;
+	class FrameGraph;
 
 	class Editor
 	{
@@ -51,9 +51,11 @@ namespace Fracture
 		std::shared_ptr<Logger> GetLogger();
 		std::shared_ptr<ProjectProperties> Properties();
 		std::shared_ptr<AssetManager> GetAssetManager();
+
+		static std::shared_ptr<FrameGraph> m_graph; //TODO rename or hide
 	private:
 
-		std::shared_ptr<TestGraph> m_graph;
+	
 
 		double time = 0.0;
 		const double dt = 0.01;
