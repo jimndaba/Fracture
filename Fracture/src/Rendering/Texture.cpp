@@ -47,8 +47,7 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, GLenum inter
 		else if (Type == GL_FLOAT)
 			InternalFormat = GL_RGBA32F;
 
-		glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat,
-			Width, Height, 0, format, Type, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, format, Type, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

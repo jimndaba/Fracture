@@ -9,6 +9,7 @@
 #include "PassLibrary/ToneMappingNode.h"
 #include "PassLibrary/ThresholdNode.h"
 #include "PassLibrary/AdditiveMixNode.h"
+#include "PassLibrary/BoxBlurNode.h"
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
 
@@ -18,22 +19,18 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	{
 		auto backbuffer = std::make_shared<SourceNode>("global_backbuffer", m_backBufferTarget);
 		addnode(backbuffer);
-	}
-
-	
+	}	
 	{
 		auto clear = std::make_shared<ClearFrame>("clearframe");
 		addnode(clear);
 	}
-
 	{
 		auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(),renderer.m_opaqueBucket.get(), renderer.m_transparentBucket.get());
 		addnode(lambertian);
 	}
-
 	{
-		auto threshold = std::make_shared<ThresholdNode>("thresholdPass",renderer.Width(),renderer.Height());
-		addnode(threshold);
+		BrightPass = std::make_shared<ThresholdNode>("thresholdPass",renderer.Width(),renderer.Height());
+		addnode(BrightPass);
 	}
 
 	{
@@ -42,9 +39,15 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 	{
+	    blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
+		addnode(blurPass);
+	}
+
+	{
 		auto mixColor = std::make_shared<AdditiveMixNode>("mixPass", renderer.Width(), renderer.Height());
 		addnode(mixColor);
 	}
+
 
 	{
 		outputbuffer = std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height());
@@ -52,19 +55,22 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 
-	addLink("global_output", "rendertarget", "mixPass", "outputColor");
-	//addLink("global_output", "rendertarget", "thresholdPass", "colorTexture");
+	addLink("global_output", "rendertarget", "mixPass", "output");
 
-	//Mix
-	addLink("mixPass", "colorB", "lamertianPass", "buffer");
-	addLink("mixPass", "colorA", "thresholdPass", "thresholdMap");
+	addLink("mixPass", "colorB", "lamertianPass", "outputColor");
+
+	addLink("mixPass", "colorA", "BoxBlurPass", "blurOutput");
 	
+	addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
+
 	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 
-	addLink("ToneMapPass", "buffer", "lamertianPass", "buffer");
+	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
 
 	addLink("lamertianPass", "buffer", "clearframe", "buffer");
-	addLink("clearframe", "buffer","global_backbuffer", "rendertarget");	
+
+	addLink("clearframe", "buffer","global_backbuffer", "rendertarget");
+
 
 }
 
@@ -118,7 +124,7 @@ void Fracture::FrameGraph::execute(Renderer& renderer)
 					if (n->GetName() == m->FrameNode_To)
 					{
 						std::shared_ptr<FrameResource> resource = n->getResource(m->FrameNode_Resource);
-						node->LinkResource(m->FrameNode_Source, n->getResource(m->FrameNode_Resource));					
+						node->LinkResource(m->FrameNode_Source, resource);
 					}
 				}
 			}

@@ -35,12 +35,12 @@ void Fracture::ToneMappingNode::execute(Renderer& renderer)
 {	
 	glDisable(GL_DEPTH_TEST);
 	resources["colorOut"]->bind();
-	//glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 	m_toneShader->use();
 	m_toneShader->setFloat("gamma",Gamma);
 	m_toneShader->setFloat("exposure",Exposure);
-	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, resources[m_Input->GetName()]->GetColorTexture(0)->id);	// use the color attachment texture as the texture of the quad plane
+	glBindVertexArray(quadVAO);	
+	m_toneShader->setTexture("inputToneImage", resources["buffer"]->GetColorTexture(0).get(),0);	
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_toneShader->unbind();
 	resources["colorOut"]->Unbind();

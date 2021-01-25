@@ -16,6 +16,8 @@ namespace Fracture
 
 		virtual void execute(Renderer& renderer);
 
+		float brightPassThreshold = 0.4f;
+
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<FrameResource> resource;

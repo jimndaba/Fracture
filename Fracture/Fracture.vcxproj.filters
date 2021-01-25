@@ -252,6 +252,9 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -762,6 +765,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

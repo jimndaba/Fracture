@@ -17,6 +17,8 @@ namespace Fracture
 	class Renderer;
 	class RenderTarget;
 	class ToneMappingNode;
+	class ThresholdNode;
+	class BoxBlurNode;
 	class SinkNode;
 
 	class FrameGraph
@@ -46,6 +48,8 @@ namespace Fracture
 		
 
 		std::shared_ptr<ToneMappingNode> ToneMap;
+		std::shared_ptr<ThresholdNode> BrightPass;
+		std::shared_ptr<BoxBlurNode> blurPass;
 		std::shared_ptr<SinkNode> outputbuffer;
 	private:
 		//std::shared_ptr<InputSourceNode> resultsource;

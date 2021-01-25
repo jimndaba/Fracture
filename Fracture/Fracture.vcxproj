@@ -148,6 +148,7 @@
     <ClCompile Include="src\Rendering\Framegraph\Link.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\OutputSocket.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\Rendering\Framegraph\Link.h" />
     <ClInclude Include="src\Rendering\Framegraph\OutputSocket.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />

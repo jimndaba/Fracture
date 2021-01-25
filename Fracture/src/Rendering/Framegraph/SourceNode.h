@@ -57,8 +57,6 @@ namespace Fracture
 		SinkNode(std::string name, int width, int height) :FullScreenNode(name)
 		{
 			std::shared_ptr<InputSocket> m_input = std::make_shared<InputSocket>("rendertarget");
-			std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("OutputRender");
-
 
 			m_shader = AssetManager::getShader("ColorMap");
 			colorIn = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, false);
@@ -67,8 +65,8 @@ namespace Fracture
 			AddInputSocket(m_input);
 			AddInputResource(m_input,colorIn);
 
-			AddOutputSocket(m_output);
-			AddOutputResource(m_output, outputColor);
+			AddResource("OutputRender", outputColor);
+	
 		}
 
 		void execute(Renderer& renderer) override
@@ -78,7 +76,7 @@ namespace Fracture
 			resources["OutputRender"]->bind();
 			m_shader->use();			
 			glBindVertexArray(quadVAO);
-			glBindTexture(GL_TEXTURE_2D, resources["rendertarget"]->GetColorTexture(0)->id);	// use the color attachment texture as the texture of the quad plane
+			m_shader->setTexture("OutMainBuffer", resources["rendertarget"]->GetColorTexture(0).get(), 0);			
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 			m_shader->unbind();
 			resources["OutputRender"]->Unbind();

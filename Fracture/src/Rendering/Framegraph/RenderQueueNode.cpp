@@ -24,7 +24,7 @@ void Fracture::RenderQueueNode::AcceptBucket(RenderBucket* bucket)
 
 void Fracture::RenderQueueNode::render(Renderer& renderer)
 {
-    renderer.clear();
+    //renderer.clear();
     renderer.setViewport(renderer.Width(), renderer.Height());
     renderer.RenderEnvironment();
     renderer.DrawGrid();
@@ -63,6 +63,7 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
             {
                 renderer.Submit(command);
             }
+
         }
         if (bucket->mType == BucketType::Transparent)
         {

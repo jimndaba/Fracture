@@ -29,8 +29,9 @@ void Fracture::ThresholdNode::execute(Renderer& renderer)
 	resources["thresholdMap"]->bind();	
 	glBindVertexArray(quadVAO);
 	m_shader->use();
-	m_shader->setTexture("screenTexture",resources["colorTexture"]->GetColorTexture(0).get(), 0);
-
+	m_shader->setFloat("brightPassThreshold", brightPassThreshold);
+	
+	m_shader->setTexture("mthreshold",resources["colorTexture"]->GetColorTexture(0).get(), 0);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_shader->unbind();
 	resources["thresholdMap"]->Unbind();

@@ -28,6 +28,7 @@ namespace Fracture
 		void AddInputResource(std::shared_ptr<InputSocket> input, std::shared_ptr<FrameResource> resource);
 		void AddOutputResource(std::shared_ptr<OutputSocket> output, std::shared_ptr<FrameResource> resource);
 
+		void AddResource(std::string name, std::shared_ptr<FrameResource> res);
 		std::shared_ptr<FrameResource> getResource(std::string name);
 
 		void LinkResource(std::string name, std::shared_ptr<FrameResource> res);

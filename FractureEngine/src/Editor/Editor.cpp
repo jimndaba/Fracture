@@ -15,6 +15,8 @@
 
 #include "Rendering/FrameGraph/FrameGraph.h"
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
+#include "Rendering/Framegraph/PassLibrary/ThresholdNode.h"
+#include "Rendering/Framegraph/PassLibrary/BoxBlurNode.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -224,6 +226,9 @@ void Fracture::Editor::onLoadNew()
    
     //Threshold Mapping Shader
     AssetManager::AddShader("ColorMap", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/ColorMap_frag.glsl");
+
+    //Threshold Mapping Shader
+    AssetManager::AddShader("BoxBlur", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/BoxBlur_frag.glsl");
 
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
@@ -737,6 +742,10 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::Checkbox("##Bloom", &bloom);
         ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##size", &m_graph->blurPass->size, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##qualit", &m_graph->blurPass->Quality, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##direct", &m_graph->blurPass->Directions, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::PopFont();
 
         ImGui::Separator();

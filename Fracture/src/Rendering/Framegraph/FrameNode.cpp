@@ -43,6 +43,11 @@ void Fracture::FrameNode::AddOutputResource(std::shared_ptr<OutputSocket> output
 	resources[output->GetName()] = resource;
 }
 
+void Fracture::FrameNode::AddResource(std::string name, std::shared_ptr<FrameResource> res)
+{
+	resources[name] = res;
+}
+
 std::shared_ptr<Fracture::FrameResource> Fracture::FrameNode::getResource(std::string name)
 {
 	return resources[name];

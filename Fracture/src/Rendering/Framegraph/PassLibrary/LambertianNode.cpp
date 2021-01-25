@@ -23,15 +23,15 @@ Fracture::LambertianNode::LambertianNode(std::string name, int width, int height
 	//Link Sockets to Resources
 	AddInputResource(m_Input, resource);
 	//AddInputResource(m_EnvironmentInput, resource);
-	AddOutputResource(m_output, resource);
+	AddOutputResource(m_output, outputColor);
 
 }
 
 void Fracture::LambertianNode::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("Lmaertian node");
-	resources["buffer"]->bind();
+	resources["outputColor"]->bind();
 	renderer.clear();
 	render(renderer);
-	resources["buffer"]->Unbind();
+	resources["outputColor"]->Unbind();
 }
