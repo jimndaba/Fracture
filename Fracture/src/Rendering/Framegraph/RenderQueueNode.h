@@ -18,10 +18,10 @@ namespace Fracture
 		virtual void execute(Renderer& renderer);
 		void AcceptBucket(RenderBucket* bucket);
 		void render(Renderer& renderer);
-	
+		std::vector<RenderBucket*> m_buckets;
 	private:
 		int NumberBatches = 0;
-		std::vector<RenderBucket*> m_buckets;
+		
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 

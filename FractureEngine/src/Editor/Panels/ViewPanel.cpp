@@ -2,7 +2,7 @@
 #include "Rendering/RenderTarget.h"
 #include "SceneviewPanel.h"
 #include "../Editor.h"
-#include "Rendering/RenderGraph/Passes/PickingPass.h"
+#include "Rendering/Framegraph/PassLibrary/PickingPass.h"
 #include <glm/gtx/matrix_decompose.hpp>
 #include <Component\EditorNodeComponent.h>
 #include "Rendering/Framegraph/FrameGraph.h"

@@ -29,7 +29,7 @@
 #include "Physics/PhysicsManager.h"
 #include "DebugLine.h"
 #include "ShadowPass.h"
-#include "RenderGraph/Passes/PickingPass.h"
+#include "Framegraph/PassLibrary/PickingPass.h"
 #include "Environment.h"
 #include "BillBoard.h"
 #include "Grid.h"
@@ -132,6 +132,14 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 
 	//Collect Scene Data
     RenderScene(scene);
+
+    //glDisable(GL_CULL_FACE);
+    //setViewport(m_width, m_Height);
+    //m_PickingPass->Begin();
+    //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
+    //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
+    //m_PickingPass->End();
+    //glEnable(GL_CULL_FACE);
 }
 
 void Fracture::Renderer::RenderEnvironment()
@@ -145,6 +153,24 @@ void Fracture::Renderer::RenderEnvironment()
             sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
         }
     }
+
+}
+
+void Fracture::Renderer::RenderDirectLightShadows()
+{
+    ProfilerTimer timer("ShadowPass");
+    glDisable(GL_CULL_FACE);
+    m_ShadowPass->Begin();
+    for (auto light : m_lights)
+    {
+        if (light->GetLightType() == LightType::Sun && light->CastShadows())
+        {
+            m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));
+        }
+    }
+    m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"), *m_shadowBucket);
+    m_ShadowPass->End();
+    glEnable(GL_CULL_FACE);
 
 }
 

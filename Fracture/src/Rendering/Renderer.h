@@ -51,6 +51,7 @@ namespace Fracture
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderEnvironment();
+		void RenderDirectLightShadows();
 		void RenderPasses();
 		void DrawGrid();
 		void RenderDebug();

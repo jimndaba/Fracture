@@ -129,9 +129,7 @@ Fracture::Environment::Environment(std::shared_ptr<Texture> environment, std::sh
     m_prefilter->use();
     m_prefilter->setCubeMap("environmentMap", envCubemap, 0);
     m_prefilter->setMat4("projection", captureProjection);
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-
+   
 
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     unsigned int maxMipLevels = 5;

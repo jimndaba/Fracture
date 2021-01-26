@@ -56,7 +56,7 @@ namespace Fracture
 	private:
 
 	
-
+		bool frameLimiter = true;
 		double time = 0.0;
 		const double dt = 0.01;
 		double currentTime;

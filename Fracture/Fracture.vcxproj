@@ -150,6 +150,7 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\DepthNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.cpp" />
@@ -160,7 +161,7 @@
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Model.cpp" />
-    <ClCompile Include="src\Rendering\RenderGraph\Passes\PickingPass.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\PickingPass.cpp" />
     <ClCompile Include="src\Rendering\RenderBatch.cpp" />
     <ClCompile Include="src\Rendering\RenderBucket.cpp" />
     <ClCompile Include="src\Rendering\Renderer.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\DepthNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.h" />
@@ -227,7 +229,7 @@
     <ClInclude Include="src\Rendering\DrawCommand.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\EnvironmentPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\LambertianPass.h" />
-    <ClInclude Include="src\Rendering\RenderGraph\Passes\PickingPass.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PickingPass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\Passes\RenderQueuePass.h" />
     <ClInclude Include="src\Rendering\RenderGraph\RenderGraph.h" />
     <ClInclude Include="src\Rendering\RenderGraph\RenderGraphUtils.h" />

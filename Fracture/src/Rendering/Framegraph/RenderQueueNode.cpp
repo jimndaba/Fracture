@@ -26,8 +26,7 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
 {
     //renderer.clear();
     renderer.setViewport(renderer.Width(), renderer.Height());
-    renderer.RenderEnvironment();
-    renderer.DrawGrid();
+  
     for (auto& bucket : m_buckets)
     {
         if (bucket->mType == BucketType::Transparent)

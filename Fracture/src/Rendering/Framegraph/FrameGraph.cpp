@@ -48,7 +48,6 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 		addnode(mixColor);
 	}
 
-
 	{
 		outputbuffer = std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height());
 		addnode(outputbuffer);

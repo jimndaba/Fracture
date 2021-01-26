@@ -3,7 +3,7 @@
 #include "Passes/BufferClearPass.h"
 #include "Passes/LambertianPass.h"
 #include "Passes/EnvironmentPass.h"
-#include "Passes/PickingPass.h"
+#include "Rendering/Framegraph/PassLibrary/PickingPass.h"
 
 
 std::unique_ptr<Fracture::PickingPass> Fracture::TestGraph::m_pickingPass;
@@ -37,10 +37,11 @@ Fracture::TestGraph::TestGraph(Renderer& renderer, std::string name):RenderGraph
 
 int Fracture::TestGraph::PixelID(int x,int y)
 {
-	return m_pickingPass->GetPixelInfo(x, y);
+	return 0;
+	//return m_pickingPass->GetPixelInfo(x, y);
 }
 
 void  Fracture::TestGraph::Resize(int width,int height)
 {
-	m_pickingPass->Resize(width, height);
+	//m_pickingPass->Resize(width, height);
 }

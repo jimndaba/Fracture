@@ -274,9 +274,9 @@ void main()
     color += Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(1.0));
+    //color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    //color = pow(color, vec3(1.0/2.2)); 
 
 
     if(TransparencyFlag > 0.5)
@@ -318,11 +318,11 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref)
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
 {
-    vec3 radiance = (light.diffuse * light.intensity) * 0.5;
+    vec3 radiance = light.diffuse * 0.5;//* light.intensity
     vec3 l = normalize(-light.direction);
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
-    //ambient += light.ambient;
+    ambient = light.diffuse *albedo* light.intensity ;
 
 
 
@@ -332,19 +332,19 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     float NDF = DistributionGGX(normal, H, roughness);   
     vec3 nominator    = NDF * G * F;
     float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, l), 0.0) + 0.001; // 0.001 to prevent divide by zero.
-    vec3 specular = nominator / denominator * light.specular;
+    vec3 specular = nominator / denominator * light.specular * light.intensity ;
 
     vec3 kS = F;
 	vec3 kd = vec3(1.0) - kS;
     kd *= 1.0 - metallic;	
-	vec3 diffuseBRDF = kd * albedo;
+	vec3 diffuseBRDF = kd * albedo * light.intensity;
 
 	// Cook-Torrance
     float NdotL = max(dot(normal, l), 0.0);  
     float shadow = ShadowCalculation(FragPosLightSpace,light);    
-    vec3 result = (diffuseBRDF / PI + specular) * radiance * NoL;
+    vec3 result = (diffuseBRDF / PI + specular ) * radiance * NoL + ambient ;
     result *= ((1.0 - shadow) * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
-    return result;  
+    return result ;  
 }
 
 vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos, vec3 viewDir,vec3 m_ambient)
@@ -355,8 +355,9 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         vec3 L = normalize(light.position - fragPos);
         vec3 H = normalize(viewDir+ L);
         float distance = length(light.position - fragPos);
+        float NoL = clamp(dot(normal, L), 0.0, 1.0);
         float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-        vec3 radiance = (light.diffuse* light.intensity ) * attenuation;
+        vec3 radiance = light.diffuse * attenuation;
        
 
         // Cook-Torrance BRDF
@@ -366,9 +367,9 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         
         vec3 nominator    = NDF * G * F;
         float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
-        vec3 specular = nominator / denominator * light.specular;
+        vec3 specular = nominator / denominator * light.specular * light.intensity ;
         
-        vec3 mambient  = light.ambient * light.intensity * albedo;
+        vec3 mambient  = light.ambient * albedo  * light.intensity;
      
         specular *= attenuation;
         mambient *= attenuation;
@@ -377,16 +378,18 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         // for energy conservation, the diffuse and specular light can't
         // be above 1.0 (unless the surface emits light); to preserve this
         // relationship the diffuse component (kD) should equal 1.0 - kS.
-        vec3 kD = vec3(1.0) - kS;
+        vec3 kD =vec3(1.0) - kS;
         // multiply kD by the inverse metalness such that only non-metals 
         // have diffuse lighting, or a linear blend if partly metal (pure metals
         // have no diffuse light).
         kD *= 1.0 - metallic;	 
         
+        vec3 diffuseBRDF =  kD  * albedo * light.intensity;
     
         // scale light by NdotL
-        float NdotL = max(dot(normal, L), 0.0);        
-    return  (kD * albedo / PI + specular) * radiance * NdotL + mambient ; 
+        float NdotL = max(dot(normal, L), 0.0);   
+        vec3 result = (diffuseBRDF / PI + specular ) * radiance * NoL + mambient  ;     
+    return result;
 
 }
 

@@ -36,8 +36,8 @@ std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 
 inline void Style();
 
-
-
+const double SCREEN_FPS = 60.0;
+const double FRAME_DELAY = 1000.0 / SCREEN_FPS;
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
@@ -68,7 +68,7 @@ void Fracture::Editor::onInit()
 
     m_ComponentManager->onInit();
 
-    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     m_window->MaximiseWindow();
     showRenderConfig  = false;
     showAudioConfig   = false;
@@ -147,8 +147,8 @@ bool Fracture::Editor::onLoad()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());   
     SetScene();   
-    //m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
-
+    m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
+    m_graph->Buildgraph();
     return true;
 }
 
@@ -314,12 +314,15 @@ void Fracture::Editor::run()
 
     while (!done)
     {
-       
+        double framestart = SDL_GetTicks();
+
+
         double newTime = SDL_GetTicks() / 1000.0;
         double frameTime = newTime - currentTime;
         currentTime = newTime;
 
         accumulator += frameTime;
+    
 
         while (accumulator >= dt)
         {
@@ -329,9 +332,16 @@ void Fracture::Editor::run()
             accumulator -= dt;
             time += dt;
         }
-
         onRender();
-      
+
+        double framelength = SDL_GetTicks() - framestart;
+        if (frameLimiter)
+        {
+            if (FRAME_DELAY > framelength)
+            {
+                SDL_Delay(FRAME_DELAY - framelength);
+            }
+        }
     }
     onShutdown();
 }

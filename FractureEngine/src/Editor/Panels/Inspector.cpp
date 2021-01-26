@@ -1055,19 +1055,14 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, uns
 	ImGui::PushID("##sample");
 	if (ImGui::ImageButton(texture, ImVec2(64, 64)))
 	{
+		std::string name;
+		std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
+		if (!filepath.empty())
+		{
+			AssetManager::AddTexture(name, filepath, TextureType::Diffuse);
+			mMaterial->ChangeTexture(name, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
+		}
 		
-			if (ImGui::IsMouseDoubleClicked(0))
-			{
-				std::string name;
-				std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
-				if (!filepath.empty())
-				{
-					AssetManager::AddTexture(name, filepath, TextureType::Diffuse);
-					mMaterial->ChangeTexture(name, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
-				}
-			}
-			
-	
 	}
 	ImGui::SameLine();
 	ImGui::Text(label.c_str());
