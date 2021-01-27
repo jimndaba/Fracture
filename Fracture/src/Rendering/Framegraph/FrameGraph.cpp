@@ -12,7 +12,9 @@
 #include "PassLibrary/BoxBlurNode.h"
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
-
+#include "PassLibrary/DepthNode.h"
+#include "PassLibrary/SSAONode.h"
+#include "PassLibrary/MultiplyMix.h"
 
 Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_backBufferTarget(renderer.SceneRenderTarget)
 {
@@ -20,10 +22,18 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 		auto backbuffer = std::make_shared<SourceNode>("global_backbuffer", m_backBufferTarget);
 		addnode(backbuffer);
 	}	
+
+	{
+		auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer",renderer.Width(), renderer.Height(), renderer.m_opaqueBucket.get(), renderer.m_transparentBucket.get());
+		addnode(depthbuffer);
+	}
+
 	{
 		auto clear = std::make_shared<ClearFrame>("clearframe");
 		addnode(clear);
 	}
+
+
 	{
 		auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(),renderer.m_opaqueBucket.get(), renderer.m_transparentBucket.get());
 		addnode(lambertian);
@@ -39,7 +49,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 	{
-	    blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
+	    auto blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
 		addnode(blurPass);
 	}
 
@@ -47,6 +57,24 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 		auto mixColor = std::make_shared<AdditiveMixNode>("mixPass", renderer.Width(), renderer.Height());
 		addnode(mixColor);
 	}
+
+
+	{
+		ssao = std::make_shared<SSAONode>("ssaoPass", renderer.Width(), renderer.Height());
+		addnode(ssao);
+	}
+
+	{
+		ssaoblur = std::make_shared<BoxBlurNode>("ssaoBlur", renderer.Width(), renderer.Height());
+		addnode(ssaoblur);
+	}
+
+
+	{
+		auto multiply = std::make_shared<MultiplyMixNode>("multiplyPass", renderer.Width(), renderer.Height());
+		addnode(multiply);
+	}
+
 
 	{
 		outputbuffer = std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height());
@@ -56,19 +84,28 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 
 	addLink("global_output", "rendertarget", "mixPass", "output");
 
-	addLink("mixPass", "colorB", "lamertianPass", "outputColor");
 
+	addLink("mixPass", "colorB", "multiplyPass", "output");
 	addLink("mixPass", "colorA", "BoxBlurPass", "blurOutput");
+
+	
+	addLink("multiplyPass", "colorB", "lamertianPass", "outputColor");
+	addLink("multiplyPass", "colorA", "ssaoBlur", "blurOutput");
+	
+	addLink("ssaoBlur", "colorTexture", "ssaoPass", "SSAOOutput");
+
+	addLink("ssaoPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
 	
 	addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
-
+	
 	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
-
+	
 	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
-
+	
 	addLink("lamertianPass", "buffer", "clearframe", "buffer");
-
+	
 	addLink("clearframe", "buffer","global_backbuffer", "rendertarget");
+
 
 
 }

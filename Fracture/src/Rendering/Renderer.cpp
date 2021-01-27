@@ -473,6 +473,27 @@ void Fracture::Renderer::Submit(DrawCommand command)
    
 }
 
+void Fracture::Renderer::Submit(DrawCommand command,Shader* shader)
+{
+    ProfilerTimer timer("Submit");
+
+    shader->setMat4("projection",m_camera->getProjectionMatrix());
+    shader->setMat4("view", m_camera->getViewMatrix());
+
+    if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+    {
+        shader->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+    }
+    if (ComponentManager::HasComponent<EditorNode>(command.ID))
+    {
+        shader->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
+    }
+
+    Draw(command);
+
+}
+
+
 void Fracture::Renderer::Draw(DrawCommand command)
 {
     glBindVertexArray(command.VAO);

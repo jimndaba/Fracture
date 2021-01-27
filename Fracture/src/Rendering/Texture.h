@@ -31,6 +31,8 @@ namespace Fracture
 		Texture(std::string name, Fracture::TextureType mtype);
 		Texture(std::string name,int Width, int Height, Fracture::TextureType mtype);
 		Texture(std::string name, int Width, int Height, GLenum internalFormat, GLenum format, GLenum type, Fracture::TextureType mtype);
+
+		Texture(std::string name, int Width, int Height, Fracture::TextureType mtype, void* data);
 		
 
 		void Bind();

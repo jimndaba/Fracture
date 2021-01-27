@@ -17,6 +17,7 @@
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
 #include "Rendering/Framegraph/PassLibrary/ThresholdNode.h"
 #include "Rendering/Framegraph/PassLibrary/BoxBlurNode.h"
+#include "Rendering/Framegraph/PassLibrary/SSAONode.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -200,9 +201,6 @@ void Fracture::Editor::onLoadNew()
     //PBR Primitives
     AssetManager::AddShader("PBRPlaneShader", "content/shaders/PBRPrimitive/vertex.glsl", "content/shaders/PBRPrimitive/fragment.glsl");
     
-    //depthShader
-    AssetManager::AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
-
     //PickingShader
     AssetManager::AddShader("PickingShader", "content/shaders/Picking/vertex.glsl", "content/shaders/Picking/fragment.glsl");
 
@@ -230,6 +228,16 @@ void Fracture::Editor::onLoadNew()
     //Threshold Mapping Shader
     AssetManager::AddShader("BoxBlur", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/BoxBlur_frag.glsl");
 
+    //Threshold Mapping Shader
+    AssetManager::AddShader("DepthPass", "content/shaders/postprocess/depthPass_vert.glsl", "content/shaders/postprocess/depthPass_frag.glsl");
+
+    //Threshold Mapping Shader
+    AssetManager::AddShader("SSAOPASS", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/SSAO_frag.glsl");
+
+    //Threshold Mapping Shader
+    AssetManager::AddShader("MultiplyMix", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/MultiplyMix_frag.glsl");
+
+    
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
@@ -245,9 +253,9 @@ void Fracture::Editor::onLoadNew()
     pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
     pbrPrimitive->setFloat("metallic", 0.4f);
     pbrPrimitive->setFloat("roughness", 0.2f);
-    pbrPrimitive->setFloat("ao", 1.0f);
-    
-    
+    pbrPrimitive->setFloat("ao", 1.0f);    
+    */
+
     std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
     pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
     pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
@@ -259,7 +267,7 @@ void Fracture::Editor::onLoadNew()
     pbrTextured->setFloat("metallicFlag", 1.0f);
     pbrTextured->setFloat("roughnessFlag", 1.0f);
     pbrTextured->setFloat("aoFlag", 1.0f);
-    */
+    
 
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
 
@@ -753,9 +761,40 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##size", &m_graph->blurPass->size, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##qualit", &m_graph->blurPass->Quality, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##direct", &m_graph->blurPass->Directions, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##size", &m_graph->ssaoblur->size, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##qualit", &m_graph->ssaoblur->Quality, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragFloat("##direct", &m_graph->ssaoblur->Directions, 0.1f, 0.0f, 0.0f, "%.2f");
+
+        ImGui::NextColumn();
+        ImGui::Text("SSAO");
+        ImGui::SameLine();
+        ImGui::NextColumn();
+
+        ImGui::Text("Strength");
+        ImGui::SameLine();
+        ImGui::DragFloat("##strength", &m_graph->ssao->total_strength, 0.001f, 0.0001f, 0.0f, "%.2f");
+
+        ImGui::Text("Area");
+        ImGui::SameLine();
+        ImGui::DragFloat("##area", &m_graph->ssao->area, 0.001f, 0.0001f, 0.0f, "%.2f");
+
+        ImGui::Text("Radius");
+        ImGui::SameLine();
+        ImGui::DragFloat("##radius", &m_graph->ssao->radius, 0.001, 0.0001f, 0.0f, "%.2f");
+
+
+        ImGui::Text("Base");
+        ImGui::SameLine();
+        ImGui::DragFloat("##base", &m_graph->ssao->base, 0.001f, 0.0001f, 0.0f, "%.2f");
+
+        ImGui::Text("Bias");
+        ImGui::SameLine();
+        ImGui::DragFloat("##bias", &m_graph->ssao->bias, 0.001f, 0.0001f, 0.0f, "%.2f");
+
+        ImGui::Text("Falloff");
+        ImGui::SameLine();
+        ImGui::DragFloat("##falloff", &m_graph->ssao->falloff, 0.001f, 0.0001f, 0.0f, "%.2f");
+
         ImGui::PopFont();
 
         ImGui::Separator();

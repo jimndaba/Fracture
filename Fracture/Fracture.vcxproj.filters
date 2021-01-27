@@ -258,6 +258,12 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\DepthNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSAONode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -774,6 +780,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\DepthNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSAONode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

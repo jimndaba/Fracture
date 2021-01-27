@@ -154,6 +154,8 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSAONode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ThresholdNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ToneMappingNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\RenderQueueNode.cpp" />
@@ -218,6 +220,8 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSAONode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ThresholdNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ToneMappingNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\RenderQueueNode.h" />

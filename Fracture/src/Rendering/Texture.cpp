@@ -76,6 +76,19 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, GLenum inter
 
 }
 
+Fracture::Texture::Texture(std::string name, int Width, int Height, Fracture::TextureType mtype,void* data) :Name(name)
+{
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, Width, Height, 0, GL_RGB, GL_FLOAT,data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
 void Fracture::Texture::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, id);

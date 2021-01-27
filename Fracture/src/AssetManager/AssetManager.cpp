@@ -582,7 +582,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	newTex->m_data = stbi_load(path.c_str(), &newTex->width, &newTex->height, &newTex->channel, 0);
 	if (newTex->m_data)
 	{
-		GLenum format;
+		GLenum format{};
 		if (newTex->channel == 1)
 			format = GL_RED;
 		else if (newTex->channel == 3)

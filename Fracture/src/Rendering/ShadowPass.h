@@ -37,8 +37,8 @@ namespace Fracture
 		std::shared_ptr<RenderTarget> GetRenderTarget();
 
 	private:
-		const unsigned int SHADOW_WIDTH = 1024;
-		const unsigned int SHADOW_HEIGHT = 1024;
+		const unsigned int SHADOW_WIDTH = 2048;
+		const unsigned int SHADOW_HEIGHT = 2048;
 		float near_plane = -10.00f;
 		float far_plane = 100.0f;
 		float m_left = -25.0f;

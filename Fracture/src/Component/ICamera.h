@@ -39,6 +39,10 @@ namespace Fracture
 
 		glm::vec3 Right() { return right; }
 		glm::vec3 Up() {return up;}
+		float Near() { return Znear; }
+		float Far() { return Zfar; }
+		float GetApectRatio() { return aspect_ratio; }
+		float GetFOV() { return fov; }
 			
 		//frustum points
 		glm::vec3 farPts[4];

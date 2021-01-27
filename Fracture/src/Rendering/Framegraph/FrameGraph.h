@@ -20,6 +20,7 @@ namespace Fracture
 	class ThresholdNode;
 	class BoxBlurNode;
 	class SinkNode;
+	class SSAONode;
 
 	class FrameGraph
 	{
@@ -49,7 +50,8 @@ namespace Fracture
 
 		std::shared_ptr<ToneMappingNode> ToneMap;
 		std::shared_ptr<ThresholdNode> BrightPass;
-		std::shared_ptr<BoxBlurNode> blurPass;
+		std::shared_ptr<SSAONode> ssao;
+		std::shared_ptr<BoxBlurNode> ssaoblur;
 		std::shared_ptr<SinkNode> outputbuffer;
 	private:
 		//std::shared_ptr<InputSourceNode> resultsource;

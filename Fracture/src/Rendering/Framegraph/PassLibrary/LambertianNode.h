@@ -17,6 +17,7 @@ namespace Fracture
 	private:
 
 		std::shared_ptr<FrameResource> resource;
+		std::shared_ptr<FrameResource> ssaoMap;
 		std::shared_ptr<FrameResource> outputColor;
 	};
 
