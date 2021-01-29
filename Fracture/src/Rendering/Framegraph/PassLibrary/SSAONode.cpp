@@ -5,7 +5,9 @@
 #include "Rendering/Renderer.h"
 #include "Component/ICamera.h"
 #include "Rendering/Texture.h"
+#include "Profiling/Profiler.h"
 #include <random>
+
 
 Fracture::SSAONode::SSAONode(std::string name, int width, int height):FullScreenNode(name)
 {
@@ -30,7 +32,7 @@ Fracture::SSAONode::SSAONode(std::string name, int width, int height):FullScreen
 	//noise
 	std::vector<glm::vec3> ssaoNoise;
 
-	int noise_res = 16;
+	unsigned int noise_res = 16;
 
 	for (unsigned int i = 0; i < noise_res; i++)
 	{
@@ -47,6 +49,7 @@ Fracture::SSAONode::SSAONode(std::string name, int width, int height):FullScreen
 
 void Fracture::SSAONode::execute(Renderer& renderer)
 {
+	ProfilerTimer timer("SSAO Pass");
 	resources["SSAOOutput"]->bind();
 	glBindVertexArray(quadVAO);
 	m_shader->use();
@@ -64,7 +67,7 @@ void Fracture::SSAONode::execute(Renderer& renderer)
 
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
 	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
-	m_shader->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+	m_shader->setMat4("projection", glm::inverse(renderer.ActiveCamera()->getProjectionMatrix()));
 	m_shader->setTexture("depthTexture", resources["DepthTexture"]->GetColorTexture(0).get(), 0);
 	m_shader->setTexture("texNoise", m_noiseTexture.get(), 1);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

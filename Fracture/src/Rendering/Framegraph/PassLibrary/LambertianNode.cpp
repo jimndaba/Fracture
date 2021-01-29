@@ -2,8 +2,11 @@
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
 #include "Rendering/RenderTarget.h"
+#include "Rendering/Shader.h"
+#include "Rendering/RenderBucket.h"
+#include "Rendering/RenderBatch.h"
 
-Fracture::LambertianNode::LambertianNode(std::string name, int width, int height, RenderBucket* opaque, RenderBucket* transparent):RenderQueueNode(name)
+Fracture::LambertianNode::LambertianNode(std::string name, int width, int height, RenderBucket* opaque):RenderQueueNode(name)
 {
 
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("buffer");
@@ -18,7 +21,6 @@ Fracture::LambertianNode::LambertianNode(std::string name, int width, int height
 	outputColor = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, true);
 
 	AcceptBucket(opaque);
-	AcceptBucket(transparent);
 
 	//Sockets
 	AddInputSocket(m_Input);
@@ -34,13 +36,12 @@ Fracture::LambertianNode::LambertianNode(std::string name, int width, int height
 
 void Fracture::LambertianNode::execute(Renderer& renderer)
 {
-	ProfilerTimer timer("Lmaertian node");
+	ProfilerTimer timer("Lambertian node");
 	renderer.RenderDirectLightShadows();
 
 	resources["outputColor"]->bind();
 	renderer.clear();	
 	render(renderer);
-	
 	renderer.DrawGrid();
 	renderer.RenderEnvironment();
 	resources["outputColor"]->Unbind();

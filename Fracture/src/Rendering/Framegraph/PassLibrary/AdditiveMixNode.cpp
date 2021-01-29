@@ -4,6 +4,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Texture.h"
+#include "Profiling/Profiler.h"
 
 Fracture::AdditiveMixNode::AdditiveMixNode(std::string name, int width, int height):FullScreenNode(name)
 {
@@ -31,6 +32,7 @@ Fracture::AdditiveMixNode::AdditiveMixNode(std::string name, int width, int heig
 
 void Fracture::AdditiveMixNode::execute(Renderer& renderer)
 {	
+	ProfilerTimer timer("Additive Mix Pass");
 	resources["output"]->bind();
 	m_shader->use();
 	m_shader->setTexture("colorA", resources["colorA"]->GetColorTexture(0).get(), 0);

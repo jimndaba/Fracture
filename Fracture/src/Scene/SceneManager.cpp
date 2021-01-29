@@ -33,23 +33,11 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 	ComponentManager::AddComponent<TagComponent>(main_Camera->Id, "Main Camera");
 
 	//SUNLIGHT ENTITY
-	std::shared_ptr<Entity> main_sunlight = EntityManager::CreateEntity<Entity>();
-	ComponentManager::AddComponent<TagComponent>(main_sunlight->Id, "Sun");
-	std::shared_ptr<RelationShipComponent> sun_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_sunlight->Id));
-	sun_rel->SetParent(newScene->Root()->Id);
-	ComponentManager::AddComponent<RelationShipComponent>(sun_rel);
-	std::shared_ptr<EditorNode> editornode = std::make_shared<EditorNode>(main_sunlight->Id);
-	editornode->SetRotation(glm::vec3(0.0f,-1.0f,0.0f));
-	ComponentManager::AddComponent<EditorNode>(editornode);
-	ComponentManager::AddComponent<LightComponent>(main_sunlight->Id, LightType::Sun);
+	std::shared_ptr<Entity> main_sunlight = EntityFactory::CreateSunlight(newScene);
+	
 
 	//SKYLIGHT ENTITY
-	std::shared_ptr<Entity> main_skylight = EntityManager::CreateEntity<Entity>();
-	ComponentManager::AddComponent<TagComponent>(main_skylight->Id, "SkyLigth");
-	std::shared_ptr<RelationShipComponent> sky_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_skylight->Id));
-	sky_rel->SetParent(newScene->Root()->Id);
-	ComponentManager::AddComponent<RelationShipComponent>(sky_rel);
-	ComponentManager::AddComponent<LightComponent>(main_skylight->Id, LightType::Sky);
+	std::shared_ptr<Entity> main_skylight = EntityFactory::CreateSkylight(newScene);
 
 	newScene->addEntity(main_Camera);
 	newScene->addEntity(main_sunlight);

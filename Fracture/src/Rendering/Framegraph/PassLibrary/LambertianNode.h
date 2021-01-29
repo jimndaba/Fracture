@@ -11,7 +11,7 @@ namespace Fracture
 	{
 
 	public:
-		LambertianNode(std::string name, int width, int height, RenderBucket* opaque, RenderBucket* transparent);
+		LambertianNode(std::string name, int width, int height, RenderBucket* bucket);
 		void execute(Renderer& renderer) override;
 
 	private:

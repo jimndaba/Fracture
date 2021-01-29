@@ -30,8 +30,10 @@ namespace Fracture
 		float ViewDepth;
 		int HasTransparency;
 		bool IsOutlined;
+		bool CastShadows;
 		GLint indiceSize;
 		Material* material;
+		glm::mat4 Transform;
 		std::vector<std::string> TextureNames;
 
 		bool operator < (const DrawCommand& other) const

@@ -4,7 +4,6 @@
 #include "../Editor.h"
 #include "Rendering/Framegraph/PassLibrary/PickingPass.h"
 #include <glm/gtx/matrix_decompose.hpp>
-#include <Component\EditorNodeComponent.h>
 #include "Rendering/Framegraph/FrameGraph.h"
 #include "Rendering/Framegraph/SourceNode.h"
 
@@ -133,91 +132,48 @@ void Fracture::ViewPanel::render()
 	{
 
 		if (ComponentManager::HasComponent<TransformComponent>(SceneView::SelectedEntity().Id))
-		{
-			
+		{		
 
 			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
 			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(SceneView::SelectedEntity().Id);
-			if (transform)
-			{
-				float rw = (float)ImGui::GetWindowWidth();
-				float rh = (float)ImGui::GetWindowHeight();
+			
+			float rw = (float)ImGui::GetWindowWidth();
+			float rh = (float)ImGui::GetWindowHeight();
 
 
-				ImGuizmo::SetOrthographic(false);
-				ImGuizmo::SetDrawlist();
-				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
 
-				//m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
-				glm::mat4 viewMatrix = m_camera->getViewMatrix();
-				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
-				glm::mat4 transformMatrix = transform->GetLocalTranform();		
+			//m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
+			glm::mat4 viewMatrix = m_camera->getViewMatrix();
+			glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
+			glm::mat4 transformMatrix = transform->GetLocalTranform();		
 			
 
-				ImGuizmo::MODE mode = currentImGuizmoMode;
-				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
-					mode = ImGuizmo::MODE::LOCAL;				
+			ImGuizmo::MODE mode = currentImGuizmoMode;
+			if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
+				mode = ImGuizmo::MODE::LOCAL;				
 
-				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
-					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
-				);
+			ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
+				currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
+			);
 
-				if (ImGuizmo::IsUsing())
-				{
-					glm::vec3 scale; //= transform->Scale();
-					glm::vec3 rotation; //= transform->Rotation();
-					glm::vec3 position; //= transform->Position();
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 scale; //= transform->Scale();
+				glm::vec3 rotation; //= transform->Rotation();
+				glm::vec3 position; //= transform->Position();
 		
-					Math::DecomposeTransform(transformMatrix, position, rotation, scale);
+				Math::DecomposeTransform(transformMatrix, position, rotation, scale);
 					
-					glm::vec3 deltaRotation = rotation - transform->Rotation();
-					transform->setScale(scale);
-					transform->setRotation(deltaRotation += transform->Rotation());
-					transform->setPosition(position);
+				glm::vec3 deltaRotation = rotation - transform->Rotation();
+				transform->setScale(scale);
+				transform->setRotation(deltaRotation += transform->Rotation());
+				transform->setPosition(position);
 
-				}
 			}
-		}
-
-		if (ComponentManager::HasComponent<EditorNode>(SceneView::SelectedEntity().Id))
-		{
-			std::shared_ptr<EditorNode> node = ComponentManager::GetComponent<EditorNode>(SceneView::SelectedEntity().Id);
-			if (node)
-			{
-				float rw = (float)ImGui::GetWindowWidth();
-				float rh = (float)ImGui::GetWindowHeight();
-				ImGuizmo::SetDrawlist();
-				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
-				//m_camera->setProjection((int)viewportPanelSize.x, (int)viewportPanelSize.y);
-				glm::mat4 viewMatrix = m_camera->getViewMatrix();
-				glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
-				glm::mat4 transformMatrix = node->GetWorldTransform();
 			
-
-				ImGuizmo::MODE mode = currentImGuizmoMode;
-				if (currentImGuizmoOperation == ImGuizmo::OPERATION::SCALE && mode != ImGuizmo::MODE::LOCAL)
-					mode = ImGuizmo::MODE::LOCAL;
-
-				ImGuizmo::Manipulate(glm::value_ptr(viewMatrix), glm::value_ptr(projectionMatrix),
-					currentImGuizmoOperation, mode, glm::value_ptr(transformMatrix)
-				);
-
-				if (ImGuizmo::IsUsing())
-				{					
-
-					glm::vec3 scale;
-					glm::vec3 rotation;
-					glm::vec3 position;
-
-					Math::DecomposeTransform(transformMatrix, position, rotation, scale);
-					
-					glm::vec3 deltaRotation = rotation - node->GetRotation();
-					node->SetScale(scale);
-					node->SetRotation(deltaRotation += node->GetRotation());
-					node->SetPosition(position);
-
-				}
-			}
 		}
 	}
 

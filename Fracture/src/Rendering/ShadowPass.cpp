@@ -51,17 +51,14 @@ void Fracture::ShadowPass::Prepare(std::shared_ptr<SunLight> light)
 
 void Fracture::ShadowPass::Render(std::shared_ptr<Material> material, RenderBucket& bucket)
 {
-	for (const auto& batch : bucket.getRenderBatches())
+	for (const auto& command : bucket.getShadowRenderCommands())
 	{
-		for (const auto& command : batch.second->m_commnads)
-		{
-			material->getShader()->use();
-			material->getShader()->setMat4("lightSpaceMatrix", m_lightspaceMatrix);
-			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-			glBindVertexArray(command.VAO);
-			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
-		}
+		material->getShader()->use();
+		material->getShader()->setMat4("lightSpaceMatrix", m_lightspaceMatrix);
+		material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+		glBindVertexArray(command.VAO);
+		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 	}
 }
 

@@ -21,19 +21,11 @@ void Fracture::RenderQueuePass::Execute(Renderer& renderer)
     renderer.setViewport(renderer.Width(), renderer.Height());
     for(auto& bucket : m_buckets)
     {
-        if (bucket->mType == BucketType::Transparent)
-        {
-            glDisable(GL_CULL_FACE);
-        }
-        else
-        {
-            glEnable(GL_CULL_FACE);
-        }
-
-	    for (const auto& batch : bucket->getRenderBatches())
+        glEnable(GL_CULL_FACE);
+	    for (const auto& command : bucket->getForwardRenderCommands())
 	    {
             NumberBatches += 1;
-            std::shared_ptr<Material> material = AssetManager::getMaterial(batch.first);
+            Material* material = command.material;
             material->use();
 
             auto* uniforms = material->GetUniforms();
@@ -48,19 +40,35 @@ void Fracture::RenderQueuePass::Execute(Renderer& renderer)
                 WriteUniformSampler(*material->getShader(), it->first, it->second);
             }
 
-            renderer.SetupLighting(material.get());
-
-		    for (auto command : batch.second->m_commnads)
-		    {
-			    renderer.Submit(command);
-		    }
+            renderer.SetupLighting(material);
+            renderer.Submit(command);
 	    }
-        if (bucket->mType == BucketType::Transparent)
+       
+        glDisable(GL_CULL_FACE);
+        for (const auto& command : bucket->getAlphaRenderCommands())
         {
-            glEnable(GL_CULL_FACE);
-        }
-    }
+           
+            NumberBatches += 1;
+            Material* material = command.material;
+            material->use();
 
+            auto* uniforms = material->GetUniforms();
+            for (auto it = uniforms->begin(); it != uniforms->end(); ++it)
+            {
+                WriteUniformData(*material->getShader(), it->first, it->second);
+            }
+
+            std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+            for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
+            {
+                WriteUniformSampler(*material->getShader(), it->first, it->second);
+            }
+
+            renderer.SetupLighting(material);
+            renderer.Submit(command);
+        }
+        glEnable(GL_CULL_FACE);      
+    }
     renderer.DrawGrid();
 
 }

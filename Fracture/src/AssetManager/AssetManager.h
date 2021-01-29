@@ -88,6 +88,8 @@ namespace Fracture
 		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 		static std::shared_ptr<Fracture::Texture> HDRFromFile(std::string name, const char* path,Fracture::TextureType texType, bool gamma = false);
+		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material);
+
 
 
 		static const uint32_t s_MeshImportFlags =

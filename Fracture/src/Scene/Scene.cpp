@@ -11,7 +11,6 @@
 #include "Component/TagComponent.h"
 #include "Component/RenderComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/EditorNodeComponent.h"
 #include "Rendering/Model.h"
 #include "Rendering/Material.h"
 #include "Logging/Logger.h"

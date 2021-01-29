@@ -24,7 +24,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}	
 
 	{
-		auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer",renderer.Width(), renderer.Height(), renderer.m_opaqueBucket.get(), renderer.m_transparentBucket.get());
+		auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer",renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
 		addnode(depthbuffer);
 	}
 
@@ -35,7 +35,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 
 
 	{
-		auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(),renderer.m_opaqueBucket.get(), renderer.m_transparentBucket.get());
+		auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
 		addnode(lambertian);
 	}
 	{
@@ -85,28 +85,28 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	addLink("global_output", "rendertarget", "mixPass", "output");
 
 
-	addLink("mixPass", "colorB", "multiplyPass", "output");
-	addLink("mixPass", "colorA", "BoxBlurPass", "blurOutput");
+	addLink("mixPass", "colorA", "lamertianPass", "outputColor");
+	addLink("mixPass", "colorB", "BoxBlurPass", "blurOutput");
+		
 
-	
-	addLink("multiplyPass", "colorB", "lamertianPass", "outputColor");
-	addLink("multiplyPass", "colorA", "ssaoBlur", "blurOutput");
-	
-	addLink("ssaoBlur", "colorTexture", "ssaoPass", "SSAOOutput");
-
-	addLink("ssaoPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
-	
 	addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
 	
 	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 	
 	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
+		
+	//addLink("multiplyPass", "colorA", "lamertianPass", "outputColor");
+	//addLink("multiplyPass", "colorB", "ssaoBlur", "blurOutput");
 	
 	addLink("lamertianPass", "buffer", "clearframe", "buffer");
-	
+	addLink("lamertianPass", "SSAOMap", "ssaoBlur", "blurOutput");
+
 	addLink("clearframe", "buffer","global_backbuffer", "rendertarget");
+	
+	
+	addLink("ssaoBlur", "colorTexture", "ssaoPass", "SSAOOutput");
 
-
+	addLink("ssaoPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
 
 }
 

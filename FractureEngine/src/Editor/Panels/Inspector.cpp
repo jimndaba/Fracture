@@ -61,42 +61,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				body->setPosition(transform->Position());
 				body->setRotation(transform->Rotation());
 			}
-		});
-
-	DrawComponent<EditorNode>("Editor Node", entity, [](auto& component)
-		{
-			std::shared_ptr<EditorNode> m_node = std::dynamic_pointer_cast<EditorNode>(component);
-			glm::vec3 position = m_node->GetPosition();
-			glm::vec3 scale = m_node->GetScale();
-			glm::vec3 rotation = m_node->GetRotation();
-			
-			DrawVec3Control("Position", position);
-			DrawVec3Control("Scale", scale, 1);
-			DrawVec3Control("Rotation",rotation);
-
-			m_node->SetPosition(position);
-			m_node->SetScale(scale);
-			m_node->SetRotation(rotation);
-
-			if (ComponentManager::HasComponent<LightComponent>(m_node->EntityID))
-			{
-				std::shared_ptr<LightComponent> light = ComponentManager::GetComponent<LightComponent>(m_node->EntityID);
-				if (light)
-				{
-					light->SetDirection(m_node->GetRotation());
-					light->SetPosition(m_node->GetPosition());
-				}				
-			}
-			
-			if (ComponentManager::HasComponent<RigidBodyComponent>(m_node->EntityID))
-			{
-				std::shared_ptr<RigidBodyComponent> body = ComponentManager::GetComponent<RigidBodyComponent>(m_node->EntityID);
-				body->setPosition(m_node->GetPosition());
-				body->setRotation(m_node->GetRotation());
-			}
-
-
-		});
+		});	
 
 	DrawComponent<CameraControllerComponent>("Camera Controller",entity,[](auto& component)
 	{
@@ -182,23 +147,22 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			for (auto material : render->m_model->GetMaterials())
 			{
 				
-				bool open = ImGui::TreeNodeEx(material.c_str(), treeNodeFlags, material.c_str());//(void*)typeid(material).hash_code()
-				std::string current_Material = material;
-				std::shared_ptr<Material> mMaterial = AssetManager::getMaterial(current_Material);
-				mMaterial->SetIsOutlined(true);
+				bool open = ImGui::TreeNodeEx(material->Name.c_str(), treeNodeFlags, material->Name.c_str());//(void*)typeid(material).hash_code()
+				std::string current_Material = material->Name;
+				material->SetIsOutlined(true);
 				if (open)
 				{			
 					if (ImGui::BeginCombo("Material", current_Material.c_str()))
 					{
 
-						for (auto const& material : AssetManager::GetMaterials())
+						for (auto const& nMaterial : AssetManager::GetMaterials())
 						{
-							bool is_selected = (current_Material.c_str() == material.first.c_str());
+							bool is_selected = (current_Material.c_str() == nMaterial.first.c_str());
 
-							if (ImGui::Selectable(material.first.c_str(), is_selected))
+							if (ImGui::Selectable(nMaterial.first.c_str(), is_selected))
 							{
-								current_Material = material.first;
-								render->SetMaterial(material.first);
+								current_Material = nMaterial.first;
+								render->SetMaterial(nMaterial.first);
 							}
 
 							if (is_selected)
@@ -209,37 +173,37 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 						ImGui::EndCombo();
 					}					
 
-					bool isTransparent = mMaterial->IsTransparent();
+					bool isTransparent = material->IsTransparent();
 					DrawBoolControl("Is Transparent", isTransparent);
-					mMaterial->setIsTransparent(isTransparent);
+					material->setIsTransparent(isTransparent);
 
 					
 
-					bool castShadows = mMaterial->CastShadows();
+					bool castShadows = material->CastShadows();
 					DrawBoolControl("Cast Shadows", castShadows);
-					mMaterial->setCastShadows(castShadows);
+					material->setCastShadows(castShadows);
 
 					if (ImGui::Button("reload", ImVec2(100, 20)))
 					{
-						mMaterial->getShader()->reloadShader();
+						material->getShader()->reloadShader();
 
-						FRACTURE_INFO("Reloaded Shader: {}", mMaterial->getShader()->Name);
+						FRACTURE_INFO("Reloaded Shader: {}", material->getShader()->Name);
 					}
 
 					ImGui::Separator();
 
-					auto uniforms = mMaterial->GetUniforms();
+					auto uniforms = material->GetUniforms();
 					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 					{
 						DrawMaterialUniform(value->first, value->second);
 					}
 					ImGui::Separator();
-					std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = mMaterial->GetSamplerUniforms();
+					std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
 					for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
 					{
 						if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
 						{
-							DrawSample2DControl(it->first, it->second->texture->id,mMaterial);
+							DrawSample2DControl(it->first, it->second->texture->id, material);
 						}
 
 					}
@@ -463,15 +427,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			}			
 			ImGui::CloseCurrentPopup();
 		}
-
-		if (ImGui::MenuItem("Editor Node"))
-		{
-			if (SceneView::SelectedEntity())
-			{
-				ComponentManager::AddComponent<EditorNode>(entity.Id);
-			}
-			ImGui::CloseCurrentPopup();
-		}
+			
 
 		if (ImGui::MenuItem("Camera"))
 		{

@@ -138,9 +138,6 @@
     <ClCompile Include="src\Rendering\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Component\EditorNodeComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\ShadowPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -626,9 +623,6 @@
     <ClInclude Include="src\Rendering\Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Component\EditorNodeComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\ShadowPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -786,6 +780,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Component\ITransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

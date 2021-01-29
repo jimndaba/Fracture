@@ -15,12 +15,7 @@ Fracture::TestGraph::TestGraph(Renderer& renderer, std::string name):RenderGraph
 		pass->SetSinkLinkage("buffer", "$.backbuffer");
 		AppendPass(std::move(pass));
 	}		
-
-	{
-		auto pass = std::unique_ptr<LambertianPass>(new LambertianPass("lambertian",renderer.m_opaqueBucket.get(),renderer.m_transparentBucket.get()));
-		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
-		AppendPass(std::move(pass));
-	}		
+		
 
 	{
 		auto pass = std::unique_ptr<EnvironmentPass>(new EnvironmentPass("environment"));

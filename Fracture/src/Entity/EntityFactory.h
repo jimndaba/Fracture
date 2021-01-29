@@ -3,6 +3,7 @@
 #define ENTITYFACTORY_H
 
 #include <memory>
+#include "Logging/Logger.h"
 #include "Scene/Scene.h"
 #include "Entity.h"
 #include "EntityManager.h"
@@ -19,13 +20,12 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/BillboardComponent.h"
-#include "Component/EditorNodeComponent.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
 #include "Rendering/Model.h"
 #include "Rendering/Mesh.h"
 #include "Scene/Scene.h"
-#include "Logging/Logger.h"
+
 
 namespace Fracture
 {
@@ -59,11 +59,11 @@ namespace Fracture
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
 
-			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
+			std::shared_ptr<TransformComponent> node = std::make_shared<TransformComponent
 			>(newEntity->Id);
 
-			node->SetRotation(light->GetDirection());
-			ComponentManager::AddComponent<EditorNode>(node);
+			node->setRotation(light->GetDirection());
+			ComponentManager::AddComponent<TransformComponent>(node);
 			
 
 			return newEntity;
@@ -80,7 +80,7 @@ namespace Fracture
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
 			ComponentManager::AddComponent<BillboardComponent>(newEntity->Id);
-			ComponentManager::AddComponent<EditorNode>(newEntity->Id);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 			return newEntity;
 		}
 
@@ -96,12 +96,12 @@ namespace Fracture
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
 
-			std::shared_ptr<EditorNode> node = std::make_shared<EditorNode
+			std::shared_ptr<TransformComponent> node = std::make_shared<TransformComponent
 			>(newEntity->Id);
 
-			node->SetPosition(light->GetPosition());
-			node->SetRotation(light->GetDirection());
-			ComponentManager::AddComponent<EditorNode>(node);
+			node->setPosition(light->GetPosition());
+			node->setRotation(light->GetDirection());
+			ComponentManager::AddComponent<TransformComponent>(node);
 
 			return newEntity;
 		}

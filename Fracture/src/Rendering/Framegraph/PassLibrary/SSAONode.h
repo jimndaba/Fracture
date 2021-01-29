@@ -18,12 +18,12 @@ namespace Fracture
 
 		virtual void execute(Renderer& renderer);
 
-		float total_strength = 1.0;
-		float base = 0.5;
-		float area = 0.0075;
-		float falloff = 0.000001;
-		float bias = 0.025;
-		float radius = 0.0002;
+		float total_strength = 1.0f;
+		float base = 0.5f;
+		float area = 0.005f;
+		float falloff = 0.0005f;
+		float bias = 0.025f;
+		float radius = 0.003f;
 
 	private:
 		std::shared_ptr<Shader> m_shader;

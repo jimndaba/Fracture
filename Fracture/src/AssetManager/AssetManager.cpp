@@ -164,9 +164,14 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string p
 	m_model->Name = scene->GetShortFilename(path.c_str());
 	m_model->directory = path.substr(0, path.find_last_of('\\'));
 	
-	// process ASSIMP's root node recursively
-	
+	// process ASSIMP's root node recursively	
 	ProcessNode(m_model, scene->mRootNode, scene);
+
+	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+	{
+		m_model->m_materials.resize(scene->mNumMaterials);
+		m_model->m_materials[i] = loadMeshMaterial(scene->mMaterials[i]);
+	}
 
 	return m_model;
 }
@@ -232,16 +237,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	
 	aiMaterial* currentMaterial(scene->mMaterials[mesh->mMaterialIndex]);	
 	std::string mesh_name = node->mName.data;
-	std::string mat_name;
-
-	std::string temp = node->mName.data;
-	mat_name = temp + ".material_" + std::to_string(mesh->mMaterialIndex);
-
-	std::shared_ptr<Material> m_material = std::shared_ptr<Material>(new Material(mat_name, getShader("PBRTexturedShader")));
-
-	ImportMaterial(currentMaterial, m_material);
-
-	AddMaterial(mat_name, m_material);	
+	
 
 	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 
@@ -250,14 +246,16 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	glm::vec3 position; 
 
 	aiMatrix4x4 transform = node->mTransformation;
-	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);
-	new_mesh->MaterialName = mat_name;
+	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);	
+	
+	
 	new_mesh->position = position;
 	new_mesh->scale = scale;
 	new_mesh->rotation =rotation;
 	new_mesh->Name = mesh_name;
 	new_mesh->ModelName = model->Name;
-
+	new_mesh->MaterialIndex = mesh->mMaterialIndex;
+	
 	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
 	//process aabb
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
@@ -455,16 +453,15 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(a
 }
 
 void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
-{
-	
+{	
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{		
+		
 		aiMesh* mesh = scene->mMeshes[i];		
 		aiString meshname = node->mName;
 		FRACTURE_TRACE("loading Mesh: {}", meshname.C_Str());
 		std::shared_ptr<Mesh> m_mesh = processMesh(model, mesh, scene, node);
-		model->addMesh(m_mesh);	
-		model->addMaterial(m_mesh->MaterialName);
+		model->addMesh(m_mesh);			
 	}
 
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
@@ -646,5 +643,14 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(std::stri
 	}
 	texture->Unbind();
 	return texture;
+}
+
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::loadMeshMaterial(aiMaterial* material)
+{	
+	//std::string materialName = material->GetName().data;
+	std::shared_ptr<Material> m_material = std::make_shared<Material>(material->GetName().data, getShader("PBRTexturedShader"));
+	ImportMaterial(material, m_material);	
+	//AddMaterial(material->GetName().data, m_material);
+	return m_material;
 }
 

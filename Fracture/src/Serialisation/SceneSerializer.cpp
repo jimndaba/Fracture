@@ -152,11 +152,10 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		c["Model"] = component->m_model->Name;
 		json serialised_materials = json::array_t();
 
-		for (auto name : component->m_model->GetMaterials())
+		for (auto material : component->m_model->GetMaterials())
 		{
 			json m;
-			m["Material Name"] = name;
-			std::shared_ptr<Material> material = AssetManager::getMaterial(name);
+			m["Material Name"] = material->Name;
 			json serialised_unfiorms = json::array_t();
 			json serialised_sampleunfiorms = json::array_t();
 
@@ -559,7 +558,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));		
 				component->SetIntensity(lightComponent["Intensity"]);
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<EditorNode>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->Id);
 				break;
 			}
 			case LightType::Spot:
@@ -581,7 +580,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetCutoff(lightComponent["Cutoff"]);
 				component->SetOuterCutOff(lightComponent["OuterCutoff"]);			
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<EditorNode>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->Id);
 				break;
 			}
 			case LightType::Point:
@@ -599,7 +598,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetConstant(lightComponent["Constant"]);
 				component->SetQuadratic(lightComponent["Qaudratic"]);			
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<EditorNode>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->Id);
 				break;
 			}
 			case LightType::Sky:
@@ -608,7 +607,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetIntensity(lightComponent["Intensity"]);
 				component->ChangeEnvironment(lightComponent["Environment"]);
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<EditorNode>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->Id);
 				break;
 			}
 			}

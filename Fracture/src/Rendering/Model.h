@@ -10,6 +10,7 @@
 namespace Fracture
 {
 	class Mesh;
+	class Material; 
 
 	class Model
 	{
@@ -19,7 +20,7 @@ namespace Fracture
 		~Model();
 
 		void addMesh(std::shared_ptr<Mesh> mesh);
-		void addMaterial(std::string material_name);
+		void addMaterial(std::shared_ptr<Material> material);
 
 
 		std::string Name;
@@ -27,12 +28,11 @@ namespace Fracture
 		std::string directory;
 
 		std::shared_ptr<Mesh> GetMesh(std::string name);
-		std::vector<std::string> GetMaterials();
+		std::vector<std::shared_ptr<Material>> GetMaterials();
 		std::vector<std::shared_ptr<Mesh>> GetMeshes();
 
-	private:
+		std::vector<std::shared_ptr<Material>> m_materials;
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
-		std::vector<std::string> m_materials;
 	};
 }
 #endif

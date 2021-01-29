@@ -12,6 +12,8 @@ Fracture::Model::Model(std::string name, std::string path):Name(name),Path(path)
 
 Fracture::Model::~Model()
 {
+	m_meshes.clear();
+	m_materials.clear();
 }
 
 void Fracture::Model::addMesh(std::shared_ptr<Mesh> mesh)
@@ -19,9 +21,9 @@ void Fracture::Model::addMesh(std::shared_ptr<Mesh> mesh)
 	m_meshes.push_back(mesh);
 }
 
-void Fracture::Model::addMaterial(std::string material_name)
+void Fracture::Model::addMaterial(std::shared_ptr<Material> material)
 {
-	m_materials.push_back(material_name);
+	m_materials.push_back(material);
 }
 
 std::shared_ptr<Fracture::Mesh> Fracture::Model::GetMesh(std::string name)
@@ -37,7 +39,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::Model::GetMesh(std::string name)
 	return nullptr;
 }
 
-std::vector<std::string> Fracture::Model::GetMaterials()
+std::vector<std::shared_ptr<Fracture::Material>> Fracture::Model::GetMaterials()
 {
 	return m_materials;
 }

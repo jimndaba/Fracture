@@ -3,7 +3,8 @@
 #define SCENEPROBES_H
 
 #include "ISceneProbe.h"
-
+#include "Component/ITransform.h"
+#include "Profiling/Profiler.h"
 namespace Fracture
 {
 
@@ -22,13 +23,21 @@ namespace Fracture
 
 		virtual void VisitRenderComponent(const RenderComponent* component)
 		{
+			ProfilerTimer timer("Visit Render Comp");
 			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
-			for (auto mesh : component->m_model->GetMeshes())
+			std::vector<std::shared_ptr<Mesh>> meshes = component->m_model->GetMeshes();
+			for (int i = 0 ; i < meshes.size();i++)
 			{
+				ProfilerTimer timer("Scene probe for each mesh");
+				std::shared_ptr<Mesh> mesh = meshes[i];
+				std::shared_ptr<Material> material = component->m_model->m_materials[mesh->MaterialIndex];
+
+				std::shared_ptr<TransformComponent> m_transformComponent = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+		
 				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
 				{
-					mRenderer.PushCommand(mesh, AssetManager::getMaterial(mesh->MaterialName), transform);
-				}				
+					mRenderer.PushCommand(component->EntityID, mesh, material, m_transformComponent->GetWorldTransform());
+				}		
 			}			
 		}
 	private:

@@ -8,18 +8,17 @@
 #include "Component/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
-#include "Component/EditorNodeComponent.h"
 #include "../../Renderer.h"
 #include "Component/ICamera.h"
 
 std::shared_ptr<Fracture::RenderTarget> Fracture::PickingPass::m_renderTarget;
 
-Fracture::PickingPass::PickingPass(std::string Name, int width, int height, RenderBucket* opaque, RenderBucket* transparent):RenderQueueNode(Name),SCREEN_WIDTH(width),SCREEN_HEIGHT(height)
+Fracture::PickingPass::PickingPass(std::string Name, int width, int height, RenderBucket* opaque):RenderQueueNode(Name),SCREEN_WIDTH(width),SCREEN_HEIGHT(height)
 {
 	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT, GL_FLOAT, 1,false));
 
 	AcceptBucket(opaque);
-	AcceptBucket(transparent);
+
 
 	m_pixelInfo = std::make_shared<PixelInfo>();
 }
@@ -37,34 +36,46 @@ void Fracture::PickingPass::execute(Renderer& renderer)
 
 	for (auto& bucket : m_buckets)
 	{		
-		for (const auto& batch : bucket->getRenderBatches())
+		for (const auto& command : bucket->getForwardRenderCommands())
 		{			
 			std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
 			material->use();
-			for (auto command : batch.second->m_commnads)
+			int r = ((int)command.ID & 0x000000FF) >> 0;
+			int g = ((int)command.ID & 0x0000FF00) >> 8;
+			int b = ((int)command.ID & 0x00FF0000) >> 16;
+
+			//material->getShader()->setInt("gObjectIndex",command.ID);
+			material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+			material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+			material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+			if (ComponentManager::HasComponent<TransformComponent>(command.ID))
 			{
-				int r = ((int)command.ID & 0x000000FF) >> 0;
-				int g = ((int)command.ID & 0x0000FF00) >> 8;
-				int b = ((int)command.ID & 0x00FF0000) >> 16;
-
-				//material->getShader()->setInt("gObjectIndex",command.ID);
-				material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-				material->getShader()->setMat4("view",renderer.ActiveCamera()->getViewMatrix());
-				material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
-				if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-				{
-					material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-				}
-				if (ComponentManager::HasComponent<EditorNode>(command.ID))
-				{
-					material->getShader()->setMat4("model", ComponentManager::GetComponent<EditorNode>(command.ID)->GetWorldTransform());
-				}
-
-				glBindVertexArray(command.VAO);
-				glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-				glBindVertexArray(0);
+				material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
 			}
+			glBindVertexArray(command.VAO);
+			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
 		}		
+		for (const auto& command : bucket->getAlphaRenderCommands())
+		{
+			std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
+			material->use();
+			int r = ((int)command.ID & 0x000000FF) >> 0;
+			int g = ((int)command.ID & 0x0000FF00) >> 8;
+			int b = ((int)command.ID & 0x00FF0000) >> 16;
+
+			//material->getShader()->setInt("gObjectIndex",command.ID);
+			material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+			material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+			material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+			if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+			{
+				material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+			}
+			glBindVertexArray(command.VAO);
+			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+		}
 	}
 
 	glEnable(GL_DITHER);

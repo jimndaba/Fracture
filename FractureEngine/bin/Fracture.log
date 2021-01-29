@@ -1,110 +1,234 @@
-[11:45:24] [info] FRACTURE: Initializing Splash
-[11:45:25] [info] FRACTURE: OpenGL loaded
-[11:45:25] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[11:45:25] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[11:45:25] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[11:45:25] [trace] FRACTURE: Loaded Texture: splash
-[11:45:25] [trace] FRACTURE: Loaded Texture: title
-[11:45:25] [info] FRACTURE: Completed Init
-[11:45:25] [info] FRACTURE: Show Splash
-[11:45:39] [info] FRACTURE: OpenGL loaded
-[11:45:39] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[11:45:39] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[11:45:39] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[11:45:39] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[11:45:39] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: RotateIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: CameraIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: LightIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: EyeIcon
-[11:45:39] [trace] FRACTURE: Loaded Texture: EyeIconC
-[11:45:39] [trace] FRACTURE: Loaded Texture: MeshIcon
-[11:45:40] [trace] FRACTURE: Loaded HDR Environment: Loft
-[11:45:40] [trace] FRACTURE: Loaded Shader: CubeMap
-[11:45:40] [trace] FRACTURE: Loaded Shader: irradiance
-[11:45:40] [trace] FRACTURE: Loaded Shader: prefilter
-[11:45:40] [trace] FRACTURE: Loaded Shader: bdrf
-[11:45:40] [trace] FRACTURE: Loaded Shader: Skybox
-[11:45:40] [trace] FRACTURE: Loaded Shader: DebugShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[11:45:40] [trace] FRACTURE: Loaded Shader: BillboardShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: DepthShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: PickingShader
-[11:45:40] [trace] FRACTURE: Loaded Shader: default
-[11:45:40] [trace] FRACTURE: Loaded Shader: Outline
-[11:45:40] [trace] FRACTURE: Loaded Shader: InvertColor
-[11:45:40] [trace] FRACTURE: Loaded Shader: ToneMap
-[11:45:40] [trace] FRACTURE: Loaded Shader: Threshold
-[11:45:40] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[11:45:40] [trace] FRACTURE: Loaded Shader: ColorMap
-[11:45:40] [trace] FRACTURE: Loaded Shader: BoxBlur
-[11:45:40] [trace] FRACTURE: Loaded Shader: DepthPass
-[11:45:40] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[11:45:40] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[11:45:40] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[11:45:40] [trace] FRACTURE: Loaded Material: billboardIcons
-[11:45:40] [trace] FRACTURE: Loaded Material: DebugMaterial
-[11:45:40] [trace] FRACTURE: Loaded Material: DepthMaterial
-[11:45:40] [trace] FRACTURE: Loaded Material: PickingMaterial
-[11:45:40] [trace] FRACTURE: Loaded Material: Outline
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: loading Child: Plane
-[11:45:40] [trace] FRACTURE: loading Mesh: Plane
-[11:45:40] [trace] FRACTURE: Loaded Material: Plane.material_0
-[11:45:40] [trace] FRACTURE: Loaded model: Plane
-[11:45:40] [trace] FRACTURE: loading Child: Cube
-[11:45:40] [trace] FRACTURE: loading Mesh: Cube
-[11:45:40] [trace] FRACTURE: Loaded Material: Cube.material_0
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: Loaded model: Cube
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: loading Child: Sphere
-[11:45:40] [trace] FRACTURE: loading Mesh: Sphere
-[11:45:40] [trace] FRACTURE: Loaded Material: Sphere.material_0
-[11:45:40] [trace] FRACTURE: Loaded model: Sphere
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: loading Child: Cylinder
-[11:45:40] [trace] FRACTURE: loading Mesh: Cylinder
-[11:45:40] [trace] FRACTURE: Loaded Material: Cylinder.material_0
-[11:45:40] [trace] FRACTURE: Loaded model: Cylinder
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: loading Child: Torus
-[11:45:40] [trace] FRACTURE: loading Mesh: Torus
-[11:45:40] [trace] FRACTURE: Loaded Material: Torus.material_0
-[11:45:40] [trace] FRACTURE: Loaded model: Torus
-[11:45:40] [trace] FRACTURE: loading Child: Light
-[11:45:40] [trace] FRACTURE: loading Child: Camera
-[11:45:40] [trace] FRACTURE: loading Child: Suzanne
-[11:45:40] [trace] FRACTURE: loading Mesh: Suzanne
-[11:45:40] [trace] FRACTURE: Loaded Material: Suzanne.material_0
-[11:45:40] [trace] FRACTURE: Loaded model: Suzane
-[11:45:40] [info] FRACTURE: Renderer Init
-[11:45:52] [trace] FRACTURE: Loaded Texture: m1911_roughness
-[11:46:08] [trace] FRACTURE: loading Child: Light
-[11:46:08] [trace] FRACTURE: loading Child: Camera
-[11:46:08] [trace] FRACTURE: loading Child: Armature
-[11:46:08] [trace] FRACTURE: loading Child: joint_CORE
-[11:46:08] [trace] FRACTURE: loading Child: joint_trigger
-[11:46:08] [trace] FRACTURE: loading Child: joint_trigger_end
-[11:46:08] [trace] FRACTURE: loading Child: joint_slide
-[11:46:08] [trace] FRACTURE: loading Child: joint_slide_end
-[11:46:08] [trace] FRACTURE: loading Child: joint_hammer
-[11:46:08] [trace] FRACTURE: loading Child: joint_hammer_end
-[11:46:08] [trace] FRACTURE: loading Child: joint_gripsafety
-[11:46:08] [trace] FRACTURE: loading Child: joint_gripsafety_end
-[11:46:08] [trace] FRACTURE: loading Child: joint_bullet
-[11:46:08] [trace] FRACTURE: loading Child: joint_bullet_end
-[11:46:08] [trace] FRACTURE: loading Child: pCylinder5
-[11:46:08] [trace] FRACTURE: loading Mesh: pCylinder5
-[11:46:10] [trace] FRACTURE: Loaded Material: pCylinder5.material_0
-[11:46:10] [trace] FRACTURE: Loaded model: m1911_finalFire
-[11:46:34] [info] FRACTURE: Out of Bounds
+[13:17:18] [info] FRACTURE: Initializing Splash
+[13:17:18] [info] FRACTURE: OpenGL loaded
+[13:17:18] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:17:18] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:17:18] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[13:17:18] [trace] FRACTURE: Loaded Texture: splash
+[13:17:18] [trace] FRACTURE: Loaded Texture: title
+[13:17:18] [info] FRACTURE: Completed Init
+[13:17:18] [info] FRACTURE: Show Splash
+[13:17:20] [critical] FRACTURE: Failed to Load Project
+[13:17:24] [info] FRACTURE: OpenGL loaded
+[13:17:24] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:17:24] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:17:24] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[13:17:24] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[13:17:24] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: RotateIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: CameraIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: LightIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: EyeIcon
+[13:17:24] [trace] FRACTURE: Loaded Texture: EyeIconC
+[13:17:24] [trace] FRACTURE: Loaded Texture: MeshIcon
+[13:17:24] [trace] FRACTURE: Loaded HDR Environment: Loft
+[13:17:24] [trace] FRACTURE: Loaded Shader: CubeMap
+[13:17:24] [trace] FRACTURE: Loaded Shader: irradiance
+[13:17:24] [trace] FRACTURE: Loaded Shader: prefilter
+[13:17:24] [trace] FRACTURE: Loaded Shader: bdrf
+[13:17:24] [trace] FRACTURE: Loaded Shader: Skybox
+[13:17:24] [trace] FRACTURE: Loaded Shader: DebugShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[13:17:24] [trace] FRACTURE: Loaded Shader: BillboardShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: DepthShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: PickingShader
+[13:17:24] [trace] FRACTURE: Loaded Shader: default
+[13:17:24] [trace] FRACTURE: Loaded Shader: Outline
+[13:17:24] [trace] FRACTURE: Loaded Shader: InvertColor
+[13:17:24] [trace] FRACTURE: Loaded Shader: ToneMap
+[13:17:24] [trace] FRACTURE: Loaded Shader: Threshold
+[13:17:24] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[13:17:24] [trace] FRACTURE: Loaded Shader: ColorMap
+[13:17:24] [trace] FRACTURE: Loaded Shader: BoxBlur
+[13:17:24] [trace] FRACTURE: Loaded Shader: DepthPass
+[13:17:24] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[13:17:24] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[13:17:24] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[13:17:24] [trace] FRACTURE: Loaded Material: billboardIcons
+[13:17:24] [trace] FRACTURE: Loaded Material: DebugMaterial
+[13:17:24] [trace] FRACTURE: Loaded Material: DepthMaterial
+[13:17:24] [trace] FRACTURE: Loaded Material: PickingMaterial
+[13:17:24] [trace] FRACTURE: Loaded Material: Outline
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: loading Child: Plane
+[13:17:24] [trace] FRACTURE: loading Mesh: Plane
+[13:17:24] [trace] FRACTURE: Loaded model: Plane
+[13:17:24] [trace] FRACTURE: loading Child: Cube
+[13:17:24] [trace] FRACTURE: loading Mesh: Cube
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: Loaded model: Cube
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: loading Child: Sphere
+[13:17:24] [trace] FRACTURE: loading Mesh: Sphere
+[13:17:24] [trace] FRACTURE: Loaded model: Sphere
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: loading Child: Cylinder
+[13:17:24] [trace] FRACTURE: loading Mesh: Cylinder
+[13:17:24] [trace] FRACTURE: Loaded model: Cylinder
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: loading Child: Torus
+[13:17:24] [trace] FRACTURE: loading Mesh: Torus
+[13:17:24] [trace] FRACTURE: Loaded model: Torus
+[13:17:24] [trace] FRACTURE: loading Child: Light
+[13:17:24] [trace] FRACTURE: loading Child: Camera
+[13:17:24] [trace] FRACTURE: loading Child: Suzanne
+[13:17:24] [trace] FRACTURE: loading Mesh: Suzanne
+[13:17:24] [trace] FRACTURE: Loaded model: Suzane
+[13:17:24] [info] FRACTURE: Renderer Init
+[13:17:55] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:18:05] [info] FRACTURE: Out of Bounds
+[13:26:31] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:326: error(#132) Syntax error: ";" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:26:31] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:26:31] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:26:45] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:27:17] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:326: error(#132) Syntax error: "*=" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:27:17] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:27:17] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:27:18] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:326: error(#132) Syntax error: "*=" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:27:18] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:27:18] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:28:10] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:28:43] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:326: error(#132) Syntax error: "*=" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:28:43] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:28:43] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:29:06] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:326: error(#164) l-value required: assign
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:29:06] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:29:06] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:30:22] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:325: error(#164) l-value required: assign
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:30:22] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:30:22] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:30:52] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:31:31] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:31:48] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:32:28] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:32:46] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:32:55] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:33:46] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:33:55] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:327: error(#132) Syntax error: "*=" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:33:55] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:33:55] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:34:15] [error] FRACTURE: ERROR::SHADER::FRAGMENT::COMPILATION_FAILED
+ Fragment shader failed to compile with the following errors:
+ERROR: 0:327: error(#132) Syntax error: ")" parse error
+ERROR: error(#273) 1 compilation errors.  No code generated
+
+
+[13:34:15] [error] FRACTURE: ERROR::SHADER::PROGRAM LINKING_FAILED
+ Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+[13:34:15] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:34:31] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:35:09] [info] FRACTURE: Deleting Entity :  5
+[13:35:09] [info] FRACTURE: Deleting Entity :  5
+[13:35:09] [info] FRACTURE: Deleting Entity :  5
+[13:35:09] [info] FRACTURE: Deleting Entity :  5
+[13:35:11] [info] FRACTURE: Out of Bounds
+[13:35:17] [trace] FRACTURE: loading Child: Light
+[13:35:17] [trace] FRACTURE: loading Child: Camera
+[13:35:17] [trace] FRACTURE: loading Child: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:17] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:18] [trace] FRACTURE: loading Mesh: sponza
+[13:35:29] [trace] FRACTURE: Loaded model: sponza
+[13:36:01] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:36:38] [info] FRACTURE: Deleting Entity :  7
+[13:37:20] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:40:12] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
+[13:40:27] [info] FRACTURE: Out of Bounds
+[13:40:55] [trace] FRACTURE: Loaded HDR Environment: birchwood_1k
+[13:42:00] [info] FRACTURE: Out of Bounds

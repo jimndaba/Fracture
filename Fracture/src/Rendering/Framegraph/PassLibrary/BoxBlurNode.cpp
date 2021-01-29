@@ -3,7 +3,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Texture.h"
-
+#include "Profiling/Profiler.h"
 
 Fracture::BoxBlurNode::BoxBlurNode(std::string name, int width, int height):FullScreenNode(name)
 {
@@ -26,6 +26,7 @@ Fracture::BoxBlurNode::BoxBlurNode(std::string name, int width, int height):Full
 
 void Fracture::BoxBlurNode::execute(Renderer& renderer)
 {
+	ProfilerTimer timer("BoxBlur Pass");
 	resources["blurOutput"]->bind();
 	glBindVertexArray(quadVAO);
 	m_shader->use();

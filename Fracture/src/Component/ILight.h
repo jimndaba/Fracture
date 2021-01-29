@@ -8,7 +8,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Environment.h"
 #include "Rendering/Texture.h"
-#include "Logging/Logger.h"
+
 
 namespace Fracture
 {
@@ -280,7 +280,7 @@ namespace Fracture
 			}
 			else
 			{
-				FRACTURE_ERROR("FAILED TO LOAD ENVIRONMENT: {}", name);
+				//FRACTURE_ERROR("FAILED TO LOAD ENVIRONMENT: {}", name);
 			}			
 		}
 

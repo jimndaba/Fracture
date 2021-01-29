@@ -4,6 +4,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Texture.h"
+#include "Profiling/Profiler.h"
 
 Fracture::MultiplyMixNode::MultiplyMixNode(std::string name, int width, int height):FullScreenNode(name)
 {
@@ -30,6 +31,7 @@ Fracture::MultiplyMixNode::MultiplyMixNode(std::string name, int width, int heig
 
 void Fracture::MultiplyMixNode::execute(Renderer& renderer)
 {
+	ProfilerTimer timer("Multiply Pass");
 	resources["output"]->bind();
 	m_shader->use();
 	m_shader->setTexture("colorA", resources["colorA"]->GetColorTexture(0).get(), 0);

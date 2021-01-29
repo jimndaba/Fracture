@@ -11,7 +11,6 @@
 #include "RelationshipComponent.h"
 #include "TransformComponent.h"
 #include "LightComponent.h"
-#include "EditorNodeComponent.h"
 #include "CameraControllerComponent.h"
 #include "BillboardComponent.h"
 #include "RelationshipComponent.h"
@@ -25,7 +24,6 @@ std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_Relationsh
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_TransformerComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_CameraControllerComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RenderComponents;
-std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_EditorNodeComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_LightComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RigidBodyComponents;
 std::shared_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BoxColliderComponents;
@@ -51,7 +49,6 @@ void Fracture::ComponentManager::onInit()
 	m_TransformerComponents		 = std::make_shared<ComponentSet>();
 	m_CameraControllerComponents = std::make_shared<ComponentSet>();
 	m_RenderComponents			 = std::make_shared<ComponentSet>();
-	m_EditorNodeComponents		 = std::make_shared<ComponentSet>();
 	m_LightComponents			 = std::make_shared<ComponentSet>();
 	m_RigidBodyComponents		 = std::make_shared<ComponentSet>();
 	m_BoxColliderComponents		 = std::make_shared<ComponentSet>();
@@ -64,7 +61,6 @@ void Fracture::ComponentManager::onInit()
 	Register.emplace(typeid(CameraControllerComponent), m_CameraControllerComponents);
 	Register.emplace(typeid(RenderComponent), m_RenderComponents);
 	Register.emplace(typeid(BillboardComponent), m_BillboardComponents);
-	Register.emplace(typeid(EditorNode), m_EditorNodeComponents);
 	Register.emplace(typeid(LightComponent), m_LightComponents);
 	Register.emplace(typeid(RigidBodyComponent), m_RigidBodyComponents);
 	Register.emplace(typeid(BoxColliderComponent), m_BoxColliderComponents);

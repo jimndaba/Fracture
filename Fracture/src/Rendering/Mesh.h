@@ -65,6 +65,7 @@ namespace Fracture
 		std::string ModelName;
 		std::string Name;
 		std::string MaterialName;
+		unsigned int MaterialIndex;
 
 		//temp
 		glm::vec3 position;
@@ -81,12 +82,7 @@ namespace Fracture
 		{
 			return m_textures;
 		}
-
-		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> GetInstanceCommands()
-		{
-			return m_instanceCommands;
-		}
-
+		
 		void SetAABB(std::shared_ptr<BoundingBox> aabb);
 		std::shared_ptr<BoundingBox> GetAABB();
 
@@ -98,7 +94,6 @@ namespace Fracture
 		std::vector<Submesh> m_submeshes;
 		std::vector<Vertex> m_vertices;
 		std::vector<std::shared_ptr<Texture>> m_textures;
-		std::vector<std::shared_ptr<RenderInstancedElementsCommand>> m_instanceCommands;
 		std::vector<unsigned int> m_indices;
 		std::shared_ptr<BoundingBox> m_bounds;
 

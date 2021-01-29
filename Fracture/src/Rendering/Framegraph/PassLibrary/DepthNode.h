@@ -14,7 +14,7 @@ namespace Fracture
 	{
 
 	public:
-		DepthNode(std::string name, int width, int height, RenderBucket* opaque, RenderBucket* transparent);
+		DepthNode(std::string name, int width, int height, RenderBucket* opaque);
 		void execute(Renderer& renderer) override;
 
 		float NearPlane;

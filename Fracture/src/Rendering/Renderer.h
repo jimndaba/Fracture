@@ -71,7 +71,7 @@ namespace Fracture
 		void setViewport(int width,int height);
 		
 		void PushCommand(DrawCommand command);
-		void PushCommand(std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, std::shared_ptr<Fracture::TransformComponent> transform);
+		void PushCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
@@ -116,8 +116,9 @@ namespace Fracture
 		std::shared_ptr<RenderTarget> SceneRenderTarget;
 
 		//render buckets
-		std::shared_ptr<RenderBucket> m_opaqueBucket;
-		std::shared_ptr<RenderBucket> m_transparentBucket;
+		std::shared_ptr<RenderBucket> m_Bucket;
+		//std::shared_ptr<RenderBucket> m_opaqueBucket;
+		//std::shared_ptr<RenderBucket> m_transparentBucket;
 		std::shared_ptr<RenderBucket> m_shadowBucket;
 		std::shared_ptr<RenderBucket> m_outlineBucket;
 

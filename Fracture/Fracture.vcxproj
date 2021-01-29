@@ -75,8 +75,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua54.lib;assimp-vc141-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,8 +101,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\libRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua54.lib;assimp-vc142-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\release;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\lib\release;$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua54.lib;assimp-vc141-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -111,7 +111,6 @@
     <ClCompile Include="src\Component\BoxColliderComponent.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
-    <ClCompile Include="src\Component\EditorNodeComponent.cpp" />
     <ClCompile Include="src\Component\FrustumPlane.cpp" />
     <ClCompile Include="src\Component\ICamera.cpp" />
     <ClCompile Include="src\Component\ILight.cpp" />
@@ -197,10 +196,10 @@
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
-    <ClInclude Include="src\Component\EditorNodeComponent.h" />
     <ClInclude Include="src\Component\FrustumPlane.h" />
     <ClInclude Include="src\Component\ICamera.h" />
     <ClInclude Include="src\Component\ILight.h" />
+    <ClInclude Include="src\Component\ITransform.h" />
     <ClInclude Include="src\Component\IUpdatable.h" />
     <ClInclude Include="src\Component\LightComponent.h" />
     <ClInclude Include="src\Input\IInputState.h" />

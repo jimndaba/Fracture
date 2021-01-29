@@ -61,7 +61,6 @@
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/EditorNodeComponent.h"
 
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"

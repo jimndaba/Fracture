@@ -14,7 +14,7 @@
 #include "Component.h"
 #include "Logging/Logger.h"
 #include "Physics/PhysicsManager.h"
-
+#include "Profiling/Profiler.h"
 
 
 namespace Fracture
@@ -27,7 +27,6 @@ namespace Fracture
 	class RenderComponent;
 	class ScriptComponent;
 	class LightComponent;
-	class EditorNode;
 	class BoxColliderComponent;
 	class BillboardComponent;
 	//class ColliderComponent; TODO
@@ -213,7 +212,6 @@ namespace Fracture
 		static std::shared_ptr<ComponentSet> m_TransformerComponents;
 		static std::shared_ptr<ComponentSet> m_CameraControllerComponents;
 		static std::shared_ptr<ComponentSet> m_RenderComponents;
-		static std::shared_ptr<ComponentSet> m_EditorNodeComponents;
 		static std::shared_ptr<ComponentSet> m_LightComponents;
 		static std::shared_ptr<ComponentSet> m_RigidBodyComponents;
 		static std::shared_ptr<ComponentSet> m_BoxColliderComponents;
@@ -272,6 +270,7 @@ namespace Fracture
 	template<class T>
 	inline bool ComponentManager::HasComponent(uint32_t id)
 	{
+		ProfilerTimer timer("Has Component");
 		if (Register[typeid(T)]->HasComponent<T>(id))
 		{
 			return true;
