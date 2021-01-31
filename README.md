@@ -1,9 +1,7 @@
 # Fracture
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/047e8071993d44aa92253b0083ec541c)](https://app.codacy.com/gh/jimndaba/Fracture?utm_source=github.com&utm_medium=referral&utm_content=jimndaba/Fracture&utm_campaign=Badge_Grade)
-
 Fracture Game Engine
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/047e8071993d44aa92253b0083ec541c)](https://app.codacy.com/gh/jimndaba/Fracture?utm_source=github.com&utm_medium=referral&utm_content=jimndaba/Fracture&utm_campaign=Badge_Grade)
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 
