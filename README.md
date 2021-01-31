@@ -17,11 +17,11 @@ Sorry as this is my personal project there is no real plan to release this for u
 
 Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
 
-*Assimp
-*SDL2
-*GLAD
-*Bullet Physics 
-*
+* Assimp
+* SDL2
+* GLAD
+* Bullet Physics 
+
 
 ## Release History
 
