@@ -3,14 +3,15 @@
 #include <iostream>
 #include "Component/RelationshipComponent.h"
 #include "Component/ComponentManager.h"
+#include "Logging/Logger.h"
 
-Fracture::Entity::Entity():Id(IDManager::GetID())
+Fracture::Entity::Entity()
 {
-
 }
 
 Fracture::Entity::Entity(uint32_t id):Id(id)
 {
+
 	IDManager::NextID();
 }
 

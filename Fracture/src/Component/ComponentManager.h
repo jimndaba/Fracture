@@ -69,7 +69,7 @@ namespace Fracture
 			m_components.push_back(component);
 		}
 
-		void AddComponent(std::shared_ptr<Component> component)
+		void AddComponent(const std::shared_ptr<Component>& component)
 		{
 			m_components.push_back(component);
 		}
@@ -104,7 +104,7 @@ namespace Fracture
 			return set;
 		}
 		
-		void RemoveComponent(std::shared_ptr<Component> component)
+		void RemoveComponent(const std::shared_ptr<Component>& component)
 		{
 			if (!m_components.empty())
 			{
@@ -182,14 +182,14 @@ namespace Fracture
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
 		template< class T>
-		static void AddComponent(std::shared_ptr<Component> component);
+		static void AddComponent(const std::shared_ptr<Component>& component);
 
 		template<class T>
-		static void RemoveComponent(uint32_t id);
-		static void RemoveComponentsbyID(uint32_t id);
+		static void RemoveComponent(const uint32_t& id);
+		static void RemoveComponentsbyID(const uint32_t& id);
 		//static void RemoveComponent(std::shared_ptr<Component> component);
 		template<class T>
-		static void RemoveComponent(std::shared_ptr<T> component);
+		static void RemoveComponent(const std::shared_ptr<T>& component);
 
 		template <class T>
 		static std::shared_ptr<T>GetComponent(uint32_t enitytId);
@@ -228,20 +228,20 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline void ComponentManager::AddComponent(std::shared_ptr<Component> component)
+	inline void ComponentManager::AddComponent(const std::shared_ptr<Component>& component)
 	{
 		Register[typeid(T)]->AddComponent(component);
 	}
 
 
 	template<class T>
-	inline void ComponentManager::RemoveComponent(uint32_t id)
+	inline void ComponentManager::RemoveComponent(const uint32_t& id)
 	{
 		Register[typeid(T)]->RemoveComponent<T>(id);
 	} 
 
 	template<class T>
-	inline void ComponentManager::RemoveComponent(std::shared_ptr<T> component)
+	inline void ComponentManager::RemoveComponent(const std::shared_ptr<T>& component)
 	{
 		Register[typeid(T)]->RemoveComponent(component);
 	}

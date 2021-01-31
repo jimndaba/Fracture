@@ -29,15 +29,17 @@ namespace Fracture
 		Component(uint32_t id,ComponentType mtype):EntityID(id),componentType(mtype)
 		{
 		};
-		~Component() {};
 
+		virtual ~Component() = 0;
 		virtual void onStart() = 0;
+		virtual void Accept(ISceneProbe* visitor) = 0;
 
 		virtual void OnDebug() {};
-		virtual void Accept(ISceneProbe* visitor) = 0;		
+	
 		uint32_t EntityID;
 		ComponentType componentType = ComponentType::None;		
 	};
+	
 	
 }
 #endif

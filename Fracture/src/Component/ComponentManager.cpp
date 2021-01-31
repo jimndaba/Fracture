@@ -162,7 +162,7 @@ void Fracture::ComponentManager::ClearComponents()
 	}
 }
 
-void Fracture::ComponentManager::RemoveComponentsbyID(uint32_t id)
+void Fracture::ComponentManager::RemoveComponentsbyID(const uint32_t& id)
 {	
 	for (auto it = Register.begin(); it != Register.end(); ++it)
 	{

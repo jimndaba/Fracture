@@ -35,7 +35,7 @@ Fracture::AssetManager::~AssetManager()
 	m_Textures.clear();
 }
 
-void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std::string fragment)
+void Fracture::AssetManager::AddShader(const std::string& name, const std::string& vertex, const std::string& fragment)
 {
 	std::shared_ptr<Shader> m_shader = std::make_shared<Shader>(name, vertex, fragment);
 
@@ -43,7 +43,7 @@ void Fracture::AssetManager::AddShader(std::string name, std::string vertex, std
 	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
 }
 
-void Fracture::AssetManager::AddModel(std::string name, std::string path)
+void Fracture::AssetManager::AddModel(const std::string& name, const std::string& path)
 {
 	std::shared_ptr<Model> model = loadModel(path);
 
@@ -61,55 +61,55 @@ void Fracture::AssetManager::AddModel(std::string name, std::string path)
 	
 }
 
-void Fracture::AssetManager::AddTexture(std::string name, std::string path, TextureType mtype)
+void Fracture::AssetManager::AddTexture(const std::string& name, const std::string& path,TextureType mtype)
 {
 	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
 	m_Textures.emplace(name, texture);
 	FRACTURE_TRACE("Loaded Texture: {}",name);
 }
 
-void Fracture::AssetManager::AddTexture(std::shared_ptr<Texture> texture)
+void Fracture::AssetManager::AddTexture(const std::shared_ptr<Texture>& texture)
 {
 	m_Textures.emplace(texture->Name, texture);
 	FRACTURE_TRACE("Loaded Texture: {}", texture->Name);
 }
 
-void Fracture::AssetManager::AddEnvironmentMap(std::string name, std::string path)
+void Fracture::AssetManager::AddEnvironmentMap(const std::string& name, const std::string& path)
 {
 	std::shared_ptr<Texture> texture = HDRFromFile(name,path.c_str(),TextureType::Environment);
 	m_Textures.emplace(name, texture);
 	FRACTURE_TRACE("Loaded HDR Environment: {}", name);
 }
 
-void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Shader> shader)
+void Fracture::AssetManager::AddMaterial(const std::string& name, const std::shared_ptr<Shader>& shader)
 {
 	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,shader));
 	m_Materials.emplace(name, material);
 	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
-void Fracture::AssetManager::AddMaterial(std::string name, std::shared_ptr<Material> material)
+void Fracture::AssetManager::AddMaterial(const std::string& name,const std::shared_ptr<Material>& material)
 {
 	m_Materials.emplace(name, material);
 	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
-std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(std::string name)
+std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(const std::string& name)
 {
 	return m_Shaders[name];
 }
 
-std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(std::string name)
+std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(const std::string& name)
 {
 	return m_Models[name];
 }
 
-std::shared_ptr<Fracture::Material> Fracture::AssetManager::getMaterial(std::string name)
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::getMaterial(const std::string& name)
 {
 	return m_Materials[name];
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(std::string name)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(const std::string& name)
 {
 	return m_Textures[name];
 }
@@ -146,7 +146,7 @@ std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManage
 	return m_Materials;
 }
 
-std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(std::string path)
+std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::string& path)
 {
 	std::shared_ptr<Model> m_model = nullptr;
 	Assimp::Importer importer;
@@ -413,14 +413,14 @@ void Fracture::AssetManager::ImportMaterial(aiMaterial* material, std::shared_pt
 		{
 			FRACTURE_ERROR("Could not load texture: {0}", aiTexPath.C_Str());
 			f_materail->setFloat("aoFlag", 0.0f);
-			f_materail->setFloat("u_ao", 1.0f);
+			f_materail->setFloat("u_ao", 0.1f);
 			// Fallback to albedo color				
 		}
 	}
 	else
 	{
 		f_materail->setFloat("aoFlag", 0.0f);
-		f_materail->setFloat("u_ao", 1.0f);
+		f_materail->setFloat("u_ao", 0.1f);
 	}
 }
 
@@ -572,7 +572,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	return texture;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::string name, std::string path, Fracture::TextureType texType)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(const std::string& name, const std::string& path, Fracture::TextureType texType)
 {
 	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture(name, texType));
 	newTex->path = path;
@@ -610,7 +610,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(std::stri
 	return newTex;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(std::string name, const char* path, Fracture::TextureType texType, bool gamma)
+std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const std::string& name , const char* path, Fracture::TextureType texType, bool gamma)
 {
 	std::shared_ptr<Fracture::Texture> texture = std::shared_ptr<Fracture::Texture>(new Texture(texType));
 	texture->path = path;	

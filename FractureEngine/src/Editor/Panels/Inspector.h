@@ -9,11 +9,12 @@
 namespace Fracture
 {
 	struct UniformValue;
+	class SceneView;
 
 	class InspectorPanel: public Panel
 	{
 	public:
-		InspectorPanel(std::string name);
+		InspectorPanel(std::string name, SceneView& scenegraph);
 		~InspectorPanel();
 
 		void render() override;
@@ -29,6 +30,7 @@ namespace Fracture
 		static void DrawTexture2DControl(const std::string& label, unsigned int& value, float resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawSample2DControl(const std::string& label, unsigned int& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
 	private:
+		SceneView& m_scenegraph;
 		void DrawComponents(Entity entity);
 
 		template<class T, typename UIFunction>

@@ -29,7 +29,7 @@ namespace Fracture
 	template<class T>
 	inline std::shared_ptr<T> EntityManager::CreateEntity()
 	{
-		auto entity = std::make_shared<T>();
+		auto entity = std::make_shared<T>(IDManager::GetID());
 		return entity;
 	}
 

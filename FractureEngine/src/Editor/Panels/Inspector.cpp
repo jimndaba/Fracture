@@ -6,9 +6,9 @@
 #include "../utils/FileDialogue.h"
 
 
-Fracture::InspectorPanel::InspectorPanel(std::string name):Panel(name)
+
+Fracture::InspectorPanel::InspectorPanel(std::string name, Fracture::SceneView& scenegraph):Panel(name),m_scenegraph(scenegraph)
 {
-	
 }
 
 Fracture::InspectorPanel::~InspectorPanel()
@@ -17,9 +17,9 @@ Fracture::InspectorPanel::~InspectorPanel()
 
 void Fracture::InspectorPanel::render()
 {
-	if (SceneView::SelectedEntity())
+	if (m_scenegraph.SelectedEntity())
 	{
-		DrawComponents(SceneView::SelectedEntity());
+		DrawComponents(*m_scenegraph.SelectedEntity().get());
 	}
 }
 
@@ -421,7 +421,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 		if (ImGui::MenuItem("Transform"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				ComponentManager::AddComponent<TransformComponent>(entity.Id);
 			}			
@@ -432,7 +432,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		if (ImGui::MenuItem("Camera"))
 		{
 
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
 			}
@@ -442,7 +442,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::BeginMenu("Render"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				std::string modelName;
 				for (auto const& model : AssetManager::GetModels())
@@ -479,7 +479,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Audio"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);		
 			}
@@ -488,7 +488,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Light"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
 				{
@@ -505,7 +505,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Collision"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
 				{
@@ -522,7 +522,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Rigidbody"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
 				{
@@ -543,7 +543,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("Script"))
 		{
-			if (SceneView::SelectedEntity())
+			if (m_scenegraph.SelectedEntity())
 			{
 				//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
 			}

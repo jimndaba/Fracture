@@ -53,6 +53,7 @@ namespace Fracture
 		std::shared_ptr<SSAONode> ssao;
 		std::shared_ptr<BoxBlurNode> ssaoblur;
 		std::shared_ptr<SinkNode> outputbuffer;
+	
 	private:
 		//std::shared_ptr<InputSourceNode> resultsource;
 		Renderer& m_Renderer;	

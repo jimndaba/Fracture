@@ -103,8 +103,8 @@ void Fracture::Editor::onInit()
     m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
 
     m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
-    m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor"));
-    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport"));
+    m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor",*m_sceneview.get()));
+    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get()));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
@@ -370,10 +370,10 @@ void Fracture::Editor::onUpdate(float dt)
 
     if (InputManager::IsKeyDown(KeyCode::Delete))
     {
-        if (SceneView::SelectedEntity())
+        if (m_sceneview->SelectedEntity())
         {
-            FRACTURE_INFO("Deleting Entity :  {}", SceneView::SelectedEntity().Id);
-            m_SceneManager->GetActiveScene()->Destroy(SceneView::SelectedEntity().Id);
+            FRACTURE_INFO("Deleting Entity :  {}", m_sceneview->SelectedEntity()->Id);
+            m_SceneManager->GetActiveScene()->Destroy(m_sceneview->SelectedEntity()->Id);
         }
     }
 
@@ -571,68 +571,68 @@ void Fracture::Editor::DrawMenuBar()
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateEmpty(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Camera", NULL)) {};
             if (ImGui::MenuItem("Sunlight", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSunlight(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Pointlight", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreatePointlight(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Spotlight", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSpotlight(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Skylight", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSkylight(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Cube", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateCube(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Sphere", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSphere(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Plane", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreatePlane(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Torus", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateTorus(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Cylinder", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateCylinder(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::MenuItem("Suzane", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
-                SceneView::setSelectEntity(*entity);
+                m_sceneview->setSelectEntity(entity);
             };
             if (ImGui::BeginMenu("Model"))
             {
@@ -642,7 +642,7 @@ void Fracture::Editor::DrawMenuBar()
                     {
                         std::shared_ptr<Entity> entity = EntityFactory::CreateModel(m_ActiveScene, model.second->Name.c_str());
                         m_ActiveScene->addEntity(entity);
-                        SceneView::setSelectEntity(*entity);
+                        m_sceneview->setSelectEntity(entity);
                     }
                 }        
                 ImGui::EndMenu();

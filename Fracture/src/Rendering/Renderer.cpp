@@ -82,7 +82,11 @@ void Fracture::Renderer::onInit()
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());     
+    m_PickingPass = std::shared_ptr<PickingPass>(new PickingPass("pickingPass", m_width, m_Height,m_Bucket.get()));
+
     m_isDebugRender = false;
     m_drawgrid = true;
 
@@ -98,6 +102,7 @@ void Fracture::Renderer::onInit()
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
 
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    glEnable(GL_MULTISAMPLE);
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -134,6 +139,9 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 	//Collect Scene Data
     RenderScene(scene);
 
+    m_PickingPass->execute(*this);
+
+   
     //glDisable(GL_CULL_FACE);
     //setViewport(m_width, m_Height);
     //m_PickingPass->Begin();
@@ -306,11 +314,6 @@ void Fracture::Renderer::EndFrame()
    
 }
 
-void Fracture::Renderer::SetPickingPass(PickingPass* pass)
-{
-    m_PickingPass = pass;
-}
-
 void Fracture::Renderer::WriteUniformData(Shader shader,std::string name, UniformValue value)
 {
     switch (value.Type)
@@ -432,6 +435,7 @@ void Fracture::Renderer::setViewport(int width, int height)
 	glViewport(0, 0, width, height);    
     m_width = width;
     m_Height = height;
+    m_PickingPass->Resize(width, height);
     if (m_camera)
     {
         m_camera->setProjection(width, height);
@@ -666,14 +670,11 @@ uint32_t Fracture::Renderer::GetEntityID(int mouseX, int mouseY)
     if (m_PickingPass)
     {        
         int Pixel = m_PickingPass->GetPixelInfo(mouseX, mouseY);
-
-        FRACTURE_TRACE("Pixel ID: {}", Pixel);
         if (Pixel > 0) {
             return  (uint32_t)Pixel;
         }
         return -1;
-    }   
-    return -1;
+    }      
 }
 
 void _check_gl_error(const char* file, int line) {

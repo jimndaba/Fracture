@@ -284,9 +284,9 @@ void main()
     color += Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(1.0));
+    //color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    //color = pow(color, vec3(1.0/2.2)); 
 
 
     if(TransparencyFlag > 0.5)
@@ -321,9 +321,9 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref,SunLight light)
     vec3 prefilteredColor =textureLod(prefilterMap, ref,  roughness * MAX_REFLECTION_LOD).rgb;//     
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(normal, viewDir), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
-    float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    //ambient  *= ssao;
-    ambient = (kD + (1.0 - shadow)) * (diffuse + specular) * ao * intensity ;
+    float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;   
+    //(1.0 - shadow));
+    ambient = (kD + diffuse + specular) * ao * intensity; //* ssao;
     return ambient ;
 }
 
@@ -334,9 +334,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    ambient = light.diffuse *albedo* light.intensity;
-    ambient *= ssao;
-
+    ambient = light.diffuse *albedo* light.intensity ;//* ssao;  
 
     vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
 	float G = GeometrySmith(normal, viewDir, l, roughness); 
@@ -381,8 +379,7 @@ vec3 CalcPointLight(PointLight light,vec3 alb, vec3 F0,vec3 normal, vec3 fragPos
         float denominator = 4 * max(dot(normal, viewDir), 0.0) * max(dot(normal, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
         vec3 specular = nominator / denominator * light.specular * light.intensity ;
         
-        vec3 mambient  = light.ambient * albedo  * light.intensity;
-        mambient  *= ssao;
+        vec3 mambient  = light.ambient * albedo  * light.intensity * ssao;       
         specular *= attenuation;
         mambient *= attenuation;
          // kS is equal to Fresnel

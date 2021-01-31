@@ -35,13 +35,13 @@ namespace Fracture
 		~AssetManager();
 
 
-		static std::shared_ptr<Model> loadModel(std::string path);
-		static std::shared_ptr<Texture> loadTexture(std::string name, std::string path, Fracture::TextureType texType);
+		static std::shared_ptr<Model> loadModel(const std::string &name);
+		static std::shared_ptr<Texture> loadTexture(const std::string &name, const std::string &path, Fracture::TextureType texType);
 
-		static std::shared_ptr<Shader> getShader(std::string name);
-		static std::shared_ptr<Model> getModel(std::string name);
-		static std::shared_ptr<Material> getMaterial(std::string name);	
-		static std::shared_ptr<Texture> getTexture(std::string name);
+		static std::shared_ptr<Shader> getShader(const std::string &name);
+		static std::shared_ptr<Model> getModel(const std::string &name);
+		static std::shared_ptr<Material> getMaterial(const std::string &name);
+		static std::shared_ptr<Texture> getTexture(const std::string &name);
 
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
 		static std::map<std::string, std::shared_ptr<Texture>> GetTextures();
@@ -50,13 +50,13 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Material>> GetMaterials();
 
 
-		static void AddShader(std::string name, std::string vertex, std::string fragment);
-		static void AddModel(std::string name, std::string path);
-		static void AddTexture(std::string name, std::string path, TextureType mtype);
-		static void AddTexture(std::shared_ptr<Texture> texture);
-		static void AddEnvironmentMap(std::string name, std::string path);
-		static void AddMaterial(std::string name, std::shared_ptr<Shader> shader);
-		static void AddMaterial(std::string name, std::shared_ptr<Material> material);
+		static void AddShader(const std::string &name, const std::string& vertex, const std::string& fragment);
+		static void AddModel(const std::string& name, const std::string& path);
+		static void AddTexture(const std::string& name, const std::string& path, TextureType mtype);
+		static void AddTexture(const std::shared_ptr<Texture>& texture);
+		static void AddEnvironmentMap(const std::string& name, const std::string& path);
+		static void AddMaterial(const std::string& name,const std::shared_ptr<Shader>& shader);
+		static void AddMaterial(const std::string& name,const std::shared_ptr<Material>& material);
 
 	
 		static std::unique_ptr<AssetManager> instance()
@@ -87,7 +87,7 @@ namespace Fracture
 		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
 		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
-		static std::shared_ptr<Fracture::Texture> HDRFromFile(std::string name, const char* path,Fracture::TextureType texType, bool gamma = false);
+		static std::shared_ptr<Fracture::Texture> HDRFromFile(const std::string& name, const char* path,Fracture::TextureType texType, bool gamma = false);
 		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material);
 
 
@@ -99,9 +99,7 @@ namespace Fracture
 			aiProcess_GenUVCoords |            // Convert UVs if required 			
 			aiProcess_ValidateDataStructure|
 			aiProcess_RemoveRedundantMaterials
-			;    // Validation
-		//aiProcess_OptimizeMeshes |          // Batch draws where possible
-		//aiProcess_SortByPType |             // Split meshes by primitive type
+			;   
 	};
 
 

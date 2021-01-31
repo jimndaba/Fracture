@@ -5,6 +5,83 @@ D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(339,38): warning C4244: 'ar
 D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(350,39): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
 D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(783,90): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(822,101): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+  EditorCamera.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\EditorCamera.cpp(71,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\EditorCamera.cpp(72,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  TabbedElement.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+  MaterialFactory.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+  FractureSplash.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(122,64): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(129,63): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(299,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  AssetBrowserPanel.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(166,71): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+  Inspector.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(988,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1010,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+  SceneviewPanel.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(286,61): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(290,60): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(294,65): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(337,70): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(345,8): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+  TabbedPanel.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+  ViewPanel.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(69,106): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(109,53): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(109,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(194,73): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(194,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(195,59): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(195,41): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(196,59): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(196,41): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+  main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\Dev\Fracture\Fracture\vendor\GLAD\glad.h(32): message : see previous definition of 'APIENTRY'
+  Generating Code...
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
 EditorCamera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:REF' specification
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library

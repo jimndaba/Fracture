@@ -10,7 +10,7 @@
 int Fracture::ViewPanel::gizmoMode;
 
 
-Fracture::ViewPanel::ViewPanel(std::string name):Panel(name)
+Fracture::ViewPanel::ViewPanel(std::string name,SceneView& scenegraph):Panel(name), m_scenegraph(scenegraph)
 {
 	gizmoMode = 0;
 }
@@ -106,19 +106,19 @@ void Fracture::ViewPanel::render()
 			
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
-				int id = -1;// (int)TestGraph::PixelID(region_x, region_y);
+				int id = (int)m_renderer->GetEntityID(region_x, region_y);
 				if(id > 0)
 				{
-					Entity m_entity = *SceneManager::getEntity(id).get();
+					const auto & m_entity = SceneManager::getEntity(id);
 				
 					if (m_entity)
 					{
-						SceneView::setSelectEntity(m_entity);
+						m_scenegraph.setSelectEntity(m_entity);
 					}
 				}
 				else
 				{
-					SceneView::clearSelection();
+					m_scenegraph.clearSelection();
 				}
 			}
 			else
@@ -128,14 +128,14 @@ void Fracture::ViewPanel::render()
 		}	
 	}		
 
-	if (SceneView::SelectedEntity())
+	if (m_scenegraph.SelectedEntity())
 	{
 
-		if (ComponentManager::HasComponent<TransformComponent>(SceneView::SelectedEntity().Id))
+		if (ComponentManager::HasComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id))
 		{		
 
-			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(SceneView::SelectedEntity().Id);
-			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(SceneView::SelectedEntity().Id);
+			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
+			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(m_scenegraph.SelectedEntity()->Id);
 			
 			float rw = (float)ImGui::GetWindowWidth();
 			float rh = (float)ImGui::GetWindowHeight();

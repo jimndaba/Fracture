@@ -110,6 +110,7 @@
     <ClCompile Include="src\Component\BillboardComponent.cpp" />
     <ClCompile Include="src\Component\BoxColliderComponent.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
+    <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\FrustumPlane.cpp" />
     <ClCompile Include="src\Component\ICamera.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\DepthNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\DepthNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h" />

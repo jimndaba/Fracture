@@ -27,20 +27,20 @@ namespace Fracture
 		void setScale(const glm::vec3& value);
 		void setRotation(const glm::vec3& value);
 
-		glm::vec3 Position();
-		glm::vec3 Scale();
-		glm::vec3 Rotation();
+		glm::vec3 Position() const;
+		glm::vec3 Scale() const;
+		glm::vec3 Rotation() const;
 
 		glm::mat4 GetLocalTranform() override;
 		glm::mat4 GetWorldTransform()override;
 
 		void Accept(ISceneProbe* visitor)override;
 	private:
-		glm::mat4 m_LocalTransform;
-		glm::mat4 m_WorldTransform; 		
-		glm::vec3 m_Position;
-		glm::vec3 m_Scale;
-		glm::vec3 m_Rotation;
+		glm::mat4 m_LocalTransform = glm::mat4();
+		glm::mat4 m_WorldTransform = glm::mat4();
+		glm::vec3 m_Position = glm::vec3();
+		glm::vec3 m_Scale = glm::vec3();
+		glm::vec3 m_Rotation = glm::vec3();
 	};
 
 }

@@ -34,8 +34,9 @@ Fracture::ToneMappingNode::ToneMappingNode(std::string name, int width, int heig
 void Fracture::ToneMappingNode::execute(Renderer& renderer)
 {	
 	glDisable(GL_DEPTH_TEST);
-	resources["colorOut"]->bind();
+	resources["colorOut"]->bind();	
 	glClear(GL_COLOR_BUFFER_BIT);
+	resources["colorOut"]->blit(resources["buffer"]->GetID());
 	m_toneShader->use();
 	m_toneShader->setFloat("gamma",Gamma);
 	m_toneShader->setFloat("exposure",Exposure);

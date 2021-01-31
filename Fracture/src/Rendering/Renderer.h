@@ -110,7 +110,7 @@ namespace Fracture
 		std::shared_ptr<ShadowPass> m_ShadowPass;
 
 		//Picking
-		PickingPass* m_PickingPass;
+		std::shared_ptr<PickingPass> m_PickingPass;
 
 		//Scene 
 		std::shared_ptr<RenderTarget> SceneRenderTarget;

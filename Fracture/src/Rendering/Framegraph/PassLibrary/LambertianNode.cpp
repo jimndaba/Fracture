@@ -18,8 +18,8 @@ Fracture::LambertianNode::LambertianNode(std::string name, int width, int height
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputColor");
 
-	outputColor = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, true);
-
+	outputColor = std::make_shared<RenderTarget>(width, height,TextureTarget::MultiSample , GL_FLOAT, 1);
+	outputColor->SetMultiSampled(true);
 	AcceptBucket(opaque);
 
 	//Sockets
@@ -38,7 +38,6 @@ void Fracture::LambertianNode::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("Lambertian node");
 	renderer.RenderDirectLightShadows();
-
 	resources["outputColor"]->bind();
 	renderer.clear();	
 	render(renderer);

@@ -21,11 +21,13 @@ namespace Fracture
 		Scale,
 	};
 
+	class SceneView;
+
 	class ViewPanel : public Panel
 	{
 
 	public:
-		ViewPanel(std::string name);
+		ViewPanel(std::string name, SceneView& scenegraph);
 		~ViewPanel();
 
 		void init();
@@ -64,7 +66,7 @@ namespace Fracture
 		ImGuizmo::OPERATION currentImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 		ImGuizmo::MODE currentImGuizmoMode = ImGuizmo::MODE::WORLD;
 
-	
+		SceneView& m_scenegraph;
 		static int gizmoMode;
 		int lastUsing = 0;
 	};

@@ -27,14 +27,14 @@ namespace Fracture
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(uint32_t entityID, std::shared_ptr<Model> model);
+		RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model);
 		~RenderComponent();
 
 
 		virtual void onStart();
-		void SetMaterial(std::string name);
+		void SetMaterial(const std::string& name);
 		std::shared_ptr<Material> GetMaterial();
-		void SetModel(std::string name);
+		void SetModel(const std::string& name);
 
 		void SetRenderType(RenderType m_type);
 		RenderType getRenderType();

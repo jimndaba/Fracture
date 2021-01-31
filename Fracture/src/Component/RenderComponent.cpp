@@ -5,7 +5,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/DrawCommand.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID, std::shared_ptr<Model> model):Component(entityID,ComponentType::Render),m_model(model)
+Fracture::RenderComponent::RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model):Component(entityID,ComponentType::Render),m_model(model)
 {
 	m_Rendertype = RenderType::Normal;
 }
@@ -18,7 +18,7 @@ void Fracture::RenderComponent::onStart()
 {
 }
 
-void Fracture::RenderComponent::SetMaterial(std::string name)
+void Fracture::RenderComponent::SetMaterial(const std::string& name)
 {
 	m_material = AssetManager::getMaterial(name);
 }
@@ -28,7 +28,7 @@ std::shared_ptr<Fracture::Material> Fracture::RenderComponent::GetMaterial()
 	return m_material;
 }
 
-void Fracture::RenderComponent::SetModel(std::string name)
+void Fracture::RenderComponent::SetModel(const std::string& name)
 {
 	m_model = AssetManager::getModel(name);
 }

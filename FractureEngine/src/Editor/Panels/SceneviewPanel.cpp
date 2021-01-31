@@ -2,7 +2,6 @@
 #include "Scene/Scene.h"
 #include "Entity/EntityFactory.h"
 
-Fracture::Entity Fracture::SceneView::m_selection;
 std::shared_ptr<Fracture::Scene> Fracture::SceneView::m_scene;
 
 Fracture::SceneView::SceneView(std::string name):Panel(name)
@@ -16,7 +15,7 @@ Fracture::SceneView::~SceneView()
 void Fracture::SceneView::setScene(std::shared_ptr<Scene> scene)
 {
 	m_scene = scene;
-	m_selection = *m_scene->Root();
+	m_selection = m_scene->Root();
 }
 
 void Fracture::SceneView::render()
@@ -31,9 +30,12 @@ void Fracture::SceneView::render()
 
 	DrawEntityNode(m_scene->Root()->Id);
 	
-	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) //
-		m_selection = *m_scene->Root();;
+	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+	{
+		m_selection = {};
 
+	}
+		
 	// Right-click on blank space
 	if (ImGui::BeginPopupContextWindow(0, 1, false))
 	{
@@ -44,17 +46,17 @@ void Fracture::SceneView::render()
 			std::shared_ptr<RelationShipComponent> relation = std::make_shared<RelationShipComponent>(empty->Id);
 			ComponentManager::AddComponent<RelationShipComponent>(relation);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
 				m_scene->addEntity(empty);
-				setSelectEntity(*empty);
+				setSelectEntity(empty);
 			}
 			else
 			{
 				relation->SetParent(m_scene->Root()->Id);
 				m_scene->addEntity(empty);
-				setSelectEntity(*empty);
+				setSelectEntity(empty);
 			}
 			
 		}
@@ -63,130 +65,193 @@ void Fracture::SceneView::render()
 			std::shared_ptr<Entity> entity = EntityFactory::CreatePointlight(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->ChangeParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+		
 		}
 		if (ImGui::MenuItem("Create SpotLight"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSpotlight(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->ChangeParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
 		}
 		if (ImGui::MenuItem("Create Sphere"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSphere(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+			
 		}
 		if (ImGui::MenuItem("Create Cube"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCube(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+			
 		}
 		if (ImGui::MenuItem("Create Plane"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreatePlane(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+			
 		}
 		if (ImGui::MenuItem("Create Suzane"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+			
 		}
 		if (ImGui::MenuItem("Create Cylinder"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCylinder(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+		
 		}
 		if (ImGui::MenuItem("Create Torus"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateTorus(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
 		}
 		if (ImGui::MenuItem("Create Camera"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCamera(m_scene);
 			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
 
-			if (m_selection.Id != NULL)
+			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection.Id);
+				relation->SetParent(m_selection->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
+			}
+			else
+			{
+				relation->SetParent(m_scene->Root()->Id);
+				m_scene->addEntity(entity);
+				setSelectEntity(entity);
 			}
 
-			m_scene->addEntity(entity);
-			setSelectEntity(*entity);
+			
 		}
 		
 		ImGui::EndPopup();
 	}
 }
 
-Fracture::Entity Fracture::SceneView::SelectedEntity()
+std::shared_ptr<Fracture::Entity> Fracture::SceneView::SelectedEntity()
 {
-	return m_selection;
+	if(m_selection)
+		return m_selection;
+	return nullptr;
 }
 
-void Fracture::SceneView::setSelectEntity(Entity selection)
+void Fracture::SceneView::setSelectEntity(std::shared_ptr<Entity> selection)
 {
 	if(selection)
 		m_selection = selection;
@@ -194,110 +259,114 @@ void Fracture::SceneView::setSelectEntity(Entity selection)
 
 void Fracture::SceneView::clearSelection()
 {
-	m_selection = *m_scene->Root();
+	m_selection = {};
 }
 
 void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 {
-	ImVec2 size = ImVec2(16.0f,16.0f);
-	std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity);
+	 
+		ImVec2 size = ImVec2(16.0f,16.0f);
+		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity);
 
-	if (ComponentManager::HasComponent<RelationShipComponent>(entity) && tag)
-	{
-		ImTextureID icon;
-		std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity);
-		ImGuiTreeNodeFlags flags = ((m_selection.Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+		if (ComponentManager::HasComponent<RelationShipComponent>(entity) && tag)
+		{
+			ImTextureID icon;
+			ImGuiTreeNodeFlags flags;
+			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity);
+			
+			flags = ((m_selection && m_selection->Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-		if (relationship->GetChildren().size() == 0)
-		{
-			flags |= ImGuiTreeNodeFlags_Leaf;
-		}
+			if (relationship->GetChildren().size() == 0)
+			{
+				flags |= ImGuiTreeNodeFlags_Leaf;
+			}
 
-		if (ComponentManager::HasComponent<CameraControllerComponent>(entity))
-		{
-			icon = (void*)AssetManager::getTexture("CameraIcon")->id;
+			if (ComponentManager::HasComponent<CameraControllerComponent>(entity))
+			{
+				icon = (void*)AssetManager::getTexture("CameraIcon")->id;
+			}
+			else if (ComponentManager::HasComponent<LightComponent>(entity))
+			{
+				icon = (void*)AssetManager::getTexture("LightIcon")->id;
+			}
+			else
+			{
+				icon = (void*)AssetManager::getTexture("GameObjectIcon")->id;
+			}
+
+			ImGui::Image(icon, size);
+			ImGui::SameLine();
+			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag->Name.c_str());
+
+
+
+			if (ImGui::IsItemClicked())
+			{
+				auto selection = m_scene->GetEntity(entity);
+				setSelectEntity(selection);					
+			}
+
+			bool entityDeleted = false;
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::MenuItem("Delete Entity"))
+				{
+					if (m_selection != NULL)
+					{
+						entityDeleted = true;
+					}
+				}
+				ImGui::EndPopup();
+			}
+
+			if (entityDeleted)
+			{
+				m_scene->Destroy(entity);
+
+				if (m_selection->Id == entity)
+					m_selection = {};
+
+			}
+
+			ImGui::NextColumn();
+			ImGui::SetColumnWidth(1, 30);
+			ImGui::PushID(entity);
+
+			if (tag->isVisible == true)
+			{
+				ImGui::ImageButton((void*)AssetManager::getTexture("EyeIcon")->id, size, ImVec2(0, 0), ImVec2(1, 1), 1);
+				if (ImGui::IsItemClicked(0))
+				{
+					tag->isVisible = !tag->isVisible;
+				}
+			}
+			else
+			{
+				if (ImGui::ImageButton((void*)AssetManager::getTexture("EyeIconC")->id, size, ImVec2(0, 0), ImVec2(1, 1), 1))
+				{
+					tag->isVisible = true;
+				}
+
+			}
+			ImGui::PopID();
+			ImGui::NextColumn();
+			//ImGui::ImageButton(nullptr, size, ImVec2(0, 0), ImVec2(1, 1), 1);
+			//ImGui::NextColumn();
+
+			if (opened)
+			{
+				if (ComponentManager::HasComponent<RelationShipComponent>(entity))
+				{
+					for (auto& child : relationship->GetChildren())
+					{
+
+						DrawEntityNode(child);
+					}
+				}
+				ImGui::TreePop();
+			}
 		}
-		else if (ComponentManager::HasComponent<LightComponent>(entity))
-		{
-			icon = (void*)AssetManager::getTexture("LightIcon")->id;
-		}		
-		else 
-		{
-			icon = (void*)AssetManager::getTexture("GameObjectIcon")->id;
-		}
-		
-		ImGui::Image(icon, size);
-		ImGui::SameLine();
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag->Name.c_str());
 		
 	
-		
-		if (ImGui::IsItemClicked())
-		{
-			m_selection.Id = entity;
-			setSelectEntity(m_selection);
-		}
-
-		bool entityDeleted = false;
-		if (ImGui::BeginPopupContextItem())
-		{
-			if (ImGui::MenuItem("Delete Entity"))
-			{ 
-				if (m_selection != NULL)
-				{
-					entityDeleted = true;
-				}
-			}
-			ImGui::EndPopup();
-		}
-
-		if (entityDeleted)
-		{			
-			m_scene->Destroy(entity);
-			
-			if (m_selection.Id == entity)
-				m_selection = {};
-
-		}
-		
-		ImGui::NextColumn();
-		ImGui::SetColumnWidth(1, 30);
-		ImGui::PushID(entity);
-		
-		if (tag->isVisible == true)
-		{						
-			ImGui::ImageButton((void*)AssetManager::getTexture("EyeIcon")->id, size, ImVec2(0, 0), ImVec2(1, 1), 1);
-			if (ImGui::IsItemClicked(0))
-			{
-				tag->isVisible = !tag->isVisible;
-			}				
-		}
-		else
-		{
-			if (ImGui::ImageButton((void*)AssetManager::getTexture("EyeIconC")->id, size, ImVec2(0, 0), ImVec2(1, 1), 1))
-			{
-				tag->isVisible = true;
-			}
-				
-		}
-		ImGui::PopID();
-		ImGui::NextColumn();
-		//ImGui::ImageButton(nullptr, size, ImVec2(0, 0), ImVec2(1, 1), 1);
-		//ImGui::NextColumn();
-
-		if (opened)
-		{
-			if (ComponentManager::HasComponent<RelationShipComponent>(entity))
-			{
-				for (auto& child : relationship->GetChildren())
-				{
-
-					DrawEntityNode(child);
-				}
-			}
-			ImGui::TreePop();
-		}
-			
-	}
 	
 }

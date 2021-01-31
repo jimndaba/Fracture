@@ -20,11 +20,11 @@ namespace Fracture
 
 		void render() override;
 
-		static Entity SelectedEntity();
-		static void setSelectEntity(Entity selection);
-		static void clearSelection();
+		std::shared_ptr<Fracture::Entity> SelectedEntity();
+		void setSelectEntity(std::shared_ptr<Entity> selection);
+		void clearSelection();
 
-		static Entity m_selection;
+		std::shared_ptr<Entity> m_selection;
 
 	private:
 

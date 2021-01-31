@@ -24,16 +24,22 @@ namespace Fracture
 		Environment,
 	};
 
+	enum class TextureTarget
+	{
+		Texture2D,
+		MultiSample,
+	};
+
 	class Texture
 	{
 	public:
 		Texture(Fracture::TextureType mtype);
 		Texture(std::string name, Fracture::TextureType mtype);
 		Texture(std::string name,int Width, int Height, Fracture::TextureType mtype);
-		Texture(std::string name, int Width, int Height, GLenum internalFormat, GLenum format, GLenum type, Fracture::TextureType mtype);
-
 		Texture(std::string name, int Width, int Height, Fracture::TextureType mtype, void* data);
-		
+		Texture(std::string name, int Width, int Height, TextureTarget TextureTarget ,GLenum internalFormat, GLenum format, GLenum type, Fracture::TextureType mtype);
+		Texture(std::string name, int Width, int Height, GLenum internalFormat, GLenum format, GLenum type, Fracture::TextureType mtype);
+	
 
 		void Bind();
 		void Unbind();
@@ -47,7 +53,7 @@ namespace Fracture
 		GLenum      Type;
 		GLenum		InternalFormat;
 		GLenum		Format;
-
+		TextureTarget mTexturetarget;
 		unsigned char* m_data;
 		int width, height, channel = 0;
 		unsigned int id;
