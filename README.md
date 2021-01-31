@@ -8,34 +8,20 @@ One to two paragraph statement about your product and what it does.
 
 ![](Fracture.jpg)
 
-## Installation
+## Usage
 
-OS X & Linux:
+Sorry as this is my personal project there is no real plan to release this for usage by others. I am currently using this project as a platform to learn C++ and Opengl and games programming. 
 
-```sh
-npm install my-crazy-module --save
-```
 
-Windows:
-
-```sh
-edit autoexec.bat
-```
-
-## Usage example
-
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
-## Development setup
+## Libraries 
 
 Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
 
-```sh
-make install
-npm test
-```
+*Assimp
+*SDL2
+*GLAD
+*Bullet Physics 
+*
 
 ## Release History
 
@@ -44,7 +30,7 @@ npm test
 
 ## Meta
 
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
+Your Name – [@ndabzie](https://twitter.com/ndabzie?s=09)
 
 Distributed under the XYZ license. See ``LICENSE`` for more information.
 
