@@ -3,6 +3,13 @@
 #define COMPONENT_H
 
 #include <cstdint>
+#include <memory>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/common.hpp>
+#include <glm/gtx/transform.hpp> 
+#include <glm/gtc/quaternion.hpp>
+
+#include "glm/glm.hpp"
 #include "Rendering/ISceneProbe.h"
 
 namespace Fracture

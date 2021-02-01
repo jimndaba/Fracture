@@ -391,8 +391,10 @@ void Fracture::Editor::onRender()
     if (showPhysicsConfig) showPhysicsManager(&showPhysicsConfig);
     if (showInputConfig) showInputManager(&showInputConfig);
     if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
-    m_ComponentManager->onDebugDraw();
+
+
     Render();   
+
     m_frame->end(); 
     m_window->swapBuffers();
 }

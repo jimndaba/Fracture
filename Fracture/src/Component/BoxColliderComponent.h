@@ -4,7 +4,6 @@
 
 #include "Component/Component.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
-#include <memory>
 #include "Physics/PhysicsUtility.h"
 
 namespace Fracture
@@ -16,11 +15,11 @@ namespace Fracture
 
 	public:
 		BoxColliderComponent(uint32_t id,float _x, float _y, float _z);
-		~BoxColliderComponent();
+		~BoxColliderComponent() = default;
 
 		virtual void onStart();
 
-		btBoxShape* m_boxCollider;
+		std::shared_ptr<btBoxShape> m_boxCollider;
 		btTransform m_Transform;
 		float X, Y, Z;
 

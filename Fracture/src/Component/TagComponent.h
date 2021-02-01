@@ -14,7 +14,7 @@ namespace Fracture
 	public:
 		TagComponent(uint32_t entityID);
 		TagComponent(uint32_t entityID,const std::string& name);
-		~TagComponent();
+		~TagComponent() = default;
 
 		virtual void onStart();
 

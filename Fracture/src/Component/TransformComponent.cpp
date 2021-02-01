@@ -4,23 +4,19 @@
 #include "Entity/Entity.h"
 #include <glm\gtx\quaternion.hpp>
 
-Fracture::TransformComponent::TransformComponent(uint32_t entityID):Component(entityID,ComponentType::Transform)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID):Component(entityID,ComponentType::Transform),
+m_Position(glm::vec3(0.0f, 0.0f, 0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f))
 {
-	m_Position = glm::vec3(0.0f,0.0f,0.0f);
-	m_Scale = glm::vec3(1.0f);
-	m_Rotation = glm::vec3(0.0f);
 }
 
-Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform),m_Position(pos)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos): Component(entityID, ComponentType::Transform),
+m_Position(pos),m_Scale(glm::vec3(1.0f)),m_Rotation(glm::vec3(0.0f))
 {
-	m_Scale = glm::vec3(1.0f);
-	m_Rotation = glm::vec3(0.0f);
 }
 
-Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos,glm::vec3 scale) : Component(entityID, ComponentType::Transform)
-,m_Position(pos),m_Scale(scale)
+Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale) : Component(entityID, ComponentType::Transform)
+, m_Position(pos), m_Scale(scale), m_Rotation(glm::vec3(0.0f))
 {
-	m_Rotation = glm::vec3(0.0f);
 }
 
 Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale,glm::vec3 rotation) : Component(entityID, ComponentType::Transform)
@@ -28,9 +24,6 @@ Fracture::TransformComponent::TransformComponent(uint32_t entityID, glm::vec3 po
 {
 }
 
-Fracture::TransformComponent::~TransformComponent()
-{
-}
 
 void Fracture::TransformComponent::onStart()
 {

@@ -3,7 +3,7 @@
 #define SCRIPTCOMPONENT_H
 
 #include "Component.h"
-#include <memory>
+
 
 namespace Fracture
 {
@@ -14,11 +14,9 @@ namespace Fracture
 
 	public:
 		ScriptComponent(uint32_t id, std::shared_ptr<GameLogic>  script);
-		~ScriptComponent();
-
+		~ScriptComponent() = default;
 
 		virtual void onStart();
-
 		std::shared_ptr<GameLogic> GetScript();
 		void Accept(ISceneProbe* visitor) override;
 

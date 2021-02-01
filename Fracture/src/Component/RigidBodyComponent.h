@@ -5,8 +5,6 @@
 #include "Component/Component.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 #include "Physics/CollisionFilter.h"
-#include <memory>
-#include "glm/glm.hpp"
 #include "Physics/PhysicsUtility.h"
 
 namespace Fracture
@@ -17,24 +15,24 @@ namespace Fracture
 
 	public:
 
-		RigidBodyComponent(uint32_t id,float _mass);
-		~RigidBodyComponent();
+		RigidBodyComponent(uint32_t id,const float& _mass);
+		~RigidBodyComponent() = default;
 
 		float Mass;
-
-
-		btRigidBody* m_rigid;
-		btTransform m_Transform;
+		std::shared_ptr<btRigidBody> m_rigid;
+		std::shared_ptr<btTransform> m_Transform;
+		std::shared_ptr<btDefaultMotionState> myMotionState;
+		std::shared_ptr<btCollisionShape> boxCollider;
 
 		CollisionGroup collisionGroup;
 		CollisionMask collisionMask;
 
 		virtual void onStart();
-		void setMass(float mass);
-		void setVelocity(glm::vec3 velocity);
-		void setPosition(glm::vec3 pos);
-		void setRotation(glm::vec3 rot);
-		void Translate(glm::vec3 position);
+		void setMass(const float& mass);
+		void setVelocity(const glm::vec3& velocity);
+		void setPosition(const glm::vec3& pos);
+		void setRotation(const glm::vec3& rot);
+		void Translate(const glm::vec3& position);
 		void Accept(ISceneProbe* visitor) override;
 	};
 

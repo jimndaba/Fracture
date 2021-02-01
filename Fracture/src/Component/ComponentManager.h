@@ -167,7 +167,7 @@ namespace Fracture
 	{
 	public:
 		ComponentManager();
-		~ComponentManager();
+		~ComponentManager() = default;
 
 		void onInit();
 
@@ -175,19 +175,19 @@ namespace Fracture
 
 		static void onUpdate(float dt);
 
-		static void onDebugDraw();
-
 		static void ClearComponents();
 	
 		template< class T, typename... Args >
 		static void AddComponent(uint32_t entity, Args&&... params);
+		
 		template< class T>
 		static void AddComponent(const std::shared_ptr<Component>& component);
 
 		template<class T>
 		static void RemoveComponent(const uint32_t& id);
+		
 		static void RemoveComponentsbyID(const uint32_t& id);
-		//static void RemoveComponent(std::shared_ptr<Component> component);
+		
 		template<class T>
 		static void RemoveComponent(const std::shared_ptr<T>& component);
 
@@ -204,21 +204,19 @@ namespace Fracture
 		static bool HasComponent(uint32_t id);
 	
 	private:
-		//static std::vector<std::shared_ptr<Component>> m_Components;
-
 		
-		static std::shared_ptr<ComponentSet> m_tagComponents;
-		static std::shared_ptr<ComponentSet> m_RelationshipComponents;
-		static std::shared_ptr<ComponentSet> m_TransformerComponents;
-		static std::shared_ptr<ComponentSet> m_CameraControllerComponents;
-		static std::shared_ptr<ComponentSet> m_RenderComponents;
-		static std::shared_ptr<ComponentSet> m_LightComponents;
-		static std::shared_ptr<ComponentSet> m_RigidBodyComponents;
-		static std::shared_ptr<ComponentSet> m_BoxColliderComponents;
-		static std::shared_ptr<ComponentSet> m_ScriptComponents;
-		static std::shared_ptr<ComponentSet> m_BillboardComponents;
+		static std::unique_ptr<ComponentSet> m_tagComponents;
+		static std::unique_ptr<ComponentSet> m_RelationshipComponents;
+		static std::unique_ptr<ComponentSet> m_TransformerComponents;
+		static std::unique_ptr<ComponentSet> m_CameraControllerComponents;
+		static std::unique_ptr<ComponentSet> m_RenderComponents;
+		static std::unique_ptr<ComponentSet> m_LightComponents;
+		static std::unique_ptr<ComponentSet> m_RigidBodyComponents;
+		static std::unique_ptr<ComponentSet> m_BoxColliderComponents;
+		static std::unique_ptr<ComponentSet> m_ScriptComponents;
+		static std::unique_ptr<ComponentSet> m_BillboardComponents;
 
-		static std::map<std::type_index, std::shared_ptr<ComponentSet>> Register;
+		static std::map<std::type_index, std::unique_ptr<ComponentSet>> Register;
 	};
 
 	template<class T, typename ...Args>

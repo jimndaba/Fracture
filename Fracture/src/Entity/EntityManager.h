@@ -14,7 +14,7 @@ namespace Fracture
 
 	public:
 		EntityManager();
-		~EntityManager();		
+		~EntityManager() = default;		
 		
 
 		template <class T>

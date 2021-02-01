@@ -5,10 +5,6 @@ Fracture::ScriptComponent::ScriptComponent(uint32_t id, std::shared_ptr<GameLogi
 {
 }
 
-Fracture::ScriptComponent::~ScriptComponent()
-{
-}
-
 void Fracture::ScriptComponent::onStart()
 {
 }

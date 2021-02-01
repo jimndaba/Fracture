@@ -531,7 +531,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		if (exists(j, "Rigidbody Component"))
 		{
 			auto rigidbodyComponent = j["Rigidbody Component"];
-			int mass = rigidbodyComponent["Mass"];
+			float mass = rigidbodyComponent["Mass"];
 			std::shared_ptr<RigidBodyComponent> component = std::make_shared<RigidBodyComponent>(entity->Id, mass);
 			ComponentManager::AddComponent<RigidBodyComponent>(component);
 		}

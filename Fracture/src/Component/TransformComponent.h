@@ -3,12 +3,7 @@
 #define TRANSFORM_H
 
 #include "Component/Component.h"
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/common.hpp>
-#include <glm/gtx/transform.hpp> 
-#include <glm/gtc/quaternion.hpp>
 #include "ITransform.h"
-#include <cstdint>
 
 namespace Fracture
 {
@@ -19,7 +14,7 @@ namespace Fracture
 		TransformComponent(uint32_t entityID, glm::vec3 pos);
 		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale);
 		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale, glm::vec3 rotation);
-		~TransformComponent();
+		~TransformComponent()  = default ;
 
 		virtual void onStart();
 

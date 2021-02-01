@@ -10,10 +10,6 @@ Name(name)
 {
 }
 
-Fracture::TagComponent::~TagComponent()
-{
-}
-
 void Fracture::TagComponent::onStart()
 {
 }

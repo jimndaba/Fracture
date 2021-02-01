@@ -185,7 +185,7 @@ void Fracture::PhysicsManager::startPhysics()
 		{
 			if (!(std::find(rigid_ids.begin(), rigid_ids.end(), c->EntityID) != rigid_ids.end()))
 			{
-				AddRigidBody(c->EntityID, c->m_rigid, c->collisionGroup, c->collisionMask);
+				AddRigidBody(c->EntityID, c->m_rigid.get(), c->collisionGroup, c->collisionMask);
 			}
 		}			
 	}
@@ -196,7 +196,7 @@ void Fracture::PhysicsManager::startPhysics()
 		{
 			if (!(std::find(collision_ids.begin(), collision_ids.end(), c->EntityID) != collision_ids.end()))
 			{
-				AddCollider(c->EntityID, c->m_boxCollider);
+				AddCollider(c->EntityID, c->m_boxCollider.get());
 			}
 		}		
 	}
