@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "Mesh.h"
 #include "Logging/Logger.h"
+#include "AssetManager/AssetManager.h"
 
 Fracture::Model::Model()
 {
@@ -24,6 +25,19 @@ void Fracture::Model::addMesh(std::shared_ptr<Mesh> mesh)
 void Fracture::Model::addMaterial(std::shared_ptr<Material> material)
 {
 	m_materials.push_back(material);
+}
+
+void Fracture::Model::SetMaterial(const std::string& oldMaterial ,const std::shared_ptr<Material>& material)
+{
+	for (auto mat : m_materials)
+	{
+		if (mat->Name == oldMaterial)
+		{
+			mat = material;
+		}
+
+		FRACTURE_INFO("material name now is: {}", mat->Name);
+	}
 }
 
 std::shared_ptr<Fracture::Mesh> Fracture::Model::GetMesh(std::string name)

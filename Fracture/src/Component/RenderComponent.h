@@ -19,7 +19,7 @@ namespace Fracture
 
 		virtual void onStart();
 		
-		void SetMaterial(const std::string& name);
+		void SetMaterial(const std::string& oldmaterial, const std::string& newmaterial);
 		std::shared_ptr<Material> GetMaterial();
 		
 		void SetModel(const std::string& name);

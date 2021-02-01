@@ -2,6 +2,7 @@
 #include <imgui/imgui_internal.h>
 #include "../utils/FileDialogue.h"
 #include "Math/Math.h"
+#include "../Factories/MaterialFactory.h"
 
 Fracture::AssetBrowserPanel::AssetBrowserPanel():Panel("AssetBrowser")
 {
@@ -126,8 +127,7 @@ void Fracture::AssetBrowserPanel::render()
         { 
             if (!name.empty())
             {
-                std::shared_ptr<Material> material = std::make_shared<Material>(name, AssetManager::getShader("default"));
-
+                std::shared_ptr<Material> material = MaterialFactory::PBRMaterial(name);
                 AssetManager::AddMaterial(name, material);
                 ImGui::CloseCurrentPopup();
             }            

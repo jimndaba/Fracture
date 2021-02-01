@@ -16,7 +16,7 @@ namespace Fracture
 		~MaterialFactory();
 
 		static std::shared_ptr<Material> OpaqueMaterial();
-		static std::shared_ptr<Material> PBRMaterial();
+		static std::shared_ptr<Material> PBRMaterial(const std::string& name);
 	};
 
 }

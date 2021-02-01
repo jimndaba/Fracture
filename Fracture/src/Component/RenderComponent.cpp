@@ -13,9 +13,9 @@ void Fracture::RenderComponent::onStart()
 {
 }
 
-void Fracture::RenderComponent::SetMaterial(const std::string& name)
+void Fracture::RenderComponent::SetMaterial(const std::string& oldmaterial ,const std::string& name)
 {
-	m_material = AssetManager::getMaterial(name);
+	m_model->SetMaterial(oldmaterial, AssetManager::getMaterial( name));
 }
 
 std::shared_ptr<Fracture::Material> Fracture::RenderComponent::GetMaterial()

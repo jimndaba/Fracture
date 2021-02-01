@@ -89,6 +89,29 @@ namespace Fracture
 	public:
 		Material(std::string name, std::shared_ptr<Shader> shader);
 		~Material();
+
+
+        Material(const Material& material2) 
+        { 
+            m_CastShadows = material2.m_CastShadows;
+            m_isOutlined = material2.m_isOutlined;
+            m_IsTransparent = material2.m_IsTransparent;
+            m_shader = material2.m_shader;
+            m_SamplerUniforms = material2.m_SamplerUniforms;
+            m_Uniforms = material2.m_Uniforms;
+        }
+
+        const Material& operator = (const Material& material2)
+        {
+            m_CastShadows = material2.m_CastShadows;
+            m_isOutlined = material2.m_isOutlined;
+            m_IsTransparent = material2.m_IsTransparent;
+            m_shader = material2.m_shader;
+            m_SamplerUniforms = material2.m_SamplerUniforms;
+            m_Uniforms = material2.m_Uniforms;
+            return *this;
+        }
+
 		std::shared_ptr<Shader> getShader();
         void setShader(std::string shader);
         void use();

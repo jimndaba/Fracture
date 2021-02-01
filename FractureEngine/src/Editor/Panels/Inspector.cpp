@@ -144,14 +144,15 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			// Model can have more that 1 material
 			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 			
-			for (auto material : render->GetModel()->GetMaterials())
+			for (auto material : render->GetModel()->GetMaterials())//
 			{
 				
-				bool open = ImGui::TreeNodeEx(material->Name.c_str(), treeNodeFlags, material->Name.c_str());//(void*)typeid(material).hash_code()
+				bool open = ImGui::TreeNodeEx(material->Name.c_str(), treeNodeFlags, material->Name.c_str());
 				std::string current_Material = material->Name;
-				material->SetIsOutlined(true);
+
 				if (open)
 				{			
+					
 					if (ImGui::BeginCombo("Material", current_Material.c_str()))
 					{
 
@@ -161,8 +162,9 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 							if (ImGui::Selectable(nMaterial.first.c_str(), is_selected))
 							{
+								render->SetMaterial(current_Material, nMaterial.first);
 								current_Material = nMaterial.first;
-								render->SetMaterial(nMaterial.first);
+							
 							}
 
 							if (is_selected)
@@ -180,8 +182,6 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					bool castShadows = material->CastShadows();
 					DrawBoolControl("Cast Shadows", castShadows);
 					material->setCastShadows(castShadows);
-
-
 
 					if (ImGui::Button("reload", ImVec2(100, 20)))
 					{

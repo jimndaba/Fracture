@@ -22,6 +22,7 @@ namespace Fracture
 		void addMesh(std::shared_ptr<Mesh> mesh);
 		void addMaterial(std::shared_ptr<Material> material);
 
+		void SetMaterial(const std::string& oldMaterial,const std::shared_ptr<Material>& material);
 
 		std::string Name;
 		std::string Path;

@@ -649,6 +649,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const std
 std::shared_ptr<Fracture::Material> Fracture::AssetManager::loadMeshMaterial(aiMaterial* material)
 {	
 	//std::string materialName = material->GetName().data;
+
 	std::shared_ptr<Material> m_material = std::make_shared<Material>(material->GetName().data, getShader("PBRTexturedShader"));
 	ImportMaterial(material, m_material);	
 	//AddMaterial(material->GetName().data, m_material);
