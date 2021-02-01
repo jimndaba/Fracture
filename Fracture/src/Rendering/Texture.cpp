@@ -1,5 +1,6 @@
 #include "Texture.h"
 
+
 Fracture::Texture::Texture(Fracture::TextureType Type):textureType(Type), mTexturetarget(TextureTarget::Texture2D)
 {
 	glGenTextures(1, &id);

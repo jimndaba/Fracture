@@ -149,10 +149,10 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 	{
 		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->Id);
 		json c;
-		c["Model"] = component->m_model->Name;
+		c["Model"] = component->GetModel()->Name;
 		json serialised_materials = json::array_t();
 
-		for (auto material : component->m_model->GetMaterials())
+		for (auto material : component->GetModel()->GetMaterials())
 		{
 			json m;
 			m["Material Name"] = material->Name;

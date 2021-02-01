@@ -3,8 +3,6 @@
 #define RELATIONSHIPCOMPONENT_H
 
 #include "Component.h"
-#include <memory>
-#include <vector>
 
 namespace Fracture
 {
@@ -15,16 +13,16 @@ namespace Fracture
 
 	public: 
 		RelationShipComponent(uint32_t id);
-		~RelationShipComponent();
+		~RelationShipComponent() = default;
 
 		virtual void onStart();
 
 		uint32_t noChildren = 0;
 		uint32_t m_parent;
-		void SetParent(uint32_t parent);
-		void ChangeParent(uint32_t parent);
-		void AddChild(uint32_t child);
-		void RemoveChild(uint32_t child);
+		void SetParent(const uint32_t& parent);
+		void ChangeParent(const uint32_t& parent);
+		void AddChild(const uint32_t& child);
+		void RemoveChild(const uint32_t& child);
 		std::vector<uint32_t> GetChildren();
 
 		bool hasChildren();

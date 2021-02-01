@@ -1,16 +1,11 @@
 #include "RenderComponent.h"
+#include "AssetManager/AssetManager.h"
 #include "Rendering/Model.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Material.h"
-#include "AssetManager/AssetManager.h"
-#include "Rendering/DrawCommand.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model):Component(entityID,ComponentType::Render),m_model(model)
-{
-	m_Rendertype = RenderType::Normal;
-}
-
-Fracture::RenderComponent::~RenderComponent()
+Fracture::RenderComponent::RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model):Component(entityID,ComponentType::Render),
+m_model(model)
 {
 }
 
@@ -33,14 +28,9 @@ void Fracture::RenderComponent::SetModel(const std::string& name)
 	m_model = AssetManager::getModel(name);
 }
 
-void Fracture::RenderComponent::SetRenderType(RenderType m_type)
+std::shared_ptr<Fracture::Model> Fracture::RenderComponent::GetModel() const
 {
-	m_Rendertype = m_type;
-}
-
-Fracture::RenderType Fracture::RenderComponent::getRenderType()
-{
-	return m_Rendertype;
+	return m_model;
 }
 
 void Fracture::RenderComponent::Accept(ISceneProbe* visitor)

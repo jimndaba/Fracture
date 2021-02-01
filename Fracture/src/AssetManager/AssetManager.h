@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include <string>
-#include <GLAD/glad.h>
+
 
 namespace Fracture
 {

@@ -77,38 +77,15 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, std::shared_ptr<Frac
 	{
 		m_Shadowcommands.push_back(std::move(command));
 	}
-
-	//std::map<std::string, std::shared_ptr<RenderBatch>>::iterator it = m_batches.find(material->Name);	
-	//if (it != m_batches.end())
-	//{		
-	//	m_batches[material->Name]->m_commnads.push_back(command);
-	//}
-	//else
-	//{			
-	//	std::shared_ptr<RenderBatch> batch = std::make_shared<RenderBatch>();
-	//	m_batches[material->Name] = batch;
-	//	batch->m_commnads.push_back(command);
-	//}
-
 }
 
 void Fracture::RenderBucket::sort()
 {
-	//for (auto batches : m_batches)
-	//{
-	//	std::sort(batches.second->m_commnads.begin(), batches.second->m_commnads.end(),renderSortforward);
-	//}
-
 	std::sort(m_Frowardcommands.begin(), m_Frowardcommands.end(), renderSortforward);
 }
 
 void Fracture::RenderBucket::clear()
-{
-	//for (auto batches : m_batches)
-	//{
-	//	batches.second->m_commnads.clear();
-	//}
-	//m_batches.clear();
+{	
 	m_Alphacommands.clear();
 	m_Frowardcommands.clear();
 	m_Shadowcommands.clear();

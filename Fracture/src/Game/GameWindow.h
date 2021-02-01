@@ -2,9 +2,10 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
-#include <SDL2/SDL.h>
+
 #include <iostream>
 #include <string>
+#include <SDL2/SDL.h>
 #include "GLAD/glad.h"
 
 namespace Fracture

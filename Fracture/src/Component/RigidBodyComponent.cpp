@@ -2,14 +2,11 @@
 #include "ComponentManager.h"
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
-#include <glm/gtx/transform.hpp> 
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 
-
-Fracture::RigidBodyComponent::RigidBodyComponent(uint32_t id,const float& _mass):Component(id,ComponentType::Rigidbody),Mass(_mass)
+Fracture::RigidBodyComponent::RigidBodyComponent(uint32_t id,const float& _mass):Component(id,ComponentType::Rigidbody),
+Mass(_mass),
+m_Transform(std::make_shared<btTransform>())
 {
-	m_Transform = std::make_shared<btTransform>();
 	m_Transform->setIdentity();
 	glm::vec3 position = ComponentManager::GetComponent<TransformComponent>(id)->Position();
 	m_Transform->setOrigin(btVector3(position.x, position.y, position.z));

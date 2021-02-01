@@ -11,6 +11,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 #include <assimp/pbrmaterial.h>
+#include <GLAD/glad.h>
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
 

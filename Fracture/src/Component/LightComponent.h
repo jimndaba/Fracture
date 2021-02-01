@@ -4,7 +4,7 @@
 
 #include "Component.h"
 #include "ILight.h"
-#include <memory>
+
 
 namespace Fracture
 {
@@ -14,24 +14,22 @@ namespace Fracture
 
 	public:
 		LightComponent(uint32_t id,LightType lightType);
-		~LightComponent();
+		~LightComponent() = default;
 
 		virtual void onStart();
 
-		virtual void OnDebug();
-
-		void SetAmbient(glm::vec4 amb);
-		void SetDiffuse(glm::vec4 diff);
-		void SetSpecular(glm::vec4 spec);
-		void SetPosition(glm::vec3 pos);
-		void SetDirection(glm::vec3 rot);	
-		void SetConstant(float constant);
-		void SetLinear(float linear);
-		void SetQuadratic(float quad);
-		void SetCutoff(float coff);
-		void SetOuterCutOff(float outer);
-		void SetIntensity(float value);
-		void SetRadiance(glm::vec3 value);
+		void SetAmbient(const glm::vec4& amb);
+		void SetDiffuse(const glm::vec4& diff);
+		void SetSpecular(const glm::vec4& spec);
+		void SetPosition(const glm::vec3& pos);
+		void SetDirection(const glm::vec3& rot);
+		void SetConstant(const float& constant);
+		void SetLinear(const float&  linear);
+		void SetQuadratic(const float& quad);
+		void SetCutoff(const float& coff);
+		void SetOuterCutOff(const float& outer);
+		void SetIntensity(const float& value);
+		void SetRadiance(const glm::vec3& value);
 
 		glm::vec4 GetAmbient();
 		glm::vec4 GetDiffuse();

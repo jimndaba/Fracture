@@ -2,7 +2,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <GLAD/glad.h>
+
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>
@@ -11,6 +11,7 @@
 #include "Game/GameWindow.h"
 #include "Event/Event.h"
 #include "Event/WindowEvents.h"
+#include <GLAD/glad.h>
 
 namespace Fracture
 {
@@ -63,8 +64,6 @@ namespace Fracture
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 		void Draw(DrawCommand command);
 		void EndFrame();
-
-		void SetPickingPass(PickingPass* pass);
 
 		void clear();
 		void clearColor(float r, float g, float b);

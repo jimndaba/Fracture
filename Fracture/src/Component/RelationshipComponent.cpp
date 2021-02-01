@@ -1,13 +1,8 @@
 #include "RelationshipComponent.h"
 #include "Component/ComponentManager.h"
-#include "Logging/Logger.h"
 #include "Entity/Entity.h"
 
 Fracture::RelationShipComponent::RelationShipComponent(uint32_t id):Component(id,ComponentType::Relationship)
-{
-}
-
-Fracture::RelationShipComponent::~RelationShipComponent()
 {
 }
 
@@ -15,7 +10,7 @@ void Fracture::RelationShipComponent::onStart()
 {
 }
 
-void Fracture::RelationShipComponent::SetParent(uint32_t parent){
+void Fracture::RelationShipComponent::SetParent(const uint32_t& parent){
 
 	hasParent = true;
 	m_parent = parent;
@@ -23,7 +18,7 @@ void Fracture::RelationShipComponent::SetParent(uint32_t parent){
 	component.AddChild(EntityID);
 }
 
-void Fracture::RelationShipComponent::ChangeParent(uint32_t parent)
+void Fracture::RelationShipComponent::ChangeParent(const uint32_t& parent)
 {
 	RelationShipComponent& component = *ComponentManager::GetComponent<RelationShipComponent>(m_parent);
 	component.RemoveChild(EntityID);
@@ -32,7 +27,7 @@ void Fracture::RelationShipComponent::ChangeParent(uint32_t parent)
 	newcomponent.AddChild(EntityID);
 }
 
-void Fracture::RelationShipComponent::AddChild(uint32_t child)
+void Fracture::RelationShipComponent::AddChild(const uint32_t& child)
 {
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -47,7 +42,7 @@ void Fracture::RelationShipComponent::AddChild(uint32_t child)
 	m_children.push_back(child);
 }
 
-void Fracture::RelationShipComponent::RemoveChild(uint32_t child)
+void Fracture::RelationShipComponent::RemoveChild(const uint32_t& child)
 {
 	auto it = std::find_if(std::begin(m_children), std::end(m_children), [child](uint32_t p) { return p == child; });
 

@@ -116,7 +116,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	{
 
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
-			std::string current_Model = render->m_model->Name;		
+			std::string current_Model = render->GetModel()->Name;		
 			//std::string current_Shader = render->material->getShader()->Name;
 
 			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
@@ -144,7 +144,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			// Model can have more that 1 material
 			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 			
-			for (auto material : render->m_model->GetMaterials())
+			for (auto material : render->GetModel()->GetMaterials())
 			{
 				
 				bool open = ImGui::TreeNodeEx(material->Name.c_str(), treeNodeFlags, material->Name.c_str());//(void*)typeid(material).hash_code()
@@ -175,13 +175,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 					bool isTransparent = material->IsTransparent();
 					DrawBoolControl("Is Transparent", isTransparent);
-					material->setIsTransparent(isTransparent);
-
-					
+					material->setIsTransparent(isTransparent);					
 
 					bool castShadows = material->CastShadows();
 					DrawBoolControl("Cast Shadows", castShadows);
 					material->setCastShadows(castShadows);
+
+
 
 					if (ImGui::Button("reload", ImVec2(100, 20)))
 					{

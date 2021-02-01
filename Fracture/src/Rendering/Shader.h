@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 
+
 namespace Fracture {
 
 	class Texture;

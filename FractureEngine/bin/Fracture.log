@@ -1,511 +1,184 @@
-[10:07:02] [info] FRACTURE: Initializing Splash
-[10:07:02] [info] FRACTURE: OpenGL loaded
-[10:07:02] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:07:02] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:07:02] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[10:07:02] [trace] FRACTURE: Loaded Texture: splash
-[10:07:02] [trace] FRACTURE: Loaded Texture: title
-[10:07:02] [info] FRACTURE: Completed Init
-[10:07:02] [info] FRACTURE: Show Splash
-[10:16:02] [info] FRACTURE: OpenGL loaded
-[10:16:02] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:16:02] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:16:02] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[10:16:02] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[10:16:02] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: RotateIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: CameraIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: LightIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: EyeIcon
-[10:16:02] [trace] FRACTURE: Loaded Texture: EyeIconC
-[10:16:02] [trace] FRACTURE: Loaded Texture: MeshIcon
-[10:16:02] [trace] FRACTURE: Loaded HDR Environment: Loft
-[10:16:02] [trace] FRACTURE: Loaded Shader: CubeMap
-[10:16:02] [trace] FRACTURE: Loaded Shader: irradiance
-[10:16:02] [trace] FRACTURE: Loaded Shader: prefilter
-[10:16:02] [trace] FRACTURE: Loaded Shader: bdrf
-[10:16:02] [trace] FRACTURE: Loaded Shader: Skybox
-[10:16:02] [trace] FRACTURE: Loaded Shader: DebugShader
-[10:16:02] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[10:16:02] [trace] FRACTURE: Loaded Shader: BillboardShader
-[10:16:02] [trace] FRACTURE: Loaded Shader: DepthShader
-[10:16:03] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[10:16:03] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[10:16:03] [trace] FRACTURE: Loaded Shader: PickingShader
-[10:16:03] [trace] FRACTURE: Loaded Shader: default
-[10:16:03] [trace] FRACTURE: Loaded Shader: Outline
-[10:16:03] [trace] FRACTURE: Loaded Shader: InvertColor
-[10:16:03] [trace] FRACTURE: Loaded Shader: ToneMap
-[10:16:03] [trace] FRACTURE: Loaded Shader: Threshold
-[10:16:03] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[10:16:03] [trace] FRACTURE: Loaded Shader: ColorMap
-[10:16:03] [trace] FRACTURE: Loaded Shader: BoxBlur
-[10:16:03] [trace] FRACTURE: Loaded Shader: DepthPass
-[10:16:03] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[10:16:03] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[10:16:03] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[10:16:03] [trace] FRACTURE: Loaded Material: billboardIcons
-[10:16:03] [trace] FRACTURE: Loaded Material: DebugMaterial
-[10:16:03] [trace] FRACTURE: Loaded Material: DepthMaterial
-[10:16:03] [trace] FRACTURE: Loaded Material: PickingMaterial
-[10:16:03] [trace] FRACTURE: Loaded Material: Outline
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: loading Child: Plane
-[10:16:03] [trace] FRACTURE: loading Mesh: Plane
-[10:16:03] [trace] FRACTURE: Loaded model: Plane
-[10:16:03] [trace] FRACTURE: loading Child: Cube
-[10:16:03] [trace] FRACTURE: loading Mesh: Cube
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: Loaded model: Cube
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: loading Child: Sphere
-[10:16:03] [trace] FRACTURE: loading Mesh: Sphere
-[10:16:03] [trace] FRACTURE: Loaded model: Sphere
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: loading Child: Cylinder
-[10:16:03] [trace] FRACTURE: loading Mesh: Cylinder
-[10:16:03] [trace] FRACTURE: Loaded model: Cylinder
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: loading Child: Torus
-[10:16:03] [trace] FRACTURE: loading Mesh: Torus
-[10:16:03] [trace] FRACTURE: Loaded model: Torus
-[10:16:03] [trace] FRACTURE: loading Child: Light
-[10:16:03] [trace] FRACTURE: loading Child: Camera
-[10:16:03] [trace] FRACTURE: loading Child: Suzanne
-[10:16:03] [trace] FRACTURE: loading Mesh: Suzanne
-[10:16:03] [trace] FRACTURE: Loaded model: Suzane
-[10:16:03] [info] FRACTURE: Renderer Init
-[10:16:05] [info] FRACTURE: width: 1300
-[10:16:05] [info] FRACTURE: height: 905
-[10:16:05] [info] FRACTURE: width: 1300
-[10:16:05] [info] FRACTURE: height: 905
-[10:16:05] [info] FRACTURE: width: 1300
-[10:16:05] [info] FRACTURE: height: 905
-[10:16:12] [info] FRACTURE: Out of Bounds
-[10:16:15] [info] FRACTURE: width: 1300
-[10:16:15] [info] FRACTURE: height: 905
-[10:16:15] [info] FRACTURE: width: 1300
-[10:16:15] [info] FRACTURE: height: 905
-[10:16:15] [info] FRACTURE: width: 1300
-[10:16:15] [info] FRACTURE: height: 905
-[10:16:15] [info] FRACTURE: width: 1300
-[10:16:15] [info] FRACTURE: height: 905
-[10:16:15] [info] FRACTURE: width: 1300
-[10:16:15] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:16] [info] FRACTURE: width: 1300
-[10:16:16] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:17] [info] FRACTURE: width: 1300
-[10:16:17] [info] FRACTURE: height: 905
-[10:16:20] [info] FRACTURE: Out of Bounds
-[10:16:21] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
-[10:16:22] [info] FRACTURE: width: 1300
-[10:16:22] [info] FRACTURE: height: 905
-[10:16:22] [info] FRACTURE: width: 1300
-[10:16:22] [info] FRACTURE: height: 905
-[10:16:22] [info] FRACTURE: width: 1300
-[10:16:22] [info] FRACTURE: height: 905
-[10:16:23] [info] FRACTURE: width: 1300
-[10:16:23] [info] FRACTURE: height: 905
-[10:16:23] [info] FRACTURE: width: 1300
-[10:16:23] [info] FRACTURE: height: 905
-[10:16:23] [info] FRACTURE: width: 1300
-[10:16:23] [info] FRACTURE: height: 905
-[10:16:23] [info] FRACTURE: width: 1300
-[10:16:23] [info] FRACTURE: height: 905
-[10:16:23] [info] FRACTURE: width: 1300
-[10:16:23] [info] FRACTURE: height: 905
-[10:16:31] [info] FRACTURE: width: 1300
-[10:16:31] [info] FRACTURE: height: 905
-[10:16:31] [info] FRACTURE: width: 1300
-[10:16:31] [info] FRACTURE: height: 905
-[10:16:33] [info] FRACTURE: Out of Bounds
-[10:16:34] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:36] [info] FRACTURE: width: 1300
-[10:16:36] [info] FRACTURE: height: 905
-[10:16:37] [info] FRACTURE: width: 1300
-[10:16:37] [info] FRACTURE: height: 905
-[10:16:37] [info] FRACTURE: width: 1300
-[10:16:37] [info] FRACTURE: height: 905
-[10:16:37] [info] FRACTURE: width: 1300
-[10:16:37] [info] FRACTURE: height: 905
-[10:16:37] [info] FRACTURE: width: 1300
-[10:16:37] [info] FRACTURE: height: 905
-[10:16:42] [info] FRACTURE: width: 1300
-[10:16:42] [info] FRACTURE: height: 905
-[10:16:42] [info] FRACTURE: width: 1300
-[10:16:42] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:43] [info] FRACTURE: width: 1300
-[10:16:43] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:44] [info] FRACTURE: width: 1300
-[10:16:44] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:45] [info] FRACTURE: width: 1300
-[10:16:45] [info] FRACTURE: height: 905
-[10:16:46] [info] FRACTURE: width: 1300
-[10:16:46] [info] FRACTURE: height: 905
-[10:16:46] [info] FRACTURE: width: 1300
-[10:16:46] [info] FRACTURE: height: 905
-[10:16:46] [info] FRACTURE: width: 1300
-[10:16:46] [info] FRACTURE: height: 905
-[10:16:46] [info] FRACTURE: width: 1300
-[10:16:46] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:47] [info] FRACTURE: width: 1300
-[10:16:47] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:48] [info] FRACTURE: width: 1300
-[10:16:48] [info] FRACTURE: height: 905
-[10:16:50] [info] FRACTURE: width: 1300
-[10:16:50] [info] FRACTURE: height: 905
-[10:16:50] [info] FRACTURE: width: 1300
-[10:16:50] [info] FRACTURE: height: 905
-[10:16:50] [info] FRACTURE: width: 1300
-[10:16:50] [info] FRACTURE: height: 905
-[10:16:50] [info] FRACTURE: width: 1300
-[10:16:50] [info] FRACTURE: height: 905
-[10:16:51] [info] FRACTURE: width: 1300
-[10:16:51] [info] FRACTURE: height: 905
-[10:16:51] [info] FRACTURE: width: 1300
-[10:16:51] [info] FRACTURE: height: 905
-[10:16:51] [info] FRACTURE: width: 1300
-[10:16:51] [info] FRACTURE: height: 905
-[10:16:51] [info] FRACTURE: width: 1300
-[10:16:51] [info] FRACTURE: height: 905
-[10:16:52] [info] FRACTURE: Out of Bounds
-[10:17:02] [info] FRACTURE: width: 1300
-[10:17:02] [info] FRACTURE: height: 905
-[10:17:02] [info] FRACTURE: width: 1300
-[10:17:02] [info] FRACTURE: height: 905
-[10:17:02] [info] FRACTURE: width: 1300
-[10:17:02] [info] FRACTURE: height: 905
-[10:17:02] [info] FRACTURE: width: 1300
-[10:17:02] [info] FRACTURE: height: 905
-[10:17:06] [info] FRACTURE: width: 1300
-[10:17:06] [info] FRACTURE: height: 905
-[10:17:06] [info] FRACTURE: width: 1300
-[10:17:06] [info] FRACTURE: height: 905
-[10:17:06] [info] FRACTURE: width: 1300
-[10:17:06] [info] FRACTURE: height: 905
-[10:17:27] [info] FRACTURE: width: 1300
-[10:17:27] [info] FRACTURE: height: 905
-[10:17:27] [info] FRACTURE: width: 1300
-[10:17:27] [info] FRACTURE: height: 905
-[10:17:27] [info] FRACTURE: width: 1300
-[10:17:27] [info] FRACTURE: height: 905
-[10:17:48] [info] FRACTURE: Out of Bounds
-[10:17:49] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 12
-[10:18:10] [info] FRACTURE: width: 1300
-[10:18:10] [info] FRACTURE: height: 905
-[10:18:10] [info] FRACTURE: width: 1300
-[10:18:10] [info] FRACTURE: height: 905
-[10:18:10] [info] FRACTURE: width: 1300
-[10:18:10] [info] FRACTURE: height: 905
-[10:18:15] [info] FRACTURE: width: 1300
-[10:18:15] [info] FRACTURE: height: 905
-[10:18:15] [info] FRACTURE: width: 1300
-[10:18:15] [info] FRACTURE: height: 905
-[10:18:15] [info] FRACTURE: width: 1300
-[10:18:15] [info] FRACTURE: height: 905
-[10:18:15] [info] FRACTURE: width: 1300
-[10:18:15] [info] FRACTURE: height: 905
-[10:18:23] [info] FRACTURE: width: 1300
-[10:18:23] [info] FRACTURE: height: 905
-[10:18:23] [info] FRACTURE: width: 1300
-[10:18:23] [info] FRACTURE: height: 905
-[10:18:23] [info] FRACTURE: width: 1300
-[10:18:23] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:24] [info] FRACTURE: width: 1300
-[10:18:24] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:25] [info] FRACTURE: width: 1300
-[10:18:25] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:26] [info] FRACTURE: width: 1300
-[10:18:26] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:27] [info] FRACTURE: width: 1300
-[10:18:27] [info] FRACTURE: height: 905
-[10:18:28] [info] FRACTURE: width: 1300
-[10:18:28] [info] FRACTURE: height: 905
-[10:18:28] [info] FRACTURE: width: 1300
-[10:18:28] [info] FRACTURE: height: 905
-[10:18:33] [info] FRACTURE: width: 1300
-[10:18:33] [info] FRACTURE: height: 905
-[10:18:33] [info] FRACTURE: width: 1300
-[10:18:33] [info] FRACTURE: height: 905
-[10:18:33] [info] FRACTURE: width: 1300
-[10:18:33] [info] FRACTURE: height: 905
-[10:18:34] [info] FRACTURE: width: 1300
-[10:18:34] [info] FRACTURE: height: 905
-[10:18:34] [info] FRACTURE: width: 1300
-[10:18:34] [info] FRACTURE: height: 905
-[10:18:34] [info] FRACTURE: width: 1300
-[10:18:34] [info] FRACTURE: height: 905
-[10:18:34] [info] FRACTURE: width: 1300
-[10:18:34] [info] FRACTURE: height: 905
-[10:18:34] [info] FRACTURE: width: 1300
-[10:18:34] [info] FRACTURE: height: 905
-[10:18:35] [info] FRACTURE: width: 1300
-[10:18:35] [info] FRACTURE: height: 905
-[10:18:59] [trace] FRACTURE: Loaded Material: Suzzan
+[12:46:45] [info] FRACTURE: Initializing Splash
+[12:46:45] [info] FRACTURE: OpenGL loaded
+[12:46:45] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:46:45] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:46:45] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[12:46:45] [trace] FRACTURE: Loaded Texture: splash
+[12:46:45] [trace] FRACTURE: Loaded Texture: title
+[12:46:45] [info] FRACTURE: Completed Init
+[12:46:45] [info] FRACTURE: Show Splash
+[12:51:03] [info] FRACTURE: OpenGL loaded
+[12:51:03] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:51:03] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:51:03] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[12:51:03] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[12:51:03] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: RotateIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: CameraIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: LightIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: EyeIcon
+[12:51:03] [trace] FRACTURE: Loaded Texture: EyeIconC
+[12:51:03] [trace] FRACTURE: Loaded Texture: MeshIcon
+[12:51:03] [trace] FRACTURE: Loaded HDR Environment: Loft
+[12:51:03] [trace] FRACTURE: Loaded Shader: CubeMap
+[12:51:03] [trace] FRACTURE: Loaded Shader: irradiance
+[12:51:03] [trace] FRACTURE: Loaded Shader: prefilter
+[12:51:03] [trace] FRACTURE: Loaded Shader: bdrf
+[12:51:03] [trace] FRACTURE: Loaded Shader: Skybox
+[12:51:03] [trace] FRACTURE: Loaded Shader: DebugShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[12:51:03] [trace] FRACTURE: Loaded Shader: BillboardShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: DepthShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: PickingShader
+[12:51:03] [trace] FRACTURE: Loaded Shader: default
+[12:51:03] [trace] FRACTURE: Loaded Shader: Outline
+[12:51:03] [trace] FRACTURE: Loaded Shader: InvertColor
+[12:51:03] [trace] FRACTURE: Loaded Shader: ToneMap
+[12:51:03] [trace] FRACTURE: Loaded Shader: Threshold
+[12:51:03] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[12:51:03] [trace] FRACTURE: Loaded Shader: ColorMap
+[12:51:03] [trace] FRACTURE: Loaded Shader: BoxBlur
+[12:51:03] [trace] FRACTURE: Loaded Shader: DepthPass
+[12:51:03] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[12:51:03] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[12:51:03] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[12:51:03] [trace] FRACTURE: Loaded Material: billboardIcons
+[12:51:03] [trace] FRACTURE: Loaded Material: DebugMaterial
+[12:51:03] [trace] FRACTURE: Loaded Material: DepthMaterial
+[12:51:03] [trace] FRACTURE: Loaded Material: PickingMaterial
+[12:51:03] [trace] FRACTURE: Loaded Material: Outline
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: loading Child: Plane
+[12:51:03] [trace] FRACTURE: loading Mesh: Plane
+[12:51:03] [trace] FRACTURE: Loaded model: Plane
+[12:51:03] [trace] FRACTURE: loading Child: Cube
+[12:51:03] [trace] FRACTURE: loading Mesh: Cube
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: Loaded model: Cube
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: loading Child: Sphere
+[12:51:03] [trace] FRACTURE: loading Mesh: Sphere
+[12:51:03] [trace] FRACTURE: Loaded model: Sphere
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: loading Child: Cylinder
+[12:51:03] [trace] FRACTURE: loading Mesh: Cylinder
+[12:51:03] [trace] FRACTURE: Loaded model: Cylinder
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: loading Child: Torus
+[12:51:03] [trace] FRACTURE: loading Mesh: Torus
+[12:51:03] [trace] FRACTURE: Loaded model: Torus
+[12:51:03] [trace] FRACTURE: loading Child: Light
+[12:51:03] [trace] FRACTURE: loading Child: Camera
+[12:51:03] [trace] FRACTURE: loading Child: Suzanne
+[12:51:03] [trace] FRACTURE: loading Mesh: Suzanne
+[12:51:03] [trace] FRACTURE: Loaded model: Suzane
+[12:51:03] [info] FRACTURE: Renderer Init
+[12:51:04] [info] FRACTURE: width: 1136
+[12:51:04] [info] FRACTURE: height: 905
+[12:51:04] [info] FRACTURE: width: 1136
+[12:51:04] [info] FRACTURE: height: 905
+[12:51:04] [info] FRACTURE: width: 1136
+[12:51:04] [info] FRACTURE: height: 905
+[12:51:04] [info] FRACTURE: width: 1136
+[12:51:04] [info] FRACTURE: height: 905
+[12:51:04] [info] FRACTURE: width: 1136
+[12:51:04] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:07] [info] FRACTURE: width: 1240
+[12:51:07] [info] FRACTURE: height: 905
+[12:51:11] [info] FRACTURE: width: 1407
+[12:51:11] [info] FRACTURE: height: 905
+[12:51:11] [info] FRACTURE: width: 1407
+[12:51:11] [info] FRACTURE: height: 905
+[12:51:11] [info] FRACTURE: width: 1407
+[12:51:11] [info] FRACTURE: height: 905
+[12:51:11] [info] FRACTURE: width: 1407
+[12:51:11] [info] FRACTURE: height: 905
+[12:51:11] [info] FRACTURE: width: 1407
+[12:51:11] [info] FRACTURE: height: 905
+[12:51:26] [info] FRACTURE: width: 1407
+[12:51:26] [info] FRACTURE: height: 905
+[12:51:26] [info] FRACTURE: width: 1407
+[12:51:26] [info] FRACTURE: height: 905
+[12:51:26] [info] FRACTURE: width: 1407
+[12:51:26] [info] FRACTURE: height: 905
+[12:51:26] [info] FRACTURE: width: 1407
+[12:51:26] [info] FRACTURE: height: 905
+[12:51:26] [info] FRACTURE: width: 1407
+[12:51:26] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:51:45] [info] FRACTURE: width: 1407
+[12:51:45] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:14] [info] FRACTURE: width: 1407
+[12:52:14] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905
+[12:52:16] [info] FRACTURE: width: 1291
+[12:52:16] [info] FRACTURE: height: 905

@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include <GLAD/glad.h>
+
 #include "DrawCommand.h"
 
 namespace Fracture

@@ -3,7 +3,6 @@
 #define TAGCOMPONENT_H
 
 #include "Component.h"
-#include <string>
 
 namespace Fracture
 {

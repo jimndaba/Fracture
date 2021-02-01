@@ -1,8 +1,7 @@
 ﻿#include "Shader.h"
-#include "GLAD/glad.h"
-#include <iostream>
 #include "Texture.h"
 #include "Logging/Logger.h"
+#include <GLAD/glad.h>
 
 const char* getTypeString(GLenum type) {
     // There are many more types than are covered here, but

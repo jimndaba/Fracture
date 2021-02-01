@@ -1,8 +1,6 @@
 #include "LightComponent.h"
 #include "ComponentManager.h"
 #include "TransformComponent.h"
-#include "Rendering/Renderer.h"
-#include "AssetManager/AssetManager.h"
 
 Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Component(id,ComponentType::Light),m_type(lightType)
 {
@@ -24,75 +22,66 @@ Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Compo
 	}
 }
 
-Fracture::LightComponent::~LightComponent()
-{
-}
-
 void Fracture::LightComponent::onStart()
 {
 }
 
-void Fracture::LightComponent::OnDebug()
-{
-	
-}
-
-void Fracture::LightComponent::SetAmbient(glm::vec4 amb)
+void Fracture::LightComponent::SetAmbient(const glm::vec4& amb)
 {
 	m_light->SetAmbient(amb);
 }
 
-void Fracture::LightComponent::SetDiffuse(glm::vec4 diff)
+void Fracture::LightComponent::SetDiffuse(const glm::vec4& diff)
 {
 	m_light->SetDiffuse(diff);
 }
 
-void Fracture::LightComponent::SetSpecular(glm::vec4 spec)
+void Fracture::LightComponent::SetSpecular(const glm::vec4& spec)
 {
 	m_light->SetSpecular(spec);
 }
 
-void Fracture::LightComponent::SetPosition(glm::vec3 pos)
+void Fracture::LightComponent::SetPosition(const glm::vec3& pos)
 {
 	m_light->SetPosition(pos);
 }
 
-void Fracture::LightComponent::SetDirection(glm::vec3 rot)
+void Fracture::LightComponent::SetDirection(const glm::vec3& rot)
 {
 	m_light->SetDirection(rot);
 }
 
-void Fracture::LightComponent::SetConstant(float constant)
+void Fracture::LightComponent::SetConstant(const float& constant)
 {
 	m_light->SetConstant(constant);
 }
 
-void Fracture::LightComponent::SetLinear(float linear)
+void Fracture::LightComponent::SetLinear(const float& linear)
 {
 	m_light->SetLinear(linear);
 }
 
-void Fracture::LightComponent::SetQuadratic(float quad)
+void Fracture::LightComponent::SetQuadratic(const float& quad)
 {
 	m_light->SetQuadratic(quad);
 }
 
-void Fracture::LightComponent::SetCutoff(float coff)
+void Fracture::LightComponent::SetCutoff(const float& coff)
 {
 	m_light->SetCutoff(coff);
 }
 
-void Fracture::LightComponent::SetOuterCutOff(float outer)
+void Fracture::LightComponent::SetOuterCutOff(const float& outer)
 {
 	m_light->SetOuterCutOff(outer);
 }
 
-void Fracture::LightComponent::SetIntensity(float value)
+void Fracture::LightComponent::SetIntensity(const float& value)
 {
 	m_light->SetIntensity(value);
 }
 
-void Fracture::LightComponent::SetRadiance(glm::vec3 value)
+void Fracture::LightComponent::SetRadiance(const glm::vec3& value)
 {
 	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
 	sun->SetRadiance(value);
