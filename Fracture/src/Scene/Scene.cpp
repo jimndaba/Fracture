@@ -40,12 +40,12 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::Root()
 	return m_root;
 }
 
-void Fracture::Scene::addEntity(std::shared_ptr<Entity> entity)
+void Fracture::Scene::addEntity(const std::shared_ptr<Entity>& entity)
 {
 	m_entities.push_back(entity);
 }
 
-void Fracture::Scene::Destroy(std::shared_ptr<Entity> entity)
+void Fracture::Scene::Destroy(const std::shared_ptr<Entity>& entity)
 {
 	
 	std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
@@ -78,6 +78,16 @@ void Fracture::Scene::Destroy(uint32_t id)
 			Destroy(entity);
 		}
 	}
+}
+
+void Fracture::Scene::Duplicate(const std::shared_ptr<Entity>& entity)
+{
+	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();
+		
+	CopyComponentIfExists<TagComponent>(new_entity, entity);
+	
+
+	addEntity(new_entity);
 }
 
 void Fracture::Scene::clearScene()
@@ -118,3 +128,14 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::GetEntity(uint32_t id)
 	return nullptr;
 }
 
+
+template<class name>
+void Fracture::Scene::CopyComponentIfExists(const std::shared_ptr<Entity>& copyTo, const std::shared_ptr<Entity>& copyFrom)
+{
+	if (ComponentManager::HasComponent<name>(copyFrom->Id))
+	{
+		const auto& component = ComponentManager::GetComponent<name>(copyFrom->Id);
+		auto newComponent = component;
+		ComponentManager::AddComponent<name>(newComponent);
+	}
+}

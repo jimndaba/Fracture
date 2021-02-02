@@ -5,16 +5,14 @@
 #include "AssetManager/AssetManager.h"
 #include "Logging/Logger.h"
 
-Fracture::Material::Material(std::string name, std::shared_ptr<Shader> shader):Name(name),m_shader(shader)
-{
-	m_Uniforms = new  std::unordered_map<std::string, UniformValue>();
-	m_SamplerUniforms =new std::unordered_map<std::string,std::shared_ptr<UniformValueSampler>>();
-
-	m_IsTransparent = false;
-	m_CastShadows = false;
-}
-
-Fracture::Material::~Material()
+Fracture::Material::Material(const std::string& name, const std::shared_ptr<Shader>& shader) :
+	Name(name),
+	m_shader(shader),
+	m_CastShadows(false),
+	m_IsOutlined(false),
+	m_IsTransparent(false),
+	m_Uniforms(std::make_shared<std::unordered_map<std::string, UniformValue>>()),
+	m_SamplerUniforms(std::make_shared<std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>>())
 {
 }
 
@@ -23,7 +21,7 @@ std::shared_ptr <Fracture:: Shader > Fracture::Material::getShader()
     return m_shader;
 }
 
-void Fracture::Material::setShader(std::string shader)
+void Fracture::Material::setShader(const std::string& shader)
 {
 	m_shader = AssetManager::getShader(shader);
 }
@@ -33,7 +31,7 @@ void Fracture::Material::use()
 	m_shader->use();
 }
 
-void Fracture::Material::setBool(std::string name, bool value) const
+void Fracture::Material::setBool(const std::string& name, bool value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_BOOL;
@@ -42,7 +40,7 @@ void Fracture::Material::setBool(std::string name, bool value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setInt(std::string name, int value) const
+void Fracture::Material::setInt(const std::string& name, int value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_INT;
@@ -51,7 +49,7 @@ void Fracture::Material::setInt(std::string name, int value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setFloat(std::string name, float value) const
+void Fracture::Material::setFloat(const std::string& name, float value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_FLOAT;
@@ -60,7 +58,7 @@ void Fracture::Material::setFloat(std::string name, float value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec2(std::string name, const glm::vec2& value) const
+void Fracture::Material::setVec2(const std::string& name, const glm::vec2& value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC2;
@@ -69,7 +67,7 @@ void Fracture::Material::setVec2(std::string name, const glm::vec2& value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec2(std::string name, float x, float y) const
+void Fracture::Material::setVec2(const std::string& name, float x, float y) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC2;
@@ -78,7 +76,7 @@ void Fracture::Material::setVec2(std::string name, float x, float y) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec3(std::string name, const glm::vec3& value) const
+void Fracture::Material::setVec3(const std::string& name, const glm::vec3& value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC3;
@@ -87,7 +85,7 @@ void Fracture::Material::setVec3(std::string name, const glm::vec3& value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec3(std::string name, float x, float y, float z) const
+void Fracture::Material::setVec3(const std::string& name, float x, float y, float z) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC3;
@@ -96,7 +94,7 @@ void Fracture::Material::setVec3(std::string name, float x, float y, float z) co
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec4(std::string name, const glm::vec4& value) const
+void Fracture::Material::setVec4(const std::string& name, const glm::vec4& value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC4;
@@ -105,7 +103,7 @@ void Fracture::Material::setVec4(std::string name, const glm::vec4& value) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setVec4(std::string name, float x, float y, float z, float w) const
+void Fracture::Material::setVec4(const std::string& name, float x, float y, float z, float w) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_VEC4;
@@ -114,7 +112,7 @@ void Fracture::Material::setVec4(std::string name, float x, float y, float z, fl
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setColor3(std::string name, const glm::vec3& value) const
+void Fracture::Material::setColor3(const std::string& name, const glm::vec3& value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR3;
@@ -123,7 +121,7 @@ void Fracture::Material::setColor3(std::string name, const glm::vec3& value) con
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setColor3(std::string name, float x, float y, float z) const
+void Fracture::Material::setColor3(const std::string& name, float x, float y, float z) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR3;
@@ -132,7 +130,7 @@ void Fracture::Material::setColor3(std::string name, float x, float y, float z) 
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setColor4(std::string name, const glm::vec4& value) const
+void Fracture::Material::setColor4(const std::string& name, const glm::vec4& value) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR4;
@@ -141,7 +139,7 @@ void Fracture::Material::setColor4(std::string name, const glm::vec4& value) con
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setColor4(std::string name, float x, float y, float z, float w) const
+void Fracture::Material::setColor4(const std::string& name, float x, float y, float z, float w) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_COLOR4;
@@ -150,7 +148,7 @@ void Fracture::Material::setColor4(std::string name, float x, float y, float z, 
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setMat2(std::string name, const glm::mat2& mat) const
+void Fracture::Material::setMat2(const std::string& name, const glm::mat2& mat) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_MAT2;
@@ -159,7 +157,7 @@ void Fracture::Material::setMat2(std::string name, const glm::mat2& mat) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setMat3(std::string name, const glm::mat3& mat) const
+void Fracture::Material::setMat3(const std::string& name, const glm::mat3& mat) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_MAT3;
@@ -168,7 +166,7 @@ void Fracture::Material::setMat3(std::string name, const glm::mat3& mat) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::setMat4(std::string name, const glm::mat4& mat) const
+void Fracture::Material::setMat4(const std::string& name, const glm::mat4& mat) const
 {
 	UniformValue uniform;
 	uniform.Type = SHADER_TYPE::SHADER_TYPE_MAT4;
@@ -177,7 +175,7 @@ void Fracture::Material::setMat4(std::string name, const glm::mat4& mat) const
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::SetTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit)
+void Fracture::Material::SetTexture(const std::string& name, std::shared_ptr<Texture> value, unsigned int unit)
 {
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
@@ -186,14 +184,14 @@ void Fracture::Material::SetTexture(std::string name, std::shared_ptr<Texture> v
 	m_SamplerUniforms->emplace(name,sample);
 }
 
-void Fracture::Material::ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit)
+void Fracture::Material::ChangeTexture(const std::string& name, std::shared_ptr<Texture> value, unsigned int unit)
 {
 	m_SamplerUniforms->erase(name);
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
 	sample->texture = value.get();
 	sample->Unit = unit;
-	m_SamplerUniforms->emplace(name, sample);
+	m_SamplerUniforms->emplace(name,sample);
 }
 
 void Fracture::Material::setCubeMap(const std::string& name, const unsigned int value, unsigned int unit) const
@@ -207,18 +205,15 @@ void Fracture::Material::setCubeMap(const std::string& name, const unsigned int 
 
 void Fracture::Material::ClearSamples()
 {
-	for (int i = 0; i < m_SamplerUniforms->size(); i++)
-	{
-
-	}
+	m_SamplerUniforms->clear();
 }
 
-std::unordered_map<std::string, Fracture::UniformValue>* Fracture::Material::GetUniforms()
+std::shared_ptr<std::unordered_map<std::string, Fracture::UniformValue>> Fracture::Material::GetUniforms()
 {
     return m_Uniforms;
 }
 
-std::unordered_map<std::string, std::shared_ptr<Fracture::UniformValueSampler>>* Fracture::Material::GetSamplerUniforms()
+std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<Fracture::UniformValueSampler>>> Fracture::Material::GetSamplerUniforms()
 {
     return m_SamplerUniforms;
 }

@@ -35,10 +35,10 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	m_shader->use();
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
 	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
-    for (auto& bucket : m_buckets)
+    for (const auto& bucket : m_buckets)
     {
-		std::vector<DrawCommand> forwardRenderCommands = bucket->getForwardRenderCommands();
-		std::vector<DrawCommand> alphaRenderCommands = bucket->getAlphaRenderCommands();
+		const auto& forwardRenderCommands = bucket->getForwardRenderCommands();
+		const auto& alphaRenderCommands = bucket->getAlphaRenderCommands();
 
         for (unsigned int i = 0; i < forwardRenderCommands.size(); ++i)
         {

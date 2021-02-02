@@ -18,7 +18,7 @@ std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
 std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
 std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::m_Textures;
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
-std::unordered_map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
+std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::m_props;
 
@@ -39,8 +39,7 @@ Fracture::AssetManager::~AssetManager()
 void Fracture::AssetManager::AddShader(const std::string& name, const std::string& vertex, const std::string& fragment)
 {
 	std::shared_ptr<Shader> m_shader = std::make_shared<Shader>(name, vertex, fragment);
-
-	m_Shaders.emplace(name, m_shader);
+	m_Shaders[name] = m_shader;
 	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
 }
 
@@ -95,9 +94,16 @@ void Fracture::AssetManager::AddMaterial(const std::string& name,const std::shar
 	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
-std::shared_ptr<Fracture::Shader> Fracture::AssetManager::getShader(const std::string& name)
+const std::shared_ptr<Fracture::Shader>& Fracture::AssetManager::getShader(const std::string& name)
 {
-	return m_Shaders[name];
+	//std::map<std::string, std::shared_ptr<Shader>>::iterator it = m_Shaders.find(name);
+
+	for (auto it = m_Shaders.begin(); it != m_Shaders.end(); ++it)
+	{
+		if (it->first == name)
+			return it->second;
+	}
+	return nullptr;
 }
 
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(const std::string& name)
@@ -105,9 +111,14 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(const std::str
 	return m_Models[name];
 }
 
-std::shared_ptr<Fracture::Material> Fracture::AssetManager::getMaterial(const std::string& name)
+const std::shared_ptr<Fracture::Material>& Fracture::AssetManager::getMaterial(const std::string& name)
 {
-	return m_Materials[name];
+	for (auto it = m_Materials.begin(); it != m_Materials.end(); ++it)
+	{
+		if (it->first == name)
+			return it->second;
+	}
+	return nullptr;
 }
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(const std::string& name)
@@ -643,6 +654,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const std
 		stbi_image_free(texture->m_data);
 	}
 	texture->Unbind();
+	m_Textures.emplace(name, texture);
 	return texture;
 }
 

@@ -24,6 +24,8 @@ namespace Fracture
 		void setSelectEntity(std::shared_ptr<Entity> selection);
 		void clearSelection();
 
+		void DuplicateSelection(const std::shared_ptr<Entity>&);
+
 		std::shared_ptr<Entity> m_selection;
 
 	private:

@@ -153,7 +153,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				if (open)
 				{			
 					
-					if (ImGui::BeginCombo("Material", current_Material.c_str()))
+					if (ImGui::BeginCombo("##Material", current_Material.c_str()))
 					{
 
 						for (auto const& nMaterial : AssetManager::GetMaterials())
@@ -192,13 +192,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 					ImGui::Separator();
 
-					auto uniforms = material->GetUniforms();
+					const auto& uniforms = material->GetUniforms();
 					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 					{
 						DrawMaterialUniform(value->first, value->second);
 					}
 					ImGui::Separator();
-					std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+					const auto& uniformsSamplers = material->GetSamplerUniforms();
 					for (auto it = uniformsSamplers->begin(); it != uniformsSamplers->end(); ++it)
 					{
 						if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)

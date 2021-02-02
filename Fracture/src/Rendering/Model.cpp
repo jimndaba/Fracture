@@ -29,14 +29,12 @@ void Fracture::Model::addMaterial(std::shared_ptr<Material> material)
 
 void Fracture::Model::SetMaterial(const std::string& oldMaterial ,const std::shared_ptr<Material>& material)
 {
-	for (auto mat : m_materials)
+	for (auto& mat : m_materials)
 	{
 		if (mat->Name == oldMaterial)
 		{
 			mat = material;
 		}
-
-		FRACTURE_INFO("material name now is: {}", mat->Name);
 	}
 }
 

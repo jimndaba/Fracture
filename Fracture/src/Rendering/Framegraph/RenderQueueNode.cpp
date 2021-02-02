@@ -51,19 +51,20 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
             material->use();
             material->getShader()->setTexture("ambientOcclusion", resources["SSAOMap"]->GetColorTexture(0).get(), 8);
             renderer.SetupLighting(material);
-            auto& uniforms = *material->GetUniforms();
-            for (const auto& u : uniforms)
+            const auto& uniforms = material->GetUniforms();
+            for (const auto& u : *uniforms)
             {
                 ProfilerTimer timer("RQ WriteUNiforms");
                 WriteUniformData(*material->getShader(), u.first, u.second);
             }
 
-            auto& uniformsSamplers = *material->GetSamplerUniforms();
-            for (const auto& sample : uniformsSamplers)
+            const auto& uniformsSamplers = material->GetSamplerUniforms();
+            for (const auto& sample : *uniformsSamplers)
             {
                 ProfilerTimer timer("RQ WriteSamples");
                 WriteUniformSampler(*material->getShader(), sample.first, sample.second);
             }
+
             renderer.Submit(command);
         }
 
@@ -75,19 +76,21 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
             material->use();
             material->getShader()->setTexture("ambientOcclusion",resources["SSAOMap"]->GetColorTexture(0).get(), 1);
             renderer.SetupLighting(material);
-            auto& uniforms = *material->GetUniforms();
-            for (const auto& u : uniforms)
+
+            const auto& uniforms = material->GetUniforms();
+            for (const auto& u : *uniforms)
             {
                 ProfilerTimer timer("RQ WriteUNiforms");
                 WriteUniformData(*material->getShader(), u.first, u.second);
             }
 
-            auto& uniformsSamplers = *material->GetSamplerUniforms();
-            for (const auto& sample : uniformsSamplers)
+            const auto& uniformsSamplers = material->GetSamplerUniforms();
+            for (const auto& sample : *uniformsSamplers)
             {
                 ProfilerTimer timer("RQ WriteSamples");
                 WriteUniformSampler(*material->getShader(), sample.first, sample.second);
             }
+
             renderer.Submit(command);
         }
  

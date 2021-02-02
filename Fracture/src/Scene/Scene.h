@@ -29,9 +29,10 @@ namespace Fracture
 
 		virtual void onLoad() {};
 
-		void addEntity(std::shared_ptr<Entity> entity);				
-		void Destroy(std::shared_ptr<Entity> entity);
+		void addEntity(const std::shared_ptr<Entity>& entity);				
+		void Destroy(const std::shared_ptr<Entity>& entity);
 		void Destroy(uint32_t id);
+		void Duplicate(const std::shared_ptr<Entity>& entity);
 		void clearScene();		
 
 		static std::shared_ptr<Entity> ActiveCamera();
@@ -45,8 +46,12 @@ namespace Fracture
 		std::shared_ptr<Entity> m_root;
 		static std::shared_ptr<Entity> active_Camera;
 		static std::vector<std::shared_ptr<Entity>> m_entities;
+
+		template <class T>
+		void CopyComponentIfExists(const std::shared_ptr<Entity>& copyTo,const std::shared_ptr<Entity>& copyFrom);
 		
 	};
+
 }
 
 #endif

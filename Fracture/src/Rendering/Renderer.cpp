@@ -675,6 +675,7 @@ uint32_t Fracture::Renderer::GetEntityID(int mouseX, int mouseY)
         }
         return -1;
     }      
+    return -1;
 }
 
 void _check_gl_error(const char* file, int line) {

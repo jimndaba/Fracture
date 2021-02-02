@@ -58,7 +58,7 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, std::shared_ptr<Frac
 	command.VAO = mesh->VAO;
 	command.material = material.get();
 	command.CastShadows = material->CastShadows();
-	command.HasTransparency = material.get()->IsTransparent();
+	command.HasTransparency = material->IsTransparent();
 	command.IsOutlined = material->IsOutlined();
 	command.ID = EntityID;
 	command.indiceSize = (GLint)mesh->IndexCount;	
@@ -72,7 +72,6 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, std::shared_ptr<Frac
 	{
 		m_Frowardcommands.push_back(std::move(command));
 	}
-
 	if (command.CastShadows)
 	{
 		m_Shadowcommands.push_back(std::move(command));
@@ -91,11 +90,6 @@ void Fracture::RenderBucket::clear()
 	m_Shadowcommands.clear();
 }
 
-//std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getCommands(bool cull)
-//{
-//	return m_commands;
-//}
-
 std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getForwardRenderCommands()
 {
 	return m_Frowardcommands;
@@ -103,7 +97,6 @@ std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getForwardRenderComma
 
 std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getAlphaRenderCommands()
 {
-
 	return m_Alphacommands;
 }
 
@@ -111,11 +104,6 @@ std::vector<Fracture::DrawCommand> Fracture::RenderBucket::getShadowRenderComman
 {
 	return m_Shadowcommands;
 }
-
-//std::map<std::string, std::shared_ptr<Fracture::RenderBatch>> Fracture::RenderBucket::getRenderBatches()
-//{
-//	return m_batches;
-//}
 
 bool renderSortforward(const Fracture::DrawCommand& a, const Fracture::DrawCommand& b)
 {

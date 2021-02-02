@@ -7,7 +7,6 @@
 #include "GLAD/glad.h"
 #include "glm/glm.hpp"
 #include "FrameGraph/FrameResource.h"
-#include "RenderGraph/BufferResource.h"
 #include "Bindable.h"
 
 namespace Fracture
@@ -16,7 +15,7 @@ namespace Fracture
 	class Texture;
 	enum class TextureTarget;
 
-	class RenderTarget : public BufferResource, public Bindable,public FrameResource
+	class RenderTarget : public Bindable,public FrameResource
 	{
 
 	public:
@@ -45,12 +44,6 @@ namespace Fracture
 
 		void SetMultiSampled(bool value) override;
 		bool IsMultiSampled() override;
-
-		//RenderGraph Resource functions
-		virtual void BindAsBuffer(Renderer& renderer);
-		virtual void BindAsBuffer(Renderer& renderer, BufferResource* resource);
-		virtual void Clear(Renderer& renderer);
-		virtual void Clear(Renderer& renderer,glm::vec3 color);
 
 	private:		
 		bool m_IsMultiSampled;

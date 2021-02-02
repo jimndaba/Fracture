@@ -15,6 +15,20 @@ namespace Fracture
 		TagComponent(uint32_t entityID,const std::string& name);
 		~TagComponent() = default;
 
+		TagComponent(const TagComponent& tag) :Component(EntityID, ComponentType::Tag)
+		{
+			Name = tag.Name + "Copy";
+			isVisible = tag.isVisible;
+		}
+
+		const TagComponent& operator = (const TagComponent& tag)
+		{
+			Name = tag.Name + "Copy";
+			isVisible = tag.isVisible;
+			return *this;
+		}
+
+
 		virtual void onStart();
 
 		std::string Name;

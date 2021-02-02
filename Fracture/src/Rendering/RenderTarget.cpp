@@ -181,28 +181,3 @@ bool Fracture::RenderTarget::IsMultiSampled()
     return  m_IsMultiSampled;
 }
 
-void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer)
-{
-   bind();
-}
-
-void Fracture::RenderTarget::BindAsBuffer(Renderer& renderer, BufferResource* resource)
-{
-    bind();
-}
-
-void Fracture::RenderTarget::Clear(Renderer& renderer)
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);          
-    renderer.clearColor(1.0f, 1.0f, 1.0f);
-    renderer.clear();   
-   
-}
-
-void Fracture::RenderTarget::Clear(Renderer& renderer, glm::vec3 color)
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, ID); 
-    renderer.clear();
-
-}
-

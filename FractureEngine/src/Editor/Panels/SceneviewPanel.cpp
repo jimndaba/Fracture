@@ -262,6 +262,12 @@ void Fracture::SceneView::clearSelection()
 	m_selection = {};
 }
 
+void Fracture::SceneView::DuplicateSelection(const std::shared_ptr<Entity>& selection)
+{
+	m_scene->Duplicate(selection);
+}
+
+
 void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 {
 	 

@@ -152,14 +152,14 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		c["Model"] = component->GetModel()->Name;
 		json serialised_materials = json::array_t();
 
-		for (auto material : component->GetModel()->GetMaterials())
+		for (const auto& material : component->GetModel()->GetMaterials())
 		{
 			json m;
 			m["Material Name"] = material->Name;
 			json serialised_unfiorms = json::array_t();
 			json serialised_sampleunfiorms = json::array_t();
 
-			auto* uniforms = material->GetUniforms();
+			const auto& uniforms = material->GetUniforms();
 			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 			{
 				json b;
@@ -221,7 +221,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				serialised_unfiorms.push_back(b);
 			}
 
-			std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* uniformsSamplers = material->GetSamplerUniforms();
+			const auto& uniformsSamplers = material->GetSamplerUniforms();
 			for (auto value = uniformsSamplers->begin(); value != uniformsSamplers->end(); ++value)
 			{
 				json b;

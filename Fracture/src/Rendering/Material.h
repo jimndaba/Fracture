@@ -87,24 +87,23 @@ namespace Fracture
 	class Material
 	{
 	public:
-		Material(std::string name, std::shared_ptr<Shader> shader);
-		~Material();
+		Material(const std::string& name,const std::shared_ptr<Shader>& shader);
+        ~Material() = default;
 
 
         Material(const Material& material2) 
         { 
             m_CastShadows = material2.m_CastShadows;
-            m_isOutlined = material2.m_isOutlined;
+            m_IsOutlined = material2.m_IsOutlined;
             m_IsTransparent = material2.m_IsTransparent;
             m_shader = material2.m_shader;
             m_SamplerUniforms = material2.m_SamplerUniforms;
             m_Uniforms = material2.m_Uniforms;
         }
-
         const Material& operator = (const Material& material2)
         {
             m_CastShadows = material2.m_CastShadows;
-            m_isOutlined = material2.m_isOutlined;
+            m_IsOutlined = material2.m_IsOutlined;
             m_IsTransparent = material2.m_IsTransparent;
             m_shader = material2.m_shader;
             m_SamplerUniforms = material2.m_SamplerUniforms;
@@ -113,36 +112,36 @@ namespace Fracture
         }
 
 		std::shared_ptr<Shader> getShader();
-        void setShader(std::string shader);
+        void setShader(const std::string&);
         void use();
 		std::string Name;
         int MaterialCount;
 
-        void setBool(std::string name, bool value) const;
-        void setInt(std::string name, int value) const;
-        void setFloat(std::string name, float value) const;
-        void setVec2(std::string name, const glm::vec2& value) const;
-        void setVec2(std::string name, float x, float y) const;
-        void setVec3(std::string name, const glm::vec3& value) const;
-        void setVec3(std::string name, float x, float y, float z) const;
-        void setVec4(std::string name, const glm::vec4& value) const;
-        void setVec4(std::string name, float x, float y, float z, float w) const;
-        void setColor3(std::string name, const glm::vec3& value) const;
-        void setColor3(std::string name, float x, float y, float z) const;
-        void setColor4(std::string name, const glm::vec4& value) const;
-        void setColor4(std::string name, float x, float y, float z, float w) const;
-        void setMat2(std::string name, const glm::mat2& mat) const;
-        void setMat3(std::string name, const glm::mat3& mat) const;
-        void setMat4(std::string name, const glm::mat4& mat) const;
+        void setBool(const std::string&, bool value) const;
+        void setInt(const std::string&, int value) const;
+        void setFloat(const std::string&, float value) const;
+        void setVec2(const std::string&, const glm::vec2& value) const;
+        void setVec2(const std::string&, float x, float y) const;
+        void setVec3(const std::string&, const glm::vec3& value) const;
+        void setVec3(const std::string&, float x, float y, float z) const;
+        void setVec4(const std::string&, const glm::vec4& value) const;
+        void setVec4(const std::string&, float x, float y, float z, float w) const;
+        void setColor3(const std::string&, const glm::vec3& value) const;
+        void setColor3(const std::string&, float x, float y, float z) const;
+        void setColor4(const std::string&, const glm::vec4& value) const;
+        void setColor4(const std::string&, float x, float y, float z, float w) const;
+        void setMat2(const std::string&, const glm::mat2& mat) const;
+        void setMat3(const std::string&, const glm::mat3& mat) const;
+        void setMat4(const std::string&, const glm::mat4& mat) const;
 
-        void SetTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
-        void ChangeTexture(std::string name, std::shared_ptr<Texture> value, unsigned int unit);
+        void SetTexture(const std::string&, std::shared_ptr<Texture> value, unsigned int unit);
+        void ChangeTexture(const std::string&, std::shared_ptr<Texture> value, unsigned int unit);
         void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
 
         void ClearSamples();
 
-        std::unordered_map<std::string, UniformValue>* GetUniforms();
-        std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>*GetSamplerUniforms();
+        std::shared_ptr<std::unordered_map<std::string, UniformValue>> GetUniforms();
+        std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>> GetSamplerUniforms();
 
         void CopyUniforms(std::unordered_map<std::string, UniformValue>* copy);
         void CopySampleUniforms(std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* copy );
@@ -163,16 +162,16 @@ namespace Fracture
         {
             m_CastShadows = castshadows;
         }
-        bool IsOutlined() { return m_isOutlined; }
-        void SetIsOutlined(bool value) { m_isOutlined = value; }
+        bool IsOutlined() const { return m_IsOutlined; }
+        void SetIsOutlined(const bool& value) { m_IsOutlined = value; }
 
 	private:
 		std::shared_ptr<Shader> m_shader;
-        std::unordered_map<std::string, UniformValue>* m_Uniforms;
-        std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>* m_SamplerUniforms;
+        std::shared_ptr<std::unordered_map<std::string, UniformValue>> m_Uniforms;
+        std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>> m_SamplerUniforms;
         bool m_CastShadows = false;
         bool m_IsTransparent = false;
-        bool m_isOutlined = false;
+        bool m_IsOutlined = false;
 	};
 }
 

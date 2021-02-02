@@ -38,9 +38,9 @@ namespace Fracture
 		static std::shared_ptr<Model> loadModel(const std::string &name);
 		static std::shared_ptr<Texture> loadTexture(const std::string &name, const std::string &path, Fracture::TextureType texType);
 
-		static std::shared_ptr<Shader> getShader(const std::string &name);
+		static const std::shared_ptr<Shader>& getShader(const std::string &name);
 		static std::shared_ptr<Model> getModel(const std::string &name);
-		static std::shared_ptr<Material> getMaterial(const std::string &name);
+		static const std::shared_ptr<Material>& getMaterial(const std::string &name);
 		static std::shared_ptr<Texture> getTexture(const std::string &name);
 
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
@@ -78,7 +78,7 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
 		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
-		static std::unordered_map<std::string, std::shared_ptr<Shader>> m_Shaders;
+		static std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
 		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
 		
 		//Functions

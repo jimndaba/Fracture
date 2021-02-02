@@ -256,17 +256,17 @@ void Fracture::Editor::onLoadNew()
     pbrPrimitive->setFloat("ao", 1.0f);    
     */
 
-    std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
-    pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
-    pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
-    pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
-    pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),6);
-    pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"),7);
-    pbrTextured->setFloat("albedoFlag", 1.0f);
-    pbrTextured->setFloat("normalFlag", 1.0f);
-    pbrTextured->setFloat("metallicFlag", 1.0f);
-    pbrTextured->setFloat("roughnessFlag", 1.0f);
-    pbrTextured->setFloat("aoFlag", 1.0f);
+    //std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
+    //pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
+    //pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
+    //pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
+    //pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),6);
+    //pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"),7);
+    //pbrTextured->setFloat("albedoFlag", 1.0f);
+    //pbrTextured->setFloat("normalFlag", 1.0f);
+    //pbrTextured->setFloat("metallicFlag", 1.0f);
+    //pbrTextured->setFloat("roughnessFlag", 1.0f);
+    //pbrTextured->setFloat("aoFlag", 1.0f);
     
 
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));

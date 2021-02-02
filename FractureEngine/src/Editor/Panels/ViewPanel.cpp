@@ -106,7 +106,7 @@ void Fracture::ViewPanel::render()
 			
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
-				int id = (int)m_renderer->GetEntityID(region_x, region_y);
+				int id = (int)m_renderer->GetEntityID((int)region_x,(int)region_y);
 				if(id > 0)
 				{
 					const auto & m_entity = SceneManager::getEntity(id);
@@ -247,6 +247,11 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		if (InputManager::IsKeyDown(KeyCode::E))
 		{
 			gizmoMode = ImGuizmo::OPERATION::ROTATE;
+		}
+
+		if (InputManager::IsKeyDown(KeyCode::LeftControl)&& InputManager::IsKeyDown(KeyCode::D) &&  m_scenegraph.m_selection)
+		{
+			m_scenegraph.DuplicateSelection(m_scenegraph.m_selection);
 		}
 	}
 }
