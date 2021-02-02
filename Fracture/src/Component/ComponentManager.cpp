@@ -2,7 +2,6 @@
 #include "Component.h"
 #include "TagComponent.h"
 #include "IUpdatable.h"
-#include "Game/Game.h"
 #include "Scripting/ScriptManager.h"
 #include "Rendering/Renderer.h"
 #include "ScriptComponent.h"
@@ -15,9 +14,9 @@
 #include "BillboardComponent.h"
 #include "RelationshipComponent.h"
 #include "RenderComponent.h"
-#include <iostream>
 #include "Profiling/Profiler.h"
-
+#include "Logging/Logger.h"
+#include "Game/Game.h"
 
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_tagComponents;
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RelationshipComponents;

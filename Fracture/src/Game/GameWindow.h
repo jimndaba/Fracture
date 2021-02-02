@@ -2,47 +2,38 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
-
 #include <iostream>
 #include <string>
-#include <SDL2/SDL.h>
 #include "GLAD/glad.h"
-
+#include <glfw/glfw3.h>
 namespace Fracture
 {
-	class Game;
 	class GameWindow
 	{
 
 	public:
-		GameWindow(int width, int height,std::string title, Uint32 flags = SDL_WINDOW_SHOWN);
+		GameWindow(int width, int height,std::string title);
 		~GameWindow();
 
 		void MaximiseWindow();
 
-		void pollEvents(Game& game);
+		void pollEvents();
 		void swapBuffers();
 
 		int Width;
 		int Height;
 		std::string Title;
 
-		static SDL_Window* Context()
+		static GLFWwindow* Context()
 		{
-			return m_window;
+			return window;
 		}
-
-		SDL_GLContext glContext()
-		{
-			return maincontext;
-		}
-
+				
+		bool ShouldClose();
 		void close();
 
 	private:
-		static SDL_Window* m_window;
-		SDL_Event m_event;
-		SDL_GLContext maincontext;
+		static GLFWwindow* window;
 	};
 }
 

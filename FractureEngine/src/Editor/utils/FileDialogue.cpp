@@ -1,15 +1,17 @@
 #include "FileDialogue.h"
 #include "Game/GameWindow.h"
+#include "glfw/glfw3native.h"
 #include <commdlg.h>
 #include <windows.h>
 #include <shlobj.h>
 #include <shobjidl_core.h>
 
 
+
 std::string Fracture::FileDialogue::OpenFile(const char* filter)
-{
-	SDL_SysWMinfo wmInfo{};
-	HWND hwnd = wmInfo.info.win.window;
+{		
+	//SDL_SysWMinfo 
+	HWND hwnd = glfwGetWin32Window(GameWindow::Context());
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -27,8 +29,7 @@ std::string Fracture::FileDialogue::OpenFile(const char* filter)
 
 std::string Fracture::FileDialogue::OpenFile(const char* filter,std::string& filename)
 {
-	SDL_SysWMinfo wmInfo{};
-	HWND hwnd = wmInfo.info.win.window;
+	HWND hwnd = glfwGetWin32Window(GameWindow::Context());
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
 	CHAR stFile[260] = { 0 };
@@ -64,8 +65,7 @@ std::string Fracture::FileDialogue::OpenFile(const char* filter,std::string& fil
 
 std::string Fracture::FileDialogue::SaveFile(const char* filter)
 {
-	SDL_SysWMinfo wmInfo{};
-	HWND hwnd = wmInfo.info.win.window;
+	HWND hwnd = glfwGetWin32Window(GameWindow::Context());
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -88,8 +88,7 @@ std::string Fracture::FileDialogue::SaveFile(const char* filter)
 std::string Fracture::FileDialogue::AddAsset()
 {
 	const char* filter = "Fracture Project (*.fracture)\0*.fracture\0)";
-	SDL_SysWMinfo wmInfo{};
-	HWND hwnd = wmInfo.info.win.window;
+	HWND hwnd = glfwGetWin32Window(GameWindow::Context());
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));

@@ -82,11 +82,9 @@ void Fracture::Scene::Destroy(uint32_t id)
 
 void Fracture::Scene::Duplicate(const std::shared_ptr<Entity>& entity)
 {
-	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();
-		
-	CopyComponentIfExists<TagComponent>(new_entity, entity);
-	
-
+	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();		
+	CopyComponentIfExists<RelationShipComponent>(new_entity, entity);
+	CopyComponentIfExists<TagComponent>(new_entity, entity);	
 	addEntity(new_entity);
 }
 
@@ -135,7 +133,23 @@ void Fracture::Scene::CopyComponentIfExists(const std::shared_ptr<Entity>& copyT
 	if (ComponentManager::HasComponent<name>(copyFrom->Id))
 	{
 		const auto& component = ComponentManager::GetComponent<name>(copyFrom->Id);
-		auto newComponent = component;
-		ComponentManager::AddComponent<name>(newComponent);
+
+		switch (component->componentType)
+		{
+			case ComponentType::Tag:
+			{
+				std::shared_ptr<TagComponent> newComponent = std::make_shared<TagComponent>(copyTo->Id, "Copy");
+				newComponent = std::dynamic_pointer_cast<TagComponent>(component);
+				ComponentManager::AddComponent<name>(newComponent);
+				FRACTURE_INFO("Add Tag Component for Entity: {}", copyTo->Id);
+			};
+			case ComponentType::Relationship:
+			{
+				std::shared_ptr<RelationShipComponent> newComponent = std::make_shared<RelationShipComponent>(copyTo->Id);
+				newComponent = std::dynamic_pointer_cast<RelationShipComponent>(component);
+				ComponentManager::AddComponent<name>(newComponent);
+				FRACTURE_INFO("Add Relationship Component for Entity: {}", copyTo->Id);
+			};
+		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "IInputState.h"
 #include "Mousecode.h"
 #include "glm/glm.hpp"
+#include "Game/GameWindow.h"
 
 namespace Fracture
 {
@@ -34,7 +35,6 @@ namespace Fracture
 
 	private:
 		static MouseState m_MouseState;
-		static SDL_Event event;
 	};
 
 }

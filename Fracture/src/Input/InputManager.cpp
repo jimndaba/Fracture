@@ -1,13 +1,14 @@
 #include "InputManager.h"
 #include <iostream>
+#include "Logging/Logger.h"
 
-SDL_Event Fracture::InputManager::event;
 Fracture::Mouse Fracture::InputManager::m_mouse;
+Fracture::KeyboardState Fracture::InputManager::m_keyState;
+
 
 Fracture::InputManager::InputManager()
 {
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_CaptureMouse(SDL_TRUE);
+	glfwSetScrollCallback(GameWindow::Context(), scroll_callback);
 }
 
 Fracture::InputManager::~InputManager()
@@ -16,56 +17,61 @@ Fracture::InputManager::~InputManager()
 
 bool Fracture::InputManager::IsKeyDown(KeyCode key)
 {
-	const Uint8* kb = SDL_GetKeyboardState(NULL);
-	 if (kb[(SDL_Scancode)key])
-	 {
-		 return true;
-	 }
-	 return false;
+	int state = glfwGetKey(GameWindow::Context(), static_cast<int32_t>(key));
+	if (state == GLFW_PRESS && state != GLFW_REPEAT)
+		return true;
+	else
+		return false;
 }
 
 bool Fracture::InputManager::IsMouseDown(MOUSECODE key)
 {
-	if (SDL_GetMouseState(NULL, NULL)& SDL_BUTTON((Uint32)key))
+	int state = glfwGetMouseButton(GameWindow::Context(), static_cast<int32_t>(key));
+	if (state == GLFW_PRESS)
 	{
-	
 		return true;
 	}
-	
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 bool Fracture::InputManager::IsMouseUp(MOUSECODE key)
 {
-	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON((Uint32)key))
-	{
-		return true;
-	}
 	return false;
 }
 
 glm::vec2 Fracture::InputManager::GetMousePosition()
 {
-	glm::vec2 pos = glm::vec2(0.0f, 0.0f);	
-	int x, y;
-	SDL_GetMouseState(&x, &y);
-	pos.x = (float)x;
-	pos.y = (float)y;
+	glm::vec2 pos = glm::vec2(0.0f, 0.0f);
+	if (glfwGetWindowAttrib(GameWindow::Context(), GLFW_HOVERED))
+	{
+		double m_x, m_y;
+		glfwGetCursorPos(GameWindow::Context(), &m_x, &m_y);
+		pos.x = (float)m_x;
+		pos.y = (float)m_y;
+	}
 	return pos;
 }
 
 bool Fracture::InputManager::IsMouseScroll()
 {
-	if (event.type == SDL_MOUSEWHEEL)
-	{				
-		return true;
-	}
-	return false;
+	return isScrolling;
 }
 
 glm::vec2 Fracture::InputManager::GetMouseScroll()
 {
-	return glm::vec2();
+	if (isScrolling)
+	{
+		isScrolling = false;
+		return m_scroll;
+	}
+	else
+	{
+		return glm::vec2(0.0f);
+	}
+	isScrolling = false;
 }
 
 bool Fracture::InputManager::GetMouseState()
@@ -80,5 +86,12 @@ Fracture::Mouse Fracture::InputManager::GetMouse()
 
 void Fracture::InputManager::PollEvents()
 {
-	SDL_PollEvent(&event);
+	glfwPollEvents();
+}
+
+void Fracture::InputManager::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	isScrolling = true;
+	m_scroll.x = (float)xoffset;
+	m_scroll.y = (float)yoffset;
 }

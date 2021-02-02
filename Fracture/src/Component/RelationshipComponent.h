@@ -15,6 +15,25 @@ namespace Fracture
 		RelationShipComponent(uint32_t id);
 		~RelationShipComponent() = default;
 
+
+		RelationShipComponent(const RelationShipComponent& rel, const std::string& name) :Component(rel.EntityID, ComponentType::Relationship)
+		{
+			hasParent = rel.hasParent;
+			m_parent = rel.m_parent;
+			noChildren = rel.noChildren;
+			m_children = rel.m_children;
+		}
+
+		const RelationShipComponent& operator = (const RelationShipComponent& rel)
+		{
+			hasParent = rel.hasParent;
+			m_parent = rel.m_parent;
+			noChildren = rel.noChildren;
+			m_children = rel.m_children;
+			return *this;
+		}
+
+
 		virtual void onStart();
 
 		uint32_t noChildren = 0;

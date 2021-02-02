@@ -1,6 +1,6 @@
 #include "Frame.h"
 #include "imgui/imgui.h"
-#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Panels/Panel.h"
 #include "Profiling/Profiler.h"
@@ -13,11 +13,11 @@ Fracture::Frame::~Frame()
 {
 }
 
-void Fracture::Frame::begin(SDL_Window* window)
+void Fracture::Frame::begin(GLFWwindow* window)
 {
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
+    ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     ImGuizmo::BeginFrame();
 }
@@ -40,11 +40,11 @@ void Fracture::Frame::end()
     ImGuiIO& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-        SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+        //GLFWwindow* backup_current_window =;
+        //SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+        //ImGui::UpdatePlatformWindows();
+        //ImGui::RenderPlatformWindowsDefault();
+        //SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
     }
 }
 

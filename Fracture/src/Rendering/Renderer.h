@@ -5,13 +5,13 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Game/GameWindow.h"
 #include "Event/Event.h"
 #include "Event/WindowEvents.h"
-#include <GLAD/glad.h>
+
 
 namespace Fracture
 {

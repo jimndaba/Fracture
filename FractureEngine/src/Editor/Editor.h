@@ -3,7 +3,7 @@
 #define EDITOR_H
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
-#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Fracture.h"
 #include <memory>

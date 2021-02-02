@@ -5,12 +5,22 @@
 
 #include "Keycode.h"
 #include "Mousecode.h"
-#include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #include "MouseState.h"
+#include "Game/GameWindow.h"
+
 
 namespace Fracture
 {
+	enum class KeyboardState
+	{
+		Pressed,
+		Released,
+		Down,
+		Up,
+		WheelUp,
+		WheelDown,
+	};
 
 	class InputManager
 	{
@@ -33,9 +43,15 @@ namespace Fracture
 		static Mouse GetMouse();
 
 		static void PollEvents();
-		static SDL_Event event;
+	
 	private:
+		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+		static KeyboardState m_keyState;
 		static Mouse m_mouse;
+
+		static glm::vec2 m_scroll;
+		static bool isScrolling;
 	};
 
 }

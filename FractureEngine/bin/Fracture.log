@@ -1,105 +1,702 @@
-[01:07:42] [info] FRACTURE: Initializing Splash
-[01:07:42] [info] FRACTURE: OpenGL loaded
-[01:07:42] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[01:07:42] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[01:07:42] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[01:07:42] [trace] FRACTURE: Loaded Texture: splash
-[01:07:42] [trace] FRACTURE: Loaded Texture: title
-[01:07:42] [info] FRACTURE: Completed Init
-[01:07:42] [info] FRACTURE: Show Splash
-[01:07:44] [info] FRACTURE: OpenGL loaded
-[01:07:44] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[01:07:44] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[01:07:44] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
-[01:07:44] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[01:07:44] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: RotateIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: CameraIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: LightIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: EyeIcon
-[01:07:44] [trace] FRACTURE: Loaded Texture: EyeIconC
-[01:07:44] [trace] FRACTURE: Loaded Texture: MeshIcon
-[01:07:44] [trace] FRACTURE: Loaded HDR Environment: Loft
-[01:07:44] [trace] FRACTURE: Loaded Shader: CubeMap
-[01:07:44] [trace] FRACTURE: Loaded Shader: irradiance
-[01:07:44] [trace] FRACTURE: Loaded Shader: prefilter
-[01:07:44] [trace] FRACTURE: Loaded Shader: bdrf
-[01:07:44] [trace] FRACTURE: Loaded Shader: Skybox
-[01:07:44] [trace] FRACTURE: Loaded Shader: DebugShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[01:07:44] [trace] FRACTURE: Loaded Shader: BillboardShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: DepthShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: PickingShader
-[01:07:44] [trace] FRACTURE: Loaded Shader: default
-[01:07:44] [trace] FRACTURE: Loaded Shader: Outline
-[01:07:44] [trace] FRACTURE: Loaded Shader: InvertColor
-[01:07:44] [trace] FRACTURE: Loaded Shader: ToneMap
-[01:07:44] [trace] FRACTURE: Loaded Shader: Threshold
-[01:07:44] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[01:07:44] [trace] FRACTURE: Loaded Shader: ColorMap
-[01:07:44] [trace] FRACTURE: Loaded Shader: BoxBlur
-[01:07:44] [trace] FRACTURE: Loaded Shader: DepthPass
-[01:07:44] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[01:07:44] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[01:07:44] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[01:07:44] [trace] FRACTURE: Loaded Material: billboardIcons
-[01:07:44] [trace] FRACTURE: Loaded Material: DebugMaterial
-[01:07:44] [trace] FRACTURE: Loaded Material: DepthMaterial
-[01:07:44] [trace] FRACTURE: Loaded Material: PickingMaterial
-[01:07:44] [trace] FRACTURE: Loaded Material: Outline
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: loading Child: Plane
-[01:07:44] [trace] FRACTURE: loading Mesh: Plane
-[01:07:44] [trace] FRACTURE: Loaded model: Plane
-[01:07:44] [trace] FRACTURE: loading Child: Cube
-[01:07:44] [trace] FRACTURE: loading Mesh: Cube
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: Loaded model: Cube
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: loading Child: Sphere
-[01:07:44] [trace] FRACTURE: loading Mesh: Sphere
-[01:07:44] [trace] FRACTURE: Loaded model: Sphere
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: loading Child: Cylinder
-[01:07:44] [trace] FRACTURE: loading Mesh: Cylinder
-[01:07:44] [trace] FRACTURE: Loaded model: Cylinder
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: loading Child: Torus
-[01:07:44] [trace] FRACTURE: loading Mesh: Torus
-[01:07:44] [trace] FRACTURE: Loaded model: Torus
-[01:07:44] [trace] FRACTURE: loading Child: Light
-[01:07:44] [trace] FRACTURE: loading Child: Camera
-[01:07:44] [trace] FRACTURE: loading Child: Suzanne
-[01:07:44] [trace] FRACTURE: loading Mesh: Suzanne
-[01:07:44] [trace] FRACTURE: Loaded model: Suzane
-[01:07:44] [info] FRACTURE: Renderer Init
-[01:07:48] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
-[01:07:50] [info] FRACTURE: width: 1152
-[01:07:50] [info] FRACTURE: height: 801
-[01:07:50] [info] FRACTURE: width: 1152
-[01:07:50] [info] FRACTURE: height: 801
-[01:08:16] [info] FRACTURE: width: 1152
-[01:08:16] [info] FRACTURE: height: 801
-[01:08:16] [info] FRACTURE: width: 1152
-[01:08:16] [info] FRACTURE: height: 801
-[01:08:16] [info] FRACTURE: width: 1152
-[01:08:16] [info] FRACTURE: height: 801
-[01:08:17] [info] FRACTURE: width: 1152
-[01:08:17] [info] FRACTURE: height: 801
-[01:08:17] [info] FRACTURE: width: 1152
-[01:08:17] [info] FRACTURE: height: 801
-[01:08:17] [info] FRACTURE: width: 1152
-[01:08:17] [info] FRACTURE: height: 801
-[01:08:17] [info] FRACTURE: width: 1152
-[01:08:17] [info] FRACTURE: height: 801
-[01:08:17] [info] FRACTURE: width: 1152
-[01:08:17] [info] FRACTURE: height: 801
+[12:52:45] [info] FRACTURE: Initializing Splash
+[12:52:46] [info] FRACTURE: OpenGL loaded
+[12:52:46] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:52:46] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:52:46] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[12:52:46] [trace] FRACTURE: Loaded Texture: splash
+[12:52:46] [trace] FRACTURE: Loaded Texture: title
+[12:52:46] [info] FRACTURE: Completed Init
+[12:52:46] [info] FRACTURE: Show Splash
+[12:53:12] [info] FRACTURE: OpenGL loaded
+[12:53:12] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[12:53:12] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[12:53:12] [info] FRACTURE: Version: 4.6.14757 Core Profile Context 20.11.3 27.20.14501.24001
+[12:53:12] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[12:53:12] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: RotateIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: CameraIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: LightIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: EyeIcon
+[12:53:12] [trace] FRACTURE: Loaded Texture: EyeIconC
+[12:53:12] [trace] FRACTURE: Loaded Texture: MeshIcon
+[12:53:12] [trace] FRACTURE: Loaded HDR Environment: Loft
+[12:53:12] [trace] FRACTURE: Loaded Shader: CubeMap
+[12:53:12] [trace] FRACTURE: Loaded Shader: irradiance
+[12:53:12] [trace] FRACTURE: Loaded Shader: prefilter
+[12:53:12] [trace] FRACTURE: Loaded Shader: bdrf
+[12:53:12] [trace] FRACTURE: Loaded Shader: Skybox
+[12:53:12] [trace] FRACTURE: Loaded Shader: DebugShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[12:53:12] [trace] FRACTURE: Loaded Shader: BillboardShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: DepthShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: PickingShader
+[12:53:12] [trace] FRACTURE: Loaded Shader: default
+[12:53:12] [trace] FRACTURE: Loaded Shader: Outline
+[12:53:12] [trace] FRACTURE: Loaded Shader: InvertColor
+[12:53:12] [trace] FRACTURE: Loaded Shader: ToneMap
+[12:53:12] [trace] FRACTURE: Loaded Shader: Threshold
+[12:53:12] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[12:53:12] [trace] FRACTURE: Loaded Shader: ColorMap
+[12:53:12] [trace] FRACTURE: Loaded Shader: BoxBlur
+[12:53:12] [trace] FRACTURE: Loaded Shader: DepthPass
+[12:53:12] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[12:53:12] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[12:53:12] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[12:53:12] [trace] FRACTURE: Loaded Material: billboardIcons
+[12:53:12] [trace] FRACTURE: Loaded Material: DebugMaterial
+[12:53:12] [trace] FRACTURE: Loaded Material: DepthMaterial
+[12:53:12] [trace] FRACTURE: Loaded Material: PickingMaterial
+[12:53:12] [trace] FRACTURE: Loaded Material: Outline
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: loading Child: Plane
+[12:53:12] [trace] FRACTURE: loading Mesh: Plane
+[12:53:12] [trace] FRACTURE: Loaded model: Plane
+[12:53:12] [trace] FRACTURE: loading Child: Cube
+[12:53:12] [trace] FRACTURE: loading Mesh: Cube
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: Loaded model: Cube
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: loading Child: Sphere
+[12:53:12] [trace] FRACTURE: loading Mesh: Sphere
+[12:53:12] [trace] FRACTURE: Loaded model: Sphere
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: loading Child: Cylinder
+[12:53:12] [trace] FRACTURE: loading Mesh: Cylinder
+[12:53:12] [trace] FRACTURE: Loaded model: Cylinder
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: loading Child: Torus
+[12:53:12] [trace] FRACTURE: loading Mesh: Torus
+[12:53:12] [trace] FRACTURE: Loaded model: Torus
+[12:53:12] [trace] FRACTURE: loading Child: Light
+[12:53:12] [trace] FRACTURE: loading Child: Camera
+[12:53:12] [trace] FRACTURE: loading Child: Suzanne
+[12:53:12] [trace] FRACTURE: loading Mesh: Suzanne
+[12:53:12] [trace] FRACTURE: Loaded model: Suzane
+[12:53:12] [info] FRACTURE: Renderer Init
+[12:53:15] [info] FRACTURE: width: 1152
+[12:53:15] [info] FRACTURE: height: 837
+[12:53:15] [info] FRACTURE: width: 1152
+[12:53:15] [info] FRACTURE: height: 837
+[12:53:15] [info] FRACTURE: width: 1152
+[12:53:15] [info] FRACTURE: height: 837
+[12:53:15] [info] FRACTURE: width: 1152
+[12:53:15] [info] FRACTURE: height: 837
+[12:53:15] [info] FRACTURE: width: 1152
+[12:53:15] [info] FRACTURE: height: 837
+[12:53:16] [info] FRACTURE: KEY DOWN
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: key A
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY REPEAT
+[12:53:16] [info] FRACTURE: KEY UP
+[12:53:17] [info] FRACTURE: KEY DOWN
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: key A
+[12:53:17] [info] FRACTURE: KEY UP
+[12:53:18] [info] FRACTURE: KEY DOWN
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: key A
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:18] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:19] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY REPEAT
+[12:53:20] [info] FRACTURE: KEY UP
+[12:53:20] [info] FRACTURE: KEY DOWN
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:21] [info] FRACTURE: KEY REPEAT
+[12:53:22] [info] FRACTURE: KEY UP
+[12:53:22] [info] FRACTURE: KEY DOWN
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY REPEAT
+[12:53:23] [info] FRACTURE: KEY UP
+[12:53:24] [info] FRACTURE: KEY DOWN
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:24] [info] FRACTURE: KEY REPEAT
+[12:53:25] [info] FRACTURE: KEY REPEAT
+[12:53:25] [info] FRACTURE: KEY REPEAT
+[12:53:25] [info] FRACTURE: KEY REPEAT
+[12:53:25] [info] FRACTURE: KEY REPEAT
+[12:53:25] [info] FRACTURE: KEY UP
+[12:53:25] [info] FRACTURE: KEY DOWN
+[12:53:26] [info] FRACTURE: KEY UP
+[12:53:26] [info] FRACTURE: KEY DOWN
+[12:53:26] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY REPEAT
+[12:53:27] [info] FRACTURE: KEY UP
+[12:53:31] [info] FRACTURE: KEY DOWN
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:31] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:32] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY UP
+[12:53:33] [info] FRACTURE: KEY DOWN
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:33] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY REPEAT
+[12:53:34] [info] FRACTURE: KEY UP
+[12:53:34] [info] FRACTURE: KEY DOWN
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY REPEAT
+[12:53:35] [info] FRACTURE: KEY UP
+[12:53:36] [info] FRACTURE: KEY DOWN
+[12:53:36] [info] FRACTURE: KEY UP
+[12:53:38] [info] FRACTURE: width: 1152
+[12:53:38] [info] FRACTURE: height: 837
+[12:53:38] [info] FRACTURE: width: 1152
+[12:53:38] [info] FRACTURE: height: 837
+[12:53:38] [info] FRACTURE: width: 1152
+[12:53:38] [info] FRACTURE: height: 837
+[12:53:38] [info] FRACTURE: width: 1152
+[12:53:38] [info] FRACTURE: height: 837
+[12:53:38] [info] FRACTURE: width: 1152
+[12:53:38] [info] FRACTURE: height: 837
+[12:53:39] [info] FRACTURE: KEY DOWN
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: key A
+[12:53:39] [info] FRACTURE: KEY REPEAT
+[12:53:39] [info] FRACTURE: KEY REPEAT
+[12:53:39] [info] FRACTURE: KEY REPEAT
+[12:53:39] [info] FRACTURE: KEY REPEAT
+[12:53:39] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:40] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY UP
+[12:53:41] [info] FRACTURE: KEY DOWN
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: key A
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:41] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:42] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY UP
+[12:53:43] [info] FRACTURE: KEY DOWN
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: key A
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:43] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY REPEAT
+[12:53:44] [info] FRACTURE: KEY UP

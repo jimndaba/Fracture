@@ -3,7 +3,7 @@
 #define VIEWPANEL_H
 
 #include "Panel.h"
-#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "ImGuizmo/ImGuizmo.h"
 #include <glm/gtx/transform.hpp> 
 #include <glm/gtc/quaternion.hpp>

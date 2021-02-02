@@ -6,8 +6,8 @@
 #include <memory>
 #include <vector>
 #include <math.h>
-#include "SDL2/SDL.h"
 #include "GLAD/glad.h"
+#include "glfw/glfw3.h"
 
 #include "Profiling/Profiler.h"
 #include "Logging/Logger.h"

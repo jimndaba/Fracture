@@ -4,10 +4,9 @@
 
 #include "Fracture.h"
 #include "Editor.h"
-#include "SDL2/SDL.h"
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
-#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "utils/FileDialogue.h"
 #include <direct.h>

@@ -12,7 +12,7 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 	m_isShow = true;
     m_run = false;
     m_logger = m_editor->GetLogger();
-	m_window = std::unique_ptr<GameWindow>(new GameWindow(800,400,"Splash", SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL|SDL_WINDOW_BORDERLESS));
+	m_window = std::unique_ptr<GameWindow>(new GameWindow(800,400,"Splash"));
     m_AssetManger = std::unique_ptr<AssetManager>();  
 
 	// Setup Dear ImGui context
@@ -31,7 +31,7 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 	Style();
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplSDL2_InitForOpenGL(m_window->Context(), m_window->glContext());
+	ImGui_ImplGlfw_InitForOpenGL(m_window->Context(),true);
 	ImGui_ImplOpenGL3_Init("#version 400");
 
     m_AssetManger->AddTexture("splash","content/textures/splashtest.png",TextureType::Diffuse);
@@ -60,7 +60,7 @@ bool Fracture::FractureSplash::Show()
 void Fracture::FractureSplash::Close()
 {   
   ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplSDL2_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext(); 
   m_window->close();
   m_window.release();
@@ -69,22 +69,22 @@ void Fracture::FractureSplash::Close()
 
 void Fracture::FractureSplash::onUpdate()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		ImGui_ImplSDL2_ProcessEvent(&event);
-		if (event.type == SDL_QUIT)
-			m_isShow = false;
-		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window->Context()))
-			m_isShow = false;
-	}
+	//SDL_Event event;
+	//while (SDL_PollEvent(&event))
+	//{
+	//	ImGui_ImplSDL2_ProcessEvent(&event);
+	//	if (event.type == SDL_QUIT)
+	//		m_isShow = false;
+	//	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window->Context()))
+	//		m_isShow = false;
+	//}
 }
 
 void Fracture::FractureSplash::onBeginFrame()
 {
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_window->Context());
+	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
 
@@ -192,14 +192,14 @@ void Fracture::FractureSplash::onEndFrame()
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	ImGuiIO& io = ImGui::GetIO();
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-	}
+	//if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	//{
+	//	SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+	//	SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+	//	ImGui::UpdatePlatformWindows();
+	//	ImGui::RenderPlatformWindowsDefault();
+	//	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	//}
     m_window->swapBuffers();
 }
 

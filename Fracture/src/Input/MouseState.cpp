@@ -1,6 +1,6 @@
 #include "MouseState.h"
 
-SDL_Event Fracture::Mouse::event;
+
 Fracture::MouseState Fracture::Mouse::m_MouseState;
 
 Fracture::Mouse::Mouse()
@@ -14,42 +14,37 @@ Fracture::Mouse::~Mouse()
 
 bool Fracture::Mouse::IsButtonDown(Fracture::MOUSECODE key)
 {
-	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON((Uint32)key))
+	int state = glfwGetMouseButton(GameWindow::Context(), static_cast<int32_t>(key));
+	if (state == GLFW_PRESS)
 	{
-		m_MouseState = MouseState::Up;
 		return true;
 	}
-	m_MouseState = MouseState::Down;
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 bool Fracture::Mouse::IsButtonUp(Fracture::MOUSECODE key)
 {
-	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON((Uint32)key))
-	{
-		m_MouseState = MouseState::Up;
-		return true;
-	}
-	m_MouseState = MouseState::Down;
 	return false;
 }
 
 glm::vec2 Fracture::Mouse::GetPosition()
 {
 	glm::vec2 pos = glm::vec2(0.0f, 0.0f);
-	int x, y;
-	SDL_GetMouseState(&x, &y);
-	pos.x = (float)x;
-	pos.y = (float)y;
+	if (glfwGetWindowAttrib(GameWindow::Context(), GLFW_HOVERED))
+	{
+		double m_x, m_y;
+		glfwGetCursorPos(GameWindow::Context(), &m_x, &m_y);
+		pos.x = (float)m_x;
+		pos.y = (float)m_y;
+	}
 	return pos;
 }
 
 bool Fracture::Mouse::IsScrolling()
 {
-	if (event.type == SDL_MOUSEWHEEL)
-	{
-		return true;
-	}
 	return false;
 }
 

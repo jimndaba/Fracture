@@ -3,8 +3,7 @@
 #define DEBUGRENDERER_H
 
 #include "glm/glm.hpp"
-#include "GLAD/glad.h"
-#include "KHR/khrplatform.h"
+
 
 namespace Fracture
 {

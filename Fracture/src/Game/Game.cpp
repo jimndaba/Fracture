@@ -1,16 +1,13 @@
 #include "Game.h"
-#include "GameWindow.h"
 #include "Rendering/Renderer.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Component/RenderComponent.h"
-#include "Rendering/Model.h"
-#include "Entity/Entity.h"
 #include "Component/CameraControllerComponent.h"
 #include "Entity/EntityManager.h"
 #include "Input/InputManager.h"
-#include "Entity/IDManager.h"
+//#include "Entity/IDManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 #include "Scripting/ScriptManager.h"
@@ -20,11 +17,11 @@
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
 #include "Logging/Logger.h"
-
+//#include "GameWindow.h"
 
 double t = 0.0;
 const double dt = 0.01;
-double currentTime = SDL_GetTicks() / 1000.0;
+double currentTime = glfwGetTime() / 1000.0;
 double accumulator = 0.0;
 
 std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager =0;
@@ -60,10 +57,9 @@ void Fracture::Game::run()
 	loadContent();
 	while (m_isRunning)
 	{
-		m_GameWindow->pollEvents(*this);
-		InputManager::PollEvents();
-
-		double newTime = (double)SDL_GetTicks()/1000.0;
+		m_GameWindow->pollEvents();
+	
+		double newTime = (double)glfwGetTime() /1000.0;
 		double frameTime = newTime - currentTime;
 		currentTime = newTime;
 

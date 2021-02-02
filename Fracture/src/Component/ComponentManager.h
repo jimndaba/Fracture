@@ -11,8 +11,8 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <iostream>
 #include "Component.h"
-#include "Logging/Logger.h"
 #include "Physics/PhysicsManager.h"
 #include "Profiling/Profiler.h"
 
@@ -120,7 +120,7 @@ namespace Fracture
 			}
 			else
 			{
-				FRACTURE_ERROR("COMPONENT SET OF TYPE: {} IS EMPTY", typeid(Component).name());
+				//FRACTURE_ERROR("COMPONENT SET OF TYPE: {} IS EMPTY",(void*)typeid(Component).name());
 			}
 		}
 

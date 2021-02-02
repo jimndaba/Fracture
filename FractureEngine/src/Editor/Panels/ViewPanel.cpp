@@ -249,9 +249,12 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			gizmoMode = ImGuizmo::OPERATION::ROTATE;
 		}
 
-		if (InputManager::IsKeyDown(KeyCode::LeftControl)&& InputManager::IsKeyDown(KeyCode::D) &&  m_scenegraph.m_selection)
+		if (InputManager::IsKeyDown(KeyCode::D) &&  m_scenegraph.m_selection)
 		{
-			m_scenegraph.DuplicateSelection(m_scenegraph.m_selection);
+			if (InputManager::IsKeyDown(KeyCode::LeftControl) || InputManager::IsKeyDown(KeyCode::RightControl))
+			{
+				m_scenegraph.DuplicateSelection(m_scenegraph.m_selection);
+			}			
 		}
 	}
 }

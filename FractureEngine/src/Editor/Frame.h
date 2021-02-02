@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <vector>
-#include "SDL2/SDL.h"
+#include "glfw/glfw3.h"
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
 
@@ -19,7 +19,7 @@ namespace Fracture
 		Frame();
 		~Frame();
 
-		void begin(SDL_Window* window);
+		void begin(GLFWwindow* window);
 		void render();
 		void end();
 

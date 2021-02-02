@@ -11,7 +11,7 @@
 #include "Panels/AssetBrowserPanel.h"
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
-
+#include "glfw/glfw3.h"
 
 #include "Rendering/FrameGraph/FrameGraph.h"
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
@@ -48,7 +48,7 @@ Fracture::Editor::Editor()
    
 
     m_loadNewProject = false;
-    currentTime = SDL_GetTicks() / 1000.0;
+    currentTime = glfwGetTime() / 1000.0;
 }
 
 Fracture::Editor::~Editor()
@@ -69,7 +69,7 @@ void Fracture::Editor::onInit()
 
     m_ComponentManager->onInit();
 
-    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName);
     m_window->MaximiseWindow();
     showRenderConfig  = false;
     showAudioConfig   = false;
@@ -97,7 +97,7 @@ void Fracture::Editor::onInit()
     Style();
   
     // Setup Platform/Renderer bindings
-    ImGui_ImplSDL2_InitForOpenGL(m_window->Context(), m_window->glContext());
+    ImGui_ImplGlfw_InitForOpenGL(m_window->Context(),true);
     ImGui_ImplOpenGL3_Init("#version 400");
 
     m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
@@ -315,17 +315,17 @@ void Fracture::Editor::run()
         }
     }
     //TODO - Set Editor Camera as camera;
-    double lastTime = SDL_GetTicks();
+    double lastTime = glfwGetTime();
     int nbFrames = 0;
 
 
 
-    while (!done)
+    while (!m_window->ShouldClose())
     {
-        double framestart = SDL_GetTicks();
+        double framestart = glfwGetTime();
 
 
-        double newTime = SDL_GetTicks() / 1000.0;
+        double newTime = glfwGetTime() / 1000.0;
         double frameTime = newTime - currentTime;
         currentTime = newTime;
 
@@ -342,12 +342,13 @@ void Fracture::Editor::run()
         }
         onRender();
 
-        double framelength = SDL_GetTicks() - framestart;
+        double framelength = glfwGetTime() - framestart;
         if (frameLimiter)
         {
             if (FRAME_DELAY > framelength)
             {
-                SDL_Delay(FRAME_DELAY - framelength);
+
+                //SDL_Delay(FRAME_DELAY - framelength); TODO
             }
         }
     }
@@ -357,16 +358,14 @@ void Fracture::Editor::run()
 void Fracture::Editor::onUpdate(float dt)
 {
     ProfilerTimer timer("onUpdate");
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
-    {
-        ImGui_ImplSDL2_ProcessEvent(&event);
-        if (event.type == SDL_QUIT)
-            done = true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window->Context()))
-            done = true;
-    }
+   
+    m_window->pollEvents();
     InputManager::PollEvents();
+   
+    if (InputManager::IsKeyDown(KeyCode::A))
+    {
+        FRACTURE_INFO("key A");
+    }
 
     if (InputManager::IsKeyDown(KeyCode::Delete))
     {
@@ -377,9 +376,9 @@ void Fracture::Editor::onUpdate(float dt)
         }
     }
 
-   
     m_PhysicsManger->startPhysics();
     m_viewpanel->onUpdate(dt);
+    
 }
 
 void Fracture::Editor::onRender()
@@ -403,7 +402,8 @@ void Fracture::Editor::onShutdown()
 {
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+
     ImGui::DestroyContext();
     m_Renderer.reset();  
     m_PhysicsManger.reset();
@@ -479,7 +479,8 @@ void Fracture::Editor::SetScene()
 void Fracture::Editor::onChangeTitleName(std::string title)
 {
     std::string newTitle = "Fracture Engine: " + title;
-    SDL_SetWindowTitle(GameWindow::Context(),newTitle.c_str());
+    glfwSetWindowTitle(GameWindow::Context(), newTitle.c_str());
+    //SDL_SetWindowTitle(GameWindow::Context(),newTitle.c_str());
 }
 
 void Fracture::Editor::DrawMenuBar()
