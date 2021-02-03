@@ -3,9 +3,6 @@
 #define PHYSICSMANAGER_H
 
 #include "Bullet/include/btBulletDynamicsCommon.h"
-
-
-
 #include "CollisionFilter.h"
 #include "glm/glm.hpp"
 #include <map>

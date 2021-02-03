@@ -14,7 +14,7 @@ Fracture::SSAONode::SSAONode(std::string name, int width, int height):FullScreen
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("SSAOOutput");
 
-	outputTexture = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, false);
+	outputTexture = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 	m_shader = AssetManager::getShader("SSAOPASS");
 

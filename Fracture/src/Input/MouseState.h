@@ -5,7 +5,7 @@
 #include "IInputState.h"
 #include "Mousecode.h"
 #include "glm/glm.hpp"
-#include "Game/GameWindow.h"
+
 
 namespace Fracture
 {

@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Logging/Logger.h"
+#include "GameWindow.h"
 #include "Rendering/Renderer.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/ComponentManager.h"
@@ -7,7 +9,6 @@
 #include "Component/CameraControllerComponent.h"
 #include "Entity/EntityManager.h"
 #include "Input/InputManager.h"
-//#include "Entity/IDManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 #include "Scripting/ScriptManager.h"
@@ -16,8 +17,7 @@
 #include "Rendering/DebugRenderer.h"
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
-#include "Logging/Logger.h"
-//#include "GameWindow.h"
+
 
 double t = 0.0;
 const double dt = 0.01;

@@ -15,7 +15,7 @@
 #include "Rendering/Shader.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
-#include <Fracture.h>
+
 
 
 Fracture::SceneSerializer::SceneSerializer(std::shared_ptr<Scene> scene) : m_scene(scene)

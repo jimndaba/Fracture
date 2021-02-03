@@ -40,15 +40,16 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 		auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
 		addnode(lambertian);
 	}
+	
 	{
 		BrightPass = std::make_shared<ThresholdNode>("thresholdPass",renderer.Width(),renderer.Height());
 		addnode(BrightPass);
 	}
 
-	
+	{
 		ToneMap = std::make_shared<ToneMappingNode>("ToneMapPass", renderer.Width(), renderer.Height());
 		addnode(ToneMap);
-	
+	}
 
 	{
 	    auto blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
@@ -73,8 +74,8 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 
 
 	{
-		auto intermediate = std::make_shared<IntermediateNode>("intermediatePass", renderer.Width(), renderer.Height());
-		addnode(intermediate);
+		//auto intermediate = std::make_shared<IntermediateNode>("intermediatePass", renderer.Width(), renderer.Height());
+		//addnode(intermediate);
 	}
 
 
@@ -85,11 +86,11 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 
-	addLink("global_output", "rendertarget", "mixPass", "output");
+	addLink("global_output", "rendertarget", "lamertianPass", "outputColor");// "mixPass", "output");
 
 	
 
-	addLink("mixPass", "colorA", "intermediatePass", "OutTexture");
+	addLink("mixPass", "colorA", "lamertianPass", "outputColor");
 	addLink("mixPass", "colorB", "BoxBlurPass", "blurOutput");
 	
 
@@ -98,12 +99,12 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	
 	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 	
-	addLink("ToneMapPass", "buffer", "intermediatePass", "OutTexture");
+	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
 		
 	//addLink("multiplyPass", "colorA", "lamertianPass", "outputColor");
 	//addLink("multiplyPass", "colorB", "ssaoBlur", "blurOutput");
 	
-	addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");
+	//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");
 
 	addLink("lamertianPass", "buffer", "clearframe", "buffer");
 	addLink("lamertianPass", "SSAOMap", "ssaoBlur", "blurOutput");

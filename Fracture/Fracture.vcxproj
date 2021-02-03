@@ -61,7 +61,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\pxshared\include;$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
@@ -76,7 +76,8 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua54.lib;assimp-vc141-mt.lib;SDL2.lib;SDL2main.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;lua54.lib;assimp-vc141-mt.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,7 +86,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\pxshared\include;$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
@@ -102,7 +103,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\release;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\lib\release;$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glfw3.lib;lua54.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;lua54.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -112,6 +113,7 @@
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
+    <ClCompile Include="src\Component\ComponentSet.cpp" />
     <ClCompile Include="src\Component\FrustumPlane.cpp" />
     <ClCompile Include="src\Component\ICamera.cpp" />
     <ClCompile Include="src\Component\ILight.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\PointLightShadowsNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSAONode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ThresholdNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ToneMappingNode.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="src\Serialisation\ProjectSerializer.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerializer.cpp" />
     <ClCompile Include="src\Serialisation\Serializer.cpp" />
+    <ClCompile Include="vendor\GLAD\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager\AssetManager.h" />
@@ -189,6 +193,7 @@
     <ClInclude Include="src\Component\CameraControllerComponent.h" />
     <ClInclude Include="src\Component\Component.h" />
     <ClInclude Include="src\Component\ComponentManager.h" />
+    <ClInclude Include="src\Component\ComponentSet.h" />
     <ClInclude Include="src\Component\FrustumPlane.h" />
     <ClInclude Include="src\Component\ICamera.h" />
     <ClInclude Include="src\Component\ILight.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PointLightShadowsNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSAONode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ThresholdNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ToneMappingNode.h" />
@@ -281,6 +287,9 @@
     <ClInclude Include="src\Serialisation\ProjectSerializer.h" />
     <ClInclude Include="src\Serialisation\SceneSerializer.h" />
     <ClInclude Include="src\Serialisation\Serializer.h" />
+    <ClInclude Include="vendor\GLAD\glad.h" />
+    <ClInclude Include="vendor\glfw\glfw3.h" />
+    <ClInclude Include="vendor\glfw\glfw3native.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\exponential.hpp" />
     <ClInclude Include="vendor\glm\ext.hpp" />

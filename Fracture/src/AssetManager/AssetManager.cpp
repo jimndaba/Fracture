@@ -43,6 +43,13 @@ void Fracture::AssetManager::AddShader(const std::string& name, const std::strin
 	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
 }
 
+void Fracture::AssetManager::AddShader(const std::string& name, const std::string& vertex, const std::string& fragment, const std::string& geomtry)
+{
+	std::shared_ptr<Shader> m_shader = std::make_shared<Shader>(name, vertex,fragment,geomtry);
+	m_Shaders[name] = m_shader;
+	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
+}
+
 void Fracture::AssetManager::AddModel(const std::string& name, const std::string& path)
 {
 	std::shared_ptr<Model> model = loadModel(path);
@@ -664,7 +671,6 @@ std::shared_ptr<Fracture::Material> Fracture::AssetManager::loadMeshMaterial(aiM
 
 	std::shared_ptr<Material> m_material = std::make_shared<Material>(material->GetName().data, getShader("PBRTexturedShader"));
 	ImportMaterial(material, m_material);	
-	//AddMaterial(material->GetName().data, m_material);
 	return m_material;
 }
 

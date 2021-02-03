@@ -65,8 +65,8 @@ void Fracture::EditorCamera::Move(Camera_Movement td, float dt)
 
 void Fracture::EditorCamera::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
 {
-    static double lastX = xpos;
-    static double lastY = ypos;
+    static float lastX = xpos;
+    static float lastY = ypos;
 
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top

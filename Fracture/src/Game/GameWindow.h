@@ -4,8 +4,9 @@
 
 #include <iostream>
 #include <string>
-#include "GLAD/glad.h"
-#include <glfw/glfw3.h>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+
 namespace Fracture
 {
 	class GameWindow
@@ -13,7 +14,7 @@ namespace Fracture
 
 	public:
 		GameWindow(int width, int height,std::string title);
-		~GameWindow();
+		~GameWindow() = default;
 
 		void MaximiseWindow();
 

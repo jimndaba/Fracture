@@ -10,6 +10,7 @@
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/ILight.h"
+#include "Component/ComponentSet.h"
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
 #include "Component/TagComponent.h"
@@ -77,7 +78,7 @@ void Fracture::Renderer::onInit()
     m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
     m_outlineBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
 
-    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, GL_FLOAT, 1,true));
+    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_Height, TextureTarget::Texture2D, GL_FLOAT, 1,true));
     m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
     //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));

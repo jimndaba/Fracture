@@ -34,9 +34,9 @@ const char* getTypeString(GLenum type) {
     }
 }
 
-Fracture::Shader::Shader(const std::string& name,const std::string& vertexPath, const std::string& fragmentPath):Name(name),vertPath(vertexPath),fragPath(fragmentPath)
+Fracture::Shader::Shader(const std::string& name,const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath):Name(name),vertPath(vertexPath),fragPath(fragmentPath)
 {
-    m_program = createShaderFromFile(vertexPath, fragmentPath);
+    m_program = createShaderFromFile(vertexPath, fragmentPath,geometryPath);
 }
 
 Fracture::Shader::~Shader()
@@ -65,7 +65,15 @@ void Fracture::Shader::reloadShader()
 {
     if (m_program &&  !vertPath.empty() && !fragPath.empty())
     {
-        unsigned int reloaded_program = createShaderFromFile(vertPath,fragPath);
+        unsigned int reloaded_program;
+        if (!geoPath.empty())
+        {
+            reloaded_program = createShaderFromFile(vertPath, fragPath, geoPath);
+        }
+        else
+        {
+           reloaded_program = createShaderFromFile(vertPath, fragPath,"");
+        }
 
         if (reloaded_program)
         {
@@ -171,17 +179,23 @@ unsigned int Fracture::Shader::ID()
     return m_program;
 }
 
-unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath)
+unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath)
 {
     unsigned int program;
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
+    std::string geometryCode;
+
     std::ifstream vShaderFile;
     std::ifstream fShaderFile;
+    std::ifstream gShaderFile;
+
     // ensure ifstream objects can throw exceptions:
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
     try
     {
         // open files
@@ -197,6 +211,14 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
         // convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
+        if (!geometryPath.empty())
+        {
+            gShaderFile.open(geometryPath);
+            std::stringstream gShaderStream;
+            gShaderStream << gShaderFile.rdbuf();
+            gShaderFile.close();
+            geometryCode = gShaderStream.str();
+        }
     }
     catch (std::ifstream::failure e)
     {
@@ -234,10 +256,24 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
         FRACTURE_ERROR("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n {}", infoLog);
     };
 
+    // if geometry shader is given, compile geometry shader
+    unsigned int geometry;
+    if (!geometryPath.empty())
+    {
+        const char* gShaderCode = geometryCode.c_str();
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geometry, 1, &gShaderCode, NULL);
+        glCompileShader(geometry);
+        checkCompileErrors(geometry, "GEOMETRY");
+    }
+
     // shader Program
     program = glCreateProgram();
     glAttachShader(program, vertex);
     glAttachShader(program, fragment);
+    if (!geometryPath.empty())
+        glAttachShader(program, geometry);
+
     glLinkProgram(program);
     // print linking errors if any
     glGetProgramiv(program, GL_LINK_STATUS, &success);
@@ -251,6 +287,8 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
     // delete the shaders as they're linked into our program now and no longer necessery
     glDeleteShader(vertex);
     glDeleteShader(fragment);
+    if (!geometryPath.empty())
+        glDeleteShader(geometry);
 
     return program;
 }

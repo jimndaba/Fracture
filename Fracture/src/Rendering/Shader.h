@@ -18,7 +18,7 @@ namespace Fracture {
 	class Shader
 	{
 	public:
-		Shader(const std::string& name,const std::string& vertexPath,const std::string& fragmentPath);
+		Shader(const std::string& name,const std::string& vertexPath,const std::string& fragmentPath, const std::string& geometryPath ="");
 		~Shader();
 
 		void use();
@@ -44,6 +44,7 @@ namespace Fracture {
 		std::string Name;
 		std::string vertPath;
 		std::string fragPath;
+		std::string geoPath;
 
 		unsigned int ID();
 
@@ -51,7 +52,7 @@ namespace Fracture {
 		unsigned int m_program;
 	
 
-		unsigned int createShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath);
+		unsigned int createShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometyPath);
 		void checkCompileErrors(unsigned int shader, std::string type);
 	};
 

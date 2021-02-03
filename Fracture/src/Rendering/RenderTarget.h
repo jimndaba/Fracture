@@ -19,8 +19,7 @@ namespace Fracture
 	{
 
 	public:
-		RenderTarget(unsigned int width, unsigned int height, GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = true, bool renderbufferObject = false);
-		RenderTarget(unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false, bool renderbufferObject = true);
+		RenderTarget(unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 		~RenderTarget();
 
 		unsigned int ID;

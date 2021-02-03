@@ -22,12 +22,14 @@ namespace Fracture
 		ColorAttachment,
 		DepthStencilAttachment,
 		Environment,
+		CubeMap
 	};
 
 	enum class TextureTarget
 	{
 		Texture2D,
 		MultiSample,
+		CubeMap,
 	};
 
 	class Texture

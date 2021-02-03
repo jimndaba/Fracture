@@ -13,7 +13,7 @@
 
 Fracture::ShadowPass::ShadowPass()
 {
-	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(SHADOW_WIDTH, SHADOW_HEIGHT, GL_FLOAT, 1, true));
+	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(SHADOW_WIDTH, SHADOW_HEIGHT,TextureTarget::Texture2D, GL_FLOAT, 1, true));
 }
 
 Fracture::ShadowPass::~ShadowPass()
@@ -31,8 +31,8 @@ void Fracture::ShadowPass::Begin()
 
 void Fracture::ShadowPass::End()
 {		
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		FRACTURE_ERROR("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//	FRACTURE_ERROR("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 	m_renderTarget->Unbind();
 }
 

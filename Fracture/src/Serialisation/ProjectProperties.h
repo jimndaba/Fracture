@@ -2,7 +2,6 @@
 #ifndef PROJECTPROPERTIES_H
 #define PROJECTPROPERTIES_H
 
-#include "Fracture.h"
 #include <string>
 
 namespace Fracture

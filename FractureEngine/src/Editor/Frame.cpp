@@ -40,11 +40,10 @@ void Fracture::Frame::end()
     ImGuiIO& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        //GLFWwindow* backup_current_window =;
-        //SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-        //ImGui::UpdatePlatformWindows();
-        //ImGui::RenderPlatformWindowsDefault();
-        //SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+       
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+     
     }
 }
 

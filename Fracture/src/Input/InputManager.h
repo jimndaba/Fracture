@@ -6,12 +6,12 @@
 #include "Keycode.h"
 #include "Mousecode.h"
 #include <glm/glm.hpp>
-#include "MouseState.h"
-#include "Game/GameWindow.h"
+#include "glfw/glfw3.h"
 
 
 namespace Fracture
 {
+	class Mouse;
 	enum class KeyboardState
 	{
 		Pressed,

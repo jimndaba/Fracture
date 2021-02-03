@@ -11,7 +11,6 @@
 #include "Panels/AssetBrowserPanel.h"
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
-#include "glfw/glfw3.h"
 
 #include "Rendering/FrameGraph/FrameGraph.h"
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
@@ -48,7 +47,7 @@ Fracture::Editor::Editor()
    
 
     m_loadNewProject = false;
-    currentTime = glfwGetTime() / 1000.0;
+    currentTime = glfwGetTime();
 }
 
 Fracture::Editor::~Editor()
@@ -170,6 +169,10 @@ void Fracture::Editor::onLoadNew()
 
     //Environment
     AssetManager::AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
+
+    //PointShadows
+    AssetManager::AddShader("PointShadows", "content/shaders/PointShadows/vertex.glsl", "content/shaders/PointShadows/fragment.glsl", "content/shaders/PointShadows/geometry.glsl");
+
 
     //Irradiance
     AssetManager::AddShader("irradiance", "content/shaders/irradiance/vertex.glsl", "content/shaders/irradiance/fragment.glsl");
@@ -325,7 +328,7 @@ void Fracture::Editor::run()
         double framestart = glfwGetTime();
 
 
-        double newTime = glfwGetTime() / 1000.0;
+        double newTime = glfwGetTime();
         double frameTime = newTime - currentTime;
         currentTime = newTime;
 
@@ -357,8 +360,7 @@ void Fracture::Editor::run()
 
 void Fracture::Editor::onUpdate(float dt)
 {
-    ProfilerTimer timer("onUpdate");
-   
+    ProfilerTimer timer("onUpdate");   
     m_window->pollEvents();
     InputManager::PollEvents();
    

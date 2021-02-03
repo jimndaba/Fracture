@@ -51,6 +51,8 @@ namespace Fracture
 
 
 		static void AddShader(const std::string &name, const std::string& vertex, const std::string& fragment);
+		static void AddShader(const std::string& name, const std::string& vertex, const std::string& fragment, const std::string& geomtry);
+
 		static void AddModel(const std::string& name, const std::string& path);
 		static void AddTexture(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddTexture(const std::shared_ptr<Texture>& texture);

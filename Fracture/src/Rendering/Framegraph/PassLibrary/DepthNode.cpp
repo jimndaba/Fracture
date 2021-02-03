@@ -14,7 +14,7 @@ Fracture::DepthNode::DepthNode(std::string name, int width, int height, RenderBu
 {
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputDepthMap");
 
-	outputDepthMap = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, true);
+	outputDepthMap = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D,GL_FLOAT, 1, true);
 
 	m_shader = AssetManager::getShader("DepthPass");
 

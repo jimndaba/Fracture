@@ -1,9 +1,9 @@
 #include "ComponentManager.h"
 #include "Component.h"
+#include "ComponentSet.h"
+
 #include "TagComponent.h"
 #include "IUpdatable.h"
-#include "Scripting/ScriptManager.h"
-#include "Rendering/Renderer.h"
 #include "ScriptComponent.h"
 #include "BoxColliderComponent.h"
 #include "RigidBodyComponent.h"
@@ -14,8 +14,8 @@
 #include "BillboardComponent.h"
 #include "RelationshipComponent.h"
 #include "RenderComponent.h"
-#include "Profiling/Profiler.h"
-#include "Logging/Logger.h"
+#include "Physics/PhysicsManager.h"
+
 #include "Game/Game.h"
 
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_tagComponents;
@@ -28,7 +28,6 @@ std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RigidBodyC
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BoxColliderComponents;
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_ScriptComponents;
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_BillboardComponents;
-
 std::map<std::type_index, std::unique_ptr<Fracture::ComponentSet>> Fracture::ComponentManager::Register;
 
 Fracture::ComponentManager::ComponentManager()
@@ -65,7 +64,7 @@ void Fracture::ComponentManager::onLoad()
 	}
 }
 
-void Fracture::ComponentManager::onUpdate(float dt)
+const void Fracture::ComponentManager::onUpdate(float dt)
 {	
 
 	ProfilerTimer timer("Component OnUpdate");
@@ -83,7 +82,7 @@ void Fracture::ComponentManager::onUpdate(float dt)
 	}
 }
 
-void Fracture::ComponentManager::ClearComponents()
+const void Fracture::ComponentManager::ClearComponents()
 {
 	for (auto it = Register.begin(); it != Register.end(); ++it)
 	{
@@ -91,10 +90,15 @@ void Fracture::ComponentManager::ClearComponents()
 	}
 }
 
-void Fracture::ComponentManager::RemoveComponentsbyID(const uint32_t& id)
+const void Fracture::ComponentManager::RemoveComponentsbyID(const uint32_t& id)
 {	
 	for (auto it = Register.begin(); it != Register.end(); ++it)
 	{
 		it->second->RemoveComponent(id);
 	}
 }
+
+
+
+
+

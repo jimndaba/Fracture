@@ -323,7 +323,8 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref,SunLight light)
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;   
     //(1.0 - shadow));
-    ambient = (kD + diffuse + specular) * ao * intensity; //* ssao;
+    ambient = (kD + diffuse + specular) * ao * intensity ;//*  ssao; //;
+    ambient *= ssao;
     return ambient ;
 }
 
@@ -334,8 +335,8 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    ambient = light.diffuse *albedo* light.intensity ;//* ssao;  
-
+    ambient = light.diffuse *albedo* light.intensity;// * ssao;//;  
+    ambient *= ssao;
     vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
 	float G = GeometrySmith(normal, viewDir, l, roughness); 
 

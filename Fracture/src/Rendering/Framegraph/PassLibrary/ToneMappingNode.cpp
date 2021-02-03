@@ -14,7 +14,7 @@ Fracture::ToneMappingNode::ToneMappingNode(std::string name, int width, int heig
 	m_output = std::make_shared<OutputSocket>("colorOut");
 
 
-	colorOut = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, false);
+	colorOut = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 	m_toneShader = AssetManager::getShader("ToneMap");
 	//Sockets

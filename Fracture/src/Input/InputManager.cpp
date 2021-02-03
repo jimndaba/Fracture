@@ -1,10 +1,14 @@
 #include "InputManager.h"
 #include <iostream>
+#include "MouseState.h"
+#include "Game/GameWindow.h"
 #include "Logging/Logger.h"
+
 
 Fracture::Mouse Fracture::InputManager::m_mouse;
 Fracture::KeyboardState Fracture::InputManager::m_keyState;
-
+glm::vec2 Fracture::InputManager::m_scroll;
+bool Fracture::InputManager::isScrolling;
 
 Fracture::InputManager::InputManager()
 {

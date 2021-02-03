@@ -1,5 +1,5 @@
 #include "MouseState.h"
-
+#include "Game/GameWindow.h"
 
 Fracture::MouseState Fracture::Mouse::m_MouseState;
 

@@ -91,7 +91,8 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, Fracture::Te
 
 }
 
-Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarget target, GLenum internalFormat, GLenum format, GLenum ftype, Fracture::TextureType mtype):Name(name), mTexturetarget(TextureTarget::Texture2D)
+Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarget target, GLenum internalFormat, GLenum format, GLenum ftype, Fracture::TextureType mtype):
+	Name(name), mTexturetarget(TextureTarget::Texture2D),width(Width),height(Height)
 {
 	InternalFormat = internalFormat;
 	Type = ftype;
@@ -106,6 +107,11 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarge
 	{
 		texturetarget = GL_TEXTURE_2D_MULTISAMPLE;
 	}
+	if (target == TextureTarget::CubeMap)
+	{
+		texturetarget = GL_TEXTURE_CUBE_MAP;
+	}
+
 
 	glGenTextures(1, &id);
 	glBindTexture(texturetarget, id);
@@ -135,7 +141,7 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarge
 			
 		
 	}
-	if (mtype == TextureType::DepthStencilAttachment)
+	if (mtype == TextureType::DepthStencilAttachment && target == TextureTarget::Texture2D)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, Width, Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -144,7 +150,20 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarge
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);		
 		
 	}
+	if (mtype == TextureType::DepthStencilAttachment && target == TextureTarget::CubeMap)
+	{
+		for (unsigned int i = 0; i < 6; ++i)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
+				Width, Height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		}
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+	}
 	glBindTexture(texturetarget, 0);
 
 }
@@ -158,6 +177,10 @@ void Fracture::Texture::Bind()
 	if (mTexturetarget == TextureTarget::MultiSample)
 	{
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, id);
+	}
+	if (mTexturetarget == TextureTarget::CubeMap)
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP,id);;
 	}
 
 }

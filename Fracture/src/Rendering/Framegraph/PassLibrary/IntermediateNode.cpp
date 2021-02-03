@@ -11,7 +11,7 @@ Fracture::IntermediateNode::IntermediateNode(std::string name, int width, int he
 	auto m_output = std::make_shared<OutputSocket>("OutTexture");
 
 
-	colorOut = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, false);
+	colorOut = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 	//Sockets
 	AddInputSocket(m_Input);	

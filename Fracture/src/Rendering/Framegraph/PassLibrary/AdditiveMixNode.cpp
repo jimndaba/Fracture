@@ -13,7 +13,7 @@ Fracture::AdditiveMixNode::AdditiveMixNode(std::string name, int width, int heig
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("output");
 
-	outputColor = std::make_shared<RenderTarget>(width, height, GL_FLOAT, 1, false);
+	outputColor = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 	m_shader = AssetManager::getShader("AdditiveMix");
 
