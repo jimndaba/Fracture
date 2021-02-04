@@ -5,15 +5,15 @@
 #include "Rendering/Texture.h"
 #include "Profiling/Profiler.h"
 
-Fracture::BoxBlurNode::BoxBlurNode(std::string name, int width, int height):FullScreenNode(name)
+Fracture::BoxBlurNode::BoxBlurNode(const std::string& name,const int& width,const int& height):
+	FullScreenNode(name),
+	m_shader(AssetManager::getShader("BoxBlur"))
 {
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("colorTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("blurOutput");
 
-	outputTexture = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-
-	m_shader = AssetManager::getShader("BoxBlur");
-
+	outputTexture = std::make_shared<RenderTarget>("BoxBlur_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	
 	//Sockets
 	AddInputSocket(m_Input);
 	AddOutputSocket(m_output);

@@ -5,7 +5,6 @@
 #include "Rendering/RenderTarget.h"
 #include "PassLibrary/ClearFrame.h"
 #include "PassLibrary/LambertianNode.h"
-#include "PassLibrary/InvertNode.h"
 #include "PassLibrary/ToneMappingNode.h"
 #include "PassLibrary/ThresholdNode.h"
 #include "PassLibrary/AdditiveMixNode.h"
@@ -86,23 +85,18 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 
-	addLink("global_output", "rendertarget", "lamertianPass", "outputColor");// "mixPass", "output");
+	addLink("global_output", "rendertarget", "mixPass", "output");// "mixPass", "output");
 
 	
 
 	addLink("mixPass", "colorA", "lamertianPass", "outputColor");
 	addLink("mixPass", "colorB", "BoxBlurPass", "blurOutput");
 	
-
-
 	addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
 	
 	addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 	
-	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
-		
-	//addLink("multiplyPass", "colorA", "lamertianPass", "outputColor");
-	//addLink("multiplyPass", "colorB", "ssaoBlur", "blurOutput");
+	addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");		
 	
 	//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");
 
@@ -120,7 +114,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 
 }
 
-void Fracture::FrameGraph::addLink(std::string from, std::string source, std::string to, std::string resouce)
+void Fracture::FrameGraph::addLink(const std::string& from, const std::string& source, const std::string& to, const std::string& resouce)
 {
 	std::shared_ptr<Link> mlink = std::make_shared<Link>();
 	mlink->FrameNode_From= from;
@@ -130,22 +124,12 @@ void Fracture::FrameGraph::addLink(std::string from, std::string source, std::st
 	m_links.push_back(mlink);
 }
 
-void Fracture::FrameGraph::addGlobalLink(std::string to, std::string resouce)
-{
-
-}
-
-void Fracture::FrameGraph::linkGlobalResources()
-{
-
-}
-
 void Fracture::FrameGraph::addnode(std::shared_ptr<FrameNode> n)
 {
 	m_nodes.push_back(n);
 }
 
-std::shared_ptr<Fracture::FrameNode> Fracture::FrameGraph::getNode(std::string name)
+std::shared_ptr<Fracture::FrameNode> Fracture::FrameGraph::getNode(const std::string& name)
 {
 	for (auto& n : m_nodes)
 	{
@@ -230,7 +214,7 @@ void Fracture::FrameGraph::DFS(std::shared_ptr<FrameNode> v)
 	DFSUtil(v);
 }
 
-void Fracture::FrameGraph::Resize(int width,int height)
+void Fracture::FrameGraph::Resize(const int& width,const int& height)
 {
 	for (auto& node : m_nodes)
 	{

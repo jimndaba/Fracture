@@ -20,6 +20,7 @@ namespace Fracture
 	class EntityFactory;
 	struct ProjectProperties;
 	class EditorCamera;
+	class FreeCamera;
 	class FrameGraph;
 
 	class Editor
@@ -47,6 +48,7 @@ namespace Fracture
 		static void isNewProject(bool isnew);
 
 		static std::shared_ptr<Scene> ActiveScene();
+
 
 		std::shared_ptr<Logger> GetLogger();
 		std::shared_ptr<ProjectProperties> Properties();
@@ -76,7 +78,8 @@ namespace Fracture
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::unique_ptr<EntityFactory> m_EntityFactory;
 		static std::shared_ptr<Scene> m_ActiveScene;
-		std::shared_ptr<EditorCamera> camera;
+		//std::shared_ptr<EditorCamera> camera;
+		std::shared_ptr<FreeCamera> camera;
 
 		std::shared_ptr<Texture> m_irradiance;
 		std::shared_ptr<Texture> m_prefilter;
@@ -92,7 +95,7 @@ namespace Fracture
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
 		std::shared_ptr<AssetBrowserPanel> m_AssetBrowser;
-		std::shared_ptr<ProjectProperties> m_properties;
+		static std::shared_ptr<ProjectProperties> m_properties;
 
 		static bool m_loadNewProject;
 		static bool p_open;
@@ -111,6 +114,8 @@ namespace Fracture
 		static void showPhysicsManager(bool* p_open);
 		static void showInputManager(bool* p_open);
 		static void showProjectSettings(bool* p_open,std::shared_ptr<Fracture::ProjectProperties>& m_properties);
+
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	};
 }
 

@@ -2,7 +2,7 @@
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
 
-Fracture::ClearFrame::ClearFrame(std::string Name):FrameNode(Name)
+Fracture::ClearFrame::ClearFrame(const std::string& Name):FrameNode(Name)
 {
 	std::shared_ptr<InputSocket> m_Input =std::make_shared<InputSocket>("buffer");
 	std::shared_ptr<OutputSocket> m_output =std::make_shared<OutputSocket>("buffer");

@@ -6,16 +6,18 @@
 #include "Rendering/Texture.h"
 #include "Profiling/Profiler.h"
 
-Fracture::MultiplyMixNode::MultiplyMixNode(std::string name, int width, int height):FullScreenNode(name)
+Fracture::MultiplyMixNode::MultiplyMixNode(const std::string& name,const int& width,const int& height):
+	FullScreenNode(name),
+	m_shader(AssetManager::getShader("MultiplyMix"))
 {
 	std::shared_ptr<InputSocket> m_InputA = std::make_shared<InputSocket>("colorA");
 	std::shared_ptr<InputSocket> m_InputB = std::make_shared<InputSocket>("colorB");
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("output");
 
-	outputColor = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	outputColor = std::make_shared<RenderTarget>("Multiply_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-	m_shader = AssetManager::getShader("MultiplyMix");
+	
 
 	//Sockets
 	AddInputSocket(m_InputA);

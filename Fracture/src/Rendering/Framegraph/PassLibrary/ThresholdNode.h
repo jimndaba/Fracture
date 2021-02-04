@@ -12,7 +12,7 @@ namespace Fracture
 	class ThresholdNode : public FullScreenNode
 	{
 	public:
-		ThresholdNode(std::string name, int width, int height);
+		ThresholdNode(const std::string& name,const int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
 

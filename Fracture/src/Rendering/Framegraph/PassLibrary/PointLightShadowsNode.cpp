@@ -9,21 +9,22 @@
 
 
 Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height, RenderBucket* bucket, const std::shared_ptr<PointLight>& light):
-	RenderQueueNode(name),Width(width),Height(height), m_light(light)
+	RenderQueueNode(name),
+	Width(width),
+	Height(height),
+	m_light(light),
+	aspect ((float)width / (float)height),
+	m_near(1.0f),
+	m_far(25.0f)
 {
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outShadowMap");
 
-	outShadowMap = std::make_shared<RenderTarget>(1024, 1024, TextureTarget::CubeMap,GL_FLOAT,1,true);
+	outShadowMap = std::make_shared<RenderTarget>("PointShadows_Out",1024, 1024, TextureTarget::CubeMap,GL_FLOAT,1,true);
 	m_shader = AssetManager::getShader("PointShadows");
 	AcceptBucket(bucket);
 	//AddInputSocket(m_EnvironmentInput);
 	AddOutputSocket(m_output);
 	AddOutputResource(m_output, outShadowMap);
-
-	aspect = (float)width/ (float)height;
-	m_near = 1.0f;
-	m_far = 25.0f;
-
 }
 
 void Fracture::PointShadowsNode::execute(Renderer& renderer)

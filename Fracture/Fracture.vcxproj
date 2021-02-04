@@ -153,9 +153,7 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\DepthNode.cpp" />
-    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.cpp" />
-    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\InvertNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\PointLightShadowsNode.cpp" />
@@ -214,9 +212,7 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\DepthNode.h" />
-    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\EnvironmentMapNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.h" />
-    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\InvertNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\LambertianNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\MultiplyMix.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PointLightShadowsNode.h" />

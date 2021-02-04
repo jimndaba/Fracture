@@ -5,16 +5,17 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Renderer.h"
 
-Fracture::ToneMappingNode::ToneMappingNode(std::string name, int width, int height):FullScreenNode(name)
+Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& width, const int& height) :
+	FullScreenNode(name),
+	Gamma(1.0f),
+	Exposure(1.0f)
 {
-	Gamma = 1.0f;
-	Exposure = 1.0f;
 	
 	m_Input = std::make_shared<InputSocket>("buffer");
 	m_output = std::make_shared<OutputSocket>("colorOut");
 
 
-	colorOut = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	colorOut = std::make_shared<RenderTarget>("ToneMap_ColorOut",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 	m_toneShader = AssetManager::getShader("ToneMap");
 	//Sockets

@@ -13,11 +13,14 @@
 
 std::shared_ptr<Fracture::RenderTarget> Fracture::PickingPass::m_renderTarget;
 
-Fracture::PickingPass::PickingPass(std::string Name, int width, int height, RenderBucket* opaque):RenderQueueNode(Name),SCREEN_WIDTH(width),SCREEN_HEIGHT(height)
+Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,const int& height, RenderBucket* opaque):
+	RenderQueueNode(Name),
+	SCREEN_WIDTH(width),
+	SCREEN_HEIGHT(height),
+	m_pixelInfo(std::make_shared<PixelInfo>())
 {
-	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT, TextureTarget::Texture2D, GL_FLOAT, 1,false));
-	AcceptBucket(opaque);
-	m_pixelInfo = std::make_shared<PixelInfo>();
+	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget("PickingPass",SCREEN_WIDTH, SCREEN_HEIGHT, TextureTarget::Texture2D, GL_FLOAT, 1,false));
+	AcceptBucket(opaque);	
 }
 
 Fracture::PickingPass::~PickingPass()

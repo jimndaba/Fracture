@@ -13,7 +13,7 @@ namespace Fracture
 	class BoxBlurNode :public FullScreenNode
 	{
 	public:
-		BoxBlurNode(std::string name, int width, int height);
+		BoxBlurNode(const std::string& name,const  int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
 

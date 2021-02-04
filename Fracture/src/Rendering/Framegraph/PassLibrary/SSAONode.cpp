@@ -9,31 +9,29 @@
 #include <random>
 
 
-Fracture::SSAONode::SSAONode(std::string name, int width, int height):FullScreenNode(name)
+Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int& height):
+	FullScreenNode(name),
+	m_shader(AssetManager::getShader("SSAOPASS"))
 {
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("SSAOOutput");
 
-	outputTexture = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	outputTexture = std::make_shared<RenderTarget>("SSAO_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-	m_shader = AssetManager::getShader("SSAOPASS");
-
+	
 	//Sockets
 	AddInputSocket(m_Input);
 	AddOutputSocket(m_output);
 
 	//Link Sockets to Resources
 	AddInputResource(m_Input, resource);
-	//AddInputResource(m_EnvironmentInput, resource);
 	AddOutputResource(m_output, outputTexture);
 	
+	//noise TODO Move to Noise Texture Node
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
-	std::default_random_engine generator;
-	//noise
+	std::default_random_engine generator;	
 	std::vector<glm::vec3> ssaoNoise;
-
 	unsigned int noise_res = 16;
-
 	for (unsigned int i = 0; i < noise_res; i++)
 	{
 		glm::vec3 noise(

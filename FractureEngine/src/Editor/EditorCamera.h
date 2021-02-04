@@ -1,4 +1,6 @@
 #pragma once
+#ifndef EDITORCAMERA_H
+#define EDITORCAMERA_H
 
 #include "Fracture.h"
 
@@ -52,3 +54,4 @@ namespace Fracture
 	};
 }
 
+#endif

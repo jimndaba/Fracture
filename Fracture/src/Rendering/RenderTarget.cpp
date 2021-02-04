@@ -4,12 +4,13 @@
 #include <iostream>
 #include "Renderer.h"
 
-Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
-{
-    Width = width;
-    Height = height;
-    Type = type;
-
+Fracture::RenderTarget::RenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
+:m_name(name),
+Width(width),
+Height(height),
+Type(type),
+HasDepthAndStencil(depthAndStencil)
+{    
     glGenFramebuffers(1, &ID);
     glBindFramebuffer(GL_FRAMEBUFFER, ID);
     // generate all requested color attachments
@@ -34,8 +35,7 @@ Fracture::RenderTarget::RenderTarget(unsigned int width, unsigned int height, Te
       
         m_ColorAttachments.push_back(texture);
     }
-    // then generate Depth/Stencil texture if requested
-    HasDepthAndStencil = depthAndStencil;
+    // then generate Depth/Stencil texture if requested    
     if (depthAndStencil && texturetarget == TextureTarget::Texture2D)
     {       
         
@@ -110,6 +110,11 @@ void Fracture::RenderTarget::blit(unsigned int fbo)
 
 void Fracture::RenderTarget::Unbind()
 {   
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        FRACTURE_ERROR("ERROR::FRAMEBUFFER:: Framebuffer - {} - is not complete!", m_name);
+        throw "FRAMEBUFFER_INVALID";
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

@@ -2,7 +2,7 @@
 #include "InputSocket.h"
 #include "OutputSocket.h"
 
-Fracture::FrameNode::FrameNode(std::string name):m_name(name)
+Fracture::FrameNode::FrameNode(const std::string& name):m_name(name)
 {
 	isVisited = false;
 }

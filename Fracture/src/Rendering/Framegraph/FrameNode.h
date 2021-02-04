@@ -18,7 +18,7 @@ namespace Fracture
 	class FrameNode
 	{
 	public:
-		FrameNode(std::string name);
+		FrameNode(const std::string& name);
 
 		virtual void execute(Renderer& renderer) = 0;
 

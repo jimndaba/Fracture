@@ -35,7 +35,7 @@ void Fracture::EditorCamera::setProjection(int width, int height)
 }
 
 void Fracture::EditorCamera::onStart()
-{
+{   
 }
 
 void Fracture::EditorCamera::Move(Camera_Movement td, float dt)

@@ -14,7 +14,7 @@ namespace Fracture
 	class SSAONode :public FullScreenNode
 	{
 	public:
-		SSAONode(std::string name, int width, int height);
+		SSAONode(const std::string& name,const int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
 

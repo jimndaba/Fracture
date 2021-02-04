@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "GLAD/glad.h"
 #include "glm/glm.hpp"
 #include "FrameGraph/FrameResource.h"
@@ -19,7 +20,7 @@ namespace Fracture
 	{
 
 	public:
-		RenderTarget(unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
+		RenderTarget(const std::string& name,unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 		~RenderTarget();
 
 		unsigned int ID;
@@ -45,6 +46,7 @@ namespace Fracture
 		bool IsMultiSampled() override;
 
 	private:		
+		std::string m_name;
 		bool m_IsMultiSampled;
 		//GLenum									m_Target = GL_TEXTURE_2D;
 		std::shared_ptr<Texture>				m_DepthStencil;

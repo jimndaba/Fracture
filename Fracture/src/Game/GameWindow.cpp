@@ -18,6 +18,15 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	return;
 	}
 
+	
+
+	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	if (!window)
+	{	
+		glfwTerminate();
+		return;
+	}
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
@@ -29,13 +38,6 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	glfwWindowHint(GLFW_ALPHA_BITS, 8);
 	glfwWindowHint(GLFW_DEPTH_BITS, 24);
 	glfwWindowHint(GLFW_STENCIL_BITS, 8);
-
-	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-	if (!window)
-	{	
-		glfwTerminate();
-		return;
-	}
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);

@@ -11,7 +11,7 @@ namespace Fracture
 	{
 
 	public:
-		FullScreenNode(std::string name);
+		FullScreenNode(const std::string&);
 
 		virtual void execute(Renderer& renderer);		
 		// screen quad VAO

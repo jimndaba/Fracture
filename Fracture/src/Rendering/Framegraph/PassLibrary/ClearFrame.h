@@ -11,7 +11,7 @@ namespace Fracture
 	{
 
 	public:
-		ClearFrame(std::string Name);
+		ClearFrame(const std::string& Name);
 
 		void execute(Renderer& renderer) override;
 

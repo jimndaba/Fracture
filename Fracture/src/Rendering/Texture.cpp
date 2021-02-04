@@ -31,7 +31,11 @@ Fracture::Texture::Texture(std::string name,int Width, int Height,Fracture::Text
 	
 }
 
-Fracture::Texture::Texture(std::string name, int Width, int Height, GLenum internalFormat, GLenum format, GLenum ftype, Fracture::TextureType mtype):Name(name),textureType(mtype),mTexturetarget(TextureTarget::Texture2D)
+Fracture::Texture::Texture(std::string name, int Width, int Height, GLenum internalFormat, GLenum format, GLenum ftype, Fracture::TextureType mtype):
+	Name(name),textureType(mtype),
+	mTexturetarget(TextureTarget::Texture2D),
+	width(Width),
+	height(Height)
 {
 
 	InternalFormat = internalFormat;

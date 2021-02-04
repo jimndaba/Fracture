@@ -12,7 +12,7 @@ namespace Fracture
 	{
 
 	public:
-		IntermediateNode(std::string name,int width, int height);
+		IntermediateNode(const std::string& name,const int& width,const int& height);
 
 		void execute(Renderer& renderer) override;
 	private:

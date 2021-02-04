@@ -4,15 +4,15 @@
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Texture.h"
 
-Fracture::ThresholdNode::ThresholdNode(std::string name,int width, int height):FullScreenNode(name)
+Fracture::ThresholdNode::ThresholdNode(const std::string& name,const int& width,const int& height):
+	FullScreenNode(name),
+	m_shader(AssetManager::getShader("Threshold"))
 {
 
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("colorTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("thresholdMap");
 
-	outputTexture = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1,false);
-
-	m_shader = AssetManager::getShader("Threshold");
+	outputTexture = std::make_shared<RenderTarget>("Threshold_Out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1,false);
 
 	//Sockets
 	AddInputSocket(m_Input);
@@ -20,7 +20,6 @@ Fracture::ThresholdNode::ThresholdNode(std::string name,int width, int height):F
 
 	//Link Sockets to Resources
 	AddInputResource(m_Input, resource);
-	//AddInputResource(m_EnvironmentInput, resource);
 	AddOutputResource(m_output, outputTexture);
 }
 

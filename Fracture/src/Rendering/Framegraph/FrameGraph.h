@@ -28,24 +28,21 @@ namespace Fracture
 	public:
 		FrameGraph(Renderer& renderer);
 
-		void addLink(std::string from, std::string source, std::string to, std::string resouce);	
-		void addGlobalLink(std::string to, std::string resouce);
-		void linkGlobalResources();
+		void addLink(const std::string& from,const std::string& source,const std::string& to,const std::string& resouce);	
+		
 		void addnode(std::shared_ptr<FrameNode> n);		
 
-		std::shared_ptr<FrameNode> getNode(std::string name);
+		std::shared_ptr<FrameNode> getNode(const std::string& name);
 
-		void execute(Renderer& renderer);
-		
+		void execute(Renderer& renderer);	
 
-		void Buildgraph();
-		
+		void Buildgraph();		
 
 		void DFSUtil(std::shared_ptr<FrameNode> v);
 		
 		void DFS(std::shared_ptr<FrameNode> v);
 
-		void Resize(int width, int height);
+		void Resize(const int& width,const int& height);
 		
 
 		std::shared_ptr<ToneMappingNode> ToneMap;
@@ -55,11 +52,10 @@ namespace Fracture
 		std::shared_ptr<SinkNode> outputbuffer;
 	
 	private:
-		//std::shared_ptr<InputSourceNode> resultsource;
+		
 		Renderer& m_Renderer;	
 		std::shared_ptr<RenderTarget> m_backBufferTarget;
 		std::vector<std::shared_ptr<Link>> m_links;
-		//std::vector<Link> m_globallinks;
 		std::map<std::string, std::vector<std::shared_ptr<FrameNode>>> adjList;
 		std::vector<std::shared_ptr<FrameNode>> m_nodes;		
 		std::vector<std::shared_ptr<FrameNode>> m_FrameNodeQueue;

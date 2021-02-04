@@ -10,13 +10,13 @@
 #include "Rendering/Material.h"
 #include "Profiling/Profiler.h"
 
-Fracture::DepthNode::DepthNode(std::string name, int width, int height, RenderBucket* opaque):RenderQueueNode(name)
+Fracture::DepthNode::DepthNode(const std::string& name, const int& width, const int& height, RenderBucket* opaque) :
+	RenderQueueNode(name),
+	m_shader(AssetManager::getShader("DepthPass"))
 {
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputDepthMap");
 
-	outputDepthMap = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D,GL_FLOAT, 1, true);
-
-	m_shader = AssetManager::getShader("DepthPass");
+	outputDepthMap = std::make_shared<RenderTarget>("DepthPass_out",width, height, TextureTarget::Texture2D,GL_FLOAT, 1, true);
 
 	AcceptBucket(opaque);
 

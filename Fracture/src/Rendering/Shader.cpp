@@ -237,24 +237,13 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
     // print compile errors if any
-    glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        FRACTURE_ERROR("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n {}", infoLog);
-    };
+    checkCompileErrors(vertex, "VERTEX");
 
     // Frag Shader
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, NULL);
     glCompileShader(fragment);
-    // print compile errors if any
-    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        FRACTURE_ERROR("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n {}", infoLog);
-    };
+    checkCompileErrors(fragment, "FRAGMENT");
 
     // if geometry shader is given, compile geometry shader
     unsigned int geometry;
@@ -276,19 +265,15 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
 
     glLinkProgram(program);
     // print linking errors if any
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
-        FRACTURE_ERROR("ERROR::SHADER::PROGRAM LINKING_FAILED\n {}", infoLog);
-        return 0;
-    }
+    checkCompileErrors(program, "PROGRAM");
 
     // delete the shaders as they're linked into our program now and no longer necessery
     glDeleteShader(vertex);
     glDeleteShader(fragment);
     if (!geometryPath.empty())
+    {
         glDeleteShader(geometry);
+    }
 
     return program;
 }

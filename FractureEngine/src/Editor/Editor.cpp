@@ -11,6 +11,7 @@
 #include "Panels/AssetBrowserPanel.h"
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
+#include "FreeCamera.h"
 
 #include "Rendering/FrameGraph/FrameGraph.h"
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
@@ -33,6 +34,7 @@ std::shared_ptr<Fracture::FrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
+std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::m_properties;
 
 inline void Style();
 
@@ -121,10 +123,11 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_AssetBrowser);
    
     m_PhysicsManger->Init();
-    camera = std::make_shared<EditorCamera>();//TODO - update init of camera;
+    camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
     m_Renderer = Renderer::getInstance();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
    
+    glfwSetKeyCallback(m_window->Context(), key_callback);
    
  
 }
@@ -323,11 +326,9 @@ void Fracture::Editor::run()
 
 
 
-    while (!m_window->ShouldClose())
+    while (!m_window->ShouldClose() && !done)
     {
         double framestart = glfwGetTime();
-
-
         double newTime = glfwGetTime();
         double frameTime = newTime - currentTime;
         currentTime = newTime;
@@ -354,6 +355,7 @@ void Fracture::Editor::run()
                 //SDL_Delay(FRAME_DELAY - framelength); TODO
             }
         }
+        
     }
     onShutdown();
 }
@@ -363,11 +365,7 @@ void Fracture::Editor::onUpdate(float dt)
     ProfilerTimer timer("onUpdate");   
     m_window->pollEvents();
     InputManager::PollEvents();
-   
-    if (InputManager::IsKeyDown(KeyCode::A))
-    {
-        FRACTURE_INFO("key A");
-    }
+    
 
     if (InputManager::IsKeyDown(KeyCode::Delete))
     {
@@ -897,6 +895,40 @@ void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fractur
     ImGui::End();
 
 
+}
+
+void Fracture::Editor::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (mods == GLFW_MOD_CONTROL)
+    {
+        //New
+        if (key == GLFW_KEY_N && action == GLFW_PRESS)
+        {
+            FRACTURE_INFO("New");
+        }
+        //Open
+        if (key == GLFW_KEY_O && action == GLFW_PRESS)
+        {
+            FRACTURE_INFO("Open");
+        }
+        //Save
+        if (key == GLFW_KEY_S && action == GLFW_PRESS)
+        {
+            FRACTURE_INFO("Save");
+            ProjectSerializer project(m_properties);
+            project.Serialize(m_properties->ProjectDirectory + "/" + m_properties->ProjectName + ".Fracture");
+        }
+        //Select ALL
+        if (key == GLFW_KEY_A && action == GLFW_PRESS)
+        {
+            FRACTURE_INFO("Select All");
+        }
+        //Duplicate
+        if (key == GLFW_KEY_D && action == GLFW_PRESS)
+        {
+            FRACTURE_INFO("DUPLICATE");
+        }
+    }
 }
 
 void Style()

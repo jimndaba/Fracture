@@ -2,7 +2,7 @@
 #include "FrameResource.h"
 #include "GLAD/glad.h"
 
-Fracture::FullScreenNode::FullScreenNode(std::string name):FrameNode(name)
+Fracture::FullScreenNode::FullScreenNode(const std::string& name):FrameNode(name)
 {
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // positions   // texCoords
@@ -29,12 +29,5 @@ Fracture::FullScreenNode::FullScreenNode(std::string name):FrameNode(name)
 
 void Fracture::FullScreenNode::execute(Renderer& renderer)
 {
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //screenShader.use();
-    //glBindVertexArray(quadVAO);
-    //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
-   // glDrawArrays(GL_TRIANGLES, 0, 6);
-
+   
 }

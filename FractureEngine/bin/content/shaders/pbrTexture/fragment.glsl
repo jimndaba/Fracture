@@ -280,7 +280,7 @@ void main()
     }
 
     vec3 color = vec3(0);
-    color += CalcIBL(F0,N,V,R,sunLights[0]);
+    color = color + CalcIBL(F0,N,V,R,sunLights[0]);
     color += Lo;
 
     // HDR tonemapping
@@ -320,12 +320,9 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref,SunLight light)
     const float MAX_REFLECTION_LOD = 4.0;
     vec3 prefilteredColor =textureLod(prefilterMap, ref,  roughness * MAX_REFLECTION_LOD).rgb;//     
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(normal, viewDir), 0.0), roughness)).rg;
-    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
-    float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;   
-    //(1.0 - shadow));
-    ambient = (kD + diffuse + specular) * ao * intensity ;//*  ssao; //;
-    ambient *= ssao;
-    return ambient ;
+    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);    
+    ambient = (kD + diffuse + specular) * ao * intensity ;// ;
+    return ambient  ;
 }
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
@@ -353,7 +350,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
 	// Cook-Torrance
     float NdotL = max(dot(normal, l), 0.0);  
     float shadow = ShadowCalculation(FragPosLightSpace,light);    
-    vec3 result = (diffuseBRDF / PI + specular ) * radiance * NoL + ambient ;
+    vec3 result = (diffuseBRDF / PI + specular ) * radiance * NoL ;//+ ambient ;
     result *= ((1.0 - shadow) * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
     return result ;  
 }

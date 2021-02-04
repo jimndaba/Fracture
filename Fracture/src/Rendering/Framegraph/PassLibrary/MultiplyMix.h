@@ -12,7 +12,7 @@ namespace Fracture
 	class MultiplyMixNode : public FullScreenNode
 	{
 	public:
-		MultiplyMixNode(std::string name, int width, int height);
+		MultiplyMixNode(const std::string& name,const int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
 

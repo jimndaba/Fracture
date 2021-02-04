@@ -6,7 +6,8 @@
 #include "Rendering/RenderBucket.h"
 #include "Rendering/RenderBatch.h"
 
-Fracture::LambertianNode::LambertianNode(std::string name, int width, int height, RenderBucket* opaque):RenderQueueNode(name)
+Fracture::LambertianNode::LambertianNode(const std::string& name,const int& width,const int& height, RenderBucket* opaque):
+	RenderQueueNode(name)
 {
 
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("buffer");
@@ -18,7 +19,7 @@ Fracture::LambertianNode::LambertianNode(std::string name, int width, int height
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputColor");
 
-	outputColor = std::make_shared<RenderTarget>(width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
+	outputColor = std::make_shared<RenderTarget>("Lambertian_out",width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
 	AcceptBucket(opaque);
 
 	//Sockets

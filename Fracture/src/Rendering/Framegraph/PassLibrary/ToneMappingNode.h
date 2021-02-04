@@ -12,7 +12,7 @@ namespace Fracture
 	class ToneMappingNode : public FullScreenNode
 	{
 	public:
-		ToneMappingNode(std::string name, int width, int height);
+		ToneMappingNode(const std::string& name,const int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
 

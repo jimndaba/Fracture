@@ -59,8 +59,8 @@ namespace Fracture
 			std::shared_ptr<InputSocket> m_input = std::make_shared<InputSocket>("rendertarget");
 
 			m_shader = AssetManager::getShader("ColorMap");
-			colorIn = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-			outputColor = std::make_shared<RenderTarget>(width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+			colorIn = std::make_shared<RenderTarget>("Sink_Color_In",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+			outputColor = std::make_shared<RenderTarget>("Sink_Color_Out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
 			AddInputSocket(m_input);
 			AddInputResource(m_input,colorIn);
