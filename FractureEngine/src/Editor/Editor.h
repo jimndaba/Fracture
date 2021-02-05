@@ -1,10 +1,11 @@
 #pragma once
 #ifndef EDITOR_H
 #define EDITOR_H
+
 #include "imgui/imgui.h"
-#include "ImGuizmo/ImGuizmo.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "ImGuizmo/ImGuizmo.h"
 #include "Fracture.h"
 #include <memory>
 
@@ -21,7 +22,7 @@ namespace Fracture
 	struct ProjectProperties;
 	class EditorCamera;
 	class FreeCamera;
-	class FrameGraph;
+	class EditorFrameGraph;
 
 	class Editor
 	{
@@ -54,7 +55,7 @@ namespace Fracture
 		std::shared_ptr<ProjectProperties> Properties();
 		std::shared_ptr<AssetManager> GetAssetManager();
 
-		static std::shared_ptr<FrameGraph> m_graph; //TODO rename or hide
+		static std::shared_ptr<EditorFrameGraph> m_graph; //TODO rename or hide
 	private:
 
 	

@@ -1,11 +1,11 @@
 #include "Panel.h"
 #include "../Elements/Element.h"
 
-bool Fracture::Panel::p_open;
+bool* Fracture::Panel::p_open;
 
-Fracture::Panel::Panel(std::string name):m_Name(name)
+Fracture::Panel::Panel(const std::string& name):m_Name(name)
 {
-	p_open = true;
+	p_open = new bool(true);
 }
 
 Fracture::Panel::~Panel()
@@ -25,7 +25,7 @@ void Fracture::Panel::begin()
 			ImGui::PushStyleVar((ImGuiStyleVar)m_styles[i].type, m_styles[i].Vec2);
 		}
 	}
-	ImGui::Begin(m_Name.c_str(),(bool*)p_open);
+	ImGui::Begin(m_Name.c_str(),p_open);
 	for (int i = 0; i < m_styles.size(); i++)
 	{
 		ImGui::PopStyleVar();

@@ -15,7 +15,7 @@ namespace Fracture
 	class Panel
 	{
 	public:
-		Panel(std::string name);
+		Panel(const std::string& name);
 		~Panel();
 
 		virtual void begin();
@@ -23,32 +23,7 @@ namespace Fracture
 		virtual void end();
 
 		void AddElement(std::shared_ptr<Element> element);
-		
-		/*
-		ImGuiStyleVar_Alpha,               // float     Alpha
-		ImGuiStyleVar_WindowPadding,       // ImVec2    WindowPadding
-		ImGuiStyleVar_WindowRounding,      // float     WindowRounding
-		ImGuiStyleVar_WindowBorderSize,    // float     WindowBorderSize
-		ImGuiStyleVar_WindowMinSize,       // ImVec2    WindowMinSize
-		ImGuiStyleVar_WindowTitleAlign,    // ImVec2    WindowTitleAlign
-		ImGuiStyleVar_ChildRounding,       // float     ChildRounding
-		ImGuiStyleVar_ChildBorderSize,     // float     ChildBorderSize
-		ImGuiStyleVar_PopupRounding,       // float     PopupRounding
-		ImGuiStyleVar_PopupBorderSize,     // float     PopupBorderSize
-		ImGuiStyleVar_FramePadding,        // ImVec2    FramePadding
-		ImGuiStyleVar_FrameRounding,       // float     FrameRounding
-		ImGuiStyleVar_FrameBorderSize,     // float     FrameBorderSize
-		ImGuiStyleVar_ItemSpacing,         // ImVec2    ItemSpacing
-		ImGuiStyleVar_ItemInnerSpacing,    // ImVec2    ItemInnerSpacing
-		ImGuiStyleVar_IndentSpacing,       // float     IndentSpacing
-		ImGuiStyleVar_ScrollbarSize,       // float     ScrollbarSize
-		ImGuiStyleVar_ScrollbarRounding,   // float     ScrollbarRounding
-		ImGuiStyleVar_GrabMinSize,         // float     GrabMinSize
-		ImGuiStyleVar_GrabRounding,        // float     GrabRounding
-		ImGuiStyleVar_TabRounding,         // float     TabRounding
-		ImGuiStyleVar_ButtonTextAlign,     // ImVec2    ButtonTextAlign
-		ImGuiStyleVar_SelectableTextAlign, // ImVec2    SelectableTextAlign
-		*/
+				
 		void setAlpha 				(float value);
 		void setWindowPadding		(ImVec2 value);
 		void setWindowRounding		(float value);
@@ -78,7 +53,7 @@ namespace Fracture
 
 		std::string m_Name;
 		ImGuiWindowFlags window_flags;
-		static bool p_open;
+		static bool* p_open;
 	};
 }
 

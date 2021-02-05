@@ -1,487 +1,94 @@
-[15:18:19] [info] FRACTURE: Initializing Splash
-[15:18:19] [info] FRACTURE: OpenGL loaded
-[15:18:19] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[15:18:19] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[15:18:19] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[15:18:19] [trace] FRACTURE: Loaded Texture: splash
-[15:18:19] [trace] FRACTURE: Loaded Texture: title
-[15:18:19] [info] FRACTURE: Completed Init
-[15:18:19] [info] FRACTURE: Show Splash
-[15:18:25] [info] FRACTURE: OpenGL loaded
-[15:18:25] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[15:18:25] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[15:18:25] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[15:18:25] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
-[15:18:25] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: RotateIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: CameraIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: LightIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: EyeIcon
-[15:18:25] [trace] FRACTURE: Loaded Texture: EyeIconC
-[15:18:25] [trace] FRACTURE: Loaded Texture: MeshIcon
-[15:18:26] [trace] FRACTURE: Loaded HDR Environment: Loft
-[15:18:26] [trace] FRACTURE: Loaded Shader: CubeMap
-[15:18:26] [trace] FRACTURE: Loaded Shader: PointShadows
-[15:18:26] [trace] FRACTURE: Loaded Shader: irradiance
-[15:18:26] [trace] FRACTURE: Loaded Shader: prefilter
-[15:18:26] [trace] FRACTURE: Loaded Shader: bdrf
-[15:18:26] [trace] FRACTURE: Loaded Shader: Skybox
-[15:18:26] [trace] FRACTURE: Loaded Shader: DebugShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[15:18:26] [trace] FRACTURE: Loaded Shader: BillboardShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: DepthShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: PickingShader
-[15:18:26] [trace] FRACTURE: Loaded Shader: default
-[15:18:26] [trace] FRACTURE: Loaded Shader: Outline
-[15:18:26] [trace] FRACTURE: Loaded Shader: InvertColor
-[15:18:26] [trace] FRACTURE: Loaded Shader: ToneMap
-[15:18:26] [trace] FRACTURE: Loaded Shader: Threshold
-[15:18:26] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[15:18:26] [trace] FRACTURE: Loaded Shader: ColorMap
-[15:18:26] [trace] FRACTURE: Loaded Shader: BoxBlur
-[15:18:26] [trace] FRACTURE: Loaded Shader: DepthPass
-[15:18:26] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[15:18:26] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[15:18:26] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[15:18:26] [trace] FRACTURE: Loaded Material: billboardIcons
-[15:18:26] [trace] FRACTURE: Loaded Material: DebugMaterial
-[15:18:26] [trace] FRACTURE: Loaded Material: DepthMaterial
-[15:18:26] [trace] FRACTURE: Loaded Material: PickingMaterial
-[15:18:26] [trace] FRACTURE: Loaded Material: Outline
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: loading Child: Plane
-[15:18:26] [trace] FRACTURE: loading Mesh: Plane
-[15:18:26] [trace] FRACTURE: Loaded model: Plane
-[15:18:26] [trace] FRACTURE: loading Child: Cube
-[15:18:26] [trace] FRACTURE: loading Mesh: Cube
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: Loaded model: Cube
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: loading Child: Sphere
-[15:18:26] [trace] FRACTURE: loading Mesh: Sphere
-[15:18:26] [trace] FRACTURE: Loaded model: Sphere
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: loading Child: Cylinder
-[15:18:26] [trace] FRACTURE: loading Mesh: Cylinder
-[15:18:26] [trace] FRACTURE: Loaded model: Cylinder
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: loading Child: Torus
-[15:18:26] [trace] FRACTURE: loading Mesh: Torus
-[15:18:26] [trace] FRACTURE: Loaded model: Torus
-[15:18:26] [trace] FRACTURE: loading Child: Light
-[15:18:26] [trace] FRACTURE: loading Child: Camera
-[15:18:26] [trace] FRACTURE: loading Child: Suzanne
-[15:18:26] [trace] FRACTURE: loading Mesh: Suzanne
-[15:18:26] [trace] FRACTURE: Loaded model: Suzane
-[15:18:26] [info] FRACTURE: Renderer Init
-[15:18:27] [info] FRACTURE: width: 1512
-[15:18:27] [info] FRACTURE: height: 801
-[15:18:27] [info] FRACTURE: width: 1512
-[15:18:27] [info] FRACTURE: height: 801
-[15:18:27] [info] FRACTURE: width: 1512
-[15:18:27] [info] FRACTURE: height: 801
-[15:18:27] [info] FRACTURE: width: 1512
-[15:18:27] [info] FRACTURE: height: 801
-[15:18:28] [info] FRACTURE: width: 1512
-[15:18:28] [info] FRACTURE: height: 801
-[15:18:28] [info] FRACTURE: width: 1512
-[15:18:28] [info] FRACTURE: height: 801
-[15:18:28] [info] FRACTURE: width: 1512
-[15:18:28] [info] FRACTURE: height: 801
-[15:18:28] [info] FRACTURE: width: 1512
-[15:18:28] [info] FRACTURE: height: 801
-[15:18:28] [info] FRACTURE: width: 1512
-[15:18:28] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:29] [info] FRACTURE: width: 1512
-[15:18:29] [info] FRACTURE: height: 801
-[15:18:35] [info] FRACTURE: Out of Bounds
-[15:18:36] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:37] [info] FRACTURE: width: 1512
-[15:18:37] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:38] [info] FRACTURE: width: 1512
-[15:18:38] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:39] [info] FRACTURE: width: 1512
-[15:18:39] [info] FRACTURE: height: 801
-[15:18:40] [info] FRACTURE: width: 1512
-[15:18:40] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:41] [info] FRACTURE: width: 1512
-[15:18:41] [info] FRACTURE: height: 801
-[15:18:42] [info] FRACTURE: width: 1512
-[15:18:42] [info] FRACTURE: height: 801
-[15:18:42] [info] FRACTURE: width: 1512
-[15:18:42] [info] FRACTURE: height: 801
-[15:18:42] [info] FRACTURE: width: 1512
-[15:18:42] [info] FRACTURE: height: 801
-[15:18:42] [info] FRACTURE: width: 1512
-[15:18:42] [info] FRACTURE: height: 801
-[15:18:42] [info] FRACTURE: width: 1512
-[15:18:42] [info] FRACTURE: height: 801
-[15:18:43] [info] FRACTURE: Out of Bounds
-[15:18:44] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 10
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:47] [info] FRACTURE: width: 1512
-[15:18:47] [info] FRACTURE: height: 801
-[15:18:48] [info] FRACTURE: width: 1512
-[15:18:48] [info] FRACTURE: height: 801
-[15:18:48] [info] FRACTURE: width: 1512
-[15:18:48] [info] FRACTURE: height: 801
-[15:18:48] [info] FRACTURE: width: 1512
-[15:18:48] [info] FRACTURE: height: 801
-[15:18:48] [info] FRACTURE: width: 1512
-[15:18:48] [info] FRACTURE: height: 801
-[15:18:48] [info] FRACTURE: width: 1512
-[15:18:48] [info] FRACTURE: height: 801
-[15:18:49] [info] FRACTURE: width: 1512
-[15:18:49] [info] FRACTURE: height: 801
-[15:18:49] [info] FRACTURE: width: 1512
-[15:18:49] [info] FRACTURE: height: 801
-[15:18:51] [info] FRACTURE: width: 1512
-[15:18:51] [info] FRACTURE: height: 801
-[15:18:51] [info] FRACTURE: width: 1512
-[15:18:51] [info] FRACTURE: height: 801
-[15:18:51] [info] FRACTURE: width: 1512
-[15:18:51] [info] FRACTURE: height: 801
-[15:18:57] [info] FRACTURE: width: 1512
-[15:18:57] [info] FRACTURE: height: 801
-[15:18:57] [info] FRACTURE: width: 1512
-[15:18:57] [info] FRACTURE: height: 801
-[15:18:57] [info] FRACTURE: width: 1512
-[15:18:57] [info] FRACTURE: height: 801
-[15:18:57] [info] FRACTURE: width: 1512
-[15:18:57] [info] FRACTURE: height: 801
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: Deleting Entity :  10
-[15:18:58] [info] FRACTURE: width: 1512
-[15:18:58] [info] FRACTURE: height: 801
-[15:18:58] [info] FRACTURE: width: 1512
-[15:18:58] [info] FRACTURE: height: 801
-[15:18:59] [info] FRACTURE: Deleting Entity :  8
-[15:18:59] [info] FRACTURE: Deleting Entity :  8
-[15:18:59] [info] FRACTURE: Deleting Entity :  8
-[15:18:59] [info] FRACTURE: Deleting Entity :  8
-[15:18:59] [info] FRACTURE: Deleting Entity :  8
-[15:19:21] [trace] FRACTURE: loading Child: Light
-[15:19:21] [trace] FRACTURE: loading Child: Camera
-[15:19:21] [trace] FRACTURE: loading Child: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:21] [trace] FRACTURE: loading Mesh: sponza
-[15:19:22] [trace] FRACTURE: Loaded model: sponza
-[15:19:30] [info] FRACTURE: width: 1512
-[15:19:30] [info] FRACTURE: height: 801
-[15:19:30] [info] FRACTURE: width: 1512
-[15:19:30] [info] FRACTURE: height: 801
-[15:19:50] [info] FRACTURE: width: 1512
-[15:19:50] [info] FRACTURE: height: 801
-[15:19:50] [info] FRACTURE: width: 1512
-[15:19:50] [info] FRACTURE: height: 801
-[15:19:50] [info] FRACTURE: width: 1512
-[15:19:50] [info] FRACTURE: height: 801
-[15:19:50] [info] FRACTURE: width: 1512
-[15:19:50] [info] FRACTURE: height: 801
-[15:20:47] [info] FRACTURE: width: 1512
-[15:20:47] [info] FRACTURE: height: 801
-[15:20:47] [info] FRACTURE: width: 1512
-[15:20:47] [info] FRACTURE: height: 801
-[15:20:53] [info] FRACTURE: width: 1512
-[15:20:53] [info] FRACTURE: height: 801
-[15:20:53] [info] FRACTURE: width: 1512
-[15:20:53] [info] FRACTURE: height: 801
-[15:20:53] [info] FRACTURE: width: 1512
-[15:20:53] [info] FRACTURE: height: 801
-[15:20:53] [info] FRACTURE: width: 1512
-[15:20:53] [info] FRACTURE: height: 801
-[15:20:53] [info] FRACTURE: width: 1512
-[15:20:53] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:20:55] [info] FRACTURE: width: 1512
-[15:20:55] [info] FRACTURE: height: 801
-[15:21:29] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
-[15:21:34] [info] FRACTURE: width: 1512
-[15:21:34] [info] FRACTURE: height: 801
-[15:21:34] [info] FRACTURE: width: 1512
-[15:21:34] [info] FRACTURE: height: 801
-[15:21:34] [info] FRACTURE: width: 1512
-[15:21:34] [info] FRACTURE: height: 801
-[15:21:34] [info] FRACTURE: width: 1512
-[15:21:34] [info] FRACTURE: height: 801
-[15:22:12] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
-[15:22:14] [info] FRACTURE: width: 1512
-[15:22:14] [info] FRACTURE: height: 801
-[15:22:14] [info] FRACTURE: width: 1512
-[15:22:14] [info] FRACTURE: height: 801
-[15:22:14] [info] FRACTURE: width: 1512
-[15:22:14] [info] FRACTURE: height: 801
-[15:22:14] [info] FRACTURE: width: 1512
-[15:22:14] [info] FRACTURE: height: 801
-[15:23:40] [info] FRACTURE: width: 1512
-[15:23:40] [info] FRACTURE: height: 801
-[15:23:40] [info] FRACTURE: width: 1512
-[15:23:40] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:41] [info] FRACTURE: width: 1512
-[15:23:41] [info] FRACTURE: height: 801
-[15:23:42] [info] FRACTURE: width: 1512
-[15:23:42] [info] FRACTURE: height: 801
-[15:23:46] [info] FRACTURE: width: 1512
-[15:23:46] [info] FRACTURE: height: 801
-[15:23:46] [info] FRACTURE: width: 1512
-[15:23:46] [info] FRACTURE: height: 801
-[15:23:46] [info] FRACTURE: width: 1512
-[15:23:46] [info] FRACTURE: height: 801
-[15:23:47] [info] FRACTURE: Out of Bounds
-[15:27:19] [info] FRACTURE: width: 1512
-[15:27:19] [info] FRACTURE: height: 801
-[15:27:19] [info] FRACTURE: width: 1512
-[15:27:19] [info] FRACTURE: height: 801
-[15:27:19] [info] FRACTURE: width: 1512
-[15:27:19] [info] FRACTURE: height: 801
-[15:27:20] [info] FRACTURE: width: 1512
-[15:27:20] [info] FRACTURE: height: 801
-[15:27:20] [info] FRACTURE: width: 1512
-[15:27:20] [info] FRACTURE: height: 801
-[15:27:20] [info] FRACTURE: width: 1512
-[15:27:20] [info] FRACTURE: height: 801
-[15:27:38] [info] FRACTURE: width: 1512
-[15:27:38] [info] FRACTURE: height: 801
-[15:27:38] [info] FRACTURE: width: 1512
-[15:27:38] [info] FRACTURE: height: 801
-[15:27:38] [info] FRACTURE: width: 1512
-[15:27:38] [info] FRACTURE: height: 801
-[15:27:39] [info] FRACTURE: width: 1512
-[15:27:39] [info] FRACTURE: height: 801
-[15:27:39] [info] FRACTURE: width: 1512
-[15:27:39] [info] FRACTURE: height: 801
-[15:27:39] [info] FRACTURE: width: 1512
-[15:27:39] [info] FRACTURE: height: 801
-[15:27:39] [info] FRACTURE: width: 1512
-[15:27:39] [info] FRACTURE: height: 801
-[15:27:40] [info] FRACTURE: width: 1512
-[15:27:40] [info] FRACTURE: height: 801
-[15:27:43] [info] FRACTURE: width: 1512
-[15:27:43] [info] FRACTURE: height: 801
-[15:28:41] [info] FRACTURE: width: 1512
-[15:28:41] [info] FRACTURE: height: 801
-[15:28:41] [info] FRACTURE: width: 1512
-[15:28:41] [info] FRACTURE: height: 801
-[15:28:41] [info] FRACTURE: width: 1512
-[15:28:41] [info] FRACTURE: height: 801
-[15:29:58] [info] FRACTURE: Out of Bounds
-[15:30:00] [info] FRACTURE: Reloaded Shader: PBRTexturedShader
-[15:30:02] [info] FRACTURE: width: 1512
-[15:30:02] [info] FRACTURE: height: 801
-[15:30:02] [info] FRACTURE: width: 1512
-[15:30:02] [info] FRACTURE: height: 801
-[15:30:02] [info] FRACTURE: width: 1512
-[15:30:02] [info] FRACTURE: height: 801
-[15:30:31] [trace] FRACTURE: Loaded HDR Environment: birchwood_1k
-[15:33:37] [info] FRACTURE: width: 1480
-[15:33:37] [info] FRACTURE: height: 801
-[15:33:37] [info] FRACTURE: width: 1480
-[15:33:37] [info] FRACTURE: height: 801
-[15:33:43] [info] FRACTURE: width: 1480
-[15:33:43] [info] FRACTURE: height: 801
-[15:33:43] [info] FRACTURE: width: 1480
-[15:33:43] [info] FRACTURE: height: 801
-[15:33:56] [info] FRACTURE: width: 1480
-[15:33:56] [info] FRACTURE: height: 801
-[15:33:56] [info] FRACTURE: width: 1480
-[15:33:56] [info] FRACTURE: height: 801
-[15:33:56] [info] FRACTURE: width: 1480
-[15:33:56] [info] FRACTURE: height: 801
-[15:35:00] [info] FRACTURE: width: 1480
-[15:35:00] [info] FRACTURE: height: 801
-[15:35:00] [info] FRACTURE: width: 1480
-[15:35:00] [info] FRACTURE: height: 801
-[15:35:00] [info] FRACTURE: width: 1480
-[15:35:00] [info] FRACTURE: height: 801
-[15:35:02] [info] FRACTURE: width: 1480
-[15:35:02] [info] FRACTURE: height: 801
-[15:35:02] [info] FRACTURE: width: 1480
-[15:35:02] [info] FRACTURE: height: 801
-[15:35:02] [info] FRACTURE: width: 1480
-[15:35:02] [info] FRACTURE: height: 801
-[15:35:02] [info] FRACTURE: width: 1480
-[15:35:02] [info] FRACTURE: height: 801
-[15:35:04] [info] FRACTURE: width: 1480
-[15:35:04] [info] FRACTURE: height: 801
-[15:35:05] [info] FRACTURE: width: 1480
-[15:35:05] [info] FRACTURE: height: 801
-[15:36:17] [info] FRACTURE: width: 1480
-[15:36:17] [info] FRACTURE: height: 801
-[15:36:17] [info] FRACTURE: width: 1480
-[15:36:17] [info] FRACTURE: height: 801
-[15:36:39] [info] FRACTURE: width: 1480
-[15:36:39] [info] FRACTURE: height: 801
-[15:36:39] [info] FRACTURE: width: 1480
-[15:36:39] [info] FRACTURE: height: 801
-[15:36:39] [info] FRACTURE: width: 1480
-[15:36:39] [info] FRACTURE: height: 801
+[15:46:12] [info] FRACTURE: Initializing Splash
+[15:46:12] [info] FRACTURE: OpenGL loaded
+[15:46:12] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[15:46:12] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[15:46:12] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[15:46:12] [trace] FRACTURE: Loaded Texture: splash
+[15:46:12] [trace] FRACTURE: Loaded Texture: title
+[15:46:12] [info] FRACTURE: Completed Init
+[15:46:12] [info] FRACTURE: Show Splash
+[15:46:15] [info] FRACTURE: OpenGL loaded
+[15:46:15] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[15:46:15] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[15:46:15] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[15:46:15] [error] FRACTURE: RENDERER HAS NOT BEEN INITIALISED
+[15:46:15] [info] FRACTURE: Renderer Init
+[15:46:15] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: RotateIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: CameraIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: LightIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: EyeIcon
+[15:46:15] [trace] FRACTURE: Loaded Texture: EyeIconC
+[15:46:15] [trace] FRACTURE: Loaded Texture: MeshIcon
+[15:46:16] [trace] FRACTURE: Loaded HDR Environment: Loft
+[15:46:16] [trace] FRACTURE: Loaded Shader: CubeMap
+[15:46:16] [trace] FRACTURE: Loaded Shader: PointShadows
+[15:46:16] [trace] FRACTURE: Loaded Shader: irradiance
+[15:46:16] [trace] FRACTURE: Loaded Shader: prefilter
+[15:46:16] [trace] FRACTURE: Loaded Shader: bdrf
+[15:46:16] [trace] FRACTURE: Loaded Shader: Skybox
+[15:46:16] [trace] FRACTURE: Loaded Shader: DebugShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[15:46:16] [trace] FRACTURE: Loaded Shader: BillboardShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: DepthShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: PBRTexturedShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: PickingShader
+[15:46:16] [trace] FRACTURE: Loaded Shader: default
+[15:46:16] [trace] FRACTURE: Loaded Shader: Outline
+[15:46:16] [trace] FRACTURE: Loaded Shader: InvertColor
+[15:46:16] [trace] FRACTURE: Loaded Shader: ToneMap
+[15:46:16] [trace] FRACTURE: Loaded Shader: Threshold
+[15:46:16] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[15:46:16] [trace] FRACTURE: Loaded Shader: ColorMap
+[15:46:16] [trace] FRACTURE: Loaded Shader: BoxBlur
+[15:46:16] [trace] FRACTURE: Loaded Shader: DepthPass
+[15:46:16] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[15:46:16] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[15:46:16] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[15:46:16] [trace] FRACTURE: Loaded Material: billboardIcons
+[15:46:16] [trace] FRACTURE: Loaded Material: DebugMaterial
+[15:46:16] [trace] FRACTURE: Loaded Material: DepthMaterial
+[15:46:16] [trace] FRACTURE: Loaded Material: PickingMaterial
+[15:46:16] [trace] FRACTURE: Loaded Material: Outline
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: loading Child: Plane
+[15:46:16] [trace] FRACTURE: loading Mesh: Plane
+[15:46:16] [trace] FRACTURE: Loaded model: Plane
+[15:46:16] [trace] FRACTURE: loading Child: Cube
+[15:46:16] [trace] FRACTURE: loading Mesh: Cube
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: Loaded model: Cube
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: loading Child: Sphere
+[15:46:16] [trace] FRACTURE: loading Mesh: Sphere
+[15:46:16] [trace] FRACTURE: Loaded model: Sphere
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: loading Child: Cylinder
+[15:46:16] [trace] FRACTURE: loading Mesh: Cylinder
+[15:46:16] [trace] FRACTURE: Loaded model: Cylinder
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: loading Child: Torus
+[15:46:16] [trace] FRACTURE: loading Mesh: Torus
+[15:46:16] [trace] FRACTURE: Loaded model: Torus
+[15:46:16] [trace] FRACTURE: loading Child: Light
+[15:46:16] [trace] FRACTURE: loading Child: Camera
+[15:46:16] [trace] FRACTURE: loading Child: Suzanne
+[15:46:16] [trace] FRACTURE: loading Mesh: Suzanne
+[15:46:16] [trace] FRACTURE: Loaded model: Suzane
+[15:46:16] [info] FRACTURE: width: 1480
+[15:46:16] [info] FRACTURE: height: 801
+[15:46:16] [info] FRACTURE: width: 1480
+[15:46:16] [info] FRACTURE: height: 801
+[15:46:16] [info] FRACTURE: width: 1480
+[15:46:16] [info] FRACTURE: height: 801
+[15:46:16] [info] FRACTURE: width: 1480
+[15:46:16] [info] FRACTURE: height: 801
+[15:46:40] [error] FRACTURE: ENTITY ALREADY HAS THIS CHILD ADDED: 8

@@ -140,16 +140,9 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 	//Collect Scene Data
     RenderScene(scene);
 
-    m_PickingPass->execute(*this);
+    //m_PickingPass->execute(*this);
 
    
-    //glDisable(GL_CULL_FACE);
-    //setViewport(m_width, m_Height);
-    //m_PickingPass->Begin();
-    //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
-    //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
-    //m_PickingPass->End();
-    //glEnable(GL_CULL_FACE);
 }
 
 void Fracture::Renderer::RenderEnvironment()

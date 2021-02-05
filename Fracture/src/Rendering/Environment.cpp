@@ -89,9 +89,7 @@ Fracture::Environment::Environment(std::shared_ptr<Texture> environment, std::sh
     // -----------------------------------------------------------------------------
     m_irradiance->use();
     m_irradiance->setCubeMap("environmentMap", envCubemap, 0);
-    m_irradiance->setMat4("projection", captureProjection);
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+    m_irradiance->setMat4("projection", captureProjection);    
     glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     for (unsigned int i = 0; i < 6; ++i)
@@ -197,7 +195,7 @@ void Fracture::Environment::Render(std::shared_ptr<Shader> mshader, glm::mat4 vi
     mshader->use();
     mshader->setMat4("view", view);
     mshader->setMat4("projection", projection);
-    mshader->setCubeMap("environmentMap",envCubemap, 0);  
+    mshader->setCubeMap("environmentMap", envCubemap, 0);  //
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);

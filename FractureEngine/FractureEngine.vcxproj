@@ -98,6 +98,7 @@
     <ClInclude Include="src\Editor\EditorCamera.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\Editor\EditorFrameGraph.h" />
     <ClInclude Include="src\Editor\Elements\Element.h" />
     <ClInclude Include="src\Editor\Elements\TabbedElement.h" />
     <ClInclude Include="src\Editor\Elements\TagComponentElement.h" />

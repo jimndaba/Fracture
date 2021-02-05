@@ -201,7 +201,7 @@ void Fracture::FractureSplash::onEndFrame()
     m_window->swapBuffers();
 }
 
-void Fracture::FractureSplash::createNewProject(std::string filepath)
+void Fracture::FractureSplash::createNewProject(const std::string& filepath)
 {  
     m_editor->Properties()->ProjectDirectory = filepath;
     m_editor->Properties()->ProjectName ="Untitled";
@@ -224,7 +224,7 @@ void Fracture::FractureSplash::createNewProject(std::string filepath)
 
 }
 
-void Fracture::FractureSplash::openProject(std::string filepath)
+void Fracture::FractureSplash::openProject(const std::string& filepath)
 {
     m_editor->Properties()->ProjectFilePath = filepath;    
 }

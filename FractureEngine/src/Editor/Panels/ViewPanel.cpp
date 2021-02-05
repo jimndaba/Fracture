@@ -2,10 +2,10 @@
 #include "Rendering/RenderTarget.h"
 #include "SceneviewPanel.h"
 #include "../Editor.h"
-#include "Rendering/Framegraph/PassLibrary/PickingPass.h"
+
 #include <glm/gtx/matrix_decompose.hpp>
-#include "Rendering/Framegraph/FrameGraph.h"
-#include "Rendering/Framegraph/SourceNode.h"
+#include "../EditorFrameGraph.h"
+
 
 int Fracture::ViewPanel::gizmoMode;
 
@@ -58,6 +58,7 @@ void Fracture::ViewPanel::render()
 	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
+	
 	//Draw Screen Picking Window
 	//ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
 	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -66,7 +67,7 @@ void Fracture::ViewPanel::render()
     //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
 	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
-	 ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->outputbuffer->outputColor->GetColorTexture(0)->id),
+	 ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
 		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 
@@ -186,7 +187,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 {
 	ProfilerTimer timer("ViewPanel update");
 	Mouse m_mouse = InputManager::GetMouse();
-
+	
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
@@ -197,22 +198,17 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		//TestGraph::Resize(m_ViewportSize.x, m_ViewportSize.y);	
 	}
 
-	if(m_ViewportFocused && m_ViewportHovered && m_camera)
+	if(m_ViewportHovered && m_camera)
 	{ 
-		if (InputManager::IsKeyDown(KeyCode::LeftAlt))
-		{
-			const glm::vec2& mouse{ m_mouse.GetPosition().x,m_mouse.GetPosition().y };
-			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.03f;
-			m_InitialMousePosition = mouse;
-			if (m_mouse.IsButtonDown(MOUSECODE::ButtonRight))
-			{
-				m_camera->InputMouse(delta.x, delta.y, dt);
-			}
-			
-
-		}
+		
+		const glm::vec2& mouse{ m_mouse.GetPosition().x,m_mouse.GetPosition().y };
+		glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.03f;
+		m_InitialMousePosition = mouse;
+		
 		if (m_mouse.IsButtonDown(MOUSECODE::ButtonRight))
 		{	
+			m_camera->InputMouse(delta.x, delta.y, dt);
+
 			//SDL_WarpMouseInWindow(m_GameWindow->Context(), m_GameWindow->Width / 2, m_GameWindow->Height / 2);
 			if (InputManager::IsKeyDown(KeyCode::W))
 			{
@@ -239,8 +235,11 @@ void Fracture::ViewPanel::onUpdate(float dt)
 				m_camera->Move(Camera_Movement::DOWN, dt);
 			}
 
-			m_camera->onUpdate(dt);
+		
 		}			
+
+		m_camera->onUpdate(dt);
+
 		if (InputManager::IsKeyDown(KeyCode::Q))
 		{
 			gizmoMode = ImGuizmo::OPERATION::TRANSLATE;
@@ -253,7 +252,6 @@ void Fracture::ViewPanel::onUpdate(float dt)
 		{
 			gizmoMode = ImGuizmo::OPERATION::ROTATE;
 		}
-
 		if (InputManager::IsKeyDown(KeyCode::D) &&  m_scenegraph.m_selection)
 		{
 			if (InputManager::IsKeyDown(KeyCode::LeftControl) || InputManager::IsKeyDown(KeyCode::RightControl))

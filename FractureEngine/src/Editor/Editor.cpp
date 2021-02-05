@@ -13,11 +13,7 @@
 #include "EditorCamera.h"
 #include "FreeCamera.h"
 
-#include "Rendering/FrameGraph/FrameGraph.h"
-#include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
-#include "Rendering/Framegraph/PassLibrary/ThresholdNode.h"
-#include "Rendering/Framegraph/PassLibrary/BoxBlurNode.h"
-#include "Rendering/Framegraph/PassLibrary/SSAONode.h"
+#include "EditorFrameGraph.h"
 
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
@@ -30,7 +26,7 @@ bool Fracture::Editor::showInputConfig;
 bool Fracture::Editor::showProjectConfig;
 
 
-std::shared_ptr<Fracture::FrameGraph> Fracture::Editor::m_graph;
+std::shared_ptr<Fracture::EditorFrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
@@ -150,13 +146,16 @@ bool Fracture::Editor::onLoad()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());   
     SetScene();   
-    m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
+    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
     m_graph->Buildgraph();
     return true;
 }
 
 void Fracture::Editor::onLoadNew()
 {
+    m_Renderer->onInit();
+   
+
     AssetManager::AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
     AssetManager::AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
@@ -291,7 +290,6 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddModel("Torus", "content/models/primitives/torus.fbx");
     AssetManager::AddModel("Suzane", "content/models/primitives/suzane.fbx");
 
-    m_Renderer->onInit();
     std::shared_ptr<Scene> scene = m_SceneManager->NewScene();
     m_SceneManager->AddScene("empty", scene);
     m_SceneManager->SetScene("empty");
@@ -299,7 +297,7 @@ void Fracture::Editor::onLoadNew()
     m_viewpanel->init();
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(m_Renderer.get());
-    m_graph = std::shared_ptr<FrameGraph>(new FrameGraph(*m_Renderer));
+    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
     m_graph->Buildgraph();
 }
 
@@ -455,18 +453,13 @@ void Fracture::Editor::Render()
         }
 
         DrawMenuBar();
+
         m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());      
 
         m_graph->execute(*m_Renderer);
           
-        //m_Renderer->RenderPasses();
         m_Renderer->EndFrame();
-        //m_graph->Reset();
-
-
         m_frame->render();
-
-       
         ImGui::End();
 }
 

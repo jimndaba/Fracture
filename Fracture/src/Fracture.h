@@ -42,6 +42,7 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Material.h"
 #include "Rendering/Environment.h"
+#include "Rendering/Framegraph/FrameGraph.h"
 
 ////// Input
 #include "Input/MouseState.h"

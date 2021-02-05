@@ -8,20 +8,27 @@
 #include <stack>
 #include <vector>
 #include <iostream>
+#include "Link.h"
+#include "FrameNode.h"
+#include "SourceNode.h"
+#include "Rendering/RenderTarget.h"
+#include "PassLibrary/ClearFrame.h"
+#include "PassLibrary/LambertianNode.h"
+#include "PassLibrary/ToneMappingNode.h"
+#include "PassLibrary/ThresholdNode.h"
+#include "PassLibrary/AdditiveMixNode.h"
+#include "PassLibrary/BoxBlurNode.h"
+#include "Rendering/Renderer.h"
+#include "Profiling/Profiler.h"
+#include "PassLibrary/DepthNode.h"
+#include "PassLibrary/SSAONode.h"
+#include "PassLibrary/MultiplyMix.h"
+#include "PassLibrary/PickingPass.h"
+#include "PassLibrary/IntermediateNode.h"
+
 
 namespace Fracture
 {
-
-	class FrameNode;
-	class Link;
-	class Renderer;
-	class RenderTarget;
-	class ToneMappingNode;
-	class ThresholdNode;
-	class BoxBlurNode;
-	class SinkNode;
-	class SSAONode;
-
 	class FrameGraph
 	{
 
@@ -44,17 +51,14 @@ namespace Fracture
 
 		void Resize(const int& width,const int& height);
 		
-
-		std::shared_ptr<ToneMappingNode> ToneMap;
-		std::shared_ptr<ThresholdNode> BrightPass;
-		std::shared_ptr<SSAONode> ssao;
-		std::shared_ptr<BoxBlurNode> ssaoblur;
-		std::shared_ptr<SinkNode> outputbuffer;
-	
+		std::shared_ptr<SinkNode> GetOutput();
 	private:
 		
 		Renderer& m_Renderer;	
+		//globals
 		std::shared_ptr<RenderTarget> m_backBufferTarget;
+		std::shared_ptr<SinkNode> outputbuffer;
+
 		std::vector<std::shared_ptr<Link>> m_links;
 		std::map<std::string, std::vector<std::shared_ptr<FrameNode>>> adjList;
 		std::vector<std::shared_ptr<FrameNode>> m_nodes;		

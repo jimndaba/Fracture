@@ -280,13 +280,13 @@ void main()
     }
 
     vec3 color = vec3(0);
-    color = color + CalcIBL(F0,N,V,R,sunLights[0]);
+    color += CalcIBL(F0,N,V,R,sunLights[0]);
     color += Lo;
 
     // HDR tonemapping
-    //color = color / (color + vec3(1.0));
+    color = color / (color + vec3(1.0));
     // gamma correct
-    //color = pow(color, vec3(1.0/2.2)); 
+    color = pow(color, vec3(1.0/2.2)); 
 
 
     if(TransparencyFlag > 0.5)
@@ -321,7 +321,9 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref,SunLight light)
     vec3 prefilteredColor =textureLod(prefilterMap, ref,  roughness * MAX_REFLECTION_LOD).rgb;//     
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(normal, viewDir), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);    
-    ambient = (kD + diffuse + specular) * ao * intensity ;// ;
+    float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
+    ambient = (kD * diffuse + specular) * ao * intensity ;// ;
+    ambient *= ssao;
     return ambient  ;
 }
 
@@ -332,7 +334,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    ambient = light.diffuse *albedo* light.intensity;// * ssao;//;  
+    ambient = light.diffuse *albedo * light.intensity;
     ambient *= ssao;
     vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
 	float G = GeometrySmith(normal, viewDir, l, roughness); 
