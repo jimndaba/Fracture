@@ -26,6 +26,15 @@ namespace Fracture
 			m_Rotation = transform.m_Rotation;
 		}
 
+		TransformComponent(const TransformComponent& transform,const uint32_t& entityID) :Component(entityID, ComponentType::Transform)
+		{
+			m_LocalTransform = transform.m_LocalTransform;
+			m_WorldTransform = transform.m_WorldTransform;
+			m_Position = transform.m_Position;
+			m_Scale = transform.m_Scale;
+			m_Rotation = transform.m_Rotation;
+		}
+
 		const TransformComponent& operator = (const TransformComponent& transform)
 		{
 			m_LocalTransform = transform.m_LocalTransform;
@@ -50,7 +59,18 @@ namespace Fracture
 		glm::mat4 GetWorldTransform()override;
 
 		void Accept(ISceneProbe* visitor)override;
+
+		std::shared_ptr<TransformComponent> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<TransformComponent>(this->clone_impl(entityID));
+		}
+
 	private:
+		
+		virtual TransformComponent* clone_impl(uint32_t entityID) const override
+		{
+			return new TransformComponent(*this, entityID);
+		}
 		glm::mat4 m_LocalTransform = glm::mat4();
 		glm::mat4 m_WorldTransform = glm::mat4();
 		glm::vec3 m_Position = glm::vec3();

@@ -18,6 +18,19 @@ namespace Fracture
 		RigidBodyComponent(uint32_t id,const float& _mass);
 		~RigidBodyComponent() = default;
 
+		RigidBodyComponent(const RigidBodyComponent& component, uint32_t id) :Component(id, ComponentType::Rigidbody)
+		{
+			m_rigid = component.m_rigid;
+			Mass = component.Mass;
+			m_Transform = component.m_Transform;
+			myMotionState = component.myMotionState;
+			boxCollider = component.boxCollider;
+
+			collisionGroup = component.collisionGroup;
+			collisionMask = component.collisionMask;
+		}
+
+
 		float Mass;
 		std::shared_ptr<btRigidBody> m_rigid;
 		std::shared_ptr<btTransform> m_Transform;
@@ -34,6 +47,19 @@ namespace Fracture
 		void setRotation(const glm::vec3& rot);
 		void Translate(const glm::vec3& position);
 		void Accept(ISceneProbe* visitor) override;
+		
+		std::shared_ptr<RigidBodyComponent> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<RigidBodyComponent>(this->clone_impl(entityID));
+		}
+
+
+	private:
+
+		virtual RigidBodyComponent* clone_impl(uint32_t entityID) const override
+		{
+			return new RigidBodyComponent(*this, entityID);
+		}
 	};
 
 }

@@ -16,6 +16,12 @@ namespace Fracture
 		LightComponent(uint32_t id,LightType lightType);
 		~LightComponent() = default;
 
+		LightComponent(const LightComponent& component, uint32_t id) :Component(id, ComponentType::Light)
+		{
+			m_light = component.m_light;
+			m_type = component.m_type;
+		}
+
 		virtual void onStart();
 
 		void SetAmbient(const glm::vec4& amb);
@@ -53,7 +59,19 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor) override;
 
+		std::shared_ptr<LightComponent> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<LightComponent>(this->clone_impl(entityID));
+		}
+
+
 	private:
+
+		virtual LightComponent* clone_impl(uint32_t entityID) const override
+		{
+			return new LightComponent(*this, entityID);
+		}
+
 		LightType m_type;
 		std::shared_ptr<ILight> m_light;
 	};

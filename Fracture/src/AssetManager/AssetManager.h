@@ -4,15 +4,17 @@
 
 
 #include <iostream>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <string>
 #include <memory>
 #include <vector>
 #include <map>
 #include <unordered_map>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include <glm/glm.hpp>
-#include <string>
+
 
 
 namespace Fracture

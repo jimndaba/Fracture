@@ -169,7 +169,7 @@ namespace Fracture
 		std::shared_ptr<Shader> m_shader;
         std::shared_ptr<std::unordered_map<std::string, UniformValue>> m_Uniforms;
         std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<UniformValueSampler>>> m_SamplerUniforms;
-        bool m_CastShadows = false;
+        bool m_CastShadows = true;
         bool m_IsTransparent = false;
         bool m_IsOutlined = false;
 	};

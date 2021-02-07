@@ -52,8 +52,8 @@ namespace Fracture
 		float lastX = 1280.0f / 2.0f;
 		float lastY = 720.0f / 2.0f;
 		bool changed = false;
-		float rX = 0;
-		float rY = 0;
+		float rX = 1280.0f / 2.0f;
+		float rY = 720.0f / 2.0f;
 
 
 	};

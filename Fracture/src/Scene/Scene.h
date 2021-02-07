@@ -4,11 +4,30 @@
 
 #include <memory>
 #include <map>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "Component/ComponentManager.h"
+#include "Component/TransformComponent.h"
+#include "Component/RenderComponent.h"
+#include "Component/CameraControllerComponent.h"
+#include "Entity/EntityManager.h"
+#include "Entity/Entity.h"
+#include "AssetManager/AssetManager.h"
+#include "Component/TransformComponent.h"
+#include "Component/RelationshipComponent.h"
+#include "Component/TagComponent.h"
+#include "Component/RenderComponent.h"
+#include "Component/LightComponent.h"
+#include "Component/RigidBodyComponent.h"
+#include "Component/BoxColliderComponent.h"
+#include "Component/ScriptComponent.h"
+#include "Rendering/Model.h"
+#include "Rendering/Material.h"
+#include "Logging/Logger.h"
 
 namespace Fracture
 {
@@ -32,7 +51,7 @@ namespace Fracture
 		void addEntity(const std::shared_ptr<Entity>& entity);				
 		void Destroy(const std::shared_ptr<Entity>& entity);
 		void Destroy(uint32_t id);
-		void Duplicate(const std::shared_ptr<Entity>& entity);
+		std::shared_ptr<Entity> Duplicate(const std::shared_ptr<Entity>& entity);
 		void clearScene();		
 
 		static std::shared_ptr<Entity> ActiveCamera();
@@ -52,6 +71,17 @@ namespace Fracture
 		
 	};
 
+	template<class name>
+	void Fracture::Scene::CopyComponentIfExists(const std::shared_ptr<Entity>& copyTo, const std::shared_ptr<Entity>& copyFrom)
+	{
+		if (ComponentManager::HasComponent<name>(copyFrom->Id))
+		{		
+			auto& comp = ComponentManager::GetComponent<name>(copyFrom->Id);
+			std::shared_ptr<name> component = std::dynamic_pointer_cast<name>(comp->clone(copyTo->Id));
+			ComponentManager::AddComponent<name>(component);
+			FRACTURE_INFO("ADD COMPONENT TO ENTITY: {}", copyTo->Id);
+		}
+	}
 
 
 }

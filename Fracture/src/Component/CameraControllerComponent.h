@@ -28,6 +28,25 @@ namespace Fracture
 		CameraControllerComponent(uint32_t id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 		~CameraControllerComponent();
 
+		CameraControllerComponent(const CameraControllerComponent& component, uint32_t id) :Component(id, ComponentType::Camera)
+		{
+			Position = component.Position;
+			Front = component.Front;
+			Up = component.Up;
+			foV = component.foV;
+			WorldUp = component.WorldUp;
+			Zoom = component.Zoom;
+			m_viewMatrix = component.m_viewMatrix;
+
+			Yaw = component.Yaw;
+			Pitch = component.Pitch;
+			Roll = component.Roll;
+			nearClip = component.nearClip;
+			farClip = component.farClip;
+
+
+		}
+
 		// Camera Attributes
 		glm::vec3 Position = glm::vec3(0.0f, 5.0f, 15.0f);
 		glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -72,7 +91,21 @@ namespace Fracture
 
 		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 5.0f, 15.0f);
 		void Accept(ISceneProbe* visitor) override;
+
+		std::shared_ptr<CameraControllerComponent> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<CameraControllerComponent>(this->clone_impl(entityID));
+		}
+
+
 	private:
+
+		virtual CameraControllerComponent* clone_impl(uint32_t entityID) const override
+		{
+			return new CameraControllerComponent(*this, entityID);
+		}
+
+
 		void UpdateCameraVectors();
 
 		glm::mat4 m_viewMatrix;

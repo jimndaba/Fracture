@@ -22,8 +22,7 @@ namespace Fracture
 		};
 
 		static void ResetIDs();
-		static void NextID();
-
+		
 	private:
 		static uint32_t m_currentID;
 		static void nextID()

@@ -91,7 +91,7 @@ namespace Fracture
 		ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 		std::shared_ptr<Frame> m_frame;
-		std::shared_ptr<SceneView> m_sceneview;
+		static std::shared_ptr<SceneView> m_sceneview;
 		std::shared_ptr<InspectorPanel> m_inspectorpanel;
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;

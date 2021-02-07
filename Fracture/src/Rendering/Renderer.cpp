@@ -72,19 +72,13 @@ void Fracture::Renderer::onInit()
 {    
     FRACTURE_INFO("Renderer Init");
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
-    m_Bucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    //m_opaqueBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    //m_transparentBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    m_shadowBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
-    m_outlineBucket = std::shared_ptr<RenderBucket>(new RenderBucket());
+    m_Bucket = std::shared_ptr<RenderBucket>(new RenderBucket());   
 
     SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget("MainBuffer",m_width, m_Height, TextureTarget::Texture2D, GL_FLOAT, 1,true));
-    m_grid = std::make_shared<Grid>(100, 100, 1, 1, 0.5f);
+    
+    m_grid = std::make_shared<Grid>(100, 100, 1.0f, 1.0f, 0.5);
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
-    //DrawDebugLineRetained(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(50.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    //DrawDebugLineRetained(glm::vec3(0.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 50.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-
-
+    
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());     
     m_PickingPass = std::shared_ptr<PickingPass>(new PickingPass("pickingPass", m_width, m_Height,m_Bucket.get()));
 
@@ -113,34 +107,19 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     NumberBatches = 0;
    
     glEnable(GL_CULL_FACE);
-    
-    glDepthFunc(GL_LESS);
-    //glEnable(GL_STENCIL_TEST);
+    glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_SCISSOR_TEST);
 
-    //Set blending
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //Initialize stencil clear value
-    //glClearStencil(0);
-
-  
+    glDepthFunc(GL_LESS);
     glCullFace(GL_BACK);
     glDepthMask(GL_TRUE);
 
-    //Clear All Buckets
-	//m_opaqueBucket->clear();
-    //m_transparentBucket->clear();
     m_Bucket->clear();
-    m_shadowBucket->clear();
-    m_outlineBucket->clear();
 
 	//Collect Scene Data
     RenderScene(scene);
 
-    //m_PickingPass->execute(*this);
+    m_PickingPass->execute(*this);
 
    
 }
@@ -180,13 +159,8 @@ void Fracture::Renderer::RenderDirectLightShadows()
 void Fracture::Renderer::RenderPasses()
 {
     ProfilerTimer timer("RenderPass");
-  
-    //m_opaqueBucket->sort();   
-    //m_transparentBucket->sort();
 
     m_Bucket->sort();
-    m_shadowBucket->sort();   
-    m_outlineBucket->sort();
    
     {
         ProfilerTimer timer("ShadowPass");
@@ -199,7 +173,8 @@ void Fracture::Renderer::RenderPasses()
                 m_ShadowPass->Prepare(std::static_pointer_cast<SunLight>(light));            
             }  
         }
-        m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"),*m_shadowBucket);
+
+        m_ShadowPass->Render(AssetManager::getMaterial("DepthMaterial"), *m_Bucket);
         m_ShadowPass->End();
         glEnable(GL_CULL_FACE);
     }
@@ -438,26 +413,14 @@ void Fracture::Renderer::setViewport(int width, int height)
 
 void Fracture::Renderer::PushCommand(DrawCommand command)
 {
-    NumberDraw += 1;
-    if (command.material->CastShadows())
-    {
-        m_shadowBucket->pushCommand(command);
-    }
-
+    NumberDraw += 1;    
     m_Bucket->pushCommand(command);
 }
 
 void Fracture::Renderer::PushCommand(uint32_t EntityID,std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
 {
     NumberDraw += 1;
-   
-    if (material->CastShadows())
-    {
-        m_shadowBucket->pushCommand(EntityID, mesh, material, transform);
-    }
-
-    m_Bucket->pushCommand(EntityID, mesh, material, transform);
-       
+    m_Bucket->pushCommand(EntityID, mesh, material, transform);       
 }
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color)

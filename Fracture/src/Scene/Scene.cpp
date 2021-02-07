@@ -1,20 +1,5 @@
 #include "Scene.h"
-#include "Component/ComponentManager.h"
-#include "Component/TransformComponent.h"
-#include "Component/RenderComponent.h"
-#include "Component/CameraControllerComponent.h"
-#include "Entity/EntityManager.h"
-#include "Entity/Entity.h"
-#include "AssetManager/AssetManager.h"
-#include "Component/TransformComponent.h"
-#include "Component/RelationshipComponent.h"
-#include "Component/TagComponent.h"
-#include "Component/RenderComponent.h"
-#include "Component/LightComponent.h"
-#include "Rendering/Model.h"
-#include "Rendering/Material.h"
-#include "Logging/Logger.h"
-#include <iostream>
+
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::active_Camera;
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::m_entities;
@@ -80,12 +65,20 @@ void Fracture::Scene::Destroy(uint32_t id)
 	}
 }
 
-void Fracture::Scene::Duplicate(const std::shared_ptr<Entity>& entity)
+std::shared_ptr<Fracture::Entity> Fracture::Scene::Duplicate(const std::shared_ptr<Entity>& entity)
 {
-	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();		
-	CopyComponentIfExists<RelationShipComponent>(new_entity, entity);
+	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();	
+
 	CopyComponentIfExists<TagComponent>(new_entity, entity);	
-	addEntity(new_entity);
+	CopyComponentIfExists<RelationShipComponent>(new_entity, entity);
+	CopyComponentIfExists<TransformComponent>(new_entity, entity);
+	CopyComponentIfExists<RenderComponent>(new_entity, entity);
+	CopyComponentIfExists<LightComponent>(new_entity, entity);
+	CopyComponentIfExists<RigidBodyComponent>(new_entity, entity);
+	CopyComponentIfExists<BoxColliderComponent>(new_entity, entity);
+	CopyComponentIfExists<ScriptComponent>(new_entity, entity);
+	
+	return new_entity;
 }
 
 void Fracture::Scene::clearScene()
@@ -127,29 +120,3 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::GetEntity(uint32_t id)
 }
 
 
-template<class name>
-void Fracture::Scene::CopyComponentIfExists(const std::shared_ptr<Entity>& copyTo, const std::shared_ptr<Entity>& copyFrom)
-{
-	if (ComponentManager::HasComponent<name>(copyFrom->Id))
-	{
-		const auto& component = ComponentManager::GetComponent<name>(copyFrom->Id);
-
-		switch (component->componentType)
-		{
-			case ComponentType::Tag:
-			{
-				std::shared_ptr<TagComponent> newComponent = std::make_shared<TagComponent>(copyTo->Id, "Copy");
-				newComponent = std::dynamic_pointer_cast<TagComponent>(component);
-				ComponentManager::AddComponent<name>(newComponent);
-				FRACTURE_INFO("Add Tag Component for Entity: {}", copyTo->Id);
-			};
-			case ComponentType::Relationship:
-			{
-				std::shared_ptr<RelationShipComponent> newComponent = std::make_shared<RelationShipComponent>(copyTo->Id);
-				newComponent = std::dynamic_pointer_cast<RelationShipComponent>(component);
-				ComponentManager::AddComponent<name>(newComponent);
-				FRACTURE_INFO("Add Relationship Component for Entity: {}", copyTo->Id);
-			};
-		}
-	}
-}

@@ -17,6 +17,14 @@ namespace Fracture
 		RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model);
 		~RenderComponent() = default;
 
+		RenderComponent(const RenderComponent& component, uint32_t id) :Component(id, ComponentType::Render)
+		{
+			m_isOutlined = component.m_isOutlined;
+			m_material = component.m_material;
+			m_model = component.m_model;
+			m_modelName = component.m_modelName;
+		}
+
 		virtual void onStart();
 		
 		void SetMaterial(const std::string& oldmaterial, const std::string& newmaterial);
@@ -30,7 +38,19 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor) override;
 
+		std::shared_ptr<RenderComponent> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<RenderComponent>(this->clone_impl(entityID));
+		}
+
+
 	private:
+
+		virtual RenderComponent* clone_impl(uint32_t entityID) const override
+		{
+			return new RenderComponent(*this, entityID);
+		}
+
 		std::shared_ptr<Model> m_model;
 		std::string m_modelName;
 		bool m_isOutlined = false;

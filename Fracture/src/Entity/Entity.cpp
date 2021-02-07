@@ -12,7 +12,6 @@ Fracture::Entity::Entity()
 Fracture::Entity::Entity(uint32_t id):Id(id)
 {
 
-	IDManager::NextID();
 }
 
 Fracture::Entity::~Entity()

@@ -48,10 +48,19 @@ namespace Fracture
 		virtual void onStart() = 0;
 		virtual void Accept(ISceneProbe* visitor) = 0;
 
+
+		std::shared_ptr<Component> clone(uint32_t entityID) const
+		{
+			return std::shared_ptr<Component>(this->clone_impl(entityID));
+		}
+
 		virtual void OnDebug() {};
 	
 		uint32_t EntityID;
 		ComponentType componentType = ComponentType::None;		
+
+	private:
+		virtual Component* clone_impl(uint32_t entityID) const = 0;
 	};
 	
 	

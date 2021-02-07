@@ -31,6 +31,7 @@ std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::m_properties;
+std::shared_ptr<Fracture::SceneView> Fracture::Editor::m_sceneview;
 
 inline void Style();
 
@@ -94,8 +95,15 @@ void Fracture::Editor::onInit()
     Style();
   
     // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(m_window->Context(),true);
-    ImGui_ImplOpenGL3_Init("#version 400");
+    if (!ImGui_ImplGlfw_InitForOpenGL(m_window->Context(), true))
+    {
+        FRACTURE_ERROR("FAILED TO INIT IMGUI GLFW");
+    }
+
+    if (!ImGui_ImplOpenGL3_Init("#version 450"))
+    {
+        FRACTURE_ERROR("FAILED TO INIT IMGUI OPENGL");
+    }
 
     m_frame = std::shared_ptr<Fracture::Frame>(new Frame());
 
@@ -136,9 +144,7 @@ bool Fracture::Editor::onLoad()
     {
         FRACTURE_ERROR("FAiLED to load Project");
         return false;
-    }   
-
-  
+    }     
 
     m_Renderer->onInit();
     m_SceneManager->SetScene(m_properties->ActiveScene);
@@ -338,7 +344,7 @@ void Fracture::Editor::run()
         {
             onUpdate((float)dt);
             m_PhysicsManger->stepUpdate();
-            m_ScriptManger->OnUpdate(dt);
+            m_ScriptManger->OnUpdate((float)dt);
             accumulator -= dt;
             time += dt;
         }
@@ -776,7 +782,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
 
         ImGui::Text("Radius");
         ImGui::SameLine();
-        ImGui::DragFloat("##radius", &m_graph->ssao->radius, 0.001, 0.0001f, 0.0f, "%.2f");
+        ImGui::DragFloat("##radius", &m_graph->ssao->radius, 0.001f, 0.0001f, 0.0f, "%.2f");
 
 
         ImGui::Text("Base");
@@ -919,7 +925,12 @@ void Fracture::Editor::key_callback(GLFWwindow* window, int key, int scancode, i
         //Duplicate
         if (key == GLFW_KEY_D && action == GLFW_PRESS)
         {
-            FRACTURE_INFO("DUPLICATE");
+            if(m_sceneview->m_selection)
+            {
+                std::shared_ptr<Entity> entity = m_ActiveScene->Duplicate(m_sceneview->SelectedEntity());
+                m_ActiveScene->addEntity(entity);
+                m_sceneview->setSelectEntity(entity);
+            }            
         }
     }
 }

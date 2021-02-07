@@ -48,13 +48,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(empty);
 				setSelectEntity(empty);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(empty);
 				setSelectEntity(empty);
 			}
@@ -73,7 +73,7 @@ void Fracture::SceneView::render()
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -94,7 +94,7 @@ void Fracture::SceneView::render()
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -107,13 +107,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -127,13 +127,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -147,13 +147,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -167,13 +167,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -187,13 +187,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -207,13 +207,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -226,13 +226,13 @@ void Fracture::SceneView::render()
 
 			if (m_selection != nullptr)
 			{
-				relation->SetParent(m_selection->Id);
+				relation->ChangeParent(m_selection->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->SetParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->Id);
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -264,7 +264,7 @@ void Fracture::SceneView::clearSelection()
 
 void Fracture::SceneView::DuplicateSelection(const std::shared_ptr<Entity>& selection)
 {
-	m_scene->Duplicate(selection);
+	//scene->Duplicate(selection);
 }
 
 
@@ -272,15 +272,15 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 {
 	 
 		ImVec2 size = ImVec2(16.0f,16.0f);
+		static bool drag_and_drop = false;
 		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity);
-
 		if (ComponentManager::HasComponent<RelationShipComponent>(entity) && tag)
 		{
 			ImTextureID icon;
 			ImGuiTreeNodeFlags flags;
 			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity);
 			
-			flags = ((m_selection && m_selection->Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+			flags = ((m_selection && m_selection->Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 			if (relationship->GetChildren().size() == 0)
 			{
@@ -302,9 +302,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 
 			ImGui::Image(icon, size);
 			ImGui::SameLine();
-			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag->Name.c_str());
-
-
+			bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag->Name.c_str());
 
 			if (ImGui::IsItemClicked())
 			{
@@ -334,6 +332,13 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 
 			}
 
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+				ImGui::Text(tag->Name.c_str());
+				ImGui::EndDragDropSource();
+			}
+
 			ImGui::NextColumn();
 			ImGui::SetColumnWidth(1, 30);
 			ImGui::PushID(entity);
@@ -354,10 +359,13 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 				}
 
 			}
+			
 			ImGui::PopID();
 			ImGui::NextColumn();
 			//ImGui::ImageButton(nullptr, size, ImVec2(0, 0), ImVec2(1, 1), 1);
 			//ImGui::NextColumn();
+
+			
 
 			if (opened)
 			{
@@ -365,14 +373,15 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 				{
 					for (auto& child : relationship->GetChildren())
 					{
-
 						DrawEntityNode(child);
 					}
+					ImGui::TreePop();
 				}
-				ImGui::TreePop();
+			
 			}
-		}
+
+
 		
-	
-	
+		}
+
 }

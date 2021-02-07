@@ -59,15 +59,7 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 	
-	//Draw Screen Picking Window
-	//ImGui::Image(reinterpret_cast<void*>(m_renderer->m_PickingPass->m_renderTarget->GetColorTexture(0)->id),
-	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-	//Draw Final Image from Render Target
-    //ImGui::Image(reinterpret_cast<void*>(m_renderer->SceneRenderTarget->GetColorTexture(0)->id),
-	//	viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-	
-	 ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
+	ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
 		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 
