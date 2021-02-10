@@ -104,39 +104,7 @@ float ShadowCalculation(vec4 fragPosLightSpace,SunLight light)
 
 void main()
 {
-    vec3 norm = normalize(Normal);
-    // specular
-    vec3 viewDir = normalize(viewPos- FragPos);
-
-    vec3 result;
-    for(int i = 0; i < NR_SUN_LIGHTS; i++)
-    {
-      if (!sunLights[i].enabled)
-      {
-        continue;
-      }
-      result = CalcDirLight(sunLights[i],norm,viewDir);//
-    }
-
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
-    {
-      if (!pointLights[i].enabled)
-      {
-        continue;
-      }
-      result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-    }
-
-    for(int i = 0; i < NR_SPOT_LIGHTS; i++)
-    {
-      if (!spotLights[i].enabled)
-      {
-        continue;
-      }
-      result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
-    }
-
-    FragColor = vec4(result,1.0);
+      FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
 
 vec3 CalcDirLight(SunLight light, vec3 normal, vec3 viewDir)

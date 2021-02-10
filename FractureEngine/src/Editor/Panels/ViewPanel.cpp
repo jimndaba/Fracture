@@ -61,8 +61,7 @@ void Fracture::ViewPanel::render()
 	
 	ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
 		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-
+	
 	ImGui::SetCursorPos(ImVec2{10,10});
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
@@ -123,11 +122,12 @@ void Fracture::ViewPanel::render()
 
 	if (m_scenegraph.SelectedEntity())
 	{
+		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
 
-		if (ComponentManager::HasComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id))
+		if (transform)
 		{		
 
-			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
+			//std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
 			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(m_scenegraph.SelectedEntity()->Id);
 			
 			float rw = (float)ImGui::GetWindowWidth();
@@ -166,8 +166,20 @@ void Fracture::ViewPanel::render()
 				transform->setPosition(position);
 
 			}
+
+			if (ComponentManager::HasComponent<RenderComponent>(m_scenegraph.SelectedEntity()->Id))
+			{
+				auto& rendercomp = ComponentManager::GetComponent<RenderComponent>(m_scenegraph.SelectedEntity()->Id);
+				std::vector<std::shared_ptr<Mesh>> meshes = rendercomp->GetModel()->GetMeshes();
+				for (const auto& mesh : meshes)
+				{
+					m_renderer->PushOutlineCommand(m_scenegraph.SelectedEntity()->Id, mesh,transform->GetWorldTransform());
+				}
+			}
 			
 		}
+
+		
 	}
 
     ImGui::PopStyleVar();

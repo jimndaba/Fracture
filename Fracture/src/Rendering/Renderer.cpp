@@ -96,8 +96,10 @@ void Fracture::Renderer::onInit()
     // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
 
-    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-    glEnable(GL_MULTISAMPLE);
+
+
+   
+   
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -105,16 +107,22 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     ProfilerTimer timer("Begin Frame");
     NumberDraw = 0;
     NumberBatches = 0;
-   
     glEnable(GL_CULL_FACE);
-    glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
-
-    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+   
     glCullFace(GL_BACK);
     glDepthMask(GL_TRUE);
 
-    m_Bucket->clear();
+    glDepthFunc(GL_LESS);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      
+   
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    
 
 	//Collect Scene Data
     RenderScene(scene);
@@ -160,7 +168,8 @@ void Fracture::Renderer::RenderPasses()
 {
     ProfilerTimer timer("RenderPass");
 
-    m_Bucket->sort();
+    m_Bucket->sortForward();
+    m_Bucket->sortAlpha();
    
     {
         ProfilerTimer timer("ShadowPass");
@@ -279,7 +288,8 @@ void Fracture::Renderer::EndFrame()
     glDisable(GL_DEPTH_TEST);
     m_DebugDraws.clear();
     m_lights.clear();
- 
+    m_Bucket->clear();
+
    
 }
 
@@ -364,16 +374,21 @@ void Fracture::Renderer::Submit(DrawCommand command,Shader* shader)
     ProfilerTimer timer("Submit");
 
     {
-        ProfilerTimer timer("setProjection matries");
         shader->setMat4("projection", m_camera->getProjectionMatrix());
         shader->setMat4("view", m_camera->getViewMatrix());
+      
     }
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(m_camera->getProjectionMatrix()));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_camera->getViewMatrix()));
+    glBufferSubData(GL_UNIFORM_BUFFER, (2 * sizeof(glm::mat4)), sizeof(glm::mat4), glm::value_ptr(m_ShadowPass->GetLightSpaceMatrix()));
+    glBufferSubData(GL_UNIFORM_BUFFER, (3 * sizeof(glm::mat4)), sizeof(glm::vec3), glm::value_ptr(m_camera->getPosition()));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
   
 
     if (ComponentManager::HasComponent<TransformComponent>(command.ID))
     {
-        ProfilerTimer timer("GetTransform");
-        shader->setMat4("model", command.Transform);
+        shader->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
     }
 
     Draw(command);
@@ -396,7 +411,7 @@ void Fracture::Renderer::clear()
 
 void Fracture::Renderer::clearColor(float r, float g, float b)
 {
-	glClearColor(r, g, b, 1.0f);
+	glClearColor(r, g, b, 0.0f);
 }
 
 void Fracture::Renderer::setViewport(int width, int height)
@@ -421,6 +436,11 @@ void Fracture::Renderer::PushCommand(uint32_t EntityID,std::shared_ptr<Fracture:
 {
     NumberDraw += 1;
     m_Bucket->pushCommand(EntityID, mesh, material, transform);       
+}
+
+void Fracture::Renderer::PushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform)
+{
+    m_Bucket->pushOutlineCommand(EntityID, mesh, transform);
 }
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color)

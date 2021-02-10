@@ -15,16 +15,15 @@ namespace Fracture
 	public:
 		BoxBlurNode(const std::string& name,const  int& width,const int& height);
 
-		virtual void execute(Renderer& renderer);
-
-		float Directions = 16.0f;// BLUR DIRECTIONS (Default 16.0 - More is better but slower)
-		float Quality = 4.0f; // BLUR QUALITY (Default 4.0 - More is better but slower)
-		float size = 8.0f;		
-
+		virtual void execute(Renderer& renderer);	
+		int amount = 10;
 	private:
 		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<Shader> m_outPutshader;
+	
 		std::shared_ptr<FrameResource> resource;
 		std::shared_ptr<FrameResource> outputTexture;
+		std::shared_ptr<RenderTarget> m_blurPasses[2];
 
 	};
 

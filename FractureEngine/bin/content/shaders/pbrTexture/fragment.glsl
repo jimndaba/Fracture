@@ -69,7 +69,7 @@ uniform float normalFlag;
 uniform float metallicFlag;
 uniform float roughnessFlag;
 uniform float aoFlag;
-uniform float TransparencyFlag;
+uniform int TransparencyFlag;
 
 // IBL
 uniform samplerCube irradianceMap;
@@ -279,9 +279,12 @@ void main()
       Lo += CalcPointLight(pointLights[i],albedo, F0, N, FragPos, V,ambient);      
     }
 
+    float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
     vec3 color = vec3(0);
-    color += CalcIBL(F0,N,V,R,sunLights[0]);
-    color += Lo;
+    color += (0.3 * CalcIBL(F0,N,V,R,sunLights[0]) * ssao) ;
+    color += (0.3 * Lo * ssao);
+
+ 
 
     // HDR tonemapping
     color = color / (color + vec3(1.0));
@@ -289,11 +292,12 @@ void main()
     color = pow(color, vec3(1.0/2.2)); 
 
 
-    if(TransparencyFlag > 0.5)
+    if(TransparencyFlag > 0)
     {      
         vec4 alphaTex =  texture(albedoMap, TexCoords);
         alpha = alphaTex.a;
     }
+   
     vec4 final = vec4(color,alpha);
 
     if(final.a < 0.5)
@@ -322,9 +326,9 @@ vec3 CalcIBL(vec3 F0, vec3 normal, vec3 viewDir,vec3 ref,SunLight light)
     vec2 brdf  = texture(brdfLUT, vec2(max(dot(normal, viewDir), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);    
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    ambient = (kD * diffuse + specular) * ao * intensity ;// ;
-    ambient *= ssao;
-    return ambient  ;
+    vec3 color = (kD * diffuse + specular) * ao * intensity ;// ;
+    //ambient *= ssao;
+    return color;
 }
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
@@ -334,8 +338,8 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
     vec3 H = normalize(viewDir+ l);
     float NoL = clamp(dot(normal, l), 0.0, 1.0);
     float ssao = texture(ambientOcclusion, CalcScreenTexCoord()).r;
-    ambient = light.diffuse *albedo * light.intensity;
-    ambient *= ssao;
+    //vec3 mambient = 0.3 * light.diffuse *albedo * light.intensity;
+    //ambient *= ssao;
     vec3 F  = fresnelSchlick(max(dot(H, viewDir), 0.0), F0);  
 	float G = GeometrySmith(normal, viewDir, l, roughness); 
 
@@ -352,7 +356,7 @@ vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)
 	// Cook-Torrance
     float NdotL = max(dot(normal, l), 0.0);  
     float shadow = ShadowCalculation(FragPosLightSpace,light);    
-    vec3 result = (diffuseBRDF / PI + specular ) * radiance * NoL ;//+ ambient ;
+    vec3 result = (diffuseBRDF / PI + specular) * radiance * NoL ;//;
     result *= ((1.0 - shadow) * (NoL * 1.0)) ; //(shadow * (NoL * 1.0));
     return result ;  
 }

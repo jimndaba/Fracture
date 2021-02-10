@@ -6,6 +6,7 @@
 #include "../utils/FileDialogue.h"
 
 
+Fracture::SampleUniformType stringToEnum(const std::string& m_type);
 
 Fracture::InspectorPanel::InspectorPanel(std::string name, Fracture::SceneView& scenegraph):Panel(name),m_scenegraph(scenegraph)
 {
@@ -25,6 +26,7 @@ void Fracture::InspectorPanel::render()
 
 void Fracture::InspectorPanel::DrawComponents(Entity entity)
 {
+
 	DrawComponent<TagComponent>("Tag", entity, [](auto& component)
 	{
 		std::shared_ptr<TagComponent> tag = std::dynamic_pointer_cast<TagComponent>(component);
@@ -115,6 +117,11 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	DrawComponent<RenderComponent>("Mesh Render", entity, [](auto& component)
 	{
 
+			ImGuiIO& io = ImGui::GetIO();
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			ImVec2 buttonSize = { lineHeight + 2.0f, lineHeight };
+			auto font = io.Fonts->Fonts[0];
+
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 			std::string current_Model = render->GetModel()->Name;		
 			//std::string current_Shader = render->material->getShader()->Name;
@@ -143,6 +150,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			
 			// Model can have more that 1 material
 			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			
+
 			
 			for (auto material : render->GetModel()->GetMaterials())//
 			{
@@ -176,11 +185,11 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					}					
 
 					bool isTransparent = material->IsTransparent();
-					DrawBoolControl("Is Transparent", isTransparent);
+					DrawBoolControl("Transparent", isTransparent);
 					material->setIsTransparent(isTransparent);					
 
 					bool castShadows = material->CastShadows();
-					DrawBoolControl("Cast Shadows", castShadows);
+					DrawBoolControl("CastShadows", castShadows);
 					material->setCastShadows(castShadows);
 
 					if (ImGui::Button("reload", ImVec2(100, 20)))
@@ -192,10 +201,30 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 					ImGui::Separator();
 
+
+					if (ImGui::Button("Add Unfiorm", buttonSize))
+					{
+						ImGui::OpenPopup("Add Uniform?");
+					}
+
 					const auto& uniforms = material->GetUniforms();
 					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 					{
+						ImGui::Columns(3);
+						ImGui::SetColumnWidth(0, 40);
+
+						ImGui::PushFont(font);
+						if (ImGui::Button("a", buttonSize))
+						{
+							ImGui::OpenPopup("Add Uniform?");
+						}					
+
+						ImGui::PopFont();
+						ImGui::NextColumn();
+
 						DrawMaterialUniform(value->first, value->second);
+
+						
 					}
 					ImGui::Separator();
 					const auto& uniformsSamplers = material->GetSamplerUniforms();
@@ -206,6 +235,101 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 							DrawSample2DControl(it->first, it->second->texture->id, material);
 						}
 
+					}
+
+					if (ImGui::BeginPopupModal("Add Uniform?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+					{
+						ImGui::Text("uniform Name: .\n");
+						ImGui::SameLine();
+						static std::string name;
+						static std::string textureName;
+						static std::string m_types[] = {
+							"Diffuse",
+							"Normal",
+							"Metallic",
+							"Roughness",
+							"AO",
+							"Specular",
+							"Emmision"
+						};
+
+						
+						static int item_current_idx = 0;
+						std::string current_type = m_types[item_current_idx];
+						if (ImGui::BeginCombo("##uniformType",current_type.c_str()))
+						{
+							for (int n = 0; n < IM_ARRAYSIZE(m_types); n++)
+							{
+								const bool is_selected = (item_current_idx == n);
+								if (ImGui::Selectable(m_types[n].c_str(), is_selected))
+								{
+									item_current_idx = n;
+								}						
+
+								// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();
+							}
+							ImGui::EndCombo();
+						}
+						ImGui::SameLine();
+						std::shared_ptr<Texture> map;
+						if (ImGui::Button("+", buttonSize))
+						{
+
+							std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", textureName);
+							if (!filepath.empty())
+							{
+								AssetManager::AddTexture(textureName, filepath, TextureType::Diffuse);
+							}
+						}
+
+						switch (stringToEnum(current_type))
+						{
+							case SampleUniformType::Diffuse:
+							{
+								name = "albedoMap";
+							}
+							break;
+							case SampleUniformType::Normal:
+							{
+								name = "normalMap";
+							}
+							break;
+							case SampleUniformType::Metallic:
+							{
+								name = "metallicMap";
+							}
+							break;
+							case SampleUniformType::Roughness:
+							{
+								name = "roughnessMap";
+							}
+							break;
+							case SampleUniformType::AO:
+							{
+								name = "aoMap";
+							}
+							break;
+							case SampleUniformType::Specular:
+							{
+								name = "specularMap";
+							}
+							break;
+						}
+
+						if (ImGui::Button("OK", ImVec2(120, 0)))
+						{
+							if (!name.empty() && !textureName.empty())
+							{
+								material->SetTexture(name, AssetManager::getTexture(textureName), (unsigned int)stringToEnum(current_type));
+								ImGui::CloseCurrentPopup();
+							}
+						}
+						ImGui::SetItemDefaultFocus();
+						ImGui::SameLine();
+						if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+						ImGui::EndPopup();
 					}
 					ImGui::TreePop();
 				
@@ -303,7 +427,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			light->SetCastShadow(shadow);
 
 			float intensity = light->Intensity();
-			DrawfloatControl("Intensity",intensity);
+			DrawfloatControl("Intensity",intensity,0.0f,100.0f);
 			light->SetIntensity(intensity);
 
 			switch(light->GetLightType())
@@ -672,8 +796,8 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 	auto boldFont = io.Fonts->Fonts[0];
 	ImGui::PushID(label.c_str());
 	
-	ImGui::Columns(2);
-	ImGui::SetColumnWidth(0, columnWidth);
+	//ImGui::Columns(2);
+	ImGui::SetColumnWidth(1, columnWidth);
 
 	char buffer[256];
 	memset(buffer, 0, sizeof(buffer));
@@ -715,7 +839,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 			value.Float = resetValue;
 		ImGui::PopFont();
 		ImGui::SameLine();
-		ImGui::DragFloat("##uniform", &value.Float, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##uniform", &value.Float, 0.001f, 0.0f, 1.0f, "%.2f");
 	
 		break;
 	}
@@ -735,7 +859,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &value.Vec2.x, 0.05f, 0.0f, 1.0f, "%.2f");
+		ImGui::DragFloat("##X", &value.Vec2.x, 0.001f, 0.0f, 1.0f, "%.2f");
 
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -917,7 +1041,7 @@ void Fracture::InspectorPanel::DrawColourControl(const std::string& label, glm::
 	ImGui::Separator();
 }
 
-void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float& value, float resetValue, float columnWidth)
+void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float& value, float resetValue, const float& max, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];
@@ -937,7 +1061,7 @@ void Fracture::InspectorPanel::DrawfloatControl(const std::string& label, float&
 		value = resetValue;
 	ImGui::PopFont();
 	ImGui::SameLine();
-	ImGui::DragFloat("##uniform", &value, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat("##uniform", &value, 0.01f, 0.0f,max, "%.2f");
 	ImGui::Columns(1);
 
 	ImGui::PopID();
@@ -1016,7 +1140,7 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, uns
 		if (!filepath.empty())
 		{
 			AssetManager::AddTexture(name, filepath, TextureType::Diffuse);
-			mMaterial->ChangeTexture(name, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
+			mMaterial->ChangeTexture(label, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
 		}
 		
 	}
@@ -1024,4 +1148,37 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, uns
 	ImGui::Text(label.c_str());
 	ImGui::PopID();
 	ImGui::Separator();
+}
+
+Fracture::SampleUniformType stringToEnum(const std::string& m_type)
+{
+	if (m_type == "Diffuse")
+	{
+		return Fracture::SampleUniformType::Diffuse;
+	}
+	if (m_type == "Normal")
+	{
+		return Fracture::SampleUniformType::Normal;
+	}
+	if (m_type == "Metallic")
+	{
+		return Fracture::SampleUniformType::Metallic;
+	}
+	if (m_type == "Roughness")
+	{
+		return Fracture::SampleUniformType::Roughness;
+	}
+	if (m_type == "AO")
+	{
+		return Fracture::SampleUniformType::AO;
+	}
+	if (m_type == "Specular")
+	{
+		return Fracture::SampleUniformType::Specular;
+	}
+	if (m_type == "Emmision")
+	{
+		return Fracture::SampleUniformType::Emmision;
+	}
+
 }

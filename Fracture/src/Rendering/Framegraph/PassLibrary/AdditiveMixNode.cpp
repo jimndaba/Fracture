@@ -34,11 +34,16 @@ void Fracture::AdditiveMixNode::execute(Renderer& renderer)
 {	
 	ProfilerTimer timer("Additive Mix Pass");
 	resources["output"]->bind();
+	glClear(GL_COLOR_BUFFER_BIT);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	m_shader->use();
 	m_shader->setTexture("colorA", resources["colorA"]->GetColorTexture(0).get(), 0);
 	m_shader->setTexture("colorB", resources["colorB"]->GetColorTexture(0).get(), 1);
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_shader->unbind();
+
+
 	resources["output"]->Unbind();
 }

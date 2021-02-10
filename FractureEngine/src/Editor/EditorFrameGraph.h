@@ -17,83 +17,73 @@ namespace Fracture
 				auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
 				addnode(depthbuffer);
 			}
-
 			{
 				auto clear = std::make_shared<ClearFrame>("clearframe");
 				addnode(clear);
 			}
-
-
 			{
 				auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
 				addnode(lambertian);
 			}
-
+			{
+				auto outline = std::make_shared<OutlineNode>("outlinePass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
+				addnode(outline);
+			}
 			{
 				BrightPass = std::make_shared<ThresholdNode>("thresholdPass", renderer.Width(), renderer.Height());
 				addnode(BrightPass);
 			}
-
 			{
 				ToneMap = std::make_shared<ToneMappingNode>("ToneMapPass", renderer.Width(), renderer.Height());
 				addnode(ToneMap);
 			}
-
 			{
 				auto blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
 				addnode(blurPass);
 			}
-
 			{
-				auto mixColor = std::make_shared<AdditiveMixNode>("mixPass", renderer.Width(), renderer.Height());
+				auto mixColor = std::make_shared<AdditiveMixNode>("AddPass", renderer.Width(), renderer.Height());
 				addnode(mixColor);
 			}
-
-
 			{
 				ssao = std::make_shared<SSAONode>("ssaoPass", renderer.Width(), renderer.Height());
 				addnode(ssao);
 			}
-
 			{
 				ssaoblur = std::make_shared<BoxBlurNode>("ssaoBlur", renderer.Width(), renderer.Height());
 				addnode(ssaoblur);
 			}
-
-
 			{
-				//auto intermediate = std::make_shared<IntermediateNode>("intermediatePass", renderer.Width(), renderer.Height());
-				//addnode(intermediate);
+				auto mixoutline = std::make_shared<MixNode>("mixOutlinePass", renderer.Width(), renderer.Height());
+				addnode(mixoutline);
 			}
+			
 
 
+			addLink("global_output", "rendertarget", "mixOutlinePass", "Mix_out");// "mixPass", "output");
 
-			addLink("global_output", "rendertarget", "mixPass", "output");// "mixPass", "output");
+			addLink("mixOutlinePass", "colorA", "outlinePass", "outline_out");
+			addLink("mixOutlinePass", "colorB", "AddPass", "output");
 
-
-
-			addLink("mixPass", "colorA", "lamertianPass", "outputColor");
-			addLink("mixPass", "colorB", "BoxBlurPass", "blurOutput");
-
-			addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
-
-			addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
-
+			addLink("AddPass", "colorA", "lamertianPass", "outputColor");
+			addLink("AddPass", "colorB", "BoxBlurPass", "blurOutput");
+			
+			//blooom
+			addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");			
+			addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");			
 			addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
-
-			//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");
-
+			
+			//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");			
+			
+			//main lambertian pass
 			addLink("lamertianPass", "buffer", "clearframe", "buffer");
-			addLink("lamertianPass", "SSAOMap", "ssaoBlur", "blurOutput");
-
-
-
-			addLink("clearframe", "buffer", "global_backbuffer", "rendertarget");
-
-
-			addLink("ssaoBlur", "colorTexture", "ssaoPass", "SSAOOutput");
+			addLink("lamertianPass", "SSAOMap", "ssaoPass", "SSAOOutput");
 
 			addLink("ssaoPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
+			
+			addLink("clearframe", "buffer", "global_backbuffer", "rendertarget");		
+			
+			
 		}
 
 		std::shared_ptr<ToneMappingNode> ToneMap;

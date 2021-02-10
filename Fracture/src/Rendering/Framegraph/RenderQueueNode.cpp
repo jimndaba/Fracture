@@ -23,26 +23,18 @@ void Fracture::RenderQueueNode::AcceptBucket(RenderBucket* bucket)
 }
 
 void Fracture::RenderQueueNode::render(Renderer& renderer)
-{
-    //renderer.clear();
+{   
     ProfilerTimer timer("RenderQueue Render");
     renderer.setViewport(renderer.Width(), renderer.Height());
-  
     for (auto& bucket : m_buckets)
     {
-        if (bucket->mType == BucketType::Transparent)
-        {
-            glDisable(GL_CULL_FACE);
-        }
-        else
-        {
-            glEnable(GL_CULL_FACE);
-        }
-
-        //1. Geometry buffer
+        bucket->sortForward();
+        bucket->sortAlpha();
+        //1. Geometry buffers
         std::vector<DrawCommand> forwardRenderCommands = bucket->getForwardRenderCommands();
         std::vector<DrawCommand> alphaRenderCommands = bucket->getAlphaRenderCommands();
 
+        
         for (unsigned int i = 0; i < forwardRenderCommands.size(); ++i)
         {
             DrawCommand command = forwardRenderCommands[i];
@@ -67,34 +59,41 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
 
             renderer.Submit(command);
         }
+        
 
-        for (unsigned int i = 0; i < alphaRenderCommands.size(); ++i)
+        if (alphaRenderCommands.size() > 0)
         {
-            DrawCommand command = alphaRenderCommands[i];
-            NumberBatches += 1;
-            Material* material = command.material;
-            material->use();
-            material->getShader()->setTexture("ambientOcclusion",resources["SSAOMap"]->GetColorTexture(0).get(), 1);
-            renderer.SetupLighting(material);
-
-            const auto& uniforms = material->GetUniforms();
-            for (const auto& u : *uniforms)
+            glDisable(GL_CULL_FACE);
+            for (unsigned int i = 0; i < alphaRenderCommands.size(); ++i)
             {
-                ProfilerTimer timer("RQ WriteUNiforms");
-                WriteUniformData(*material->getShader(), u.first, u.second);
-            }
+                DrawCommand command = alphaRenderCommands[i];
+                NumberBatches += 1;
+                Material* material = command.material;
+                material->use();
+                material->getShader()->setTexture("ambientOcclusion", resources["SSAOMap"]->GetColorTexture(0).get(), 8);
+                material->getShader()->setInt("TransparencyFlag", command.material->IsTransparent());
+                renderer.SetupLighting(material);
 
-            const auto& uniformsSamplers = material->GetSamplerUniforms();
-            for (const auto& sample : *uniformsSamplers)
-            {
-                ProfilerTimer timer("RQ WriteSamples");
-                WriteUniformSampler(*material->getShader(), sample.first, sample.second);
-            }
+                const auto& uniforms = material->GetUniforms();
+                for (const auto& u : *uniforms)
+                {
+                    ProfilerTimer timer("RQ WriteUNiforms");
+                    WriteUniformData(*material->getShader(), u.first, u.second);
+                }
 
-            renderer.Submit(command);
+                const auto& uniformsSamplers = material->GetSamplerUniforms();
+                for (const auto& sample : *uniformsSamplers)
+                {
+                    ProfilerTimer timer("RQ WriteSamples");
+                    WriteUniformSampler(*material->getShader(), sample.first, sample.second);
+                }
+
+                renderer.Submit(command);
+            }
+            glEnable(GL_CULL_FACE);
         }
- 
     }
+
 }
 
 void Fracture::RenderQueueNode::WriteUniformData(Shader shader, std::string name, UniformValue value)

@@ -1,0 +1,32 @@
+#pragma once
+#ifndef MIXNODE_H
+#define MIXNODE_H
+#include "../FullscreenNode.h"
+
+
+namespace Fracture
+{
+	class Shader;
+	class RenderTarget;
+	class FrameResource;
+	
+	class MixNode : public FullScreenNode
+	{
+	public:
+
+		MixNode(const std::string& name, const int& width, const int& height);
+
+		virtual void execute(Renderer& renderer);
+
+	private:
+
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<FrameResource> colorA;
+		std::shared_ptr<FrameResource> colorB;
+		std::shared_ptr<FrameResource> outputColor;
+	};
+
+
+}
+
+#endif 

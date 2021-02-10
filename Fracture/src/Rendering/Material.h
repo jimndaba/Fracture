@@ -91,8 +91,9 @@ namespace Fracture
         ~Material() = default;
 
 
-        Material(const Material& material2) 
+        Material(const Material& material2, const std::string& name)
         { 
+            Name = name;
             m_CastShadows = material2.m_CastShadows;
             m_IsOutlined = material2.m_IsOutlined;
             m_IsTransparent = material2.m_IsTransparent;
@@ -109,6 +110,11 @@ namespace Fracture
             m_SamplerUniforms = material2.m_SamplerUniforms;
             m_Uniforms = material2.m_Uniforms;
             return *this;
+        }
+
+        std::shared_ptr<Material> Create(const std::string& name)
+        {
+            return std::shared_ptr<Material>(new Material(*this,name));
         }
 
 		std::shared_ptr<Shader> getShader();

@@ -26,7 +26,7 @@ namespace Fracture
 
 		static void Clear(float r, float g, float b)
 		{
-			glClearColor(r,g,b,1.0f);
+			glClearColor(r,g,b,0.0f);
 		}
 	};	
 }

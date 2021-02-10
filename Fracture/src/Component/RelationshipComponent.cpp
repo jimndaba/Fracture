@@ -14,17 +14,17 @@ void Fracture::RelationShipComponent::SetParent(const uint32_t& parent){
 
 	hasParent = true;
 	m_parent = parent;
-	RelationShipComponent& component = *ComponentManager::GetComponent<RelationShipComponent>(parent);
-	component.AddChild(EntityID);
+	auto& component = ComponentManager::GetComponent<RelationShipComponent>(parent);
+	component->AddChild(EntityID);
 }
 
 void Fracture::RelationShipComponent::ChangeParent(const uint32_t& parent)
 {
-	RelationShipComponent& component = *ComponentManager::GetComponent<RelationShipComponent>(m_parent);
-	component.RemoveChild(EntityID);
+	auto& component = ComponentManager::GetComponent<RelationShipComponent>(m_parent);
+	component->RemoveChild(EntityID);
 	m_parent = parent;
-	RelationShipComponent& newcomponent = *ComponentManager::GetComponent<RelationShipComponent>(parent);
-	newcomponent.AddChild(EntityID);
+	auto& newcomponent = ComponentManager::GetComponent<RelationShipComponent>(parent);
+	newcomponent->AddChild(EntityID);
 }
 
 void Fracture::RelationShipComponent::AddChild(const uint32_t& child)

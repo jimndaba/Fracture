@@ -219,7 +219,7 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddShader("default", "content/shaders/model/vertex.glsl", "content/shaders/model/fragment.glsl");
 
     //Outline Shader
-    AssetManager::AddShader("Outline", "content/shaders/outline/vertex.glsl", "content/shaders/outline/fragment.glsl");
+    AssetManager::AddShader("OutlinePass", "content/shaders/outline/vertex.glsl", "content/shaders/outline/fragment.glsl");
 
     //Invert Color Shader
     AssetManager::AddShader("InvertColor", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/invert_frag.glsl");
@@ -230,7 +230,10 @@ void Fracture::Editor::onLoadNew()
     //Threshold Mapping Shader
     AssetManager::AddShader("Threshold", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/threshold_frag.glsl");
 
-    //Threshold Mapping Shader
+    //Mix Shader
+    AssetManager::AddShader("MixNode", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/Mix_frag.glsl");
+
+    //Add Shader
     AssetManager::AddShader("AdditiveMix", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/AdditiveMix_frag.glsl");
    
     //Threshold Mapping Shader
@@ -242,8 +245,12 @@ void Fracture::Editor::onLoadNew()
     //Threshold Mapping Shader
     AssetManager::AddShader("DepthPass", "content/shaders/postprocess/depthPass_vert.glsl", "content/shaders/postprocess/depthPass_frag.glsl");
 
-    //Threshold Mapping Shader
+    //SSAO Shader
     AssetManager::AddShader("SSAOPASS", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/SSAO_frag.glsl");
+
+    //SSAO BLUR Shader
+    AssetManager::AddShader("SSAOBLUR", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/ssao_blur_frag.glsl");
+
 
     //Threshold Mapping Shader
     AssetManager::AddShader("MultiplyMix", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/MultiplyMix_frag.glsl");
@@ -279,6 +286,9 @@ void Fracture::Editor::onLoadNew()
     //pbrTextured->setFloat("roughnessFlag", 1.0f);
     //pbrTextured->setFloat("aoFlag", 1.0f);
     
+    std::shared_ptr<Material> base_material = std::shared_ptr<Material>(new Material("BaseMaterial", m_AssetManger->getShader("PBRTexturedShader")));
+
+    AssetManager::AddMaterial("BaseMaterial", base_material);
 
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
 
@@ -286,7 +296,7 @@ void Fracture::Editor::onLoadNew()
 
     AssetManager::AddMaterial("PickingMaterial", std::shared_ptr<Material>(new Material("PickingMaterial", AssetManager::getShader("PickingShader"))));
 
-    AssetManager::AddMaterial("Outline", std::shared_ptr<Material>(new Material("Outline", AssetManager::getShader("Outline"))));
+    AssetManager::AddMaterial("OutlinePass", std::shared_ptr<Material>(new Material("OutlinePass", AssetManager::getShader("OutlinePass"))));
 
 
     AssetManager::AddModel("Plane", "content/models/primitives/plane.fbx");
@@ -760,13 +770,11 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
 
         ImGui::PushFont(boldFont);
         ImGui::Checkbox("##Bloom", &bloom);
-        ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##size", &m_graph->ssaoblur->size, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##qualit", &m_graph->ssaoblur->Quality, 0.1f, 0.0f, 0.0f, "%.2f");
-        ImGui::DragFloat("##direct", &m_graph->ssaoblur->Directions, 0.1f, 0.0f, 0.0f, "%.2f");
-
+        ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 5.0f, "%.2f");
+        ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 5.0f, "%.2f");
+        ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 5.0f, "%.2f");
+        ImGui::DragInt("##size", &m_graph->ssaoblur->amount, 1.0f, 0.0f, 50.0f, "%.2f");
+  
         ImGui::NextColumn();
         ImGui::Text("SSAO");
         ImGui::SameLine();
@@ -783,15 +791,6 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::Text("Radius");
         ImGui::SameLine();
         ImGui::DragFloat("##radius", &m_graph->ssao->radius, 0.001f, 0.0001f, 0.0f, "%.2f");
-
-
-        ImGui::Text("Base");
-        ImGui::SameLine();
-        ImGui::DragFloat("##base", &m_graph->ssao->base, 0.001f, 0.0001f, 0.0f, "%.2f");
-
-        ImGui::Text("Bias");
-        ImGui::SameLine();
-        ImGui::DragFloat("##bias", &m_graph->ssao->bias, 0.001f, 0.0001f, 0.0f, "%.2f");
 
         ImGui::Text("Falloff");
         ImGui::SameLine();

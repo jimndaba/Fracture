@@ -25,6 +25,8 @@
 #include "PassLibrary/MultiplyMix.h"
 #include "PassLibrary/PickingPass.h"
 #include "PassLibrary/IntermediateNode.h"
+#include "PassLibrary/OutlineNode.h"
+#include "PassLibrary/MixNode.h"
 
 
 namespace Fracture

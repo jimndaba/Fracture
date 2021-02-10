@@ -36,12 +36,12 @@ Fracture::LambertianNode::LambertianNode(const std::string& name,const int& widt
 
 void Fracture::LambertianNode::execute(Renderer& renderer)
 {
-	ProfilerTimer timer("Lambertian node");
 	renderer.RenderDirectLightShadows();
+	ProfilerTimer timer("Lambertian node");	
 	resources["outputColor"]->bind();
 	renderer.clear();	
 	render(renderer);
-	renderer.DrawGrid();
 	renderer.RenderEnvironment();
+	renderer.DrawGrid();	
 	resources["outputColor"]->Unbind();
 }

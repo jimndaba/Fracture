@@ -24,7 +24,7 @@ void Fracture::ShadowPass::Begin()
 {
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	m_renderTarget->bind();
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);	
 
 }

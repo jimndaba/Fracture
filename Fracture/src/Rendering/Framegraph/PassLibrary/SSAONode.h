@@ -19,16 +19,16 @@ namespace Fracture
 		virtual void execute(Renderer& renderer);
 
 		float total_strength = 1.0f;
-		float base = 0.5f;
-		float area = 0.005f;
-		float falloff = 0.0005f;
-		float bias = 0.025f;
-		float radius = 0.003f;
+		float area = 0.002f;
+		float falloff = 0.00001f;
+		float radius = 0.0025f;
 
 	private:
 		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<Shader> m_blurshader;
 		std::shared_ptr<Texture> m_noiseTexture;;
 		std::shared_ptr<FrameResource> resource;
+		std::shared_ptr<FrameResource> ssao;
 		std::shared_ptr<FrameResource> outputTexture;
 		unsigned int noiseTexture;
 	};

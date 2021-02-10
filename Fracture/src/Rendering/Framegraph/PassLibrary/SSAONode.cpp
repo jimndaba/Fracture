@@ -11,13 +11,16 @@
 
 Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int& height):
 	FullScreenNode(name),
-	m_shader(AssetManager::getShader("SSAOPASS"))
+	m_shader(AssetManager::getShader("SSAOPASS")),
+	m_blurshader(AssetManager::getShader("SSAOBLUR"))
 {
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("SSAOOutput");
 
+	ssao = std::make_shared<RenderTarget>("ssaopass", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 	outputTexture = std::make_shared<RenderTarget>("SSAO_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
+	AddResource("ssaopass",ssao);
 	
 	//Sockets
 	AddInputSocket(m_Input);
@@ -48,28 +51,32 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 void Fracture::SSAONode::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("SSAO Pass");
-	resources["SSAOOutput"]->bind();
-	glBindVertexArray(quadVAO);
+	
+	resources["ssaopass"]->bind();
 	m_shader->use();
 	float TanHalfFOV = tanf(renderer.ActiveCamera()->GetFOV()/ 2.0f);
 	m_shader->setFloat("gAspectRatio", renderer.ActiveCamera()->GetApectRatio());
 	m_shader->setFloat("gTanHalfFOV", TanHalfFOV);
-
-
 	m_shader->setFloat("total_strength", total_strength);
-	m_shader->setFloat("base", base);
 	m_shader->setFloat("area", area);
 	m_shader->setFloat("falloff", falloff);
-	m_shader->setFloat("bias", bias);
 	m_shader->setFloat("radius", radius);
-
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
 	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
 	m_shader->setMat4("projection", glm::inverse(renderer.ActiveCamera()->getProjectionMatrix()));
 	m_shader->setTexture("depthTexture", resources["DepthTexture"]->GetColorTexture(0).get(), 0);
 	m_shader->setTexture("texNoise", m_noiseTexture.get(), 1);
+	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_shader->unbind();
+	resources["ssaopass"]->bind();
+
+	resources["SSAOOutput"]->bind();
+	m_blurshader->use();
+	m_shader->setTexture("ssaoInput", resources["ssaopass"]->GetColorTexture(0).get(), 0);
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	m_blurshader->unbind();
 	resources["SSAOOutput"]->Unbind();
 
 }

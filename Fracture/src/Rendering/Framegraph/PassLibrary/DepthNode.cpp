@@ -30,7 +30,7 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	//glDepthFunc(GL_ALWAYS); // always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))
 	ProfilerTimer timer("Depth Pre-Pass");
 	resources["outputDepthMap"]->bind();
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 	renderer.clear();
 	m_shader->use();
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
