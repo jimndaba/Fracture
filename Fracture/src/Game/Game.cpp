@@ -2,6 +2,7 @@
 #include "Logging/Logger.h"
 #include "GameWindow.h"
 #include "Rendering/Renderer.h"
+#include "Serialisation/GameSettings.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
@@ -17,6 +18,7 @@
 #include "Rendering/DebugRenderer.h"
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
+#include "Serialisation/GameSerializer.h"
 
 
 double t = 0.0;
@@ -31,19 +33,7 @@ std::unique_ptr<Fracture::SceneManager> Fracture::Game::m_SceneManager = 0;
 
 Fracture::Game::Game()
 {
-	
-}
-
-Fracture::Game::Game(int width, int height)
-{
-	//m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
-	m_AssetManager = Fracture::AssetManager::instance();
-	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
-	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
-	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
-	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
-	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
+	init();
 }
 
 Fracture::Game::~Game()
@@ -52,10 +42,10 @@ Fracture::Game::~Game()
 
 void Fracture::Game::run()
 {
-	Profiler::Get().BeginSession("Profile");
-	init();
+	Profiler::Get().BeginSession("Profile");	
+
 	loadContent();
-	while (m_isRunning)
+	while (!m_GameWindow->ShouldClose() && m_isRunning)
 	{
 		m_GameWindow->pollEvents();
 	
@@ -86,9 +76,21 @@ void Fracture::Game::init()
 	ProfilerTimer timer("Init");
 	m_logger = std::make_unique<Logger>();
 	m_Eventbus = std::make_shared<Eventbus>();
-	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(1280, 720, "FRACTURE"));
+	m_GameSettings = std::make_shared<GameSettings>();
+
+	GameSerializer loader = GameSerializer(m_GameSettings);
+	loader.DeSerialize("Game.config");
+
+	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(
+		m_GameSettings->Resolution_Width, 
+		m_GameSettings->Resolution_Height,
+		m_GameSettings->Title,
+		m_GameSettings->IsResizable));
+
 	m_AssetManager = Fracture::AssetManager::instance();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+	m_ComponentManager->onInit();
+
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
@@ -97,6 +99,8 @@ void Fracture::Game::init()
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
 	m_debug = std::make_unique<DebugRenderer>();
+
+
 	m_Renderer->onInit();
 	m_PhysicsManager->Init();
 	
@@ -123,19 +127,15 @@ void Fracture::Game::update(float dt)
 		m_ScriptManager->onStart();
 		m_ScriptManager->Start = false;
 	}
-
 	m_ScriptManager->OnUpdate(dt);
 
-
-
 	m_PhysicsManager->onUpdate(dt);
-
 		
-	std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->ActiveCamera()->Id);
+	//std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->ActiveCamera()->Id);
 
 	float mouseX = m_InputManager->GetMousePosition().x;
 	float mouseY = m_InputManager->GetMousePosition().y;
-	
+	/*
 	if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 	{
 		//SDL_WarpMouseInWindow(m_GameWindow->Context(), m_GameWindow->Width / 2, m_GameWindow->Height / 2);
@@ -166,6 +166,7 @@ void Fracture::Game::update(float dt)
 		}		
 		
 	}	
+	*/
 
 	if (InputManager::IsKeyDown(KeyCode::Escape))
 	{
@@ -177,7 +178,9 @@ void Fracture::Game::render()
 {
 	ProfilerTimer timer("Render");
 	m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
-	m_Renderer->RenderPasses();
+	m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
+	m_Renderer->clear();
+	//m_Renderer->RenderPasses();
 	m_Renderer->EndFrame();
 }
 

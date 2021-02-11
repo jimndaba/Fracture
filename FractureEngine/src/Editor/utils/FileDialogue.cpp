@@ -14,10 +14,13 @@ std::string Fracture::FileDialogue::OpenFile(const char* filter)
 	HWND hwnd = glfwGetWin32Window(GameWindow::Context());
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
+
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner = hwnd;
 	ofn.lpstrFile = szFile;
+	std::string root = "C:/";
+	ofn.lpstrInitialDir = root.c_str(); 
 	ofn.nMaxFile = sizeof(szFile);
 	ofn.lpstrFilter = filter;
 	ofn.nFilterIndex = 1;

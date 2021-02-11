@@ -18,7 +18,7 @@ namespace Fracture
 		Panel(const std::string& name);
 		~Panel();
 
-		virtual void begin();
+		virtual void begin(bool* open);
 		virtual void render() = 0;
 		virtual void end();
 
@@ -53,7 +53,7 @@ namespace Fracture
 
 		std::string m_Name;
 		ImGuiWindowFlags window_flags;
-		static bool* p_open;
+	
 	};
 }
 

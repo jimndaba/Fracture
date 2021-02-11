@@ -18,6 +18,7 @@ Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, co
 	for (int i = 0; i < 2; i++)
 	{
 		m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+		m_blurPasses[i]->SetResizable(true);
 		AddResource("blurPass" + i, m_blurPasses[i]);
 	}
 	
@@ -36,6 +37,9 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("BoxBlur Pass");
 	bool horizontal = true, first_iteration = true;	
+
+
+
 	glBindVertexArray(quadVAO);
 	m_shader->use();	
 	for (int i = 0; i < amount; i++)
@@ -47,6 +51,13 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 		if (first_iteration)
 		{
 			m_shader->setTexture("boxblur", resources["colorTexture"]->GetColorTexture(0).get(), 0);
+
+			/*
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, resources["colorTexture"]->GetID());
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[0]->GetID());
+			glBlitFramebuffer(0, 0, resources["colorTexture"]->GetColorTexture(0)->width,
+				resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[0]->Width, m_blurPasses[0]->Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			*/
 		}
 		else
 		{

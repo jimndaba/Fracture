@@ -2,10 +2,9 @@
 
 Fracture::FreeCamera::FreeCamera(glm::vec3 m_position, glm::vec3 m_up, float yaw, float pitch)
 {
-    Yaw = -90.0f;
+    Yaw = -1.0f;
     Pitch = 0.0f;
     up = m_up;
-    right = glm::vec3(1.0f, 0.0f, 0.0f);
     Znear = 0.5f;
     Zfar = 1000.0f;
     fov = 45.0f;
@@ -79,22 +78,24 @@ void Fracture::FreeCamera::Move(Camera_Movement td, float dt)
 }
 
 void Fracture::FreeCamera::InputMouse(float xpos, float ypos, float dt, bool constrainPitch)
-{
-    //static float lastX = xpos;
-    //static float lastY = ypos;
-
-    //float xoffset = (lastX - xpos) / 5.0f;
-    //float yoffset = (ypos - lastY) / 5.0f; // reversed since y-coordinates go from bottom to top
+{  
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
 
     rX -= xpos * MouseSensitivity;// *xoffset;
     rY += ypos * MouseSensitivity;// *yoffset;
+
+    lastX = rX;
+    lastY = rY;
 
     m_TargetYaw = rX;
     m_TargetPitch = rY;
     m_TargetRoll = 0;
 
-    //lastX = xpos;
-    //lastY = ypos;
     changed = true;
 }
 
@@ -116,5 +117,5 @@ void Fracture::FreeCamera::UpdateCameraVectors()
     R = glm::rotate(R,Pitch, glm::vec3(1, 0, 0));
     front = glm::normalize(glm::vec3(R * glm::vec4(0, 0, 1, 0)));   
     up = glm::normalize(glm::vec3(R * glm::vec4(0, 1, 0, 0)));
-    right = glm::normalize(glm::cross(front, WorldUp));
+    right = glm::normalize(glm::cross(front, up));
 }

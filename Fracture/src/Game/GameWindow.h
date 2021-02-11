@@ -13,7 +13,7 @@ namespace Fracture
 	{
 
 	public:
-		GameWindow(int width, int height,std::string title);
+		GameWindow(int width, int height,std::string title, bool resizable = true);
 		~GameWindow() = default;
 
 		void MaximiseWindow();
@@ -24,6 +24,8 @@ namespace Fracture
 		int Width;
 		int Height;
 		std::string Title;
+		bool IsResizable;
+		bool IsFullscreen;
 
 		static GLFWwindow* Context()
 		{

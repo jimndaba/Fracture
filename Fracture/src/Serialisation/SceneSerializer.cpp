@@ -409,9 +409,10 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		{
 			auto renderComponent = j["Render Component"];
 			std::string model = renderComponent["Model"];
+			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
+
 
 			auto materials = renderComponent["Materials"];
-
 			for (auto m_material : materials)
 			{
 				std::string m_Name = m_material["Material Name"];
@@ -499,7 +500,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 					{
 					case SHADER_TYPE_SAMPLER2D:
 					{
-						material->SetTexture(sample["Name"], AssetManager::getTexture(sample["Texture"]), (int)sample["Unit"]);
+						material->ChangeTexture(sample["Name"], AssetManager::getTexture(sample["Texture"]), (int)sample["Unit"]);
 						break;
 					}
 					FRACTURE_ERROR("Unrecognized Uniform type set");
@@ -508,9 +509,16 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				}
 
 				AssetManager::AddMaterial(m_Name, material);
-			}
 
-			std::shared_ptr<Model> m_model = AssetManager::getModel(model);	
+
+				if (AssetManager::getMaterial("DefaultMaterial"))
+				{					
+					m_model->SetMaterial("DefaultMaterial", material);
+				}
+
+			
+			}
+			
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id, m_model);
 			ComponentManager::AddComponent<RenderComponent>(component);
 

@@ -46,6 +46,10 @@ Fracture::FractureSplash::~FractureSplash()
 bool Fracture::FractureSplash::Show()
 {
     FRACTURE_INFO("Show Splash");
+
+    m_title = m_AssetManger->getTexture("title");
+    m_splash = m_AssetManger->getTexture("splash");
+
 	while (m_isShow)
 	{
         onUpdate();
@@ -70,15 +74,6 @@ void Fracture::FractureSplash::Close()
 void Fracture::FractureSplash::onUpdate()
 {
     m_window->pollEvents();
-	//SDL_Event event;
-	//while (SDL_PollEvent(&event))
-	//{
-	//	ImGui_ImplSDL2_ProcessEvent(&event);
-	//	if (event.type == SDL_QUIT)
-	//		m_isShow = false;
-	//	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window->Context()))
-	//		m_isShow = false;
-	//}
 }
 
 void Fracture::FractureSplash::onBeginFrame()
@@ -120,14 +115,14 @@ void Fracture::FractureSplash::onRender()
 
     //ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-    ImGui::Image((void*)m_AssetManger->getTexture("splash")->id, ImVec2(300, 400));
+    ImGui::Image((void*)m_splash->id, ImVec2(300, 400));
     ImGui::PopStyleVar();
     ImGui::End();
 
     ImGui::Begin("Project", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 
-    ImGui::Image((void*)m_AssetManger->getTexture("title")->id, ImVec2(500, 200));
+    ImGui::Image((void*)m_title->id, ImVec2(500, 200));
     ImGui::PushID("##project");
     ImGui::Columns(3);
     ImGui::AlignTextToFramePadding();
@@ -216,6 +211,10 @@ void Fracture::FractureSplash::createNewProject(const std::string& filepath)
 
 
     int content = mkdir(m_editor->Properties()->ContentDirectory.c_str());
+    if (content)
+    {
+
+    }
     int models = mkdir(m_editor->Properties()->ModelsPath.c_str());
     int scenes = mkdir(m_editor->Properties()->ScenesPath.c_str());
     int shaders = mkdir(m_editor->Properties()->ShadersPath.c_str());
@@ -228,7 +227,6 @@ void Fracture::FractureSplash::openProject(const std::string& filepath)
 {
     m_editor->Properties()->ProjectFilePath = filepath;    
 }
-
 
 inline void Fracture::FractureSplash::Style()
 {

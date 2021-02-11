@@ -120,17 +120,20 @@ void Fracture::RenderTarget::Unbind()
 
 void Fracture::RenderTarget::Resize(unsigned int width, unsigned int height)
 {
-    Width = width;
-    Height = height;
+    if (m_IsResizable)
+    {
+        Width = width;
+        Height = height;
 
-    for (unsigned int i = 0; i < m_ColorAttachments.size(); ++i)
-    {
-        m_ColorAttachments[i]->Resize(width, height);
-    }
-    // generate Depth/Stencil texture if requested
-    if (HasDepthAndStencil)
-    {
-        m_DepthStencil->Resize(width, height);
+        for (unsigned int i = 0; i < m_ColorAttachments.size(); ++i)
+        {
+            m_ColorAttachments[i]->Resize(width, height);
+        }
+        // generate Depth/Stencil texture if requested
+        if (HasDepthAndStencil)
+        {
+            m_DepthStencil->Resize(width, height);
+        }
     }
 }
 
@@ -147,5 +150,15 @@ void Fracture::RenderTarget::SetMultiSampled(bool value)
 bool Fracture::RenderTarget::IsMultiSampled()
 {
     return  m_IsMultiSampled;
+}
+
+void Fracture::RenderTarget::SetResizable(bool value)
+{
+    m_IsResizable = value;
+}
+
+bool Fracture::RenderTarget::IsResizable()
+{
+    return m_IsResizable;
 }
 

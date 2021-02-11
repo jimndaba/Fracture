@@ -45,6 +45,9 @@ namespace Fracture
 		std::unique_ptr<AssetManager> m_AssetManger;
 		std::shared_ptr<Logger> m_logger;
 
+		std::shared_ptr<Texture> m_splash;
+		std::shared_ptr<Texture> m_title;
+
 		void createNewProject(const std::string& filepath);
 		void openProject(const std::string& filepath);
 		void Style();

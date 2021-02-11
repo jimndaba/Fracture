@@ -211,17 +211,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 					{
 						ImGui::Columns(3);
-						ImGui::SetColumnWidth(0, 40);
-
-						ImGui::PushFont(font);
-						if (ImGui::Button("a", buttonSize))
-						{
-							ImGui::OpenPopup("Add Uniform?");
-						}					
-
-						ImGui::PopFont();
+						ImGui::SetColumnWidth(0, 40);						
 						ImGui::NextColumn();
-
 						DrawMaterialUniform(value->first, value->second);
 
 						

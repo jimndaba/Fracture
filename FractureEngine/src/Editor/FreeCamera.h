@@ -21,10 +21,7 @@ namespace Fracture
 		glm::vec3 getPosition() override;
 		void onUpdate(float dt);
 
-		// euler Angles
-		float Yaw = 0.0f;
-		float Pitch = -90.0f;
-		float Roll = 0.0f;
+		
 		// camera options
 		float MouseSpeed = 0.8f;
 		float MovementSpeed = 10.0f;
@@ -49,12 +46,12 @@ namespace Fracture
 		float m_TargetPitch = 0.0f;
 		float m_TargetRoll = 0.0f;
 		float targetZoom = 45.0f;
-		float lastX = 1280.0f / 2.0f;
-		float lastY = 720.0f / 2.0f;
+		float lastX = 0;
+		float lastY = 0;
 		bool changed = false;
-		float rX = 1280.0f / 2.0f;
-		float rY = 720.0f / 2.0f;
-
+		float rX =0;
+		float rY = 0;
+		bool firstMouse = true;
 
 	};
 

@@ -39,21 +39,30 @@ namespace Fracture
 
 		glm::vec3 Right() { return right; }
 		glm::vec3 Up() {return up;}
+		glm::vec3 Front() { return front; }
 		float Near() { return Znear; }
 		float Far() { return Zfar; }
 		float GetApectRatio() { return aspect_ratio; }
 		float GetFOV() { return fov; }
-			
+
+		float GetYaw() { return Yaw; }
+		float GetPitch() { return Pitch; }
+		float GetRoll() { return Roll; }
 		//frustum points
 		glm::vec3 farPts[4];
 		glm::vec3 nearPts[4];
 	protected:
+		// euler Angles
+		float Yaw = -1.0f;
+		float Pitch = 0.0f;
+		float Roll = 0.0f;
+
 		//Frsutum planes
 		float fov, aspect_ratio, Znear, Zfar;
 		glm::vec3 look;
 		glm::vec3 up;
 		glm::vec3 right;
-		glm::vec3 front;
+		glm::vec3 front = glm::vec3(0.0f,0.0f,-1.0f);
 		glm::vec3 position;
 		glm::mat4 V; //view matrix
 		glm::mat4 P; //projection matrix

@@ -12,7 +12,7 @@ namespace Fracture
 {
 	
 
-	const float YAW = -90.0f;
+	const float YAW = -1.0f;
 	const float PITCH = 0.0f;
 	const float SPEED = 5.0f;
 	const float SENSITIVITY = 0.1f;
@@ -55,8 +55,8 @@ namespace Fracture
 		glm::vec3 LookTarget = glm::vec3(0,0,0);
 		glm::vec3 WorldUp;
 		// euler Angles
-		float Yaw = 0.0f;
-		float Pitch = -90.0f;
+		float Yaw = -1.0f;
+		float Pitch = 0.0f;
 		float Roll = 0.0f;
 		// camera options
 		float mouseSpeed = 0.8f;
@@ -111,7 +111,7 @@ namespace Fracture
 		glm::mat4 m_viewMatrix;
 
 	
-		float m_TargetYaw = -90.0f;
+		float m_TargetYaw = -1.0f;
 		float m_TargetPitch = 0.0f;
 		float targetZoom = 45.0f;
 

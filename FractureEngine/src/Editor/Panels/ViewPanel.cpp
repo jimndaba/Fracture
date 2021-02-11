@@ -70,6 +70,13 @@ void Fracture::ViewPanel::render()
 	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
 	ImGui::Text("Number of Batches: %d ", m_renderer->NumberBatches);
+	ImGui::Text("Camera Position: %f , %f , %f ", m_renderer->ActiveCamera()->getPosition().x, m_renderer->ActiveCamera()->getPosition().y, m_renderer->ActiveCamera()->getPosition().z);
+	ImGui::Text("Camera Right: %f , %f , %f ", m_renderer->ActiveCamera()->Right().x, m_renderer->ActiveCamera()->Right().y, m_renderer->ActiveCamera()->Right().z);
+	ImGui::Text("Camera Up: %f , %f , %f ", m_renderer->ActiveCamera()->Up().x, m_renderer->ActiveCamera()->Up().y, m_renderer->ActiveCamera()->Up().z);
+	ImGui::Text("Camera Front: %f , %f , %f ", m_renderer->ActiveCamera()->Front().x, m_renderer->ActiveCamera()->Front().y, m_renderer->ActiveCamera()->Front().z);
+	ImGui::Text("Camera Yaw: %f ", m_renderer->ActiveCamera()->GetYaw());
+	ImGui::Text("Camera Pitch: %f ", m_renderer->ActiveCamera()->GetPitch());
+	ImGui::Text("Camera Roll: %f ", m_renderer->ActiveCamera()->GetRoll());
 
 	
 	//IMGUIZMO STUFF STARTS HERE
@@ -238,11 +245,12 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			{
 				m_camera->Move(Camera_Movement::DOWN, dt);
 			}
-
+			
+			m_camera->onUpdate(dt);
 		
 		}			
 
-		m_camera->onUpdate(dt);
+		
 
 		if (InputManager::IsKeyDown(KeyCode::Q))
 		{

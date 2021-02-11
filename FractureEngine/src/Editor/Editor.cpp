@@ -25,12 +25,18 @@ bool Fracture::Editor::showPhysicsConfig;
 bool Fracture::Editor::showInputConfig;
 bool Fracture::Editor::showProjectConfig;
 
+bool Fracture::Editor::showInspector = true;
+bool Fracture::Editor::showLogger = true;
+bool Fracture::Editor::showScenegraph = true;
+bool Fracture::Editor::showAssets = true;
+bool Fracture::Editor::showViewport = true;
 
 std::shared_ptr<Fracture::EditorFrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::m_properties;
+std::shared_ptr<Fracture::GameSettings> Fracture::Editor::m_GameSettings;
 std::shared_ptr<Fracture::SceneView> Fracture::Editor::m_sceneview;
 
 inline void Style();
@@ -41,10 +47,9 @@ Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
     m_properties = std::make_shared<ProjectProperties>();
+    m_GameSettings = std::make_shared<GameSettings>();
     m_AssetManger = std::make_shared<AssetManager>(m_properties);   
     m_SceneManager = std::make_unique<SceneManager>();
-   
-
     m_loadNewProject = false;
     currentTime = glfwGetTime();
 }
@@ -471,11 +476,32 @@ void Fracture::Editor::Render()
         DrawMenuBar();
 
         m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());      
-
-        m_graph->execute(*m_Renderer);
-          
+        m_graph->execute(*m_Renderer);          
         m_Renderer->EndFrame();
-        m_frame->render();
+       
+        m_sceneview->begin(&showScenegraph);
+        m_sceneview->render();
+        m_sceneview->end();
+
+        m_inspectorpanel->begin(&showInspector);
+        m_inspectorpanel->render();
+        m_inspectorpanel->end();
+
+        m_viewpanel->begin(&showViewport);
+        m_viewpanel->render();
+        m_viewpanel->end();
+
+        m_TabbedPanel->begin(&showLogger);
+        m_TabbedPanel->render();
+        m_TabbedPanel->end();
+
+
+        m_AssetBrowser->begin(&showAssets);
+        m_AssetBrowser->render();
+        m_AssetBrowser->end();
+
+
+
         ImGui::End();
 }
 
@@ -506,6 +532,9 @@ void Fracture::Editor::DrawMenuBar()
             {
                 ProjectSerializer project(m_properties);
                 project.Serialize(m_properties->ProjectDirectory+"/"+m_properties->ProjectName+".Fracture");
+
+                GameSerializer serialiser(m_GameSettings);
+                serialiser.Serialize(m_properties->ProjectDirectory + "/" + "Game.config");
             }
             ImGui::Separator();
             if (ImGui::MenuItem("New Scene", NULL))
@@ -730,20 +759,21 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
 
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-        ImVec2 buttonSize = { lineHeight + 20.0f, lineHeight };
+        ImVec2 buttonSize = { lineHeight + 20.0f, lineHeight };      
 
+        ImGui::Separator();
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
         ImGui::PushFont(boldFont);
         if (ImGui::Button("Width", buttonSize))
         {
-
+            m_GameSettings->Resolution_Width = 0;
         }         
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
-        ImGui::DragFloat("##X", &width, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragInt("##X", &m_GameSettings->Resolution_Width, 1,0,0, "%.2f");
         ImGui::PopItemWidth();
         ImGui::SameLine();
 
@@ -753,14 +783,25 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PushFont(boldFont);
         if (ImGui::Button("Height", buttonSize))
         {
+            m_GameSettings->Resolution_Height = 0;
         }
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
-        ImGui::DragFloat("##Y", &height, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::DragInt("##Y", &m_GameSettings->Resolution_Height, 1, 0, 0 ,"%.2f");
         ImGui::PopItemWidth();
         ImGui::SameLine();
         ImGui::PopStyleVar();
+
+        bool isWindowResizable = m_GameSettings->IsResizable;
+        ImGui::NextColumn();
+        ImGui::Text("Is Window Resizable");
+        ImGui::NextColumn();
+        ImGui::PushFont(boldFont);
+        ImGui::Checkbox("##drawdebug", &isWindowResizable);
+        m_GameSettings->IsResizable = isWindowResizable;
+        ImGui::PopFont();
+        ImGui::Separator();
 
         ImGui::Separator();
         bool bloom ;
@@ -773,7 +814,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 5.0f, "%.2f");
         ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 5.0f, "%.2f");
         ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 5.0f, "%.2f");
-        ImGui::DragInt("##size", &m_graph->ssaoblur->amount, 1.0f, 0.0f, 50.0f, "%.2f");
+        ImGui::DragInt("##size", &m_graph->ssaoblur->amount, 1, 0, 5, "%.2f");
   
         ImGui::NextColumn();
         ImGui::Text("SSAO");
@@ -886,6 +927,11 @@ void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fractur
         InspectorPanel::DrawTextInputControl("Textures Path", _properties->TexturesPath);
         InspectorPanel::DrawTextInputControl("Models Path", _properties->ModelsPath);
         InspectorPanel::DrawTextInputControl("Game Config Path", _properties->GameConfigPath);
+     
+        std::string Gametitle = m_GameSettings->Title;
+        InspectorPanel::DrawTextInputControl("Game Window Title", Gametitle);
+        m_GameSettings->Title = Gametitle;
+
       
         ImGui::End();
         return;
@@ -912,9 +958,12 @@ void Fracture::Editor::key_callback(GLFWwindow* window, int key, int scancode, i
         //Save
         if (key == GLFW_KEY_S && action == GLFW_PRESS)
         {
-            FRACTURE_INFO("Save");
+            FRACTURE_INFO("Project Saved");
             ProjectSerializer project(m_properties);
             project.Serialize(m_properties->ProjectDirectory + "/" + m_properties->ProjectName + ".Fracture");
+
+            GameSerializer serialiser(m_GameSettings);
+            serialiser.Serialize(m_properties->ProjectDirectory + "/" + "Game.config");
         }
         //Select ALL
         if (key == GLFW_KEY_A && action == GLFW_PRESS)

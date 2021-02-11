@@ -133,7 +133,7 @@ Fracture::Texture::Texture(std::string name, int Width, int Height, TextureTarge
 			glTexParameteri(texturetarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(texturetarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(texturetarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(texturetarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(texturetarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			glTexParameterfv(texturetarget, GL_TEXTURE_BORDER_COLOR, borderColor);
 		}

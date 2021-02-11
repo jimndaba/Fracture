@@ -218,8 +218,7 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		FRACTURE_ERROR("File is either non-json file or corrupt;");
 		return false;
 	}
-
-	
+		
 	m_properties->ProjectName = input["Project"];
 	m_properties->GameConfigPath = input["Game Config Path"];
 	m_properties->TexturesPath = input["Textures Path"];
@@ -234,6 +233,14 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		{
 			DeSerializeShaders(shader);
 		}
+	}	
+
+	if (exists(input, "Textures"))
+	{
+		for (auto texture : input["Textures"])
+		{
+			DeSerializeTextures(texture);
+		}
 	}
 
 	if (exists(input, "Materials"))
@@ -241,14 +248,6 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		for (auto material : input["Materials"])
 		{
 			DeSerializeMaterial(material);
-		}
-	}
-
-	if (exists(input, "Textures"))
-	{
-		for (auto texture : input["Textures"])
-		{
-			DeSerializeTextures(texture);
 		}
 	}
 

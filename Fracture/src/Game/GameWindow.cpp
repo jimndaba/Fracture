@@ -7,8 +7,8 @@
 
 GLFWwindow* Fracture::GameWindow::window;
 
-Fracture::GameWindow::GameWindow(int width, int height, std::string title):
-	Width(width),Height(height),Title(title)
+Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool resizable):
+	Width(width),Height(height),Title(title),IsResizable(resizable)
 {
 
 	if (!glfwInit())
@@ -18,6 +18,14 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	return;
 	}
 
+	if (IsResizable)
+	{
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	}
+	else
+	{
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	}
 	
 
 	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
@@ -31,7 +39,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title):
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-	glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+	glfwWindowHint(GLFW_SAMPLES, 8); // 4x antialiasing
 	glfwWindowHint(GLFW_RED_BITS, 8);
 	glfwWindowHint(GLFW_GREEN_BITS, 8);
 	glfwWindowHint(GLFW_BLUE_BITS, 8);
@@ -67,60 +75,6 @@ void Fracture::GameWindow::MaximiseWindow()
 void Fracture::GameWindow::pollEvents()
 {
 	glfwPollEvents();
-	
-	/*
-	while (SDL_PollEvent(&m_event))
-	{
-		InputManager::PollEvents(m_event);
-
-		if (m_event.type == SDL_QUIT)
-		{
-			game.onQuit();
-		}
-		if (m_event.type == SDL_WINDOWEVENT)
-		{
-			switch (m_event.window.event) {
-            case SDL_WINDOWEVENT_SHOWN:              
-                break;
-            case SDL_WINDOWEVENT_HIDDEN:              
-                break;
-            case SDL_WINDOWEVENT_EXPOSED:               
-                break;
-            case SDL_WINDOWEVENT_MOVED:                
-                break;
-            case SDL_WINDOWEVENT_RESIZED:
-                //game.onWindowResize(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h);
-				Game::onEvent(new WindowResizeEvent(SDL_GetWindowSurface(m_window)->w, SDL_GetWindowSurface(m_window)->h));
-                break;
-            case SDL_WINDOWEVENT_SIZE_CHANGED:
-				FRACTURE_TRACE("Window {} size changed to {}x{}",
-                    m_event.window.windowID, m_event.window.data1,
-                    m_event.window.data2);
-                break;
-            case SDL_WINDOWEVENT_MINIMIZED:
-                break;
-            case SDL_WINDOWEVENT_MAXIMIZED:
-                break;
-            case SDL_WINDOWEVENT_RESTORED:
-                break;
-            case SDL_WINDOWEVENT_ENTER:              
-                break;
-            case SDL_WINDOWEVENT_LEAVE:
-                break;
-            case SDL_WINDOWEVENT_FOCUS_GAINED:
-                break;
-            case SDL_WINDOWEVENT_FOCUS_LOST:
-               break;
-            case SDL_WINDOWEVENT_CLOSE:
-				game.onQuit();
-              break;			
-			}
-
-			
-		}
-
-	}
-	*/
 }
 
 void Fracture::GameWindow::swapBuffers()

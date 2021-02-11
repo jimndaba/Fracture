@@ -45,9 +45,14 @@ namespace Fracture
 		void SetMultiSampled(bool value) override;
 		bool IsMultiSampled() override;
 
+		void SetResizable(bool value)override;
+		bool IsResizable() override;
+
+
 	private:		
 		std::string m_name;
 		bool m_IsMultiSampled;
+		bool m_IsResizable = true;
 		//GLenum									m_Target = GL_TEXTURE_2D;
 		std::shared_ptr<Texture>				m_DepthStencil;
 		std::vector<std::shared_ptr<Texture>>	m_ColorAttachments;

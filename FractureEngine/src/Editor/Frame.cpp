@@ -27,9 +27,9 @@ void Fracture::Frame::render()
     ProfilerTimer timer("Render Frame");
     for (int i = 0; i < m_panels.size(); i++)
     {
-        m_panels[i]->begin();
-        m_panels[i]->render();
-        m_panels[i]->end();
+        //m_panels[i]->begin();
+        //m_panels[i]->render();
+        //m_panels[i]->end();
     }
 }
 

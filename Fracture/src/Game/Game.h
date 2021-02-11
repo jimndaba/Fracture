@@ -25,14 +25,14 @@ namespace Fracture
 	class Eventbus;
 	class SceneManager;
 	struct Event;
+	struct GameSettings;
 
 	
 	class Game
 	{
 
 	public:
-		Game();
-		Game(int width, int height);
+		Game();	
 		~Game();
 
 		void run();
@@ -49,17 +49,15 @@ namespace Fracture
 		static void removeScene(std::string name);
 		static void changeScene(std::string name);
 		std::shared_ptr<Fracture::Scene> CurrentScene();
-
 		static std::shared_ptr<Eventbus> GetEventbus();
-
 
 		//Scripting
 		static void AddScript(std::shared_ptr<GameLogic> script);
-
 		//events
 		static void onEvent(Event* mEvent);
 
 		void onQuit();
+
 		void onWindowResize(int width, int height);
 
 		Renderer* GetRenderer();
@@ -76,6 +74,7 @@ namespace Fracture
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
 		std::unique_ptr<Logger> m_logger;
 		std::unique_ptr<DebugRenderer> m_debug;
+		std::shared_ptr<GameSettings> m_GameSettings;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::shared_ptr<Eventbus> m_Eventbus;
 		static std::shared_ptr<Fracture::Scene> m_currentScene;
