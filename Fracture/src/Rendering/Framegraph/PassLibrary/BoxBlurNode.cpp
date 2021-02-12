@@ -2,6 +2,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
+#include "Rendering/Renderer.h"
 #include "Rendering/Texture.h"
 #include "Profiling/Profiler.h"
 
@@ -17,8 +18,8 @@ Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, co
 
 	for (int i = 0; i < 2; i++)
 	{
-		m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-		m_blurPasses[i]->SetResizable(true);
+		m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width/8, height/8, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+		m_blurPasses[i]->SetResizable(false);
 		AddResource("blurPass" + i, m_blurPasses[i]);
 	}
 	
@@ -38,26 +39,21 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 	ProfilerTimer timer("BoxBlur Pass");
 	bool horizontal = true, first_iteration = true;	
 
-
-
 	glBindVertexArray(quadVAO);
 	m_shader->use();	
 	for (int i = 0; i < amount; i++)
 	{
+		renderer.setViewport(m_blurPasses[horizontal]->Width, m_blurPasses[horizontal]->Height);
 		m_blurPasses[horizontal]->bind();
 		m_shader->setInt("horizontal", horizontal);
-		//m_shader->setTexture("boxblur", first_iteration ? resources["colorTexture"]->GetColorTexture(0).get() : m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);
-
+	
 		if (first_iteration)
 		{
-			m_shader->setTexture("boxblur", resources["colorTexture"]->GetColorTexture(0).get(), 0);
-
-			/*
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, resources["colorTexture"]->GetID());
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[0]->GetID());
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[horizontal]->GetID());
 			glBlitFramebuffer(0, 0, resources["colorTexture"]->GetColorTexture(0)->width,
-				resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[0]->Width, m_blurPasses[0]->Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-			*/
+				resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[horizontal]->Width, m_blurPasses[horizontal]->Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			m_shader->setTexture("boxblur", m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);	
 		}
 		else
 		{
@@ -70,10 +66,16 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 	}
 	m_shader->unbind();
 
+	renderer.setViewport(resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height);
 	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_blurPasses[!horizontal]->GetID());
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resources["blurOutput"]->GetID());
+		glBlitFramebuffer(0, 0, m_blurPasses[!horizontal]->GetColorTexture(0)->width,
+			m_blurPasses[!horizontal]->GetColorTexture(0)->height, 0, 0, resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
 		m_outPutshader->use();
 		resources["blurOutput"]->bind();
-		m_outPutshader->setTexture("OutMainBuffer", m_blurPasses[!horizontal]->GetColorTexture(0).get(), 0);
+		m_outPutshader->setTexture("OutMainBuffer", resources["blurOutput"]->GetColorTexture(0).get(), 0);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		resources["blurOutput"]->Unbind();
 		m_outPutshader->unbind();

@@ -4,17 +4,17 @@
 Fracture::Billboard::Billboard()
 {
     Vertex v1;
-    v1.position = glm::vec3(0.5f, 0.5f, 0.0f );
-    v1.uvs = glm::vec2(0.0f, 0.0f);
+    v1.Position = glm::vec3(0.5f, 0.5f, 0.0f );
+    v1.Uvs = glm::vec2(0.0f, 0.0f);
     Vertex v2;
-    v2.position = glm::vec3(0.5f, -0.5f, 0.0f);
-    v2.uvs = glm::vec2(1.0f, 0.0f);
+    v2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
+    v2.Uvs = glm::vec2(1.0f, 0.0f);
     Vertex v3;
-    v3.position = glm::vec3(-0.5f, -0.5f, 0.0f);
-    v3.uvs = glm::vec2(1.0f, 1.0f);
+    v3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
+    v3.Uvs = glm::vec2(1.0f, 1.0f);
     Vertex v4;
-    v4.position = glm::vec3(-0.5f, 0.5f, 0.0f);
-    v4.uvs = glm::vec2(0.0f, 1.0f);
+    v4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
+    v4.Uvs = glm::vec2(0.0f, 1.0f);
 
     unsigned int indices[] = {
         0, 1, 3, // first triangle
@@ -43,7 +43,7 @@ Fracture::Billboard::Billboard()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
     //uvs attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uvs));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Uvs));
     glEnableVertexAttribArray(1);
     m_indiceCount = sizeof(indices);
     glBindVertexArray(0);

@@ -16,7 +16,7 @@ std::shared_ptr <Fracture::Material > Fracture::MaterialFactory::OpaqueMaterial(
 
 std::shared_ptr<Fracture::Material> Fracture::MaterialFactory::PBRMaterial(const std::string& name)
 {
-    std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,AssetManager::getShader("PBRTexturedShader")));
+    std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,AssetManager::getShader("PBRStatic")));
 
      material->setFloat("albedoFlag", 0.0f);
      material->setFloat("TransparencyFlag", 0.0f);

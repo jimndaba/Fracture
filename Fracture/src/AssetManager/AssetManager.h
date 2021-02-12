@@ -24,6 +24,7 @@ namespace Fracture
 	class Shader;
 	class Model;
 	class Material; 
+	class AnimationClip;
 
 	struct ProjectProperties;
 
@@ -92,8 +93,8 @@ namespace Fracture
 		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
 		static std::shared_ptr<Fracture::Texture> HDRFromFile(const std::string& name, const char* path,Fracture::TextureType texType, bool gamma = false);
-		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material);
-
+		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material, bool isAnimated);
+		static std::shared_ptr<AnimationClip> loadModeAnimations(aiAnimation* animation);
 
 
 		static const uint32_t s_MeshImportFlags =

@@ -1,64 +1,4 @@
-﻿  Editor.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(864,101): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(752,23): warning C4101: 'height': unreferenced local variable
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(752,15): warning C4101: 'width': unreferenced local variable
-  EditorCamera.cpp
-  TabbedElement.cpp
-  MaterialFactory.cpp
-  FractureSplash.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(118,37): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(125,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(295,29): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  FreeCamera.cpp
-  AssetBrowserPanel.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(166,71): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-  Inspector.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1103,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1125,36): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-  SceneviewPanel.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(292,61): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(296,60): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(300,65): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(305,59): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(348,70): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(356,8): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
-  TabbedPanel.cpp
-  ViewPanel.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(62,104): warning C4312: 'reinterpret_cast': conversion from 'unsigned int' to 'void *' of greater size
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(206,73): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(206,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(207,59): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(207,41): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(208,59): warning C4244: 'argument': conversion from 'T' to 'const int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\ViewPanel.cpp(208,41): warning C4244: 'argument': conversion from 'T' to 'const int', possible loss of data
-          with
-          [
-              T=float
-          ]
-  main.cpp
-  Generating Code...
-D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1175): warning C4715: 'stringToEnum': not all control paths return a value
-LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
+﻿LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
   
   Starting pass 1
   Processed /DEFAULTLIB:libcpmtd
@@ -2295,90 +2235,91 @@ EditorCamera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:REF
           Referenced in TabbedElement.obj
           Loaded LIBCMTD.lib(debugger_jmc.obj)
         Found __GSHandlerCheck
+          Referenced in libcpmtd.lib(StlCompareStringA.obj)
+          Referenced in libcpmtd.lib(cout.obj)
           Referenced in libcpmtd.lib(locale.obj)
           Referenced in libcpmtd.lib(wlocale.obj)
           Referenced in libcpmtd.lib(xlocale.obj)
-          Referenced in libcpmtd.lib(StlCompareStringA.obj)
+          Referenced in libcpmtd.lib(mutex.obj)
           Referenced in libcpmtd.lib(cthread.obj)
           Referenced in libcpmtd.lib(cond.obj)
           Referenced in libcpmtd.lib(cerr.obj)
-          Referenced in libcpmtd.lib(cout.obj)
+          Referenced in Fracture.lib(btQuantizedBvh.obj)
           Referenced in Fracture.lib(btOptimizedBvh.obj)
           Referenced in libcpmtd.lib(xtime.obj)
           Referenced in libcpmtd.lib(xwctomb.obj)
-          Referenced in libcpmtd.lib(mutex.obj)
+          Referenced in Fracture.lib(btVector3.obj)
           Referenced in Fracture.lib(lundump.obj)
           Referenced in Fracture.lib(btMiniSDF.obj)
           Referenced in Fracture.lib(btTriangleMeshShape.obj)
-          Referenced in Fracture.lib(btQuantizedBvh.obj)
+          Referenced in Fracture.lib(btGjkEpa2.obj)
           Referenced in Fracture.lib(btBvhTriangleMeshShape.obj)
           Referenced in Fracture.lib(btHeightfieldTerrainShape.obj)
           Referenced in Fracture.lib(btContinuousConvexCollision.obj)
-          Referenced in Fracture.lib(btVector3.obj)
+          Referenced in Fracture.lib(btSdfCollisionShape.obj)
           Referenced in Fracture.lib(btBoxBoxDetector.obj)
           Referenced in Fracture.lib(SphereTriangleDetector.obj)
           Referenced in Fracture.lib(btVoronoiSimplexSolver.obj)
-          Referenced in Fracture.lib(btGjkEpa2.obj)
+          Referenced in Fracture.lib(btPolyhedralConvexShape.obj)
           Referenced in Fracture.lib(btGjkPairDetector.obj)
           Referenced in Fracture.lib(btPolyhedralContactClipping.obj)
           Referenced in Fracture.lib(btSubSimplexConvexCast.obj)
-          Referenced in Fracture.lib(btSdfCollisionShape.obj)
+          Referenced in Fracture.lib(ltable.obj)
           Referenced in Fracture.lib(lobject.obj)
           Referenced in Fracture.lib(ldump.obj)
           Referenced in Fracture.lib(lvm.obj)
-          Referenced in Fracture.lib(btPolyhedralConvexShape.obj)
+          Referenced in Fracture.lib(btConvexInternalShape.obj)
           Referenced in Fracture.lib(ldebug.obj)
           Referenced in Fracture.lib(ldo.obj)
           Referenced in Fracture.lib(llex.obj)
-          Referenced in Fracture.lib(ltable.obj)
+          Referenced in Fracture.lib(btCollisionShape.obj)
           Referenced in Fracture.lib(btConeTwistConstraint.obj)
           Referenced in Fracture.lib(btGeneric6DofConstraint.obj)
           Referenced in Fracture.lib(btConvexShape.obj)
-          Referenced in Fracture.lib(btConvexInternalShape.obj)
+          Referenced in Fracture.lib(btGjkEpaPenetrationDepthSolver.obj)
           Referenced in Fracture.lib(btDbvt.obj)
           Referenced in Fracture.lib(btOverlappingPairCache.obj)
           Referenced in Fracture.lib(btCollisionWorld.obj)
-          Referenced in Fracture.lib(btCollisionShape.obj)
+          Referenced in Fracture.lib(btConvexConcaveCollisionAlgorithm.obj)
           Referenced in Fracture.lib(btCompoundCollisionAlgorithm.obj)
           Referenced in Fracture.lib(btCompoundCompoundCollisionAlgorithm.obj)
           Referenced in Fracture.lib(btConvexPlaneCollisionAlgorithm.obj)
-          Referenced in Fracture.lib(btGjkEpaPenetrationDepthSolver.obj)
+          Referenced in Fracture.lib(win32_monitor.obj)
           Referenced in Fracture.lib(btPersistentManifold.obj)
           Referenced in Fracture.lib(btManifoldResult.obj)
           Referenced in Fracture.lib(btConvexConvexAlgorithm.obj)
-          Referenced in Fracture.lib(btConvexConcaveCollisionAlgorithm.obj)
+          Referenced in Fracture.lib(wgl_context.obj)
           Referenced in Fracture.lib(egl_context.obj)
           Referenced in Fracture.lib(osmesa_context.obj)
           Referenced in Fracture.lib(win32_init.obj)
-          Referenced in Fracture.lib(win32_monitor.obj)
+          Referenced in Fracture.lib(ldblib.obj)
           Referenced in Fracture.lib(loadlib.obj)
           Referenced in Fracture.lib(btRigidBody.obj)
           Referenced in Fracture.lib(btBoxShape.obj)
-          Referenced in Fracture.lib(wgl_context.obj)
+          Referenced in Fracture.lib(liolib.obj)
           Referenced in Fracture.lib(loslib.obj)
           Referenced in Fracture.lib(lstrlib.obj)
           Referenced in Fracture.lib(lutf8lib.obj)
-          Referenced in Fracture.lib(ldblib.obj)
+          Referenced in Fracture.lib(lstate.obj)
           Referenced in Fracture.lib(lauxlib.obj)
           Referenced in Fracture.lib(lcorolib.obj)
           Referenced in Fracture.lib(ltablib.obj)
-          Referenced in Fracture.lib(liolib.obj)
+          Referenced in Fracture.lib(RenderQueueNode.obj)
           Referenced in Fracture.lib(btDiscreteDynamicsWorld.obj)
           Referenced in Fracture.lib(btSequentialImpulseConstraintSolver.obj)
           Referenced in Fracture.lib(PhysicsDebugDraw.obj)
-          Referenced in Fracture.lib(lstate.obj)
+          Referenced in Fracture.lib(Texture.obj)
           Referenced in Fracture.lib(InputSocket.obj)
           Referenced in Fracture.lib(OutputSocket.obj)
           Referenced in Fracture.lib(FrameNode.obj)
-          Referenced in Fracture.lib(RenderQueueNode.obj)
+          Referenced in Fracture.lib(DebugLine.obj)
           Referenced in Fracture.lib(PickingPass.obj)
           Referenced in Fracture.lib(Billboard.obj)
           Referenced in Fracture.lib(Grid.obj)
-          Referenced in Fracture.lib(Texture.obj)
+          Referenced in Fracture.lib(Mesh.obj)
           Referenced in Fracture.lib(RenderBucket.obj)
           Referenced in Fracture.lib(Environment.obj)
           Referenced in Fracture.lib(RenderTarget.obj)
-          Referenced in Fracture.lib(DebugLine.obj)
           Referenced in Fracture.lib(init.obj)
           Referenced in Fracture.lib(glad.obj)
           Referenced in Fracture.lib(Game.obj)
@@ -7694,27 +7635,27 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
    /v
    /x
    /fo
-   "C:\Users\Ndaba\AppData\Local\Temp\lnk{07551461-AA25-478C-AABF-F97C456070F6}.tmp"
-   "C:\Users\Ndaba\AppData\Local\Temp\lnk{E36B1788-D7C9-4C84-B2F3-0BB7657DD7CA}.tmp"
+   "C:\Users\Ndaba\AppData\Local\Temp\lnk{6A6D6830-5EDD-40FB-8962-EF3D1E8C7192}.tmp"
+   "C:\Users\Ndaba\AppData\Local\Temp\lnk{F8AC2691-161D-46A5-8735-9470F0CBFCE2}.tmp"
   Microsoft (R) Windows (R) Resource Compiler Version 10.0.10011.16384
   
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
   
-  Creating C:\Users\Ndaba\AppData\Local\Temp\lnk{07551461-AA25-478C-AABF-F97C456070F6}.tmp
+  Creating C:\Users\Ndaba\AppData\Local\Temp\lnk{6A6D6830-5EDD-40FB-8962-EF3D1E8C7192}.tmp
   
   Using codepage 1252 as default
   
-  C:\Users\Ndaba\AppData\Local\Temp\lnk{E36B1788-D7C9-4C84-B2F3-0BB7657DD7CA}.tmp.
+  C:\Users\Ndaba\AppData\Local\Temp\lnk{F8AC2691-161D-46A5-8735-9470F0CBFCE2}.tmp.
   Writing 24:1,	lang:0x409,	size 381
   
   Invoking cvtres.exe:
    /machine:amd64
    /verbose
-   /out:"C:\Users\Ndaba\AppData\Local\Temp\lnk{0D176531-CDE6-4D43-9A68-5EA1B87536E0}.tmp"
+   /out:"C:\Users\Ndaba\AppData\Local\Temp\lnk{95561D1D-F883-4E8D-AC27-C86FFAB2ABB5}.tmp"
    /readonly
    "D:\Dev\Fracture\FractureEngine\int\FractureEngine.res"
-   "C:\Users\Ndaba\AppData\Local\Temp\lnk{07551461-AA25-478C-AABF-F97C456070F6}.tmp"
+   "C:\Users\Ndaba\AppData\Local\Temp\lnk{6A6D6830-5EDD-40FB-8962-EF3D1E8C7192}.tmp"
   Microsoft (R) Windows Resource To Object Converter Version 14.27.29111.0
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
@@ -13616,6 +13557,7 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
       Discarded '.xdata' from Fracture.lib(Game.obj)
       Discarded '.xdata' from Fracture.lib(Game.obj)
       Discarded '.xdata' from Fracture.lib(Game.obj)
+      Discarded '.xdata' from Fracture.lib(Mesh.obj)
       Discarded '.xdata' from Fracture.lib(Mesh.obj)
       Discarded '.xdata' from Fracture.lib(Mesh.obj)
       Discarded '.xdata' from Fracture.lib(RenderBucket.obj)
@@ -20772,6 +20714,7 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
       Discarded '.pdata' from Fracture.lib(Game.obj)
       Discarded '.pdata' from Fracture.lib(Mesh.obj)
       Discarded '.pdata' from Fracture.lib(Mesh.obj)
+      Discarded '.pdata' from Fracture.lib(Mesh.obj)
       Discarded '.pdata' from Fracture.lib(RenderBucket.obj)
       Discarded '.pdata' from Fracture.lib(RenderBucket.obj)
       Discarded '.pdata' from Fracture.lib(RenderBucket.obj)
@@ -26540,6 +26483,7 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
       Discarded "public: void __cdecl std::shared_ptr<class Fracture::Eventbus>::swap(class std::shared_ptr<class Fracture::Eventbus> &)" (?swap@?$shared_ptr@VEventbus@Fracture@@@std@@QEAAXAEAV12@@Z) from Fracture.lib(Game.obj)
       Discarded "public: void __cdecl Fracture::Game::unloadContent(void)" (?unloadContent@Game@Fracture@@QEAAXXZ) from Fracture.lib(Game.obj)
       Discarded "public: void __cdecl Fracture::Game::update(float)" (?update@Game@Fracture@@QEAAXM@Z) from Fracture.lib(Game.obj)
+      Discarded "private: void __cdecl Fracture::Mesh::setupMesh(void)" (?setupMesh@Mesh@Fracture@@AEAAXXZ) from Fracture.lib(Mesh.obj)
       Discarded "public: void __cdecl Fracture::RenderTarget::SetTarget(unsigned int)" (?SetTarget@RenderTarget@Fracture@@QEAAXI@Z) from Fracture.lib(RenderTarget.obj)
       Discarded localtime_s from Fracture.lib(RenderTarget.obj)
       Discarded "public: struct glm::vec<4,float,0> __cdecl Fracture::DebugLine::GetColor(void)" (?GetColor@DebugLine@Fracture@@QEAA?AU?$vec@$03M$0A@@glm@@XZ) from Fracture.lib(DebugLine.obj)
@@ -32991,6 +32935,7 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
        libucrtd.lib(log_special.obj)
        libucrtd.lib(pow_special.obj)
        libucrtd.lib(sincos_special.obj)
+  Finished pass 2
 Fracture.lib(btVector3.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btVector3.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
 Fracture.lib(btQuickprof.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btQuickprof.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
 Fracture.lib(btGeometryUtil.obj) : warning LNK4099: PDB 'LinearMath.pdb' was not found with 'Fracture.lib(btGeometryUtil.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\LinearMath.pdb'; linking object as if no debug info
@@ -32999,7 +32944,6 @@ Fracture.lib(btAlignedAllocator.obj) : warning LNK4099: PDB 'LinearMath.pdb' was
 Fracture.lib(btPolyhedralContactClipping.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btPolyhedralContactClipping.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
 Fracture.lib(btVoronoiSimplexSolver.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btVoronoiSimplexSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
 Fracture.lib(btSubSimplexConvexCast.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btSubSimplexConvexCast.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
-  Finished pass 2
 Fracture.lib(btRaycastCallback.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btRaycastCallback.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
 Fracture.lib(btPersistentManifold.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btPersistentManifold.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info
 Fracture.lib(btMinkowskiPenetrationDepthSolver.obj) : warning LNK4099: PDB 'BulletCollision.pdb' was not found with 'Fracture.lib(btMinkowskiPenetrationDepthSolver.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\BulletCollision.pdb'; linking object as if no debug info

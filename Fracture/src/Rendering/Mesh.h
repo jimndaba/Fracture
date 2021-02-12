@@ -10,13 +10,21 @@
 
 namespace Fracture
 {
-	class Vertex;
+	struct Vertex;
+	struct AnimatedVertex;
 	class Texture;
 	class VertexArray;
 	class VertexBuffer;
 	class IndexBuffer;
 	struct RenderInstancedElementsCommand;
 	class Material;
+
+	struct BoneInfo
+	{
+		glm::mat4 BoneOffset;
+		glm::mat4 FinalTransformation;
+	};
+
 
 	struct BoundingBox
 	{
@@ -56,7 +64,8 @@ namespace Fracture
 	{
 
 	public:
-		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
+		Mesh(std::vector<Vertex> static_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures,bool IsAnimated = false);
+		Mesh(std::vector<AnimatedVertex> animated_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures, bool IsAnimated = true);
 		~Mesh();
 
 		std::string director;		
@@ -87,12 +96,19 @@ namespace Fracture
 		std::shared_ptr<BoundingBox> GetAABB();
 
 		unsigned int IndexCount;
-
+		bool m_IsAnimated;
 		
+		std::map <std::string, uint32_t> m_BoneMapping;
+
+		uint32_t m_BoneCount = 0;
+		std::vector<BoneInfo> m_BoneInfo;
+
+
 	private:
 		void setupMesh();
 		std::vector<Submesh> m_submeshes;
-		std::vector<Vertex> m_vertices;
+		std::vector<Vertex> m_StaticVertices;
+		std::vector<AnimatedVertex> m_AnimatedVertices;
 		std::vector<std::shared_ptr<Texture>> m_textures;
 		std::vector<unsigned int> m_indices;
 		std::shared_ptr<BoundingBox> m_bounds;

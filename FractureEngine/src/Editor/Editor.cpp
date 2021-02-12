@@ -212,10 +212,13 @@ void Fracture::Editor::onLoadNew()
     AssetManager::AddShader("DepthShader", "content/shaders/DepthMap/DepthVertex.glsl", "content/shaders/DepthMap/DepthFragment.glsl");
 
     //PBR Shader
-    AssetManager::AddShader("PBRTexturedShader", "content/shaders/pbrTexture/vertex.glsl", "content/shaders/pbrTexture/fragment.glsl");
+    AssetManager::AddShader("PBRStatic", "content/shaders/PBRStatic/vertex.glsl", "content/shaders/PBRStatic/fragment.glsl");
 
     //PBR Primitives
     AssetManager::AddShader("PBRPlaneShader", "content/shaders/PBRPrimitive/vertex.glsl", "content/shaders/PBRPrimitive/fragment.glsl");
+
+    //PBR Animated
+    AssetManager::AddShader("PBRAnimated", "content/shaders/PBRAnimated/vertex.glsl", "content/shaders/PBRAnimated/fragment.glsl");
     
     //PickingShader
     AssetManager::AddShader("PickingShader", "content/shaders/Picking/vertex.glsl", "content/shaders/Picking/fragment.glsl");
@@ -279,7 +282,7 @@ void Fracture::Editor::onLoadNew()
     pbrPrimitive->setFloat("ao", 1.0f);    
     */
 
-    //std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRTexturedShader")));
+    //std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRStatic")));
     //pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
     //pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
     //pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
@@ -291,7 +294,7 @@ void Fracture::Editor::onLoadNew()
     //pbrTextured->setFloat("roughnessFlag", 1.0f);
     //pbrTextured->setFloat("aoFlag", 1.0f);
     
-    std::shared_ptr<Material> base_material = std::shared_ptr<Material>(new Material("BaseMaterial", m_AssetManger->getShader("PBRTexturedShader")));
+    std::shared_ptr<Material> base_material = std::shared_ptr<Material>(new Material("BaseMaterial", m_AssetManger->getShader("PBRStatic")));
 
     AssetManager::AddMaterial("BaseMaterial", base_material);
 

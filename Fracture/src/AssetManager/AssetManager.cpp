@@ -2,12 +2,14 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Material.h"
 #include "Rendering/Mesh.h"
+#include "Animation/AnimationClip.h"
 #include "Rendering/Model.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Vertex.h"
 #include "Logging/Logger.h"
 #include "Math/Math.h"
 #include "Serialisation/ProjectProperties.h"
+#include <glm/gtx/quaternion.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
 #include <assimp/pbrmaterial.h>
@@ -21,6 +23,17 @@ std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::
 std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::m_props;
+
+glm::mat4 Mat4FromAssimpMat4(const aiMatrix4x4& matrix)
+{
+	glm::mat4 result;
+	//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+	result[0][0] = matrix.a1; result[1][0] = matrix.a2; result[2][0] = matrix.a3; result[3][0] = matrix.a4;
+	result[0][1] = matrix.b1; result[1][1] = matrix.b2; result[2][1] = matrix.b3; result[3][1] = matrix.b4;
+	result[0][2] = matrix.c1; result[1][2] = matrix.c2; result[2][2] = matrix.c3; result[3][2] = matrix.c4;
+	result[0][3] = matrix.d1; result[1][3] = matrix.d2; result[2][3] = matrix.d3; result[3][3] = matrix.d4;
+	return result;
+}
 
 Fracture::AssetManager::AssetManager(std::shared_ptr<ProjectProperties> m_properties)
 {
@@ -189,8 +202,17 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::st
 	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
 	{
 		m_model->m_materials.resize(scene->mNumMaterials);
-		m_model->m_materials[i] = loadMeshMaterial(scene->mMaterials[i]);
+		
+		m_model->m_materials[i] = loadMeshMaterial(scene->mMaterials[i], scene->HasAnimations());
 	}
+
+	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+	{
+		m_model->m_animations.resize(scene->mNumAnimations);
+		m_model->m_animations[i] = loadModeAnimations(scene->mAnimations[i]);
+	}
+
+	FRACTURE_ERROR("Number of Animations: {}", m_model->m_animations.size());	
 
 	return m_model;
 }
@@ -198,54 +220,138 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::st
 std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene, aiNode* node)
 {
 	std::vector<Vertex> vertices;
+	std::vector<AnimatedVertex> m_animatedvertices;
+	std::map<std::string, uint32_t> m_bonemap;
+	std::vector<BoneInfo> m_boneInfo;
+
 	std::vector<unsigned int> indices;
 	std::vector<std::shared_ptr<Texture>> textures;
+	std::shared_ptr<Mesh> new_mesh;
 
+	bool isAnimated = scene->HasAnimations();
 
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	if (isAnimated)
 	{
-		Vertex vertex;
-		glm::vec3 vector;
-		// process vertex positions, normals and texture coordinates
-		vector.x = mesh->mVertices[i].x;
-		vector.y = mesh->mVertices[i].y;
-		vector.z = mesh->mVertices[i].z;
-		vertex.position = vector;
-
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.normal = vector;
-
-		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
-			glm::vec2 vec;
-			vec.x = mesh->mTextureCoords[0][i].x;
-			vec.y = mesh->mTextureCoords[0][i].y;
-			vertex.uvs = vec;
-		}
-		else
-		{
-			vertex.uvs = glm::vec2(0.0f, 0.0f);
+			AnimatedVertex vertex;
+			glm::vec3 vector;
+			// process vertex positions, normals and texture coordinates
+			vector.x = mesh->mVertices[i].x;
+			vector.y = mesh->mVertices[i].y;
+			vector.z = mesh->mVertices[i].z;
+			vertex.Position = vector;
+
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+
+			if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+			{
+				glm::vec2 vec;
+				vec.x = mesh->mTextureCoords[0][i].x;
+				vec.y = mesh->mTextureCoords[0][i].y;
+				vertex.Uvs = vec;
+			}
+			else
+			{
+				vertex.Uvs = glm::vec2(0.0f, 0.0f);
+			}
+
+			if (mesh->HasTangentsAndBitangents())
+			{
+				//Tangents
+				vector.x = mesh->mTangents[i].x;
+				vector.y = mesh->mTangents[i].y;
+				vector.z = mesh->mTangents[i].z;
+				vertex.Tangent = vector;
+
+				// bitangent
+				vector.x = mesh->mBitangents[i].x;
+				vector.y = mesh->mBitangents[i].y;
+				vector.z = mesh->mBitangents[i].z;
+				vertex.Bitangent = vector;
+			}
+			m_animatedvertices.push_back(vertex);
 		}
 
-		if (mesh->HasTangentsAndBitangents())
+		for (unsigned int i = 0; i < mesh->mNumBones; i++)
 		{
-			//Tangents
-			vector.x = mesh->mTangents[i].x;
-			vector.y = mesh->mTangents[i].y;
-			vector.z = mesh->mTangents[i].z;
-			vertex.tangent = vector;
+			aiBone* bone = mesh->mBones[i];
+			std::string boneName(bone->mName.data);
+			uint32_t  m_NumBones = 0;
+			uint32_t BoneIndex = 0;
+			std::string BoneName(mesh->mBones[i]->mName.data);
 
-			// bitangent
-			vector.x = mesh->mBitangents[i].x;
-			vector.y = mesh->mBitangents[i].y;
-			vector.z = mesh->mBitangents[i].z;
-			vertex.bitangent = vector;
+			if (m_bonemap.find(BoneName) == m_bonemap.end()) {
+				BoneIndex = m_NumBones;
+				m_NumBones++;
+				BoneInfo bi;
+				m_boneInfo.push_back(bi);
+			}
+			else {
+				BoneIndex = m_bonemap[BoneName];
+			}
+
+			m_bonemap[BoneName] = BoneIndex;
+			m_boneInfo[BoneIndex].BoneOffset = Mat4FromAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
+
+			for (size_t j = 0; j < bone->mNumWeights; j++)
+			{
+				int VertexID = bone->mWeights[j].mVertexId;
+				float Weight = bone->mWeights[j].mWeight;
+				m_animatedvertices[VertexID].AddBoneData(BoneIndex, Weight);
+			}
 		}
-		vertices.push_back(vertex);
 	}
+	else
+	{
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			Vertex vertex;
+			glm::vec3 vector;
+			// process vertex positions, normals and texture coordinates
+			vector.x = mesh->mVertices[i].x;
+			vector.y = mesh->mVertices[i].y;
+			vector.z = mesh->mVertices[i].z;
+			vertex.Position = vector;
 
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+
+			if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+			{
+				glm::vec2 vec;
+				vec.x = mesh->mTextureCoords[0][i].x;
+				vec.y = mesh->mTextureCoords[0][i].y;
+				vertex.Uvs = vec;
+			}
+			else
+			{
+				vertex.Uvs = glm::vec2(0.0f, 0.0f);
+			}
+
+			if (mesh->HasTangentsAndBitangents())
+			{
+				//Tangents
+				vector.x = mesh->mTangents[i].x;
+				vector.y = mesh->mTangents[i].y;
+				vector.z = mesh->mTangents[i].z;
+				vertex.Tangent = vector;
+
+				// bitangent
+				vector.x = mesh->mBitangents[i].x;
+				vector.y = mesh->mBitangents[i].y;
+				vector.z = mesh->mBitangents[i].z;
+				vertex.Bitangent = vector;
+			}
+			vertices.push_back(vertex);
+		}
+	}
+	
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
@@ -257,8 +363,18 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	aiMaterial* currentMaterial(scene->mMaterials[mesh->mMaterialIndex]);	
 	std::string mesh_name = node->mName.data;
 	
+	if (isAnimated)
+	{
+		new_mesh = std::shared_ptr<Mesh>(new Mesh(m_animatedvertices, indices, textures, isAnimated));
+		new_mesh->m_BoneMapping = m_bonemap;
+		new_mesh->m_BoneInfo = m_boneInfo;
+		new_mesh->m_BoneCount = mesh->mNumBones;
+	}
+	else
+	{
+		new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, isAnimated));
+	}
 
-	std::shared_ptr<Mesh> new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures));
 
 	glm::vec3 scale;
 	glm::vec3 rotation;
@@ -280,13 +396,13 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
-		vertex.position = { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
-		aabb->min.x = glm::min(vertex.position.x, aabb->min.x);
-		aabb->min.y = glm::min(vertex.position.y, aabb->min.y);
-		aabb->min.z = glm::min(vertex.position.z, aabb->min.z);
-		aabb->max.x = glm::max(vertex.position.x, aabb->max.x);
-		aabb->max.y = glm::max(vertex.position.y, aabb->max.y);
-		aabb->max.z = glm::max(vertex.position.z, aabb->max.z);
+		vertex.Position = { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
+		aabb->min.x = glm::min(vertex.Position.x, aabb->min.x);
+		aabb->min.y = glm::min(vertex.Position.y, aabb->min.y);
+		aabb->min.z = glm::min(vertex.Position.z, aabb->min.z);
+		aabb->max.x = glm::max(vertex.Position.x, aabb->max.x);
+		aabb->max.y = glm::max(vertex.Position.y, aabb->max.y);
+		aabb->max.z = glm::max(vertex.Position.z, aabb->max.z);
 	}
 
 	new_mesh->SetAABB(aabb);
@@ -665,11 +781,75 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::HDRFromFile(const std
 	return texture;
 }
 
-std::shared_ptr<Fracture::Material> Fracture::AssetManager::loadMeshMaterial(aiMaterial* material)
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::loadMeshMaterial(aiMaterial* material,bool isAnimated)
 {	
-	std::string name = material->GetName().data;
-	std::shared_ptr<Material> m_material = std::make_shared<Material>(name,AssetManager::getShader("PBRTexturedShader")); //m_base->Create(name);
+	std::string name = material->GetName().data;	
+	std::shared_ptr<Material> m_material;
+	if(isAnimated)
+	{
+		m_material = std::make_shared<Material>(name, AssetManager::getShader("PBRAnimated")); //m_base->Create(name);
+	}
+	else
+	{
+		m_material = std::make_shared<Material>(name, AssetManager::getShader("PBRStatic")); //m_base->Create(name);
+	}
+		
 	ImportMaterial(material, m_material);	
 	return m_material;
+}
+
+std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::loadModeAnimations(aiAnimation* animation)
+{
+	std::shared_ptr<AnimationClip> clip = std::make_shared<AnimationClip>();
+
+	clip->FramesPerSec = (float)animation->mTicksPerSecond;
+	clip->NumberOfFrames = (int)animation->mDuration;
+	clip->Name = animation->mName.data;
+
+	clip->m_channels.resize(animation->mNumChannels);
+
+	for (int i = 0; i < animation->mNumChannels; i++)
+	{
+		clip->m_channels[i].Name = animation->mChannels[i]->mNodeName.data;
+		if (animation->mChannels[i]->mNumPositionKeys > 0)
+		{
+			for (int i = 0; i < animation->mChannels[i]->mNumPositionKeys; i++)
+			{
+				AnimationKeyframe keyframe;
+				aiVector3D position = animation->mChannels[i]->mPositionKeys[i].mValue;
+				keyframe.Position_key = glm::vec3{ position.x,position.y,position.z };
+				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
+			}
+		}
+		if (animation->mChannels[i]->mNumRotationKeys > 0)
+		{
+			for (int i = 0; i < animation->mChannels[i]->mNumRotationKeys; i++)
+			{
+
+				AnimationKeyframe keyframe;
+				aiQuaternion rotation = animation->mChannels[i]->mRotationKeys[i].mValue;
+				keyframe.Rotation_key = glm::quat{ rotation.x,rotation.y,rotation.z,rotation.w };
+				clip->m_channels[i].m_Rotation.push_back(keyframe);
+			}
+
+		}
+		if (animation->mChannels[i]->mNumScalingKeys > 0)
+		{
+
+
+			for (int i = 0; i < animation->mChannels[i]->mNumScalingKeys; i++)
+			{
+				AnimationKeyframe keyframe;
+				aiVector3D scale = animation->mChannels[i]->mScalingKeys[i].mValue;
+				keyframe.Position_key = glm::vec3{ scale.x,scale.y,scale.z };
+				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
+			}
+		}
+	}
+	FRACTURE_ERROR("Number of Animations Channels: {}", animation->mNumChannels);
+	
+	FRACTURE_ERROR("Number of Animations Channels: {}", clip->m_channels.size());
+
+	return clip;
 }
 

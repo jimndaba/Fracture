@@ -11,6 +11,7 @@ namespace Fracture
 {
 	class Mesh;
 	class Material; 
+	class AnimationClip;
 
 	class Model
 	{
@@ -34,6 +35,8 @@ namespace Fracture
 
 		std::vector<std::shared_ptr<Material>> m_materials;
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
+
+		std::vector<std::shared_ptr<AnimationClip>> m_animations;
 	};
 }
 #endif

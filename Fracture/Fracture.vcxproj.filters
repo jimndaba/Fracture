@@ -255,6 +255,9 @@
     <ClCompile Include="src\Serialisation\GameSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\AnimatorComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -756,6 +759,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Serialisation\GameSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Component\AnimatorComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation\AnimationClip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
