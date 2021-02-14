@@ -22,6 +22,7 @@ namespace Fracture
 	struct AnimationChannel;
 	class Skeleton;
 	class AnimatorProbe;
+	class AnimatorComponent;
 
 	class AnimationManager
 	{
@@ -32,17 +33,19 @@ namespace Fracture
 
 		void OnUpdate(float dt);
 
-		void BoneTransformation(float dt, std::shared_ptr<Skeleton>& skeleton, std::vector<glm::mat4>& Transforms);
+		void BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& skeleton, std::vector<glm::mat4>& Transforms);
 	private:
 		AnimatorProbe* m_probe;
 
 		void CalcInterpolatedScaling(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
 		void CalcInterpolatedRotation(glm::quat& out, const AnimationChannel& animation, const float& animationTime);
 		void CalcInterpolatedPosition(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
+		void CalcInterpolatedColor(glm::vec4& out, const AnimationChannel& animation, const float& animationTime);
 
 		uint32_t FindRotation(const float& time, const AnimationChannel& channel);
 		uint32_t FindScale(const float& time, const AnimationChannel& channel);
 		uint32_t FindPosition(const float& time, const AnimationChannel& channel);
+		uint32_t FindColor(const float& time, const AnimationChannel& channel);
 	};
 
 

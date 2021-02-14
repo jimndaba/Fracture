@@ -14,6 +14,7 @@ namespace Fracture
 		glm::vec3 Position_key;
 		glm::quat Rotation_key;
 		glm::vec3 Scale_key;
+		glm::vec4 Color_key;
 		double Time;
 	};
 
@@ -25,16 +26,15 @@ namespace Fracture
 		std::vector<AnimationKeyframe> m_PositionKeys;
 		std::vector<AnimationKeyframe> m_ScaleKeys;
 		std::vector<AnimationKeyframe> m_RotationKeys;
+		std::vector<AnimationKeyframe> m_ColorKeys;
 	};
 	
 	class AnimationClip
 	{
 	public:
-		//Name of Animation
+		//Name of Animation similar to Name of Bone
 		std::string Name;
-
 		int NumberOfFrames;
-
 		float FramesPerSec;
 
 		std::vector<AnimationChannel> m_channels;

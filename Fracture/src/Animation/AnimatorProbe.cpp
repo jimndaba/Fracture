@@ -11,5 +11,5 @@ void Fracture::AnimatorProbe::VisitAnimatorComponent(AnimatorComponent* componen
 {
 	ProfilerTimer timer("Visit Render Comp");
 	std::shared_ptr<AnimatorComponent> animator = ComponentManager::GetComponent<AnimatorComponent>(component->EntityID);
-	m_manager.BoneTransformation(dt, animator->m_skeleton, animator->m_Transforms);
+	m_manager.BoneTransformation(dt, animator, animator->m_Transforms);
 }
