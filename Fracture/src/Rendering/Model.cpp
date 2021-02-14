@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "Mesh.h"
+#include "Animation/Skeleton.h"
 #include "Logging/Logger.h"
 #include "AssetManager/AssetManager.h"
 

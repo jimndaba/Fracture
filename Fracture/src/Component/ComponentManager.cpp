@@ -15,7 +15,7 @@
 #include "RelationshipComponent.h"
 #include "RenderComponent.h"
 #include "Physics/PhysicsManager.h"
-
+#include "AnimatorComponent.h"
 #include "Game/Game.h"
 
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_tagComponents;
@@ -48,6 +48,7 @@ void Fracture::ComponentManager::onInit()
 	Register[typeid(RigidBodyComponent)] = std::make_unique<ComponentSet>();
 	Register[typeid(BoxColliderComponent)] = std::make_unique<ComponentSet>();
 	Register[typeid(ScriptComponent)] = std::make_unique<ComponentSet>();	
+	Register[typeid(AnimatorComponent)] = std::make_unique<ComponentSet>();
 }
 
 void Fracture::ComponentManager::onLoad()

@@ -47,6 +47,10 @@
 ////// Input
 #include "Input/MouseState.h"
 
+////Animation
+#include "Animation/AnimationManager.h"
+#include "Animation/AnimatorProbe.h"
+
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 
@@ -65,6 +69,7 @@
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/AnimatorComponent.h"
 
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"

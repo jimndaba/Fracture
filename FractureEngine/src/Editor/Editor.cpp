@@ -12,7 +12,6 @@
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
 #include "FreeCamera.h"
-
 #include "EditorFrameGraph.h"
 
 bool Fracture::Editor::opt_padding;
@@ -68,6 +67,7 @@ void Fracture::Editor::onInit()
     m_Profiler = std::make_unique<Profiler>();
     m_ComponentManager = std::make_unique<ComponentManager>();
     m_ScriptManger = std::make_shared<ScriptManager>();
+    m_AnimationManger = std::make_unique<AnimationManager>();
 
 
     m_ComponentManager->onInit();
@@ -397,6 +397,9 @@ void Fracture::Editor::onUpdate(float dt)
             m_SceneManager->GetActiveScene()->Destroy(m_sceneview->SelectedEntity()->Id);
         }
     }
+   
+    m_AnimationManger->OnUpdate(dt);
+    
 
     m_PhysicsManger->startPhysics();
     m_viewpanel->onUpdate(dt);

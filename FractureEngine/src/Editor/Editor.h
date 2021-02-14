@@ -24,6 +24,8 @@ namespace Fracture
 	class EditorCamera;
 	class FreeCamera;
 	class EditorFrameGraph;
+	class AnimationManager;
+	class AnimatorProbe;
 
 	class Editor
 	{
@@ -73,6 +75,7 @@ namespace Fracture
 		std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
+		std::unique_ptr<AnimationManager> m_AnimationManger;
 		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
 		std::shared_ptr<AssetManager> m_AssetManger;

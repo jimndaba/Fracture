@@ -9,6 +9,8 @@ namespace Fracture
 {
 	class Mesh;
 	class AnimationClip;
+	struct AnimationChannel;
+	class Skeleton;
 
 	class AnimatorComponent : public Component
 	{
@@ -16,22 +18,16 @@ namespace Fracture
 		AnimatorComponent(uint32_t entityID);
 		~AnimatorComponent() = default;
 
-		AnimatorComponent(const AnimatorComponent& animator) :Component(animator.EntityID, ComponentType::None),
-			m_meshes(animator.m_meshes)
+		AnimatorComponent(const AnimatorComponent& animator) :Component(animator.EntityID, ComponentType::None)
 		{
 		}
-		AnimatorComponent(const AnimatorComponent& animator, const uint32_t& entityID) :Component(entityID, ComponentType::None),
-			m_meshes(animator.m_meshes)
+		AnimatorComponent(const AnimatorComponent& animator, const uint32_t& entityID) :Component(entityID, ComponentType::None)
 		{		
 		}
 
 		virtual void onStart();
-		void OnUpdate(float dt);
 
-		glm::mat4 BoneTransformation(float dt, std::shared_ptr<Mesh>& mesh, std::vector<glm::mat4>& Transforms);
-
-
-
+		void SetAnimation(const std::string& name);
 
 		void Accept(ISceneProbe* visitor) override;
 		std::shared_ptr<AnimatorComponent> clone(uint32_t entityID) const
@@ -39,16 +35,18 @@ namespace Fracture
 			return std::shared_ptr<AnimatorComponent>(this->clone_impl(entityID));
 		}
 
-		std::vector<std::shared_ptr<Mesh>>& m_meshes;
+		std::shared_ptr<Skeleton> m_skeleton;
 		std::map<std::string, std::shared_ptr<AnimationClip>> m_animations;
 		std::shared_ptr<AnimationClip> m_CurrentAnimation;
+
+		std::vector<glm::mat4> m_Transforms;
+
 	private:
 		virtual AnimatorComponent* clone_impl(uint32_t entityID) const override
 		{
 			return new AnimatorComponent(*this, entityID);
 		}
 
-		//List of AnimationClips
 	};
 
 

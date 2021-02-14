@@ -14,28 +14,31 @@ namespace Fracture
 		glm::vec3 Position_key;
 		glm::quat Rotation_key;
 		glm::vec3 Scale_key;
+		double Time;
 	};
-
 
 	struct AnimationChannel
 	{
+		//Bone Name is also Channel Name
 		std::string Name;
+
 		std::vector<AnimationKeyframe> m_PositionKeys;
 		std::vector<AnimationKeyframe> m_ScaleKeys;
-		std::vector<AnimationKeyframe> m_Rotation;
+		std::vector<AnimationKeyframe> m_RotationKeys;
 	};
 	
 	class AnimationClip
 	{
 	public:
+		//Name of Animation
 		std::string Name;
+
 		int NumberOfFrames;
+
 		float FramesPerSec;
-			
+
 		std::vector<AnimationChannel> m_channels;
 	};
-
-
 }
 
 

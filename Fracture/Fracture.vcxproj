@@ -107,6 +107,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation\AnimationManager.cpp" />
+    <ClCompile Include="src\Animation\AnimatorProbe.cpp" />
+    <ClCompile Include="src\Animation\Skeleton.cpp" />
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\Component\AnimatorComponent.cpp" />
     <ClCompile Include="src\Component\BillboardComponent.cpp" />
@@ -190,6 +193,9 @@
     <ClCompile Include="vendor\GLAD\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation\AnimationManager.h" />
+    <ClInclude Include="src\Animation\AnimatorProbe.h" />
+    <ClInclude Include="src\Animation\Skeleton.h" />
     <ClInclude Include="src\AssetManager\AssetManager.h" />
     <ClInclude Include="src\Animation\AnimationClip.h" />
     <ClInclude Include="src\Component\AnimatorComponent.h" />

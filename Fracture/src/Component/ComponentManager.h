@@ -29,6 +29,7 @@ namespace Fracture
 	class LightComponent;
 	class BoxColliderComponent;
 	class BillboardComponent;
+	class AnimatorComponent;
 	class Component;
 	//class ColliderComponent; TODO
 
@@ -85,6 +86,7 @@ namespace Fracture
 		static std::unique_ptr<ComponentSet> m_BoxColliderComponents;
 		static std::unique_ptr<ComponentSet> m_ScriptComponents;
 		static std::unique_ptr<ComponentSet> m_BillboardComponents;
+		
 		static std::map<std::type_index, std::unique_ptr<ComponentSet>> Register;
 	};
 

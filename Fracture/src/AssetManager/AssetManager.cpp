@@ -3,6 +3,7 @@
 #include "Rendering/Material.h"
 #include "Rendering/Mesh.h"
 #include "Animation/AnimationClip.h"
+#include "Animation/Skeleton.h"
 #include "Rendering/Model.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Vertex.h"
@@ -223,7 +224,6 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	std::vector<AnimatedVertex> m_animatedvertices;
 	std::map<std::string, uint32_t> m_bonemap;
 	std::vector<BoneInfo> m_boneInfo;
-
 	std::vector<unsigned int> indices;
 	std::vector<std::shared_ptr<Texture>> textures;
 	std::shared_ptr<Mesh> new_mesh;
@@ -276,26 +276,40 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 			m_animatedvertices.push_back(vertex);
 		}
 
+		auto m_skeleton = std::make_shared<Skeleton>();
+		m_skeleton->BoneParents.resize(mesh->mNumBones);
+
 		for (unsigned int i = 0; i < mesh->mNumBones; i++)
 		{
 			aiBone* bone = mesh->mBones[i];
 			std::string boneName(bone->mName.data);
 			uint32_t  m_NumBones = 0;
 			uint32_t BoneIndex = 0;
-			std::string BoneName(mesh->mBones[i]->mName.data);
+			
+		
 
-			if (m_bonemap.find(BoneName) == m_bonemap.end()) {
+			if (m_bonemap.find(boneName) == m_bonemap.end()) {
 				BoneIndex = m_NumBones;
 				m_NumBones++;
 				BoneInfo bi;
 				m_boneInfo.push_back(bi);
 			}
 			else {
-				BoneIndex = m_bonemap[BoneName];
+				BoneIndex = m_bonemap[boneName];
 			}
 
-			m_bonemap[BoneName] = BoneIndex;
+			m_bonemap[boneName] = BoneIndex;
 			m_boneInfo[BoneIndex].BoneOffset = Mat4FromAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
+
+
+			if (bone->mNode->mParent)
+			{
+				m_skeleton->BoneParents[i] = m_bonemap[bone->mNode->mParent->mName.data];
+			}
+			else
+			{
+				m_skeleton->BoneParents[i] = -1;
+			}		
 
 			for (size_t j = 0; j < bone->mNumWeights; j++)
 			{
@@ -303,7 +317,13 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 				float Weight = bone->mWeights[j].mWeight;
 				m_animatedvertices[VertexID].AddBoneData(BoneIndex, Weight);
 			}
+
 		}
+		m_skeleton->NumBones = mesh->mNumBones;
+		m_skeleton->m_BoneMapping = m_bonemap;
+		m_skeleton->m_BoneInfo = m_boneInfo;
+
+		model->m_Skeleton = m_skeleton;
 	}
 	else
 	{
@@ -366,9 +386,9 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	if (isAnimated)
 	{
 		new_mesh = std::shared_ptr<Mesh>(new Mesh(m_animatedvertices, indices, textures, isAnimated));
-		new_mesh->m_BoneMapping = m_bonemap;
-		new_mesh->m_BoneInfo = m_boneInfo;
-		new_mesh->m_BoneCount = mesh->mNumBones;
+		//new_mesh->m_BoneMapping = m_bonemap;
+		//new_mesh->m_BoneInfo = m_boneInfo;
+		//new_mesh->m_BoneCount = mesh->mNumBones;
 	}
 	else
 	{
@@ -818,6 +838,7 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::loadModeAnimati
 				AnimationKeyframe keyframe;
 				aiVector3D position = animation->mChannels[i]->mPositionKeys[i].mValue;
 				keyframe.Position_key = glm::vec3{ position.x,position.y,position.z };
+				keyframe.Time = animation->mChannels[i]->mPositionKeys[i].mTime;
 				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
 			}
 		}
@@ -829,7 +850,8 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::loadModeAnimati
 				AnimationKeyframe keyframe;
 				aiQuaternion rotation = animation->mChannels[i]->mRotationKeys[i].mValue;
 				keyframe.Rotation_key = glm::quat{ rotation.x,rotation.y,rotation.z,rotation.w };
-				clip->m_channels[i].m_Rotation.push_back(keyframe);
+				keyframe.Time = animation->mChannels[i]->mRotationKeys[i].mTime;
+				clip->m_channels[i].m_RotationKeys.push_back(keyframe);
 			}
 
 		}
@@ -842,6 +864,7 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::loadModeAnimati
 				AnimationKeyframe keyframe;
 				aiVector3D scale = animation->mChannels[i]->mScalingKeys[i].mValue;
 				keyframe.Position_key = glm::vec3{ scale.x,scale.y,scale.z };
+				keyframe.Time = animation->mChannels[i]->mScalingKeys[i].mTime;
 				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
 			}
 		}

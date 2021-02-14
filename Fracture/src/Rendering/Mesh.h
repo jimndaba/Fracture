@@ -19,13 +19,6 @@ namespace Fracture
 	struct RenderInstancedElementsCommand;
 	class Material;
 
-	struct BoneInfo
-	{
-		glm::mat4 BoneOffset;
-		glm::mat4 FinalTransformation;
-	};
-
-
 	struct BoundingBox
 	{
 		glm::vec3 min;
@@ -98,12 +91,6 @@ namespace Fracture
 		unsigned int IndexCount;
 		bool m_IsAnimated;
 		
-		std::map <std::string, uint32_t> m_BoneMapping;
-
-		uint32_t m_BoneCount = 0;
-		std::vector<BoneInfo> m_BoneInfo;
-
-
 	private:
 		void setupMesh();
 		std::vector<Submesh> m_submeshes;
