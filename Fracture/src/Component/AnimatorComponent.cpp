@@ -33,3 +33,8 @@ void Fracture::AnimatorComponent::SetAnimation(const std::string& name)
 void Fracture::AnimatorComponent::Accept(ISceneProbe* visitor)
 {
 }
+
+void Fracture::AnimatorComponent::Accept(ISceneProbe* visitor,float dt)
+{
+    visitor->VisitAnimatorComponent(std::shared_ptr<AnimatorComponent>(this),dt);
+}

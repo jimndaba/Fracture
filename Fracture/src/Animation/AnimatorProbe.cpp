@@ -7,7 +7,7 @@ Fracture::AnimatorProbe::AnimatorProbe(AnimationManager& manager):m_manager(mana
 {
 }
 
-void Fracture::AnimatorProbe::VisitAnimatorComponent(std::shared_ptr<AnimatorComponent>& component,float dt)
+void Fracture::AnimatorProbe::VisitAnimatorComponent(const std::shared_ptr<AnimatorComponent>& component,float dt)
 {
 	ProfilerTimer timer("Visit Render Comp");
 	m_manager.BoneTransformation(dt, component, component->m_Transforms);

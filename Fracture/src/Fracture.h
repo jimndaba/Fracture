@@ -50,6 +50,8 @@
 ////Animation
 #include "Animation/AnimationManager.h"
 #include "Animation/AnimatorProbe.h"
+#include "Animation/AnimationClip.h"
+#include "Animation/Skeleton.h"
 
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"

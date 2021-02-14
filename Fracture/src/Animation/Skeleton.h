@@ -11,6 +11,7 @@
 
 namespace Fracture
 {
+
 	struct BoneInfo
 	{
 		glm::mat4 BoneOffset;
@@ -20,8 +21,6 @@ namespace Fracture
 	class Skeleton
 	{
 	public:
-		Skeleton();
-
 		// Number of bones in the skeleton
 		int NumBones; 
 
@@ -35,6 +34,7 @@ namespace Fracture
 		std::vector<int> BoneParents;
 		
 	};
+
 }
 
 #endif

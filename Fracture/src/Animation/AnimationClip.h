@@ -9,6 +9,7 @@
 
 namespace Fracture
 {
+
 	struct AnimationKeyframe
 	{
 		glm::vec3 Position_key;
@@ -24,7 +25,6 @@ namespace Fracture
 	{
 		//Bone Name is also Channel Name
 		std::string Name;
-
 		std::vector<AnimationKeyframe> m_PositionKeys;
 		std::vector<AnimationKeyframe> m_ScaleKeys;
 		std::vector<AnimationKeyframe> m_RotationKeys;
@@ -38,9 +38,9 @@ namespace Fracture
 		std::string Name;
 		int NumberOfFrames;
 		float FramesPerSec;
-
 		std::vector<AnimationChannel> m_channels;
 	};
+
 }
 
 

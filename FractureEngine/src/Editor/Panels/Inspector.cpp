@@ -124,11 +124,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
 			std::string current_Model = render->GetModel()->Name;		
-			//std::string current_Shader = render->material->getShader()->Name;
-
+			
 			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
-			if (ImGui::BeginCombo("Model",current_Model.c_str()))
+			if (ImGui::BeginCombo("Model",current_Model.c_str(),flags))
 			{				
 				for (auto const& model : AssetManager::GetModels())
 				{
@@ -150,8 +149,6 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			
 			// Model can have more that 1 material
 			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
-			
-
 			
 			for (auto material : render->GetModel()->GetMaterials())//
 			{
@@ -328,6 +325,40 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			}
 	});	
 
+	DrawComponent<AnimatorComponent>("Animator", entity, [](auto& component)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 2.0f, lineHeight };
+		auto font = io.Fonts->Fonts[0];
+
+		std::shared_ptr<AnimatorComponent> animator = std::dynamic_pointer_cast<AnimatorComponent>(component);
+
+		std::string current_Animation = animator->m_CurrentAnimation->Name;
+
+		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
+
+		if (ImGui::BeginCombo("Animation", current_Model.c_str(),flags))
+		{
+			for (auto const& animation : animator->m_animations)
+			{
+				const bool is_selected = (current_Animation.c_str() == animation.first.c_str());
+				if (ImGui::Selectable(animation.first.c_str(), is_selected))
+				{
+					current_Animation = animation.first;
+					animator->SetAnimation(animation.first);
+				}
+
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+					animator->SetAnimation(animation.first);
+				}
+			}
+			ImGui::EndCombo();
+		}
+	});
+	
 	DrawComponent<RigidBodyComponent>("Rigidbody", entity, [](auto& component)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -525,8 +556,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				}
 			}
 	});
-
-
+	
 	if (ImGui::Button("Add Component"))
 	{
 		ImGui::OpenPopup("AddComponent");
@@ -665,6 +695,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImGui::CloseCurrentPopup();
 		}
 
+		if (ImGui::MenuItem("Animator"))
+		{
+			if (m_scenegraph.SelectedEntity())
+			{
+				//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);		
+			}
+			ImGui::CloseCurrentPopup();
+		}
 
 		ImGui::EndPopup();
 	}

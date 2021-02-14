@@ -258,9 +258,6 @@
     <ClCompile Include="src\Component\AnimatorComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Animation\Skeleton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Animation\AnimationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

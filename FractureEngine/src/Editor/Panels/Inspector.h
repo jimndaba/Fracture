@@ -100,15 +100,9 @@ namespace Fracture
 				ComponentManager::RemoveComponent<T>(entity.Id);
 			}
 		
-		
 			ImGui::PopStyleColor(1);
 			ImGui::PopStyleVar(2);
-			
-	
-
-		}
-	
-		
+		}		
 	}
 
 }

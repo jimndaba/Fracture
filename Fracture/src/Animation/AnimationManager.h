@@ -38,7 +38,7 @@ namespace Fracture
 
 		void AnimateTransform(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<TransformComponent>& transform);
 		void AnimateRenderer(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<RenderComponent>& renderer);
-		void BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& animator, std::vector<glm::mat4>& Transforms);
+		void BoneTransformation(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::vector<glm::mat4>& Transforms);
 	private:
 		AnimatorProbe* m_probe;
 

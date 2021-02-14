@@ -109,7 +109,6 @@
   <ItemGroup>
     <ClCompile Include="src\Animation\AnimationManager.cpp" />
     <ClCompile Include="src\Animation\AnimatorProbe.cpp" />
-    <ClCompile Include="src\Animation\Skeleton.cpp" />
     <ClCompile Include="src\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\Component\AnimatorComponent.cpp" />
     <ClCompile Include="src\Component\BillboardComponent.cpp" />

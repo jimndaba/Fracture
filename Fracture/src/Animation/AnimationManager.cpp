@@ -77,7 +77,7 @@ void Fracture::AnimationManager::AnimateRenderer(float dt,const std::shared_ptr<
     }
 }
 
-void Fracture::AnimationManager::BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& m_animator, std::vector<glm::mat4>& Transforms)
+void Fracture::AnimationManager::BoneTransformation(float dt,const std::shared_ptr<AnimatorComponent>& m_animator, std::vector<glm::mat4>& Transforms)
 {
     std::shared_ptr<Skeleton> skeleton = m_animator->m_skeleton;
    

@@ -19,7 +19,7 @@ namespace Fracture
 		virtual void VisitRenderComponent(const RenderComponent* component) {};
 		virtual void VisitLightComponent(LightComponent* component) {};
 		virtual void VisitBillboardComponent(BillboardComponent* component) {};
-		virtual void VisitAnimatorComponent(std::shared_ptr<AnimatorComponent>& component,float dt) {};
+		virtual void VisitAnimatorComponent(const std::shared_ptr<AnimatorComponent>& component,float dt) {};
 	};
 
 }

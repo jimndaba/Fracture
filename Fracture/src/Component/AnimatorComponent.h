@@ -30,6 +30,8 @@ namespace Fracture
 		void SetAnimation(const std::string& name);
 
 		void Accept(ISceneProbe* visitor) override;
+		void Accept(ISceneProbe* visitor,float dt) override;
+
 		std::shared_ptr<AnimatorComponent> clone(uint32_t entityID) const
 		{
 			return std::shared_ptr<AnimatorComponent>(this->clone_impl(entityID));
