@@ -14,7 +14,9 @@ namespace Fracture
 		glm::vec3 Position_key;
 		glm::quat Rotation_key;
 		glm::vec3 Scale_key;
-		glm::vec4 Color_key;
+		glm::vec2 VEC2;
+		glm::vec3 VEC3;
+		glm::vec4 VEC4;
 		double Time;
 	};
 

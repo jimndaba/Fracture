@@ -43,6 +43,7 @@ namespace Fracture
 			return std::shared_ptr<RenderComponent>(this->clone_impl(entityID));
 		}
 
+		glm::vec4 Color;
 
 	private:
 

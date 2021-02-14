@@ -7,9 +7,21 @@ Fracture::AnimatorProbe::AnimatorProbe(AnimationManager& manager):m_manager(mana
 {
 }
 
-void Fracture::AnimatorProbe::VisitAnimatorComponent(AnimatorComponent* component,float dt)
+void Fracture::AnimatorProbe::VisitAnimatorComponent(std::shared_ptr<AnimatorComponent>& component,float dt)
 {
 	ProfilerTimer timer("Visit Render Comp");
-	std::shared_ptr<AnimatorComponent> animator = ComponentManager::GetComponent<AnimatorComponent>(component->EntityID);
-	m_manager.BoneTransformation(dt, animator, animator->m_Transforms);
+	m_manager.BoneTransformation(dt, component, component->m_Transforms);
+
+	if (ComponentManager::HasComponent<TransformComponent>(component->EntityID))
+	{
+		auto transform = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+		m_manager.AnimateTransform(dt, component, transform);
+	}
+	
+	if (ComponentManager::HasComponent<RenderComponent>(component->EntityID))
+	{
+		auto renderer = ComponentManager::GetComponent<RenderComponent>(component->EntityID);
+		m_manager.AnimateRenderer(dt,component,renderer);
+	}
+	
 }

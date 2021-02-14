@@ -18,11 +18,14 @@
 
 namespace Fracture
 {
+	struct AnimationKeyframe;
 	class AnimationClip;
 	struct AnimationChannel;
 	class Skeleton;
 	class AnimatorProbe;
 	class AnimatorComponent;
+	class TransformComponent;
+	class RenderComponent;
 
 	class AnimationManager
 	{
@@ -33,19 +36,25 @@ namespace Fracture
 
 		void OnUpdate(float dt);
 
-		void BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& skeleton, std::vector<glm::mat4>& Transforms);
+		void AnimateTransform(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<TransformComponent>& transform);
+		void AnimateRenderer(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<RenderComponent>& renderer);
+		void BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& animator, std::vector<glm::mat4>& Transforms);
 	private:
 		AnimatorProbe* m_probe;
 
 		void CalcInterpolatedScaling(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
 		void CalcInterpolatedRotation(glm::quat& out, const AnimationChannel& animation, const float& animationTime);
 		void CalcInterpolatedPosition(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
-		void CalcInterpolatedColor(glm::vec4& out, const AnimationChannel& animation, const float& animationTime);
+
+		void CalcInterpolatedvec2(glm::vec2& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime);
+		void CalcInterpolatedvec3(glm::vec3& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime);
+		void CalcInterpolatedvec4(glm::vec4& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime);
 
 		uint32_t FindRotation(const float& time, const AnimationChannel& channel);
 		uint32_t FindScale(const float& time, const AnimationChannel& channel);
 		uint32_t FindPosition(const float& time, const AnimationChannel& channel);
-		uint32_t FindColor(const float& time, const AnimationChannel& channel);
+
+		uint32_t FindNextKeyFrame(const float& time, const std::vector<AnimationKeyframe>& keyframes);
 	};
 
 

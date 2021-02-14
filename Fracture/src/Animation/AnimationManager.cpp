@@ -4,6 +4,8 @@
 #include "Animation/AnimationClip.h"
 #include "AnimatorProbe.h"
 #include "Component/AnimatorComponent.h"
+#include "Component/TransformComponent.h"
+#include "Component/RenderComponent.h"
 
 Fracture::AnimationManager::AnimationManager()
 {
@@ -23,16 +25,67 @@ void Fracture::AnimationManager::OnUpdate(float dt)
     }
 }
 
-void Fracture::AnimationManager::BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& m_animtor, std::vector<glm::mat4>& Transforms)
+void Fracture::AnimationManager::AnimateTransform(float dt,const std::shared_ptr<AnimatorComponent>& m_animator, std::shared_ptr<TransformComponent>& transform)
 {
-    std::shared_ptr<AnimatorComponent> m_animtor;
-    std::shared_ptr<Skeleton> skeleton = m_animtor->m_skeleton;
-   
-    if (m_animtor->m_CurrentAnimation)
+    if (m_animator->m_CurrentAnimation)
     {
-        float TicksPerSecond = m_animtor->m_CurrentAnimation->FramesPerSec != 0 ? m_animtor->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
+        float TicksPerSecond = m_animator->m_CurrentAnimation->FramesPerSec != 0 ? m_animator->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
         float TimeInTicks = dt * TicksPerSecond;
-        float AnimationTime = fmod(TimeInTicks, m_animtor->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+        float AnimationTime = fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+
+        for (int i = 0; i < m_animator->m_CurrentAnimation->m_channels.size(); i++)
+        {
+            if (m_animator->m_CurrentAnimation->m_channels[i].Name == "Position")
+            {
+                glm::vec3 position;
+                CalcInterpolatedvec3(position, m_animator->m_CurrentAnimation->m_channels[i].m_PositionKeys, AnimationTime);
+                transform->setPosition(position);
+            }
+            if (m_animator->m_CurrentAnimation->m_channels[i].Name == "Scale")
+            {
+                glm::vec3 scale;
+                CalcInterpolatedvec3(scale, m_animator->m_CurrentAnimation->m_channels[i].m_ScaleKeys, AnimationTime);
+                transform->setScale(scale);
+            }
+            if (m_animator->m_CurrentAnimation->m_channels[i].Name == "Rotation")
+            {
+                glm::vec3 rotation;
+                CalcInterpolatedvec3(rotation, m_animator->m_CurrentAnimation->m_channels[i].m_RotationKeys, AnimationTime);
+                transform->setRotation(rotation);
+            }
+        }
+    }
+}
+
+void Fracture::AnimationManager::AnimateRenderer(float dt,const std::shared_ptr<AnimatorComponent>& m_animator, std::shared_ptr<RenderComponent>& renderer)
+{
+    if (m_animator->m_CurrentAnimation)
+    {
+        float TicksPerSecond = m_animator->m_CurrentAnimation->FramesPerSec != 0 ? m_animator->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
+        float TimeInTicks = dt * TicksPerSecond;
+        float AnimationTime = fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+
+        for (int i = 0; i < m_animator->m_CurrentAnimation->m_channels.size(); i++)
+        {
+            if (m_animator->m_CurrentAnimation->m_channels[i].Name == "Color")
+            {
+                glm::vec4 color;
+                CalcInterpolatedvec4(color, m_animator->m_CurrentAnimation->m_channels[i].m_ColorKeys, AnimationTime);
+                renderer->Color = color;
+            }
+        }
+    }
+}
+
+void Fracture::AnimationManager::BoneTransformation(float dt, std::shared_ptr<AnimatorComponent>& m_animator, std::vector<glm::mat4>& Transforms)
+{
+    std::shared_ptr<Skeleton> skeleton = m_animator->m_skeleton;
+   
+    if (m_animator->m_CurrentAnimation)
+    {
+        float TicksPerSecond = m_animator->m_CurrentAnimation->FramesPerSec != 0 ? m_animator->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
+        float TimeInTicks = dt * TicksPerSecond;
+        float AnimationTime = fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
 
         if (skeleton)
         {
@@ -55,16 +108,16 @@ void Fracture::AnimationManager::BoneTransformation(float dt, std::shared_ptr<An
 
                 // Interpolate scaling and generate scaling transformation matrix
                 glm::vec3 Scaling;
-                CalcInterpolatedScaling(Scaling, m_animtor->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
+                CalcInterpolatedScaling(Scaling, m_animator->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
 
                 // Interpolate rotation and generate rotation transformation matrix
                 glm::quat RotationQ;
-                CalcInterpolatedRotation(RotationQ, m_animtor->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
+                CalcInterpolatedRotation(RotationQ, m_animator->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
 
 
                 // Interpolate translation and generate translation transformation matrix
                 glm::vec3 Translation;
-                CalcInterpolatedPosition(Translation, m_animtor->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
+                CalcInterpolatedPosition(Translation, m_animator->m_CurrentAnimation->m_channels[bone.second], AnimationTime);
 
                 // Combine the above transformations        
                 glm::mat4 m_rotation, m_translation, m_scale;
@@ -94,7 +147,6 @@ void Fracture::AnimationManager::BoneTransformation(float dt, std::shared_ptr<An
 
 void Fracture::AnimationManager::CalcInterpolatedScaling(glm::vec3& out, const AnimationChannel& channel, const float& animationTime)
 {
-
     // we need at least two values to interpolate...
     if (channel.m_ScaleKeys.size() == 1) {
         out = channel.m_ScaleKeys[0].Scale_key;
@@ -155,22 +207,63 @@ void Fracture::AnimationManager::CalcInterpolatedPosition(glm::vec3& out, const 
     out = glm::normalize(final);
 }
 
-void Fracture::AnimationManager::CalcInterpolatedColor(glm::vec4& out, const AnimationChannel& channel, const float& animationTime)
+
+void Fracture::AnimationManager::CalcInterpolatedvec2(glm::vec2& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime)
 {
     // we need at least two values to interpolate...
-    if (channel.m_ColorKeys.size() == 1) {
-        out = channel.m_ColorKeys[0].Color_key;
+    if (keyframes.size() == 1) {
+        out = keyframes[0].VEC2;
         return;
     }
-    uint32_t ColorIndex = FindRotation(animationTime, channel);
-    uint32_t NextColorIndex = (ColorIndex + 1);
-    assert(NextColorIndex < channel.m_ColorKeys.size());
+    uint32_t PositionIndex = FindNextKeyFrame(animationTime, keyframes);
+    uint32_t NextPositionIndex = (PositionIndex + 1);
+    assert(NextPositionIndex < keyframes.size());
 
-    float DeltaTime = channel.m_ColorKeys[NextColorIndex].Time - channel.m_ColorKeys[ColorIndex].Time;
-    float Factor = (animationTime - (float)channel.m_ColorKeys[ColorIndex].Time) / DeltaTime;
+    float DeltaTime = keyframes[NextPositionIndex].Time - keyframes[PositionIndex].Time;
+    float Factor = (animationTime - (float)keyframes[PositionIndex].Time) / DeltaTime;
     assert(Factor >= 0.0f && Factor <= 1.0f);
-    const glm::vec4& StartPosition = channel.m_ColorKeys[ColorIndex].Color_key;
-    const glm::vec4& EndPosition = channel.m_ColorKeys[NextColorIndex].Color_key;
+    const glm::vec2& StartPosition = keyframes[PositionIndex].VEC2;
+    const glm::vec2& EndPosition = keyframes[NextPositionIndex].VEC2;
+    glm::vec2 final = glm::lerp(StartPosition, EndPosition, Factor);
+    out = glm::normalize(final);
+}
+
+void Fracture::AnimationManager::CalcInterpolatedvec3(glm::vec3& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime)
+{
+    // we need at least two values to interpolate...
+    if (keyframes.size() == 1) {
+        out = keyframes[0].VEC3;
+        return;
+    }
+    uint32_t PositionIndex = FindNextKeyFrame(animationTime, keyframes);
+    uint32_t NextPositionIndex = (PositionIndex + 1);
+    assert(NextPositionIndex < keyframes.size());
+
+    float DeltaTime = keyframes[NextPositionIndex].Time - keyframes[PositionIndex].Time;
+    float Factor = (animationTime - (float)keyframes[PositionIndex].Time) / DeltaTime;
+    assert(Factor >= 0.0f && Factor <= 1.0f);
+    const glm::vec3& StartPosition = keyframes[PositionIndex].VEC3;
+    const glm::vec3& EndPosition = keyframes[NextPositionIndex].VEC3;
+    glm::vec3 final = glm::lerp(StartPosition, EndPosition, Factor);
+    out = glm::normalize(final);
+}
+
+void Fracture::AnimationManager::CalcInterpolatedvec4(glm::vec4& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime)
+{
+    // we need at least two values to interpolate...
+    if (keyframes.size() == 1) {
+        out = keyframes[0].VEC4;
+        return;
+    }
+    uint32_t PositionIndex = FindNextKeyFrame(animationTime, keyframes);
+    uint32_t NextPositionIndex = (PositionIndex + 1);
+    assert(NextPositionIndex < keyframes.size());
+
+    float DeltaTime = keyframes[NextPositionIndex].Time - keyframes[PositionIndex].Time;
+    float Factor = (animationTime - (float)keyframes[PositionIndex].Time) / DeltaTime;
+    assert(Factor >= 0.0f && Factor <= 1.0f);
+    const glm::vec4& StartPosition = keyframes[PositionIndex].VEC4;
+    const glm::vec4& EndPosition = keyframes[NextPositionIndex].VEC4;
     glm::vec4 final = glm::lerp(StartPosition, EndPosition, Factor);
     out = glm::normalize(final);
 }
@@ -208,13 +301,14 @@ uint32_t Fracture::AnimationManager::FindPosition(const float& time, const Anima
     assert(0);
 }
 
-uint32_t Fracture::AnimationManager::FindColor(const float& time, const AnimationChannel& channel)
+uint32_t Fracture::AnimationManager::FindNextKeyFrame(const float& time, const std::vector<AnimationKeyframe>& keyframes)
 {
-    assert(channel.m_ColorKeys.size() > 0);
-    for (int i = 0; i < channel.m_ColorKeys.size() - 1; i++) {
-        if (time < (float)channel.m_ColorKeys[i + 1].Time) {
+    assert(keyframes.size() > 0);
+    for (int i = 0; i < keyframes.size() - 1; i++) {
+        if (time < (float)keyframes[i + 1].Time) {
             return i;
         }
     }
     assert(0);
 }
+
