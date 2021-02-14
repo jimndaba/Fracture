@@ -433,10 +433,10 @@ void Fracture::Renderer::PushCommand(DrawCommand command)
     m_Bucket->pushCommand(command);
 }
 
-void Fracture::Renderer::PushCommand(uint32_t EntityID,std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
+void Fracture::Renderer::PushCommand(uint32_t EntityID,glm::vec4 color,std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
 {
     NumberDraw += 1;
-    m_Bucket->pushCommand(EntityID, mesh, material, transform);       
+    m_Bucket->pushCommand(EntityID,color, mesh, material, transform);       
 }
 
 void Fracture::Renderer::PushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform)

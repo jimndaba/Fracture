@@ -36,5 +36,6 @@ void Fracture::AnimatorComponent::Accept(ISceneProbe* visitor)
 
 void Fracture::AnimatorComponent::Accept(ISceneProbe* visitor,float dt)
 {
-    visitor->VisitAnimatorComponent(std::shared_ptr<AnimatorComponent>(this),dt);
+    auto component = std::make_shared<AnimatorComponent>(*this);
+    visitor->VisitAnimatorComponent(component,dt);
 }

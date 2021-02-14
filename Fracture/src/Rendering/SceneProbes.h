@@ -36,7 +36,7 @@ namespace Fracture
 		
 				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
 				{
-					mRenderer.PushCommand(component->EntityID, mesh, material, m_transformComponent->GetWorldTransform());
+					mRenderer.PushCommand(component->EntityID,component->Color, mesh, material, m_transformComponent->GetWorldTransform());
 				}		
 			}			
 		}

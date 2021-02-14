@@ -200,21 +200,71 @@ namespace Fracture
 				channel.m_ColorKeys.push_back(f1);
 
 				AnimationKeyframe f2 = AnimationKeyframe();
-				f2.Time = 12.0;
+				f2.Time = 20.0;
 				f2.VEC4 = glm::vec4(1.0f, 1.0f, 0.2f, 0.8f);
 				channel.m_ColorKeys.push_back(f2);
 
 				AnimationKeyframe f3 = AnimationKeyframe();
-				f3.Time = 24.0;
-				f3.VEC4 = glm::vec4(0.5f, 1.0f, 0.8f, 1.0f);
+				f3.Time = 70.0;
+				f3.VEC4 = glm::vec4(1.0f, 0.0f, 0.2f, 0.8f);
 				channel.m_ColorKeys.push_back(f3);
 
-				animation->NumberOfFrames = 24;
+				AnimationKeyframe f4 = AnimationKeyframe();
+				f4.Time = 100.0;
+				f4.VEC4 = glm::vec4(0.5f, 1.0f, 0.8f, 1.0f);
+				channel.m_ColorKeys.push_back(f4);
+
+				auto move = AnimationChannel();
+				move.Name = "Position";
+
+				AnimationKeyframe p1 = AnimationKeyframe();
+				p1.Time = 0.0;
+				p1.VEC3 = glm::vec3(0.0f, 0.0f, 0.0f);
+				move.m_PositionKeys.push_back(p1);
+
+				AnimationKeyframe p2 = AnimationKeyframe();
+				p2.Time = 50.0;
+				p2.VEC3 = glm::vec3(20.0f, 10.0f, -10.0f);
+				move.m_PositionKeys.push_back(p2);
+
+				AnimationKeyframe p3 = AnimationKeyframe();
+				p3.Time = 100.0;
+				p3.VEC3 = glm::vec3(0.0f, 0.0f, 0.0f);
+				move.m_PositionKeys.push_back(p3);
+
+
+				auto scale = AnimationChannel();
+				scale.Name = "Scale";
+
+				AnimationKeyframe s1 = AnimationKeyframe();
+				s1.Time = 0.0;
+				s1.VEC3 = glm::vec3(1.0f, 1.0f, 1.0f);
+				scale.m_ScaleKeys.push_back(s1);
+
+				AnimationKeyframe s2 = AnimationKeyframe();
+				s2.Time = 60.0;
+				s2.VEC3 = glm::vec3(2.0f, 2.0f, 2.0f);
+				scale.m_ScaleKeys.push_back(s2);
+
+				AnimationKeyframe s3 = AnimationKeyframe();
+				s3.Time = 80.0;
+				s3.VEC3 = glm::vec3(0.1f, 1.0f, 5.0f);
+				scale.m_ScaleKeys.push_back(s3);
+
+				AnimationKeyframe s4 = AnimationKeyframe();
+				s4.Time = 100.0;
+				s4.VEC3 = glm::vec3(1.0f, 1.0f, 1.0f);
+				scale.m_ScaleKeys.push_back(s4);
+				
+
+				animation->NumberOfFrames = 100;
 				animation->FramesPerSec = 30;
 				animation->m_channels.push_back(channel);
+				animation->m_channels.push_back(move);
+				animation->m_channels.push_back(scale);
+
 				animation->Name = "ChangeColor";
 				animator->m_animations["ChangeColor"] = animation;
-
 				animator->SetAnimation("ChangeColor");
 
 				ComponentManager::AddComponent<AnimatorComponent>(animator);

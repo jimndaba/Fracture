@@ -41,6 +41,7 @@ namespace Fracture
 		void BoneTransformation(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::vector<glm::mat4>& Transforms);
 	private:
 		AnimatorProbe* m_probe;
+		float AnimationTime = 0.0f;
 
 		void CalcInterpolatedScaling(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
 		void CalcInterpolatedRotation(glm::quat& out, const AnimationChannel& animation, const float& animationTime);

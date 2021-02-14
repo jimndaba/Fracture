@@ -338,7 +338,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
-		if (ImGui::BeginCombo("Animation", current_Model.c_str(),flags))
+		if (ImGui::BeginCombo("Animation", current_Animation.c_str(),flags))
 		{
 			for (auto const& animation : animator->m_animations)
 			{

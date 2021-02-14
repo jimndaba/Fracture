@@ -20,6 +20,11 @@ namespace Fracture
 
 		AnimatorComponent(const AnimatorComponent& animator) :Component(animator.EntityID, ComponentType::None)
 		{
+			m_CurrentAnimation = animator.m_CurrentAnimation;
+			m_animations = animator.m_animations;
+			m_skeleton = animator.m_skeleton;
+			m_Transforms = animator.m_Transforms;
+			
 		}
 		AnimatorComponent(const AnimatorComponent& animator, const uint32_t& entityID) :Component(entityID, ComponentType::None)
 		{		
@@ -40,7 +45,6 @@ namespace Fracture
 		std::shared_ptr<Skeleton> m_skeleton;
 		std::map<std::string, std::shared_ptr<AnimationClip>> m_animations;
 		std::shared_ptr<AnimationClip> m_CurrentAnimation;
-
 		std::vector<glm::mat4> m_Transforms;
 
 	private:

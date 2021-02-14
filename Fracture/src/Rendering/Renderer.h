@@ -70,7 +70,7 @@ namespace Fracture
 		void setViewport(int width,int height);
 		
 		void PushCommand(DrawCommand command);
-		void PushCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform);
+		void PushCommand(uint32_t EntityID, glm::vec4 color, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform);
 		void PushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);

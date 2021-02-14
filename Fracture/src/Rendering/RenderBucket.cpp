@@ -44,7 +44,7 @@ void Fracture::RenderBucket::pushCommand(const DrawCommand& command)
 
 }
 
-void Fracture::RenderBucket::pushCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
+void Fracture::RenderBucket::pushCommand(uint32_t EntityID, glm::vec4 color, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
 {
 	ProfilerTimer timer("Create Command");
 	DrawCommand command = DrawCommand{};	
@@ -56,6 +56,7 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, std::shared_ptr<Frac
 	command.ID = EntityID;
 	command.indiceSize = (GLint)mesh->IndexCount;	
 	command.Transform = transform;
+	command.Color = color;
 	pushCommand(command);
 }
 

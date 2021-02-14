@@ -2,6 +2,8 @@
 #include "AnimationManager.h"
 #include "Component/ComponentManager.h"
 #include "Component/AnimatorComponent.h"
+#include "Component/TransformComponent.h"
+#include "Component/RenderComponent.h"
 
 Fracture::AnimatorProbe::AnimatorProbe(AnimationManager& manager):m_manager(manager)
 {

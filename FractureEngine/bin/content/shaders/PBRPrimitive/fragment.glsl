@@ -54,6 +54,7 @@ in vec3 Normal;
 
 // material parameters
 uniform vec3  albedo;
+uniform vec4 Color;
 uniform float metallic;
 uniform float roughness;
 uniform float ao;
@@ -238,8 +239,8 @@ void main()
     color = color / (color + vec3(1.0));
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
-
-    FragColor = vec4(color  , 1.0);
+    vec4 result = vec4(color,1.0) + Color;
+    FragColor = result;
 }
 
 vec3 CalcDirLight(SunLight light,vec3 F0, vec3 normal, vec3 viewDir)

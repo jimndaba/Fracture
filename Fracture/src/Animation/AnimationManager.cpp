@@ -7,7 +7,8 @@
 #include "Component/TransformComponent.h"
 #include "Component/RenderComponent.h"
 
-Fracture::AnimationManager::AnimationManager()
+Fracture::AnimationManager::AnimationManager():
+    AnimationTime(0.0f)
 {
     m_probe = new AnimatorProbe(*this);
 }
@@ -21,7 +22,7 @@ void Fracture::AnimationManager::OnUpdate(float dt)
 {
     for (auto component : ComponentManager::GetAllComponents<AnimatorComponent>())
     {
-        component->Accept(m_probe);
+        component->Accept(m_probe,dt);
     }
 }
 
@@ -31,7 +32,12 @@ void Fracture::AnimationManager::AnimateTransform(float dt,const std::shared_ptr
     {
         float TicksPerSecond = m_animator->m_CurrentAnimation->FramesPerSec != 0 ? m_animator->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
         float TimeInTicks = dt * TicksPerSecond;
-        float AnimationTime = fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+       
+        AnimationTime += TimeInTicks;
+        if (AnimationTime > m_animator->m_CurrentAnimation->NumberOfFrames)
+        {
+            AnimationTime = 0;
+        }
 
         for (int i = 0; i < m_animator->m_CurrentAnimation->m_channels.size(); i++)
         {
@@ -61,9 +67,16 @@ void Fracture::AnimationManager::AnimateRenderer(float dt,const std::shared_ptr<
 {
     if (m_animator->m_CurrentAnimation)
     {
+        //float time = dt * 100.0f;
         float TicksPerSecond = m_animator->m_CurrentAnimation->FramesPerSec != 0 ? m_animator->m_CurrentAnimation->FramesPerSec : 24.0f;//Animation FPS
         float TimeInTicks = dt * TicksPerSecond;
-        float AnimationTime = fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+        // fmod(TimeInTicks, m_animator->m_CurrentAnimation->NumberOfFrames); //Animation Duration
+
+        AnimationTime += TimeInTicks;
+        if (AnimationTime > m_animator->m_CurrentAnimation->NumberOfFrames)
+        {
+            AnimationTime = 0;
+        }
 
         for (int i = 0; i < m_animator->m_CurrentAnimation->m_channels.size(); i++)
         {
@@ -207,7 +220,6 @@ void Fracture::AnimationManager::CalcInterpolatedPosition(glm::vec3& out, const 
     out = glm::normalize(final);
 }
 
-
 void Fracture::AnimationManager::CalcInterpolatedvec2(glm::vec2& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime)
 {
     // we need at least two values to interpolate...
@@ -245,7 +257,8 @@ void Fracture::AnimationManager::CalcInterpolatedvec3(glm::vec3& out, const std:
     const glm::vec3& StartPosition = keyframes[PositionIndex].VEC3;
     const glm::vec3& EndPosition = keyframes[NextPositionIndex].VEC3;
     glm::vec3 final = glm::lerp(StartPosition, EndPosition, Factor);
-    out = glm::normalize(final);
+    out = final;
+   // out = glm::normalize(final);
 }
 
 void Fracture::AnimationManager::CalcInterpolatedvec4(glm::vec4& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime)
