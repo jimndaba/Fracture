@@ -20,6 +20,8 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
 #include "Component/BillboardComponent.h"
+#include "Component/AnimatorComponent.h"
+#include "Animation/AnimationClip.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
 #include "Rendering/Model.h"
@@ -184,6 +186,38 @@ namespace Fracture
 					ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
 				}
+
+
+				auto animator = std::make_shared<AnimatorComponent>(newEntity->Id);
+				auto animation = std::make_shared<AnimationClip>();
+				auto channel = AnimationChannel();
+
+				channel.Name = "Color";
+
+				AnimationKeyframe f1 = AnimationKeyframe();
+				f1.Time = 0.0;
+				f1.VEC4 = glm::vec4(0.5f,1.0f,0.8f,1.0f);
+				channel.m_ColorKeys.push_back(f1);
+
+				AnimationKeyframe f2 = AnimationKeyframe();
+				f2.Time = 12.0;
+				f2.VEC4 = glm::vec4(1.0f, 1.0f, 0.2f, 0.8f);
+				channel.m_ColorKeys.push_back(f2);
+
+				AnimationKeyframe f3 = AnimationKeyframe();
+				f3.Time = 24.0;
+				f3.VEC4 = glm::vec4(0.5f, 1.0f, 0.8f, 1.0f);
+				channel.m_ColorKeys.push_back(f3);
+
+				animation->NumberOfFrames = 24;
+				animation->FramesPerSec = 30;
+				animation->m_channels.push_back(channel);
+				animation->Name = "ChangeColor";
+				animator->m_animations["ChangeColor"] = animation;
+
+				animator->SetAnimation("ChangeColor");
+
+				ComponentManager::AddComponent<AnimatorComponent>(animator);
 			}
 			else
 			{

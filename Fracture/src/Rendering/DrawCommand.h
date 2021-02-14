@@ -34,6 +34,7 @@ namespace Fracture
 		GLint indiceSize;
 		Material* material;
 		glm::mat4 Transform;
+		glm::vec4 Color;
 		std::vector<std::string> TextureNames;
 
 		bool operator < (const DrawCommand& other) const

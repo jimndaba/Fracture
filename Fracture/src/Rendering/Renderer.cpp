@@ -364,6 +364,7 @@ void Fracture::Renderer::Submit(DrawCommand command)
     command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
+    command.material->getShader()->setVec4("Color", command.Color);
     
     Draw(command);
    
