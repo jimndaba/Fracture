@@ -15,6 +15,7 @@ namespace Fracture
 		Depth = GL_DEPTH_COMPONENT,
 		Red = GL_RED,
 		RedGreen = GL_RG,
+		RedGreen16 = GL_RG16F,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
 		RGBA16 = GL_RGBA16F,

@@ -2,7 +2,7 @@
 #include "OpenGLBase.h"
 
 
-Fracture::Texture2D::Texture2D(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType):
+Fracture::Texture2D::Texture2D(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType):Texture(),
     m_Width(width),
     m_Height(height),
     m_Format(format),
@@ -22,7 +22,7 @@ Fracture::Texture2D::Texture2D(InternalFormat internalformat,TextureFormat forma
 }
 
 Fracture::Texture2D::Texture2D(void* data, InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType)
-    :
+    :Texture(),
     m_Width(width),
     m_Height(height),
     m_Format(format),

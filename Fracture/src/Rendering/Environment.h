@@ -27,10 +27,10 @@ namespace Fracture
 		Environment(std::shared_ptr<Texture2D> environment, std::shared_ptr<Shader> shader);
 		~Environment();
 
-		unsigned int envCubemap;
-		unsigned int irradianceMap;
-		unsigned int prefilterMap;
-		unsigned int brdfLUTTexture;
+		//unsigned int envCubemap;
+		//unsigned int irradianceMap;
+		//unsigned int prefilterMap;
+		//unsigned int brdfLUTTexture;
 
 		std::shared_ptr<RenderTarget> m_CaptureTarget;
 	
@@ -39,19 +39,20 @@ namespace Fracture
 		std::shared_ptr<Shader> m_bdrf;
 
 		std::shared_ptr<Texture2D> m_enviroment;
-		std::shared_ptr<Texture2D> m_IrradianceMap;
-		std::shared_ptr<Texture2D> m_PrefilterMap;
-		std::shared_ptr<TextureCubeMap> m_CubeMap;
 		std::shared_ptr<Texture2D> m_bdrfTexture;
 
+		std::shared_ptr<TextureCubeMap> m_PrefilterMap;
+		std::shared_ptr<TextureCubeMap> m_IrradianceMap;
+		std::shared_ptr<TextureCubeMap> m_CubeMap;
+		
 		void Render(std::shared_ptr<Shader> shader, glm::mat4 view, glm::mat4 projection);
 	private:
 		unsigned int cubeVAO;
 		unsigned int cubeVBO;
 		unsigned int quadVAO = 0;
 		unsigned int quadVBO;
+		
 		std::shared_ptr<Shader> shader;
-
 
 		glm::mat4 captureProjection;
 		glm::mat4 captureViews[6];
@@ -62,7 +63,6 @@ namespace Fracture
 		void CreateIrradianceMap();
 		void CreatePreFilterMap();
 		void CreateBDRF();
-
 
 		void Render();
 		void RenderQuad();

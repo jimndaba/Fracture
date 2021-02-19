@@ -1,7 +1,7 @@
 #include "TextureCubeMap.h"
 #include "OpenGLBase.h"
 
-Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap,FormatType formatType)
+Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap,FormatType formatType) :Texture()
 {
 	glGenTextures(1, &m_TextureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
@@ -17,7 +17,7 @@ Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFo
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
-Fracture::TextureCubeMap::TextureCubeMap(void* data,InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType)
+Fracture::TextureCubeMap::TextureCubeMap(void* data,InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType):Texture(),
 {
 	glGenTextures(1, &m_TextureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
@@ -39,12 +39,14 @@ void Fracture::TextureCubeMap::bind() const
 }
 
 void Fracture::TextureCubeMap::unbind() const
-{
+{	
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void Fracture::TextureCubeMap::GenerateMips()
 {
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
 uint32_t Fracture::TextureCubeMap::GetWidth() const
