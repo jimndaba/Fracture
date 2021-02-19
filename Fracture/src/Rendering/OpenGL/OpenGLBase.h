@@ -1,7 +1,9 @@
 #pragma once
-#include <GLAD\glad.h>
 #ifndef OPENGLBASE_H
 #define OPENGLBASE_H
+
+#include <GLAD\glad.h>
+
 
 namespace Fracture
 {
@@ -46,7 +48,6 @@ namespace Fracture
 		CubeMapPosX = GL_TEXTURE_CUBE_MAP_POSITIVE_X
 	};
 	
-
 }
 
 #endif
