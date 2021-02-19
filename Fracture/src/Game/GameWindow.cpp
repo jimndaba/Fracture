@@ -57,7 +57,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 		return;
 	}
 
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 		
 	// Check OpenGL properties
 	FRACTURE_INFO("OpenGL loaded");
@@ -65,7 +65,6 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	FRACTURE_INFO("Renderer: {}", glGetString(GL_RENDERER));
 	FRACTURE_INFO("Version: {}", glGetString(GL_VERSION));
 }
-
 
 void Fracture::GameWindow::MaximiseWindow()
 {
@@ -91,4 +90,9 @@ void Fracture::GameWindow::close()
 {
 	glfwTerminate();
 	glfwDestroyWindow(window);
+}
+
+std::shared_ptr<Fracture::GameWindow> Fracture::GameWindow::Create(int width, int height, std::string title, bool resizable)
+{
+	return std::make_shared<GameWindow>(width,height,title,resizable);
 }

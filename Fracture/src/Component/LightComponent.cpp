@@ -1,6 +1,11 @@
 #include "LightComponent.h"
 #include "ComponentManager.h"
 #include "TransformComponent.h"
+#include "Entity/ILight.h"
+#include "Entity/SkyLight.h"
+#include "Entity/SunLight.h"
+#include "Entity/PointLight.h"
+#include "Entity/SpotLight.h"
 
 Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Component(id,ComponentType::Light),m_type(lightType)
 {

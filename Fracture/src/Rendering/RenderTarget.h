@@ -15,15 +15,17 @@ namespace Fracture
 
 	class Texture;
 	enum class TextureTarget;
+	class FrameBuffer;
+
 
 	class RenderTarget : public Bindable,public FrameResource
 	{
 
 	public:
+		RenderTarget(const std::string& name);
 		RenderTarget(const std::string& name,unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 		~RenderTarget();
-
-		unsigned int ID;
+		
 		unsigned int Width;
 		unsigned int Height;
 		GLenum       Type;
@@ -34,22 +36,28 @@ namespace Fracture
 		std::shared_ptr<Texture> GetDepthStencilTexture() override;
 		std::shared_ptr<Texture> GetColorTexture(unsigned int index) override;
 
-		unsigned int GetID() override { return ID; };
+		std::shared_ptr<FrameBuffer> GetBuffer() override;
+		
 		void bind() override;
-		void blit(unsigned int fbo) override;
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight) override;
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight) override;
 		void Unbind();
 
 		void Resize(unsigned int width, unsigned int height);
 		void SetTarget(GLenum target);
 
-		void SetMultiSampled(bool value) override;
+		
 		bool IsMultiSampled() override;
-
-		void SetResizable(bool value)override;
 		bool IsResizable() override;
 
+		void SetMultiSampled(bool value) override;
+		void SetResizable(bool value)override;
+		
+		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name);
+		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 
 	private:		
+		std::shared_ptr<FrameBuffer> m_framebuffer;
 		std::string m_name;
 		bool m_IsMultiSampled;
 		bool m_IsResizable = true;

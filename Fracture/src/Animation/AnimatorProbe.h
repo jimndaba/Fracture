@@ -14,7 +14,7 @@ namespace Fracture
 	{
 	public:
 		AnimatorProbe(AnimationManager& manager);
-		void VisitAnimatorComponent(const  std::shared_ptr<AnimatorComponent>& component, float dt) override;
+		void VisitAnimatorComponent(AnimatorComponent* component, float dt) override;
 	private:
 		AnimationManager& m_manager;
 	};

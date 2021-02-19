@@ -39,16 +39,12 @@ std::shared_ptr<Fracture::GameSettings> Fracture::Editor::m_GameSettings;
 std::shared_ptr<Fracture::SceneView> Fracture::Editor::m_sceneview;
 
 inline void Style();
+const float FIXED_STEP = 1/60.0f;
 
-const double SCREEN_FPS = 60.0;
-const double FRAME_DELAY = 1000.0 / SCREEN_FPS;
 Fracture::Editor::Editor()
 {        
     m_logger = std::make_shared<Logger>();
     m_properties = std::make_shared<ProjectProperties>();
-    m_GameSettings = std::make_shared<GameSettings>();
-    m_AssetManger = std::make_shared<AssetManager>(m_properties);   
-    m_SceneManager = std::make_unique<SceneManager>();
     m_loadNewProject = false;
     currentTime = glfwGetTime();
 }
@@ -61,6 +57,9 @@ Fracture::Editor::~Editor()
 void Fracture::Editor::onInit()
 {      
     m_Eventbus = std::make_unique<Eventbus>();
+    m_GameSettings = std::make_shared<GameSettings>();
+    m_AssetManger = std::make_unique<AssetManager>(m_properties);
+    m_SceneManager = std::make_unique<SceneManager>();
     m_InputManager = std::make_unique<InputManager>();
     m_PhysicsManger = std::make_unique<PhysicsManager>();
     m_EntityFactory = std::make_unique<EntityFactory>();
@@ -72,7 +71,7 @@ void Fracture::Editor::onInit()
 
     m_ComponentManager->onInit();
 
-    m_window = std::make_unique<GameWindow>(1920,1080, "Fracture Engine: " + m_properties->ProjectName);
+    m_window = GameWindow::Create(1920,1080, "Fracture Engine: " + m_properties->ProjectName);
     m_window->MaximiseWindow();
     showRenderConfig  = false;
     showAudioConfig   = false;
@@ -118,10 +117,6 @@ void Fracture::Editor::onInit()
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
-
-    
-
-   
     ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
    
 
@@ -133,7 +128,7 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
     camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
-    m_Renderer = Renderer::getInstance();
+    m_Renderer = std::make_shared<Renderer>();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
    
     glfwSetKeyCallback(m_window->Context(), key_callback);
@@ -165,33 +160,31 @@ bool Fracture::Editor::onLoad()
 void Fracture::Editor::onLoadNew()
 {
     m_Renderer->onInit();
+    m_AssetManger->AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
    
 
-    AssetManager::AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
-    AssetManager::AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
-    AssetManager::AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
-   
-
-    AssetManager::AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
+    m_AssetManger->AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
 
     //Environment
-    AssetManager::AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
+    m_AssetManger->AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
 
     //PointShadows
-    AssetManager::AddShader("PointShadows", "content/shaders/PointShadows/vertex.glsl", "content/shaders/PointShadows/fragment.glsl", "content/shaders/PointShadows/geometry.glsl");
+    m_AssetManger->AddShader("PointShadows", "content/shaders/PointShadows/vertex.glsl", "content/shaders/PointShadows/fragment.glsl", "content/shaders/PointShadows/geometry.glsl");
 
 
     //Irradiance
-    AssetManager::AddShader("irradiance", "content/shaders/irradiance/vertex.glsl", "content/shaders/irradiance/fragment.glsl");
+    m_AssetManger->AddShader("irradiance", "content/shaders/irradiance/vertex.glsl", "content/shaders/irradiance/fragment.glsl");
 
     //prefilter
-    AssetManager::AddShader("prefilter", "content/shaders/prefilter/vertex.glsl", "content/shaders/prefilter/fragment.glsl");
+    m_AssetManger->AddShader("prefilter", "content/shaders/prefilter/vertex.glsl", "content/shaders/prefilter/fragment.glsl");
 
     //bdrf
     AssetManager::AddShader("bdrf", "content/shaders/bdrf/vertex.glsl", "content/shaders/bdrf/fragment.glsl");
@@ -344,40 +337,26 @@ void Fracture::Editor::run()
     }
     //TODO - Set Editor Camera as camera;
     double lastTime = glfwGetTime();
-    int nbFrames = 0;
-
-
 
     while (!m_window->ShouldClose() && !done)
-    {
-        double framestart = glfwGetTime();
-        double newTime = glfwGetTime();
-        double frameTime = newTime - currentTime;
-        currentTime = newTime;
+    {       
+        double currentTime = glfwGetTime();
+        double frameTime = currentTime - lastTime;
+        lastTime = currentTime;
 
-        accumulator += frameTime;
-    
+       
 
-        while (accumulator >= dt)
+
+        while (frameTime > 0.0)
         {
-            onUpdate((float)dt);
-            m_PhysicsManger->stepUpdate();
-            m_ScriptManger->OnUpdate((float)dt);
-            accumulator -= dt;
-            time += dt;
+            ProfilerTimer timer("Update Accumulator");
+            float deltaTime = (float)std::min(frameTime, dt);
+            onUpdate(deltaTime);
+            frameTime -= deltaTime;
+            time += deltaTime;
         }
-        onRender();
-
-        double framelength = glfwGetTime() - framestart;
-        if (frameLimiter)
-        {
-            if (FRAME_DELAY > framelength)
-            {
-
-                //SDL_Delay(FRAME_DELAY - framelength); TODO
-            }
-        }
-        
+       
+        onRender();        
     }
     onShutdown();
 }
@@ -386,8 +365,7 @@ void Fracture::Editor::onUpdate(float dt)
 {
     ProfilerTimer timer("onUpdate");   
     m_window->pollEvents();
-    InputManager::PollEvents();
-    
+    InputManager::PollEvents();    
 
     if (InputManager::IsKeyDown(KeyCode::Delete))
     {
@@ -397,11 +375,12 @@ void Fracture::Editor::onUpdate(float dt)
             m_SceneManager->GetActiveScene()->Destroy(m_sceneview->SelectedEntity()->Id);
         }
     }
-   
-    m_AnimationManger->OnUpdate(dt);
-    
+    //m_PhysicsManger->startPhysics();
+    m_AnimationManger->OnUpdate(FIXED_STEP);
 
-    m_PhysicsManger->startPhysics();
+    //m_PhysicsManger->stepUpdate();  
+    m_ScriptManger->OnUpdate(dt);
+
     m_viewpanel->onUpdate(dt);
     
 }
@@ -416,7 +395,6 @@ void Fracture::Editor::onRender()
     if (showInputConfig) showInputManager(&showInputConfig);
     if (showProjectConfig) showProjectSettings(&showProjectConfig,m_properties);
 
-
     Render();   
 
     m_frame->end(); 
@@ -430,9 +408,17 @@ void Fracture::Editor::onShutdown()
     ImGui_ImplGlfw_Shutdown();
 
     ImGui::DestroyContext();
+
+    m_AssetManger->Clear();
+    m_PhysicsManger->onShutdown();    
+    m_GameSettings.reset();
+    m_SceneManager.reset();
     m_Renderer.reset();  
     m_PhysicsManger.reset();
+    m_AssetManger.reset();
     m_window.reset();
+    m_properties.reset();
+    m_logger.reset();
     Profiler::Get().EndSession();
 }
 
@@ -742,10 +728,6 @@ std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::Properties()
     return m_properties;
 }
 
-std::shared_ptr<Fracture::AssetManager> Fracture::Editor::GetAssetManager()
-{
-    return m_AssetManger;
-}
 
 void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::Renderer>& _renderer)
 {
@@ -755,7 +737,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGuiIO& io = ImGui::GetIO();
         auto boldFont = io.Fonts->Fonts[0];
 
-        float width,  height;
+        //float width,  height;
         ImGui::PushID("renderConfig");
         ImGui::Columns(2);
         ImGui::SetColumnWidth(0, 200.0f);
@@ -867,7 +849,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::Separator();
         ImGui::NextColumn();
         ImGui::BeginChild("ShadowMap");
-        ImGui::Image((void*)_renderer->m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->id, ImVec2(200,200));
+        ImGui::Image((void*)&_renderer->m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->id, ImVec2(200,200));
         ImGui::EndChild();
         ImGui::NextColumn();
         static float vnear;

@@ -3,13 +3,16 @@
 #include "RenderBucket.h"
 #include "Model.h"
 #include "Mesh.h"
-#include "Vertex.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
-#include "Component/ILight.h"
+#include "Entity/ILight.h"
+#include "Entity/SkyLight.h"
+#include "Entity/SunLight.h"
+#include "Entity/SpotLight.h"
+#include "Entity/PointLight.h"
 #include "Component/ComponentSet.h"
 #include "Component/ComponentManager.h"
 #include "Component/CameraControllerComponent.h"
@@ -61,11 +64,6 @@ Fracture::Renderer::Renderer()
 {
    m_width = 1920;
    m_Height = 1080;  
-}
-
-Fracture::Renderer::~Renderer()
-{
-
 }
 
 void Fracture::Renderer::onInit()
@@ -365,6 +363,13 @@ void Fracture::Renderer::Submit(DrawCommand command)
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
     command.material->getShader()->setVec4("Color", command.Color);
+    command.material->getShader()->setInt("isAnimated", command.IsAnimated);
+    if (command.IsAnimated)
+    {
+        for (int i = 0; i < command.AnimationTransforms.size(); i++) {
+            command.material->getShader()->setMat4("gBones[" + std::to_string(i) + "]", command.AnimationTransforms[i]);
+        }
+    }
     
     Draw(command);
    

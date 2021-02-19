@@ -5,7 +5,7 @@
 #include "../../RenderBatch.h"
 #include "../../Material.h"
 #include "Rendering/Shader.h"
-#include "Component/ILight.h"
+#include "Entity/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "../../Renderer.h"

@@ -1,6 +1,3 @@
-d:\dev\fracture\fractureengine\int\vc142.pdb
-d:\dev\fracture\fractureengine\int\vc142.idb
-d:\dev\fracture\fractureengine\int\imgui_impl_opengl3.obj
 d:\dev\fracture\fractureengine\int\imgui_draw.obj
 d:\dev\fracture\fractureengine\int\imgui.obj
 d:\dev\fracture\fractureengine\int\imguizmo.obj
@@ -13,6 +10,7 @@ d:\dev\fracture\fractureengine\int\sceneviewpanel.obj
 d:\dev\fracture\fractureengine\int\panel.obj
 d:\dev\fracture\fractureengine\int\inspector.obj
 d:\dev\fracture\fractureengine\int\assetbrowserpanel.obj
+d:\dev\fracture\fractureengine\int\freecamera.obj
 d:\dev\fracture\fractureengine\int\fracturesplash.obj
 d:\dev\fracture\fractureengine\int\materialfactory.obj
 d:\dev\fracture\fractureengine\int\tagcomponentelement.obj
@@ -21,12 +19,19 @@ d:\dev\fracture\fractureengine\int\element.obj
 d:\dev\fracture\fractureengine\int\editor.obj
 d:\dev\fracture\fractureengine\int\editorcamera.obj
 d:\dev\fracture\fractureengine\int\imgui_widgets.obj
-d:\dev\fracture\fractureengine\int\imgui_impl_sdl.obj
+d:\dev\fracture\fractureengine\int\imgui_tables.obj
+d:\dev\fracture\fractureengine\int\imgui_impl_opengl3.obj
+d:\dev\fracture\fractureengine\int\imgui_impl_glfw.obj
+d:\dev\fracture\fractureengine\bin\fractureengine.lib
+d:\dev\fracture\fractureengine\bin\fractureengine.exp
+d:\dev\fracture\fractureengine\bin\fractureengine.ipdb
+d:\dev\fracture\fractureengine\bin\fractureengine.iobj
 d:\dev\fracture\fractureengine\int\fractureengine.res
 d:\dev\fracture\fractureengine\bin\fractureengine.pdb
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\cl.command.1.tlog
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\cl.read.1.tlog
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\cl.write.1.tlog
+d:\dev\fracture\fractureengine\int\fractureengine.tlog\fractureengine.write.1u.tlog
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\link-cvtres.read.1.tlog
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\link-cvtres.write.1.tlog
 d:\dev\fracture\fractureengine\int\fractureengine.tlog\link-rc.read.1.tlog

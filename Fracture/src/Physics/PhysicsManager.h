@@ -30,7 +30,6 @@ namespace Fracture
 
 		static void AddCollider(int id,btCollisionShape* collider);
 		static void RemoveCollider(btCollisionShape* collider);
-
 		static void AddRigidBody(int id,btRigidBody* body);
 		static void AddRigidBody(int id, btRigidBody* body, Fracture::CollisionGroup group, Fracture::CollisionMask mask);
 		static void RemoveRigidBody(btRigidBody* body);
@@ -38,9 +37,9 @@ namespace Fracture
 		static bool RayCast(Ray rayIn, RayHit& out);
 
 		void startPhysics();
-
 		void onUpdate(float dt);
 		void stepUpdate();
+		void onShutdown();
 
 		static void DrawDebug();
 

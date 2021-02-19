@@ -7,8 +7,6 @@
 #include <vector>
 #include <math.h>
 
-
-
 #include "Profiling/Profiler.h"
 #include "Logging/Logger.h"
 #include "Event/Eventbus.h"
@@ -37,7 +35,7 @@
 #include "Rendering/RenderBucket.h"
 #include "Rendering/Model.h"
 #include "Rendering/Mesh.h"
-#include "Rendering/Vertex.h"
+#include "Rendering/OpenGL/Vertex.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Material.h"
@@ -59,6 +57,11 @@
 
 #include "Entity/Entity.h"
 #include "Entity/IDManager.h"
+#include "Entity/ILight.h"
+#include "Entity/SkyLight.h"
+#include "Entity/SunLight.h"
+#include "Entity/SpotLight.h"
+#include "Entity/PointLight.h"
 #include "Scripting/GameLogic.h"
 
 #include "Component/TagComponent.h"

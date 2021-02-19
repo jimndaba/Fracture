@@ -49,11 +49,19 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 	
 		if (first_iteration)
 		{
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, resources["colorTexture"]->GetID());
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[horizontal]->GetID());
-			glBlitFramebuffer(0, 0, resources["colorTexture"]->GetColorTexture(0)->width,
-				resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[horizontal]->Width, m_blurPasses[horizontal]->Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-			m_shader->setTexture("boxblur", m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);	
+			uint32_t srcWidth = resources["colorTexture"]->GetColorTexture(0)->width;
+			uint32_t srcHeight = resources["colorTexture"]->GetColorTexture(0)->height;
+			uint32_t dstWidth = m_blurPasses[horizontal]->Width;
+			uint32_t dstHeight = m_blurPasses[horizontal]->Height;
+
+			m_blurPasses[horizontal]->blit(resources["colorTexture"]->GetBuffer(), srcWidth, srcHeight, dstWidth, dstHeight);
+			m_shader->setTexture("boxblur", m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);
+
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, resources["colorTexture"]->GetID());
+			//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[horizontal]->GetID());
+			//glBlitFramebuffer(0, 0, resources["colorTexture"]->GetColorTexture(0)->width,
+				//resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[horizontal]->Width, m_blurPasses[horizontal]->Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			
 		}
 		else
 		{
@@ -68,10 +76,17 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 
 	renderer.setViewport(resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height);
 	{
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_blurPasses[!horizontal]->GetID());
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resources["blurOutput"]->GetID());
-		glBlitFramebuffer(0, 0, m_blurPasses[!horizontal]->GetColorTexture(0)->width,
-			m_blurPasses[!horizontal]->GetColorTexture(0)->height, 0, 0, resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+		uint32_t srcWidth = m_blurPasses[!horizontal]->GetColorTexture(0)->width;
+		uint32_t srcHeight = m_blurPasses[!horizontal]->GetColorTexture(0)->height;
+		uint32_t dstWidth = resources["blurOutput"]->GetColorTexture(0)->width;
+		uint32_t dstHeight = resources["blurOutput"]->GetColorTexture(0)->height;
+
+		resources["blurOutput"]->blit(m_blurPasses[!horizontal]->GetBuffer(),srcWidth, srcHeight, dstWidth, dstHeight);
+
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, m_blurPasses[!horizontal]->GetID());
+		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resources["blurOutput"]->GetID());
+		//glBlitFramebuffer(0, 0, m_blurPasses[!horizontal]->GetColorTexture(0)->width,
+		//	m_blurPasses[!horizontal]->GetColorTexture(0)->height, 0, 0, resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 		m_outPutshader->use();
 		resources["blurOutput"]->bind();

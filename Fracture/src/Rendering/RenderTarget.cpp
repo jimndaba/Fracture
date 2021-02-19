@@ -3,17 +3,26 @@
 #include "Logging/Logger.h"
 #include <iostream>
 #include "Renderer.h"
+#include "OpenGL/OpenGLBase.h"
+#include "OpenGL/FrameBuffer.h"
+#include "OpenGL/RenderBuffer.h"
+
+Fracture::RenderTarget::RenderTarget(const std::string& name):
+    m_name(name),
+    m_framebuffer(FrameBuffer::CreateBuffer())
+{
+
+}
 
 Fracture::RenderTarget::RenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
 :m_name(name),
+m_framebuffer(FrameBuffer::CreateBuffer()),
 Width(width),
 Height(height),
 Type(type),
 HasDepthAndStencil(depthAndStencil)
-{    
-    glGenFramebuffers(1, &ID);
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
-    // generate all requested color attachments
+{      
+    m_framebuffer->bind();
     for (unsigned int i = 0; i < nrColorAttachments; ++i)
     {
         GLenum internalFormat = GL_RGBA;
@@ -26,56 +35,43 @@ HasDepthAndStencil(depthAndStencil)
 
         if (texturetarget == TextureTarget::Texture2D)
         {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture->id, 0);
+            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::Texture2D, texture->id);
         }
         if (texturetarget == TextureTarget::MultiSample)
         {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D_MULTISAMPLE, texture->id, 0);
+            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::MULTISAMPLE, texture->id);
         }
       
         m_ColorAttachments.push_back(texture);
     }
-    // then generate Depth/Stencil texture if requested    
+
     if (depthAndStencil && texturetarget == TextureTarget::Texture2D)
-    {       
-        
-        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dtexture->id, 0);
+    {           
+        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));  
+        m_framebuffer->AddAttachment(glAttachmentType::DepthStencil,glAttachmentTarget::Texture2D, dtexture->id);
         m_DepthStencil = dtexture;
     }
 
     if (depthAndStencil && texturetarget == TextureTarget::MultiSample)
     {
-        unsigned int rbo;
-        glGenRenderbuffers(1, &rbo);
-        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, width, height);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+        m_framebuffer->AddRenderBuffer(name,glAttachmentType::DepthStencil, RenderBuffer::CreateBuffer(4, InternalFormat::Depth24Stencil8, width, height));
     }
 
     if (depthAndStencil && texturetarget == TextureTarget::CubeMap)
     {
-
+        m_framebuffer->bind();
         std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height,TextureTarget::CubeMap, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
         m_DepthStencil = dtexture;
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, dtexture->id, 0);
+        m_framebuffer->AddAttachment(glAttachmentType::Depth, dtexture->id);
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
     }
 
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        FRACTURE_ERROR("Framebuffer not complete!");
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    m_framebuffer->unbind();
 }
 
 Fracture::RenderTarget::~RenderTarget()
-{
-
-    glDeleteFramebuffers(1,&ID);
+{    
 
 }
 
@@ -97,25 +93,22 @@ std::shared_ptr<Fracture::Texture> Fracture::RenderTarget::GetColorTexture(unsig
 
 void Fracture::RenderTarget::bind()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, ID);
+    m_framebuffer->bind();
 }
 
-void Fracture::RenderTarget::blit(unsigned int fbo)
+void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight)
 {
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, ID);
-    glBlitFramebuffer(0, 0, Width, Height, 0, 0, Width, Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    m_framebuffer->blit(otherBuffer,SrcDstWidth,SrcDstheight);
+}
 
+void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight)
+{
+    m_framebuffer->blit(otherBuffer, srcWidth,srcHeight,dstWidth,dstHeight);
 }
 
 void Fracture::RenderTarget::Unbind()
 {   
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        FRACTURE_ERROR("ERROR::FRAMEBUFFER:: Framebuffer - {} - is not complete!", m_name);
-        throw "FRAMEBUFFER_INVALID";
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    m_framebuffer->unbind();
 }
 
 void Fracture::RenderTarget::Resize(unsigned int width, unsigned int height)
@@ -157,8 +150,23 @@ void Fracture::RenderTarget::SetResizable(bool value)
     m_IsResizable = value;
 }
 
+std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name)
+{
+    return std::make_shared<RenderTarget>(name);
+}
+
+std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
+{
+    return std::make_shared<RenderTarget>(name,width,height,texturetarget,type,nrColorAttachments,depthAndStencil);
+}
+
 bool Fracture::RenderTarget::IsResizable()
 {
     return m_IsResizable;
+}
+
+std::shared_ptr<Fracture::FrameBuffer> Fracture::RenderTarget::GetBuffer()
+{
+    return m_framebuffer;
 }
 

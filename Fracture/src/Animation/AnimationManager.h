@@ -21,6 +21,7 @@ namespace Fracture
 	struct AnimationKeyframe;
 	class AnimationClip;
 	struct AnimationChannel;
+	struct Bone;
 	class Skeleton;
 	class AnimatorProbe;
 	class AnimatorComponent;
@@ -36,16 +37,22 @@ namespace Fracture
 
 		void OnUpdate(float dt);
 
-		void AnimateTransform(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<TransformComponent>& transform);
-		void AnimateRenderer(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::shared_ptr<RenderComponent>& renderer);
-		void BoneTransformation(float dt,const std::shared_ptr<AnimatorComponent>& animator, std::vector<glm::mat4>& Transforms);
+		void AnimateTransform(float dt,AnimatorComponent* animator, std::shared_ptr<TransformComponent>& transform);
+		void AnimateRenderer(float dt,AnimatorComponent* animator, std::shared_ptr<RenderComponent>& renderer);
+		void BoneTransformation(const AnimationChannel& channel, const  std::shared_ptr<Skeleton>& skeleton, const float& time);
+		void UpdateFinalTransforms(const std::shared_ptr<Skeleton>& skeleton);
+		void UpdateHierachy(const std::shared_ptr<Bone>& bone, const std::shared_ptr<Skeleton>& skeleton, const glm::mat4& parentTransform);
+		void PushTransforms(AnimatorComponent* animator);
+
+
 	private:
 		AnimatorProbe* m_probe;
-		float AnimationTime = 0.0f;
+	
+		float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 
-		void CalcInterpolatedScaling(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
-		void CalcInterpolatedRotation(glm::quat& out, const AnimationChannel& animation, const float& animationTime);
-		void CalcInterpolatedPosition(glm::vec3& out, const AnimationChannel& animation, const float& animationTime);
+		glm::mat4 CalcInterpolatedScaling(const AnimationChannel& animation, const float& animationTime);
+		glm::mat4 CalcInterpolatedRotation(const AnimationChannel& animation, const float& animationTime);
+		glm::mat4 CalcInterpolatedPosition(const AnimationChannel& animation, const float& animationTime);
 
 		void CalcInterpolatedvec2(glm::vec2& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime);
 		void CalcInterpolatedvec3(glm::vec3& out, const std::vector<AnimationKeyframe>& keyframes, const float& animationTime);

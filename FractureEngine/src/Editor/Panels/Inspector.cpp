@@ -333,8 +333,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		auto font = io.Fonts->Fonts[0];
 
 		std::shared_ptr<AnimatorComponent> animator = std::dynamic_pointer_cast<AnimatorComponent>(component);
+		std::string current_Animation;
 
-		std::string current_Animation = animator->m_CurrentAnimation->Name;
+		if(animator->m_CurrentAnimation)
+			current_Animation = animator->m_CurrentAnimation->Name;
 
 		ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 
@@ -699,7 +701,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);		
+				ComponentManager::AddComponent<AnimatorComponent>(entity.Id);		
 			}
 			ImGui::CloseCurrentPopup();
 		}

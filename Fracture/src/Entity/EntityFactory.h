@@ -19,6 +19,7 @@
 #include "Component/RigidBodyComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/LightComponent.h"
+#include "Entity/ILight.h"
 #include "Component/BillboardComponent.h"
 #include "Component/AnimatorComponent.h"
 #include "Animation/AnimationClip.h"
@@ -368,6 +369,19 @@ namespace Fracture
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
 				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
 				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				if (model->m_IsAnimated)
+				{
+					auto animator = std::make_shared<AnimatorComponent>(newEntity->Id);
+
+					for (auto& animation : model->m_animations)
+					{
+						animator->m_animations[animation->Name] = animation;
+					}
+					animator->m_skeleton = model->m_Skeleton;
+					animator->resizeTransforms();
+					ComponentManager::AddComponent<AnimatorComponent>(animator);
+				}
+		
 			}
 			else
 			{

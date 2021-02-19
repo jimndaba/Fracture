@@ -12,8 +12,8 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 	m_isShow = true;
     m_run = false;
     m_logger = m_editor->GetLogger();
-	m_window = std::unique_ptr<GameWindow>(new GameWindow(800,400,"Splash"));
-    m_AssetManger = std::unique_ptr<AssetManager>();  
+	m_window = std::make_unique<GameWindow>(800,400,"Splash");
+    m_AssetManger = std::make_unique<AssetManager>(m_editor->Properties());  
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -63,12 +63,17 @@ bool Fracture::FractureSplash::Show()
 
 void Fracture::FractureSplash::Close()
 {   
+  FRACTURE_INFO("Close Splash");
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext(); 
+  
+ 
   m_window->close();
-  m_window.release();
-  m_AssetManger.release();
+  m_AssetManger->Clear();
+
+  m_window.reset();
+  m_AssetManger.reset();
 }
 
 void Fracture::FractureSplash::onUpdate()
@@ -115,7 +120,7 @@ void Fracture::FractureSplash::onRender()
 
     //ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-    ImGui::Image((void*)m_splash->id, ImVec2(300, 400));
+    ImGui::Image((ImTextureID)m_splash->id, ImVec2(300, 400));
     ImGui::PopStyleVar();
     ImGui::End();
 
@@ -292,7 +297,7 @@ inline void Fracture::FractureSplash::Style()
     style.WindowBorderSize = 1;
     style.ChildBorderSize = 1;
     style.PopupBorderSize = 1;
-    style.FrameBorderSize = is3D;
+    style.FrameBorderSize = (float)is3D;
 
     style.WindowRounding = 2;
     style.ChildRounding = 2;

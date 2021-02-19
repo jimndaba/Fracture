@@ -3,11 +3,13 @@
 #define LIGHTCOMPONENT_H
 
 #include "Component.h"
-#include "ILight.h"
+
 
 
 namespace Fracture
 {
+	class ILight;
+	enum class LightType;
 
 	class LightComponent:public Component
 	{

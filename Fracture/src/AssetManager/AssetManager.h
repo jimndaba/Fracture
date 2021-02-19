@@ -13,13 +13,22 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/pbrmaterial.h>
+
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+
+
 
 
 
 namespace Fracture
 {
 	class Mesh;
+	class Skeleton;
+	struct BoneInfo;
+	struct Bone;
 	class Texture;
 	class Shader;
 	class Model;
@@ -51,6 +60,8 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Model>> GetModels();
 		static std::vector<std::shared_ptr<Fracture::Shader>>  GetShaders();
 		static std::map<std::string, std::shared_ptr<Material>> GetMaterials();
+
+		void Clear();
 
 
 		static void AddShader(const std::string &name, const std::string& vertex, const std::string& fragment);
@@ -89,6 +100,7 @@ namespace Fracture
 		//Functions
 		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
 		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiNode* node);
+		static void processSkeleton(std::shared_ptr<Bone> bone, std::shared_ptr<Skeleton> skeleton, aiNode* node);
 		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
 		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
 		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
@@ -100,10 +112,14 @@ namespace Fracture
 		static const uint32_t s_MeshImportFlags =
 			aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case
 			aiProcess_Triangulate |             // Make sure we're triangles			
-			aiProcess_GenSmoothNormals |              // Make sure we have legit normals
+			aiProcess_GenNormals |              // Make sure we have legit normals
 			aiProcess_GenUVCoords |            // Convert UVs if required 			
 			aiProcess_ValidateDataStructure|
-			aiProcess_RemoveRedundantMaterials
+			aiProcess_RemoveRedundantMaterials|
+			aiProcess_SortByPType |
+			aiProcess_OptimizeMeshes |
+			aiProcess_PopulateArmatureData|
+			aiProcess_ValidateDataStructure
 			;   
 	};
 

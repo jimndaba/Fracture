@@ -10,29 +10,25 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FractureEngine", "..\Fractu
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504} = {47AFA82F-B3AD-4F3B-8D34-84C97A852504}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "..\Sandbox\Sandbox.vcxproj", "{7A9AD083-566A-4CF8-8EC9-E4C415F934C2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{47AFA82F-B3AD-4F3B-8D34-84C97A852504} = {47AFA82F-B3AD-4F3B-8D34-84C97A852504}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Release wSymbols|x64 = Release wSymbols|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Debug|x64.ActiveCfg = Debug|x64
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Debug|x64.Build.0 = Debug|x64
+		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Release wSymbols|x64.ActiveCfg = Release wSymbols|x64
+		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Release wSymbols|x64.Build.0 = Release wSymbols|x64
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Release|x64.ActiveCfg = Release|x64
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504}.Release|x64.Build.0 = Release|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Debug|x64.ActiveCfg = Debug|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Debug|x64.Build.0 = Debug|x64
+		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release wSymbols|x64.ActiveCfg = Release wSymbols|x64
+		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release wSymbols|x64.Build.0 = Release wSymbols|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.ActiveCfg = Release|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.Build.0 = Release|x64
-		{7A9AD083-566A-4CF8-8EC9-E4C415F934C2}.Debug|x64.ActiveCfg = Debug|x64
-		{7A9AD083-566A-4CF8-8EC9-E4C415F934C2}.Debug|x64.Build.0 = Debug|x64
-		{7A9AD083-566A-4CF8-8EC9-E4C415F934C2}.Release|x64.ActiveCfg = Release|x64
-		{7A9AD083-566A-4CF8-8EC9-E4C415F934C2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

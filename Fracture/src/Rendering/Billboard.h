@@ -3,7 +3,7 @@
 #define BILLBOARD_H
 
 #include <vector>
-#include "Vertex.h"
+#include "OpenGL/Vertex.h"
 
 namespace Fracture
 {

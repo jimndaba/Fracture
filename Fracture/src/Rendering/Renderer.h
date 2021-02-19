@@ -46,7 +46,7 @@ namespace Fracture
 	{
 	public:
 		Renderer();
-		~Renderer();	
+		~Renderer() = default;	
 
 		void onInit();
 

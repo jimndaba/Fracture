@@ -4,6 +4,8 @@
 
 /Fracture/.vs/Fracture/v16
 /Fracture/bin
+/Fracture/Debug
+/Fracture/Release wSymbols
 /Fracture/int
 /Fracture/vendor
 /.vs
@@ -12,3 +14,4 @@
 FractureEngine/bin/result.json
 FractureEngine/int
 FractureEngine/bin
+FractureEngine/vendor

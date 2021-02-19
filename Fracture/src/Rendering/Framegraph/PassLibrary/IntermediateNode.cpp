@@ -5,8 +5,10 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Renderer.h"
 
-Fracture::IntermediateNode::IntermediateNode(const std::string& name,const int& width,const int& height):
-	FrameNode(name)
+Fracture::IntermediateNode::IntermediateNode(const std::string& name,const uint32_t& width,const uint32_t& height):
+	FrameNode(name),
+	m_width(width),
+	m_height(height)
 {
 	auto m_Input = std::make_shared<InputSocket>("inputbuffer");
 	auto m_output = std::make_shared<OutputSocket>("OutTexture");
@@ -27,6 +29,6 @@ void Fracture::IntermediateNode::execute(Renderer& renderer)
 {
 	glDisable(GL_DEPTH_TEST);
 	resources["OutTexture"]->bind();	
-	resources["OutTexture"]->blit(resources["inputbuffer"]->GetID());
+	resources["OutTexture"]->blit(resources["inputbuffer"]->GetBuffer(),m_width,m_height);
 	resources["OutTexture"]->Unbind();
 }

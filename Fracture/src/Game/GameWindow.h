@@ -17,7 +17,6 @@ namespace Fracture
 		~GameWindow() = default;
 
 		void MaximiseWindow();
-
 		void pollEvents();
 		void swapBuffers();
 
@@ -34,6 +33,8 @@ namespace Fracture
 				
 		bool ShouldClose();
 		void close();
+
+		static std::shared_ptr<GameWindow> Create(int width, int height, std::string title, bool resizable = true);
 
 	private:
 		static GLFWwindow* window;

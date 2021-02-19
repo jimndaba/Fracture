@@ -5,7 +5,8 @@
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
 #include "Rendering/RenderBatch.h"
-#include "Component/ILight.h"
+#include "Entity/ILight.h"
+#include "Entity/PointLight.h"
 
 
 Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height, RenderBucket* bucket, const std::shared_ptr<PointLight>& light):
@@ -22,7 +23,7 @@ Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int&
 	outShadowMap = std::make_shared<RenderTarget>("PointShadows_Out",1024, 1024, TextureTarget::CubeMap,GL_FLOAT,1,true);
 	m_shader = AssetManager::getShader("PointShadows");
 	AcceptBucket(bucket);
-	//AddInputSocket(m_EnvironmentInput);
+
 	AddOutputSocket(m_output);
 	AddOutputResource(m_output, outShadowMap);
 }

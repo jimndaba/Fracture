@@ -6,15 +6,14 @@
 #include "Animation/Skeleton.h"
 #include "Rendering/Model.h"
 #include "Rendering/Texture.h"
-#include "Rendering/Vertex.h"
+#include "Rendering/OpenGL/Vertex.h"
 #include "Logging/Logger.h"
 #include "Math/Math.h"
 #include "Serialisation/ProjectProperties.h"
-#include <glm/gtx/quaternion.hpp>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbimage/stb_image.h"
-#include <assimp/pbrmaterial.h>
-#include <GLAD/glad.h>
+//#include <GLAD/glad.h>
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::m_instance;
 
@@ -39,15 +38,12 @@ glm::mat4 Mat4FromAssimpMat4(const aiMatrix4x4& matrix)
 Fracture::AssetManager::AssetManager(std::shared_ptr<ProjectProperties> m_properties)
 {
 	m_props = m_properties;
+	FRACTURE_INFO("Asset Manager startup");
 }
 
 Fracture::AssetManager::~AssetManager()
-{
-	m_Materials.clear();
-	m_meshes.clear();
-	m_Shaders.clear();
-	m_Models.clear();
-	m_Textures.clear();
+{	
+	FRACTURE_INFO("Asset Manager Shutdown");
 }
 
 void Fracture::AssetManager::AddShader(const std::string& name, const std::string& vertex, const std::string& fragment)
@@ -84,8 +80,10 @@ void Fracture::AssetManager::AddModel(const std::string& name, const std::string
 
 void Fracture::AssetManager::AddTexture(const std::string& name, const std::string& path,TextureType mtype)
 {
+
 	std::shared_ptr<Texture> texture = loadTexture(name,path,mtype);
 	m_Textures.emplace(name, texture);
+	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}",name);
 }
 
@@ -179,6 +177,15 @@ std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManage
 	return m_Materials;
 }
 
+void Fracture::AssetManager::Clear()
+{
+	m_Materials.clear();
+	m_meshes.clear();
+	m_Shaders.clear();
+	m_Models.clear();
+	m_Textures.clear();
+}
+
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::string& path)
 {
 	std::shared_ptr<Model> m_model = nullptr;
@@ -200,6 +207,12 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::st
 	// process ASSIMP's root node recursively	
 	ProcessNode(m_model, scene->mRootNode, scene);
 
+	if (m_model->m_IsAnimated)
+	{
+		processSkeleton(m_model->m_Skeleton->m_Root, m_model->m_Skeleton, scene->mRootNode);
+	}
+	
+
 	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
 	{
 		m_model->m_materials.resize(scene->mNumMaterials);
@@ -213,25 +226,53 @@ std::shared_ptr<Fracture::Model> Fracture::AssetManager::loadModel(const std::st
 		m_model->m_animations[i] = loadModeAnimations(scene->mAnimations[i]);
 	}
 
+
+
 	FRACTURE_ERROR("Number of Animations: {}", m_model->m_animations.size());	
 
 	return m_model;
 }
 
+void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[i];
+		aiString meshname = node->mName;
+		FRACTURE_TRACE("loading Mesh: {}", meshname.C_Str());
+		std::shared_ptr<Mesh> m_mesh = processMesh(model, mesh, scene, node);
+
+	
+		
+		model->addMesh(m_mesh);
+	}
+
+	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		FRACTURE_TRACE("loading Child: {}", node->mChildren[i]->mName.data);
+		ProcessNode(model, node->mChildren[i], scene);
+	}
+
+	
+}
+
 std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_ptr<Model> model,aiMesh* mesh, const aiScene* scene, aiNode* node)
 {
+	std::shared_ptr<Mesh> new_mesh;
 	std::vector<Vertex> vertices;
 	std::vector<AnimatedVertex> m_animatedvertices;
-	std::map<std::string, uint32_t> m_bonemap;
-	std::vector<BoneInfo> m_boneInfo;
 	std::vector<unsigned int> indices;
 	std::vector<std::shared_ptr<Texture>> textures;
-	std::shared_ptr<Mesh> new_mesh;
 
 	bool isAnimated = scene->HasAnimations();
-
+	model->m_IsAnimated = isAnimated;
 	if (isAnimated)
 	{
+		std::map<std::string, uint32_t> m_bonemap;
+		std::vector<BoneInfo> m_boneInfo;
+
+		
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
 			AnimatedVertex vertex;
@@ -278,52 +319,71 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 
 		auto m_skeleton = std::make_shared<Skeleton>();
 		m_skeleton->BoneParents.resize(mesh->mNumBones);
+		m_boneInfo.resize(mesh->mNumBones);
 
-		for (unsigned int i = 0; i < mesh->mNumBones; i++)
-		{
-			aiBone* bone = mesh->mBones[i];
-			std::string boneName(bone->mName.data);
-			uint32_t  m_NumBones = 0;
-			uint32_t BoneIndex = 0;
+		uint32_t  m_NumBones = 0;
+		int BoneIndex = 0;
+		glm::mat4 globalInverse = Mat4FromAssimpMat4(scene->mRootNode->mTransformation);
+		m_skeleton->m_InverseTransform = glm::inverse(globalInverse);
+
+		FRACTURE_INFO("No. Bones: {}", mesh->mNumBones);
+
+		//populate bone map and info
+		for (unsigned int i = 0; i < mesh->mNumBones; i++)		{
 			
-		
+			std::string boneName = mesh->mBones[i]->mName.C_Str();
 
-			if (m_bonemap.find(boneName) == m_bonemap.end()) {
+			if (m_bonemap.find(boneName) == m_bonemap.end()) {				
 				BoneIndex = m_NumBones;
 				m_NumBones++;
-				BoneInfo bi;
-				m_boneInfo.push_back(bi);
+				BoneInfo bi;				
+				m_boneInfo[i] = bi;
 			}
 			else {
 				BoneIndex = m_bonemap[boneName];
-			}
+			}		
 
 			m_bonemap[boneName] = BoneIndex;
-			m_boneInfo[BoneIndex].BoneOffset = Mat4FromAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
+			m_boneInfo[BoneIndex].ID = BoneIndex;
+			m_boneInfo[BoneIndex].Name = boneName;
+			m_boneInfo[BoneIndex].BoneOffset = Mat4FromAssimpMat4(mesh->mBones[i]->mOffsetMatrix);		
+			
 
-
-			if (bone->mNode->mParent)
+			assert(BoneIndex != -1);
+			if (m_bonemap.find(mesh->mBones[i]->mNode->mParent->mName.data) != m_bonemap.end())
 			{
-				m_skeleton->BoneParents[i] = m_bonemap[bone->mNode->mParent->mName.data];
+				if (mesh->mBones[i]->mNode->mParent != nullptr)
+				{
+					m_skeleton->BoneParents[i] = m_bonemap[mesh->mBones[i]->mNode->mParent->mName.data];
+				}				
 			}
 			else
 			{
-				m_skeleton->BoneParents[i] = -1;
-			}		
+				m_skeleton->BoneParents[i] = 0;
+			}
+				
 
-			for (size_t j = 0; j < bone->mNumWeights; j++)
+			FRACTURE_INFO("BONE: {}", m_boneInfo[BoneIndex].Name);
+			FRACTURE_INFO("BONE PARENT : {}", m_skeleton->BoneParents[BoneIndex]);
+			for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 			{
-				int VertexID = bone->mWeights[j].mVertexId;
-				float Weight = bone->mWeights[j].mWeight;
+				int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+				float Weight = mesh->mBones[i]->mWeights[j].mWeight;
 				m_animatedvertices[VertexID].AddBoneData(BoneIndex, Weight);
 			}
 
+
 		}
+		
 		m_skeleton->NumBones = mesh->mNumBones;
 		m_skeleton->m_BoneMapping = m_bonemap;
-		m_skeleton->m_BoneInfo = m_boneInfo;
+		m_skeleton->m_BoneInfo = m_boneInfo;		
 
 		model->m_Skeleton = m_skeleton;
+		FRACTURE_INFO("Root Name: {}", m_skeleton->m_Root->Name);
+		
+
+		
 	}
 	else
 	{
@@ -386,27 +446,14 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	if (isAnimated)
 	{
 		new_mesh = std::shared_ptr<Mesh>(new Mesh(m_animatedvertices, indices, textures, isAnimated));
-		//new_mesh->m_BoneMapping = m_bonemap;
-		//new_mesh->m_BoneInfo = m_boneInfo;
-		//new_mesh->m_BoneCount = mesh->mNumBones;
 	}
 	else
 	{
 		new_mesh = std::shared_ptr<Mesh>(new Mesh(vertices, indices, textures, isAnimated));
 	}
 
-
-	glm::vec3 scale;
-	glm::vec3 rotation;
-	glm::vec3 position; 
-
 	aiMatrix4x4 transform = node->mTransformation;
-	Math::DecomposeTransform(Math::Mat4FromAssimpMat4(transform), position, rotation, scale);	
 	
-	
-	new_mesh->position = position;
-	new_mesh->scale = scale;
-	new_mesh->rotation =rotation;
 	new_mesh->Name = mesh_name;
 	new_mesh->ModelName = model->Name;
 	new_mesh->MaterialIndex = mesh->mMaterialIndex;
@@ -428,6 +475,20 @@ std::shared_ptr<Fracture::Mesh> Fracture::AssetManager::processMesh(std::shared_
 	new_mesh->SetAABB(aabb);
 
 	return new_mesh;
+}
+
+void Fracture::AssetManager::processSkeleton(std::shared_ptr<Bone> bone, std::shared_ptr<Skeleton> skeleton, aiNode* node)
+{		
+	std::shared_ptr<Bone> m_bone = std::make_shared<Bone>();
+	m_bone->ID = skeleton->m_BoneMapping[node->mName.data];
+	m_bone->Name = node->mName.data;
+	m_bone->LocalTransformation = Mat4FromAssimpMat4(node->mTransformation);
+	bone->AddChild(m_bone);				
+	for (int i = 0; i < node->mNumChildren; i++)
+	{
+		processSkeleton(m_bone, skeleton,node->mChildren[i]);
+	}
+
 }
 
 //Process each material from Mesh
@@ -607,25 +668,6 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadMaterialTexture(a
 	return texture;
 }
 
-void Fracture::AssetManager::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
-{	
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
-	{		
-		
-		aiMesh* mesh = scene->mMeshes[i];		
-		aiString meshname = node->mName;
-		FRACTURE_TRACE("loading Mesh: {}", meshname.C_Str());
-		std::shared_ptr<Mesh> m_mesh = processMesh(model, mesh, scene, node);
-		model->addMesh(m_mesh);			
-	}
-
-	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		FRACTURE_TRACE("loading Child: {}", node->mChildren[i]->mName.data);
-		ProcessNode(model, node->mChildren[i], scene);
-	}
-}
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma)
 {
@@ -698,7 +740,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 	
 	if (texture->m_data)
 	{
-		GLenum format;
+		GLenum format = GL_RGBA;
 		if (texture->channel == 1)
 			format = GL_RED;
 		else if (texture->channel == 3)
@@ -729,7 +771,7 @@ std::shared_ptr<Fracture::Texture> Fracture::AssetManager::TextureFromFile(const
 
 std::shared_ptr<Fracture::Texture> Fracture::AssetManager::loadTexture(const std::string& name, const std::string& path, Fracture::TextureType texType)
 {
-	std::shared_ptr<Texture> newTex = std::shared_ptr<Texture>(new Texture(name, texType));
+	std::shared_ptr<Texture> newTex = std::make_shared<Texture>(name, texType);
 	newTex->path = path;
 	newTex->m_data = stbi_load(path.c_str(), &newTex->width, &newTex->height, &newTex->channel, 0);
 	if (newTex->m_data)
@@ -828,49 +870,49 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::loadModeAnimati
 
 	clip->m_channels.resize(animation->mNumChannels);
 
-	for (int i = 0; i < animation->mNumChannels; i++)
+	for (unsigned int i = 0; i < animation->mNumChannels; i++)
 	{
 		clip->m_channels[i].Name = animation->mChannels[i]->mNodeName.data;
 		if (animation->mChannels[i]->mNumPositionKeys > 0)
 		{
-			for (int i = 0; i < animation->mChannels[i]->mNumPositionKeys; i++)
+			for (unsigned int J = 0; J < animation->mChannels[i]->mNumPositionKeys; J++)
 			{
 				AnimationKeyframe keyframe;
-				aiVector3D position = animation->mChannels[i]->mPositionKeys[i].mValue;
+				aiVector3D position = animation->mChannels[i]->mPositionKeys[J].mValue;
 				keyframe.Position_key = glm::vec3{ position.x,position.y,position.z };
-				keyframe.Time = animation->mChannels[i]->mPositionKeys[i].mTime;
+				keyframe.Time = animation->mChannels[i]->mPositionKeys[J].mTime;
 				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
 			}
 		}
 		if (animation->mChannels[i]->mNumRotationKeys > 0)
 		{
-			for (int i = 0; i < animation->mChannels[i]->mNumRotationKeys; i++)
+			for (unsigned int J = 0; J < animation->mChannels[i]->mNumRotationKeys; J++)
 			{
 
 				AnimationKeyframe keyframe;
-				aiQuaternion rotation = animation->mChannels[i]->mRotationKeys[i].mValue;
+				aiQuaternion rotation = animation->mChannels[i]->mRotationKeys[J].mValue;
 				keyframe.Rotation_key = glm::quat{ rotation.x,rotation.y,rotation.z,rotation.w };
-				keyframe.Time = animation->mChannels[i]->mRotationKeys[i].mTime;
+				keyframe.Time = animation->mChannels[i]->mRotationKeys[J].mTime;
 				clip->m_channels[i].m_RotationKeys.push_back(keyframe);
 			}
 
 		}
 		if (animation->mChannels[i]->mNumScalingKeys > 0)
 		{
-
-
-			for (int i = 0; i < animation->mChannels[i]->mNumScalingKeys; i++)
+			for (unsigned int J = 0; J < animation->mChannels[i]->mNumScalingKeys; J++)
 			{
 				AnimationKeyframe keyframe;
-				aiVector3D scale = animation->mChannels[i]->mScalingKeys[i].mValue;
-				keyframe.Position_key = glm::vec3{ scale.x,scale.y,scale.z };
-				keyframe.Time = animation->mChannels[i]->mScalingKeys[i].mTime;
-				clip->m_channels[i].m_PositionKeys.push_back(keyframe);
+				aiVector3D scale = animation->mChannels[i]->mScalingKeys[J].mValue;
+				keyframe.Scale_key = glm::vec3{ scale.x,scale.y,scale.z };
+				keyframe.Time = animation->mChannels[i]->mScalingKeys[J].mTime;
+				clip->m_channels[i].m_ScaleKeys.push_back(keyframe);
 			}
 		}
 	}
-	FRACTURE_ERROR("Number of Animations Channels: {}", animation->mNumChannels);
-	
+
+	FRACTURE_ERROR("Name of Animation: {}", animation->mName.data);
+	FRACTURE_ERROR("Duration: {}", animation->mDuration);	
+	FRACTURE_ERROR("FPS: {}", animation->mTicksPerSecond);
 	FRACTURE_ERROR("Number of Animations Channels: {}", clip->m_channels.size());
 
 	return clip;

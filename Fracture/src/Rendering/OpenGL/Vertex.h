@@ -1,0 +1,46 @@
+#pragma once
+#ifndef VERTEX_H
+#define VERTEX_H
+
+#include <glm/glm.hpp>
+
+namespace Fracture
+{
+
+	struct Vertex
+	{
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec2 Uvs;
+		glm::vec3 Tangent;
+		glm::vec3 Bitangent;
+	};
+
+	struct AnimatedVertex
+	{
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec2 Uvs;
+		glm::vec3 Tangent;
+		glm::vec3 Bitangent;
+
+		int IDs[4] = {-1,-1,-1,-1 };
+		float Weights[4] = {0.0f,0.0f,0.0f,0.0f};
+
+		void AddBoneData(uint32_t BoneID, float Weight)
+		{
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (IDs[i] < 0)
+				{
+					IDs[i] = BoneID;
+					Weights[i] = Weight;
+					return;
+				}
+			}
+		}
+	};
+
+}
+
+#endif

@@ -39,6 +39,7 @@ namespace Fracture
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 
 		//Animation
+		bool m_IsAnimated = false;
 		std::vector<std::shared_ptr<AnimationClip>> m_animations;
 		std::shared_ptr<Skeleton> m_Skeleton;
 		

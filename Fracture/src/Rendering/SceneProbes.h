@@ -5,6 +5,8 @@
 #include "ISceneProbe.h"
 #include "Component/ITransform.h"
 #include "Profiling/Profiler.h"
+#include "Component/AnimatorComponent.h"
+
 namespace Fracture
 {
 
@@ -35,10 +37,27 @@ namespace Fracture
 				std::shared_ptr<TransformComponent> m_transformComponent = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
 		
 				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
-				{
-					mRenderer.PushCommand(component->EntityID,component->Color, mesh, material, m_transformComponent->GetWorldTransform());
+				{					
+					DrawCommand command = DrawCommand{};
+					command.VAO = mesh->VAO;
+					command.material = material.get();
+					command.CastShadows = material->CastShadows();
+					command.HasTransparency = material->IsTransparent();
+					command.IsOutlined = material->IsOutlined();
+					command.ID = component->EntityID;
+					command.indiceSize = (GLint)mesh->IndexCount;
+					command.Transform = m_transformComponent->GetWorldTransform();
+					command.Color = component->Color;;
+
+					if (ComponentManager::HasComponent<AnimatorComponent>(component->EntityID))
+					{
+						auto& animator = ComponentManager::GetComponent<AnimatorComponent>(component->EntityID);
+						command.AnimationTransforms = animator->getAnimationTransforms();
+						command.IsAnimated = true;
+					}
+					mRenderer.PushCommand(command);
 				}		
-			}			
+			}					
 		}
 	private:
 		Renderer& mRenderer;

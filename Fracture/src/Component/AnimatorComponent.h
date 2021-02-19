@@ -4,6 +4,7 @@
 
 #include "Component.h"
 #include <map>
+#include <vector>
 
 namespace Fracture
 {
@@ -42,12 +43,17 @@ namespace Fracture
 			return std::shared_ptr<AnimatorComponent>(this->clone_impl(entityID));
 		}
 
+		std::vector<glm::mat4> getAnimationTransforms();	
+		void resizeTransforms();
+		void pushTransform();
+
 		std::shared_ptr<Skeleton> m_skeleton;
 		std::map<std::string, std::shared_ptr<AnimationClip>> m_animations;
 		std::shared_ptr<AnimationClip> m_CurrentAnimation;
 		std::vector<glm::mat4> m_Transforms;
 
 	private:
+
 		virtual AnimatorComponent* clone_impl(uint32_t entityID) const override
 		{
 			return new AnimatorComponent(*this, entityID);

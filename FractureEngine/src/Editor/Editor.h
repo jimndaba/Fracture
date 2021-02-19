@@ -56,7 +56,6 @@ namespace Fracture
 
 		std::shared_ptr<Logger> GetLogger();
 		std::shared_ptr<ProjectProperties> Properties();
-		std::shared_ptr<AssetManager> GetAssetManager();
 
 		static std::shared_ptr<EditorFrameGraph> m_graph; //TODO rename or hide
 	private:
@@ -71,14 +70,14 @@ namespace Fracture
 		std::shared_ptr<Logger> m_logger;
 		std::unique_ptr<Profiler> m_Profiler;
 		std::shared_ptr<Renderer> m_Renderer;
-		std::unique_ptr<GameWindow> m_window;
+		std::shared_ptr<GameWindow> m_window;
 		std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
 		std::unique_ptr<AnimationManager> m_AnimationManger;
 		
 		std::unique_ptr<PhysicsManager> m_PhysicsManger;
-		std::shared_ptr<AssetManager> m_AssetManger;
+		std::unique_ptr<AssetManager> m_AssetManger;
 		std::shared_ptr<ScriptManager> m_ScriptManger;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::unique_ptr<EntityFactory> m_EntityFactory;

@@ -59,7 +59,8 @@ void Fracture::ViewPanel::render()
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 	
-	ImGui::Image(reinterpret_cast<void*>(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
+
+	ImGui::Image((ImTextureID)(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
 		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	ImGui::SetCursorPos(ImVec2{10,10});
@@ -203,9 +204,9 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
 	{		
-		m_renderer->SceneRenderTarget->Resize(m_ViewportSize.x, m_ViewportSize.y);
-		m_renderer->setViewport(m_ViewportSize.x, m_ViewportSize.y);	
-		Editor::m_graph->Resize(m_ViewportSize.x, m_ViewportSize.y);
+		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 		//TestGraph::Resize(m_ViewportSize.x, m_ViewportSize.y);	
 	}
 

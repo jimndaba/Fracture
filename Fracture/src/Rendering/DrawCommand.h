@@ -25,16 +25,23 @@ namespace Fracture
 
 		}
 
-		uint32_t ID;
-		uint32_t VAO;
-		float ViewDepth;
-		int HasTransparency;
-		bool IsOutlined;
-		bool CastShadows;
-		GLint indiceSize;
-		Material* material;
-		glm::mat4 Transform;
-		glm::vec4 Color;
+		uint32_t ID = 0;
+		uint32_t VAO = 0;
+		float ViewDepth = 0;
+
+		int HasTransparency = 0;
+		bool IsOutlined = false;
+		bool CastShadows = true;
+		bool IsAnimated = false;
+
+		GLint indiceSize = 0;
+		Material* material = nullptr;
+		glm::mat4 Transform = glm::mat4(1.0f);
+		glm::vec4 Color = glm::vec4(1.0f);	
+		std::vector<glm::mat4> AnimationTransforms;
+		//animation
+
+
 		std::vector<std::string> TextureNames;
 
 		bool operator < (const DrawCommand& other) const

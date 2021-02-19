@@ -69,11 +69,6 @@ namespace Fracture
 		std::string MaterialName;
 		unsigned int MaterialIndex;
 
-		//temp
-		glm::vec3 position;
-		glm::vec3 scale;
-		glm::vec3 rotation;
-
 
 		std::vector<unsigned int> GetIndices()
 		{

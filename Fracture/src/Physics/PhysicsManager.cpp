@@ -26,7 +26,8 @@ btAlignedObjectArray<btCollisionShape*> Fracture::PhysicsManager::collisionShape
 std::vector<int> Fracture::PhysicsManager::rigid_ids;
 std::vector<int> Fracture::PhysicsManager::collision_ids;
 
-Fracture::PhysicsManager::PhysicsManager()
+Fracture::PhysicsManager::PhysicsManager():
+	m_debug(new PhysicsDebugDraw())
 {
 
 	
@@ -34,15 +35,8 @@ Fracture::PhysicsManager::PhysicsManager()
 
 Fracture::PhysicsManager::~PhysicsManager()
 {
+	//delete dynamicsWorld;
 
-
-	ClearScene();
-
-	delete collisionConfiguration;
-	delete dispatcher;
-	delete overlappingPairCache;
-	delete solver;
-	delete dynamicsWorld;
 }
 
 void Fracture::PhysicsManager::Init()
@@ -65,7 +59,7 @@ void Fracture::PhysicsManager::Init()
 
 	dynamicsWorld->setGravity(m_gravity);
 
-	m_debug = new PhysicsDebugDraw();
+	
 	dynamicsWorld->setDebugDrawer(m_debug);
 
 	
@@ -254,6 +248,18 @@ void Fracture::PhysicsManager::stepUpdate()
 {
 	dynamicsWorld->updateAabbs();
 	dynamicsWorld->computeOverlappingPairs();
+}
+
+void Fracture::PhysicsManager::onShutdown()
+{
+	ClearScene();
+
+	delete collisionConfiguration;
+	delete dispatcher;
+	delete overlappingPairCache;
+	delete solver;
+	delete m_debug;
+	//delete dynamicsWorld;
 }
 
 void Fracture::PhysicsManager::DrawDebug()

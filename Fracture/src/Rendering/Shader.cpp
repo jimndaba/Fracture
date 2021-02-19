@@ -229,8 +229,8 @@ unsigned int Fracture::Shader::createShaderFromFile(const std::string& vertexPat
 
     // 2. compile shaders
     unsigned int vertex, fragment;
-    int success;
-    char infoLog[512];
+    //int success;
+    //char infoLog[512];
 
     // vertex Shader
     vertex = glCreateShader(GL_VERTEX_SHADER);

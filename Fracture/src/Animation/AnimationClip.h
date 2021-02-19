@@ -35,9 +35,10 @@ namespace Fracture
 	{
 	public:
 		//Name of Animation similar to Name of Bone
-		std::string Name;
-		int NumberOfFrames;
-		float FramesPerSec;
+		std::string Name = std::string{};
+		int NumberOfFrames = 0;
+		float FramesPerSec = 0.0f;
+		float AnimationTime = 0.0f;
 		std::vector<AnimationChannel> m_channels;
 	};
 
