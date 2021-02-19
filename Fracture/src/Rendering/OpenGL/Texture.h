@@ -12,6 +12,7 @@ namespace Fracture
 	enum class TextureFormat;
 	enum class glType;
 	enum class glWrap;
+	enum class FormatType;
 
 	class Texture
 	{

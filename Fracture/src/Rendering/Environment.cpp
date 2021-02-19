@@ -3,21 +3,20 @@
 #include "OpenGL/FrameBuffer.h"
 #include "OpenGL/RenderBuffer.h"
 #include "OpenGL/OpenGLBase.h"
-#include "Texture.h"
+#include "OpenGL/Texture2D.h"
+#include "OpenGL/TextureCubeMap.h"
 #include "Shader.h"
 #include "AssetManager/AssetManager.h"
 #include "Model.h"
 
 
-Fracture::Environment::Environment(std::shared_ptr<Texture> environment, std::shared_ptr<Shader> mshader):
+Fracture::Environment::Environment(std::shared_ptr<Texture2D> environment, std::shared_ptr<Shader> mshader):
     m_enviroment(environment),
     shader(mshader),
     m_irradiance(AssetManager::getShader("irradiance")),
     m_prefilter(AssetManager::getShader("prefilter")),
-    m_bdrf(AssetManager::getShader("bdrf")),
-    m_bdrfTexture(std::make_shared<Texture>(TextureType::Environment))
-{
-     
+    m_bdrf(AssetManager::getShader("bdrf"))
+{     
     m_CaptureTarget = RenderTarget::CreateRenderTarget("EnvironmentCapture");
     m_CaptureTarget->GetBuffer()->AddRenderBuffer("EnvironmentBuffer",glAttachmentType::Depth, RenderBuffer::CreateBuffer(InternalFormat::DepthComponent24,512,512));
 
@@ -56,21 +55,23 @@ void Fracture::Environment::Render(std::shared_ptr<Shader> mshader, glm::mat4 vi
 
 void Fracture::Environment::CreateCubeMaptexture()
 {
-    glGenTextures(1, &envCubemap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-    for (unsigned int i = 0; i < 6; ++i)
-    {
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
-    }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glGenTextures(1, &envCubemap);
+    //glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+    //
+    m_CubeMap = TextureCubeMap::CreateTexture(InternalFormat::RGBA16, TextureFormat::RGB, 512, 512, glWrap::ClampToEdge, FormatType::Float);
 
+    //for (unsigned int i = 0; i < 6; ++i)
+    //{
+    //    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
+    //}
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //
     // then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
-    glGenTextures(1, &irradianceMap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+  
 }
 
 void Fracture::Environment::SetupMatricies()
@@ -110,6 +111,8 @@ void Fracture::Environment::ConvertHDRtoCubeMap()
 
 void Fracture::Environment::CreateIrradianceMap()
 {
+    glGenTextures(1, &irradianceMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
     for (unsigned int i = 0; i < 6; ++i)
     {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
@@ -190,7 +193,7 @@ void Fracture::Environment::CreatePreFilterMap()
 void Fracture::Environment::CreateBDRF()
 {
     // pre-allocate enough memory for the LUT texture.
-    glBindTexture(GL_TEXTURE_2D, m_bdrfTexture->id);
+    glBindTexture(GL_TEXTURE_2D, m_bdrfTexture->GetTextureID());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
     // be sure to set wrapping mode to GL_CLAMP_TO_EDGE
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -201,7 +204,7 @@ void Fracture::Environment::CreateBDRF()
     // then re-configure capture framebuffer object and render screen-space quad with BRDF shader.
     m_CaptureTarget->bind();
     m_CaptureTarget->GetBuffer()->GetRenderBuffer("EnvironmentBuffer")->Resize(512, 512);
-    m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, glAttachmentTarget::Texture2D, m_bdrfTexture->id);
+    m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, glAttachmentTarget::Texture2D, m_bdrfTexture->GetTextureID());
     glViewport(0, 0, 512, 512);
     m_bdrf->use();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

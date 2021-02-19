@@ -15,7 +15,8 @@ namespace Fracture
 
 	class RenderTarget;
 	class FrameBuffer;
-	class Texture;
+	class Texture2D;
+	class TextureCubeMap;
 	class Model;
 	class Shader;
 
@@ -23,13 +24,10 @@ namespace Fracture
 	{
 
 	public: 
-		Environment(std::shared_ptr<Texture> environment, std::shared_ptr<Shader> shader);
+		Environment(std::shared_ptr<Texture2D> environment, std::shared_ptr<Shader> shader);
 		~Environment();
 
-		unsigned int captureFBO;
-		unsigned int captureRBO;
 		unsigned int envCubemap;
-
 		unsigned int irradianceMap;
 		unsigned int prefilterMap;
 		unsigned int brdfLUTTexture;
@@ -40,8 +38,11 @@ namespace Fracture
 		std::shared_ptr<Shader> m_prefilter;
 		std::shared_ptr<Shader> m_bdrf;
 
-		std::shared_ptr<Texture> m_enviroment;
-		std::shared_ptr<Texture> m_bdrfTexture;
+		std::shared_ptr<Texture2D> m_enviroment;
+		std::shared_ptr<Texture2D> m_IrradianceMap;
+		std::shared_ptr<Texture2D> m_PrefilterMap;
+		std::shared_ptr<TextureCubeMap> m_CubeMap;
+		std::shared_ptr<Texture2D> m_bdrfTexture;
 
 		void Render(std::shared_ptr<Shader> shader, glm::mat4 view, glm::mat4 projection);
 	private:
