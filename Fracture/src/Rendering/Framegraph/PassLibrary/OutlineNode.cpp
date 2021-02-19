@@ -8,6 +8,7 @@
 #include "Rendering/RenderBatch.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 
 Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, const int& height, RenderBucket* bucket):
 	RenderQueueNode(name),
@@ -17,7 +18,8 @@ Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, co
 		
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outline_out");
 
-	out_resource = std::make_shared<RenderTarget>("outline_out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, true);
+	out_resource = RenderTarget::CreateRenderTarget("outline_out",width, height, glAttachmentTarget::Texture2D,FormatType::Float, 1, true);
+		
 	AcceptBucket(bucket);
 
 	//Sockets

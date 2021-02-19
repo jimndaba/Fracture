@@ -1,9 +1,9 @@
 #include "Mesh.h"
 #include "OpenGL/Vertex.h"
-#include "Texture.h"
+#include "OpenGL/Texture2D.h"
 #include <GLAD/glad.h>
 
-Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures, bool IsAnimated)
+Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures, bool IsAnimated)
     :m_StaticVertices(vertices), m_indices(indices), m_textures(textures),m_IsAnimated(IsAnimated)
 {    
    //setupMesh();
@@ -40,7 +40,7 @@ Fracture::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
     IndexCount = (unsigned int)m_indices.size();
 }
 
-Fracture::Mesh::Mesh(std::vector<AnimatedVertex> animated_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures, bool IsAnimated)
+Fracture::Mesh::Mesh(std::vector<AnimatedVertex> animated_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures, bool IsAnimated)
     : m_AnimatedVertices(animated_vertices), m_indices(indices), m_textures(textures), m_IsAnimated(IsAnimated)
 {
     //setupMesh();

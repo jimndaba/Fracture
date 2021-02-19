@@ -1,7 +1,13 @@
 #include "TextureCubeMap.h"
 #include "OpenGLBase.h"
 
-Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap,FormatType formatType) :Texture()
+Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap,FormatType formatType) :Texture(),
+m_Width(width),
+m_Height(height),
+m_Format(format),
+m_TextureWrap(wrap),
+m_FormatType(formatType),
+m_InternalFormat(internalformat)
 {
 	glGenTextures(1, &m_TextureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
@@ -18,6 +24,13 @@ Fracture::TextureCubeMap::TextureCubeMap(InternalFormat internalformat,TextureFo
 }
 
 Fracture::TextureCubeMap::TextureCubeMap(void* data,InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType):Texture(),
+m_Width(width),
+m_Height(height),
+m_Format(format),
+m_TextureWrap(wrap),
+m_data(data),
+m_FormatType(formatType),
+m_InternalFormat(internalformat)
 {
 	glGenTextures(1, &m_TextureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);

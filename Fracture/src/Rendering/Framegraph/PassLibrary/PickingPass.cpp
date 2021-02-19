@@ -8,6 +8,8 @@
 #include "Entity/ILight.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "../../Renderer.h"
 #include "Component/ICamera.h"
 
@@ -19,7 +21,8 @@ Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,cons
 	SCREEN_HEIGHT(height),
 	m_pixelInfo(std::make_shared<PixelInfo>())
 {
-	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget("PickingPass",SCREEN_WIDTH, SCREEN_HEIGHT, TextureTarget::Texture2D, GL_FLOAT, 1,false));
+	m_renderTarget = RenderTarget::CreateRenderTarget("PickingPass", SCREEN_WIDTH, SCREEN_HEIGHT, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	
 	AcceptBucket(opaque);	
 }
 
@@ -32,7 +35,7 @@ void Fracture::PickingPass::execute(Renderer& renderer)
 	renderer.setViewport(renderer.Width(), renderer.Height());
 	glDisable(GL_DITHER);
 	int clearValue = -1;
-	glClearTexImage(m_renderTarget->GetColorTexture(0)->id, 0, GL_RGBA, GL_UNSIGNED_BYTE, &clearValue);
+	glClearTexImage(m_renderTarget->GetColorTexture(0)->GetTextureID(), 0, GL_RGBA, GL_UNSIGNED_BYTE, &clearValue);
 
 	for (auto& bucket : m_buckets)
 	{		

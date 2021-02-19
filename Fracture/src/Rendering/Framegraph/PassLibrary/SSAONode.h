@@ -7,7 +7,7 @@
 namespace Fracture
 {
 	class Shader;
-	class Texture;
+	class Texture2D;
 	class RenderTarget;
 	class FrameResource;
 
@@ -26,7 +26,7 @@ namespace Fracture
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<Shader> m_blurshader;
-		std::shared_ptr<Texture> m_noiseTexture;;
+		std::shared_ptr<Texture2D> m_noiseTexture;;
 		std::shared_ptr<FrameResource> resource;
 		std::shared_ptr<FrameResource> ssao;
 		std::shared_ptr<FrameResource> outputTexture;

@@ -1,5 +1,6 @@
 #include "ShadowPass.h"
 #include "RenderTarget.h"
+#include "OpenGL/OpenGLBase.h"
 #include "DrawCommand.h"
 #include "RenderBucket.h"
 #include "RenderBatch.h"
@@ -14,7 +15,7 @@
 
 Fracture::ShadowPass::ShadowPass()
 {
-	m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget("Direct Shadow",SHADOW_WIDTH, SHADOW_HEIGHT,TextureTarget::Texture2D, GL_FLOAT, 1, true));
+	m_renderTarget = RenderTarget::CreateRenderTarget("ShadowPass",SHADOW_WIDTH,SHADOW_HEIGHT,glAttachmentTarget::Texture2D,FormatType::Float,1,true);
 }
 
 Fracture::ShadowPass::~ShadowPass()

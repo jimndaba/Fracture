@@ -3,7 +3,8 @@
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Renderer.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Profiling/Profiler.h"
 
 Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, const int& height) :
@@ -14,11 +15,15 @@ Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, co
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("colorTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("blurOutput");
 
-	outputTexture = std::make_shared<RenderTarget>("BoxBlur_out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	//outputTexture = std::make_shared<RenderTarget>("BoxBlur_out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+
+	outputTexture = RenderTarget::CreateRenderTarget("BoxBlur_out", width, height, glAttachmentTarget::Texture2D,FormatType::Float, 1, false);
 
 	for (int i = 0; i < 2; i++)
 	{
-		m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width/8, height/8, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+		//m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width/8, height/8, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+
+		m_blurPasses[i] = RenderTarget::CreateRenderTarget("blurPass" + i, width / 8, height / 8, glAttachmentTarget::Texture2D,FormatType::Float, 1, false);
 		m_blurPasses[i]->SetResizable(false);
 		AddResource("blurPass" + i, m_blurPasses[i]);
 	}
@@ -49,8 +54,8 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 	
 		if (first_iteration)
 		{
-			uint32_t srcWidth = resources["colorTexture"]->GetColorTexture(0)->width;
-			uint32_t srcHeight = resources["colorTexture"]->GetColorTexture(0)->height;
+			uint32_t srcWidth = resources["colorTexture"]->GetColorTexture(0)->GetWidth();
+			uint32_t srcHeight = resources["colorTexture"]->GetColorTexture(0)->GetHeight();
 			uint32_t dstWidth = m_blurPasses[horizontal]->Width;
 			uint32_t dstHeight = m_blurPasses[horizontal]->Height;
 
@@ -74,12 +79,12 @@ void Fracture::BoxBlurNode::execute(Renderer& renderer)
 	}
 	m_shader->unbind();
 
-	renderer.setViewport(resources["blurOutput"]->GetColorTexture(0)->width, resources["blurOutput"]->GetColorTexture(0)->height);
+	renderer.setViewport(resources["blurOutput"]->GetColorTexture(0)->GetWidth(), resources["blurOutput"]->GetColorTexture(0)->GetHeight());
 	{
-		uint32_t srcWidth = m_blurPasses[!horizontal]->GetColorTexture(0)->width;
-		uint32_t srcHeight = m_blurPasses[!horizontal]->GetColorTexture(0)->height;
-		uint32_t dstWidth = resources["blurOutput"]->GetColorTexture(0)->width;
-		uint32_t dstHeight = resources["blurOutput"]->GetColorTexture(0)->height;
+		uint32_t srcWidth = m_blurPasses[!horizontal]->GetColorTexture(0)->GetWidth();
+		uint32_t srcHeight = m_blurPasses[!horizontal]->GetColorTexture(0)->GetHeight();
+		uint32_t dstWidth = resources["blurOutput"]->GetColorTexture(0)->GetWidth();
+		uint32_t dstHeight = resources["blurOutput"]->GetColorTexture(0)->GetHeight();
 
 		resources["blurOutput"]->blit(m_blurPasses[!horizontal]->GetBuffer(),srcWidth, srcHeight, dstWidth, dstHeight);
 

@@ -3,7 +3,8 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Profiling/Profiler.h"
 
 Fracture::MultiplyMixNode::MultiplyMixNode(const std::string& name,const int& width,const int& height):
@@ -15,9 +16,7 @@ Fracture::MultiplyMixNode::MultiplyMixNode(const std::string& name,const int& wi
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("output");
 
-	outputColor = std::make_shared<RenderTarget>("Multiply_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-
-	
+	outputColor = RenderTarget::CreateRenderTarget("Multiply_out",width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	//Sockets
 	AddInputSocket(m_InputA);

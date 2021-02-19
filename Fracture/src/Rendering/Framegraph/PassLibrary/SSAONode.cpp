@@ -4,7 +4,8 @@
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Renderer.h"
 #include "Component/ICamera.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Profiling/Profiler.h"
 #include <random>
 
@@ -17,8 +18,9 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("SSAOOutput");
 
-	ssao = std::make_shared<RenderTarget>("ssaopass", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-	outputTexture = std::make_shared<RenderTarget>("SSAO_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	ssao = RenderTarget::CreateRenderTarget("ssaopass",width,height,glAttachmentTarget::Texture2D,FormatType::Float,1,false);
+
+	outputTexture = RenderTarget::CreateRenderTarget("SSAO_out",width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	AddResource("ssaopass",ssao);
 	
@@ -34,7 +36,9 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
 	std::default_random_engine generator;	
 	std::vector<glm::vec3> ssaoNoise;
+
 	unsigned int noise_res = 16;
+
 	for (unsigned int i = 0; i < noise_res; i++)
 	{
 		glm::vec3 noise(
@@ -44,7 +48,9 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 		ssaoNoise.push_back(noise);
 	}
 	
-	m_noiseTexture = std::shared_ptr<Texture>(new Texture("ssao_noise", 4, 4, TextureType::Diffuse, &ssaoNoise[0]));
+	m_noiseTexture = Texture2D::CreateTexture(&ssaoNoise[0], InternalFormat::RGBA16,TextureFormat::RGB, 4, 4, glWrap::ClampToEdge, FormatType::Float);
+
+	//m_noiseTexture = std::shared_ptr<Texture>(new Texture("ssao_noise", 4, 4, TextureType::Diffuse, &ssaoNoise[0]));
 	
 }
 

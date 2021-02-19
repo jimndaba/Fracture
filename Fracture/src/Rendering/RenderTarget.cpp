@@ -1,7 +1,9 @@
 #include "RenderTarget.h"
-#include "Texture.h"
+#include "OpenGL/Texture.h"
+#include "OpenGL/Texture2D.h"
+#include "OpenGL/Texture2DMultiSample.h"
+#include "OpenGL/TextureCubeMap.h"
 #include "Logging/Logger.h"
-#include <iostream>
 #include "Renderer.h"
 #include "OpenGL/OpenGLBase.h"
 #include "OpenGL/FrameBuffer.h"
@@ -11,60 +13,66 @@ Fracture::RenderTarget::RenderTarget(const std::string& name):
     m_name(name),
     m_framebuffer(FrameBuffer::CreateBuffer())
 {
-
 }
 
-Fracture::RenderTarget::RenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
+Fracture::RenderTarget::RenderTarget(const std::string& name, unsigned int width, unsigned int height, glAttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments, bool depthAndStencil)
 :m_name(name),
 m_framebuffer(FrameBuffer::CreateBuffer()),
 Width(width),
 Height(height),
-Type(type),
+m_Type(type),
 HasDepthAndStencil(depthAndStencil)
-{      
-    m_framebuffer->bind();
+{   
+    m_framebuffer->bind();    
+
     for (unsigned int i = 0; i < nrColorAttachments; ++i)
     {
-        GLenum internalFormat = GL_RGBA;
-        if (type == GL_HALF_FLOAT)
-            internalFormat = GL_RGBA16F;
-        else if (type == GL_FLOAT)
-            internalFormat = GL_RGBA32F;
+  
+        InternalFormat internalFormat = InternalFormat::RGBA;
+        if (type == FormatType::Half_Float)
+            internalFormat =InternalFormat::RedGreen16;
+        else if (type == FormatType::Float)
+            internalFormat = InternalFormat::RGBA32;
 
-        std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(new Texture("cAttachment" + i, width, height, texturetarget, internalFormat, GL_RGBA, GL_FLOAT, TextureType::ColorAttachment));
+        if (texturetarget == glAttachmentTarget::Texture2D)
+        {
+            std::shared_ptr<Texture2D> texture = Texture2D::CreateTexture(internalFormat,TextureFormat::RGBA,width,height,glWrap::ClampToEdge,type);
 
-        if (texturetarget == TextureTarget::Texture2D)
-        {
-            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::Texture2D, texture->id);
+            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::Texture2D, texture->GetTextureID());
+
+            m_ColorAttachments.push_back(texture);
         }
-        if (texturetarget == TextureTarget::MultiSample)
+        if (texturetarget == glAttachmentTarget::MULTISAMPLE)
         {
-            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::MULTISAMPLE, texture->id);
-        }
-      
-        m_ColorAttachments.push_back(texture);
+            std::shared_ptr<Texture2DMultiSample> texture = Texture2DMultiSample::CreateTexture(internalFormat,4, width, height);
+            m_framebuffer->AddAttachment(glAttachmentType::Color, i, glAttachmentTarget::MULTISAMPLE, texture->GetTextureID());
+            m_ColorAttachments.push_back(texture);
+        }      
+       
     }
 
-    if (depthAndStencil && texturetarget == TextureTarget::Texture2D)
-    {           
-        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));  
-        m_framebuffer->AddAttachment(glAttachmentType::DepthStencil,glAttachmentTarget::Texture2D, dtexture->id);
-        m_DepthStencil = dtexture;
+    if (depthAndStencil && texturetarget == glAttachmentTarget::Texture2D)
+    {       
+        std::shared_ptr<Texture2D> texture = Texture2D::CreateTexture(InternalFormat::Depth24Stencil8, TextureFormat::DepthStencil, width, height, glWrap::ClampToEdge, FormatType::UInt24_8);
+
+        m_framebuffer->AddAttachment(glAttachmentType::DepthStencil,glAttachmentTarget::Texture2D, texture->GetTextureID());
+        m_DepthStencil = texture;
     }
 
-    if (depthAndStencil && texturetarget == TextureTarget::MultiSample)
+    if (depthAndStencil && texturetarget == glAttachmentTarget::MULTISAMPLE)
     {
         m_framebuffer->AddRenderBuffer(name,glAttachmentType::DepthStencil, RenderBuffer::CreateBuffer(4, InternalFormat::Depth24Stencil8, width, height));
     }
 
-    if (depthAndStencil && texturetarget == TextureTarget::CubeMap)
+    if (depthAndStencil && texturetarget == glAttachmentTarget::CubeMapPosX)
     {
-        m_framebuffer->bind();
-        std::shared_ptr<Texture> dtexture = std::shared_ptr<Texture>(new Texture("cDepthStencil", width, height,TextureTarget::CubeMap, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, TextureType::DepthStencilAttachment));
-        m_DepthStencil = dtexture;
-        m_framebuffer->AddAttachment(glAttachmentType::Depth, dtexture->id);
+        std::shared_ptr<TextureCubeMap> texture = TextureCubeMap::CreateTexture(InternalFormat::Depth24Stencil8, TextureFormat::DepthStencil, width, height, glWrap::ClampToEdge, FormatType::UInt24_8);
+
+        m_framebuffer->AddAttachment(glAttachmentType::Depth, texture->GetTextureID());
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
+
+        m_DepthStencil = texture;
     }
 
     m_framebuffer->unbind();
@@ -130,10 +138,6 @@ void Fracture::RenderTarget::Resize(unsigned int width, unsigned int height)
     }
 }
 
-void Fracture::RenderTarget::SetTarget(GLenum target)
-{
- 
-}
 
 void Fracture::RenderTarget::SetMultiSampled(bool value)
 {
@@ -155,7 +159,7 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarg
     return std::make_shared<RenderTarget>(name);
 }
 
-std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type, unsigned int nrColorAttachments, bool depthAndStencil)
+std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, glAttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false)
 {
     return std::make_shared<RenderTarget>(name,width,height,texturetarget,type,nrColorAttachments,depthAndStencil);
 }

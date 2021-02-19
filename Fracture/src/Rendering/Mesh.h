@@ -12,7 +12,7 @@ namespace Fracture
 {
 	struct Vertex;
 	struct AnimatedVertex;
-	class Texture;
+	class Texture2D;
 	class VertexArray;
 	class VertexBuffer;
 	class IndexBuffer;
@@ -57,8 +57,8 @@ namespace Fracture
 	{
 
 	public:
-		Mesh(std::vector<Vertex> static_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures,bool IsAnimated = false);
-		Mesh(std::vector<AnimatedVertex> animated_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures, bool IsAnimated = true);
+		Mesh(std::vector<Vertex> static_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures,bool IsAnimated = false);
+		Mesh(std::vector<AnimatedVertex> animated_vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures, bool IsAnimated = true);
 		~Mesh();
 
 		std::string director;		
@@ -75,7 +75,7 @@ namespace Fracture
 			return m_indices;
 		}
 
-		std::vector<std::shared_ptr<Texture>> Textures()
+		std::vector<std::shared_ptr<Texture2D>> Textures()
 		{
 			return m_textures;
 		}
@@ -91,7 +91,7 @@ namespace Fracture
 		std::vector<Submesh> m_submeshes;
 		std::vector<Vertex> m_StaticVertices;
 		std::vector<AnimatedVertex> m_AnimatedVertices;
-		std::vector<std::shared_ptr<Texture>> m_textures;
+		std::vector<std::shared_ptr<Texture2D>> m_textures;
 		std::vector<unsigned int> m_indices;
 		std::shared_ptr<BoundingBox> m_bounds;
 

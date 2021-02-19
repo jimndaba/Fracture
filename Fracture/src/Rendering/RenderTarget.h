@@ -5,8 +5,8 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include "GLAD/glad.h"
 #include "glm/glm.hpp"
+#include <iostream>
 #include "FrameGraph/FrameResource.h"
 #include "Bindable.h"
 
@@ -14,8 +14,10 @@ namespace Fracture
 {
 
 	class Texture;
-	enum class TextureTarget;
+	class Texture2D;
+	enum class glAttachmentTarget;
 	class FrameBuffer;
+	enum class FormatType;
 
 
 	class RenderTarget : public Bindable,public FrameResource
@@ -23,12 +25,12 @@ namespace Fracture
 
 	public:
 		RenderTarget(const std::string& name);
-		RenderTarget(const std::string& name,unsigned int width, unsigned int height, TextureTarget texturetarget,GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
+		RenderTarget(const std::string& name,unsigned int width, unsigned int height, glAttachmentTarget texturetarget,FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 		~RenderTarget();
 		
 		unsigned int Width;
 		unsigned int Height;
-		GLenum       Type;
+		FormatType m_Type;
 	
 		bool HasRenderBuffer;
 		bool HasDepthAndStencil;
@@ -44,8 +46,6 @@ namespace Fracture
 		void Unbind();
 
 		void Resize(unsigned int width, unsigned int height);
-		void SetTarget(GLenum target);
-
 		
 		bool IsMultiSampled() override;
 		bool IsResizable() override;
@@ -54,7 +54,7 @@ namespace Fracture
 		void SetResizable(bool value)override;
 		
 		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name);
-		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, TextureTarget texturetarget, GLenum type = GL_UNSIGNED_BYTE, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
+		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, glAttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 
 	private:		
 		std::shared_ptr<FrameBuffer> m_framebuffer;

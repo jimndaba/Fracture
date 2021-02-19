@@ -2,7 +2,8 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Renderer.h"
 
 Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& width, const int& height) :
@@ -14,8 +15,7 @@ Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& w
 	m_Input = std::make_shared<InputSocket>("buffer");
 	m_output = std::make_shared<OutputSocket>("colorOut");
 
-
-	colorOut = std::make_shared<RenderTarget>("ToneMap_ColorOut",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	colorOut = RenderTarget::CreateRenderTarget("ToneMap_ColorOut", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	m_toneShader = AssetManager::getShader("ToneMap");
 	//Sockets

@@ -230,7 +230,6 @@
     <ClCompile Include="src\Rendering\RenderTarget.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\ShadowPass.cpp" />
-    <ClCompile Include="src\Rendering\OpenGL\Texture.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scripting\GameLogic.cpp" />
@@ -270,6 +269,7 @@
     <ClInclude Include="src\Input\IInputState.h" />
     <ClInclude Include="src\Input\MouseState.h" />
     <ClInclude Include="src\Rendering\Bindable.h" />
+    <ClInclude Include="src\Rendering\OpenGL\BufferLayout.h" />
     <ClInclude Include="src\Rendering\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameGraph.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameNode.h" />
@@ -295,11 +295,16 @@
     <ClInclude Include="src\Rendering\Framegraph\SourceNode.h" />
     <ClInclude Include="src\Rendering\DrawCommand.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PickingPass.h" />
+    <ClInclude Include="src\Rendering\OpenGL\IndexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLBase.h" />
     <ClInclude Include="src\Rendering\OpenGL\RenderBuffer.h" />
+    <ClInclude Include="src\Rendering\OpenGL\SkeletalMesh.h" />
+    <ClInclude Include="src\Rendering\OpenGL\StaticMesh.h" />
     <ClInclude Include="src\Rendering\OpenGL\Texture2D.h" />
     <ClInclude Include="src\Rendering\OpenGL\Texture2DMultiSample.h" />
     <ClInclude Include="src\Rendering\OpenGL\TextureCubeMap.h" />
+    <ClInclude Include="src\Rendering\OpenGL\VertexArray.h" />
+    <ClInclude Include="src\Rendering\OpenGL\VertexBuffer.h" />
     <ClInclude Include="src\Rendering\SceneProbes.h" />
     <ClInclude Include="src\Entity\EntityFactory.h" />
     <ClInclude Include="src\Math\Math.h" />

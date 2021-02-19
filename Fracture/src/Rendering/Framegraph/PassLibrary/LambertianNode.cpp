@@ -2,6 +2,7 @@
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
 #include "Rendering/RenderTarget.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
 #include "Rendering/RenderBatch.h"
@@ -19,7 +20,10 @@ Fracture::LambertianNode::LambertianNode(const std::string& name,const int& widt
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputColor");
 
-	outputColor = std::make_shared<RenderTarget>("Lambertian_out",width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
+	//outputColor = std::make_shared<RenderTarget>("Lambertian_out",width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
+	
+	outputColor = RenderTarget::CreateRenderTarget("Lambertian_out", width, height,glAttachmentTarget::Texture2D, FormatType::Float, 1, true);
+	
 	AcceptBucket(opaque);
 
 	//Sockets

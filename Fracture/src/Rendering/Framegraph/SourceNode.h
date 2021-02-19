@@ -4,10 +4,10 @@
 
 #include "FrameNode.h"
 #include "OutputSocket.h"
-#include "GLAD/glad.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
+#include "Rendering/OpenGL/Texture2D.h"
 #include "AssetManager/AssetManager.h"
 #include "FullscreenNode.h"
 #include "Rendering/Renderer.h"
@@ -59,12 +59,13 @@ namespace Fracture
 			std::shared_ptr<InputSocket> m_input = std::make_shared<InputSocket>("rendertarget");
 
 			m_shader = AssetManager::getShader("ColorMap");
-			colorIn = std::make_shared<RenderTarget>("Sink_Color_In",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
-			outputColor = std::make_shared<RenderTarget>("Sink_Color_Out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+			
+			colorIn = RenderTarget::CreateRenderTarget("Sink_Color_In",width, height,glAttachmentTarget::Texture2D,FormatType::Float, 1, false);	
+			
+			outputColor = RenderTarget::CreateRenderTarget("Sink_Color_In", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 			AddInputSocket(m_input);
 			AddInputResource(m_input,colorIn);
-
 			AddResource("OutputRender", outputColor);
 	
 		}
@@ -81,6 +82,7 @@ namespace Fracture
 			m_shader->unbind();
 			resources["OutputRender"]->Unbind();
 		}
+		
 		std::shared_ptr<RenderTarget> outputColor;
 	private:
 		std::shared_ptr<Shader> m_shader;

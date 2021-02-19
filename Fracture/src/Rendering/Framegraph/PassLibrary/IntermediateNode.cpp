@@ -2,7 +2,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Renderer.h"
 
 Fracture::IntermediateNode::IntermediateNode(const std::string& name,const uint32_t& width,const uint32_t& height):
@@ -13,7 +13,9 @@ Fracture::IntermediateNode::IntermediateNode(const std::string& name,const uint3
 	auto m_Input = std::make_shared<InputSocket>("inputbuffer");
 	auto m_output = std::make_shared<OutputSocket>("OutTexture");
 
-	colorOut = std::make_shared<RenderTarget>("blit_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+	//colorOut = std::make_shared<RenderTarget>("blit_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
+
+	colorOut = RenderTarget::CreateRenderTarget("blit_out", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	//Sockets
 	AddInputSocket(m_Input);	

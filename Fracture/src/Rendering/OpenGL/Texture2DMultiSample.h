@@ -10,8 +10,7 @@ namespace Fracture
 	class Texture2DMultiSample : public Texture
 	{
 	public:
-		Texture2DMultiSample(InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);
-		Texture2DMultiSample(void* data, InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);
+		Texture2DMultiSample(InternalFormat internalformat, uint32_t noSamples, uint32_t width, uint32_t height);
 
 		void bind()const;
 		void unbind()const;
@@ -24,11 +23,11 @@ namespace Fracture
 		void resize(int width, int height)const;
 		uint32_t GetTextureID()const;
 
-		static std::shared_ptr<Texture2DMultiSample> CreateTexture(InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);
-		static std::shared_ptr<Texture2DMultiSample> CreateTexture(void* data, InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);
+		static std::shared_ptr<Texture2DMultiSample> CreateTexture(InternalFormat internalformat, uint32_t noSamples, uint32_t width, uint32_t height);
 
 	private:
 		uint32_t m_TextureID;
+		uint32_t m_NoSamples;
 		uint32_t m_Width;
 		uint32_t m_Height;
 		uint32_t m_MipLevels;

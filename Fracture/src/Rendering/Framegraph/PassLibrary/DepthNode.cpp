@@ -1,6 +1,7 @@
 #include "DepthNode.h"
 
 #include "Rendering/RenderTarget.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
@@ -16,7 +17,10 @@ Fracture::DepthNode::DepthNode(const std::string& name, const int& width, const 
 {
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputDepthMap");
 
-	outputDepthMap = std::make_shared<RenderTarget>("DepthPass_out",width, height, TextureTarget::Texture2D,GL_FLOAT, 1, true);
+	//outputDepthMap = std::make_shared<RenderTarget>("DepthPass_out",width, height, TextureTarget::Texture2D,GL_FLOAT, 1, true);
+
+	outputDepthMap = RenderTarget::CreateRenderTarget("DepthPass_out", width, height, glAttachmentTarget::Texture2D,FormatType::Float, 1, true);
+
 
 	AcceptBucket(opaque);
 
