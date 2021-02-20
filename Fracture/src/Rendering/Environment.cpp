@@ -53,6 +53,11 @@ void Fracture::Environment::Render(std::shared_ptr<Shader> mshader, glm::mat4 vi
     glDepthMask(GL_TRUE);
 }
 
+std::shared_ptr<Fracture::Environment> Fracture::Environment::Create(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader)
+{
+	return std::make_shared<Environment>(texture,shader);
+}
+
 void Fracture::Environment::CreateCubeMaptexture()
 {
     //glGenTextures(1, &envCubemap);

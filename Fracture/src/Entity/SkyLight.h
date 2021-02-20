@@ -8,7 +8,8 @@
 namespace Fracture
 {
 	class Environment;
-	class Texture;
+	class Texture2D;
+	class TextureCubeMap;
 
 	class SkyLight : public ILight
 	{
@@ -26,11 +27,11 @@ namespace Fracture
 		
 		virtual LightType GetLightType();
 		
-		unsigned int GetIrradianceMap();
+		std::shared_ptr<TextureCubeMap> GetIrradianceMap();
 
-		unsigned int GetPreFilterMap();
+		std::shared_ptr<TextureCubeMap> GetPreFilterMap();
 
-		std::shared_ptr<Texture> GetBDRFMap();
+		std::shared_ptr<Texture2D> GetBDRFMap();
 
 		std::shared_ptr<Environment> GetEnvironment();	
 

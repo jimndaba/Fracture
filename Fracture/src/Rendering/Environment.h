@@ -24,7 +24,7 @@ namespace Fracture
 	{
 
 	public: 
-		Environment(std::shared_ptr<Texture2D> environment, std::shared_ptr<Shader> shader);
+		Environment(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader);
 		//Environment(std::shared_ptr<TextureCubeMap> environment, std::shared_ptr<Shader> shader); TODO take in dynamic cube map 
 		~Environment();
 
@@ -43,6 +43,7 @@ namespace Fracture
 		
 		void Render(std::shared_ptr<Shader> shader, glm::mat4 view, glm::mat4 projection);
 
+		static std::shared_ptr<Environment> Create(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader);
 
 	private:
 		unsigned int cubeVAO = 0;

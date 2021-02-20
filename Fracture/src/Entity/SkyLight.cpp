@@ -1,6 +1,7 @@
 #include "SkyLight.h"
 #include "Rendering/Environment.h"
-#include "Rendering/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/TextureCubeMap.h"
 
 Fracture::SkyLight::SkyLight():
 	ILight(),
@@ -14,17 +15,17 @@ Fracture::LightType  Fracture::SkyLight::GetLightType()
 	return LightType::Sky;
 }
 
-unsigned int  Fracture::SkyLight::GetIrradianceMap()
+std::shared_ptr<Fracture::TextureCubeMap>  Fracture::SkyLight::GetIrradianceMap()
 {
-	return m_environment->irradianceMap;
+	return m_environment->m_IrradianceMap;
 }
 
-unsigned int  Fracture::SkyLight::GetPreFilterMap()
+std::shared_ptr<Fracture::TextureCubeMap>  Fracture::SkyLight::GetPreFilterMap()
 {
-	return m_environment->prefilterMap;
+	return m_environment->m_PrefilterMap;
 }
 
-std::shared_ptr<Fracture::Texture>  Fracture::SkyLight::GetBDRFMap()
+std::shared_ptr<Fracture::Texture2D>  Fracture::SkyLight::GetBDRFMap()
 {
 	return m_environment->m_bdrfTexture;
 }
@@ -36,7 +37,9 @@ std::shared_ptr<Fracture::Environment> Fracture::SkyLight::GetEnvironment()
 
 void Fracture::SkyLight::ChangeEnvironment(const std::string& name)
 {
-	std::shared_ptr<Environment> newEnvironment = std::shared_ptr<Environment>(new Environment(AssetManager::getTexture(name), AssetManager::getShader("CubeMap")));
+	std::shared_ptr<Texture2D> texture = std::static_pointer_cast<Texture2D>(AssetManager::getTexture(name));
+	std::shared_ptr<Environment> newEnvironment = Environment::Create(texture, AssetManager::getShader("CubeMap"));
+		
 	if (newEnvironment)
 	{
 		m_environment.reset();
