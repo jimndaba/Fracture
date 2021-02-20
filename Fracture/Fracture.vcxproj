@@ -153,6 +153,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetManager\ModelLoader.cpp" />
+    <ClCompile Include="src\AssetManager\ShaderLoader.cpp" />
+    <ClCompile Include="src\AssetManager\TextureLoader.cpp" />
     <ClCompile Include="src\Entity\SpotLight.cpp" />
     <ClCompile Include="src\Animation\AnimationManager.cpp" />
     <ClCompile Include="src\Animation\AnimatorProbe.cpp" />
@@ -249,6 +252,9 @@
     <ClCompile Include="vendor\GLAD\glad.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AssetManager\ModelLoader.h" />
+    <ClInclude Include="src\AssetManager\ShaderLoader.h" />
+    <ClInclude Include="src\AssetManager\TextureLoader.h" />
     <ClInclude Include="src\Entity\PointLight.h" />
     <ClInclude Include="src\Entity\SpotLight.h" />
     <ClInclude Include="src\Animation\AnimationManager.h" />

@@ -35,6 +35,10 @@ namespace Fracture
 	class Material; 
 	class AnimationClip;
 
+	class TextureLoader;
+	class ShaderLoader;
+	class ModelLoader;
+
 	struct ProjectProperties;
 
 	enum class TextureType;
@@ -48,8 +52,6 @@ namespace Fracture
 
 
 		static std::shared_ptr<Model> loadModel(const std::string &name);
-		static std::shared_ptr<Texture> loadTexture(const std::string &name, const std::string &path, Fracture::TextureType texType);
-
 		static const std::shared_ptr<Shader>& getShader(const std::string &name);
 		static std::shared_ptr<Model> getModel(const std::string &name);
 		static const std::shared_ptr<Material>& getMaterial(const std::string &name);
@@ -68,28 +70,23 @@ namespace Fracture
 		static void AddShader(const std::string& name, const std::string& vertex, const std::string& fragment, const std::string& geomtry);
 
 		static void AddModel(const std::string& name, const std::string& path);
-		static void AddTexture(const std::string& name, const std::string& path, TextureType mtype);
-		static void AddTexture(const std::shared_ptr<Texture>& texture);
-		static void AddEnvironmentMap(const std::string& name, const std::string& path);
+		
+		static void AddTexture2D(const std::string& name, const std::string& path, TextureType mtype);
+		static void AddHDR(const std::string& name, const std::string& path, TextureType mtype);
+		static void AddCubeMap(const std::string& name, const std::string& path, TextureType mtype);
+
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Shader>& shader);
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Material>& material);
-
 	
-		static std::unique_ptr<AssetManager> instance()
-		{
-			if (!m_instance)
-			{
-				std::unique_ptr<AssetManager> s_instance (new AssetManager(m_props));
-				return s_instance;
-			}		
-			return nullptr;
-		}
-
 	private:
-		//static const aiScene* scene;
-		//static Assimp::Importer importer;
+
 		static std::unique_ptr<AssetManager> m_instance;
 		static std::shared_ptr<ProjectProperties> m_props;
+
+		static std::unique_ptr<TextureLoader> m_TextureLoader;
+		static std::unique_ptr<ShaderLoader> m_ShaderLoader;
+		static std::unique_ptr<ModelLoader> m_ModelLoader;
+
 		//Libraries
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
 		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
@@ -98,29 +95,8 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
 		
 		//Functions
-		static void ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
-		static std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiNode* node);
-		static void processSkeleton(std::shared_ptr<Bone> bone, std::shared_ptr<Skeleton> skeleton, aiNode* node);
-		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
-		static std::shared_ptr<Texture> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
-		static std::shared_ptr<Fracture::Texture> TextureFromFile(const char* path, const std::string& directory, Fracture::TextureType texType, bool gamma = false);
-		static std::shared_ptr<Fracture::Texture> HDRFromFile(const std::string& name, const char* path,Fracture::TextureType texType, bool gamma = false);
-		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material, bool isAnimated);
-		static std::shared_ptr<AnimationClip> loadModeAnimations(aiAnimation* animation);
-
-
-		static const uint32_t s_MeshImportFlags =
-			aiProcess_CalcTangentSpace |        // Create binormals/tangents just in case
-			aiProcess_Triangulate |             // Make sure we're triangles			
-			aiProcess_GenNormals |              // Make sure we have legit normals
-			aiProcess_GenUVCoords |            // Convert UVs if required 			
-			aiProcess_ValidateDataStructure|
-			aiProcess_RemoveRedundantMaterials|
-			aiProcess_SortByPType |
-			aiProcess_OptimizeMeshes |
-			aiProcess_PopulateArmatureData|
-			aiProcess_ValidateDataStructure
-			;   
+		
+	
 	};
 
 
