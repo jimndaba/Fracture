@@ -7,7 +7,7 @@
 #include "Component/TransformComponent.h"
 #include "Material.h"
 #include "Mesh.h"
-#include "Texture.h"
+#include "OpenGL/Texture.h"
 #include "Shader.h"
 
 namespace Fracture

@@ -1,17 +1,17 @@
 #pragma once
-#ifndef STATICMESH_H
-#define STATICMESH_H
+#ifndef SKELETONMESH_H
+#define SKELETONMESH_H
 
 #include "Mesh.h"
 
 namespace Fracture
 {
 
-	class StaticMesh : public Mesh
+	class SkeletonMesh : public Mesh
 	{
-	public: 
-		StaticMesh();
-		~StaticMesh() = default;
+	public:
+		SkeletonMesh();
+		~SkeletonMesh() = default;
 
 		uint32_t RenderID();
 
