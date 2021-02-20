@@ -15,6 +15,7 @@
 #include "Rendering/Material.h"
 #include "Rendering/Model.h"
 #include "Rendering/Shader.h"
+#include "Rendering/OpenGL/Texture.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"

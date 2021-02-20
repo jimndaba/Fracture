@@ -1,10 +1,10 @@
 #include "Renderer.h"
+#include "OpenGL/OpenGLBase.h"
+#include "OpenGL/Mesh.h"
 #include "DrawCommand.h"
 #include "RenderBucket.h"
-#include "Model.h"
-#include "Mesh.h"
 #include "Shader.h"
-#include "Texture.h"
+#include "OpenGL/Texture.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
@@ -19,11 +19,9 @@
 #include "Component/TagComponent.h"
 #include "Component/ICamera.h"
 #include "Component/BillboardComponent.h"
-
 #include "Game/Game.h"
 #include "Scene/Scene.h"
 #include "RenderTarget.h"
-#include "RenderBatch.h"
 #include "Entity/Entity.h"
 #include "AssetManager/AssetManager.h"
 #include "Profiling/Profiler.h"
@@ -72,7 +70,7 @@ void Fracture::Renderer::onInit()
     Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
     m_Bucket = std::shared_ptr<RenderBucket>(new RenderBucket());   
 
-    SceneRenderTarget = std::shared_ptr<RenderTarget>(new RenderTarget("MainBuffer",m_width, m_Height, TextureTarget::Texture2D, GL_FLOAT, 1,true));
+    SceneRenderTarget = RenderTarget::CreateRenderTarget("MainBuffer", m_width, m_Height, AttachmentTarget::Texture2D, FormatType::Float, 1, true);
     
     m_grid = std::make_shared<Grid>(100, 100, 1.0f, 1.0f, 0.5);
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
@@ -359,7 +357,7 @@ void Fracture::Renderer::Submit(DrawCommand command)
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->textureType);
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
     command.material->getShader()->setVec4("Color", command.Color);

@@ -5,8 +5,8 @@
 #include "OpenGL/OpenGLBase.h"
 #include "OpenGL/Texture2D.h"
 #include "OpenGL/TextureCubeMap.h"
-#include "Shader.h"
 #include "AssetManager/AssetManager.h"
+#include "Shader.h"
 #include "Model.h"
 
 
@@ -18,7 +18,7 @@ Fracture::Environment::Environment(std::shared_ptr<Texture2D> environment, std::
     m_bdrf(AssetManager::getShader("bdrf"))
 {     
     m_CaptureTarget = RenderTarget::CreateRenderTarget("EnvironmentCapture");
-    m_CaptureTarget->GetBuffer()->AddRenderBuffer("EnvironmentBuffer",glAttachmentType::Depth, RenderBuffer::CreateBuffer(InternalFormat::DepthComponent24,512,512));
+    m_CaptureTarget->GetBuffer()->AddRenderBuffer("EnvironmentBuffer",AttachmentType::Depth, RenderBuffer::CreateBuffer(InternalFormat::DepthComponent24,512,512));
 
     CreateCubeMaptexture();
   
@@ -101,7 +101,7 @@ void Fracture::Environment::ConvertHDRtoCubeMap()
     for (unsigned int i = 0; i < 6; ++i)
     {
         shader->setMat4("view", captureViews[i]);
-        m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_CubeMap->GetTextureID(), 0);
+        m_CaptureTarget->GetBuffer()->AddAttachment(AttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_CubeMap->GetTextureID(), 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Render();
     }
@@ -138,7 +138,7 @@ void Fracture::Environment::CreateIrradianceMap()
     for (unsigned int i = 0; i < 6; ++i)
     {
         m_irradiance->setMat4("view", captureViews[i]);
-        m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_IrradianceMap->GetTextureID(), 0);
+        m_CaptureTarget->GetBuffer()->AddAttachment(AttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_IrradianceMap->GetTextureID(), 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Render();
     }
@@ -187,7 +187,7 @@ void Fracture::Environment::CreatePreFilterMap()
         for (unsigned int i = 0; i < 6; ++i)
         {
             m_prefilter->setMat4("view", captureViews[i]);
-            m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_PrefilterMap->GetTextureID(), mip);
+            m_CaptureTarget->GetBuffer()->AddAttachment(AttachmentType::Color, 0, AttachmentTarget::CubeMapPosX, i, m_PrefilterMap->GetTextureID(), mip);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             Render();
         }
@@ -210,7 +210,7 @@ void Fracture::Environment::CreateBDRF()
     // then re-configure capture framebuffer object and render screen-space quad with BRDF shader.
     m_CaptureTarget->bind();
     m_CaptureTarget->GetBuffer()->GetRenderBuffer("EnvironmentBuffer")->Resize(512, 512);
-    m_CaptureTarget->GetBuffer()->AddAttachment(glAttachmentType::Color, 0, AttachmentTarget::Texture2D, m_bdrfTexture->GetTextureID());
+    m_CaptureTarget->GetBuffer()->AddAttachment(AttachmentType::Color, 0, AttachmentTarget::Texture2D, m_bdrfTexture->GetTextureID());
     glViewport(0, 0, 512, 512);
     m_bdrf->use();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

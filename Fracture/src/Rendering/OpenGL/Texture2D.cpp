@@ -58,6 +58,11 @@ void Fracture::Texture2D::GenerateMips()
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 
+uint32_t Fracture::Texture2D::TextureUnit() const
+{
+	return uint32_t();
+}
+
 uint32_t Fracture::Texture2D::GetWidth() const
 {
     return m_Width;

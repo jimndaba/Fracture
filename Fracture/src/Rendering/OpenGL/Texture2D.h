@@ -17,6 +17,7 @@ namespace Fracture
 		void unbind()const;
 		void GenerateMips();
 
+		uint32_t TextureUnit()const;
 		uint32_t GetWidth()const;
 		uint32_t GetHeight()const;
 		uint32_t GetMipLevel()const;

@@ -1,5 +1,6 @@
 #include "Model.h"
-#include "Mesh.h"
+#include "Material.h"
+#include "OpenGL/Mesh.h"
 #include "Animation/Skeleton.h"
 #include "Logging/Logger.h"
 #include "AssetManager/AssetManager.h"
@@ -43,7 +44,7 @@ std::shared_ptr<Fracture::Mesh> Fracture::Model::GetMesh(std::string name)
 {
 	for (auto mesh : m_meshes)
 	{
-		if (mesh->Name == name)
+		if (mesh->Name() == name)
 		{
 			return mesh;
 		}

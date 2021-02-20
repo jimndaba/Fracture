@@ -2,12 +2,12 @@
 #include "DrawCommand.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
-#include "RenderBatch.h"
 #include "Logging/Logger.h"
-#include "Mesh.h"
-#include "Texture.h"
+#include "OpenGL/Mesh.h"
+#include "OpenGL/Texture.h"
 #include "Shader.h"
 #include "Material.h"
+#include "OpenGL/Mesh.h"
 #include "Profiling/Profiler.h"
 
 bool renderSortforward(const Fracture::DrawCommand& a, const Fracture::DrawCommand& b);
@@ -48,13 +48,13 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, glm::vec4 color, std
 {
 	ProfilerTimer timer("Create Command");
 	DrawCommand command = DrawCommand{};	
-	command.VAO = mesh->VAO;
+	command.VAO = mesh->RenderID();
 	command.material = material.get();
 	command.CastShadows = material->CastShadows();
 	command.HasTransparency = material->IsTransparent();
 	command.IsOutlined = material->IsOutlined();
 	command.ID = EntityID;
-	command.indiceSize = (GLint)mesh->IndexCount;	
+	command.indiceSize = mesh->CountOfIndices();	
 	command.Transform = transform;
 	command.Color = color;
 	pushCommand(command);
@@ -63,12 +63,12 @@ void Fracture::RenderBucket::pushCommand(uint32_t EntityID, glm::vec4 color, std
 void Fracture::RenderBucket::pushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform)
 {
 	DrawCommand command = DrawCommand{};
-	command.VAO = mesh->VAO;
+	command.VAO = mesh->RenderID();
 	command.CastShadows = false;
 	command.HasTransparency =false;
 	command.IsOutlined = true;
 	command.ID = EntityID;
-	command.indiceSize = (GLint)mesh->IndexCount;
+	command.indiceSize = mesh->CountOfIndices();
 	command.Transform = transform;
 	m_Outlinecommands.push_back(command);
 }

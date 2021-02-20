@@ -1,5 +1,5 @@
 ﻿#include "Shader.h"
-#include "Texture.h"
+#include "OpenGL/Texture.h"
 #include "Logging/Logger.h"
 #include <GLAD/glad.h>
 
@@ -164,7 +164,7 @@ void Fracture::Shader::setTexture(const std::string& name, const Texture* value,
 {
     glActiveTexture(GL_TEXTURE0 + unit);
     glUniform1i(glGetUniformLocation(m_program, name.c_str()), unit);
-    glBindTexture(GL_TEXTURE_2D, value->id);   
+    glBindTexture(GL_TEXTURE_2D, value->GetTextureID());   
 }
 
 void Fracture::Shader::setCubeMap(const std::string& name, const unsigned int value, unsigned int unit) const

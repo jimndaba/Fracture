@@ -6,8 +6,6 @@
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Material.h"
-#include "Mesh.h"
-#include "OpenGL/Texture.h"
 #include "Shader.h"
 
 namespace Fracture
@@ -34,7 +32,7 @@ namespace Fracture
 		bool CastShadows = true;
 		bool IsAnimated = false;
 
-		GLint indiceSize = 0;
+		uint32_t indiceSize = 0;
 		Material* material = nullptr;
 		glm::mat4 Transform = glm::mat4(1.0f);
 		glm::vec4 Color = glm::vec4(1.0f);	

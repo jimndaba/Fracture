@@ -62,6 +62,11 @@ void Fracture::TextureCubeMap::GenerateMips()
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
+uint32_t Fracture::TextureCubeMap::TextureUnit() const
+{
+	return uint32_t();
+}
+
 uint32_t Fracture::TextureCubeMap::GetWidth() const
 {
 	return m_Width;

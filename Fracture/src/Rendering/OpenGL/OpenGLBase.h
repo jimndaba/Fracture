@@ -65,6 +65,12 @@ namespace Fracture
 		MULTISAMPLE = GL_TEXTURE_2D_MULTISAMPLE,
 		CubeMapPosX = GL_TEXTURE_CUBE_MAP_POSITIVE_X
 	};
+
+	enum class TextureUnit
+	{
+
+
+	};
 	
 }
 

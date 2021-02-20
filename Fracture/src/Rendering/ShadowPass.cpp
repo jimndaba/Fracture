@@ -3,7 +3,6 @@
 #include "OpenGL/OpenGLBase.h"
 #include "DrawCommand.h"
 #include "RenderBucket.h"
-#include "RenderBatch.h"
 #include "Material.h"
 #include "Shader.h"
 #include "Entity/ILight.h"

@@ -268,6 +268,6 @@ void Fracture::Material::CopySampleUniforms(std::unordered_map<std::string, std:
 {
 	for (auto it = copy->begin(); it != copy->end(); ++it)
 	{
-		SetTexture(it->first,AssetManager::getTexture(it->second->texture->Name),it->second->Unit);
+		//SetTexture(it->first,AssetManager::getTexture(it->second->texture->Name),it->second->Unit); TODO
 	}
 }

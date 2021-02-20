@@ -39,13 +39,13 @@ namespace Fracture
 				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
 				{					
 					DrawCommand command = DrawCommand{};
-					command.VAO = mesh->VAO;
+					command.VAO = mesh->RenderID();
 					command.material = material.get();
 					command.CastShadows = material->CastShadows();
 					command.HasTransparency = material->IsTransparent();
 					command.IsOutlined = material->IsOutlined();
 					command.ID = component->EntityID;
-					command.indiceSize = (GLint)mesh->IndexCount;
+					command.indiceSize = mesh->CountOfIndices();
 					command.Transform = m_transformComponent->GetWorldTransform();
 					command.Color = component->Color;;
 

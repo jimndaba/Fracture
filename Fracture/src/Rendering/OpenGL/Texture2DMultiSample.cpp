@@ -29,6 +29,11 @@ void Fracture::Texture2DMultiSample::GenerateMips()
 	glGenerateMipmap(GL_TEXTURE_2D_MULTISAMPLE);
 }
 
+uint32_t Fracture::Texture2DMultiSample::TextureUnit() const
+{
+	return uint32_t();
+}
+
 uint32_t Fracture::Texture2DMultiSample::GetWidth() const
 {
 	return m_Width;
