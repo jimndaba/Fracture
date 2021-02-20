@@ -15,7 +15,7 @@
 
 Fracture::ShadowPass::ShadowPass()
 {
-	m_renderTarget = RenderTarget::CreateRenderTarget("ShadowPass",SHADOW_WIDTH,SHADOW_HEIGHT,glAttachmentTarget::Texture2D,FormatType::Float,1,true);
+	m_renderTarget = RenderTarget::CreateRenderTarget("ShadowPass",SHADOW_WIDTH,SHADOW_HEIGHT,AttachmentTarget::Texture2D,FormatType::Float,1,true);
 }
 
 Fracture::ShadowPass::~ShadowPass()

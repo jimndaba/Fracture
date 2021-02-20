@@ -1,6 +1,6 @@
 #include "InputSocket.h"
 
-Fracture::InputSocket::InputSocket(std::string Name):m_name(Name)
+Fracture::InputSocket::InputSocket(const std::string& Name):m_name(Name)
 {
 }
 

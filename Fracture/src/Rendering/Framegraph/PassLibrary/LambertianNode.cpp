@@ -7,8 +7,8 @@
 #include "Rendering/RenderBucket.h"
 #include "Rendering/RenderBatch.h"
 
-Fracture::LambertianNode::LambertianNode(const std::string& name,const int& width,const int& height, RenderBucket* opaque):
-	RenderQueueNode(name)
+Fracture::LambertianNode::LambertianNode(const std::string& name,const int& width,const int& height, std::shared_ptr<RenderBucket> bucket):
+	RenderQueueNode(name,bucket)
 {
 
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("buffer");
@@ -17,15 +17,12 @@ Fracture::LambertianNode::LambertianNode(const std::string& name,const int& widt
 	std::shared_ptr<InputSocket> m_OmniInput = std::make_shared<InputSocket>("OmniShadowMap");
 
 	std::shared_ptr<InputSocket> m_SSAO = std::make_shared<InputSocket>("SSAOMap");
-
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputColor");
 
 	//outputColor = std::make_shared<RenderTarget>("Lambertian_out",width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
 	
-	outputColor = RenderTarget::CreateRenderTarget("Lambertian_out", width, height,glAttachmentTarget::Texture2D, FormatType::Float, 1, true);
+	outputColor = RenderTarget::CreateRenderTarget("Lambertian_out", width, height,AttachmentTarget::Texture2D, FormatType::Float, 1, true);
 	
-	AcceptBucket(opaque);
-
 	//Sockets
 	AddInputSocket(m_Input);
 	//AddInputSocket(m_EnvironmentInput);

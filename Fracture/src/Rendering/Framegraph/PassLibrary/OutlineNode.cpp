@@ -10,21 +10,16 @@
 #include "Component/TransformComponent.h"
 #include "Rendering/OpenGL/OpenGLBase.h"
 
-Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, const int& height, RenderBucket* bucket):
-	RenderQueueNode(name),
+Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, const int& height, std::shared_ptr<RenderBucket> bucket):
+	RenderQueueNode(name,bucket),
 	m_firstshader(AssetManager::getShader("PrimitiveMaterial")),
 	m_shader(AssetManager::getShader("OutlinePass"))
 {
 		
-	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outline_out");
+	std::shared_ptr<OutputSocket> m_output =  OutputSocket::Craete("outline_out");
 
-	out_resource = RenderTarget::CreateRenderTarget("outline_out",width, height, glAttachmentTarget::Texture2D,FormatType::Float, 1, true);
+	out_resource = RenderTarget::CreateRenderTarget("outline_out",width, height, AttachmentTarget::Texture2D,FormatType::Float, 1, true);
 		
-	AcceptBucket(bucket);
-
-	//Sockets
-
-	//AddInputSocket(m_EnvironmentInput);
 	AddOutputSocket(m_output);
 
 	//Link Sockets to Resources	
@@ -42,32 +37,29 @@ void Fracture::OutlineNode::execute(Renderer& renderer)
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 	glStencilMask(0xFF);	
 	m_firstshader->use();
-	for (const auto& bucket : m_buckets)
-	{
-		const auto& outlineRenderCommands = bucket->getOutlineRenderCommands();
-		for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
-		{
-			DrawCommand command = outlineRenderCommands[i];		
-			renderer.Submit(command, m_shader.get());			
-		}
-	}
 
+	const auto& outlineRenderCommands = GetBucket()->getOutlineRenderCommands();
+	for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
+	{
+		DrawCommand command = outlineRenderCommands[i];
+		renderer.Submit(command, m_shader.get());
+	}
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	glStencilMask(0x00);	
 	glDisable(GL_DEPTH_TEST);
 	
 	m_shader->use();
-	for (const auto& bucket : m_buckets)
+
+	const auto& outlineRenderCommands = GetBucket()->getOutlineRenderCommands();
+	for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
 	{
-		const auto& outlineRenderCommands = bucket->getOutlineRenderCommands();		
-		for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
-		{			
-			DrawCommand command = outlineRenderCommands[i];
-			auto& transform = ComponentManager::GetComponent<TransformComponent>(command.ID);			
-			renderer.Submit(command, m_shader.get());
-		}
+		DrawCommand command = outlineRenderCommands[i];
+		auto& transform = ComponentManager::GetComponent<TransformComponent>(command.ID);
+		renderer.Submit(command, m_shader.get());
 	}
+
 	glStencilMask(0xFF);
 	glStencilFunc(GL_ALWAYS, 0, 0xFF);
 	glEnable(GL_DEPTH_TEST);

@@ -13,7 +13,7 @@ Fracture::ThresholdNode::ThresholdNode(const std::string& name,const int& width,
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("colorTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("thresholdMap");
 
-	outputTexture = RenderTarget::CreateRenderTarget("Threshold_Out", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	outputTexture = RenderTarget::CreateRenderTarget("Threshold_Out", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	//Sockets
 	AddInputSocket(m_Input);

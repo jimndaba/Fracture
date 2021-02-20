@@ -16,7 +16,7 @@ Fracture::MultiplyMixNode::MultiplyMixNode(const std::string& name,const int& wi
 
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("output");
 
-	outputColor = RenderTarget::CreateRenderTarget("Multiply_out",width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	outputColor = RenderTarget::CreateRenderTarget("Multiply_out",width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	//Sockets
 	AddInputSocket(m_InputA);

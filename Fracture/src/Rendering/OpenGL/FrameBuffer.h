@@ -8,8 +8,8 @@
 
 namespace Fracture
 {
-	enum class glAttachmentTarget;
-	enum class glAttachmentType;
+	enum class AttachmentTarget;
+	enum class AttachmentType;
 	class RenderBuffer;
 
 	class FrameBuffer
@@ -19,13 +19,13 @@ namespace Fracture
 
 		void bind();
 		void unbind();
-		void AddAttachment(glAttachmentType type, uint32_t textureID);
-		void AddAttachment(glAttachmentType type, glAttachmentTarget attachmentTarget, uint32_t textureID);	
-		void AddAttachment(glAttachmentType type, uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t textureID);
-		void AddAttachment(glAttachmentType type, uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t textureID, uint32_t miplevels);
-		void AddAttachment(glAttachmentType type, uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t targetindex, uint32_t textureID, uint32_t miplevels);
+		void AddAttachment(AttachmentType type, uint32_t textureID);
+		void AddAttachment(AttachmentType type, AttachmentTarget attachmentTarget, uint32_t textureID);	
+		void AddAttachment(AttachmentType type, uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t textureID);
+		void AddAttachment(AttachmentType type, uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t textureID, uint32_t miplevels);
+		void AddAttachment(AttachmentType type, uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t targetindex, uint32_t textureID, uint32_t miplevels);
 		
-		void AddRenderBuffer(const std::string& name,glAttachmentType attachmentType,const std::shared_ptr<RenderBuffer>& buffer);
+		void AddRenderBuffer(const std::string& name,AttachmentType attachmentType,const std::shared_ptr<RenderBuffer>& buffer);
 		std::shared_ptr<RenderBuffer> GetRenderBuffer(const std::string& name);
 
 		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight);

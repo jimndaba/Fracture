@@ -297,6 +297,8 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PickingPass.h" />
     <ClInclude Include="src\Rendering\OpenGL\IndexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLBase.h" />
+    <ClInclude Include="src\Rendering\OpenGL\Primitives\Cube.h" />
+    <ClInclude Include="src\Rendering\OpenGL\Primitives\Quad.h" />
     <ClInclude Include="src\Rendering\OpenGL\RenderBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\SkeletalMesh.h" />
     <ClInclude Include="src\Rendering\OpenGL\StaticMesh.h" />

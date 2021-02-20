@@ -60,9 +60,9 @@ namespace Fracture
 
 			m_shader = AssetManager::getShader("ColorMap");
 			
-			colorIn = RenderTarget::CreateRenderTarget("Sink_Color_In",width, height,glAttachmentTarget::Texture2D,FormatType::Float, 1, false);	
+			colorIn = RenderTarget::CreateRenderTarget("Sink_Color_In",width, height,AttachmentTarget::Texture2D,FormatType::Float, 1, false);	
 			
-			outputColor = RenderTarget::CreateRenderTarget("Sink_Color_In", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+			outputColor = RenderTarget::CreateRenderTarget("Sink_Color_In", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 			AddInputSocket(m_input);
 			AddInputResource(m_input,colorIn);

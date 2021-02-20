@@ -13,7 +13,7 @@ namespace Fracture
 	class OutlineNode : public RenderQueueNode
 	{
 	public:
-		OutlineNode(const std::string& name, const int& width, const int& height, RenderBucket* bucket);
+		OutlineNode(const std::string& name, const int& width, const int& height, std::shared_ptr<RenderBucket> bucket);
 		void execute(Renderer& renderer) override;
 
 	private:

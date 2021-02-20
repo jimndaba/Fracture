@@ -1,6 +1,6 @@
 #include "OutputSocket.h"
 
-Fracture::OutputSocket::OutputSocket(std::string Name):m_name(Name)
+Fracture::OutputSocket::OutputSocket(const std::string& Name):m_name(Name)
 {
 }
 

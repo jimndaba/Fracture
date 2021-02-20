@@ -12,10 +12,17 @@ namespace Fracture
 	{
 
 	public:
-		InputSocket(std::string Name);
+		InputSocket(const std::string& Name);
+		
 		std::string GetName();
+
+		static std::shared_ptr<InputSocket> Create(const std::string& Name)
+		{
+			return std::make_shared<InputSocket>(Name);
+		}
+
 	private:
-		//std::shared_ptr<Resource> number;
+
 		std::string m_name;
 
 

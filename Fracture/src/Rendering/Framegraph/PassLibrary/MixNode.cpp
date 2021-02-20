@@ -17,7 +17,7 @@ Fracture::MixNode::MixNode(const std::string& name, const int& width, const int&
 
 	//outputColor = std::make_shared<RenderTarget>("Mix_out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-	outputColor = RenderTarget::CreateRenderTarget("Mix_out", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	outputColor = RenderTarget::CreateRenderTarget("Mix_out", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 
 	//Sockets

@@ -25,12 +25,8 @@ namespace Fracture
 
 	public: 
 		Environment(std::shared_ptr<Texture2D> environment, std::shared_ptr<Shader> shader);
+		//Environment(std::shared_ptr<TextureCubeMap> environment, std::shared_ptr<Shader> shader); TODO take in dynamic cube map 
 		~Environment();
-
-		//unsigned int envCubemap;
-		//unsigned int irradianceMap;
-		//unsigned int prefilterMap;
-		//unsigned int brdfLUTTexture;
 
 		std::shared_ptr<RenderTarget> m_CaptureTarget;
 	
@@ -46,11 +42,13 @@ namespace Fracture
 		std::shared_ptr<TextureCubeMap> m_CubeMap;
 		
 		void Render(std::shared_ptr<Shader> shader, glm::mat4 view, glm::mat4 projection);
+
+
 	private:
-		unsigned int cubeVAO;
-		unsigned int cubeVBO;
+		unsigned int cubeVAO = 0;
+		unsigned int cubeVBO = 0;
 		unsigned int quadVAO = 0;
-		unsigned int quadVBO;
+		unsigned int quadVBO = 0;
 		
 		std::shared_ptr<Shader> shader;
 

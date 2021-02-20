@@ -23,32 +23,32 @@ void Fracture::FrameBuffer::unbind()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Fracture::FrameBuffer::AddAttachment(glAttachmentType type, uint32_t textureID)
+void Fracture::FrameBuffer::AddAttachment(AttachmentType type, uint32_t textureID)
 {
 	glFramebufferTexture(GL_FRAMEBUFFER,(GLenum)type, textureID, 0);
 }
 
-void Fracture::FrameBuffer::AddAttachment(glAttachmentType type, glAttachmentTarget attachmentTarget, uint32_t textureID)
+void Fracture::FrameBuffer::AddAttachment(AttachmentType type, AttachmentTarget attachmentTarget, uint32_t textureID)
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)type, (GLenum)attachmentTarget, textureID, 0);
 }
 
-void Fracture::FrameBuffer::AddAttachment(glAttachmentType type,uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t textureID)
+void Fracture::FrameBuffer::AddAttachment(AttachmentType type,uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t textureID)
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER,(GLenum)type + attachmentIndex,(GLenum)attachmentTarget, textureID, 0);
 }
 
-void Fracture::FrameBuffer::AddAttachment(glAttachmentType type, uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t textureID, uint32_t miplevels)
+void Fracture::FrameBuffer::AddAttachment(AttachmentType type, uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t textureID, uint32_t miplevels)
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)type + attachmentIndex, (GLenum)attachmentTarget, textureID, miplevels);
 }
 
-void Fracture::FrameBuffer::AddAttachment(glAttachmentType type, uint32_t attachmentIndex, glAttachmentTarget attachmentTarget, uint32_t targetindex, uint32_t textureID, uint32_t miplevels)
+void Fracture::FrameBuffer::AddAttachment(AttachmentType type, uint32_t attachmentIndex, AttachmentTarget attachmentTarget, uint32_t targetindex, uint32_t textureID, uint32_t miplevels)
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)type + attachmentIndex, (GLenum)attachmentTarget + targetindex, textureID, miplevels);
 }
 
-void Fracture::FrameBuffer::AddRenderBuffer(const std::string& name,glAttachmentType attachmentType, const std::shared_ptr<RenderBuffer>& buffer)
+void Fracture::FrameBuffer::AddRenderBuffer(const std::string& name,AttachmentType attachmentType, const std::shared_ptr<RenderBuffer>& buffer)
 {
 	bind();
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)attachmentType, GL_RENDERBUFFER, buffer->GetBuffer());

@@ -17,13 +17,13 @@ Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, co
 
 	//outputTexture = std::make_shared<RenderTarget>("BoxBlur_out", width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-	outputTexture = RenderTarget::CreateRenderTarget("BoxBlur_out", width, height, glAttachmentTarget::Texture2D,FormatType::Float, 1, false);
+	outputTexture = RenderTarget::CreateRenderTarget("BoxBlur_out", width, height, AttachmentTarget::Texture2D,FormatType::Float, 1, false);
 
 	for (int i = 0; i < 2; i++)
 	{
 		//m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width/8, height/8, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-		m_blurPasses[i] = RenderTarget::CreateRenderTarget("blurPass" + i, width / 8, height / 8, glAttachmentTarget::Texture2D,FormatType::Float, 1, false);
+		m_blurPasses[i] = RenderTarget::CreateRenderTarget("blurPass" + i, width / 8, height / 8, AttachmentTarget::Texture2D,FormatType::Float, 1, false);
 		m_blurPasses[i]->SetResizable(false);
 		AddResource("blurPass" + i, m_blurPasses[i]);
 	}

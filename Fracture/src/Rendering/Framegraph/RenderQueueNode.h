@@ -14,14 +14,17 @@ namespace Fracture
 	class RenderQueueNode : public FrameNode
 	{
 	public:
-		RenderQueueNode(std::string name);
+		RenderQueueNode(std::string name, std::shared_ptr<RenderBucket> bucket);
 		virtual void execute(Renderer& renderer);
-		void AcceptBucket(RenderBucket* bucket);
+
 		void render(Renderer& renderer);
-		std::vector<RenderBucket*> m_buckets;
+		
+		std::shared_ptr<RenderBucket> GetBucket();
+
+
 	private:
 		int NumberBatches = 0;
-		
+		std::shared_ptr<RenderBucket> m_bucket;
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);
 		void WriteUniformSampler(Shader shader, std::string name, std::shared_ptr<UniformValueSampler> value);
 

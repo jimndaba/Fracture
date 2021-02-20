@@ -15,7 +15,7 @@ namespace Fracture
 
 	class Texture;
 	class Texture2D;
-	enum class glAttachmentTarget;
+	enum class AttachmentTarget;
 	class FrameBuffer;
 	enum class FormatType;
 
@@ -25,7 +25,7 @@ namespace Fracture
 
 	public:
 		RenderTarget(const std::string& name);
-		RenderTarget(const std::string& name,unsigned int width, unsigned int height, glAttachmentTarget texturetarget,FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
+		RenderTarget(const std::string& name,unsigned int width, unsigned int height, AttachmentTarget texturetarget,FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 		~RenderTarget();
 		
 		unsigned int Width;
@@ -54,7 +54,7 @@ namespace Fracture
 		void SetResizable(bool value)override;
 		
 		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name);
-		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, glAttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
+		static std::shared_ptr<RenderTarget> CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, AttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false);
 
 	private:		
 		std::shared_ptr<FrameBuffer> m_framebuffer;

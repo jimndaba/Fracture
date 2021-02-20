@@ -52,14 +52,14 @@ namespace Fracture
 		CampToBorder = GL_CLAMP_TO_BORDER
 	};
 
-	enum class glAttachmentType
+	enum class AttachmentType
 	{
 		Color = GL_COLOR_ATTACHMENT0,
 		Depth = GL_DEPTH_ATTACHMENT,
 		DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT
 	};
 
-	enum class glAttachmentTarget
+	enum class AttachmentTarget
 	{
 		Texture2D = GL_TEXTURE_2D,
 		MULTISAMPLE = GL_TEXTURE_2D_MULTISAMPLE,

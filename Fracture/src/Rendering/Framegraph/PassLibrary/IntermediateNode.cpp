@@ -15,7 +15,7 @@ Fracture::IntermediateNode::IntermediateNode(const std::string& name,const uint3
 
 	//colorOut = std::make_shared<RenderTarget>("blit_out",width, height, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-	colorOut = RenderTarget::CreateRenderTarget("blit_out", width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	colorOut = RenderTarget::CreateRenderTarget("blit_out", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	//Sockets
 	AddInputSocket(m_Input);	

@@ -18,9 +18,9 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("SSAOOutput");
 
-	ssao = RenderTarget::CreateRenderTarget("ssaopass",width,height,glAttachmentTarget::Texture2D,FormatType::Float,1,false);
+	ssao = RenderTarget::CreateRenderTarget("ssaopass",width,height,AttachmentTarget::Texture2D,FormatType::Float,1,false);
 
-	outputTexture = RenderTarget::CreateRenderTarget("SSAO_out",width, height, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	outputTexture = RenderTarget::CreateRenderTarget("SSAO_out",width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
 	AddResource("ssaopass",ssao);
 	

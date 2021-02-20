@@ -21,7 +21,7 @@ Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,cons
 	SCREEN_HEIGHT(height),
 	m_pixelInfo(std::make_shared<PixelInfo>())
 {
-	m_renderTarget = RenderTarget::CreateRenderTarget("PickingPass", SCREEN_WIDTH, SCREEN_HEIGHT, glAttachmentTarget::Texture2D, FormatType::Float, 1, false);
+	m_renderTarget = RenderTarget::CreateRenderTarget("PickingPass", SCREEN_WIDTH, SCREEN_HEIGHT, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 	
 	AcceptBucket(opaque);	
 }
