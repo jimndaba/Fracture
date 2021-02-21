@@ -2,7 +2,6 @@
 #include "../../RenderTarget.h"
 #include "../../DrawCommand.h"
 #include "../../RenderBucket.h"
-#include "../../RenderBatch.h"
 #include "../../Material.h"
 #include "Rendering/Shader.h"
 #include "Entity/ILight.h"
@@ -15,15 +14,14 @@
 
 std::shared_ptr<Fracture::RenderTarget> Fracture::PickingPass::m_renderTarget;
 
-Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,const int& height, RenderBucket* opaque):
-	RenderQueueNode(Name),
+Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,const int& height,std::shared_ptr<RenderBucket> opaque):
+	RenderQueueNode(Name,opaque),
 	SCREEN_WIDTH(width),
 	SCREEN_HEIGHT(height),
 	m_pixelInfo(std::make_shared<PixelInfo>())
 {
 	m_renderTarget = RenderTarget::CreateRenderTarget("PickingPass", SCREEN_WIDTH, SCREEN_HEIGHT, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
-	
-	AcceptBucket(opaque);	
+
 }
 
 Fracture::PickingPass::~PickingPass()
@@ -37,49 +35,49 @@ void Fracture::PickingPass::execute(Renderer& renderer)
 	int clearValue = -1;
 	glClearTexImage(m_renderTarget->GetColorTexture(0)->GetTextureID(), 0, GL_RGBA, GL_UNSIGNED_BYTE, &clearValue);
 
-	for (auto& bucket : m_buckets)
-	{		
-		for (const auto& command : bucket->getForwardRenderCommands())
-		{			
-			std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
-			material->use();
-			int r = ((int)command.ID & 0x000000FF) >> 0;
-			int g = ((int)command.ID & 0x0000FF00) >> 8;
-			int b = ((int)command.ID & 0x00FF0000) >> 16;
+	const auto& bucket = GetBucket();
+	
+	for (const auto& command : bucket->getForwardRenderCommands())
+	{
+		std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
+		material->use();
+		int r = ((int)command.ID & 0x000000FF) >> 0;
+		int g = ((int)command.ID & 0x0000FF00) >> 8;
+		int b = ((int)command.ID & 0x00FF0000) >> 16;
 
-			//material->getShader()->setInt("gObjectIndex",command.ID);
-			material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-			material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
-			material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
-			if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-			{
-				material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-			}
-			glBindVertexArray(command.VAO);
-			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
-		}		
-		for (const auto& command : bucket->getAlphaRenderCommands())
+		//material->getShader()->setInt("gObjectIndex",command.ID);
+		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+		material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+		material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
 		{
-			std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
-			material->use();
-			int r = ((int)command.ID & 0x000000FF) >> 0;
-			int g = ((int)command.ID & 0x0000FF00) >> 8;
-			int b = ((int)command.ID & 0x00FF0000) >> 16;
-
-			//material->getShader()->setInt("gObjectIndex",command.ID);
-			material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-			material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
-			material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
-			if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-			{
-				material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-			}
-			glBindVertexArray(command.VAO);
-			glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
 		}
+		glBindVertexArray(command.VAO);
+		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 	}
+	for (const auto& command : bucket->getAlphaRenderCommands())
+	{
+		std::shared_ptr<Material> material = AssetManager::getMaterial("PickingMaterial");
+		material->use();
+		int r = ((int)command.ID & 0x000000FF) >> 0;
+		int g = ((int)command.ID & 0x0000FF00) >> 8;
+		int b = ((int)command.ID & 0x00FF0000) >> 16;
+
+		//material->getShader()->setInt("gObjectIndex",command.ID);
+		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+		material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+		material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
+		{
+			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+		}
+		glBindVertexArray(command.VAO);
+		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
+
 
 	glEnable(GL_DITHER);
 	m_renderTarget->Unbind();

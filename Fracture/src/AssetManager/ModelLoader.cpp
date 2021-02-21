@@ -361,7 +361,7 @@ void Fracture::ModelLoader::processSkeleton(std::shared_ptr<Bone> bone, std::sha
 	m_bone->Name = node->mName.data;
 	m_bone->LocalTransformation = Math::Mat4FromAssimpMat4(node->mTransformation);
 	bone->AddChild(m_bone);
-	for (int i = 0; i < node->mNumChildren; i++)
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		processSkeleton(m_bone, skeleton, node->mChildren[i]);
 	}
@@ -393,7 +393,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 	// 1. diffuse maps	
 	if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)
 	{
-		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
+		auto texture = loadMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, TextureType::Diffuse);
 
 		if (texture)
 		{
@@ -538,7 +538,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it		
 			texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);// m_props->TexturesPath + );
-			m_Textures[mat->GetName().C_Str()] = texture; // add to loaded textures
+			m_Textures.emplace(mat->GetName().C_Str(),texture); // add to loaded textures
 		}
 	}
 

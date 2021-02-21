@@ -46,14 +46,23 @@ namespace Fracture
 		{
 			return m_TextureType;
 		}
-
 		void SetType(const TextureType& textureType)
 		{
 			m_TextureType = textureType;
 		}
 
+		std::string GetName()const
+		{
+			return m_Name;
+		}
+		void SetName(const std::string Name)
+		{
+			m_Name = Name;
+		}
+
 	private:
 		TextureType m_TextureType;
+		std::string m_Name;
 	};
 
 

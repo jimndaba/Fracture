@@ -3,10 +3,10 @@
 #define VERTEXBUFFERLAYOUT_H
 
 #include <vector>
+#include "BufferAttribute.h"
 
 namespace Fracture
 {
-	class BufferAttribute;
 
 	class VertexBufferLayout
 	{

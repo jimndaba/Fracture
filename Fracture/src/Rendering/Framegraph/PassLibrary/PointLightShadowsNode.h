@@ -14,7 +14,7 @@ namespace Fracture
 	class PointShadowsNode : public RenderQueueNode
 	{
 	public:
-		PointShadowsNode(const std::string& name, const int& width, const int& height, RenderBucket* bucket, const std::shared_ptr<PointLight>& light);
+		PointShadowsNode(const std::string& name, const int& width, const int& height, std::shared_ptr<RenderBucket> bucket, const std::shared_ptr<PointLight>& light);
 		void execute(Renderer& renderer) override;
 
 		void PrepareLightMatrix();

@@ -78,7 +78,7 @@ void Fracture::Renderer::onInit()
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
     
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());     
-    m_PickingPass = std::shared_ptr<PickingPass>(new PickingPass("pickingPass", m_width, m_Height,m_Bucket.get()));
+    m_PickingPass = std::shared_ptr<PickingPass>(new PickingPass("pickingPass", m_width, m_Height,m_Bucket));
 
     m_isDebugRender = false;
     m_drawgrid = true;

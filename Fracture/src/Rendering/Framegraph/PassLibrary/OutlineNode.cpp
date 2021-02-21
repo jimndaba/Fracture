@@ -5,7 +5,6 @@
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
-#include "Rendering/RenderBatch.h"
 #include "Component/ComponentManager.h"
 #include "Component/TransformComponent.h"
 #include "Rendering/OpenGL/OpenGLBase.h"
@@ -52,7 +51,6 @@ void Fracture::OutlineNode::execute(Renderer& renderer)
 	
 	m_shader->use();
 
-	const auto& outlineRenderCommands = GetBucket()->getOutlineRenderCommands();
 	for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
 	{
 		DrawCommand command = outlineRenderCommands[i];

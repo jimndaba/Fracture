@@ -13,6 +13,8 @@ namespace Fracture
 		Texture2D(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType m_FormatType);
 		Texture2D(void* data, InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType m_FormatType);
 
+		~Texture2D() {};
+
 		void bind()const;
 		void unbind()const;
 		void GenerateMips();
@@ -21,9 +23,10 @@ namespace Fracture
 		uint32_t GetWidth()const;
 		uint32_t GetHeight()const;
 		uint32_t GetMipLevel()const;
+		uint32_t GetTextureID()const;
 
 		void resize(int width, int height)const;
-		uint32_t GetTextureID()const;
+	
 
 		static std::shared_ptr<Texture2D> CreateTexture(InternalFormat internalformat,TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);
 		static std::shared_ptr<Texture2D> CreateTexture(void* data, InternalFormat internalformat, TextureFormat format, uint32_t width, uint32_t height, glWrap wrap, FormatType formatType);

@@ -19,7 +19,7 @@ namespace Fracture
 		StaticMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures);
 		~StaticMesh() = default;
 
-		uint32_t RenderID();
+		uint32_t RenderID() const;
 		uint32_t CountOfIndices();
 
 		void SetBufferLayout(const VertexBufferLayout& layout);

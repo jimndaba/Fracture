@@ -30,7 +30,7 @@ namespace Fracture
 	class PickingPass:public RenderQueueNode
 	{
 	public:
-		PickingPass(const std::string& Name, const int& width,const int& height, RenderBucket* opaque);
+		PickingPass(const std::string& Name, const int& width,const int& height, std::shared_ptr<RenderBucket>  opaque);
 		~PickingPass();
 
 		void execute(Renderer& renderer) override;

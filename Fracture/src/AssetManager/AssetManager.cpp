@@ -73,7 +73,9 @@ void Fracture::AssetManager::AddTexture2D(const std::string& name, const std::st
 {
 
 	std::shared_ptr<Texture2D> texture = TextureLoader::LoadTexture2D(name,path);
-	m_Textures.emplace(name, texture);
+	
+	m_Textures[name] = std::move(texture);
+
 	
 	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}",name);
@@ -82,7 +84,8 @@ void Fracture::AssetManager::AddTexture2D(const std::string& name, const std::st
 void Fracture::AssetManager::AddHDR(const std::string& name, const std::string& path, TextureType mtype)
 {
 	std::shared_ptr<Texture2D> texture = TextureLoader::LoadHDR(name, path);
-	m_Textures.emplace(name, texture);
+	
+	m_Textures[name] = std::move(texture);
 
 	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}", name);
@@ -91,7 +94,7 @@ void Fracture::AssetManager::AddHDR(const std::string& name, const std::string& 
 void Fracture::AssetManager::AddCubeMap(const std::string& name, const std::string& path, TextureType mtype)
 {
 	std::shared_ptr<TextureCubeMap> texture = TextureLoader::LoadCubeMap(name, path);
-	m_Textures.emplace(name, texture);
+	m_Textures[name]= std::move(texture);
 
 	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}", name);

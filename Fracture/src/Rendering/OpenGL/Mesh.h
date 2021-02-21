@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
+#include <string>
+#include "glm/glm.hpp"
 
 namespace Fracture
 {

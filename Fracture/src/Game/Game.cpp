@@ -87,7 +87,7 @@ void Fracture::Game::init()
 		m_GameSettings->Title,
 		m_GameSettings->IsResizable));
 
-	m_AssetManager = Fracture::AssetManager::instance();
+	//m_AssetManager = std::make_shared<AssetManager>();
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_ComponentManager->onInit();
 

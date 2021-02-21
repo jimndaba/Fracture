@@ -161,7 +161,7 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 			case SHADER_TYPE_SAMPLER2D:
 				b["Type"] = value->second->Type;
 				b["Name"] = value->first;
-				b["Texture"] = value->second->texture->Name;
+				b["Texture"] = value->second->texture->GetName();
 				b["Unit"] = value->second->Unit;
 				break;
 				FRACTURE_ERROR("Unrecognized Uniform type set");
@@ -183,8 +183,8 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	{
 		json a;
 		a["Texture Name"] = texture->first;
-		a["Texture Path"] = texture->second->path;
-		a["Texture Type"] = texture->second->textureType;
+		//a["Texture Path"] = texture->second->;
+		//a["Texture Type"] = texture->second->textureType;
 		textures.push_back(a);
 	}
 	j["Textures"] = textures;
@@ -389,7 +389,7 @@ void Fracture::ProjectSerializer::DeSerializeTextures(nlohmann::json t)
 	std::string name = t["Texture Name"];
 	std::string path = t["Texture Path"];
 	int _type = t["Texture Type"];
-	AssetManager::AddTexture(name, path, (TextureType)_type);
+	AssetManager::AddTexture2D(name, path, (TextureType)_type);
 }
 
 void Fracture::ProjectSerializer::DeSerializeScene(nlohmann::json s)

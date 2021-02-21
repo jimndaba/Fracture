@@ -2,7 +2,6 @@
 #include "OpenGLBase.h"
 #include "Vertex.h"
 #include <string>
-#include "VertexBufferLayout.h"
 
 Fracture::VertexBuffer::VertexBuffer(void* data, uint32_t size)
 {

@@ -26,7 +26,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Material.h"
 #include "Rendering/Model.h"
-#include "Rendering/Mesh.h"
+#include "Rendering/OpenGL/Mesh.h"
 #include "Scene/Scene.h"
 
 

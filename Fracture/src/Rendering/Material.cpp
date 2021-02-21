@@ -5,7 +5,7 @@
 #include "AssetManager/AssetManager.h"
 #include "OpenGL/Texture.h"
 #include "OpenGL/Texture2D.h"
-#include "OpenGL/Texture2DMultiSample.h";
+#include "OpenGL/Texture2DMultiSample.h"
 #include "OpenGL/TextureCubeMap.h"
 #include "Logging/Logger.h"
 

@@ -160,7 +160,7 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarg
 }
 
 
-std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, AttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments = 1, bool depthAndStencil = false)
+std::shared_ptr<Fracture::RenderTarget> Fracture::RenderTarget::CreateRenderTarget(const std::string& name, unsigned int width, unsigned int height, AttachmentTarget texturetarget, FormatType type, unsigned int nrColorAttachments, bool depthAndStencil)
 {
     return std::make_shared<RenderTarget>(name,width,height,texturetarget,type,nrColorAttachments,depthAndStencil);
 }

@@ -5,7 +5,6 @@
 #include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
-#include "Rendering/RenderBatch.h"
 
 Fracture::LambertianNode::LambertianNode(const std::string& name,const int& width,const int& height, std::shared_ptr<RenderBucket> bucket):
 	RenderQueueNode(name,bucket)

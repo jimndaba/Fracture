@@ -5,7 +5,6 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
-#include "Rendering/RenderBatch.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/ICamera.h"
 #include "Rendering/Material.h"

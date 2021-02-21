@@ -20,7 +20,7 @@ namespace Fracture
 
 		~SkeletonMesh() = default;
 
-		uint32_t RenderID();
+		uint32_t RenderID() const;
 		uint32_t CountOfIndices();
 
 		void SetBufferLayout(const VertexBufferLayout& layout);

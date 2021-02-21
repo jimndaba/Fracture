@@ -52,10 +52,10 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 
 std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(const std::string& name, const std::string& filename, const std::string& directory)
 {
-	std::string filename = path;
-	filename = directory + '/' + filename;
+	std::string file = filename;
+	std::string path = directory + '/' + file;
 
-	auto texture = TextureLoader::LoadTexture2D(name, filename);
+	auto texture = TextureLoader::LoadTexture2D(name, path);
 
 	return texture;
 

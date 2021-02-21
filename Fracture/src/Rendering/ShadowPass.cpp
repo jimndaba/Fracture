@@ -1,6 +1,5 @@
 #include "ShadowPass.h"
 #include "RenderTarget.h"
-#include "OpenGL/OpenGLBase.h"
 #include "DrawCommand.h"
 #include "RenderBucket.h"
 #include "Material.h"
@@ -11,6 +10,7 @@
 #include "Component/TransformComponent.h"
 #include "Renderer.h"
 #include "Component/ICamera.h"
+#include "OpenGL/OpenGLBase.h"
 
 Fracture::ShadowPass::ShadowPass()
 {

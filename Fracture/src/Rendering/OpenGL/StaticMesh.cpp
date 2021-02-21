@@ -38,7 +38,7 @@ Fracture::StaticMesh::StaticMesh(std::vector<Vertex> vertices, std::vector<unsig
 
 }
 
-uint32_t Fracture::StaticMesh::RenderID()
+uint32_t Fracture::StaticMesh::RenderID()const
 {
     return m_VerterArray->RenderID();
 }

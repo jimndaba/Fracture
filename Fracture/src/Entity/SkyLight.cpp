@@ -5,7 +5,7 @@
 
 Fracture::SkyLight::SkyLight():
 	ILight(),
-	m_environment(std::make_shared<Environment>(AssetManager::getTexture("Loft"), AssetManager::getShader("CubeMap")))
+	m_environment(Environment::Create(std::static_pointer_cast<Texture2D>(AssetManager::getTexture("Loft")), AssetManager::getShader("CubeMap")))
 {
 	
 }

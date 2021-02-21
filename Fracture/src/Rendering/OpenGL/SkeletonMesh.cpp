@@ -40,7 +40,7 @@ Fracture::SkeletonMesh::SkeletonMesh(std::vector<AnimatedVertex> vertices, std::
     bind();
 }
 
-uint32_t Fracture::SkeletonMesh::RenderID()
+uint32_t Fracture::SkeletonMesh::RenderID()const
 {
     return m_VerterArray->RenderID();
 }

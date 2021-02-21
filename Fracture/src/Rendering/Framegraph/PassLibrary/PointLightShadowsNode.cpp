@@ -1,16 +1,18 @@
 #include "PointLightShadowsNode.h"
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
+#include "Rendering/OpenGL/FrameBuffer.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/RenderTarget.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderBucket.h"
-#include "Rendering/RenderBatch.h"
 #include "Entity/ILight.h"
 #include "Entity/PointLight.h"
 
 
-Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height, RenderBucket* bucket, const std::shared_ptr<PointLight>& light):
-	RenderQueueNode(name),
+Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height,std::shared_ptr<RenderBucket> bucket, const std::shared_ptr<PointLight>& light):
+	RenderQueueNode(name,bucket),
 	Width(width),
 	Height(height),
 	m_light(light),
@@ -20,10 +22,9 @@ Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int&
 {
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outShadowMap");
 
-	outShadowMap = std::make_shared<RenderTarget>("PointShadows_Out",1024, 1024, TextureTarget::CubeMap,GL_FLOAT,1,true);
+	outShadowMap = RenderTarget::CreateRenderTarget("PointShadows_Out",1024, 1024, AttachmentTarget::CubeMapPosX,FormatType::Float,1,true);
 	m_shader = AssetManager::getShader("PointShadows");
-	AcceptBucket(bucket);
-
+	
 	AddOutputSocket(m_output);
 	AddOutputResource(m_output, outShadowMap);
 }
@@ -46,15 +47,12 @@ void Fracture::PointShadowsNode::execute(Renderer& renderer)
 	m_shader->setFloat("far_plane", m_far);
 	m_shader->setVec3("lightPos", m_light->GetPosition());
 
-	for (const auto& bucket : m_buckets)
+	const auto& shadowRenderCommands = GetBucket()->getShadowRenderCommands();
+
+	for (unsigned int i = 0; i < shadowRenderCommands.size(); ++i)
 	{
-		const auto& shadowRenderCommands = bucket->getShadowRenderCommands();
-		
-		for (unsigned int i = 0; i < shadowRenderCommands.size(); ++i)
-		{
-			DrawCommand command = shadowRenderCommands[i];
-			renderer.Submit(command, m_shader.get());
-		}
+		DrawCommand command = shadowRenderCommands[i];
+		renderer.Submit(command, m_shader.get());
 	}
 
 	resources["outShadowMap"]->Unbind();

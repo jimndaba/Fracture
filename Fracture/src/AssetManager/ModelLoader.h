@@ -16,10 +16,11 @@ namespace Fracture
 	class SkeletonMesh;
 	class Model;
 	class Material;
-	class Bone;
+	struct Bone;
 	class Skeleton;	
 	class Texture2D;
 	class AnimationClip;
+	enum class TextureType;
 
 	class ModelLoader
 	{

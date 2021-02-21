@@ -18,6 +18,8 @@
 #include "Rendering/Shader.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
+#include "Rendering/OpenGL/Texture2D.h"
+
 
 
 
@@ -233,7 +235,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 				case SHADER_TYPE_SAMPLER2D:
 					b["Type"] = value->second->Type;
 					b["Name"] = value->first;
-					b["Texture"] = value->second->texture->Name;
+					b["Texture"] = value->second->texture->GetName();
 					b["Unit"] = value->second->Unit;
 					break;
 					FRACTURE_ERROR("Unrecognized Uniform type set");
@@ -317,7 +319,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 			{
 				std::shared_ptr<SkyLight> sky = std::static_pointer_cast<SkyLight>(component->GetLight());
 				c["Intensity"] = sky->Intensity();
-				c["Environment"] = sky->GetEnvironment()->m_enviroment->Name;			
+				c["Environment"] = sky->GetEnvironment()->m_enviroment->GetName();			
 				break;
 			}
 		}
