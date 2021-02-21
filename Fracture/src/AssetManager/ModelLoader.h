@@ -15,6 +15,7 @@ namespace Fracture
 	class StaticMesh;
 	class SkeletonMesh;
 	class Model;
+	class Material;
 	class Bone;
 	class Skeleton;	
 	class Texture2D;
@@ -39,8 +40,7 @@ namespace Fracture
 			aiProcess_RemoveRedundantMaterials |
 			aiProcess_SortByPType |
 			aiProcess_OptimizeMeshes |
-			aiProcess_PopulateArmatureData |
-			aiProcess_ValidateDataStructures
+			aiProcess_PopulateArmatureData
 			;
 
 		//Functions

@@ -1,4 +1,7 @@
 #include "ModelLoader.h"
+#include "AssetManager.h"
+#include "TextureLoader.h"
+#include "Serialisation/ProjectProperties.h"
 #include "Rendering/OpenGL/Vertex.h"
 #include "Rendering/OpenGL/Mesh.h"
 #include "Rendering/Model.h"
@@ -166,9 +169,9 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::ProcessStaticMesh(s
 
 	aiMatrix4x4 transform = node->mTransformation;
 
-	new_mesh->Name = mesh_name;
+	new_mesh->SetName(mesh_name);
 	//new_mesh->ModelName = model->Name;
-	//new_mesh->MaterialIndex = mesh->mMaterialIndex;
+	new_mesh->SetMaterialIndex(mesh->mMaterialIndex);
 
 	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
 	//process aabb
@@ -328,9 +331,9 @@ std::shared_ptr<Fracture::SkeletonMesh> Fracture::ModelLoader::ProcessSkeletonMe
 	
 	aiMatrix4x4 transform = node->mTransformation;
 
-	new_mesh->Name = mesh_name;
+	new_mesh->SetName(mesh_name);
 	//new_mesh->ModelName = model->Name;
-	//new_mesh->MaterialIndex = mesh->mMaterialIndex;
+	new_mesh->SetMaterialIndex(mesh->mMaterialIndex);
 
 	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
 	//process aabb
@@ -396,11 +399,11 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		{
 			f_materail->setFloat("albedoFlag", 1.0f);
 			f_materail->SetTexture("albedoMap", texture, 3);
-			if (texture->Format == GL_RGBA)
-			{
-				f_materail->setIsTransparent(true);
-				f_materail->setFloat("TransparencyFlag", 1.0f);
-			}
+			//if (texture-> == GL_RGBA)
+			//{
+			//	f_materail->setIsTransparent(true);
+			//	f_materail->setFloat("TransparencyFlag", 1.0f);
+			//}
 		}
 		else
 		{
@@ -520,6 +523,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 	mat->GetTexture(type, 0, &str);
 	bool skip = false;
 
+	auto m_Textures = AssetManager::GetTextures();
 	for (unsigned int j = 0; j < m_Textures.size(); j++)
 	{
 		for (const auto& component_pair : m_Textures)
@@ -527,13 +531,14 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 			if (std::strcmp(component_pair.first.c_str(), str.C_Str()) == 0)
 			{
 				skip = true;
-				return getTexture(str.C_Str());
+				auto texture = AssetManager::getTexture(str.C_Str());
+				return std::static_pointer_cast<Texture2D>(texture);
 			}
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it		
-			texture = TextureLoader::LoadTexture2D(str.C_Str(), m_props->TexturesPath);
-			m_Textures.emplace(mat->GetName().C_Str(), texture); // add to loaded textures
+			texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);// m_props->TexturesPath + );
+			m_Textures[mat->GetName().C_Str()] = texture; // add to loaded textures
 		}
 	}
 

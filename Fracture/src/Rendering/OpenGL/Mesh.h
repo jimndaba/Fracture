@@ -39,6 +39,35 @@ namespace Fracture
 		virtual uint32_t RenderID() const = 0;
 		virtual uint32_t CountOfIndices() {};
 
+		std::shared_ptr<BoundingBox> GetAABB();
+		void SetAABB(const std::shared_ptr<BoundingBox>& aabb)
+		{
+			m_AABB = aabb;
+		}
+
+		std::string GetName()
+		{
+			return m_Name;
+		}
+		void SetName(const std::string& name)
+		{
+			m_Name = name;
+		}
+
+		void SetMaterialIndex(uint32_t index)
+		{
+			m_MaterialIndex = index;
+		}
+		uint32_t MaterialIndex()
+		{
+			return m_MaterialIndex;
+		}
+
+	private:
+		std::shared_ptr<BoundingBox> m_AABB;
+		std::string m_Name;
+		uint32_t m_MaterialIndex;
+
 	};
 
 }

@@ -1,8 +1,5 @@
 #include "AnimatorComponent.h"
 #include "Component/ComponentManager.h"
-#include "Component/RenderComponent.h"
-#include "Rendering/Model.h"
-#include "Rendering/Mesh.h"
 #include "Animation/Skeleton.h"
 #include "Animation/AnimationClip.h"
 #include "glm/ext/quaternion_common.hpp"

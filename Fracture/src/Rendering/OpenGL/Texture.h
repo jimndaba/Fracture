@@ -14,6 +14,18 @@ namespace Fracture
 	enum class glWrap;
 	enum class FormatType;
 
+	enum class TextureType
+	{
+		Albedo = 0,
+		Diffuse = 0,
+		Normal,
+		Roughness,
+		Metallic,
+		AO,
+		Specular,
+		Emission
+	};
+
 	class Texture
 	{
 	public:
@@ -28,8 +40,20 @@ namespace Fracture
 		virtual uint32_t GetWidth()const = 0;
 		virtual uint32_t GetHeight()const = 0;
 		virtual uint32_t GetMipLevel()const = 0;
-
 		virtual uint32_t GetTextureID()const = 0;
+
+		TextureType GetType() const
+		{
+			return m_TextureType;
+		}
+
+		void SetType(const TextureType& textureType)
+		{
+			m_TextureType = textureType;
+		}
+
+	private:
+		TextureType m_TextureType;
 	};
 
 

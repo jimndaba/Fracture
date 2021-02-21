@@ -1148,8 +1148,8 @@ void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uns
 		std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
 		if (!filepath.empty())
 		{
-			AssetManager::AddTexture(name,filepath,TextureType::Diffuse);
-			value = AssetManager::getTexture(name)->id;
+			AssetManager::AddTexture2D(name,filepath,TextureType::Diffuse);
+			value = AssetManager::getTexture(name)->GetTextureID();
 		}
 	}
 	ImGui::SameLine();
@@ -1170,8 +1170,8 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, uns
 		std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", name);
 		if (!filepath.empty())
 		{
-			AssetManager::AddTexture(name, filepath, TextureType::Diffuse);
-			mMaterial->ChangeTexture(label, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->textureType);
+			AssetManager::AddTexture2D(name, filepath, TextureType::Diffuse);
+			mMaterial->ChangeTexture(label, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->GetType());
 		}
 		
 	}

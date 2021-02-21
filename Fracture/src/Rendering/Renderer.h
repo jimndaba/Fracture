@@ -57,7 +57,6 @@ namespace Fracture
 		void DrawGrid();
 		void RenderDebug();
 		void RenderDebugRetained();		
-		void RenderOutlined();
 		void Submit(DrawCommand command);
 		void Submit(DrawCommand command, Shader* shader);
 		void WriteUniformData(Shader shader, std::string name, UniformValue value);

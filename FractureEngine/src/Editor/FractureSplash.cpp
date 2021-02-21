@@ -34,8 +34,8 @@ Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
 	ImGui_ImplGlfw_InitForOpenGL(m_window->Context(),true);
 	ImGui_ImplOpenGL3_Init("#version 400");
 
-    m_AssetManger->AddTexture("splash","content/textures/splashtest.png",TextureType::Diffuse);
-    m_AssetManger->AddTexture("title", "content/textures/title.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("splash","content/textures/splashtest.png",TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("title", "content/textures/title.png", TextureType::Diffuse);
     FRACTURE_INFO("Completed Init");
 }
 
@@ -120,14 +120,14 @@ void Fracture::FractureSplash::onRender()
 
     //ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-    ImGui::Image((ImTextureID)m_splash->id, ImVec2(300, 400));
+    ImGui::Image((ImTextureID)m_splash->GetTextureID(), ImVec2(300, 400));
     ImGui::PopStyleVar();
     ImGui::End();
 
     ImGui::Begin("Project", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 
-    ImGui::Image((void*)m_title->id, ImVec2(500, 200));
+    ImGui::Image((void*)m_title->GetTextureID(), ImVec2(500, 200));
     ImGui::PushID("##project");
     ImGui::Columns(3);
     ImGui::AlignTextToFramePadding();

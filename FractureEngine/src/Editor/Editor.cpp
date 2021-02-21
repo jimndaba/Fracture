@@ -14,6 +14,7 @@
 #include "FreeCamera.h"
 #include "EditorFrameGraph.h"
 
+
 bool Fracture::Editor::opt_padding;
 bool Fracture::Editor::p_open;
 bool Fracture::Editor::m_loadNewProject;
@@ -160,18 +161,18 @@ bool Fracture::Editor::onLoad()
 void Fracture::Editor::onLoadNew()
 {
     m_Renderer->onInit();
-    m_AssetManger->AddTexture("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
+    m_AssetManger->AddTexture2D("TranslateIcon", "content/textures/TranslateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("ScaleIcon", "content/textures/ScaleIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("RotateIcon", "content/textures/RotateIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("GameObjectIcon", "content/textures/GameObjectIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("CameraIcon", "content/textures/CameraIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("LightIcon", "content/textures/LightIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
    
 
-    m_AssetManger->AddEnvironmentMap("Loft",  "content/environments/Newport_Loft_Env.hdr");
+    m_AssetManger->AddHDR("Loft",  "content/environments/Newport_Loft_Env.hdr",TextureType::Diffuse);
 
     //Environment
     m_AssetManger->AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
@@ -849,7 +850,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::Separator();
         ImGui::NextColumn();
         ImGui::BeginChild("ShadowMap");
-        ImGui::Image((void*)&_renderer->m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->id, ImVec2(200,200));
+        ImGui::Image((void*)_renderer->m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->GetTextureID(), ImVec2(200,200));
         ImGui::EndChild();
         ImGui::NextColumn();
         static float vnear;

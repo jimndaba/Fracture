@@ -37,7 +37,7 @@ void Fracture::AssetBrowserPanel::render()
         std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0tga(*.tga)\0*.tga\0bmp(*.bmp)\0*.bmp\0hdr(*.hdr)\0*.hdr\0", name);
         if (!filepath.empty())
         {
-            AssetManager::AddTexture(name, filepath,TextureType::Diffuse);
+            AssetManager::AddTexture2D(name, filepath,TextureType::Diffuse);
         }
     }
 
@@ -163,7 +163,7 @@ void Fracture::AssetBrowserPanel::render()
     ImGui::BeginChild("AssetViewer");
     ImGui::SetScrollY(scroll_y);
     ImGui::ImageButton(nullptr, ImVec2(64, 64));
-    ImGui::Image((void*)AssetManager::getTexture("GameObjectIcon")->id, ImVec2(16, 16));
+    ImGui::Image((void*)AssetManager::getTexture("GameObjectIcon")->GetTextureID(), ImVec2(16, 16));
 
     scroll_y = ImGui::GetScrollY();
     ImGui::EndChild();

@@ -1,11 +1,12 @@
 #include "RenderQueueNode.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Material.h"
+#include "Rendering/OpenGL/TextureCubeMap.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RenderBucket.h"
-#include "Rendering/RenderBatch.h"
 #include "AssetManager/AssetManager.h"
 #include "Profiling/Profiler.h"
+#include "GLAD/glad.h"
 
 Fracture::RenderQueueNode::RenderQueueNode(std::string name, std::shared_ptr<RenderBucket> bucket):FrameNode(name),m_bucket(bucket)
 {
@@ -140,7 +141,7 @@ void Fracture::RenderQueueNode::WriteUniformSampler(Shader shader, std::string n
         shader.setTexture(name, value->texture, value->Unit);
         break;
     case SHADER_TYPE_SAMPLERCUBE:
-        shader.setCubeMap(name, value->id, value->Unit);
+        shader.setCubeMap(name, value->texture->GetTextureID(), value->Unit);
         break;
         FRACTURE_ERROR("Unrecognized Uniform type set");
         break;

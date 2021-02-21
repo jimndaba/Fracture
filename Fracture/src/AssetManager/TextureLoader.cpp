@@ -26,7 +26,17 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 
 	if (data)
 	{
-		texture = Texture2D::CreateTexture(data, InternalFormat::RGBA16, TextureFormat::RGB, width, height, glWrap::ClampToEdge, FormatType::UByte);
+
+		TextureFormat format = TextureFormat::RGB;
+		
+		if (channel == 1)
+			format = TextureFormat::Red;
+		else if (channel == 3)
+			format = TextureFormat::RGB;
+		else if (channel == 4)
+			format = TextureFormat::RGBA;
+
+		texture = Texture2D::CreateTexture(data, InternalFormat::RGBA16, format, width, height, glWrap::ClampToEdge, FormatType::UByte);
 
 		texture->GenerateMips();
 
@@ -38,6 +48,17 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 	}
 
 	return texture;
+}
+
+std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(const std::string& name, const std::string& filename, const std::string& directory)
+{
+	std::string filename = path;
+	filename = directory + '/' + filename;
+
+	auto texture = TextureLoader::LoadTexture2D(name, filename);
+
+	return texture;
+
 }
 
 std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadHDR(const std::string& name, const std::string& path)

@@ -11,11 +11,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <algorithm>
-#include "OpenGL/Texture.h"
+
 
 namespace Fracture
 {
 	class Shader;
+    class Texture;
+    class Texture2D;
+    class TextuerMultiSample;
+    class TextureCubeMap;
 
     enum SHADER_TYPE
     {
@@ -70,7 +74,7 @@ namespace Fracture
     {
         SHADER_TYPE  Type;
         unsigned int Unit;
-        unsigned int id;
+    
         union
         {
             Texture* texture;
@@ -140,9 +144,9 @@ namespace Fracture
         void setMat3(const std::string&, const glm::mat3& mat) const;
         void setMat4(const std::string&, const glm::mat4& mat) const;
 
-        void SetTexture(const std::string&, std::shared_ptr<Texture> value, unsigned int unit);
+        void SetTexture(const std::string&,const std::shared_ptr<Texture>& value, unsigned int unit);
         void ChangeTexture(const std::string&, std::shared_ptr<Texture> value, unsigned int unit);
-        void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
+        void setCubeMap(const std::string& name, const std::shared_ptr<TextureCubeMap>& value, unsigned int unit) const;
 
         void ClearSamples();
 

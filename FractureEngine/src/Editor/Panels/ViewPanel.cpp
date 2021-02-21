@@ -10,7 +10,8 @@
 int Fracture::ViewPanel::gizmoMode;
 
 
-Fracture::ViewPanel::ViewPanel(std::string name,SceneView& scenegraph):Panel(name), m_scenegraph(scenegraph)
+Fracture::ViewPanel::ViewPanel(std::string name,SceneView& scenegraph, Renderer& renderer):Panel(name), m_scenegraph(scenegraph),
+m_renderer(renderer)
 {
 	gizmoMode = 0;
 }
@@ -24,10 +25,10 @@ void Fracture::ViewPanel::init()
 	//m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->ActiveCamera()->Id);
 }
 
-void Fracture::ViewPanel::setRenderer(Renderer* renderer)
+void Fracture::ViewPanel::setRenderer(Renderer& renderer)
 {
     m_renderer = renderer;
-	m_camera = m_renderer->ActiveCamera();
+	m_camera = m_renderer.ActiveCamera();
 }
 
 void Fracture::ViewPanel::render()
@@ -60,7 +61,7 @@ void Fracture::ViewPanel::render()
 	m_ViewportHovered = ImGui::IsWindowHovered();
 	
 
-	ImGui::Image((ImTextureID)(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->id),
+	ImGui::Image((ImTextureID)(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->GetTextureID()),
 		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	
 	ImGui::SetCursorPos(ImVec2{10,10});
@@ -69,15 +70,15 @@ void Fracture::ViewPanel::render()
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
-	ImGui::Text("Number of DrawCalls: %d " , m_renderer->NumberDraw);
-	ImGui::Text("Number of Batches: %d ", m_renderer->NumberBatches);
-	ImGui::Text("Camera Position: %f , %f , %f ", m_renderer->ActiveCamera()->getPosition().x, m_renderer->ActiveCamera()->getPosition().y, m_renderer->ActiveCamera()->getPosition().z);
-	ImGui::Text("Camera Right: %f , %f , %f ", m_renderer->ActiveCamera()->Right().x, m_renderer->ActiveCamera()->Right().y, m_renderer->ActiveCamera()->Right().z);
-	ImGui::Text("Camera Up: %f , %f , %f ", m_renderer->ActiveCamera()->Up().x, m_renderer->ActiveCamera()->Up().y, m_renderer->ActiveCamera()->Up().z);
-	ImGui::Text("Camera Front: %f , %f , %f ", m_renderer->ActiveCamera()->Front().x, m_renderer->ActiveCamera()->Front().y, m_renderer->ActiveCamera()->Front().z);
-	ImGui::Text("Camera Yaw: %f ", m_renderer->ActiveCamera()->GetYaw());
-	ImGui::Text("Camera Pitch: %f ", m_renderer->ActiveCamera()->GetPitch());
-	ImGui::Text("Camera Roll: %f ", m_renderer->ActiveCamera()->GetRoll());
+	ImGui::Text("Number of DrawCalls: %d " , m_renderer.NumberDraw);
+	ImGui::Text("Number of Batches: %d ", m_renderer.NumberBatches);
+	ImGui::Text("Camera Position: %f , %f , %f ", m_renderer.ActiveCamera()->getPosition().x, m_renderer.ActiveCamera()->getPosition().y, m_renderer.ActiveCamera()->getPosition().z);
+	ImGui::Text("Camera Right: %f , %f , %f ", m_renderer.ActiveCamera()->Right().x, m_renderer.ActiveCamera()->Right().y, m_renderer.ActiveCamera()->Right().z);
+	ImGui::Text("Camera Up: %f , %f , %f ", m_renderer.ActiveCamera()->Up().x, m_renderer.ActiveCamera()->Up().y, m_renderer.ActiveCamera()->Up().z);
+	ImGui::Text("Camera Front: %f , %f , %f ", m_renderer.ActiveCamera()->Front().x, m_renderer.ActiveCamera()->Front().y, m_renderer.ActiveCamera()->Front().z);
+	ImGui::Text("Camera Yaw: %f ", m_renderer.ActiveCamera()->GetYaw());
+	ImGui::Text("Camera Pitch: %f ", m_renderer.ActiveCamera()->GetPitch());
+	ImGui::Text("Camera Roll: %f ", m_renderer.ActiveCamera()->GetRoll());
 
 	
 	//IMGUIZMO STUFF STARTS HERE
@@ -106,7 +107,7 @@ void Fracture::ViewPanel::render()
 			
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
-				int id = (int)m_renderer->GetEntityID((int)region_x,(int)region_y);
+				int id = (int)m_renderer.GetEntityID((int)region_x,(int)region_y);
 				if(id > 0)
 				{
 					const auto & m_entity = SceneManager::getEntity(id);
@@ -181,7 +182,7 @@ void Fracture::ViewPanel::render()
 				std::vector<std::shared_ptr<Mesh>> meshes = rendercomp->GetModel()->GetMeshes();
 				for (const auto& mesh : meshes)
 				{
-					m_renderer->PushOutlineCommand(m_scenegraph.SelectedEntity()->Id, mesh,transform->GetWorldTransform());
+					m_renderer.PushOutlineCommand(m_scenegraph.SelectedEntity()->Id, mesh,transform->GetWorldTransform());
 				}
 			}
 			
@@ -202,10 +203,10 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-		(m_renderer->SceneRenderTarget->Width != m_ViewportSize.x || m_renderer->SceneRenderTarget->Height != m_ViewportSize.y))
+		(m_renderer.SceneRenderTarget->Width != m_ViewportSize.x || m_renderer.SceneRenderTarget->Height != m_ViewportSize.y))
 	{		
-		m_renderer->SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		m_renderer->setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer.SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 		//TestGraph::Resize(m_ViewportSize.x, m_ViewportSize.y);	
 	}

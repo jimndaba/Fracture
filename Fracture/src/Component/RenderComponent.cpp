@@ -1,7 +1,7 @@
 #include "RenderComponent.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Model.h"
-#include "Rendering/Mesh.h"
+#include "Rendering/OpenGL/Mesh.h"
 #include "Rendering/Material.h"
 
 Fracture::RenderComponent::RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model):Component(entityID,ComponentType::Render),

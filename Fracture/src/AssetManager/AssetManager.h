@@ -77,6 +77,8 @@ namespace Fracture
 
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Shader>& shader);
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Material>& material);
+
+		static std::shared_ptr<ProjectProperties> GetProperties();
 	
 	private:
 

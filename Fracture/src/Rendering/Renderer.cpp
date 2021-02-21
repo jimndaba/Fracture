@@ -5,6 +5,8 @@
 #include "RenderBucket.h"
 #include "Shader.h"
 #include "OpenGL/Texture.h"
+#include "OpenGL/Texture2D.h"
+#include "OpenGL/TextureCubeMap.h"
 #include "Component/RenderComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
@@ -269,11 +271,6 @@ void Fracture::Renderer::RenderDebugRetained()
     m_DebugMaterial->getShader()->unbind();
 }
 
-void Fracture::Renderer::RenderOutlined()
-{
-     
-   
-}
 
 void Fracture::Renderer::EndFrame()
 {
@@ -338,7 +335,7 @@ void Fracture::Renderer::WriteUniformSampler(Shader shader, std::string name, st
         shader.setTexture(name,value->texture,value->Unit);
         break;
     case SHADER_TYPE_SAMPLERCUBE:
-        shader.setCubeMap(name, value->id, value->Unit);
+        shader.setCubeMap(name, value->texture->GetTextureID(), value->Unit);
         break;
         FRACTURE_ERROR("Unrecognized Uniform type set");
         break;
@@ -582,8 +579,8 @@ void Fracture::Renderer::SetupLighting(Material* material)
             {
                 std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_lights[i]);
                 material->getShader()->setFloat("intensity", sky->Intensity());
-                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap(),10);
-                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap(), 1);
+                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap()->GetTextureID(),10);
+                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap()->GetTextureID(), 1);
                 material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), 2);
                 break;
             }

@@ -3,6 +3,10 @@
 #include <utility>
 #include <functional>
 #include "AssetManager/AssetManager.h"
+#include "OpenGL/Texture.h"
+#include "OpenGL/Texture2D.h"
+#include "OpenGL/Texture2DMultiSample.h";
+#include "OpenGL/TextureCubeMap.h"
 #include "Logging/Logger.h"
 
 Fracture::Material::Material(const std::string& name, const std::shared_ptr<Shader>& shader) :
@@ -175,7 +179,7 @@ void Fracture::Material::setMat4(const std::string& name, const glm::mat4& mat) 
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::SetTexture(const std::string& name, std::shared_ptr<Texture> value, unsigned int unit)
+void Fracture::Material::SetTexture(const std::string& name,const std::shared_ptr<Texture>& value, unsigned int unit)
 {
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
@@ -194,11 +198,11 @@ void Fracture::Material::ChangeTexture(const std::string& name, std::shared_ptr<
 	m_SamplerUniforms->emplace(name,sample);
 }
 
-void Fracture::Material::setCubeMap(const std::string& name, const unsigned int value, unsigned int unit) const
+void Fracture::Material::setCubeMap(const std::string& name, const std::shared_ptr<TextureCubeMap>& value, unsigned int unit) const
 {
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLERCUBE;
-	sample->id = value;
+	sample->texture= value.get();
 	sample->Unit = unit;
 	m_SamplerUniforms->emplace(name, sample);
 }

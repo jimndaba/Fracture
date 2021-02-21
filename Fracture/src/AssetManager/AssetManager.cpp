@@ -110,6 +110,11 @@ void Fracture::AssetManager::AddMaterial(const std::string& name,const std::shar
 	FRACTURE_TRACE("Loaded Material: {}", name);
 }
 
+std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::GetProperties()
+{
+	return m_props;
+}
+
 const std::shared_ptr<Fracture::Shader>& Fracture::AssetManager::getShader(const std::string& name)
 {
 	for (auto it = m_Shaders.begin(); it != m_Shaders.end(); ++it)
