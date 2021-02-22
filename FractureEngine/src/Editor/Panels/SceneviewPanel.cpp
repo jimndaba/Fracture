@@ -289,15 +289,15 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 
 			if (ComponentManager::HasComponent<CameraControllerComponent>(entity))
 			{
-				icon = (void*)AssetManager::getTexture("CameraIcon")->GetTextureID();
+				icon = (void*)AssetManager::getTexture2D("CameraIcon")->GetTextureID();
 			}
 			else if (ComponentManager::HasComponent<LightComponent>(entity))
 			{
-				icon = (void*)AssetManager::getTexture("LightIcon")->GetTextureID();
+				icon = (void*)AssetManager::getTexture2D("LightIcon")->GetTextureID();
 			}
 			else
 			{
-				icon = (void*)AssetManager::getTexture("GameObjectIcon")->GetTextureID();
+				icon = (void*)AssetManager::getTexture2D("GameObjectIcon")->GetTextureID();
 			}
 
 			ImGui::Image(icon, size);
@@ -345,7 +345,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 
 			if (tag->isVisible == true)
 			{
-				ImGui::ImageButton((void*)AssetManager::getTexture("EyeIcon")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1);
+				ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIcon")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1);
 				if (ImGui::IsItemClicked(0))
 				{
 					tag->isVisible = !tag->isVisible;
@@ -353,7 +353,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 			}
 			else
 			{
-				if (ImGui::ImageButton((void*)AssetManager::getTexture("EyeIconC")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1))
+				if (ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIconC")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1))
 				{
 					tag->isVisible = true;
 				}

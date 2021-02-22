@@ -179,7 +179,7 @@ void Fracture::Material::setMat4(const std::string& name, const glm::mat4& mat) 
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::SetTexture(const std::string& name,const std::shared_ptr<Texture>& value, unsigned int unit)
+void Fracture::Material::SetTexture(const std::string& name,const std::shared_ptr<Texture2D>& value, unsigned int unit)
 {
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
@@ -188,7 +188,7 @@ void Fracture::Material::SetTexture(const std::string& name,const std::shared_pt
 	m_SamplerUniforms->emplace(name,sample);
 }
 
-void Fracture::Material::ChangeTexture(const std::string& name, std::shared_ptr<Texture> value, unsigned int unit)
+void Fracture::Material::ChangeTexture(const std::string& name, std::shared_ptr<Texture2D> value, unsigned int unit)
 {
 	m_SamplerUniforms->erase(name);
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
@@ -272,6 +272,6 @@ void Fracture::Material::CopySampleUniforms(std::unordered_map<std::string, std:
 {
 	for (auto it = copy->begin(); it != copy->end(); ++it)
 	{
-		//SetTexture(it->first,AssetManager::getTexture(it->second->texture->Name),it->second->Unit); TODO
+		//SetTexture(it->first,AssetManager::getTexture2D(it->second->texture->Name),it->second->Unit); TODO
 	}
 }

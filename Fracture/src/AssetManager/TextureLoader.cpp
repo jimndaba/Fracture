@@ -20,7 +20,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 	int channel;
 	std::shared_ptr<Fracture::Texture2D> texture;
 
-	stbi_set_flip_vertically_on_load(true);
+	//stbi_set_flip_vertically_on_load(true);
 
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
 
@@ -28,17 +28,28 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 	{
 
 		TextureFormat format = TextureFormat::RGB;
-		
+		InternalFormat iformat = InternalFormat::Red;
 		if (channel == 1)
+		{
 			format = TextureFormat::Red;
+			iformat = InternalFormat::Red;
+		}
 		else if (channel == 3)
+		{
 			format = TextureFormat::RGB;
+			iformat = InternalFormat::RGB;
+		}
 		else if (channel == 4)
+		{
 			format = TextureFormat::RGBA;
+			iformat = InternalFormat::RGBA;
+		}
 
-		texture = Texture2D::CreateTexture(data, InternalFormat::RGBA16, format, width, height, glWrap::ClampToEdge, FormatType::UByte);
+		texture = Texture2D::CreateTexture(data, iformat, format, width, height, glWrap::Repeat, FormatType::UByte);
 
 		texture->GenerateMips();
+
+		texture->SetName(name);
 
 		stbi_image_free(data);
 	}
@@ -68,13 +79,16 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadHDR(const std:
 	int channel;
 	std::shared_ptr<Fracture::Texture2D> texture;
 	stbi_set_flip_vertically_on_load(true);
+	
 	float* data = stbi_loadf(path.c_str(), &width, &height, &channel, 0);
 	
 	if (data)
 	{
 		texture = Texture2D::CreateTexture(data,InternalFormat::RGBA16, TextureFormat::RGB, width, height, glWrap::ClampToEdge, FormatType::Float);
 
-		stbi_image_free(data);
+		texture->SetName(name);
+
+		stbi_image_free(data);	
 	}
 	else
 	{

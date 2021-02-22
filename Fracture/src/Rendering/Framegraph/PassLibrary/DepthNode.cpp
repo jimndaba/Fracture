@@ -10,7 +10,7 @@
 #include "Rendering/Material.h"
 #include "Profiling/Profiler.h"
 
-Fracture::DepthNode::DepthNode(const std::string& name, const int& width, const int& height, std::shared_ptr<RenderBucket> bucket) :
+Fracture::DepthNode::DepthNode(const std::string& name, const int& width, const int& height, const std::shared_ptr<RenderBucket>& bucket) :
 	RenderQueueNode(name,bucket),
 	m_shader(AssetManager::getShader("DepthPass"))
 {

@@ -14,7 +14,7 @@ namespace Fracture
 	class RenderQueueNode : public FrameNode
 	{
 	public:
-		RenderQueueNode(std::string name, std::shared_ptr<RenderBucket> bucket);
+		RenderQueueNode(std::string name,const std::shared_ptr<RenderBucket>& bucket);
 		virtual void execute(Renderer& renderer);
 
 		void render(Renderer& renderer);

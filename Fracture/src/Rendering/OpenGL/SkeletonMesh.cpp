@@ -28,11 +28,11 @@ Fracture::SkeletonMesh::SkeletonMesh(std::vector<AnimatedVertex> vertices, std::
     {
         { ShaderDataType::Float3, "aPos" },
         { ShaderDataType::Float3, "aNormal" },
-        { ShaderDataType::Float2, "aTexCoord" },
+        { ShaderDataType::Float2, "aTexCoords" },
         { ShaderDataType::Float3, "aTangent" },
-        { ShaderDataType::Float3, "aBiTanget" },
-        { ShaderDataType::Int4,   "aBoneIds" },
-        { ShaderDataType::Float4, "aWeights" },
+        { ShaderDataType::Float3, "aBitangent" },
+        { ShaderDataType::Int4,   "aBoneIDs" },
+        { ShaderDataType::Float4, "aBoneWeights" },
     };
 
     m_VertexBuffer->SetLayout(vertexLayout);

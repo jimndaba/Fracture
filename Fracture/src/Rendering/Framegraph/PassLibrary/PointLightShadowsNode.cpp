@@ -11,7 +11,7 @@
 #include "Entity/PointLight.h"
 
 
-Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height,std::shared_ptr<RenderBucket> bucket, const std::shared_ptr<PointLight>& light):
+Fracture::PointShadowsNode::PointShadowsNode(const std::string& name, const int& width,const int& height, const std::shared_ptr<RenderBucket>& bucket, const std::shared_ptr<PointLight>& light):
 	RenderQueueNode(name,bucket),
 	Width(width),
 	Height(height),

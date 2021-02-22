@@ -94,7 +94,7 @@ namespace Fracture
 
 		virtual void VisitBillboardComponent(BillboardComponent* component)
 		{
-			mRenderer.DrawBillboard(component->EntityID,component->GetBillboard(),glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), AssetManager::getTexture("LightIcon"));
+			mRenderer.DrawBillboard(component->EntityID,component->GetBillboard(),glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), AssetManager::getTexture2D("LightIcon"));
 		}
 
 	private:

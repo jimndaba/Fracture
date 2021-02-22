@@ -93,11 +93,6 @@ void Fracture::Renderer::onInit()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
-
-
-
-   
-   
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -454,7 +449,7 @@ void Fracture::Renderer::DrawDebugLineRetained(glm::vec3 start, glm::vec3 end, g
     m_DebugDrawsRetained.push_back(std::make_shared<DebugLine>(start, end,color));
 }
 
-void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billboard, glm::vec4 color, std::shared_ptr<Texture> texture)
+void Fracture::Renderer::DrawBillboard(int id, std::shared_ptr<Billboard> billboard, glm::vec4 color, std::shared_ptr<Texture2D> texture)
 {
     std::shared_ptr<Material> billbaordMaterial = AssetManager::getMaterial("billboardIcons");   
     billbaordMaterial->setColor4("mColor",color);

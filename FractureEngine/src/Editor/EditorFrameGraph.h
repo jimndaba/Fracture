@@ -14,7 +14,7 @@ namespace Fracture
 		{
 			
 			{
-				auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
+				auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 				addnode(depthbuffer);
 			}
 			{
@@ -22,11 +22,11 @@ namespace Fracture
 				addnode(clear);
 			}
 			{
-				auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
+				auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 				addnode(lambertian);
 			}
 			{
-				auto outline = std::make_shared<OutlineNode>("outlinePass", renderer.Width(), renderer.Height(), renderer.m_Bucket.get());
+				auto outline = std::make_shared<OutlineNode>("outlinePass", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 				addnode(outline);
 			}
 			{

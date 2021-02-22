@@ -163,7 +163,7 @@ void Fracture::AssetBrowserPanel::render()
     ImGui::BeginChild("AssetViewer");
     ImGui::SetScrollY(scroll_y);
     ImGui::ImageButton(nullptr, ImVec2(64, 64));
-    ImGui::Image((void*)AssetManager::getTexture("GameObjectIcon")->GetTextureID(), ImVec2(16, 16));
+    ImGui::Image((void*)AssetManager::getTexture2D("GameObjectIcon")->GetTextureID(), ImVec2(16, 16));
 
     scroll_y = ImGui::GetScrollY();
     ImGui::EndChild();

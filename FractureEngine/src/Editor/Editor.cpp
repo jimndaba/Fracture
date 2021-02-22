@@ -59,6 +59,9 @@ void Fracture::Editor::onInit()
 {      
     m_Eventbus = std::make_unique<Eventbus>();
     m_GameSettings = std::make_shared<GameSettings>();
+    m_window = GameWindow::Create(1920, 1080, "Fracture Engine: " + m_properties->ProjectName);
+    m_window->MaximiseWindow();
+    m_Renderer = std::make_shared<Renderer>();
     m_AssetManger = std::make_unique<AssetManager>(m_properties);
     m_SceneManager = std::make_unique<SceneManager>();
     m_InputManager = std::make_unique<InputManager>();
@@ -69,11 +72,9 @@ void Fracture::Editor::onInit()
     m_ScriptManger = std::make_shared<ScriptManager>();
     m_AnimationManger = std::make_unique<AnimationManager>();
 
-
     m_ComponentManager->onInit();
 
-    m_window = GameWindow::Create(1920,1080, "Fracture Engine: " + m_properties->ProjectName);
-    m_window->MaximiseWindow();
+  
     showRenderConfig  = false;
     showAudioConfig   = false;
     showPhysicsConfig = false;
@@ -114,7 +115,7 @@ void Fracture::Editor::onInit()
 
     m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
     m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor",*m_sceneview.get()));
-    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get()));
+    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get(),*m_Renderer.get()));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
 
@@ -129,8 +130,9 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
     camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
-    m_Renderer = std::make_shared<Renderer>();
+    //m_Renderer = std::make_shared<Renderer>();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
+
    
     glfwSetKeyCallback(m_window->Context(), key_callback);
    
@@ -151,7 +153,7 @@ bool Fracture::Editor::onLoad()
     m_SceneManager->SetScene(m_properties->ActiveScene);
     m_viewpanel->init();
     m_Renderer->SetCamera(camera);
-    m_viewpanel->setRenderer(m_Renderer.get());   
+    m_viewpanel->setRenderer(*m_Renderer.get());   
     SetScene();   
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
     m_graph->Buildgraph();
@@ -277,11 +279,11 @@ void Fracture::Editor::onLoadNew()
     */
 
     //std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRStatic")));
-    //pbrTextured->SetTexture("albedoMap",AssetManager::getTexture("Rust_albedo"),3);
-    //pbrTextured->SetTexture("normalMap", AssetManager::getTexture("Rust_normal"), 4);
-    //pbrTextured->SetTexture("metallicMap", AssetManager::getTexture("Rust_metallic"),5);
-    //pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture("Rust_roughness"),6);
-    //pbrTextured->SetTexture("aoMap", AssetManager::getTexture("Rust_ao"),7);
+    //pbrTextured->SetTexture("albedoMap",AssetManager::getTexture2D("Rust_albedo"),3);
+    //pbrTextured->SetTexture("normalMap", AssetManager::getTexture2D("Rust_normal"), 4);
+    //pbrTextured->SetTexture("metallicMap", AssetManager::getTexture2D("Rust_metallic"),5);
+    //pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture2D("Rust_roughness"),6);
+    //pbrTextured->SetTexture("aoMap", AssetManager::getTexture2D("Rust_ao"),7);
     //pbrTextured->setFloat("albedoFlag", 1.0f);
     //pbrTextured->setFloat("normalFlag", 1.0f);
     //pbrTextured->setFloat("metallicFlag", 1.0f);
@@ -314,8 +316,8 @@ void Fracture::Editor::onLoadNew()
     SetScene();
     m_viewpanel->init();
     m_Renderer->SetCamera(camera);
-    m_viewpanel->setRenderer(m_Renderer.get());
-    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
+    m_viewpanel->setRenderer(*m_Renderer.get());
+    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
     m_graph->Buildgraph();
 }
 

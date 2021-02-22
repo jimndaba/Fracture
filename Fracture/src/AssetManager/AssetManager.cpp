@@ -8,6 +8,9 @@
 #include "Animation/Skeleton.h"
 #include "Rendering/Model.h"
 #include "TextureLoader.h"
+#include "Rendering/OpenGL/Texture2D.h"
+#include "Rendering/OpenGL/Texture2DMultiSample.h"
+#include "Rendering/OpenGL/TextureCubeMap.h"
 #include "ShaderLoader.h"
 #include "ModelLoader.h"
 #include "Logging/Logger.h"
@@ -16,7 +19,9 @@
 
 
 std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
-std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::m_Textures;
+std::map<std::string, std::shared_ptr<Fracture::Texture2D>> Fracture::AssetManager::m_Textures;
+std::map<std::string, std::shared_ptr<Fracture::TextureMultiSample>> Fracture::AssetManager::m_MultiSampleTextures;
+std::map<std::string, std::shared_ptr<Fracture::TextureCubeMap>> Fracture::AssetManager::m_CubeMaps;
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
 std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
@@ -69,23 +74,30 @@ void Fracture::AssetManager::AddModel(const std::string& name, const std::string
 	
 }
 
+void Fracture::AssetManager::AddTexture2D(const std::string& name, const std::shared_ptr<Texture2D>& texture)
+{
+	m_Textures[name] = texture;
+	FRACTURE_TRACE("Loaded Texture: {}", name);
+}
+
 void Fracture::AssetManager::AddTexture2D(const std::string& name, const std::string& path,TextureType mtype)
 {
-
-	std::shared_ptr<Texture2D> texture = TextureLoader::LoadTexture2D(name,path);
-	
-	m_Textures[name] = std::move(texture);
-
-	
-	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
+	std::shared_ptr<Texture2D> texture = TextureLoader::LoadTexture2D(name,path);	
+	m_Textures[name] = texture;
 	FRACTURE_TRACE("Loaded Texture: {}",name);
+}
+
+void Fracture::AssetManager::AddMultiSampleTexture(const std::string& name, const std::string& path, TextureType mtype)
+{
+	auto texture = TextureLoader::LoadTextureMultiSample(name, path);
+	m_MultiSampleTextures[name] = texture;
 }
 
 void Fracture::AssetManager::AddHDR(const std::string& name, const std::string& path, TextureType mtype)
 {
 	std::shared_ptr<Texture2D> texture = TextureLoader::LoadHDR(name, path);
 	
-	m_Textures[name] = std::move(texture);
+	m_Textures[name] = texture;
 
 	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}", name);
@@ -94,7 +106,7 @@ void Fracture::AssetManager::AddHDR(const std::string& name, const std::string& 
 void Fracture::AssetManager::AddCubeMap(const std::string& name, const std::string& path, TextureType mtype)
 {
 	std::shared_ptr<TextureCubeMap> texture = TextureLoader::LoadCubeMap(name, path);
-	m_Textures[name]= std::move(texture);
+	m_CubeMaps[name]= texture;
 
 	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
 	FRACTURE_TRACE("Loaded Texture: {}", name);
@@ -143,7 +155,17 @@ const std::shared_ptr<Fracture::Material>& Fracture::AssetManager::getMaterial(c
 	return nullptr;
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::AssetManager::getTexture(const std::string& name)
+std::shared_ptr<Fracture::TextureMultiSample> Fracture::AssetManager::getMultiSampleTexture(const std::string& name)
+{
+	return m_MultiSampleTextures[name];
+}
+
+std::shared_ptr<Fracture::TextureCubeMap> Fracture::AssetManager::getCubeMapTexture(const std::string& name)
+{
+	return m_CubeMaps[name];
+}
+
+std::shared_ptr<Fracture::Texture2D> Fracture::AssetManager::getTexture2D(const std::string& name)
 {
 	return m_Textures[name];
 }
@@ -153,9 +175,19 @@ std::map<std::string, std::shared_ptr<Fracture::Mesh>> Fracture::AssetManager::G
 	return m_meshes;
 }
 
-std::map<std::string, std::shared_ptr<Fracture::Texture>> Fracture::AssetManager::GetTextures()
+std::map<std::string, std::shared_ptr<Fracture::Texture2D>> Fracture::AssetManager::GetTextures()
 {
 	return m_Textures;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::TextureMultiSample>> Fracture::AssetManager::GetMultiSampleTextures()
+{
+	return m_MultiSampleTextures;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::TextureCubeMap>> Fracture::AssetManager::GetCubeMapTextures()
+{
+	return m_CubeMaps;;
 }
 
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::GetModels()

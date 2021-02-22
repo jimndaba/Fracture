@@ -9,7 +9,7 @@
 #include "Component/TransformComponent.h"
 #include "Rendering/OpenGL/OpenGLBase.h"
 
-Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, const int& height, std::shared_ptr<RenderBucket> bucket):
+Fracture::OutlineNode::OutlineNode(const std::string& name, const int& width, const int& height, const std::shared_ptr<RenderBucket>& bucket):
 	RenderQueueNode(name,bucket),
 	m_firstshader(AssetManager::getShader("PrimitiveMaterial")),
 	m_shader(AssetManager::getShader("OutlinePass"))

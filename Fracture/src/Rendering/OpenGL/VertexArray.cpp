@@ -25,7 +25,6 @@ void Fracture::VertexArray::unbind()
 void Fracture::VertexArray::AddBuffer(const std::shared_ptr<VertexBuffer>& buffer)
 {
 	bind();
-	//bind buffer and setup Data.
 }
 
 uint32_t Fracture::VertexArray::RenderID()

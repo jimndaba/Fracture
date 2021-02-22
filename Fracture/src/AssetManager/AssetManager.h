@@ -18,11 +18,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-
-
-
-
-
 namespace Fracture
 {
 	class Mesh;
@@ -30,6 +25,9 @@ namespace Fracture
 	struct BoneInfo;
 	struct Bone;
 	class Texture;
+	class Texture2D;
+	class TextureMultiSample;
+	class TextureCubeMap;
 	class Shader;
 	class Model;
 	class Material; 
@@ -53,10 +51,14 @@ namespace Fracture
 		static const std::shared_ptr<Shader>& getShader(const std::string &name);
 		static std::shared_ptr<Model> getModel(const std::string &name);
 		static const std::shared_ptr<Material>& getMaterial(const std::string &name);
-		static std::shared_ptr<Texture> getTexture(const std::string &name);
+		static std::shared_ptr<Texture2D> getTexture2D(const std::string &name);
+		static std::shared_ptr<TextureMultiSample> getMultiSampleTexture(const std::string& name);
+		static std::shared_ptr<TextureCubeMap> getCubeMapTexture(const std::string& name);
 
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
-		static std::map<std::string, std::shared_ptr<Texture>> GetTextures();
+		static std::map<std::string, std::shared_ptr<Texture2D>> GetTextures();
+		static std::map<std::string, std::shared_ptr<TextureMultiSample>> GetMultiSampleTextures();
+		static std::map<std::string, std::shared_ptr<TextureCubeMap>> GetCubeMapTextures();
 		static std::map<std::string, std::shared_ptr<Model>> GetModels();
 		static std::vector<std::shared_ptr<Fracture::Shader>>  GetShaders();
 		static std::map<std::string, std::shared_ptr<Material>> GetMaterials();
@@ -69,7 +71,9 @@ namespace Fracture
 
 		static void AddModel(const std::string& name, const std::string& path);
 		
+		static void AddTexture2D(const std::string& name, const std::shared_ptr<Texture2D>& texture);
 		static void AddTexture2D(const std::string& name, const std::string& path, TextureType mtype);
+		static void AddMultiSampleTexture(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddHDR(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddCubeMap(const std::string& name, const std::string& path, TextureType mtype);
 
@@ -89,10 +93,13 @@ namespace Fracture
 
 		//Libraries
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
-		static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
+		//static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
 		static std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
 		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
+		static std::map<std::string, std::shared_ptr<Texture2D>> m_Textures;
+		static std::map<std::string, std::shared_ptr<TextureMultiSample>> m_MultiSampleTextures;
+		static std::map<std::string, std::shared_ptr<TextureCubeMap>> m_CubeMaps;
 		
 		//Functions
 		

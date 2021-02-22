@@ -8,7 +8,7 @@
 #include "Profiling/Profiler.h"
 #include "GLAD/glad.h"
 
-Fracture::RenderQueueNode::RenderQueueNode(std::string name, std::shared_ptr<RenderBucket> bucket):FrameNode(name),m_bucket(bucket)
+Fracture::RenderQueueNode::RenderQueueNode(std::string name, const std::shared_ptr<RenderBucket>& bucket):FrameNode(name),m_bucket(bucket)
 {
 }
 

@@ -37,11 +37,14 @@ namespace Fracture
 	public:
 		virtual ~Mesh() {};
 
-		virtual std::string Name() {};
+		virtual std::string Name() { return m_Name; };
 		virtual uint32_t RenderID() const = 0;
-		virtual uint32_t CountOfIndices() {};
+		virtual uint32_t CountOfIndices() { return 0; };
 
-		std::shared_ptr<BoundingBox> GetAABB();
+		std::shared_ptr<BoundingBox> GetAABB()
+		{
+			return m_AABB;
+		}
 		void SetAABB(const std::shared_ptr<BoundingBox>& aabb)
 		{
 			m_AABB = aabb;

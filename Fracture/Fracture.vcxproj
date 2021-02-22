@@ -280,7 +280,6 @@
     <ClInclude Include="src\Input\IInputState.h" />
     <ClInclude Include="src\Input\MouseState.h" />
     <ClInclude Include="src\Rendering\Bindable.h" />
-    <ClInclude Include="src\Rendering\OpenGL\BufferLayout.h" />
     <ClInclude Include="src\Rendering\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameGraph.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameNode.h" />

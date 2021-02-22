@@ -47,8 +47,8 @@ bool Fracture::FractureSplash::Show()
 {
     FRACTURE_INFO("Show Splash");
 
-    m_title = m_AssetManger->getTexture("title");
-    m_splash = m_AssetManger->getTexture("splash");
+    m_title = m_AssetManger->getTexture2D("title");
+    m_splash = m_AssetManger->getTexture2D("splash");
 
 	while (m_isShow)
 	{

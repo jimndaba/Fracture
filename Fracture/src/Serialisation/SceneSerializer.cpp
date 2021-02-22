@@ -505,7 +505,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 					{
 					case SHADER_TYPE_SAMPLER2D:
 					{
-						material->ChangeTexture(sample["Name"], AssetManager::getTexture(sample["Texture"]), (int)sample["Unit"]);
+						material->ChangeTexture(sample["Name"], AssetManager::getTexture2D(sample["Texture"]), (int)sample["Unit"]);
 						break;
 					}
 					FRACTURE_ERROR("Unrecognized Uniform type set");

@@ -41,8 +41,8 @@ namespace Fracture
 		static void DrawfloatControl(const std::string& label, float& values, float resetValue = 0.0f, const float& max =1.0f, float columnWidth = 100.0f);
 		static void DrawIntControl(const std::string& label, int& value, int resetValue = 0.0f, float columnWidth = 100.0f);
 		static void DrawBoolControl(const std::string& label, bool& value, float columnWidth = 100.0f);
-		static void DrawTexture2DControl(const std::string& label, unsigned int& value, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawSample2DControl(const std::string& label, unsigned int& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawTexture2DControl(const std::string& label, uint32_t& value, float resetValue = 0.0f, float columnWidth = 100.0f);
+		static void DrawSample2DControl(const std::string& label, const  uint32_t& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
 	private:
 		
 		SceneView& m_scenegraph;

@@ -220,7 +220,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					{
 						if (it->second->Type == SHADER_TYPE::SHADER_TYPE_SAMPLER2D)
 						{
-							DrawSample2DControl(it->first, it->second->texture->id, material);
+							DrawSample2DControl(it->first, it->second->texture->GetTextureID(), material);
 						}
 
 					}
@@ -268,7 +268,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 							std::string filepath = FileDialogue::OpenFile("png(*.png)\0*.png\0jpg(*.jpg)\0*.jpg\0bmp(*.bmp)\0*.bmp\0", textureName);
 							if (!filepath.empty())
 							{
-								AssetManager::AddTexture(textureName, filepath, TextureType::Diffuse);
+								AssetManager::AddTexture2D(textureName, filepath, TextureType::Diffuse);
 							}
 						}
 
@@ -310,7 +310,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 						{
 							if (!name.empty() && !textureName.empty())
 							{
-								material->SetTexture(name, AssetManager::getTexture(textureName), (unsigned int)stringToEnum(current_type));
+								material->SetTexture(name, AssetManager::getTexture2D(textureName), (unsigned int)stringToEnum(current_type));
 								ImGui::CloseCurrentPopup();
 							}
 						}
@@ -550,7 +550,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 						std::string filepath = FileDialogue::OpenFile("HDR(*.hdr)\0*.hdr\0", name);
 						if (!filepath.empty())
 						{
-							AssetManager::AddEnvironmentMap(name, filepath);
+							AssetManager::AddHDR(name, filepath,TextureType::Diffuse);
 							light->ChangeEnvironment(name);
 						}
 					}
@@ -1136,7 +1136,7 @@ void Fracture::InspectorPanel::DrawBoolControl(const std::string& label, bool& v
 	ImGui::Separator();
 }
 
-void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,unsigned int& value, float resetValue, float columnWidth)
+void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uint32_t& value, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];
@@ -1149,7 +1149,7 @@ void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uns
 		if (!filepath.empty())
 		{
 			AssetManager::AddTexture2D(name,filepath,TextureType::Diffuse);
-			value = AssetManager::getTexture(name)->GetTextureID();
+			value = AssetManager::getTexture2D(name)->GetTextureID();
 		}
 	}
 	ImGui::SameLine();
@@ -1158,7 +1158,7 @@ void Fracture::InspectorPanel::DrawTexture2DControl(const std::string& label,uns
 	ImGui::Separator();
 }
 
-void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, unsigned int& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue, float columnWidth)
+void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label,const uint32_t& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];
@@ -1171,7 +1171,7 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label, uns
 		if (!filepath.empty())
 		{
 			AssetManager::AddTexture2D(name, filepath, TextureType::Diffuse);
-			mMaterial->ChangeTexture(label, AssetManager::getTexture(name), (int)AssetManager::getTexture(name)->GetType());
+			mMaterial->ChangeTexture(label, AssetManager::getTexture2D(name), (int)AssetManager::getTexture2D(name)->GetType());
 		}
 		
 	}

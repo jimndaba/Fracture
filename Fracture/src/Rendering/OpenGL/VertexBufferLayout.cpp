@@ -1,5 +1,6 @@
 #include "VertexBufferLayout.h"
 #include "BufferAttribute.h"
+#include "Logging/Logger.h"
 
 Fracture::VertexBufferLayout::VertexBufferLayout()
 {
@@ -29,6 +30,7 @@ void Fracture::VertexBufferLayout::CalculateStride()
 	{
 		attribute.Offset(offset);
 		offset += attribute.Size();
-		m_Stride += attribute.Size();
+		m_Stride += attribute.Size();		
 	}
+
 }

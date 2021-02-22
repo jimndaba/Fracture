@@ -14,28 +14,27 @@ Fracture::StaticMesh::StaticMesh(std::vector<Vertex> vertices, std::vector<unsig
 {  
     m_VerterArray = VertexArray::Create();
 
-    m_IndexBuffer = IndexBuffer::Create(&m_Indices[0], m_Indices.size() * sizeof(unsigned int));
+    m_VerterArray->bind();
 
     m_VertexBuffer = VertexBuffer::Create(&m_vertices[0], m_vertices.size() * sizeof(Vertex));
+    m_IndexBuffer = IndexBuffer::Create(&m_Indices[0], m_Indices.size() * sizeof(unsigned int));
     
-    m_VerterArray->bind();
-    m_IndexBuffer->bind();
-    m_VertexBuffer->bind();
-
     VertexBufferLayout vertexLayout;
 
     vertexLayout = 
     {
-        { ShaderDataType::Float3, "aPos" },
+        { ShaderDataType::Float3, "aPos" },   
         { ShaderDataType::Float3, "aNormal" },
-        { ShaderDataType::Float2, "aTexCoord" },
+        { ShaderDataType::Float2, "aTexCoords" },
         { ShaderDataType::Float3, "aTangent" },
-        { ShaderDataType::Float3, "aBiTanget" },          
+        { ShaderDataType::Float3, "aBitangent" },          
     };
-    m_VertexBuffer->SetLayout(vertexLayout);
+    
+    SetBufferLayout(vertexLayout);
 
     bind();
 
+    m_VerterArray->unbind();
 }
 
 uint32_t Fracture::StaticMesh::RenderID()const
@@ -55,36 +54,55 @@ void Fracture::StaticMesh::SetBufferLayout(const VertexBufferLayout& layout)
 
 void Fracture::StaticMesh::bind()
 {
+    // vertex positions
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    // vertex normals
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    // vertex texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Uvs));
+
+    // vertex texture coords
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+    // vertex texture coords
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+    /*
+
     uint32_t attribIndex = 0;
     
     auto& m_layout = m_VertexBuffer->GetLayout();
     
     for (const auto& attribute : m_layout.GetAttributes())
     {
-        auto shadertype = attribute.Type();
+        auto shadertype = ShaderDataTypeToOpenGLBaseType(attribute.Type());
         glEnableVertexAttribArray(attribIndex);
 
-        if (shadertype == ShaderDataType::Int)
+        if (shadertype == GL_INT)
         {
             glVertexAttribIPointer(attribIndex,
                 attribute.GetCount(),
-               ShaderDataTypeToOpenGLBaseType(shadertype),
-                m_layout.GetStride(),
-                (const void*)(intptr_t)attribute.Offset());
-
+                shadertype,
+                sizeof(Vertex),
+                (void*)attribute.Offset());
         }
         else
         {
             glVertexAttribPointer(attribIndex,
                 attribute.GetCount(),
-                ShaderDataTypeToOpenGLBaseType(shadertype), GL_FALSE,
-                m_layout.GetStride(),
-                (const void*)(intptr_t)attribute.Offset());
+                shadertype,
+                GL_FALSE,
+                sizeof(Vertex),
+                (void*)attribute.Offset());
         }
 
         attribIndex++;
     }
-
+    */
 }
 
 std::shared_ptr<Fracture::StaticMesh> Fracture::StaticMesh::Create(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures)

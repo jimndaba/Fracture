@@ -857,9 +857,6 @@
     <ClInclude Include="src\Rendering\OpenGL\VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\OpenGL\BufferLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\OpenGL\Primitives\Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -5,7 +5,7 @@ Fracture::IndexBuffer::IndexBuffer(void* data, uint32_t size)
 {
 	glGenBuffers(1, &m_RenderID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RenderID);
-	glNamedBufferStorage(m_RenderID,size,data, GL_MAP_WRITE_BIT);
+	glNamedBufferData(m_RenderID,size,data,GL_STATIC_DRAW);
 }
 
 Fracture::IndexBuffer::~IndexBuffer()

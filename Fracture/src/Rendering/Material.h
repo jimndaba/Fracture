@@ -144,8 +144,8 @@ namespace Fracture
         void setMat3(const std::string&, const glm::mat3& mat) const;
         void setMat4(const std::string&, const glm::mat4& mat) const;
 
-        void SetTexture(const std::string&,const std::shared_ptr<Texture>& value, unsigned int unit);
-        void ChangeTexture(const std::string&, std::shared_ptr<Texture> value, unsigned int unit);
+        void SetTexture(const std::string&,const std::shared_ptr<Texture2D>& value, unsigned int unit);
+        void ChangeTexture(const std::string&, std::shared_ptr<Texture2D> value, unsigned int unit);
         void setCubeMap(const std::string& name, const std::shared_ptr<TextureCubeMap>& value, unsigned int unit) const;
 
         void ClearSamples();

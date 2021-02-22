@@ -424,7 +424,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 	// 2. normal maps
 	if (material->GetTexture(aiTextureType::aiTextureType_NORMALS, 0, &aiTexPath) == AI_SUCCESS)
 	{
-		std::shared_ptr<Texture> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_NORMALS, TextureType::Normal);
+		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_NORMALS, TextureType::Normal);
 		if (texture)
 		{
 			f_materail->SetTexture("normalMap", texture, 4);
@@ -445,7 +445,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 	// 3. Roughness map
 	if (material->GetTexture(aiTextureType::aiTextureType_SHININESS, 0, &aiTexPath) == AI_SUCCESS)
 	{
-		std::shared_ptr<Texture> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_SHININESS, TextureType::Roughness);
+		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_SHININESS, TextureType::Roughness);
 		if (texture)
 		{
 			f_materail->setFloat("roughnessFlag", 1.0f);
@@ -470,7 +470,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 	// 1. Metallic map
 	if (material->GetTexture(aiTextureType::aiTextureType_METALNESS, 0, &aiTexPath) == AI_SUCCESS)
 	{
-		std::shared_ptr<Texture> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_METALNESS, TextureType::Metallic);
+		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_METALNESS, TextureType::Metallic);
 		if (texture)
 		{
 			f_materail->setFloat("metallicFlag", 1.0f);
@@ -493,7 +493,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 	// 1. ao map
 	if (material->GetTexture(aiTextureType::aiTextureType_AMBIENT_OCCLUSION, 0, &aiTexPath) == AI_SUCCESS)
 	{
-		std::shared_ptr<Texture> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_AMBIENT_OCCLUSION, TextureType::AO);
+		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_AMBIENT_OCCLUSION, TextureType::AO);
 		if (texture)
 		{
 			f_materail->setFloat("aoFlag", 1.0f);
@@ -531,15 +531,15 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 			if (std::strcmp(component_pair.first.c_str(), str.C_Str()) == 0)
 			{
 				skip = true;
-				auto texture = AssetManager::getTexture(str.C_Str());
-				return std::static_pointer_cast<Texture2D>(texture);
+				auto texture = AssetManager::getTexture2D(str.C_Str());
+				return texture;
 			}
-		}
-		if (!skip)
-		{   // if texture hasn't been loaded already, load it		
-			texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);// m_props->TexturesPath + );
-			m_Textures.emplace(mat->GetName().C_Str(),texture); // add to loaded textures
-		}
+		}		
+	}
+	if (!skip)
+	{   // if texture hasn't been loaded already, load it		
+		texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);// m_props->TexturesPath + 	
+		AssetManager::AddTexture2D(str.C_Str(), texture);
 	}
 
 	return texture;

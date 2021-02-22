@@ -27,8 +27,8 @@ void Fracture::ViewPanel::init()
 
 void Fracture::ViewPanel::setRenderer(Renderer& renderer)
 {
-    m_renderer = renderer;
-	m_camera = m_renderer.ActiveCamera();
+    //m_renderer = renderer;
+	m_camera = renderer.ActiveCamera();
 }
 
 void Fracture::ViewPanel::render()

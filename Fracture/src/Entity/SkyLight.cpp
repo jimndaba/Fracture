@@ -5,7 +5,7 @@
 
 Fracture::SkyLight::SkyLight():
 	ILight(),
-	m_environment(Environment::Create(std::static_pointer_cast<Texture2D>(AssetManager::getTexture("Loft")), AssetManager::getShader("CubeMap")))
+	m_environment(Environment::Create(std::static_pointer_cast<Texture2D>(AssetManager::getTexture2D("Loft")), AssetManager::getShader("CubeMap")))
 {
 	
 }
@@ -37,7 +37,7 @@ std::shared_ptr<Fracture::Environment> Fracture::SkyLight::GetEnvironment()
 
 void Fracture::SkyLight::ChangeEnvironment(const std::string& name)
 {
-	std::shared_ptr<Texture2D> texture = std::static_pointer_cast<Texture2D>(AssetManager::getTexture(name));
+	std::shared_ptr<Texture2D> texture = AssetManager::getTexture2D(name);
 	std::shared_ptr<Environment> newEnvironment = Environment::Create(texture, AssetManager::getShader("CubeMap"));
 		
 	if (newEnvironment)

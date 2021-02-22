@@ -14,7 +14,7 @@
 
 std::shared_ptr<Fracture::RenderTarget> Fracture::PickingPass::m_renderTarget;
 
-Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,const int& height,std::shared_ptr<RenderBucket> opaque):
+Fracture::PickingPass::PickingPass(const std::string& Name,const int& width,const int& height, const std::shared_ptr<RenderBucket>& opaque):
 	RenderQueueNode(Name,opaque),
 	SCREEN_WIDTH(width),
 	SCREEN_HEIGHT(height),

@@ -25,6 +25,7 @@ namespace Fracture
 	class Shader;
 	class Material;
 	class Texture;
+	class Texture2D;
 	class Entity;
 	class EntityInstance;
 	class Scene;
@@ -74,7 +75,7 @@ namespace Fracture
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
-		static void DrawBillboard(int id, std::shared_ptr<Billboard> billboard, glm::vec4 color, std::shared_ptr<Texture> texture);
+		static void DrawBillboard(int id, std::shared_ptr<Billboard> billboard, glm::vec4 color, std::shared_ptr<Texture2D> texture);
 		static void DrawAABB(const BoundingBox& aabb, const glm::mat4& transform, const glm::vec4& color);
 
 		static bool IsDebugDraw()
