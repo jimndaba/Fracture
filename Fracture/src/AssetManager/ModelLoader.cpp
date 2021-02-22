@@ -398,8 +398,8 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		if (texture)
 		{
 			f_materail->setFloat("albedoFlag", 1.0f);
-			f_materail->SetTexture("albedoMap", texture, 3);
-			//if (texture-> == GL_RGBA)
+			f_materail->SetTexture("albedoMap", texture, (unsigned int)TextureType::Diffuse);
+			//if (texture-> == TextureType::)
 			//{
 			//	f_materail->setIsTransparent(true);
 			//	f_materail->setFloat("TransparencyFlag", 1.0f);
@@ -427,7 +427,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		std::shared_ptr<Texture2D> texture = loadMaterialTexture(material, aiTextureType::aiTextureType_NORMALS, TextureType::Normal);
 		if (texture)
 		{
-			f_materail->SetTexture("normalMap", texture, 4);
+			f_materail->SetTexture("normalMap", texture,(unsigned int)TextureType::Normal);
 			f_materail->setFloat("normalFlag", 1.0f);
 		}
 		else
@@ -449,7 +449,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		if (texture)
 		{
 			f_materail->setFloat("roughnessFlag", 1.0f);
-			f_materail->SetTexture("roughnessMap", texture, 5);
+			f_materail->SetTexture("roughnessMap", texture, (unsigned int)TextureType::Roughness);
 		}
 		else
 		{
@@ -474,7 +474,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		if (texture)
 		{
 			f_materail->setFloat("metallicFlag", 1.0f);
-			f_materail->SetTexture("metallicMap", texture, 6);
+			f_materail->SetTexture("metallicMap", texture, (unsigned int)TextureType::Metallic);
 		}
 		else
 		{

@@ -16,14 +16,18 @@ namespace Fracture
 
 	enum class TextureType
 	{
-		Albedo = 0,
-		Diffuse = 0,
+		Albedo = 3,
+		Diffuse = 3,
 		Normal,
 		Roughness,
 		Metallic,
 		AO,
 		Specular,
-		Emission
+		Emission,
+		IrradianceMap,
+		PreFilterMap,
+		Brdf,
+		DirShadowMap,
 	};
 
 	class Texture
