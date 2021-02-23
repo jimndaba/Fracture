@@ -8,7 +8,7 @@
 
 namespace Fracture
 {
-
+	class UUID;
 	class EntityManager
 	{
 
@@ -20,7 +20,7 @@ namespace Fracture
 		template <class T>
 		static std::shared_ptr<T> CreateEntity();
 
-		static std::shared_ptr<Entity> CreateEntity(uint32_t id);
+		static std::shared_ptr<Entity> CreateEntity(UUID id);
 		
 	private:
 
@@ -29,7 +29,7 @@ namespace Fracture
 	template<class T>
 	inline std::shared_ptr<T> EntityManager::CreateEntity()
 	{
-		auto entity = std::make_shared<T>(IDManager::GetID());
+		auto entity = std::make_shared<T>();
 		return entity;
 	}
 

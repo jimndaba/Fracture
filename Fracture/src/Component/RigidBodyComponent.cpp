@@ -3,7 +3,7 @@
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
 
-Fracture::RigidBodyComponent::RigidBodyComponent(uint32_t id,const float& _mass):Component(id,ComponentType::Rigidbody),
+Fracture::RigidBodyComponent::RigidBodyComponent(UUID id,const float& _mass):Component(id),
 Mass(_mass),
 m_Transform(std::make_shared<btTransform>())
 {

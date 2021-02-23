@@ -29,7 +29,7 @@ namespace Fracture
 		static void AddEntity(std::shared_ptr<Entity> entity);
 		static void RemoveEntity(std::shared_ptr<Entity> entity);
 		static void RemoveEntity(uint32_t entity);
-		static std::shared_ptr<Entity> getEntity(uint32_t id);
+		static std::shared_ptr<Entity> getEntity(UUID id);
 
 		static std::map<std::string, std::shared_ptr<Scene>> GetScenes();
 

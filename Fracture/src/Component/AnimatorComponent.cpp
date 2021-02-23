@@ -4,7 +4,7 @@
 #include "Animation/AnimationClip.h"
 #include "glm/ext/quaternion_common.hpp"
 
-Fracture::AnimatorComponent::AnimatorComponent(uint32_t entityID):Component(entityID,ComponentType::None)
+Fracture::AnimatorComponent::AnimatorComponent(UUID id):Component(id)
 {
 
 }

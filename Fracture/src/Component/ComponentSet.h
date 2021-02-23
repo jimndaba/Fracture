@@ -11,6 +11,7 @@
 #include <typeindex>
 #include <iostream>
 #include <map>
+#include "Entity/UUID.h"
 
 namespace Fracture
 {
@@ -22,29 +23,29 @@ namespace Fracture
 		ComponentSet();
 
 		template <typename name>
-		bool HasComponent(uint32_t id);
+		bool HasComponent(UUID id);
 
 		template <typename name>
-		std::shared_ptr<name> GetComponent(uint32_t entitytId);
+		std::shared_ptr<name> GetComponent(UUID entitytId);
 
 
 		template <class name, typename... Args>
-		void AddComponent(uint32_t entity, Args && ...params);
+		void AddComponent(UUID entity, Args && ...params);
 		
 		void AddComponent(const std::shared_ptr<Component>& component);
 		
 		template <typename name>
 		std::vector<std::shared_ptr<name>> GetComponents();
 		
-		std::vector<std::shared_ptr<Component>> GetComponents(uint32_t id);
+		std::vector<std::shared_ptr<Component>> GetComponents(UUID id);
 
 		void RemoveComponent(const std::shared_ptr<Component>& component);
 
 
-		void RemoveComponent(uint32_t id);
+		void RemoveComponent(UUID id);
 
 		template <typename name>
-		void RemoveComponent(uint32_t id);
+		void RemoveComponent(UUID id);
 		
 
 		void Clear();
@@ -58,7 +59,7 @@ namespace Fracture
 	};
 
 	template<typename name>
-	inline bool Fracture::ComponentSet::HasComponent(uint32_t id)
+	inline bool Fracture::ComponentSet::HasComponent(UUID id)
 	{
 		std::shared_ptr<Component> c = GetComponent<name>(id);
 		if (c)
@@ -68,7 +69,7 @@ namespace Fracture
 	}
 
 	template<typename name>
-	inline std::shared_ptr<name> Fracture::ComponentSet::GetComponent(uint32_t entitytId)
+	inline std::shared_ptr<name> Fracture::ComponentSet::GetComponent(UUID entitytId)
 	{
 		for (std::shared_ptr<Component> component : m_components)
 		{
@@ -81,7 +82,7 @@ namespace Fracture
 	}
 
 	template<class name, typename ...Args>
-	inline void Fracture::ComponentSet::AddComponent(uint32_t entity, Args && ...params)
+	inline void Fracture::ComponentSet::AddComponent(UUID entity, Args && ...params)
 	{
 		std::shared_ptr<name>component = std::make_shared<name>(entity, params...);
 		m_components.push_back(component);
@@ -101,7 +102,7 @@ namespace Fracture
 	}
 
 	template <typename name>
-	inline void Fracture::ComponentSet::RemoveComponent(uint32_t id)
+	inline void Fracture::ComponentSet::RemoveComponent(UUID id)
 	{
 		std::shared_ptr<name> c = GetComponent<name>(id);
 		if (c)

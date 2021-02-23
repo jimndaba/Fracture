@@ -10,14 +10,14 @@ namespace Fracture
 	class TransformComponent:public Component,public ITransform
 	{
 	public:
-		TransformComponent(uint32_t entityID);
-		TransformComponent(uint32_t entityID, glm::vec3 pos);
-		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale);
-		TransformComponent(uint32_t entityID, glm::vec3 pos, glm::vec3 scale, glm::vec3 rotation);
+		TransformComponent(UUID ID);
+		TransformComponent(UUID ID, glm::vec3 pos);
+		TransformComponent(UUID ID, glm::vec3 pos, glm::vec3 scale);
+		TransformComponent(UUID ID, glm::vec3 pos, glm::vec3 scale, glm::vec3 rotation);
 		~TransformComponent()  = default ;
 
 
-		TransformComponent(const TransformComponent& transform):Component(transform.EntityID, ComponentType::Transform)
+		TransformComponent(const TransformComponent& transform):Component(transform)
 		{
 			m_LocalTransform = transform.m_LocalTransform;
 			m_WorldTransform = transform.m_WorldTransform;
@@ -26,7 +26,7 @@ namespace Fracture
 			m_Rotation = transform.m_Rotation;
 		}
 
-		TransformComponent(const TransformComponent& transform,const uint32_t& entityID) :Component(entityID, ComponentType::Transform)
+		TransformComponent(const TransformComponent& transform,const UUID& entityID) :Component(entityID)
 		{
 			m_LocalTransform = transform.m_LocalTransform;
 			m_WorldTransform = transform.m_WorldTransform;
@@ -60,16 +60,16 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor)override;
 
-		std::shared_ptr<TransformComponent> clone(uint32_t entityID) const
+		std::shared_ptr<TransformComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<TransformComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<TransformComponent>(this->clone_impl(id));
 		}
 
 	private:
 		
-		virtual TransformComponent* clone_impl(uint32_t entityID) const override
+		virtual TransformComponent* clone_impl(UUID id) const override
 		{
-			return new TransformComponent(*this, entityID);
+			return new TransformComponent(*this, id);
 		}
 		glm::mat4 m_LocalTransform = glm::mat4();
 		glm::mat4 m_WorldTransform = glm::mat4();

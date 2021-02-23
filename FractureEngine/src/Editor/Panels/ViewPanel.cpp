@@ -22,7 +22,7 @@ Fracture::ViewPanel::~ViewPanel()
 
 void Fracture::ViewPanel::init()
 {
-	//m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->ActiveCamera()->Id);
+	//m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->ActiveCamera()->GetId());
 }
 
 void Fracture::ViewPanel::setRenderer(Renderer& renderer)
@@ -121,13 +121,13 @@ void Fracture::ViewPanel::render()
 
 	if (m_scenegraph.SelectedEntity())
 	{
-		const auto& transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
+		const auto& transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->GetId());
 
 		if (transform)
 		{		
 
-			//std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
-			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(m_scenegraph.SelectedEntity()->Id);
+			//std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->GetId());
+			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(m_scenegraph.SelectedEntity()->GetId());
 			
 			float rw = (float)ImGui::GetWindowWidth();
 			float rh = (float)ImGui::GetWindowHeight();
@@ -166,13 +166,13 @@ void Fracture::ViewPanel::render()
 
 			}
 
-			if (ComponentManager::HasComponent<RenderComponent>(m_scenegraph.SelectedEntity()->Id))
+			if (ComponentManager::HasComponent<RenderComponent>(m_scenegraph.SelectedEntity()->GetId()))
 			{
-				auto& rendercomp = ComponentManager::GetComponent<RenderComponent>(m_scenegraph.SelectedEntity()->Id);
+				auto& rendercomp = ComponentManager::GetComponent<RenderComponent>(m_scenegraph.SelectedEntity()->GetId());
 				std::vector<std::shared_ptr<Mesh>> meshes = rendercomp->GetModel()->GetMeshes();
 				for (const auto& mesh : meshes)
 				{
-					m_renderer.PushOutlineCommand(m_scenegraph.SelectedEntity()->Id, mesh,transform->GetWorldTransform());
+					m_renderer.PushOutlineCommand(m_scenegraph.SelectedEntity()->GetId(), mesh,transform->GetWorldTransform());
 				}
 			}
 			

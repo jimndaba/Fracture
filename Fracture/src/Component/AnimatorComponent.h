@@ -16,10 +16,10 @@ namespace Fracture
 	class AnimatorComponent : public Component
 	{
 	public:
-		AnimatorComponent(uint32_t entityID);
+		AnimatorComponent(UUID id);
 		~AnimatorComponent() = default;
 
-		AnimatorComponent(const AnimatorComponent& animator) :Component(animator.EntityID, ComponentType::None)
+		AnimatorComponent(const AnimatorComponent& animator) :Component(animator)
 		{
 			m_CurrentAnimation = animator.m_CurrentAnimation;
 			m_animations = animator.m_animations;
@@ -27,7 +27,7 @@ namespace Fracture
 			m_Transforms = animator.m_Transforms;
 			
 		}
-		AnimatorComponent(const AnimatorComponent& animator, const uint32_t& entityID) :Component(entityID, ComponentType::None)
+		AnimatorComponent(const AnimatorComponent& animator, const UUID& entityID) :Component(entityID)
 		{		
 		}
 
@@ -38,9 +38,9 @@ namespace Fracture
 		void Accept(ISceneProbe* visitor) override;
 		void Accept(ISceneProbe* visitor,float dt) override;
 
-		std::shared_ptr<AnimatorComponent> clone(uint32_t entityID) const
+		std::shared_ptr<AnimatorComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<AnimatorComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<AnimatorComponent>(this->clone_impl(id));
 		}
 
 		std::vector<glm::mat4> getAnimationTransforms();	
@@ -54,9 +54,9 @@ namespace Fracture
 
 	private:
 
-		virtual AnimatorComponent* clone_impl(uint32_t entityID) const override
+		virtual AnimatorComponent* clone_impl(UUID id) const override
 		{
-			return new AnimatorComponent(*this, entityID);
+			return new AnimatorComponent(*this, id);
 		}
 
 	};

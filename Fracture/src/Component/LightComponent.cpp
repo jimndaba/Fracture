@@ -7,7 +7,7 @@
 #include "Entity/PointLight.h"
 #include "Entity/SpotLight.h"
 
-Fracture::LightComponent::LightComponent(uint32_t id, LightType lightType):Component(id,ComponentType::Light),m_type(lightType)
+Fracture::LightComponent::LightComponent(UUID id, LightType lightType):Component(id),m_type(lightType)
 {
 	switch (lightType)
 	{

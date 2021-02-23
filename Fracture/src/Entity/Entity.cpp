@@ -5,17 +5,25 @@
 #include "Component/ComponentManager.h"
 #include "Logging/Logger.h"
 
-Fracture::Entity::Entity()
+Fracture::Entity::Entity():
+	m_ID(UUID())
+{
+	std::cout << m_ID << std::endl;
+}
+
+Fracture::Entity::Entity(UUID id):
+	m_ID(id)
 {
 }
 
-Fracture::Entity::Entity(uint32_t id):Id(id)
-{
-
-}
 
 Fracture::Entity::~Entity()
 {
 	
+}
+
+Fracture::UUID Fracture::Entity::GetId()
+{
+	return m_ID;
 }
 

@@ -41,29 +41,29 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateEmpty(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id,"Empty");
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(),"Empty");
 	
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+			ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
 			return newEntity;
 		}
 
 		static std::shared_ptr<Entity> CreateSunlight(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "sunLight");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "sunLight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
 
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sun);
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::Sun);
 
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
 
 			std::shared_ptr<TransformComponent> node = std::make_shared<TransformComponent
-			>(newEntity->Id);
+			>(newEntity->GetId());
 
 			node->setRotation(light->GetDirection());
 			ComponentManager::AddComponent<TransformComponent>(node);
@@ -75,32 +75,32 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreatePointlight(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Pointlight");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Point);	
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Pointlight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::Point);	
 			
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
-			ComponentManager::AddComponent<BillboardComponent>(newEntity->Id);
-			ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
+			ComponentManager::AddComponent<BillboardComponent>(newEntity->GetId());
+			ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
 			return newEntity;
 		}
 
 		static std::shared_ptr<Entity> CreateSpotlight(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Spotlight");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Spot);
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Spotlight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::Spot);
 			
 		
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
 			ComponentManager::AddComponent<LightComponent>(light);
 
 			std::shared_ptr<TransformComponent> node = std::make_shared<TransformComponent
-			>(newEntity->Id);
+			>(newEntity->GetId());
 
 			node->setPosition(light->GetPosition());
 			node->setRotation(light->GetDirection());
@@ -112,10 +112,10 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateSkylight(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Skylight");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
-			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->Id, LightType::Sky);
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Skylight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::Sky);
 
 
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
@@ -131,12 +131,12 @@ namespace Fracture
 			
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cube");
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Cube");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);					
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);					
 			}
 			else
 			{
@@ -154,12 +154,12 @@ namespace Fracture
 
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Plane");
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Plane");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 			}
 			else
 			{
@@ -179,17 +179,17 @@ namespace Fracture
 				for (auto mesh : model->GetMeshes())
 				{
 					
-					ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Sphere");
-					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-					relationship->SetParent(scene->Root()->Id);
+					ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Sphere");
+					std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+					relationship->SetParent(scene->Root()->GetId());
 
 					ComponentManager::AddComponent<RelationShipComponent>(relationship);
-					ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-					ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+					ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+					ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 				}
 
 
-				auto animator = std::make_shared<AnimatorComponent>(newEntity->Id);
+				auto animator = std::make_shared<AnimatorComponent>(newEntity->GetId());
 				auto animation = std::make_shared<AnimationClip>();
 				auto channel = AnimationChannel();
 
@@ -285,12 +285,12 @@ namespace Fracture
 
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Suzane");
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Suzane");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 			}
 			else
 			{
@@ -308,12 +308,12 @@ namespace Fracture
 
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Cylinder");
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Cylinder");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 			}
 			else
 			{
@@ -330,12 +330,12 @@ namespace Fracture
 
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Torus");
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Torus");
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 			}
 			else
 			{
@@ -348,11 +348,11 @@ namespace Fracture
 		static std::shared_ptr<Entity> CreateCamera(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(newEntity->Id, "Camera");
-			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-			relationship->SetParent(scene->Root()->Id);
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Camera");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);
-			ComponentManager::AddComponent<CameraControllerComponent>(newEntity->Id);
+			ComponentManager::AddComponent<CameraControllerComponent>(newEntity->GetId());
 			return newEntity;
 		}
 
@@ -363,15 +363,15 @@ namespace Fracture
 
 			if (model)
 			{
-				ComponentManager::AddComponent<TagComponent>(newEntity->Id, ModelName);
-				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->Id);
-				relationship->SetParent(scene->Root()->Id);
+				ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), ModelName);
+				std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+				relationship->SetParent(scene->Root()->GetId());
 				ComponentManager::AddComponent<RelationShipComponent>(relationship);
-				ComponentManager::AddComponent<TransformComponent>(newEntity->Id);
-				ComponentManager::AddComponent<RenderComponent>(newEntity->Id, model);
+				ComponentManager::AddComponent<TransformComponent>(newEntity->GetId());
+				ComponentManager::AddComponent<RenderComponent>(newEntity->GetId(), model);
 				if (model->m_IsAnimated)
 				{
-					auto animator = std::make_shared<AnimatorComponent>(newEntity->Id);
+					auto animator = std::make_shared<AnimatorComponent>(newEntity->GetId());
 
 					for (auto& animation : model->m_animations)
 					{

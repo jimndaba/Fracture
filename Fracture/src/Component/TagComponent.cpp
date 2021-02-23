@@ -1,11 +1,10 @@
 #include "TagComponent.h"
-#include "Entity/IDManager.h"
 
-Fracture::TagComponent::TagComponent(uint32_t entityID) :Component(entityID,ComponentType::Tag)
+Fracture::TagComponent::TagComponent(UUID entityID) :Component(entityID)
 {
 }
 
-Fracture::TagComponent::TagComponent(uint32_t entityID,const std::string& name) : Component(entityID, ComponentType::Tag),
+Fracture::TagComponent::TagComponent(UUID entityID,const std::string& name) : Component(entityID),
 Name(name)
 {
 }

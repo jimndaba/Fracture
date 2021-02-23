@@ -6,6 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include <string>
+#include "UUID.h"
 
 namespace Fracture
 {
@@ -13,16 +14,17 @@ namespace Fracture
 	{
 	public:
 		Entity();
-		Entity(uint32_t id);
+		Entity(UUID id);
+		
 		~Entity();
-		uint32_t Id;
+		UUID GetId();
 
 		operator bool() const
 		{
 			return true;
 		}
 	private:
-
+		UUID m_ID;
 	};
 
 }

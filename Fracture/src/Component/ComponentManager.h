@@ -55,24 +55,24 @@ namespace Fracture
 		const static void AddComponent(const std::shared_ptr<Component>& component);
 
 		template<class T>
-		const static void RemoveComponent(const uint32_t& id);
+		const static void RemoveComponent(const UUID& id);
 		
-		const static void RemoveComponentsbyID(const uint32_t& id);
+		const static void RemoveComponentsbyID(const UUID& id);
 		
 		template<class T>
 		const static void RemoveComponent(const std::shared_ptr<T>& component);
 
 		template <class T>
-		const static std::shared_ptr<T>GetComponent(uint32_t enitytId);
+		const static std::shared_ptr<T>GetComponent(UUID enitytId);
 		
 		template <class T>
 		const static std::vector<std::shared_ptr<T>>GetAllComponents();
 
 		template <class T>
-		const static std::vector<std::shared_ptr<T>>GetComponents(uint32_t enitytId);
+		const static std::vector<std::shared_ptr<T>>GetComponents(UUID enitytId);
 
 		template<class T>
-		const static bool HasComponent(uint32_t id);
+		const static bool HasComponent(UUID id);
 	
 	private:
 		
@@ -103,7 +103,7 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline const void  Fracture::ComponentManager::RemoveComponent(const uint32_t& id)
+	inline const void  Fracture::ComponentManager::RemoveComponent(const UUID& id)
 	{
 		Register[typeid(T)]->RemoveComponent<T>(id);
 	}
@@ -115,7 +115,7 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline const std::shared_ptr<T> Fracture::ComponentManager::GetComponent(uint32_t entitytId)
+	inline const std::shared_ptr<T> Fracture::ComponentManager::GetComponent(UUID entitytId)
 	{
 		std::shared_ptr<T> c = Register[typeid(T)]->GetComponent<T>(entitytId);
 		if (c)
@@ -130,14 +130,14 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline const std::vector<std::shared_ptr<T>>  Fracture::ComponentManager::GetComponents(uint32_t entitytId)
+	inline const std::vector<std::shared_ptr<T>>  Fracture::ComponentManager::GetComponents(UUID entitytId)
 	{
 		return Register[typeid(T)]->GetComponents(entitytId);
 	}
 
 
 	template<class T>
-	inline const bool Fracture::ComponentManager::HasComponent(uint32_t id)
+	inline const bool Fracture::ComponentManager::HasComponent(UUID id)
 	{
 		ProfilerTimer timer("Has Component");
 		if (Register[typeid(T)]->HasComponent<T>(id))

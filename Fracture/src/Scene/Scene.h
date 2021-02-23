@@ -35,6 +35,7 @@ namespace Fracture
 	class Entity; 
 	class TransformComponent;
 	class InstancePool;
+	class UUID;
 
 	class Scene
 	{
@@ -50,7 +51,7 @@ namespace Fracture
 
 		void addEntity(const std::shared_ptr<Entity>& entity);				
 		void Destroy(const std::shared_ptr<Entity>& entity);
-		void Destroy(uint32_t id);
+		void Destroy(UUID id);
 		std::shared_ptr<Entity> Duplicate(const std::shared_ptr<Entity>& entity);
 		void clearScene();		
 
@@ -58,7 +59,7 @@ namespace Fracture
 		static void setCamera(std::shared_ptr<Entity> camera);
 
 		std::vector<std::shared_ptr<Entity>> Entities();
-		static std::shared_ptr<Entity> GetEntity(uint32_t id);
+		static std::shared_ptr<Entity> GetEntity(UUID id);
 		std::string Name;
 
 	private:
@@ -74,12 +75,12 @@ namespace Fracture
 	template<class name>
 	void Fracture::Scene::CopyComponentIfExists(const std::shared_ptr<Entity>& copyTo, const std::shared_ptr<Entity>& copyFrom)
 	{
-		if (ComponentManager::HasComponent<name>(copyFrom->Id))
+		if (ComponentManager::HasComponent<name>(copyFrom->GetId()))
 		{		
-			auto& comp = ComponentManager::GetComponent<name>(copyFrom->Id);
-			std::shared_ptr<name> component = std::dynamic_pointer_cast<name>(comp->clone(copyTo->Id));
+			auto& comp = ComponentManager::GetComponent<name>(copyFrom->GetId());
+			std::shared_ptr<name> component = std::dynamic_pointer_cast<name>(comp->clone(copyTo->GetId()));
 			ComponentManager::AddComponent<name>(component);
-			FRACTURE_INFO("ADD COMPONENT TO ENTITY: {}", copyTo->Id);
+			FRACTURE_INFO("ADD COMPONENT TO ENTITY: {}", copyTo->GetId());
 		}
 	}
 

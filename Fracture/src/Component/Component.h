@@ -18,29 +18,16 @@
 
 #include "Logging/Logger.h"
 #include "Rendering/ISceneProbe.h"
+#include "Entity/UUID.h"
 
 namespace Fracture
 {
-	enum class ComponentType
-	{
-		None,
-		Relationship,
-		Tag,
-		Transform,
-		EditorNode,
-		Render,
-		Camera,		
-		Rigidbody,
-		BoxCollider,
-		Script,
-		Light,		
-		Audio,
-	};
+	class UUID;
 
 	class Component
 	{
 	public:
-		Component(uint32_t id,ComponentType mtype):EntityID(id),componentType(mtype)
+		Component(UUID id):m_ID(id)
 		{
 		};
 
@@ -50,18 +37,22 @@ namespace Fracture
 		virtual void Accept(ISceneProbe* visitor, float dt) {};
 
 
-		std::shared_ptr<Component> clone(uint32_t entityID) const
+		std::shared_ptr<Component> clone(UUID id) const
 		{
-			return std::shared_ptr<Component>(this->clone_impl(entityID));
+			return std::shared_ptr<Component>(this->clone_impl(id));
 		}
 
 		virtual void OnDebug() {};
 	
-		uint32_t EntityID;
-		ComponentType componentType = ComponentType::None;		
+		UUID GetID()
+		{
+			return m_ID;
+		}
 
 	private:
-		virtual Component* clone_impl(uint32_t entityID) const = 0;
+		virtual Component* clone_impl(UUID id) const = 0;
+
+		UUID m_ID;
 	};
 	
 	

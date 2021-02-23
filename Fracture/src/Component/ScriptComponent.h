@@ -13,10 +13,10 @@ namespace Fracture
 	{
 
 	public:
-		ScriptComponent(uint32_t id, std::shared_ptr<GameLogic>  script);
+		ScriptComponent(UUID id, std::shared_ptr<GameLogic>  script);
 		~ScriptComponent() = default;
 
-		ScriptComponent(const ScriptComponent& component, uint32_t id) :Component(id, ComponentType::Script)
+		ScriptComponent(const ScriptComponent& component, UUID id) :Component(id)
 		{
 			m_script = component.m_script;
 		}
@@ -25,17 +25,17 @@ namespace Fracture
 		std::shared_ptr<GameLogic> GetScript();
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<ScriptComponent> clone(uint32_t entityID) const
+		std::shared_ptr<ScriptComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<ScriptComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<ScriptComponent>(this->clone_impl(id));
 		}
 
 	
 	private:
 
-		virtual ScriptComponent* clone_impl(uint32_t entityID) const override
+		virtual ScriptComponent* clone_impl(UUID id) const override
 		{
-			return new ScriptComponent(*this, entityID);
+			return new ScriptComponent(*this, id);
 		}
 		std::shared_ptr<GameLogic> m_script;
 

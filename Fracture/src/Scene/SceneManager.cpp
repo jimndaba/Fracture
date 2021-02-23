@@ -26,11 +26,11 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 
 	//CAMERA ENTITY
 	std::shared_ptr<Entity> main_Camera = EntityManager::CreateEntity<Entity>();
-	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->Id));
-	m_camera_rel->SetParent(newScene->Root()->Id);
+	std::shared_ptr<RelationShipComponent> m_camera_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(main_Camera->GetId()));
+	m_camera_rel->SetParent(newScene->Root()->GetId());
 	ComponentManager::AddComponent<RelationShipComponent>(m_camera_rel);
-	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->Id);
-	ComponentManager::AddComponent<TagComponent>(main_Camera->Id, "Main Camera");
+	ComponentManager::AddComponent<CameraControllerComponent>(main_Camera->GetId());
+	ComponentManager::AddComponent<TagComponent>(main_Camera->GetId(), "Main Camera");
 
 	//SUNLIGHT ENTITY
 	std::shared_ptr<Entity> main_sunlight = EntityFactory::CreateSunlight(newScene);
@@ -97,7 +97,7 @@ void Fracture::SceneManager::RemoveEntity(uint32_t entity)
 	m_activeScene->Destroy(entity);
 }
 
-std::shared_ptr<Fracture::Entity> Fracture::SceneManager::getEntity(uint32_t id)
+std::shared_ptr<Fracture::Entity> Fracture::SceneManager::getEntity(UUID id)
 {
 	return m_activeScene->GetEntity(id);
 }

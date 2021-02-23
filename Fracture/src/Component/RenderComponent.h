@@ -14,10 +14,10 @@ namespace Fracture
 	class RenderComponent :public Component
 	{
 	public:
-		RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model);
+		RenderComponent(UUID id,const std::shared_ptr<Model>& model);
 		~RenderComponent() = default;
 
-		RenderComponent(const RenderComponent& component, uint32_t id) :Component(id, ComponentType::Render)
+		RenderComponent(const RenderComponent& component, UUID id) :Component(id)
 		{
 			m_isOutlined = component.m_isOutlined;
 			m_material = component.m_material;
@@ -38,18 +38,18 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<RenderComponent> clone(uint32_t entityID) const
+		std::shared_ptr<RenderComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<RenderComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<RenderComponent>(this->clone_impl(id));
 		}
 
 		glm::vec4 Color;
 
 	private:
 
-		virtual RenderComponent* clone_impl(uint32_t entityID) const override
+		virtual RenderComponent* clone_impl(UUID id) const override
 		{
-			return new RenderComponent(*this, entityID);
+			return new RenderComponent(*this, id);
 		}
 
 		std::shared_ptr<Model> m_model;

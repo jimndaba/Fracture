@@ -15,7 +15,6 @@ namespace Fracture
 	class EntityManager;
 	class Entity;
 	class InputManager;
-	class IDManager;
 	class Scene;
 	class ScriptManager;
 	class GameLogic;
@@ -70,7 +69,6 @@ namespace Fracture
 		std::unique_ptr<AssetManager> m_AssetManager;
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
-		std::unique_ptr<IDManager> m_IDManager;
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
 		std::unique_ptr<Logger> m_logger;
 		std::unique_ptr<DebugRenderer> m_debug;

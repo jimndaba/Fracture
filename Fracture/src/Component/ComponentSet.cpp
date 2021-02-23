@@ -13,7 +13,7 @@ void Fracture::ComponentSet::AddComponent(const std::shared_ptr<Component>& comp
 	m_components.push_back(component);
 }
 
-std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentSet::GetComponents(uint32_t id)
+std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentSet::GetComponents(UUID id)
 {
 	std::vector<std::shared_ptr<Component>>  set;
 
@@ -21,7 +21,7 @@ std::vector<std::shared_ptr<Fracture::Component>> Fracture::ComponentSet::GetCom
 	{
 		for (std::shared_ptr<Component> component : m_components)
 		{
-			if (component != NULL && component->EntityID == id)
+			if (component != NULL && component->GetID() == id)
 			{
 				set.push_back(component);
 			}
@@ -60,11 +60,11 @@ void Fracture::ComponentSet::RemoveComponent(const std::shared_ptr<Fracture::Com
 	}
 }
 
-void Fracture::ComponentSet::RemoveComponent(uint32_t id)
+void Fracture::ComponentSet::RemoveComponent(UUID id)
 {
 	for (auto& component : m_components)
 	{
-		if (component != nullptr && component->EntityID == id)
+		if (component != nullptr && component->GetID() == id)
 		{
 			RemoveComponent(component);
 		}

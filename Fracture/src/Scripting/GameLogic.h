@@ -27,18 +27,18 @@ namespace Fracture
 
 		//Scripting helper functions
 		template<class T>
-		static std::shared_ptr<T> GetComponent(uint32_t entityID);
+		static std::shared_ptr<T> GetComponent(UUID id);
 
 		template<class T>
 		static std::shared_ptr<T> GetComponent(std::string entityName);
 
-		void destroy(uint32_t entityID);
+		void destroy(UUID id);
 		void destroy(std::shared_ptr<Entity> entity);
 
 	};
 
 	template<class T>
-	inline std::shared_ptr<T> GameLogic::GetComponent(uint32_t entityID)
+	inline std::shared_ptr<T> GameLogic::GetComponent(UUID id)
 	{
 		return ComponentManager::GetComponent<T>(entityID);
 	}

@@ -12,11 +12,11 @@ namespace Fracture
 	{
 
 	public: 
-		RelationShipComponent(uint32_t id);
+		RelationShipComponent(UUID id);
 		~RelationShipComponent() = default;
 
 
-		RelationShipComponent(const RelationShipComponent& rel) :Component(rel.EntityID,ComponentType::Relationship)
+		RelationShipComponent(const RelationShipComponent& rel) :Component(rel)
 		{
 			hasParent = rel.hasParent;
 			m_parent = rel.m_parent;
@@ -24,7 +24,7 @@ namespace Fracture
 			m_children = rel.m_children;
 		}
 
-		RelationShipComponent(const RelationShipComponent& component, uint32_t id) :Component(id, ComponentType::Relationship)
+		RelationShipComponent(const RelationShipComponent& component, UUID id) :Component(id)
 		{
 			hasParent = component.hasParent;
 			if (hasParent)
@@ -54,30 +54,30 @@ namespace Fracture
 
 		uint32_t noChildren = 0;
 		uint32_t m_parent;
-		void SetParent(const uint32_t& parent);
-		void ChangeParent(const uint32_t& parent);
-		void AddChild(const uint32_t& child);
-		void RemoveChild(const uint32_t& child);
-		std::vector<uint32_t> GetChildren();
+		void SetParent(const UUID& parent);
+		void ChangeParent(const UUID& parent);
+		void AddChild(const UUID& child);
+		void RemoveChild(const UUID& child);
+		std::vector<UUID> GetChildren();
 
 		bool hasChildren();
 		bool hasParent = false;
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<RelationShipComponent> clone(uint32_t entityID) const
+		std::shared_ptr<RelationShipComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<RelationShipComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<RelationShipComponent>(this->clone_impl(id));
 		}
 
 
 	private:
 
-		virtual RelationShipComponent *clone_impl(uint32_t entityID) const override
+		virtual RelationShipComponent *clone_impl(UUID id) const override
 		{
-			return new RelationShipComponent(*this, entityID);
+			return new RelationShipComponent(*this, id);
 		}
 		
-		std::vector<uint32_t> m_children;
+		std::vector<UUID> m_children;
 	};
 
 }

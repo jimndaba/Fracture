@@ -14,10 +14,10 @@ namespace Fracture
 	{
 
 	public:
-		BoxColliderComponent(uint32_t id,float _x, float _y, float _z);
+		BoxColliderComponent(UUID id,float _x, float _y, float _z);
 		~BoxColliderComponent() = default;
 
-		BoxColliderComponent(const BoxColliderComponent& component, uint32_t id) :Component(id, ComponentType::BoxCollider)
+		BoxColliderComponent(const BoxColliderComponent& component, UUID id) :Component(id)
 		{
 			m_boxCollider = component.m_boxCollider;
 			m_Transform = component.m_Transform;
@@ -34,17 +34,17 @@ namespace Fracture
 
 		void setScale(glm::vec3 sale);
 		void Accept(ISceneProbe* visitor) override;
-		std::shared_ptr<BoxColliderComponent> clone(uint32_t entityID) const
+		std::shared_ptr<BoxColliderComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<BoxColliderComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<BoxColliderComponent>(this->clone_impl(id));
 		}
 
 
 	private:
 
-		virtual BoxColliderComponent* clone_impl(uint32_t entityID) const override
+		virtual BoxColliderComponent* clone_impl(UUID id) const override
 		{
-			return new BoxColliderComponent(*this, entityID);
+			return new BoxColliderComponent(*this, id);
 		}
 	};
 

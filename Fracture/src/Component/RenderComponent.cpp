@@ -4,7 +4,7 @@
 #include "Rendering/OpenGL/Mesh.h"
 #include "Rendering/Material.h"
 
-Fracture::RenderComponent::RenderComponent(uint32_t entityID,const std::shared_ptr<Model>& model):Component(entityID,ComponentType::Render),
+Fracture::RenderComponent::RenderComponent(UUID id,const std::shared_ptr<Model>& model):Component(id),
 m_model(model)
 {
 }

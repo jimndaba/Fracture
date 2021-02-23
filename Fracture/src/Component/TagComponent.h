@@ -11,11 +11,11 @@ namespace Fracture
 	{
 
 	public:
-		TagComponent(uint32_t entityID);
-		TagComponent(uint32_t entityID,const std::string& name);
+		TagComponent(UUID entityID);
+		TagComponent(UUID entityID,const std::string& name);
 		~TagComponent() = default;
 
-		TagComponent(const TagComponent& tag,const uint32_t& entityID) :Component(entityID, ComponentType::Tag)
+		TagComponent(const TagComponent& tag,const UUID& entityID) :Component(entityID)
 		{
 			Name = tag.Name;
 			isVisible = tag.isVisible;
@@ -36,16 +36,16 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<TagComponent> clone(uint32_t entityID) const
+		std::shared_ptr<TagComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<TagComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<TagComponent>(this->clone_impl(id));
 		}
 
 	private:
 
-		virtual TagComponent* clone_impl(uint32_t entityID) const override
+		virtual TagComponent* clone_impl(UUID id) const override
 		{
-			return new TagComponent(*this,entityID);
+			return new TagComponent(*this,id);
 		}
 
 	};

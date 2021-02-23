@@ -87,9 +87,9 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity> entity)
 {
 	json j;
-	if (ComponentManager::HasComponent<TagComponent>(entity->Id))
+	if (ComponentManager::HasComponent<TagComponent>(entity->GetId()))
 	{
-		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->Id);		
+		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->GetId());		
 		json c;
 
 		//Ealy Exit we do not want to serialize the Root Entity.
@@ -102,9 +102,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Tag Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<RelationShipComponent>(entity->Id))
+	if (ComponentManager::HasComponent<RelationShipComponent>(entity->GetId()))
 	{
-		std::shared_ptr<RelationShipComponent> component = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+		std::shared_ptr<RelationShipComponent> component = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 		json c;		
 		c["Has Parent"] = component->hasParent;
 		c["Parent ID"] = component->m_parent ;
@@ -124,9 +124,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Relationship Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<TransformComponent>(entity->Id))
+	if (ComponentManager::HasComponent<TransformComponent>(entity->GetId()))
 	{
-		std::shared_ptr<TransformComponent> component = ComponentManager::GetComponent<TransformComponent>(entity->Id);
+		std::shared_ptr<TransformComponent> component = ComponentManager::GetComponent<TransformComponent>(entity->GetId());
 		json c;	
 		
 		c["Position"] = { component->Position().x,component->Position().y,component->Position().z } ;
@@ -135,9 +135,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Transform Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<CameraControllerComponent>(entity->Id))
+	if (ComponentManager::HasComponent<CameraControllerComponent>(entity->GetId()))
 	{
-		std::shared_ptr<CameraControllerComponent> component = ComponentManager::GetComponent<CameraControllerComponent>(entity->Id);
+		std::shared_ptr<CameraControllerComponent> component = ComponentManager::GetComponent<CameraControllerComponent>(entity->GetId());
 		json c;
 		c["Position"] = { component->Position.x,component->Position.y,component->Position.z };
 		c["FOV"] = component->foV ;
@@ -150,9 +150,9 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Camera Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<RenderComponent>(entity->Id))
+	if (ComponentManager::HasComponent<RenderComponent>(entity->GetId()))
 	{
-		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->Id);
+		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->GetId());
 		json c;
 		c["Model"] = component->GetModel()->Name;
 		json serialised_materials = json::array_t();
@@ -254,25 +254,25 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Render Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<RigidBodyComponent>(entity->Id))
+	if (ComponentManager::HasComponent<RigidBodyComponent>(entity->GetId()))
 	{
-		std::shared_ptr<RigidBodyComponent> component = ComponentManager::GetComponent<RigidBodyComponent>(entity->Id);
+		std::shared_ptr<RigidBodyComponent> component = ComponentManager::GetComponent<RigidBodyComponent>(entity->GetId());
 		json c;		
 		c["Mass"] =  component->Mass ;
 		j["Rigidbody Component"] = c;
 	}
 
-	if (ComponentManager::HasComponent<BoxColliderComponent>(entity->Id))
+	if (ComponentManager::HasComponent<BoxColliderComponent>(entity->GetId()))
 	{
-		std::shared_ptr<BoxColliderComponent> component = ComponentManager::GetComponent<BoxColliderComponent>(entity->Id);
+		std::shared_ptr<BoxColliderComponent> component = ComponentManager::GetComponent<BoxColliderComponent>(entity->GetId());
 		json c;		
 		c["Dimensions"] = {component->X,component->Y,component->Z };
 		j["Box Collider Component"] =c; 
 	}
 
-	if (ComponentManager::HasComponent<LightComponent>(entity->Id))
+	if (ComponentManager::HasComponent<LightComponent>(entity->GetId()))
 	{
-		std::shared_ptr<LightComponent> component = ComponentManager::GetComponent<LightComponent>(entity->Id);
+		std::shared_ptr<LightComponent> component = ComponentManager::GetComponent<LightComponent>(entity->GetId());
 		json c;
 
 		switch (component->GetLightType())
@@ -327,7 +327,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Light Component"] = c;
 	}
 
-	j["Entity ID"] = entity->Id;
+	j["Entity ID"] = entity->GetId();
 	return j;
 }
 
@@ -343,20 +343,20 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		}
 
 		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(j["Entity ID"]);		
-		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->Id);		
+		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->GetId());		
 		component->SetName(tagComponent["Entity Name"]);
 		ComponentManager::AddComponent<TagComponent>(component);
 
 		if (exists(j, "Relationship Component"))
 		{
 			auto relationshipComponent = j["Relationship Component"];
-			std::shared_ptr<RelationShipComponent> component = std::make_shared<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> component = std::make_shared<RelationShipComponent>(entity->GetId());
 
 			bool hasParent = relationshipComponent["Has Parent"];
 			if (hasParent)
 			{
-				std::cout << "Setting parent to: "<< relationshipComponent["Parent ID"] << "for Entity : " << entity->Id<< std::endl;
-				uint32_t id = relationshipComponent["Parent ID"];
+				std::cout << "Setting parent to: "<< relationshipComponent["Parent ID"] << "for Entity : " << entity->GetId()<< std::endl;
+				UUID id = relationshipComponent["Parent ID"];
 				component->SetParent(id);
 			}
 			
@@ -382,7 +382,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			std::array<float, 3> right = cameraComponent["Right"];
 			std::array<float, 3> targetpos = cameraComponent["Target Position"];
 
-			std::shared_ptr<CameraControllerComponent> component = std::make_shared<CameraControllerComponent>(entity->Id);
+			std::shared_ptr<CameraControllerComponent> component = std::make_shared<CameraControllerComponent>(entity->GetId());
 			component->foV = fov;
 			component->farClip = Far;
 			component->nearClip = Near;
@@ -402,7 +402,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			std::array<float, 3> sc = transformComponent["Scale"];
 			std::array<float, 3>rot = transformComponent["Rotation"];
 
-			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(entity->Id);
+			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(entity->GetId());
 			component->setPosition(glm::vec3(pos[0], pos[1], pos[2]));
 			component->setScale(glm::vec3(sc[0], sc[1], sc[2]));
 			component->setRotation(glm::vec3(rot[0], rot[1], rot[2]));
@@ -524,7 +524,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			
 			}
 			
-			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->Id, m_model);
+			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(entity->GetId(), m_model);
 			ComponentManager::AddComponent<RenderComponent>(component);
 
 		}
@@ -534,7 +534,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			auto boxColliderComponent = j["Box Collider Component"];
 			std::array<float, 3>dimensions = boxColliderComponent["Dimensions"];
 
-			std::shared_ptr<BoxColliderComponent> component = std::make_shared<BoxColliderComponent>(entity->Id,
+			std::shared_ptr<BoxColliderComponent> component = std::make_shared<BoxColliderComponent>(entity->GetId(),
 				dimensions[0],
 				dimensions[1],
 				dimensions[2]);
@@ -545,7 +545,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 		{
 			auto rigidbodyComponent = j["Rigidbody Component"];
 			float mass = rigidbodyComponent["Mass"];
-			std::shared_ptr<RigidBodyComponent> component = std::make_shared<RigidBodyComponent>(entity->Id, mass);
+			std::shared_ptr<RigidBodyComponent> component = std::make_shared<RigidBodyComponent>(entity->GetId(), mass);
 			ComponentManager::AddComponent<RigidBodyComponent>(component);
 		}
 		
@@ -560,7 +560,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			{
 			case LightType::Sun:
 			{											
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id,lType);
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(),lType);
 				std::array<float, 3> direction = lightComponent["Direction"];
 				std::array<float, 4> diffuse = lightComponent["Diffuse"];
 				std::array<float, 4> ambient = lightComponent["Ambient"];
@@ -571,7 +571,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));		
 				component->SetIntensity(lightComponent["Intensity"]);
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
 				break;
 			}
 			case LightType::Spot:
@@ -581,7 +581,7 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				std::array<float, 4> diffuse = lightComponent["Diffuse"];
 				std::array<float, 4> ambient = lightComponent["Ambient"];
 				std::array<float, 4> specular = lightComponent["Specular"];
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
 				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
 				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
 				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
@@ -593,13 +593,13 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetCutoff(lightComponent["Cutoff"]);
 				component->SetOuterCutOff(lightComponent["OuterCutoff"]);			
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
 				break;
 			}
 			case LightType::Point:
 			{				
 				std::array<float, 3> position = lightComponent["Position"];
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
 				std::array<float, 4> diffuse = lightComponent["Diffuse"];
 				std::array<float, 4> ambient = lightComponent["Ambient"];
 				std::array<float, 4> specular = lightComponent["Specular"];
@@ -611,16 +611,16 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 				component->SetConstant(lightComponent["Constant"]);
 				component->SetQuadratic(lightComponent["Qaudratic"]);			
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
 				break;
 			}
 			case LightType::Sky:
 			{
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->Id, lType);
+				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
 				component->SetIntensity(lightComponent["Intensity"]);
 				component->ChangeEnvironment(lightComponent["Environment"]);
 				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->Id);
+				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
 				break;
 			}
 			}

@@ -94,7 +94,6 @@ void Fracture::Game::init()
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
-	m_IDManager = std::unique_ptr<IDManager>(new IDManager());
 	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
@@ -131,7 +130,7 @@ void Fracture::Game::update(float dt)
 
 	m_PhysicsManager->onUpdate(dt);
 		
-	//std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->ActiveCamera()->Id);
+	//std::shared_ptr<CameraControllerComponent> camera = ComponentManager::GetComponent<CameraControllerComponent>(m_currentScene->ActiveCamera()->GetId());
 
 	float mouseX = m_InputManager->GetMousePosition().x;
 	float mouseY = m_InputManager->GetMousePosition().y;

@@ -376,8 +376,8 @@ void Fracture::Editor::onUpdate(float dt)
     {
         if (m_sceneview->SelectedEntity())
         {
-            FRACTURE_INFO("Deleting Entity :  {}", m_sceneview->SelectedEntity()->Id);
-            m_SceneManager->GetActiveScene()->Destroy(m_sceneview->SelectedEntity()->Id);
+            FRACTURE_INFO("Deleting Entity :  {}", m_sceneview->SelectedEntity()->GetId());
+            m_SceneManager->GetActiveScene()->Destroy(m_sceneview->SelectedEntity()->GetId());
         }
     }
     //m_PhysicsManger->startPhysics();

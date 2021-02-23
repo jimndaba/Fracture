@@ -28,7 +28,7 @@ void Fracture::SceneView::render()
 	ImGui::SetColumnWidth(0, available_width - 30);
 
 
-	DrawEntityNode(m_scene->Root()->Id);
+	DrawEntityNode(m_scene->Root()->GetId());
 	
 	if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 	{
@@ -42,19 +42,19 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Empty Entity"))
 		{
 			std::shared_ptr<Entity> empty = EntityManager::CreateEntity<Entity>();
-			ComponentManager::AddComponent<TagComponent>(empty->Id, "Empty");
-			std::shared_ptr<RelationShipComponent> relation = std::make_shared<RelationShipComponent>(empty->Id);
+			ComponentManager::AddComponent<TagComponent>(empty->GetId(), "Empty");
+			std::shared_ptr<RelationShipComponent> relation = std::make_shared<RelationShipComponent>(empty->GetId());
 			ComponentManager::AddComponent<RelationShipComponent>(relation);
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(empty);
 				setSelectEntity(empty);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(empty);
 				setSelectEntity(empty);
 			}
@@ -63,17 +63,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create PointLight"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreatePointlight(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -84,17 +84,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create SpotLight"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSpotlight(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -103,17 +103,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Sphere"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSphere(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -123,17 +123,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Cube"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCube(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -143,17 +143,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Plane"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreatePlane(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -163,17 +163,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Suzane"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateSuzane(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -183,17 +183,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Cylinder"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCylinder(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -203,17 +203,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Torus"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateTorus(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -222,17 +222,17 @@ void Fracture::SceneView::render()
 		if (ImGui::MenuItem("Create Camera"))
 		{
 			std::shared_ptr<Entity> entity = EntityFactory::CreateCamera(m_scene);
-			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+			std::shared_ptr<RelationShipComponent> relation = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 
 			if (m_selection != nullptr)
 			{
-				relation->ChangeParent(m_selection->Id);
+				relation->ChangeParent(m_selection->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
 			else
 			{
-				relation->ChangeParent(m_scene->Root()->Id);
+				relation->ChangeParent(m_scene->Root()->GetId());
 				m_scene->addEntity(entity);
 				setSelectEntity(entity);
 			}
@@ -280,7 +280,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 			ImGuiTreeNodeFlags flags;
 			std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity);
 			
-			flags = ((m_selection && m_selection->Id == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+			flags = ((m_selection && m_selection->GetId() == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 
 			if (relationship->GetChildren().size() == 0)
 			{
@@ -327,7 +327,7 @@ void Fracture::SceneView::DrawEntityNode(uint32_t entity)
 			{
 				m_scene->Destroy(entity);
 
-				if (m_selection->Id == entity)
+				if (m_selection->GetId() == entity)
 					m_selection = {};
 
 			}

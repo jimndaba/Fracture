@@ -15,10 +15,10 @@ namespace Fracture
 	{
 
 	public:
-		BillboardComponent(uint32_t id);
+		BillboardComponent(UUID id);
 		~BillboardComponent();
 
-		BillboardComponent(const BillboardComponent& component, const uint32_t& entityID) :Component(entityID, ComponentType::None)
+		BillboardComponent(const BillboardComponent& component, const UUID& entityID) :Component(entityID)
 		{
 			m_billboard = component.m_billboard;
 		}
@@ -27,17 +27,17 @@ namespace Fracture
 		std::shared_ptr<Billboard> GetBillboard();
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<BillboardComponent> clone(uint32_t entityID) const
+		std::shared_ptr<BillboardComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<BillboardComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<BillboardComponent>(this->clone_impl(id));
 		}
 
 
 	private:
 
-		virtual BillboardComponent* clone_impl(uint32_t entityID) const override
+		virtual BillboardComponent* clone_impl(UUID id) const override
 		{
-			return new BillboardComponent(*this, entityID);
+			return new BillboardComponent(*this, id);
 		}
 
 		std::shared_ptr<Billboard> m_billboard;

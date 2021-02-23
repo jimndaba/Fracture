@@ -1,5 +1,5 @@
 #include "Scene.h"
-
+#include "Entity/UUID.h"
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::active_Camera;
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::m_entities;
@@ -8,10 +8,11 @@ Fracture::Scene::Scene()
 {
 	//ROOT ENTITY
 	m_root = EntityManager::CreateEntity<Entity>();	
-	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->Id));
+
+	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->GetId()));
 	ComponentManager::AddComponent<RelationShipComponent>(m_root_rel);
-	ComponentManager::AddComponent<TransformComponent>(m_root->Id,glm::vec3(0.0f));
-	ComponentManager::AddComponent<TagComponent>(m_root->Id, "Root");
+	ComponentManager::AddComponent<TransformComponent>(m_root->GetId(),glm::vec3(0.0f));
+	ComponentManager::AddComponent<TagComponent>(m_root->GetId(), "Root");
 	addEntity(m_root);
 }
 
@@ -33,7 +34,7 @@ void Fracture::Scene::addEntity(const std::shared_ptr<Entity>& entity)
 void Fracture::Scene::Destroy(const std::shared_ptr<Entity>& entity)
 {
 	
-	std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity->Id);
+	std::shared_ptr<RelationShipComponent> relationship = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
 	if (relationship->GetChildren().size() > 0)
 	{
 		for (auto& child : relationship->GetChildren())
@@ -51,14 +52,14 @@ void Fracture::Scene::Destroy(const std::shared_ptr<Entity>& entity)
 			std::end(m_entities));
 	}
 
-	ComponentManager::RemoveComponentsbyID(entity->Id);
+	ComponentManager::RemoveComponentsbyID(entity->GetId());
 }
 
-void Fracture::Scene::Destroy(uint32_t id)
+void Fracture::Scene::Destroy(UUID id)
 {
 	for (auto& entity : m_entities)
 	{
-		if (entity != nullptr && entity->Id == id)
+		if (entity != nullptr && entity->GetId() == id)
 		{
 			Destroy(entity);
 		}
@@ -105,12 +106,12 @@ std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::Entities()
 	return m_entities;
 }
 
-std::shared_ptr<Fracture::Entity> Fracture::Scene::GetEntity(uint32_t id)
+std::shared_ptr<Fracture::Entity> Fracture::Scene::GetEntity(UUID id)
 {
 	
 	for (auto& entity : m_entities)
 	{
-		if (entity->Id == id)
+		if (entity->GetId() == id)
 		{
 			return entity;
 		}

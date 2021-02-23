@@ -164,7 +164,6 @@
     <ClCompile Include="src\Component\BillboardComponent.cpp" />
     <ClCompile Include="src\Component\BoxColliderComponent.cpp" />
     <ClCompile Include="src\Component\CameraControllerComponent.cpp" />
-    <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\ComponentManager.cpp" />
     <ClCompile Include="src\Component\ComponentSet.cpp" />
     <ClCompile Include="src\Component\FrustumPlane.cpp" />
@@ -180,8 +179,8 @@
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\EntityFactory.cpp" />
     <ClCompile Include="src\Entity\EntityManager.cpp" />
-    <ClCompile Include="src\Entity\IDManager.cpp" />
     <ClCompile Include="src\Entity\SkyLight.cpp" />
+    <ClCompile Include="src\Entity\UUID.cpp" />
     <ClCompile Include="src\Event\Eventbus.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
@@ -277,6 +276,7 @@
     <ClInclude Include="src\Component\LightComponent.h" />
     <ClInclude Include="src\Entity\SkyLight.h" />
     <ClInclude Include="src\Entity\SunLight.h" />
+    <ClInclude Include="src\Entity\UUID.h" />
     <ClInclude Include="src\Input\IInputState.h" />
     <ClInclude Include="src\Input\MouseState.h" />
     <ClInclude Include="src\Rendering\Bindable.h" />
@@ -332,7 +332,6 @@
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\EntityManager.h" />
-    <ClInclude Include="src\Entity\IDManager.h" />
     <ClInclude Include="src\Event\Event.h" />
     <ClInclude Include="src\Event\Eventbus.h" />
     <ClInclude Include="src\Event\PhysicsEvents.h" />

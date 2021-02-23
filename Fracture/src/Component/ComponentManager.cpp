@@ -57,13 +57,13 @@ void Fracture::ComponentManager::onLoad()
 	for (auto& component : GetAllComponents<BoxColliderComponent>())
 	{		
 		std::shared_ptr<BoxColliderComponent> c = std::dynamic_pointer_cast<BoxColliderComponent>(component);
-		PhysicsManager::AddCollider(c->EntityID,c->m_boxCollider.get());
+		PhysicsManager::AddCollider(c->GetID(),c->m_boxCollider.get());
 	}
 
 	for (auto& component : GetAllComponents<RigidBodyComponent>())
 	{
 		std::shared_ptr<RigidBodyComponent> c = std::dynamic_pointer_cast<RigidBodyComponent>(component);
-		PhysicsManager::AddRigidBody(c->EntityID, c->m_rigid.get(), c->collisionGroup, c->collisionMask);
+		PhysicsManager::AddRigidBody(c->GetID(), c->m_rigid.get(), c->collisionGroup, c->collisionMask);
 	}
 }
 
@@ -93,7 +93,7 @@ const void Fracture::ComponentManager::ClearComponents()
 	}
 }
 
-const void Fracture::ComponentManager::RemoveComponentsbyID(const uint32_t& id)
+const void Fracture::ComponentManager::RemoveComponentsbyID(const UUID& id)
 {	
 	for (auto it = Register.begin(); it != Register.end(); ++it)
 	{

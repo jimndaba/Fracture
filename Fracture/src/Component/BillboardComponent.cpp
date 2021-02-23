@@ -1,7 +1,7 @@
 #include "BillboardComponent.h"
 #include "Rendering/Billboard.h"
 
-Fracture::BillboardComponent::BillboardComponent(uint32_t id):Component(id,ComponentType::Render)
+Fracture::BillboardComponent::BillboardComponent(UUID id):Component(id)
 {
 	m_billboard = std::make_shared<Billboard>();
 }

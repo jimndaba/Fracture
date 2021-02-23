@@ -25,10 +25,10 @@ namespace Fracture
 	{
 
 	public:
-		CameraControllerComponent(uint32_t id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+		CameraControllerComponent(UUID id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 		~CameraControllerComponent();
 
-		CameraControllerComponent(const CameraControllerComponent& component, uint32_t id) :Component(id, ComponentType::Camera)
+		CameraControllerComponent(const CameraControllerComponent& component, UUID id) :Component(id)
 		{
 			Position = component.Position;
 			Front = component.Front;
@@ -92,17 +92,17 @@ namespace Fracture
 		glm::vec3 m_TargetPosition = glm::vec3(0.0f, 5.0f, 15.0f);
 		void Accept(ISceneProbe* visitor) override;
 
-		std::shared_ptr<CameraControllerComponent> clone(uint32_t entityID) const
+		std::shared_ptr<CameraControllerComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<CameraControllerComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<CameraControllerComponent>(this->clone_impl(id));
 		}
 
 
 	private:
 
-		virtual CameraControllerComponent* clone_impl(uint32_t entityID) const override
+		virtual CameraControllerComponent* clone_impl(UUID id) const override
 		{
-			return new CameraControllerComponent(*this, entityID);
+			return new CameraControllerComponent(*this, id);
 		}
 
 

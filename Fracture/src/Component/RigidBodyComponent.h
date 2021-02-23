@@ -15,10 +15,10 @@ namespace Fracture
 
 	public:
 
-		RigidBodyComponent(uint32_t id,const float& _mass);
+		RigidBodyComponent(UUID id,const float& _mass);
 		~RigidBodyComponent() = default;
 
-		RigidBodyComponent(const RigidBodyComponent& component, uint32_t id) :Component(id, ComponentType::Rigidbody)
+		RigidBodyComponent(const RigidBodyComponent& component, UUID id) :Component(id)
 		{
 			m_rigid = component.m_rigid;
 			Mass = component.Mass;
@@ -48,17 +48,17 @@ namespace Fracture
 		void Translate(const glm::vec3& position);
 		void Accept(ISceneProbe* visitor) override;
 		
-		std::shared_ptr<RigidBodyComponent> clone(uint32_t entityID) const
+		std::shared_ptr<RigidBodyComponent> clone(UUID id) const
 		{
-			return std::shared_ptr<RigidBodyComponent>(this->clone_impl(entityID));
+			return std::shared_ptr<RigidBodyComponent>(this->clone_impl(id));
 		}
 
 
 	private:
 
-		virtual RigidBodyComponent* clone_impl(uint32_t entityID) const override
+		virtual RigidBodyComponent* clone_impl(UUID id) const override
 		{
-			return new RigidBodyComponent(*this, entityID);
+			return new RigidBodyComponent(*this, id);
 		}
 	};
 

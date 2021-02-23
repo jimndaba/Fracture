@@ -2,7 +2,7 @@
 #include "Physics/Ray.h"
 #include "Logging/Logger.h"
 
-Fracture::CameraControllerComponent::CameraControllerComponent(uint32_t id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id,ComponentType::Camera)
+Fracture::CameraControllerComponent::CameraControllerComponent(UUID id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id)
 {
     Yaw = -90.0f;
     Pitch = 0.0f;
