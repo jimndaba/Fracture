@@ -18,9 +18,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 	int width;
 	int height;
 	int channel;
-	std::shared_ptr<Fracture::Texture2D> texture;
-
-	//stbi_set_flip_vertically_on_load(true);
+	std::shared_ptr<Fracture::Texture2D> texture;	
 
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
 
@@ -47,7 +45,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 
 		texture = Texture2D::CreateTexture(data, iformat, format, width, height, glWrap::Repeat, FormatType::UByte);
 
-		texture->GenerateMips();
+		//texture->GenerateMips();
 
 		texture->SetName(name);
 

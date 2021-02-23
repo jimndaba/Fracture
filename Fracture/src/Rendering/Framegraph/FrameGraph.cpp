@@ -119,7 +119,6 @@ void Fracture::FrameGraph::Resize(const int& width,const int& height)
 	{
 		node->Resize(width, height);
 	}
-
 }
 
 std::shared_ptr<Fracture::SinkNode> Fracture::FrameGraph::GetOutput()

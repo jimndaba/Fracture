@@ -54,7 +54,6 @@ void Fracture::Texture2D::unbind() const
 
 void Fracture::Texture2D::GenerateMips()
 {
-    bind();
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 

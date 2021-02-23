@@ -26,9 +26,9 @@ bool Fracture::Editor::showInputConfig;
 bool Fracture::Editor::showProjectConfig;
 
 bool Fracture::Editor::showInspector = true;
-bool Fracture::Editor::showLogger = true;
+bool Fracture::Editor::showLogger;
 bool Fracture::Editor::showScenegraph = true;
-bool Fracture::Editor::showAssets = true;
+bool Fracture::Editor::showAssets;
 bool Fracture::Editor::showViewport = true;
 
 std::shared_ptr<Fracture::EditorFrameGraph> Fracture::Editor::m_graph;
@@ -38,6 +38,7 @@ std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::m_properties;
 std::shared_ptr<Fracture::GameSettings> Fracture::Editor::m_GameSettings;
 std::shared_ptr<Fracture::SceneView> Fracture::Editor::m_sceneview;
+std::unique_ptr<Fracture::Eventbus>  Fracture::Editor::m_Eventbus;
 
 inline void Style();
 const float FIXED_STEP = 1/60.0f;
@@ -74,6 +75,7 @@ void Fracture::Editor::onInit()
 
     m_ComponentManager->onInit();
 
+    m_Renderer->Subscribe(*m_Eventbus.get());
   
     showRenderConfig  = false;
     showAudioConfig   = false;
@@ -400,6 +402,8 @@ void Fracture::Editor::onRender()
 
     Render();   
 
+    ImGui::ShowDemoWindow();
+
     m_frame->end(); 
     m_window->swapBuffers();
 }
@@ -437,7 +441,7 @@ void Fracture::Editor::Render()
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
         panel_flags = ImGuiWindowFlags_NoCollapse;
@@ -474,27 +478,40 @@ void Fracture::Editor::Render()
         m_graph->execute(*m_Renderer);          
         m_Renderer->EndFrame();
        
+        if (showScenegraph)
+        { 
         m_sceneview->begin(&showScenegraph);
         m_sceneview->render();
         m_sceneview->end();
+        }
 
-        m_inspectorpanel->begin(&showInspector);
-        m_inspectorpanel->render();
-        m_inspectorpanel->end();
+        if (showInspector)
+        {
+            m_inspectorpanel->begin(&showInspector);
+            m_inspectorpanel->render();
+            m_inspectorpanel->end();
+        }
 
-        m_viewpanel->begin(&showViewport);
-        m_viewpanel->render();
-        m_viewpanel->end();
+        if (showViewport)
+        {
+            m_viewpanel->begin(&showViewport);
+            m_viewpanel->render();
+            m_viewpanel->end();
+        }
 
-        m_TabbedPanel->begin(&showLogger);
-        m_TabbedPanel->render();
-        m_TabbedPanel->end();
+        if (showLogger)
+        {
+            m_TabbedPanel->begin(&showLogger);
+            m_TabbedPanel->render();
+            m_TabbedPanel->end();
+        }
 
-
-        m_AssetBrowser->begin(&showAssets);
-        m_AssetBrowser->render();
-        m_AssetBrowser->end();
-
+        if (showAssets)
+        {
+            m_AssetBrowser->begin(&showAssets);
+            m_AssetBrowser->render();
+            m_AssetBrowser->end();
+        }
 
 
         ImGui::End();
@@ -504,6 +521,11 @@ void Fracture::Editor::SetScene()
 {    
     m_ActiveScene = m_SceneManager->GetActiveScene();
     m_sceneview->setScene(m_ActiveScene);    
+}
+
+void Fracture::Editor::oEvent(Event* m_event)
+{
+    m_Eventbus->Publish(m_event);
 }
 
 void Fracture::Editor::onChangeTitleName(std::string title)
@@ -589,13 +611,12 @@ void Fracture::Editor::DrawMenuBar()
         if (ImGui::BeginMenu("View"))
         {
             // Disabling fullscreen would allow the window to be moved to the front of other windows,
-            // which we can't undo at the moment without finer window depth/z control.
-            ImGui::MenuItem("Toolbar", NULL);
-            ImGui::MenuItem("Hierachy View", NULL);
-            ImGui::MenuItem("Inspector", NULL);
-            ImGui::MenuItem("Asset Viewer", NULL);
-            ImGui::MenuItem("Logging", NULL);
-            ImGui::MenuItem("Project Settings", NULL);
+            // which we can't undo at the moment without finer window depth/z control
+            ImGui::MenuItem("Vierport", NULL, &showViewport);
+            ImGui::MenuItem("Hierachy View",NULL, &showScenegraph);
+            ImGui::MenuItem("Inspector", NULL,&showInspector);
+            ImGui::MenuItem("Asset Viewer", NULL,&showAssets);
+            ImGui::MenuItem("Logging", NULL,&showLogger);
             ImGui::EndMenu();
         }
 
@@ -934,6 +955,8 @@ void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fractur
 
 void Fracture::Editor::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+
     if (mods == GLFW_MOD_CONTROL)
     {
         //New
@@ -1036,7 +1059,6 @@ void Style()
 
 
     style.PopupRounding = 3;
-
     style.WindowPadding = ImVec2(4, 4);
     style.FramePadding = ImVec2(6, 4);
     style.ItemSpacing = ImVec2(6, 2);

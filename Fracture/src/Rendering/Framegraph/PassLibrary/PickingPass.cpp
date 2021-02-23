@@ -30,7 +30,7 @@ Fracture::PickingPass::~PickingPass()
 
 void Fracture::PickingPass::execute(Renderer& renderer)
 {
-	renderer.setViewport(renderer.Width(), renderer.Height());
+	//renderer.setViewport(renderer.Width(), renderer.Height());
 	glDisable(GL_DITHER);
 	int clearValue = -1;
 	glClearTexImage(m_renderTarget->GetColorTexture(0)->GetTextureID(), 0, GL_RGBA, GL_UNSIGNED_BYTE, &clearValue);

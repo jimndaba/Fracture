@@ -23,21 +23,16 @@ void Fracture::Frame::begin(GLFWwindow* window)
 }
 
 void Fracture::Frame::render()
-{
-    ProfilerTimer timer("Render Frame");
-    for (int i = 0; i < m_panels.size(); i++)
-    {
-        //m_panels[i]->begin();
-        //m_panels[i]->render();
-        //m_panels[i]->end();
-    }
+{    
 }
 
 void Fracture::Frame::end()
 {
+    ImGuiIO& io = ImGui::GetIO();
+    
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    ImGuiIO& io = ImGui::GetIO();
+    
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {       
         GLFWwindow* backup_current_context = glfwGetCurrentContext();

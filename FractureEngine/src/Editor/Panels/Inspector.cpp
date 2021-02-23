@@ -29,7 +29,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<TagComponent>("Tag", entity, [](auto& component)
 	{
-		std::shared_ptr<TagComponent> tag = std::dynamic_pointer_cast<TagComponent>(component);
+		const auto& tag = std::dynamic_pointer_cast<TagComponent>(component);
 
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
@@ -59,9 +59,16 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 			if (ComponentManager::HasComponent<RigidBodyComponent>(transform->EntityID))
 			{
-				std::shared_ptr<RigidBodyComponent> body = ComponentManager::GetComponent<RigidBodyComponent>(transform->EntityID);
+				const auto& body = ComponentManager::GetComponent<RigidBodyComponent>(transform->EntityID);
 				body->setPosition(transform->Position());
 				body->setRotation(transform->Rotation());
+			}
+
+			if (ComponentManager::HasComponent<LightComponent>(transform->EntityID))
+			{
+				const auto& light = ComponentManager::GetComponent<LightComponent>(transform->EntityID);
+				light->SetPosition(position);
+				light->SetDirection(rotation);
 			}
 		});	
 
@@ -122,7 +129,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImVec2 buttonSize = { lineHeight + 2.0f, lineHeight };
 			auto font = io.Fonts->Fonts[0];
 
-			std::shared_ptr<RenderComponent> render = std::dynamic_pointer_cast<RenderComponent>(component);
+			const auto& render = std::dynamic_pointer_cast<RenderComponent>(component);
 			std::string current_Model = render->GetModel()->Name;		
 			
 			ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
@@ -148,7 +155,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			}
 			
 			// Model can have more that 1 material
-			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap;// | ImGuiTreeNodeFlags_FramePadding;
 			
 			for (auto material : render->GetModel()->GetMaterials())//
 			{
@@ -207,11 +214,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					const auto& uniforms = material->GetUniforms();
 					for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
 					{
-						ImGui::Columns(3);
-						ImGui::SetColumnWidth(0, 40);						
-						ImGui::NextColumn();
+						ImGui::Columns(2);
+						ImGui::SetColumnWidth(0, 150);								
 						DrawMaterialUniform(value->first, value->second);
-
+						ImGui::NextColumn();
 						
 					}
 					ImGui::Separator();
@@ -418,12 +424,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				lType = "Skylight";
 			}
 
-			static ImGuiComboFlags flags = 0;
+			static ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
 			const char* items[] = { "Sunlight","Pointlight","Spotlight","SkyLigh" };
 			LightType lighttypes[] = {LightType::Sun,LightType::Point ,LightType::Spot,LightType::Sky };
 			static int item_current_idx = 0;                    // Here our selection data is an index.
 			static LightType m_LightType = LightType::Point;
 			const char* combo_label = items[item_current_idx];  // Label to preview before opening the combo (technically it could be anything)
+			
 			if (ImGui::BeginCombo("Light Type", combo_label, flags))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(items); n++)
@@ -453,7 +460,9 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			float intensity = light->Intensity();
 			DrawfloatControl("Intensity",intensity,0.0f,100.0f);
 			light->SetIntensity(intensity);
-
+			
+			const std::shared_ptr<TransformComponent>& transform = ComponentManager::GetComponent<TransformComponent>(light->EntityID);
+				
 			switch(light->GetLightType())
 			{
 				case LightType::Sun:
@@ -462,6 +471,8 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					glm::vec4 diffuse = light->GetDiffuse();					
 					glm::vec3 radiance = light->GetRadiance();
 
+					
+
 					DrawVec3Control("Radiance", radiance);
 					DrawVec3Control("Direction", direction);								
 					DrawColourControl("Colour", diffuse, 1.0f);			
@@ -469,6 +480,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					light->SetDirection(direction);			
 					light->SetDiffuse(diffuse);							
 					light->SetRadiance(radiance);
+
+					if (transform)
+					{
+						transform->setRotation(direction);
+					}
+
 					break;
 				}
 				case LightType::Point:
@@ -498,6 +515,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					float quad = light->GetQuadratic();
 					DrawfloatControl("Quadratic", quad, 1.0f);
 					light->SetQuadratic(quad);
+
+					if (transform)
+					{
+						transform->setPosition(position);
+					}
+
+
 					break;
 				}
 				case LightType::Spot:
@@ -538,6 +562,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					float ocutoff = light->GetOuterCutOff();
 					DrawfloatControl("OuterCutoff", ocutoff, 1.0f);
 					light->SetOuterCutOff(ocutoff);
+
+					if (transform)
+					{
+						transform->setRotation(direction);
+						transform->setPosition(position);
+					}
+
 					break;
 				}
 				case LightType::Sky:

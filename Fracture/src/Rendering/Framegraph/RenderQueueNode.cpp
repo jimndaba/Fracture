@@ -18,12 +18,11 @@ void Fracture::RenderQueueNode::execute(Renderer& renderer)
 
 void Fracture::RenderQueueNode::render(Renderer& renderer)
 {   
-    ProfilerTimer timer("RenderQueue Render");
-    renderer.setViewport(renderer.Width(), renderer.Height());
-
+    ProfilerTimer timer("RenderQueue Render");    
     m_bucket->sortForward();
     m_bucket->sortAlpha();
     //1. Geometry buffers
+    renderer.setViewport(renderer.Width(),renderer.Height());
     std::vector<DrawCommand> forwardRenderCommands = m_bucket->getForwardRenderCommands();
     std::vector<DrawCommand> alphaRenderCommands = m_bucket->getAlphaRenderCommands();
 

@@ -538,7 +538,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 	}
 	if (!skip)
 	{   // if texture hasn't been loaded already, load it		
-		texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);// m_props->TexturesPath + 	
+		texture = TextureLoader::LoadTexture2D(str.C_Str(), str.C_Str(), AssetManager::GetProperties()->TexturesPath);
 		AssetManager::AddTexture2D(str.C_Str(), texture);
 	}
 

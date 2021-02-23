@@ -34,23 +34,12 @@ void Fracture::ViewPanel::setRenderer(Renderer& renderer)
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-
-	/*
-	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
-	*/
-
+		
 	static const float identityMatrix[16] =
 	{ 1.f, 0.f, 0.f, 0.f,
 		0.f, 1.f, 0.f, 0.f,
 		0.f, 0.f, 1.f, 0.f,
-		0.f, 0.f, 0.f, 1.f };
-
-
-	
+		0.f, 0.f, 0.f, 1.f };		
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 	ImGui::BeginChild("SceneView");
@@ -70,6 +59,7 @@ void Fracture::ViewPanel::render()
 	if (ImGui::RadioButton("Rotate (E)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::ROTATE; };
 	ImGui::SameLine();
 	if (ImGui::RadioButton("Scale (R)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::SCALE; };
+
 	ImGui::Text("Number of DrawCalls: %d " , m_renderer.NumberDraw);
 	ImGui::Text("Number of Batches: %d ", m_renderer.NumberBatches);
 	ImGui::Text("Camera Position: %f , %f , %f ", m_renderer.ActiveCamera()->getPosition().x, m_renderer.ActiveCamera()->getPosition().y, m_renderer.ActiveCamera()->getPosition().z);
@@ -131,7 +121,7 @@ void Fracture::ViewPanel::render()
 
 	if (m_scenegraph.SelectedEntity())
 	{
-		std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
+		const auto& transform = ComponentManager::GetComponent<TransformComponent>(m_scenegraph.SelectedEntity()->Id);
 
 		if (transform)
 		{		
@@ -146,7 +136,7 @@ void Fracture::ViewPanel::render()
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, rw, rh);
-
+			//ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
 			//m_camera->setProjection(m_ViewportSize.x, m_ViewportSize.y);
 			glm::mat4 viewMatrix = m_camera->getViewMatrix();
 			glm::mat4 projectionMatrix = m_camera->getProjectionMatrix();
@@ -204,11 +194,10 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	
 	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 		(m_renderer.SceneRenderTarget->Width != m_ViewportSize.x || m_renderer.SceneRenderTarget->Height != m_ViewportSize.y))
-	{		
-		m_renderer.SceneRenderTarget->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		//TestGraph::Resize(m_ViewportSize.x, m_ViewportSize.y);	
+	{				
+		//Editor::oEvent(new WindowResizeEvent((int)m_ViewportSize.x, (int)m_ViewportSize.y));
+		//m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		//Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);	
 	}
 
 	if(m_ViewportHovered && m_camera)

@@ -26,6 +26,7 @@ namespace Fracture
 	class EditorFrameGraph;
 	class AnimationManager;
 	class AnimatorProbe;
+	struct Event;
 
 	class Editor
 	{
@@ -42,6 +43,8 @@ namespace Fracture
 		void onShutdown();
 		void Render();
 		void SetScene();
+
+		static void oEvent(Event* m_event);
 
 		static void onChangeTitleName(std::string title);
 
@@ -71,7 +74,7 @@ namespace Fracture
 		std::unique_ptr<Profiler> m_Profiler;
 		std::shared_ptr<Renderer> m_Renderer;
 		std::shared_ptr<GameWindow> m_window;
-		std::unique_ptr<Eventbus> m_Eventbus;
+		static std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
 		std::unique_ptr<AnimationManager> m_AnimationManger;
@@ -119,7 +122,7 @@ namespace Fracture
 		static bool showLogger;
 		static bool showScenegraph ;
 		static bool showAssets;
-		static bool showViewport ;
+		static bool showViewport;
 
 		static void showRenderManager(bool* p_open, std::shared_ptr<Fracture::Renderer>& _renderer);
 		static void showAudioManager(bool* p_open);

@@ -1,4 +1,8 @@
 #include "Renderer.h"
+#include "Event/Eventbus.h"
+#include "Event/Event.h"
+#include "Event/WindowEvents.h"
+
 #include "OpenGL/OpenGLBase.h"
 #include "OpenGL/Mesh.h"
 #include "DrawCommand.h"
@@ -38,6 +42,7 @@
 #include "Grid.h"
 #include "SceneProbes.h"
 
+
 #ifndef GLERROR_H
 #define GLERROR_H
 
@@ -69,7 +74,7 @@ Fracture::Renderer::Renderer()
 void Fracture::Renderer::onInit()
 {    
     FRACTURE_INFO("Renderer Init");
-    Game::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
+    //Editor::GetEventbus()->Subscribe(this ,& Fracture::Renderer::onWindowResize);
     m_Bucket = std::shared_ptr<RenderBucket>(new RenderBucket());   
 
     SceneRenderTarget = RenderTarget::CreateRenderTarget("MainBuffer", m_width, m_Height, AttachmentTarget::Texture2D, FormatType::Float, 1, true);
@@ -93,6 +98,11 @@ void Fracture::Renderer::onInit()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
+}
+
+void Fracture::Renderer::Subscribe(Eventbus& mbus)
+{
+    mbus.Subscribe(this, &Fracture::Renderer::onWindowResize);
 }
 
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
@@ -412,13 +422,10 @@ void Fracture::Renderer::clearColor(float r, float g, float b)
 
 void Fracture::Renderer::setViewport(int width, int height)
 {
-	glViewport(0, 0, width, height);    
-    m_width = width;
-    m_Height = height;
-    m_PickingPass->Resize(width, height);
+	glViewport(0, 0, width, height);     
     if (m_camera)
     {
-        m_camera->setProjection(width, height);
+        m_camera->setProjection(width,height);
     }
 }
 
@@ -438,6 +445,8 @@ void Fracture::Renderer::PushOutlineCommand(uint32_t EntityID, std::shared_ptr<F
 {
     m_Bucket->pushOutlineCommand(EntityID, mesh, transform);
 }
+
+//Debug Draw
 
 void Fracture::Renderer::DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color)
 {
@@ -605,7 +614,7 @@ void Fracture::Renderer::RenderScene(std::shared_ptr<Scene> scene)
         ProfilerTimer timer("billboard Probe");
         for (auto component : ComponentManager::GetAllComponents<BillboardComponent>())
         {
-            component->Accept(mBillboardProbe);
+            //component->Accept(mBillboardProbe);
         }
     }
 
@@ -625,7 +634,10 @@ std::shared_ptr<Fracture::ICamera> Fracture::Renderer::ActiveCamera()
 void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
 {
     FRACTURE_TRACE("WINDOW RESIZE");
-    setViewport(mevent->Width, mevent->Height);
+    m_width = mevent->Width;
+    m_Height = mevent->Height;  
+    m_PickingPass->Resize(mevent->Width, mevent->Height);
+    SceneRenderTarget->Resize(mevent->Width, mevent->Height);  
 }
 
 std::shared_ptr<Fracture::Renderer> Fracture::Renderer::getInstance()

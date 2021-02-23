@@ -9,8 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Event/Event.h"
-#include "Event/WindowEvents.h"
+
 
 
 namespace Fracture
@@ -42,6 +41,8 @@ namespace Fracture
 	class RenderOperation;
 	class LightOperation;
 	class BillboardOperation;
+	class Eventbus;
+	struct WindowResizeEvent;
 
 	class Renderer
 	{
@@ -50,6 +51,7 @@ namespace Fracture
 		~Renderer() = default;	
 
 		void onInit();
+		void Subscribe(Eventbus& bus);
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderEnvironment();
