@@ -205,7 +205,7 @@
     <ClCompile Include="src\Rendering\Framegraph\Link.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\OutputSocket.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.cpp" />
-    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\GaussianBlurNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\DepthNode.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.cpp" />
@@ -243,6 +243,8 @@
     <ClCompile Include="src\Scripting\LuaScriptHandle.cpp" />
     <ClCompile Include="src\Scripting\NativeScriptHandle.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.cpp" />
+    <ClCompile Include="src\Serialisation\FrameGraphSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\GameSerializer.cpp" />
     <ClCompile Include="src\Serialisation\GameSettings.h" />
     <ClCompile Include="src\Serialisation\ProjectSerializer.cpp" />
@@ -296,7 +298,7 @@
     <ClInclude Include="src\Rendering\Framegraph\Link.h" />
     <ClInclude Include="src\Rendering\Framegraph\OutputSocket.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.h" />
-    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\GaussianBlurNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\ClearFrame.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\DepthNode.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\IntermediateNode.h" />
@@ -379,6 +381,9 @@
     <ClInclude Include="src\Scripting\LuaScriptHandle.h" />
     <ClInclude Include="src\Scripting\NativeScriptHandle.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
+    <ClInclude Include="src\Serialisation\FrameGraphSerialisation\FrameNodeSerialiser.h" />
+    <ClInclude Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.h" />
+    <ClInclude Include="src\Serialisation\FrameGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\GameSerializer.h" />
     <ClInclude Include="src\Serialisation\ProjectProperties.h" />
     <ClInclude Include="src\Serialisation\ProjectSerializer.h" />

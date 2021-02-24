@@ -17,7 +17,7 @@
 #include "PassLibrary/ToneMappingNode.h"
 #include "PassLibrary/ThresholdNode.h"
 #include "PassLibrary/AdditiveMixNode.h"
-#include "PassLibrary/BoxBlurNode.h"
+#include "PassLibrary/GaussianBlurNode.h"
 #include "Rendering/Renderer.h"
 #include "Profiling/Profiler.h"
 #include "PassLibrary/DepthNode.h"
@@ -54,6 +54,9 @@ namespace Fracture
 		void Resize(const int& width,const int& height);
 		
 		std::shared_ptr<SinkNode> GetOutput();
+
+		std::vector<std::shared_ptr<FrameNode>> GetNodes();
+
 	private:
 		
 		Renderer& m_Renderer;	

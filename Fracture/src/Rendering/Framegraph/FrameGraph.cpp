@@ -126,3 +126,8 @@ std::shared_ptr<Fracture::SinkNode> Fracture::FrameGraph::GetOutput()
 {
 	return outputbuffer;
 }
+
+std::vector<std::shared_ptr<Fracture::FrameNode>> Fracture::FrameGraph::GetNodes()
+{
+	return m_nodes;
+}

@@ -9,7 +9,8 @@
 Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& width, const int& height) :
 	FullScreenNode(name),
 	Gamma(1.0f),
-	Exposure(1.0f)
+	Exposure(1.0f),
+	m_toneShader(AssetManager::getShader("ToneMap"))
 {
 	
 	m_Input = std::make_shared<InputSocket>("buffer");
@@ -17,7 +18,6 @@ Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& w
 
 	colorOut = RenderTarget::CreateRenderTarget("ToneMap_ColorOut", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
 
-	m_toneShader = AssetManager::getShader("ToneMap");
 	//Sockets
 	AddInputSocket(m_Input);
 	//AddInputSocket(m_EnvironmentInput);
@@ -27,9 +27,6 @@ Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& w
 	AddInputResource(m_Input, resource);
 	//AddInputResource(m_EnvironmentInput, resource);
 	AddOutputResource(m_output, colorOut);
-
-
-
 }
 
 void Fracture::ToneMappingNode::execute(Renderer& renderer)

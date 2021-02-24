@@ -10,6 +10,7 @@ namespace Fracture
 	class RenderTarget;
 	class FrameResource;
 
+
 	class DepthNode : public RenderQueueNode
 	{
 

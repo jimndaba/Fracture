@@ -192,9 +192,6 @@
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\PickingPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -297,16 +294,19 @@
     <ClCompile Include="src\Entity\UUID.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math\Physics\PhysicsDebugDraw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\Physics\PhysicsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\PhysicsDebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\PhysicsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\GaussianBlurNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serialisation\FrameGraphSerialiser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -725,9 +725,6 @@
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\AdditiveMixNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\BoxBlurNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\PickingPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -906,6 +903,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\RayHit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\GaussianBlurNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\FrameGraphSerialisation\FrameNodeSerialiser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\FrameGraphSerialiser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,6 +14,7 @@
 namespace Fracture
 {
 	class Renderer;
+	class FrameNodeSerialiser;
 
 	class FrameNode
 	{
@@ -34,8 +35,9 @@ namespace Fracture
 		void LinkResource(std::string name, std::shared_ptr<FrameResource> res);
 
 		std::string GetName();
-
 		void Resize(unsigned int width, unsigned int height);
+
+		virtual void Accept(FrameNodeSerialiser* visitor) = 0;
 
 		bool isVisited;
 		std::map<std::string, std::shared_ptr<FrameResource>> resources;

@@ -1,4 +1,4 @@
-#include "BoxBlurNode.h"
+#include "GaussianBlurNode.h"
 #include "AssetManager/AssetManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/RenderTarget.h"
@@ -7,7 +7,7 @@
 #include "Rendering/OpenGL/OpenGLBase.h"
 #include "Profiling/Profiler.h"
 
-Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, const int& height) :
+Fracture::GaussianBlurNode::GaussianBlurNode(const std::string& name, const int& width, const int& height) :
 	FullScreenNode(name),
 	m_shader(AssetManager::getShader("BoxBlur")),
 	m_outPutshader(AssetManager::getShader("ColorMap"))
@@ -39,7 +39,7 @@ Fracture::BoxBlurNode::BoxBlurNode(const std::string& name, const int& width, co
 	
 }
 
-void Fracture::BoxBlurNode::execute(Renderer& renderer)
+void Fracture::GaussianBlurNode::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("BoxBlur Pass");
 	bool horizontal = true, first_iteration = true;	

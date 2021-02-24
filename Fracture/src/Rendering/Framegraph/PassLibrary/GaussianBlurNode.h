@@ -10,10 +10,10 @@ namespace Fracture
 	class RenderTarget;
 	class FrameResource;
 
-	class BoxBlurNode :public FullScreenNode
+	class GaussianBlurNode :public FullScreenNode
 	{
 	public:
-		BoxBlurNode(const std::string& name,const  int& width,const int& height);
+		GaussianBlurNode(const std::string& name,const  int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);	
 		int amount = 10;

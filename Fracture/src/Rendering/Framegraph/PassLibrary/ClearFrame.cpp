@@ -22,7 +22,7 @@ void Fracture::ClearFrame::execute(Renderer& renderer)
 	for (auto& res : resources)
 	{
 		res.second->bind();
-		renderer.clearColor(1.0f, 0.0f, 0.0f);
+		renderer.clearColor(Color.x, Color.y, Color.z);
 		renderer.clear();
 		res.second->Unbind();
 	}
