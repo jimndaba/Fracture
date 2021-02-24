@@ -20,15 +20,15 @@ void Fracture::AnimatorProbe::VisitAnimatorComponent(AnimatorComponent* componen
 			m_manager.BoneTransformation(component->m_CurrentAnimation->m_channels[i], component->m_skeleton, component->m_CurrentAnimation->AnimationTime);
 		}
 
-		if (ComponentManager::HasComponent<TransformComponent>(component->EntityID))
+		if (ComponentManager::HasComponent<TransformComponent>(component->GetID()))
 		{
-			auto transform = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+			auto transform = ComponentManager::GetComponent<TransformComponent>(component->GetID());
 			m_manager.AnimateTransform(dt, component, transform);
 		}
 	
-		if (ComponentManager::HasComponent<RenderComponent>(component->EntityID))
+		if (ComponentManager::HasComponent<RenderComponent>(component->GetID()))
 	{
-		auto renderer = ComponentManager::GetComponent<RenderComponent>(component->EntityID);
+		auto renderer = ComponentManager::GetComponent<RenderComponent>(component->GetID());
 		m_manager.AnimateRenderer(dt,component,renderer);
 	}
 

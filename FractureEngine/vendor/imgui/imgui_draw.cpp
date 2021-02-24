@@ -1,4 +1,4 @@
-// dear imgui, v1.80 WIP
+// dear imgui, v1.81 WIP
 // (drawing and font code)
 
 /*
@@ -32,7 +32,11 @@ Index of this file:
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
+
 #include "imgui_internal.h"
+#ifdef IMGUI_ENABLE_FREETYPE
+#include "misc/freetype/imgui_freetype.h"
+#endif
 
 #include <stdio.h>      // vsnprintf, sscanf, printf
 #if !defined(alloca)
@@ -118,7 +122,7 @@ namespace IMGUI_STB_NAMESPACE
 #endif
 
 #ifndef STB_RECT_PACK_IMPLEMENTATION                        // in case the user already have an implementation in the _same_ compilation unit (e.g. unity builds)
-#ifndef IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
+#ifndef IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION          // in case the user already have an implementation in another compilation unit
 #define STBRP_STATIC
 #define STBRP_ASSERT(x)     do { IM_ASSERT(x); } while (0)
 #define STBRP_SORT          ImQsort
@@ -131,8 +135,9 @@ namespace IMGUI_STB_NAMESPACE
 #endif
 #endif
 
+#ifdef  IMGUI_ENABLE_STB_TRUETYPE
 #ifndef STB_TRUETYPE_IMPLEMENTATION                         // in case the user already have an implementation in the _same_ compilation unit (e.g. unity builds)
-#ifndef IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+#ifndef IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION           // in case the user already have an implementation in another compilation unit
 #define STBTT_malloc(x,u)   ((void)(u), IM_ALLOC(x))
 #define STBTT_free(x,u)     ((void)(u), IM_FREE(x))
 #define STBTT_assert(x)     do { IM_ASSERT(x); } while(0)
@@ -153,6 +158,7 @@ namespace IMGUI_STB_NAMESPACE
 #include "imstb_truetype.h"
 #endif
 #endif
+#endif // IMGUI_ENABLE_STB_TRUETYPE
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
@@ -383,7 +389,7 @@ void ImDrawListSharedData::SetCircleSegmentMaxError(float max_error)
     CircleSegmentMaxError = max_error;
     for (int i = 0; i < IM_ARRAYSIZE(CircleSegmentCounts); i++)
     {
-        const float radius = i + 1.0f;
+        const float radius = (float)i;
         const int segment_count = IM_DRAWLIST_CIRCLE_AUTO_SEGMENT_CALC(radius, CircleSegmentMaxError);
         CircleSegmentCounts[i] = (ImU8)ImMin(segment_count, 255);
     }
@@ -433,7 +439,7 @@ ImDrawList* ImDrawList::CloneOutput() const
 {
     ImDrawList* dst = IM_NEW(ImDrawList(_Data));
     dst->CmdBuffer = CmdBuffer;
-    dst->GetId()xBuffer = IdxBuffer;
+    dst->IdxBuffer = IdxBuffer;
     dst->VtxBuffer = VtxBuffer;
     dst->Flags = Flags;
     return dst;
@@ -1284,7 +1290,7 @@ void ImDrawList::AddCircle(const ImVec2& center, float radius, ImU32 col, int nu
     if (num_segments <= 0)
     {
         // Automatic segment count
-        const int radius_idx = (int)radius - 1;
+        const int radius_idx = (int)radius;
         if (radius_idx < IM_ARRAYSIZE(_Data->CircleSegmentCounts))
             num_segments = _Data->CircleSegmentCounts[radius_idx]; // Use cached value
         else
@@ -1314,7 +1320,7 @@ void ImDrawList::AddCircleFilled(const ImVec2& center, float radius, ImU32 col, 
     if (num_segments <= 0)
     {
         // Automatic segment count
-        const int radius_idx = (int)radius - 1;
+        const int radius_idx = (int)radius;
         if (radius_idx < IM_ARRAYSIZE(_Data->CircleSegmentCounts))
             num_segments = _Data->CircleSegmentCounts[radius_idx]; // Use cached value
         else
@@ -1536,7 +1542,7 @@ void ImDrawListSplitter::Merge(ImDrawList* draw_list)
     int new_cmd_buffer_count = 0;
     int new_idx_buffer_count = 0;
     ImDrawCmd* last_cmd = (_Count > 0 && draw_list->CmdBuffer.Size > 0) ? &draw_list->CmdBuffer.back() : NULL;
-    int idx_offset = last_cmd ? last_cmd->GetId()xOffset + last_cmd->ElemCount : 0;
+    int idx_offset = last_cmd ? last_cmd->IdxOffset + last_cmd->ElemCount : 0;
     for (int i = 1; i < _Count; i++)
     {
         ImDrawChannel& ch = _Channels[i];
@@ -1567,11 +1573,11 @@ void ImDrawListSplitter::Merge(ImDrawList* draw_list)
         }
     }
     draw_list->CmdBuffer.resize(draw_list->CmdBuffer.Size + new_cmd_buffer_count);
-    draw_list->GetId()xBuffer.resize(draw_list->GetId()xBuffer.Size + new_idx_buffer_count);
+    draw_list->IdxBuffer.resize(draw_list->IdxBuffer.Size + new_idx_buffer_count);
 
     // Write commands and indices in order (they are fairly small structures, we don't copy vertices only indices)
     ImDrawCmd* cmd_write = draw_list->CmdBuffer.Data + draw_list->CmdBuffer.Size - new_cmd_buffer_count;
-    ImDrawIdx* idx_write = draw_list->GetId()xBuffer.Data + draw_list->GetId()xBuffer.Size - new_idx_buffer_count;
+    ImDrawIdx* idx_write = draw_list->IdxBuffer.Data + draw_list->IdxBuffer.Size - new_idx_buffer_count;
     for (int i = 1; i < _Count; i++)
     {
         ImDrawChannel& ch = _Channels[i];
@@ -1602,11 +1608,11 @@ void ImDrawListSplitter::SetCurrentChannel(ImDrawList* draw_list, int idx)
 
     // Overwrite ImVector (12/16 bytes), four times. This is merely a silly optimization instead of doing .swap()
     memcpy(&_Channels.Data[_Current]._CmdBuffer, &draw_list->CmdBuffer, sizeof(draw_list->CmdBuffer));
-    memcpy(&_Channels.Data[_Current]._IdxBuffer, &draw_list->GetId()xBuffer, sizeof(draw_list->GetId()xBuffer));
+    memcpy(&_Channels.Data[_Current]._IdxBuffer, &draw_list->IdxBuffer, sizeof(draw_list->IdxBuffer));
     _Current = idx;
     memcpy(&draw_list->CmdBuffer, &_Channels.Data[idx]._CmdBuffer, sizeof(draw_list->CmdBuffer));
-    memcpy(&draw_list->GetId()xBuffer, &_Channels.Data[idx]._IdxBuffer, sizeof(draw_list->GetId()xBuffer));
-    draw_list->_IdxWritePtr = draw_list->GetId()xBuffer.Data + draw_list->GetId()xBuffer.Size;
+    memcpy(&draw_list->IdxBuffer, &_Channels.Data[idx]._IdxBuffer, sizeof(draw_list->IdxBuffer));
+    draw_list->_IdxWritePtr = draw_list->IdxBuffer.Data + draw_list->IdxBuffer.Size;
 
     // If current command is used with different settings we need to add a new command
     ImDrawCmd* curr_cmd = (draw_list->CmdBuffer.Size == 0) ? NULL : &draw_list->CmdBuffer.Data[draw_list->CmdBuffer.Size - 1];
@@ -1630,13 +1636,13 @@ void ImDrawData::DeIndexAllBuffers()
     for (int i = 0; i < CmdListsCount; i++)
     {
         ImDrawList* cmd_list = CmdLists[i];
-        if (cmd_list->GetId()xBuffer.empty())
+        if (cmd_list->IdxBuffer.empty())
             continue;
-        new_vtx_buffer.resize(cmd_list->GetId()xBuffer.Size);
-        for (int j = 0; j < cmd_list->GetId()xBuffer.Size; j++)
-            new_vtx_buffer[j] = cmd_list->VtxBuffer[cmd_list->GetId()xBuffer[j]];
+        new_vtx_buffer.resize(cmd_list->IdxBuffer.Size);
+        for (int j = 0; j < cmd_list->IdxBuffer.Size; j++)
+            new_vtx_buffer[j] = cmd_list->VtxBuffer[cmd_list->IdxBuffer[j]];
         cmd_list->VtxBuffer.swap(new_vtx_buffer);
-        cmd_list->GetId()xBuffer.resize(0);
+        cmd_list->IdxBuffer.resize(0);
         TotalVtxCount += cmd_list->VtxBuffer.Size;
     }
 }
@@ -1716,25 +1722,13 @@ void ImGui::ShadeVertsLinearUV(ImDrawList* draw_list, int vert_start_idx, int ve
 
 ImFontConfig::ImFontConfig()
 {
-    FontData = NULL;
-    FontDataSize = 0;
+    memset(this, 0, sizeof(*this));
     FontDataOwnedByAtlas = true;
-    FontNo = 0;
-    SizePixels = 0.0f;
     OversampleH = 3; // FIXME: 2 may be a better default?
     OversampleV = 1;
-    PixelSnapH = false;
-    GlyphExtraSpacing = ImVec2(0.0f, 0.0f);
-    GlyphOffset = ImVec2(0.0f, 0.0f);
-    GlyphRanges = NULL;
-    GlyphMinAdvanceX = 0.0f;
     GlyphMaxAdvanceX = FLT_MAX;
-    MergeMode = false;
-    RasterizerFlags = 0x00;
     RasterizerMultiply = 1.0f;
     EllipsisChar = (ImWchar)-1;
-    memset(Name, 0, sizeof(Name));
-    DstFont = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -1791,17 +1785,8 @@ static const ImVec2 FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA[ImGuiMouseCursor_COUNT][3
 
 ImFontAtlas::ImFontAtlas()
 {
-    Locked = false;
-    Flags = ImFontAtlasFlags_None;
-    TexID = (ImTextureID)NULL;
-    TexDesiredWidth = 0;
+    memset(this, 0, sizeof(*this));
     TexGlyphPadding = 1;
-
-    TexPixelsAlpha8 = NULL;
-    TexPixelsRGBA32 = NULL;
-    TexWidth = TexHeight = 0;
-    TexUvScale = ImVec2(0.0f, 0.0f);
-    TexUvWhitePixel = ImVec2(0.0f, 0.0f);
     PackIdMouseCursors = PackIdLines = -1;
 }
 
@@ -2087,7 +2072,26 @@ bool ImFontAtlas::GetMouseCursorTexData(ImGuiMouseCursor cursor_type, ImVec2* ou
 bool    ImFontAtlas::Build()
 {
     IM_ASSERT(!Locked && "Cannot modify a locked ImFontAtlas between NewFrame() and EndFrame/Render()!");
-    return ImFontAtlasBuildWithStbTruetype(this);
+
+    // Select builder
+    // - Note that we do not reassign to atlas->FontBuilderIO, since it is likely to point to static data which
+    //   may mess with some hot-reloading schemes. If you need to assign to this (for dynamic selection) AND are
+    //   using a hot-reloading scheme that messes up static data, store your own instance of ImFontBuilderIO somewhere
+    //   and point to it instead of pointing directly to return value of the GetBuilderXXX functions.
+    const ImFontBuilderIO* builder_io = FontBuilderIO;
+    if (builder_io == NULL)
+    {
+#ifdef IMGUI_ENABLE_FREETYPE
+        builder_io = ImGuiFreeType::GetBuilderForFreeType();
+#elif defined(IMGUI_ENABLE_STB_TRUETYPE)
+        builder_io = ImFontAtlasGetBuilderForStbTruetype();
+#else
+        IM_ASSERT(0); // Invalid Build function
+#endif
+    }
+
+    // Build
+    return builder_io->FontBuilder_Build(this);
 }
 
 void    ImFontAtlasBuildMultiplyCalcLookupTable(unsigned char out_table[256], float in_brighten_factor)
@@ -2107,6 +2111,7 @@ void    ImFontAtlasBuildMultiplyRectAlpha8(const unsigned char table[256], unsig
             data[i] = table[data[i]];
 }
 
+#ifdef IMGUI_ENABLE_STB_TRUETYPE
 // Temporary data for one source font (multiple source fonts can be merged into one destination ImFont)
 // (C++03 doesn't allow instancing ImVector<> with function-local types so we declare the type here.)
 struct ImFontBuildSrcData
@@ -2144,7 +2149,7 @@ static void UnpackBitVectorToFlatIndexList(const ImBitVector* in, ImVector<int>*
                     out->push_back((int)(((it - it_begin) << 5) + bit_n));
 }
 
-bool    ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
+static bool ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
 {
     IM_ASSERT(atlas->ConfigData.Size > 0);
 
@@ -2397,6 +2402,15 @@ bool    ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
     return true;
 }
 
+const ImFontBuilderIO* ImFontAtlasGetBuilderForStbTruetype()
+{
+    static ImFontBuilderIO io;
+    io.FontBuilder_Build = ImFontAtlasBuildWithStbTruetype;
+    return &io;
+}
+
+#endif // IMGUI_ENABLE_STB_TRUETYPE
+
 void ImFontAtlasBuildSetupFont(ImFontAtlas* atlas, ImFont* font, ImFontConfig* font_config, float ascent, float descent)
 {
     if (!font_config->MergeMode)
@@ -2439,7 +2453,7 @@ void ImFontAtlasBuildPackCustomRects(ImFontAtlas* atlas, void* stbrp_context_opa
         }
 }
 
-void ImFontAtlasBuildRender1bppRectFromString(ImFontAtlas* atlas, int x, int y, int w, int h, const char* in_str, char in_marker_char, unsigned char in_marker_pixel_value)
+void ImFontAtlasBuildRender8bppRectFromString(ImFontAtlas* atlas, int x, int y, int w, int h, const char* in_str, char in_marker_char, unsigned char in_marker_pixel_value)
 {
     IM_ASSERT(x >= 0 && x + w <= atlas->TexWidth);
     IM_ASSERT(y >= 0 && y + h <= atlas->TexHeight);
@@ -2461,8 +2475,8 @@ static void ImFontAtlasBuildRenderDefaultTexData(ImFontAtlas* atlas)
         IM_ASSERT(r->Width == FONT_ATLAS_DEFAULT_TEX_DATA_W * 2 + 1 && r->Height == FONT_ATLAS_DEFAULT_TEX_DATA_H);
         const int x_for_white = r->X;
         const int x_for_black = r->X + FONT_ATLAS_DEFAULT_TEX_DATA_W + 1;
-        ImFontAtlasBuildRender1bppRectFromString(atlas, x_for_white, r->Y, FONT_ATLAS_DEFAULT_TEX_DATA_W, FONT_ATLAS_DEFAULT_TEX_DATA_H, FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS, '.', 0xFF);
-        ImFontAtlasBuildRender1bppRectFromString(atlas, x_for_black, r->Y, FONT_ATLAS_DEFAULT_TEX_DATA_W, FONT_ATLAS_DEFAULT_TEX_DATA_H, FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS, 'X', 0xFF);
+        ImFontAtlasBuildRender8bppRectFromString(atlas, x_for_white, r->Y, FONT_ATLAS_DEFAULT_TEX_DATA_W, FONT_ATLAS_DEFAULT_TEX_DATA_H, FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS, '.', 0xFF);
+        ImFontAtlasBuildRender8bppRectFromString(atlas, x_for_black, r->Y, FONT_ATLAS_DEFAULT_TEX_DATA_W, FONT_ATLAS_DEFAULT_TEX_DATA_H, FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS, 'X', 0xFF);
     }
     else
     {
@@ -3317,7 +3331,7 @@ void ImFont::RenderText(ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col
     // Reserve vertices for remaining worse case (over-reserving is useful and easily amortized)
     const int vtx_count_max = (int)(text_end - s) * 4;
     const int idx_count_max = (int)(text_end - s) * 6;
-    const int idx_expected_size = draw_list->GetId()xBuffer.Size + idx_count_max;
+    const int idx_expected_size = draw_list->IdxBuffer.Size + idx_count_max;
     draw_list->PrimReserve(idx_count_max, vtx_count_max);
 
     ImDrawVert* vtx_write = draw_list->_VtxWritePtr;
@@ -3448,8 +3462,8 @@ void ImFont::RenderText(ImDrawList* draw_list, float size, ImVec2 pos, ImU32 col
 
     // Give back unused vertices (clipped ones, blanks) ~ this is essentially a PrimUnreserve() action.
     draw_list->VtxBuffer.Size = (int)(vtx_write - draw_list->VtxBuffer.Data); // Same as calling shrink()
-    draw_list->GetId()xBuffer.Size = (int)(idx_write - draw_list->GetId()xBuffer.Data);
-    draw_list->CmdBuffer[draw_list->CmdBuffer.Size - 1].ElemCount -= (idx_expected_size - draw_list->GetId()xBuffer.Size);
+    draw_list->IdxBuffer.Size = (int)(idx_write - draw_list->IdxBuffer.Data);
+    draw_list->CmdBuffer[draw_list->CmdBuffer.Size - 1].ElemCount -= (idx_expected_size - draw_list->IdxBuffer.Size);
     draw_list->_VtxWritePtr = vtx_write;
     draw_list->_IdxWritePtr = idx_write;
     draw_list->_VtxCurrentIdx = vtx_current_idx;

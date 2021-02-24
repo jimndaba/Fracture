@@ -12,7 +12,6 @@ namespace Fracture
 
 	public:
 		Link();
-
 		std::string FrameNode_From;
 		std::string FrameNode_To;
 		std::string FrameNode_Source;

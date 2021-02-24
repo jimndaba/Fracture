@@ -11,6 +11,7 @@ namespace Fracture
 
 	class Scene;
 	class Entity;
+	class UUID;
 
 	class SceneManager
 	{

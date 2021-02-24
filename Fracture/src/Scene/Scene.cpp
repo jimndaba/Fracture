@@ -86,7 +86,6 @@ void Fracture::Scene::clearScene()
 {	
 	m_entities.clear();
 	ComponentManager::ClearComponents();
-	IDManager::ResetIDs();
 }
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::ActiveCamera()

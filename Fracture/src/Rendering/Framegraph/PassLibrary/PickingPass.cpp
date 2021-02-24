@@ -47,15 +47,15 @@ void Fracture::PickingPass::execute(Renderer& renderer)
 
 		//material->getShader()->setInt("gObjectIndex",command.ID);
 		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-		material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
-		material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
-		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-		{
-			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-		}
-		glBindVertexArray(command.VAO);
-		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		//material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+		//material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+		//material->getShader()->setMat4("model", command.Transform);
+
+		renderer.Submit(command,material->getShader().get());
+		
+		//glBindVertexArray(command.VAO);
+		//glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);
 	}
 	for (const auto& command : bucket->getAlphaRenderCommands())
 	{
@@ -67,15 +67,15 @@ void Fracture::PickingPass::execute(Renderer& renderer)
 
 		//material->getShader()->setInt("gObjectIndex",command.ID);
 		material->getShader()->setVec4("pickingColorID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-		material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
-		material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
-		if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-		{
-			material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-		}
-		glBindVertexArray(command.VAO);
-		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+
+		renderer.Submit(command, material->getShader().get());
+		//material->getShader()->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+		//material->getShader()->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+		//material->getShader()->setMat4("model", command.Transform);
+		//
+		//glBindVertexArray(command.VAO);
+		//glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);
 	}
 
 

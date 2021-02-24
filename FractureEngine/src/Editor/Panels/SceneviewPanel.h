@@ -33,7 +33,7 @@ namespace Fracture
 		static std::shared_ptr<Scene> m_scene;
 		
 
-		void DrawEntityNode(uint32_t entity);
+		void DrawEntityNode(const UUID& entity);
 	};
 
 }

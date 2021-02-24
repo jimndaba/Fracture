@@ -53,8 +53,7 @@ void Fracture::OutlineNode::execute(Renderer& renderer)
 
 	for (unsigned int i = 0; i < outlineRenderCommands.size(); ++i)
 	{
-		DrawCommand command = outlineRenderCommands[i];
-		auto& transform = ComponentManager::GetComponent<TransformComponent>(command.ID);
+		DrawCommand command = outlineRenderCommands[i];	
 		renderer.Submit(command, m_shader.get());
 	}
 

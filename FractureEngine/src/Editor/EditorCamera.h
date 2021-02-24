@@ -37,7 +37,6 @@ namespace Fracture
 		void InputMouse(float xpos, float ypos, float dt, bool constrainPitch = true);
 		void ZoomCamera(glm::vec2 zoom, float dt);	
 		void Translate(glm::vec3 position);
-		Ray ScreenPointToRay(glm::vec2 mousePosition, int viewWidth, int viewHeight);
 
 
 	private:

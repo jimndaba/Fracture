@@ -5,15 +5,24 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 #include "../EditorFrameGraph.h"
+#include "ViewportMode.h"
+#include "EditorViewModes.h"
 
 
 int Fracture::ViewPanel::gizmoMode;
-
+std::string Fracture::ViewPanel::m_currentViewMode;
 
 Fracture::ViewPanel::ViewPanel(std::string name,SceneView& scenegraph, Renderer& renderer):Panel(name), m_scenegraph(scenegraph),
-m_renderer(renderer)
+m_renderer(renderer),
+m_RenderView(std::make_shared<RenderViewMode>()),
+m_SSAOView(std::make_shared<SSAOViewMode>()),
+m_DepthView(std::make_shared<DepthViewMode>())
 {
 	gizmoMode = 0;
+
+	m_viewModes["RenderView"] = m_RenderView;
+	m_viewModes["SSAO"] = m_SSAOView;
+	m_viewModes["Depth"] = m_DepthView;
 }
 
 Fracture::ViewPanel::~ViewPanel()
@@ -22,19 +31,19 @@ Fracture::ViewPanel::~ViewPanel()
 
 void Fracture::ViewPanel::init()
 {
-	//m_camera = ComponentManager::GetComponent<CameraControllerComponent>(Editor::ActiveScene()->ActiveCamera()->GetId());
+	SetViewMode("RenderView");
 }
 
 void Fracture::ViewPanel::setRenderer(Renderer& renderer)
 {
-    //m_renderer = renderer;
 	m_camera = renderer.ActiveCamera();
 }
 
 void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
-		
+
+	
 	static const float identityMatrix[16] =
 	{ 1.f, 0.f, 0.f, 0.f,
 		0.f, 1.f, 0.f, 0.f,
@@ -48,11 +57,10 @@ void Fracture::ViewPanel::render()
 	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
-	
 
-	ImGui::Image((ImTextureID)(Editor::m_graph->GetOutput()->outputColor->GetColorTexture(0)->GetTextureID()),
-		viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-	
+	//Render Current View Mode
+	m_Viewportmode->Render(Editor::m_graph, viewportPanelSize);
+		
 	ImGui::SetCursorPos(ImVec2{10,10});
 	if (ImGui::RadioButton("Move (W)", &gizmoMode)) { gizmoMode = ImGuizmo::OPERATION::TRANSLATE; };
 	ImGui::SameLine();
@@ -70,7 +78,33 @@ void Fracture::ViewPanel::render()
 	ImGui::Text("Camera Pitch: %f ", m_renderer.ActiveCamera()->GetPitch());
 	ImGui::Text("Camera Roll: %f ", m_renderer.ActiveCamera()->GetRoll());
 
-	
+	ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
+	//View mode 
+	ImGui::PushItemWidth(100);
+	ImGui::SetCursorPos(ImVec2{ ImGui::GetContentRegionAvail().x - 100, 10 });
+	if (ImGui::BeginCombo("ViewMode", "Render", flags))
+	{
+
+		for (const auto& viewmode : m_viewModes)//
+		{
+			const bool is_selected = (m_currentViewMode == viewmode.first);
+			if (ImGui::Selectable(viewmode.first.c_str(), is_selected))
+			{
+				m_currentViewMode = viewmode.first;
+				SetViewMode(m_currentViewMode);
+			}
+
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+
+
+		ImGui::EndCombo();
+	}
+	ImGui::PopItemWidth();
+
 	//IMGUIZMO STUFF STARTS HERE
 	ImVec2 screen_pos = ImGui::GetMousePos();
 	ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -97,8 +131,8 @@ void Fracture::ViewPanel::render()
 			
 			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
 			{		
-				int id = (int)m_renderer.GetEntityID((int)region_x,(int)region_y);
-				if(id > 0)
+				UUID id = m_renderer.GetEntityID((int)region_x,(int)region_y);
+				if(id)
 				{
 					const auto & m_entity = SceneManager::getEntity(id);
 				
@@ -263,6 +297,11 @@ void Fracture::ViewPanel::onUpdate(float dt)
 			}			
 		}
 	}
+}
+
+void Fracture::ViewPanel::SetViewMode(const std::string& mode)
+{
+	m_Viewportmode = m_viewModes[mode];
 }
 
 void Fracture::ViewPanel::SetImGuizmoOperation(ImGuizmo::OPERATION operation)

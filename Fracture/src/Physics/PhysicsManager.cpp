@@ -177,9 +177,9 @@ void Fracture::PhysicsManager::startPhysics()
 		std::shared_ptr<RigidBodyComponent> c = std::dynamic_pointer_cast<RigidBodyComponent>(component);
 		if (c)
 		{
-			if (!(std::find(rigid_ids.begin(), rigid_ids.end(), c->EntityID) != rigid_ids.end()))
+			if (!(std::find(rigid_ids.begin(), rigid_ids.end(), c->GetID()) != rigid_ids.end()))
 			{
-				AddRigidBody(c->EntityID, c->m_rigid.get(), c->collisionGroup, c->collisionMask);
+				AddRigidBody(c->GetID(), c->m_rigid.get(), c->collisionGroup, c->collisionMask);
 			}
 		}			
 	}
@@ -188,9 +188,9 @@ void Fracture::PhysicsManager::startPhysics()
 		std::shared_ptr<BoxColliderComponent> c = std::dynamic_pointer_cast<BoxColliderComponent>(component);
 		if (c)
 		{
-			if (!(std::find(collision_ids.begin(), collision_ids.end(), c->EntityID) != collision_ids.end()))
+			if (!(std::find(collision_ids.begin(), collision_ids.end(), c->GetID()) != collision_ids.end()))
 			{
-				AddCollider(c->EntityID, c->m_boxCollider.get());
+				AddCollider(c->GetID(), c->m_boxCollider.get());
 			}
 		}		
 	}
@@ -228,7 +228,7 @@ void Fracture::PhysicsManager::onUpdate(float dt)
 
 				btQuaternion orientation = trans.getRotation();
 
-				std::shared_ptr<TransformComponent> transcomponent = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+				std::shared_ptr<TransformComponent> transcomponent = ComponentManager::GetComponent<TransformComponent>(component->GetID());
 
 				if(transcomponent)				
 				{
@@ -286,7 +286,7 @@ void Fracture::PhysicsManager::checkCollision()
 		RigidBodyComponent* pointerA = (RigidBodyComponent*)obA->getUserPointer();
 		RigidBodyComponent* pointerB = (RigidBodyComponent*)obB->getUserPointer();
 
-		Eventbus::Publish(new CollisionEvent(pointerA->EntityID,pointerB->EntityID));	
+		Eventbus::Publish(new CollisionEvent(pointerA->GetID(),pointerB->GetID()));	
 
 	}
 

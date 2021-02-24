@@ -54,7 +54,8 @@ void Fracture::ShadowPass::Render(std::shared_ptr<Material> material, RenderBuck
 	{
 		material->getShader()->use();
 		material->getShader()->setMat4("lightSpaceMatrix", m_lightspaceMatrix);
-		material->getShader()->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
+		material->getShader()->setMat4("model",command.Transform);
+
 		glBindVertexArray(command.VAO);
 		glDrawElements(GL_TRIANGLES, command.indiceSize, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

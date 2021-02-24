@@ -497,7 +497,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 		if (texture)
 		{
 			f_materail->setFloat("aoFlag", 1.0f);
-			f_materail->SetTexture("aoMap", texture, 7);
+			f_materail->SetTexture("aoMap", texture, (int)TextureType::AO);
 			//mi->Set("u_AlbedoTexToggle", 1.0f); - way to toggle texture on or off
 		}
 		else

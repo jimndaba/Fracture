@@ -268,7 +268,7 @@ void Fracture::SceneView::DuplicateSelection(const std::shared_ptr<Entity>& sele
 }
 
 
-void Fracture::SceneView::DrawEntityNode(uint32_t entity)
+void Fracture::SceneView::DrawEntityNode(const UUID& entity)
 {
 	 
 		ImVec2 size = ImVec2(16.0f,16.0f);

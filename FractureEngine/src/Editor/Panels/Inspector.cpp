@@ -5,7 +5,6 @@
 #include "Rendering/Material.h"
 #include "../utils/FileDialogue.h"
 
-
 Fracture::SampleUniformType stringToEnum(const std::string& m_type);
 
 Fracture::InspectorPanel::InspectorPanel(std::string name, Fracture::SceneView& scenegraph):Panel(name),m_scenegraph(scenegraph)
@@ -39,6 +38,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			tag->Name = std::string(buffer);
 		}
+
+		ImGui::SameLine();
+		std::string stringID = std::to_string((uint32_t)component->GetID());
+		ImGui::Text(stringID.c_str());
 	});
 
 	DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
@@ -57,16 +60,16 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			transform->setScale(scale);
 			transform->setRotation(rotation);
 
-			if (ComponentManager::HasComponent<RigidBodyComponent>(transform->EntityID))
+			if (ComponentManager::HasComponent<RigidBodyComponent>(transform->GetID()))
 			{
-				const auto& body = ComponentManager::GetComponent<RigidBodyComponent>(transform->EntityID);
+				const auto& body = ComponentManager::GetComponent<RigidBodyComponent>(transform->GetID());
 				body->setPosition(transform->Position());
 				body->setRotation(transform->Rotation());
 			}
 
-			if (ComponentManager::HasComponent<LightComponent>(transform->EntityID))
+			if (ComponentManager::HasComponent<LightComponent>(transform->GetID()))
 			{
-				const auto& light = ComponentManager::GetComponent<LightComponent>(transform->EntityID);
+				const auto& light = ComponentManager::GetComponent<LightComponent>(transform->GetID());
 				light->SetPosition(position);
 				light->SetDirection(rotation);
 			}
@@ -461,7 +464,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			DrawfloatControl("Intensity",intensity,0.0f,100.0f);
 			light->SetIntensity(intensity);
 			
-			const std::shared_ptr<TransformComponent>& transform = ComponentManager::GetComponent<TransformComponent>(light->EntityID);
+			const std::shared_ptr<TransformComponent>& transform = ComponentManager::GetComponent<TransformComponent>(light->GetID());
 				
 			switch(light->GetLightType())
 			{
@@ -601,7 +604,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				ComponentManager::AddComponent<TransformComponent>(entity.Id);
+				ComponentManager::AddComponent<TransformComponent>(entity.GetId());
 			}			
 			ImGui::CloseCurrentPopup();
 		}
@@ -612,7 +615,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 			if (m_scenegraph.SelectedEntity())
 			{
-				ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);
+				ComponentManager::AddComponent<CameraControllerComponent>(entity.GetId());
 			}
 			
 			ImGui::CloseCurrentPopup();
@@ -628,19 +631,19 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 					if (ImGui::MenuItem(model.first.c_str()))
 					{
 						modelName = model.first;
-						if (ComponentManager::HasComponent<TransformComponent>(entity.Id))
+						if (ComponentManager::HasComponent<TransformComponent>(entity.GetId()))
 						{
 							std::string mat_name = model.second->Name;
 							std::shared_ptr<Material> material = AssetManager::getMaterial(mat_name);
 							if (material)
 							{
-								//ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+								//ComponentManager::AddComponent<RenderComponent>(entity.GetId(), modelName, mat_name);
 							}
 							else
 							{
 								//material = std::make_shared<Material>(mat_name, AssetManager::getShader("default"));
 								//AssetManager::AddMaterial(mat_name, material);
-								//ComponentManager::AddComponent<RenderComponent>(entity.Id, modelName, mat_name);
+								//ComponentManager::AddComponent<RenderComponent>(entity.GetId(), modelName, mat_name);
 							}							
 							
 						}
@@ -659,7 +662,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				//ComponentManager::AddComponent<CameraControllerComponent>(entity.Id);		
+				//ComponentManager::AddComponent<CameraControllerComponent>(entity.GetId());		
 			}
 			ImGui::CloseCurrentPopup();
 		}
@@ -668,14 +671,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.GetId()))
 				{
 					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
 
 				}
 				else
 				{
-					ComponentManager::AddComponent<LightComponent>(entity.Id, LightType::Sun);
+					ComponentManager::AddComponent<LightComponent>(entity.GetId(), LightType::Sun);
 				}
 			}
 			ImGui::CloseCurrentPopup();
@@ -685,14 +688,14 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.GetId()))
 				{
 					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
 
 				}
 				else
 				{
-					ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
+					ComponentManager::AddComponent<BoxColliderComponent>(entity.GetId(), 1.0f, 1.0f, 1.0f);
 				}
 			}
 			ImGui::CloseCurrentPopup();
@@ -702,18 +705,18 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.Id))
+				if (ComponentManager::HasComponent<CameraControllerComponent>(entity.GetId()))
 				{
 					FRACTURE_ERROR("Cannot Attach Light to Entity with Camera Component!");
 				}
-				else if (!ComponentManager::HasComponent<BoxColliderComponent>(entity.Id))
+				else if (!ComponentManager::HasComponent<BoxColliderComponent>(entity.GetId()))
 				{
-					ComponentManager::AddComponent<BoxColliderComponent>(entity.Id, 1.0f, 1.0f, 1.0f);
-					ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+					ComponentManager::AddComponent<BoxColliderComponent>(entity.GetId(), 1.0f, 1.0f, 1.0f);
+					ComponentManager::AddComponent<RigidBodyComponent>(entity.GetId(), 1.0f);
 				}
 				else
 				{
-					ComponentManager::AddComponent<RigidBodyComponent>(entity.Id, 1.0f);
+					ComponentManager::AddComponent<RigidBodyComponent>(entity.GetId(), 1.0f);
 				}
 			}
 			ImGui::CloseCurrentPopup();
@@ -723,7 +726,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				//ComponentManager::AddComponent<ScriptComponent>(entity.Id);
+				//ComponentManager::AddComponent<ScriptComponent>(entity.GetId());
 			}
 			ImGui::CloseCurrentPopup();
 		}
@@ -732,7 +735,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				ComponentManager::AddComponent<AnimatorComponent>(entity.Id);		
+				ComponentManager::AddComponent<AnimatorComponent>(entity.GetId());		
 			}
 			ImGui::CloseCurrentPopup();
 		}
@@ -901,7 +904,7 @@ void Fracture::InspectorPanel::DrawMaterialUniform(const std::string& label, Uni
 			value.Float = resetValue;
 		ImGui::PopFont();
 		ImGui::SameLine();
-		ImGui::DragFloat("##uniform", &value.Float, 0.001f, 0.0f, 1.0f, "%.2f");
+		ImGui::DragFloat("##uniform", &value.Float, 0.001f, 0.0f, 10.0f, "%.2f");
 	
 		break;
 	}

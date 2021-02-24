@@ -30,13 +30,15 @@ HasDepthAndStencil(depthAndStencil)
   
         InternalFormat internalFormat = InternalFormat::RGBA;
         if (type == FormatType::Half_Float)
-            internalFormat =InternalFormat::RedGreen16;
+            internalFormat = InternalFormat::RedGreen16;
         else if (type == FormatType::Float)
             internalFormat = InternalFormat::RGBA32;
+        else if (type == FormatType::UInt)
+            internalFormat = InternalFormat::RGB;
 
         if (texturetarget == AttachmentTarget::Texture2D)
         {
-            std::shared_ptr<Texture2D> texture = Texture2D::CreateTexture(internalFormat,TextureFormat::RGBA,width,height,glWrap::ClampToEdge,type);
+            std::shared_ptr<Texture2D> texture = Texture2D::CreateTexture(internalFormat,TextureFormat::RGB,width,height,glWrap::ClampToEdge,type);
 
             m_framebuffer->AddAttachment(AttachmentType::Color, i, AttachmentTarget::Texture2D, texture->GetTextureID());
 

@@ -40,7 +40,7 @@ namespace Fracture
 	template<class T>
 	inline std::shared_ptr<T> GameLogic::GetComponent(UUID id)
 	{
-		return ComponentManager::GetComponent<T>(entityID);
+		return ComponentManager::GetComponent<T>(id);
 	}
 
 	template<class T>

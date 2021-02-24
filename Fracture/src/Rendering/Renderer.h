@@ -43,6 +43,7 @@ namespace Fracture
 	class BillboardOperation;
 	class Eventbus;
 	struct WindowResizeEvent;
+	class UUID;
 
 	class Renderer
 	{
@@ -72,8 +73,8 @@ namespace Fracture
 		void setViewport(int width,int height);
 		
 		void PushCommand(DrawCommand command);
-		void PushCommand(uint32_t EntityID, glm::vec4 color, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform);
-		void PushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform);
+		void PushCommand(const UUID& EntityID, glm::vec4 color, std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform);
+		void PushOutlineCommand(const UUID& EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform);
 
 		static void DrawDebugLine(glm::vec3 start, glm::vec3 end, glm::vec4 color);
 		static void DrawDebugLineRetained(glm::vec3 start, glm::vec3 end,  glm::vec4 color);
@@ -122,7 +123,7 @@ namespace Fracture
 
 		static std::shared_ptr<Renderer> getInstance();
 
-		uint32_t GetEntityID(int mouseX, int mouseY);
+		UUID GetEntityID(int mouseX, int mouseY);
 
 		int Width()
 		{

@@ -73,7 +73,7 @@ namespace Fracture
 	{
 		for (std::shared_ptr<Component> component : m_components)
 		{
-			if (component != nullptr && component->EntityID == entitytId)
+			if (component != nullptr && component->GetID() == entitytId)
 			{
 				return std::dynamic_pointer_cast<name>(component);
 			}

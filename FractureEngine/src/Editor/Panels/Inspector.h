@@ -59,13 +59,13 @@ namespace Fracture
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 	
-		if (Fracture::ComponentManager::HasComponent<T>(entity.Id))
+		if (Fracture::ComponentManager::HasComponent<T>(entity.GetId()))
 		{
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 			
 
 			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.Id);
+			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.GetId());
 		
 			ImGuiWindowFlags window_flags =ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_AlwaysAutoResize;
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.70f, 0.70f, 0.70f, 1.00f));
@@ -97,7 +97,7 @@ namespace Fracture
 
 			if (removeComponent)
 			{
-				ComponentManager::RemoveComponent<T>(entity.Id);
+				ComponentManager::RemoveComponent<T>(entity.GetId());
 			}
 		
 			ImGui::PopStyleColor(1);

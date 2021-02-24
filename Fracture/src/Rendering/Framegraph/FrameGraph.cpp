@@ -37,6 +37,7 @@ std::shared_ptr<Fracture::FrameNode> Fracture::FrameGraph::getNode(const std::st
 			return n;
 		}
 	}
+
 }
 
 void Fracture::FrameGraph::execute(Renderer& renderer)

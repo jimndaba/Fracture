@@ -9,7 +9,6 @@
 Fracture::LambertianNode::LambertianNode(const std::string& name,const int& width,const int& height, const std::shared_ptr<RenderBucket>& bucket):
 	RenderQueueNode(name,bucket)
 {
-
 	std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("buffer");
 	std::shared_ptr<InputSocket> m_EnvInput = std::make_shared<InputSocket>("EnvironmentLight");
 	std::shared_ptr<InputSocket> m_DirInput = std::make_shared<InputSocket>("DirectionalShadowMap");
@@ -17,14 +16,11 @@ Fracture::LambertianNode::LambertianNode(const std::string& name,const int& widt
 
 	std::shared_ptr<InputSocket> m_SSAO = std::make_shared<InputSocket>("SSAOMap");
 	std::shared_ptr<OutputSocket> m_output = std::make_shared<OutputSocket>("outputColor");
-
-	//outputColor = std::make_shared<RenderTarget>("Lambertian_out",width, height,TextureTarget::Texture2D, GL_FLOAT, 1,true);
 	
-	outputColor = RenderTarget::CreateRenderTarget("Lambertian_out", width, height,AttachmentTarget::Texture2D, FormatType::Float, 1, true);
+	outputColor = RenderTarget::CreateRenderTarget("Lambertian_out", width, height,AttachmentTarget::Texture2D, FormatType::UInt, 1, true);
 	
 	//Sockets
 	AddInputSocket(m_Input);
-	//AddInputSocket(m_EnvironmentInput);
 	AddOutputSocket(m_output);
 
 	//Link Sockets to Resources

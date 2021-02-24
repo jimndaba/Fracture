@@ -6,6 +6,8 @@
 #include "Component/ITransform.h"
 #include "Profiling/Profiler.h"
 #include "Component/AnimatorComponent.h"
+#include "Entity/UUID.h"
+#include "Component/Component.h"
 
 namespace Fracture
 {
@@ -26,7 +28,7 @@ namespace Fracture
 		virtual void VisitRenderComponent(const RenderComponent* component)
 		{
 			ProfilerTimer timer("Visit Render Comp");
-			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(component->GetID());
 			std::vector<std::shared_ptr<Mesh>> meshes = component->GetModel()->GetMeshes();
 			for (int i = 0 ; i < meshes.size();i++)
 			{
@@ -34,7 +36,7 @@ namespace Fracture
 				auto mesh = meshes[i];
 				auto material = component->GetModel()->m_materials[mesh->MaterialIndex()];
 
-				std::shared_ptr<TransformComponent> m_transformComponent = ComponentManager::GetComponent<TransformComponent>(component->EntityID);
+				std::shared_ptr<TransformComponent> m_transformComponent = ComponentManager::GetComponent<TransformComponent>(component->GetID());
 		
 				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
 				{					
@@ -44,14 +46,14 @@ namespace Fracture
 					command.CastShadows = material->CastShadows();
 					command.HasTransparency = material->IsTransparent();
 					command.IsOutlined = material->IsOutlined();
-					command.ID = component->EntityID;
+					command.ID = component->GetID();
 					command.indiceSize = mesh->CountOfIndices();
 					command.Transform = m_transformComponent->GetWorldTransform();
 					command.Color = component->Color;;
 
-					if (ComponentManager::HasComponent<AnimatorComponent>(component->EntityID))
+					if (ComponentManager::HasComponent<AnimatorComponent>(component->GetID()))
 					{
-						auto& animator = ComponentManager::GetComponent<AnimatorComponent>(component->EntityID);
+						auto& animator = ComponentManager::GetComponent<AnimatorComponent>(component->GetID());
 						command.AnimationTransforms = animator->getAnimationTransforms();
 						command.IsAnimated = true;
 					}
@@ -94,7 +96,7 @@ namespace Fracture
 
 		virtual void VisitBillboardComponent(BillboardComponent* component)
 		{
-			mRenderer.DrawBillboard(component->EntityID,component->GetBillboard(),glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), AssetManager::getTexture2D("LightIcon"));
+			mRenderer.DrawBillboard(component->GetID(),component->GetBillboard(),glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), AssetManager::getTexture2D("LightIcon"));
 		}
 
 	private:

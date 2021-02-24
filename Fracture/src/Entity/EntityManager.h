@@ -3,7 +3,6 @@
 #define ENTITYMANAGER_H
 
 #include "Entity.h"
-#include "IDManager.h"
 #include <memory>
 
 namespace Fracture

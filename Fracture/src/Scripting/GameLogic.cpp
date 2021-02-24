@@ -5,8 +5,8 @@
 
 void Fracture::GameLogic::destroy(UUID id)
 {
-	ComponentManager::RemoveComponentsbyID(entityID);	
-	SceneManager::RemoveEntity(entityID);
+	ComponentManager::RemoveComponentsbyID(id);	
+	SceneManager::RemoveEntity(id);
 }
 
 void Fracture::GameLogic::destroy(std::shared_ptr<Entity> entity)

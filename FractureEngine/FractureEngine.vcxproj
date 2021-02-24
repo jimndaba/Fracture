@@ -150,10 +150,12 @@
     <ClInclude Include="src\Editor\Panels\Inspector.h" />
     <ClInclude Include="src\Editor\Panels\Panel.h" />
     <ClInclude Include="src\Editor\Panels\SceneviewPanel.h" />
+    <ClInclude Include="src\Editor\Panels\EditorViewModes.h" />
     <ClInclude Include="src\Editor\Panels\TabbedPanel.h" />
     <ClInclude Include="src\Editor\Panels\ViewPanel.h" />
     <ClInclude Include="src\Editor\Frame.h" />
     <ClInclude Include="src\Editor\Panels\UIStyle.h" />
+    <ClInclude Include="src\Editor\Panels\ViewportMode.h" />
     <ClInclude Include="src\Editor\utils\FileDialogue.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />

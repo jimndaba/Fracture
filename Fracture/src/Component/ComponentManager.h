@@ -63,16 +63,16 @@ namespace Fracture
 		const static void RemoveComponent(const std::shared_ptr<T>& component);
 
 		template <class T>
-		const static std::shared_ptr<T>GetComponent(UUID enitytId);
+		const static std::shared_ptr<T>GetComponent(const UUID& enitytId);
 		
 		template <class T>
 		const static std::vector<std::shared_ptr<T>>GetAllComponents();
 
 		template <class T>
-		const static std::vector<std::shared_ptr<T>>GetComponents(UUID enitytId);
+		const static std::vector<std::shared_ptr<T>>GetComponents(const UUID& enitytId);
 
 		template<class T>
-		const static bool HasComponent(UUID id);
+		const static bool HasComponent(const UUID& id);
 	
 	private:
 		
@@ -115,7 +115,7 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline const std::shared_ptr<T> Fracture::ComponentManager::GetComponent(UUID entitytId)
+	inline const std::shared_ptr<T> Fracture::ComponentManager::GetComponent(const UUID& entitytId)
 	{
 		std::shared_ptr<T> c = Register[typeid(T)]->GetComponent<T>(entitytId);
 		if (c)
@@ -130,14 +130,14 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline const std::vector<std::shared_ptr<T>>  Fracture::ComponentManager::GetComponents(UUID entitytId)
+	inline const std::vector<std::shared_ptr<T>>  Fracture::ComponentManager::GetComponents(const UUID& entitytId)
 	{
 		return Register[typeid(T)]->GetComponents(entitytId);
 	}
 
 
 	template<class T>
-	inline const bool Fracture::ComponentManager::HasComponent(UUID id)
+	inline const bool Fracture::ComponentManager::HasComponent(const UUID& id)
 	{
 		ProfilerTimer timer("Has Component");
 		if (Register[typeid(T)]->HasComponent<T>(id))

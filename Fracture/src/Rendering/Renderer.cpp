@@ -41,6 +41,7 @@
 #include "BillBoard.h"
 #include "Grid.h"
 #include "SceneProbes.h"
+#include "Entity/UUID.h"
 
 
 #ifndef GLERROR_H
@@ -191,17 +192,6 @@ void Fracture::Renderer::RenderPasses()
         glEnable(GL_CULL_FACE);
     }
 
-    
-    //Picking Pass
-    {
-        //glDisable(GL_CULL_FACE);
-        //setViewport(m_width, m_Height);
-        //m_PickingPass->Begin();
-        //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_opaqueBucket);
-        //m_PickingPass->Render(m_camera, AssetManager::getMaterial("PickingMaterial"), *m_transparentBucket);
-        //m_PickingPass->End();
-        //glEnable(GL_CULL_FACE);
-    }
     {
         SceneRenderTarget->bind();    
         setViewport(m_width, m_Height);      
@@ -359,7 +349,7 @@ void Fracture::Renderer::Submit(DrawCommand command)
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)TextureType::DirShadowMap);//(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
     command.material->getShader()->setVec4("Color", command.Color);
@@ -377,13 +367,7 @@ void Fracture::Renderer::Submit(DrawCommand command)
 
 void Fracture::Renderer::Submit(DrawCommand command,Shader* shader)
 {
-    ProfilerTimer timer("Submit");
-
-    {
-        shader->setMat4("projection", m_camera->getProjectionMatrix());
-        shader->setMat4("view", m_camera->getViewMatrix());
-      
-    }
+    ProfilerTimer timer("Submit");   
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(m_camera->getProjectionMatrix()));
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_camera->getViewMatrix()));
@@ -391,12 +375,10 @@ void Fracture::Renderer::Submit(DrawCommand command,Shader* shader)
     glBufferSubData(GL_UNIFORM_BUFFER, (3 * sizeof(glm::mat4)), sizeof(glm::vec3), glm::value_ptr(m_camera->getPosition()));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
   
-
-    if (ComponentManager::HasComponent<TransformComponent>(command.ID))
-    {
-        shader->setMat4("model", ComponentManager::GetComponent<TransformComponent>(command.ID)->GetWorldTransform());
-    }
-
+    shader->setMat4("projection", m_camera->getProjectionMatrix());
+    shader->setMat4("view", m_camera->getViewMatrix());
+    shader->setMat4("model", command.Transform);
+   
     Draw(command);
 
 }
@@ -435,13 +417,13 @@ void Fracture::Renderer::PushCommand(DrawCommand command)
     m_Bucket->pushCommand(command);
 }
 
-void Fracture::Renderer::PushCommand(uint32_t EntityID,glm::vec4 color,std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
+void Fracture::Renderer::PushCommand(const UUID& EntityID,glm::vec4 color,std::shared_ptr<Fracture::Mesh> mesh, std::shared_ptr<Fracture::Material> material, glm::mat4 transform)
 {
     NumberDraw += 1;
     m_Bucket->pushCommand(EntityID,color, mesh, material, transform);       
 }
 
-void Fracture::Renderer::PushOutlineCommand(uint32_t EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform)
+void Fracture::Renderer::PushOutlineCommand(const UUID& EntityID, std::shared_ptr<Fracture::Mesh> mesh, glm::mat4 transform)
 {
     m_Bucket->pushOutlineCommand(EntityID, mesh, transform);
 }
@@ -583,9 +565,9 @@ void Fracture::Renderer::SetupLighting(Material* material)
             {
                 std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_lights[i]);
                 material->getShader()->setFloat("intensity", sky->Intensity());
-                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap()->GetTextureID(),10);
-                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap()->GetTextureID(), 1);
-                material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), 2);
+                material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap()->GetTextureID(),(int)TextureType::IrradianceMap);
+                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap()->GetTextureID(), (int)TextureType::PreFilterMap);
+                material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), (int)TextureType::Brdf);
                 break;
             }
         }       
@@ -650,13 +632,14 @@ std::shared_ptr<Fracture::Renderer> Fracture::Renderer::getInstance()
     return instance;
 }
 
-uint32_t Fracture::Renderer::GetEntityID(int mouseX, int mouseY)
+Fracture::UUID Fracture::Renderer::GetEntityID(int mouseX, int mouseY)
 {
     if (m_PickingPass)
     {        
         int Pixel = m_PickingPass->GetPixelInfo(mouseX, mouseY);
         if (Pixel > 0) {
-            return  (uint32_t)Pixel;
+            UUID id = ((uint32_t)Pixel);
+            return  id;
         }
         return -1;
     }      

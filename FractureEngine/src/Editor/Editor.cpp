@@ -558,7 +558,6 @@ void Fracture::Editor::DrawMenuBar()
             {
 
                 m_ActiveScene->clearScene();
-                IDManager::ResetIDs();
                 m_SceneManager->AddScene("Untitled", m_SceneManager->NewScene());
                 m_SceneManager->SetScene("Untitled");
                 SetScene();
@@ -566,7 +565,6 @@ void Fracture::Editor::DrawMenuBar()
             }
             if (ImGui::MenuItem("Open Scene", NULL))
             {
-                IDManager::ResetIDs();
                 std::shared_ptr<Scene> newscene = std::make_shared<Scene>();
                 SceneSerializer serializer(newscene);
                 if (!serializer.DeSerialize("bin/content/Sandbox.json"))//todo

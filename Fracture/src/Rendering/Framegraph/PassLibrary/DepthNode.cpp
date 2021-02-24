@@ -24,8 +24,6 @@ Fracture::DepthNode::DepthNode(const std::string& name, const int& width, const 
 
 void Fracture::DepthNode::execute(Renderer& renderer)
 {
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_ALWAYS); // always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))
 	ProfilerTimer timer("Depth Pre-Pass");
 	resources["outputDepthMap"]->bind();
 	glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
@@ -33,6 +31,7 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	m_shader->use();
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
 	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
+	
 	const auto& forwardRenderCommands = GetBucket()->getForwardRenderCommands();
 	const auto& alphaRenderCommands = GetBucket()->getAlphaRenderCommands();
 

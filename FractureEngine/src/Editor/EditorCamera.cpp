@@ -108,24 +108,6 @@ void Fracture::EditorCamera::Translate(glm::vec3 m_position)
     m_TargetPosition = m_position;
 }
 
-Fracture::Ray Fracture::EditorCamera::ScreenPointToRay(glm::vec2 mousePosition, int viewWidth, int viewHeight)
-{
-    // these positions must be in range [-1, 1] (!!!), not [0, width] and [0, height]
-    float mouseX = (mousePosition.x / viewWidth - 0.5f) * 2;//(2.0f * mousePosition.x) / viewWidth - 1.0f;
-    float mouseY = (mousePosition.y / viewHeight - 0.5f) * 2;///1.0f - (2.0f * mousePosition.y) / viewHeight;
-
-    glm::vec4 ray_clip = glm::vec4(mouseX, mouseY, -1.0, 1.0);
-
-    glm::vec4 toEyeCoords = glm::inverse(getProjectionMatrix()) * ray_clip;
-    toEyeCoords = glm::vec4(toEyeCoords.x, toEyeCoords.y, -1.0, 0.0);
-
-    glm::vec4 toWorldCoords = glm::inverse(getViewMatrix()) * toEyeCoords;
-
-    glm::vec3 mouse_ray = glm::vec3(toWorldCoords.x, toWorldCoords.y, toWorldCoords.z);
-    mouse_ray = glm::normalize(mouse_ray);
-
-    return Ray(position, mouse_ray);
-}
 
 void Fracture::EditorCamera::UpdateCameraVectors()
 {

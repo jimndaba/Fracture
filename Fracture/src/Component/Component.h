@@ -31,7 +31,7 @@ namespace Fracture
 		{
 		};
 
-		virtual ~Component() = 0;
+		virtual ~Component() {};
 		virtual void onStart() = 0;
 		virtual void Accept(ISceneProbe* visitor) = 0;
 		virtual void Accept(ISceneProbe* visitor, float dt) {};
@@ -40,14 +40,14 @@ namespace Fracture
 		std::shared_ptr<Component> clone(UUID id) const
 		{
 			return std::shared_ptr<Component>(this->clone_impl(id));
-		}
+		};
 
 		virtual void OnDebug() {};
 	
-		UUID GetID()
+		const UUID& GetID()const
 		{
 			return m_ID;
-		}
+		};
 
 	private:
 		virtual Component* clone_impl(UUID id) const = 0;

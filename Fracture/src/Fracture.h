@@ -21,7 +21,7 @@
 #include "AssetManager/AssetManager.h"
 #include "Entity/EntityManager.h"
 #include "Input/InputManager.h"
-#include "Entity/IDManager.h"
+#include "Entity/UUID.h"
 
 
 #include <glm/glm.hpp>
@@ -59,7 +59,6 @@
 
 
 #include "Entity/Entity.h"
-#include "Entity/IDManager.h"
 #include "Entity/ILight.h"
 #include "Entity/SkyLight.h"
 #include "Entity/SunLight.h"
@@ -67,6 +66,7 @@
 #include "Entity/PointLight.h"
 #include "Scripting/GameLogic.h"
 
+#include "Component/Component.h"
 #include "Component/TagComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/CameraControllerComponent.h"

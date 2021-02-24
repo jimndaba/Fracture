@@ -19,7 +19,7 @@
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
 #include "Rendering/OpenGL/Texture2D.h"
-
+#include "Entity/UUID.h"
 
 
 
@@ -115,7 +115,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 			for (auto& child : component->GetChildren())
 			{				
 				json b;
-				b["Child ID"] = child;
+				b["Child ID"] = (uint32_t)child;
 				serialised_children.push_back(b);
 			}
 			c["Children"]=  serialised_children;
@@ -327,7 +327,7 @@ nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity
 		j["Light Component"] = c;
 	}
 
-	j["Entity ID"] = entity->GetId();
+	j["Entity ID"] =(uint32_t)entity->GetId();
 	return j;
 }
 
@@ -342,7 +342,8 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			return;
 		}
 
-		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(j["Entity ID"]);		
+		UUID id = UUID(j["Entity ID"]);
+		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(id);		
 		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->GetId());		
 		component->SetName(tagComponent["Entity Name"]);
 		ComponentManager::AddComponent<TagComponent>(component);
@@ -356,8 +357,8 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			if (hasParent)
 			{
 				std::cout << "Setting parent to: "<< relationshipComponent["Parent ID"] << "for Entity : " << entity->GetId()<< std::endl;
-				UUID id = relationshipComponent["Parent ID"];
-				component->SetParent(id);
+				UUID p_id = UUID(relationshipComponent["Parent ID"]);
+				component->SetParent(p_id);
 			}
 			
 			auto children = relationshipComponent["Children"];

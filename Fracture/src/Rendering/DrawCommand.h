@@ -7,6 +7,7 @@
 #include "Component/TransformComponent.h"
 #include "Material.h"
 #include "Shader.h"
+#include "Entity/UUID.h"
 
 namespace Fracture
 {
@@ -23,7 +24,7 @@ namespace Fracture
 
 		}
 
-		uint32_t ID = 0;
+		UUID ID = UUID(0);
 		uint32_t VAO = 0;
 		float ViewDepth = 0;
 
@@ -80,8 +81,8 @@ namespace Fracture
 			if (other.material->getShader()->ID() < material->getShader()->ID())
 				return false;
 
-			if (ID < other.ID) return true;
-			if (other.ID < ID) return false;
+			//if (ID < other.ID) return true;
+			//if (other.ID < ID) return false;
 
 			return false;
 		}
