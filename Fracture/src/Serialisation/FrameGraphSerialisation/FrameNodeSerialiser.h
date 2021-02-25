@@ -29,31 +29,25 @@ namespace Fracture
 	class FrameNodeSerialiser
 	{
 	public:
-		FrameNodeSerialiser(nlohmann::json node):m_json(node)
+		FrameNodeSerialiser()
 		{};
 		~FrameNodeSerialiser() = default;
-
-		json j()const { return m_json; }
-
-		virtual void visitClearFrameNode(const std::shared_ptr<ClearFrame>& node)const {};
-		virtual void visitAdditiveMixNode(const std::shared_ptr<AdditiveMixNode>& node)const {};
-		virtual void visitGaussianBlurNode(const std::shared_ptr<GaussianBlurNode>& node)const {};
-		virtual void visitDepthNode(const std::shared_ptr<DepthNode>& node)const {};
-		virtual void visitIntermediateNode(const std::shared_ptr<IntermediateNode>& node)const {};
-		virtual void visitLambertianNode(const std::shared_ptr<LambertianNode>& node)const {};
-		virtual void visitMixNode(const std::shared_ptr<MixNode>& node)const {};
-		virtual void visitMultiplyMixNode(const std::shared_ptr<MultiplyMixNode>& node)const {};
-		virtual void visitOutlineNode(const std::shared_ptr<OutlineNode>& node)const {};
-		virtual void visitSSAONode(const std::shared_ptr<SSAONode>& node)const {};
-		virtual void visitThresholdNode(const std::shared_ptr<ThresholdNode>& node)const {};
-		virtual void visitToneMappingNode(const std::shared_ptr<ToneMappingNode>& node)const {};
-		virtual void visitSinkNode(const std::shared_ptr<SinkNode>& node)const {};
-		virtual void visitSourceNode(const std::shared_ptr<SourceNode>& node)const {};
-		virtual void visitLink(const std::shared_ptr<Link>& link)const {};
+		virtual json visitClearFrameNode(const ClearFrame& node)const { json j; return j; };
+		virtual json visitAdditiveMixNode(const AdditiveMixNode& node)const { json j; return j; };
+		virtual json visitGaussianBlurNode(const GaussianBlurNode& node)const { json j; return j; };
+		virtual json visitDepthNode(const DepthNode& node)const { json j; return j; };
+		virtual json visitIntermediateNode(const IntermediateNode& node)const { json j; return j; };
+		virtual json visitLambertianNode(const LambertianNode& node)const { json j; return j; };
+		virtual json visitMixNode(const MixNode& node)const { json j; return j; };
+		virtual json visitMultiplyMixNode(const MultiplyMixNode& node)const { json j; return j; };
+		virtual json visitOutlineNode(const OutlineNode& node)const { json j; return j; };
+		virtual json visitSSAONode(const SSAONode& node)const { json j; return j; };
+		virtual json visitThresholdNode(const ThresholdNode& node)const { json j; return j; };
+		virtual json visitToneMappingNode(const ToneMappingNode& node)const { json j; return j; };
+		virtual json visitSinkNode(const SinkNode& node)const { json j; return j; };
+		virtual json visitSourceNode(const SourceNode& node)const { json j; return j; };
+		virtual json visitLink(const Link& link)const { json j; return j; };
 	private:
-		json m_json;
-
-
 	};
 
 }

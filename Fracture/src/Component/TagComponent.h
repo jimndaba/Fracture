@@ -41,6 +41,8 @@ namespace Fracture
 			return std::shared_ptr<TagComponent>(this->clone_impl(id));
 		}
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
+
 	private:
 
 		virtual TagComponent* clone_impl(UUID id) const override

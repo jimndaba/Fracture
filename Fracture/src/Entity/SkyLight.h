@@ -33,7 +33,7 @@ namespace Fracture
 
 		std::shared_ptr<Texture2D> GetBDRFMap();
 
-		std::shared_ptr<Environment> GetEnvironment();	
+		std::shared_ptr<Environment> GetEnvironment()const;	
 
 		void ChangeEnvironment(const std::string& name);
 		

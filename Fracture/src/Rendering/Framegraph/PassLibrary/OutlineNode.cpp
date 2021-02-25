@@ -66,3 +66,8 @@ void Fracture::OutlineNode::execute(Renderer& renderer)
 
 
 }
+
+nlohmann::json Fracture::OutlineNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitOutlineNode(*this);
+}

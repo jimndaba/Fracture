@@ -34,15 +34,15 @@ namespace Fracture
 		void render() override;
 		
 
-		static void DrawTextInputControl(const std::string& label, std::string& values, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawMaterialUniform(const std::string& label, UniformValue& value, float resetValue = 0.0f, float columnWidth = 150.0f);
-		static void DrawColourControl(const std::string& label, glm::vec4& values, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawfloatControl(const std::string& label, float& values, float resetValue = 0.0f, const float& max =1.0f, float columnWidth = 100.0f);
-		static void DrawIntControl(const std::string& label, int& value, int resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawBoolControl(const std::string& label, bool& value, float columnWidth = 100.0f);
-		static void DrawTexture2DControl(const std::string& label, uint32_t& value, float resetValue = 0.0f, float columnWidth = 100.0f);
-		static void DrawSample2DControl(const std::string& label, const  uint32_t& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawTextInputControl(const std::string& label, std::string& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawMaterialUniform(const std::string& label, UniformValue& value, float resetValue = 0.0f, float columnWidth = 150.0f);
+		//static void DrawColourControl(const std::string& label, glm::vec4& values, float resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawfloatControl(const std::string& label, float& values, float resetValue = 0.0f, const float& max =1.0f, float columnWidth = 100.0f);
+		//static void DrawIntControl(const std::string& label, int& value, int resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawBoolControl(const std::string& label, bool& value, float columnWidth = 100.0f);
+		//static void DrawTexture2DControl(const std::string& label, uint32_t& value, float resetValue = 0.0f, float columnWidth = 100.0f);
+		//static void DrawSample2DControl(const std::string& label, const  uint32_t& value, std::shared_ptr<Fracture::Material> mMaterial, float resetValue = 0.0f, float columnWidth = 100.0f);
 	private:
 		
 		SceneView& m_scenegraph;
@@ -64,8 +64,8 @@ namespace Fracture
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 			
 
-			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-			std::shared_ptr<T> component = ComponentManager::GetComponent<T>(entity.GetId());
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 1.0f;
+			auto& component = ComponentManager::GetComponent<T>(entity.GetId());
 		
 			ImGuiWindowFlags window_flags =ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_AlwaysAutoResize;
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.70f, 0.70f, 0.70f, 1.00f));

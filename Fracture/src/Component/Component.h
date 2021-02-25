@@ -18,6 +18,7 @@
 
 #include "Logging/Logger.h"
 #include "Rendering/ISceneProbe.h"
+#include "Serialisation/ComponentSerialisers/ComponentSerialiser.h"
 #include "Entity/UUID.h"
 
 namespace Fracture
@@ -36,6 +37,7 @@ namespace Fracture
 		virtual void Accept(ISceneProbe* visitor) = 0;
 		virtual void Accept(ISceneProbe* visitor, float dt) {};
 
+		virtual json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) { return json{}; };
 
 		std::shared_ptr<Component> clone(UUID id) const
 		{

@@ -39,6 +39,13 @@ namespace Fracture
 
 		unsigned int GetPixelInfo(unsigned int x, unsigned int y);
 		static std::shared_ptr<RenderTarget> m_renderTarget;
+
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+		{
+			json j;
+			return j;
+		}
+
 	private:
 
 		int SCREEN_WIDTH, SCREEN_HEIGHT;

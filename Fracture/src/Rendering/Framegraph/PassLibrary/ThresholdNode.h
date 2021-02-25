@@ -18,6 +18,8 @@ namespace Fracture
 
 		float brightPassThreshold = 0.4f;
 
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
+
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<FrameResource> resource;

@@ -744,7 +744,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 	}
 
 }
-
+/*
 void Fracture::InspectorPanel::DrawTextInputControl(const std::string& label, std::string& values, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -1214,7 +1214,7 @@ void Fracture::InspectorPanel::DrawSample2DControl(const std::string& label,cons
 	ImGui::PopID();
 	ImGui::Separator();
 }
-
+*/
 Fracture::SampleUniformType stringToEnum(const std::string& m_type)
 {
 	if (m_type == "Diffuse")

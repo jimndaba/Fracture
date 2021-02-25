@@ -47,3 +47,8 @@ void Fracture::MixNode::execute(Renderer& renderer)
 	m_shader->unbind();
 	resources["Mix_out"]->Unbind();
 }
+
+nlohmann::json Fracture::MixNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitMixNode(*this);
+}

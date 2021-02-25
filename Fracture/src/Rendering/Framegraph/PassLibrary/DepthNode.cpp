@@ -29,8 +29,8 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 	renderer.clear();
 	m_shader->use();
-	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
-	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
+	m_shader->setFloat("nearPlane", NearPlane);
+	m_shader->setFloat("farPlane", FarPlane);
 	
 	const auto& forwardRenderCommands = GetBucket()->getForwardRenderCommands();
 	const auto& alphaRenderCommands = GetBucket()->getAlphaRenderCommands();
@@ -48,4 +48,9 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	}
    
 	resources["outputDepthMap"]->Unbind();
+}
+
+nlohmann::json Fracture::DepthNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitDepthNode(*this);
 }

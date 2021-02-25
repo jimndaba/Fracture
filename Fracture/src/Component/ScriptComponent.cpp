@@ -18,3 +18,8 @@ std::shared_ptr<Fracture::GameLogic> Fracture::ScriptComponent::GetScript()
 void Fracture::ScriptComponent::Accept(ISceneProbe* visitor)
 {
 }
+
+nlohmann::json Fracture::ScriptComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitScriptComponent(*this);
+}

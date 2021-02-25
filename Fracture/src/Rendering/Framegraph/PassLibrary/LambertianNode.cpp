@@ -41,3 +41,9 @@ void Fracture::LambertianNode::execute(Renderer& renderer)
 	renderer.DrawGrid();	
 	resources["outputColor"]->Unbind();
 }
+
+nlohmann::json Fracture::LambertianNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitLambertianNode(*this);
+}
+

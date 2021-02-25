@@ -10,6 +10,7 @@ namespace Fracture
 {
 	class ILight;
 	enum class LightType;
+	class Environment;
 
 	class LightComponent:public Component
 	{
@@ -39,23 +40,25 @@ namespace Fracture
 		void SetIntensity(const float& value);
 		void SetRadiance(const glm::vec3& value);
 
-		glm::vec4 GetAmbient();
-		glm::vec4 GetDiffuse();
-		glm::vec4 GetSpecular();
-		glm::vec3 GetPosition();
-		glm::vec3 GetDirection();	
-		float GetConstant();
-		float GetLinear();
-		float GetQuadratic();
-		float GetCutoff();
-		float GetOuterCutOff();
-		float Intensity();
-		glm::vec3 GetRadiance();
+		glm::vec4 GetAmbient() const;
+		glm::vec4 GetDiffuse()const;
+		glm::vec4 GetSpecular()const;
+		glm::vec3 GetPosition()const;
+		glm::vec3 GetDirection()const;
+		float GetConstant()const;
+		float GetLinear()const;
+		float GetQuadratic()const;
+		float GetCutoff()const;
+		float GetOuterCutOff()const;
+		float Intensity()const;
+		glm::vec3 GetRadiance()const;
 
 		std::shared_ptr<ILight> GetLight();
 		LightType GetLightType();
 		void ChangeLightType(LightType new_type);
+		std::shared_ptr<Environment> GetEnvironment()const;
 		void ChangeEnvironment(const std::string& name);
+
 		bool CastShadow();
 		void SetCastShadow(bool value);
 
@@ -66,6 +69,7 @@ namespace Fracture
 			return std::shared_ptr<LightComponent>(this->clone_impl(id));
 		}
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
 
 	private:
 

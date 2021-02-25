@@ -48,3 +48,8 @@ void Fracture::AdditiveMixNode::execute(Renderer& renderer)
 
 	resources["output"]->Unbind();
 }
+
+nlohmann::json Fracture::AdditiveMixNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitAdditiveMixNode(*this);
+}

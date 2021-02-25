@@ -10,6 +10,8 @@
 #include "Component/RenderComponent.h"
 #include "Component/RigidBodyComponent.h"
 #include "Component/LightComponent.h"
+#include "Component/BillboardComponent.h"
+#include "Component/AnimatorComponent.h"
 #include "Entity/ILight.h"
 #include "Entity/SkyLight.h"
 #include "Rendering/Environment.h"
@@ -21,7 +23,7 @@
 #include "Rendering/OpenGL/Texture2D.h"
 #include "Entity/UUID.h"
 
-
+#include "ComponentSerialisers/ComponentSerialisers.h"
 
 Fracture::SceneSerializer::SceneSerializer(std::shared_ptr<Scene> scene) : m_scene(scene)
 {
@@ -40,9 +42,100 @@ void Fracture::SceneSerializer::Serialize(const std::string& filepath)
 	json serialised_entities = json::array_t();
 	for (auto& entity : m_scene->Entities())
 	{		
-		serialised_entities.push_back(SerializeEntity(entity));
+		json e;
+		e["EntityID"] = (uint32_t)entity->GetId();
+		//serialised_entities.push_back(SerializeEntity(entity));
+		serialised_entities.push_back(e);
 	}
 	j["Entities"] = serialised_entities;
+	
+	auto& TagComponents = ComponentManager::GetAllComponents<TagComponent>();
+	json serialised_tagc = json::array_t();
+	for (auto& component : TagComponents)
+	{
+		serialised_tagc.push_back(component->serialise(std::make_shared<TagComponentSerialiser>()));
+	}
+
+	auto& TransformComponents = ComponentManager::GetAllComponents<TransformComponent>();
+	json serialised_transformc = json::array_t();
+	for (auto& component : TransformComponents)
+	{
+		serialised_transformc.push_back(component->serialise(std::make_shared<TransformComponentSerialiser>()));
+	}
+
+	auto& ScriptComponents = ComponentManager::GetAllComponents<ScriptComponent>();
+	json serialised_Scriptc = json::array_t();
+	for (auto& component : ScriptComponents)
+	{
+		serialised_Scriptc.push_back(component->serialise(std::make_shared<ScriptComponentSerialiser>()));
+	}
+
+	auto& RigidBodyComponents = ComponentManager::GetAllComponents<RigidBodyComponent>();
+	json serialised_RigidBodyc = json::array_t();
+	for (auto& component : RigidBodyComponents)
+	{
+		serialised_RigidBodyc.push_back(component->serialise(std::make_shared<RigidBodyComponentSerialiser>()));
+	}
+
+	auto& RenderComponents = ComponentManager::GetAllComponents<RenderComponent>();
+	json serialised_Renderc = json::array_t();
+	for (auto& component : RenderComponents)
+	{
+		serialised_Renderc.push_back(component->serialise(std::make_shared<RenderComponentSerialiser>()));
+	}
+
+	auto& RelationshipComponents = ComponentManager::GetAllComponents<RelationShipComponent>();
+	json serialised_Relationc = json::array_t();
+	for (auto& component : RelationshipComponents)
+	{
+		serialised_Relationc.push_back(component->serialise(std::make_shared<RelationShipComponentSerialiser>()));
+	}
+
+	auto& LightComponents = ComponentManager::GetAllComponents<LightComponent>();
+	json serialised_Lightc = json::array_t();
+	for (auto& component : LightComponents)
+	{
+		serialised_Lightc.push_back(component->serialise(std::make_shared<LightComponentSerialiser>()));
+	}
+
+	auto& CameraControllers = ComponentManager::GetAllComponents<CameraControllerComponent>();
+	json serialised_Camerac = json::array_t();
+	for (auto& component : CameraControllers)
+	{
+		serialised_Camerac.push_back(component->serialise(std::make_shared<CameraControllerComponentSerialiser>()));
+	}
+
+	auto& BoxColliderComponents = ComponentManager::GetAllComponents<BoxColliderComponent>();
+	json serialised_Boxc = json::array_t();
+	for (auto& component : BoxColliderComponents)
+	{
+		serialised_Boxc.push_back(component->serialise(std::make_shared<BoxColliderComponentSerialiser>()));
+	}
+
+	auto& BillboardComponents = ComponentManager::GetAllComponents<BillboardComponent>();
+	json serialised_billboardc = json::array_t();
+	for (auto& component : BillboardComponents)
+	{
+		serialised_billboardc.push_back(component->serialise(std::make_shared<BillboardComponentSerialiser>()));
+	}
+
+	auto& AnimationComponents = ComponentManager::GetAllComponents<AnimatorComponent>();
+	json serialised_animatec = json::array_t();
+	for (auto& component : AnimationComponents)
+	{
+		serialised_animatec.push_back(component->serialise(std::make_shared<AnimatorComponentSerialiser>()));
+	}
+
+	j["TagComponents"] = serialised_tagc;
+	j["TransformComponents"] = serialised_transformc;
+	j["AnimatorComponents"] = serialised_animatec;
+	j["BillboardComponents"] = serialised_billboardc;
+	j["BoxColliderComponents"] = serialised_Boxc;
+	j["CameraComponents"] = serialised_Camerac;
+	j["LightComponents"] = serialised_Lightc;
+	j["RelationshipComponents"] = serialised_Relationc;
+	j["RenderComponents"] = serialised_Renderc;
+	j["RigidbodyComponents"] = serialised_RigidBodyc;
 
 	m_OutputStream << j;
 	m_OutputStream.close();
@@ -84,251 +177,9 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 	return true;
 }
 
-nlohmann::json Fracture::SceneSerializer::SerializeEntity(std::shared_ptr<Entity> entity)
+void Fracture::SceneSerializer::SerializeComponents(json j)
 {
-	json j;
-	if (ComponentManager::HasComponent<TagComponent>(entity->GetId()))
-	{
-		std::shared_ptr<TagComponent> tag = ComponentManager::GetComponent<TagComponent>(entity->GetId());		
-		json c;
-
-		//Ealy Exit we do not want to serialize the Root Entity.
-		if (tag->Name == "Root")
-		{
-			return j;
-		}
-
-		c["Entity Name"] = tag->Name;
-		j["Tag Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<RelationShipComponent>(entity->GetId()))
-	{
-		std::shared_ptr<RelationShipComponent> component = ComponentManager::GetComponent<RelationShipComponent>(entity->GetId());
-		json c;		
-		c["Has Parent"] = component->hasParent;
-		c["Parent ID"] = component->m_parent ;
-		c["No. Children"] = component->noChildren ;
-		if (component->hasChildren())
-		{
-			json serialised_children = json::array_t();
-			for (auto& child : component->GetChildren())
-			{				
-				json b;
-				b["Child ID"] = (uint32_t)child;
-				serialised_children.push_back(b);
-			}
-			c["Children"]=  serialised_children;
-		}
-
-		j["Relationship Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<TransformComponent>(entity->GetId()))
-	{
-		std::shared_ptr<TransformComponent> component = ComponentManager::GetComponent<TransformComponent>(entity->GetId());
-		json c;	
-		
-		c["Position"] = { component->Position().x,component->Position().y,component->Position().z } ;
-		c[ "Scale"] = { component->Scale().x,component->Scale().y ,component->Scale().z } ;
-		c["Rotation"] =  { component->Rotation().x,component->Rotation().y ,component->Rotation().z } ;		
-		j["Transform Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<CameraControllerComponent>(entity->GetId()))
-	{
-		std::shared_ptr<CameraControllerComponent> component = ComponentManager::GetComponent<CameraControllerComponent>(entity->GetId());
-		json c;
-		c["Position"] = { component->Position.x,component->Position.y,component->Position.z };
-		c["FOV"] = component->foV ;
-		c["Near Clip"] = component->nearClip ;
-		c["Far Clip"] =  component->farClip ;
-		c["Front"] = { component->Front.x, component->Front.y, component->Front.z };
-		c["Up"] = { component->Up.x,component->Up.y,component->Up.z };
-		c["Right"] = { component->Right.x,component->Right.y,component->Right.z };
-		c["Target Position"] = { component->m_TargetPosition.x, component->m_TargetPosition.y, component->m_TargetPosition.z };
-		j["Camera Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<RenderComponent>(entity->GetId()))
-	{
-		std::shared_ptr<RenderComponent> component = ComponentManager::GetComponent<RenderComponent>(entity->GetId());
-		json c;
-		c["Model"] = component->GetModel()->Name;
-		json serialised_materials = json::array_t();
-
-		for (const auto& material : component->GetModel()->GetMaterials())
-		{
-			json m;
-			m["Material Name"] = material->Name;
-			json serialised_unfiorms = json::array_t();
-			json serialised_sampleunfiorms = json::array_t();
-
-			const auto& uniforms = material->GetUniforms();
-			for (auto value = uniforms->begin(); value != uniforms->end(); ++value)
-			{
-				json b;
-				switch (value->second.Type)
-				{
-				case SHADER_TYPE_BOOL:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = value->second.Bool;
-					break;
-				case SHADER_TYPE_INT:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = value->second.Int;
-					break;
-				case SHADER_TYPE_FLOAT:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = value->second.Float;
-					break;
-				case SHADER_TYPE_VEC2:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = { value->second.Vec2.x,value->second.Vec2.y };
-					break;
-				case SHADER_TYPE_VEC3:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = { value->second.Vec3.x,value->second.Vec3.y,value->second.Vec3.z };
-					break;
-				case SHADER_TYPE_VEC4:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = { value->second.Vec4.x,value->second.Vec4.y,value->second.Vec4.z,value->second.Vec4.w };
-					break;
-				case SHADER_TYPE_COLOR3:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = { value->second.Color3.x,value->second.Color3.y,value->second.Color3.z };
-					break;
-				case SHADER_TYPE_COLOR4:
-					b["Type"] = value->second.Type;
-					b["Name"] = value->first;
-					b["value"] = { value->second.Color4.x,value->second.Color4.y,value->second.Color4.z,value->second.Color4.w };
-					break;
-				case SHADER_TYPE_MAT2:
-
-					break;
-				case SHADER_TYPE_MAT3:
-
-					break;
-				case SHADER_TYPE_MAT4:
-
-					break;
-				default:
-					//Log::Message("Unrecognized Uniform type set.", LOG_ERROR);
-					break;
-				}
-				serialised_unfiorms.push_back(b);
-			}
-
-			const auto& uniformsSamplers = material->GetSamplerUniforms();
-			for (auto value = uniformsSamplers->begin(); value != uniformsSamplers->end(); ++value)
-			{
-				json b;
-				switch (value->second->Type)
-				{
-				case SHADER_TYPE_SAMPLER2D:
-					b["Type"] = value->second->Type;
-					b["Name"] = value->first;
-					b["Texture"] = value->second->texture->GetName();
-					b["Unit"] = value->second->Unit;
-					break;
-					FRACTURE_ERROR("Unrecognized Uniform type set");
-					break;
-				}
-				serialised_sampleunfiorms.push_back(b);
-			}
-
-			m["MaterialUniforms"] = serialised_unfiorms;
-			m["MaterialSampleUniforms"] = serialised_sampleunfiorms;		
-			m["Shader"] = material->getShader()->Name;
-			serialised_materials.push_back(m);
-		}
-		
-		c["Materials"] = serialised_materials;
-		j["Render Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<RigidBodyComponent>(entity->GetId()))
-	{
-		std::shared_ptr<RigidBodyComponent> component = ComponentManager::GetComponent<RigidBodyComponent>(entity->GetId());
-		json c;		
-		c["Mass"] =  component->Mass ;
-		j["Rigidbody Component"] = c;
-	}
-
-	if (ComponentManager::HasComponent<BoxColliderComponent>(entity->GetId()))
-	{
-		std::shared_ptr<BoxColliderComponent> component = ComponentManager::GetComponent<BoxColliderComponent>(entity->GetId());
-		json c;		
-		c["Dimensions"] = {component->X,component->Y,component->Z };
-		j["Box Collider Component"] =c; 
-	}
-
-	if (ComponentManager::HasComponent<LightComponent>(entity->GetId()))
-	{
-		std::shared_ptr<LightComponent> component = ComponentManager::GetComponent<LightComponent>(entity->GetId());
-		json c;
-
-		switch (component->GetLightType())
-		{
-			case LightType::Sun:
-			{
-				c["Direction"] = { component->GetLight()->GetDirection().x,component->GetLight()->GetDirection().y,component->GetLight()->GetDirection().z };
-				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
-				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
-				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
-				c["Intensity"] = component->Intensity();
-				break;
-			}
-			case LightType::Spot:
-			{
-				c["Position"] = { component->GetLight()->GetPosition().x,component->GetLight()->GetPosition().y,component->GetLight()->GetPosition().z };
-				c["Direction"] = { component->GetLight()->GetDirection().x,component->GetLight()->GetDirection().y,component->GetLight()->GetDirection().z };
-				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
-				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
-				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
-
-				c["Linear"] = component->GetLight()->GetLinear();
-				c["Constant"] = component->GetLight()->GetConstant();
-				c["Qaudratic"] = component->GetLight()->GetQuadratic();
-				c["Cutoff"] = component->GetLight()->GetCutoff();
-				c["OuterCutoff"] = component->GetLight()->GetOuterCutOff();
-				c["Intensity"] = component->Intensity();
-				break;
-			}
-			case LightType::Point:
-			{
-				c["Position"] = { component->GetLight()->GetPosition().x,component->GetLight()->GetPosition().y,component->GetLight()->GetPosition().z };
-				c["Ambient"] = { component->GetLight()->GetAmbient().x,component->GetLight()->GetAmbient().y,component->GetLight()->GetAmbient().z,component->GetLight()->GetAmbient().w };
-				c["Diffuse"] = { component->GetLight()->GetDiffuse().x,component->GetLight()->GetDiffuse().y,component->GetLight()->GetDiffuse().z,component->GetLight()->GetDiffuse().w };
-				c["Specular"] = { component->GetLight()->GetSpecular().x,component->GetLight()->GetSpecular().y,component->GetLight()->GetSpecular().z,component->GetLight()->GetSpecular().w };
-
-				c["Intensity"] = component->Intensity();
-				c["Linear"] = component->GetLight()->GetLinear();
-				c["Constant"] = component->GetLight()->GetConstant();
-				c["Qaudratic"] = component->GetLight()->GetQuadratic();
-				break;
-			}
-			case LightType::Sky:
-			{
-				std::shared_ptr<SkyLight> sky = std::static_pointer_cast<SkyLight>(component->GetLight());
-				c["Intensity"] = sky->Intensity();
-				c["Environment"] = sky->GetEnvironment()->m_enviroment->GetName();			
-				break;
-			}
-		}
-		j["Light Type"] = component->GetLightType();
-		j["Light Component"] = c;
-	}
-
-	j["Entity ID"] =(uint32_t)entity->GetId();
-	return j;
+	
 }
 
 void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)

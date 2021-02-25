@@ -15,6 +15,7 @@ namespace Fracture
 		IntermediateNode(const std::string& name,const uint32_t& width,const uint32_t& height);
 
 		void execute(Renderer& renderer) override;
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 	private:
 		std::shared_ptr<FrameResource> inputFBO;
 		std::shared_ptr<RenderTarget> colorOut;

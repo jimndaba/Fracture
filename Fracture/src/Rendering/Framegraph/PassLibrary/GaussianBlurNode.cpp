@@ -101,3 +101,8 @@ void Fracture::GaussianBlurNode::execute(Renderer& renderer)
 		m_outPutshader->unbind();
 	}
 }
+
+nlohmann::json Fracture::GaussianBlurNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitGaussianBlurNode(*this);
+}

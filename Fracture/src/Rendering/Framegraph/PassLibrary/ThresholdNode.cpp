@@ -35,3 +35,8 @@ void Fracture::ThresholdNode::execute(Renderer& renderer)
 	m_shader->unbind();
 	resources["thresholdMap"]->Unbind();
 }
+
+nlohmann::json Fracture::ThresholdNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitThresholdNode(*this);
+}

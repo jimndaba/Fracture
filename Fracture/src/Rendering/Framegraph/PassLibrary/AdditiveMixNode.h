@@ -15,7 +15,7 @@ namespace Fracture
 		AdditiveMixNode(const std::string& name,const int& width,const int& height);
 
 		virtual void execute(Renderer& renderer);
-
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<FrameResource> colorA;

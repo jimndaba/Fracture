@@ -17,9 +17,10 @@ namespace Fracture
 	public:
 		DepthNode(const std::string& name,const int& width,const int& height, const std::shared_ptr<RenderBucket>& bucket);
 		void execute(Renderer& renderer) override;
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 
-		float NearPlane;
-		float FarPlane;
+		float NearPlane = 0.1f;
+		float FarPlane = 100.0f;	
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<FrameResource> outputDepthMap;

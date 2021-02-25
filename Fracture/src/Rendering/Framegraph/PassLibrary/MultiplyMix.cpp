@@ -42,3 +42,8 @@ void Fracture::MultiplyMixNode::execute(Renderer& renderer)
 	m_shader->unbind();
 	resources["output"]->Unbind();
 }
+
+nlohmann::json Fracture::MultiplyMixNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	visitor->visitMultiplyMixNode(*this);
+}

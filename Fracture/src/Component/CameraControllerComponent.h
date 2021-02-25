@@ -98,6 +98,8 @@ namespace Fracture
 		}
 
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
+
 	private:
 
 		virtual CameraControllerComponent* clone_impl(UUID id) const override

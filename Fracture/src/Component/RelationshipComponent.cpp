@@ -56,7 +56,7 @@ void Fracture::RelationShipComponent::RemoveChild(const UUID& child)
 	}
 }
 
-std::vector<Fracture::UUID> Fracture::RelationShipComponent::GetChildren()
+std::vector<Fracture::UUID> Fracture::RelationShipComponent::GetChildren() const
 {
 	return m_children;
 }
@@ -72,4 +72,9 @@ bool Fracture::RelationShipComponent::hasChildren()
 
 void Fracture::RelationShipComponent::Accept(ISceneProbe* visitor)
 {
+}
+
+nlohmann::json Fracture::RelationShipComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitRelationShipComponent(*this);
 }

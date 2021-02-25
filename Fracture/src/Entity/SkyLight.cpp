@@ -30,7 +30,7 @@ std::shared_ptr<Fracture::Texture2D>  Fracture::SkyLight::GetBDRFMap()
 	return m_environment->m_bdrfTexture;
 }
 
-std::shared_ptr<Fracture::Environment> Fracture::SkyLight::GetEnvironment()
+std::shared_ptr<Fracture::Environment> Fracture::SkyLight::GetEnvironment()const
 {
 	return m_environment;
 }

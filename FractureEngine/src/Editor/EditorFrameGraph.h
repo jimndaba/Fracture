@@ -38,7 +38,7 @@ namespace Fracture
 				addnode(ToneMap);
 			}
 			{
-				auto blurPass = std::make_shared<BoxBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
+				auto blurPass = std::make_shared<GaussianBlurNode>("BoxBlurPass", renderer.Width(), renderer.Height());
 				addnode(blurPass);
 			}
 			{
@@ -50,7 +50,7 @@ namespace Fracture
 				addnode(ssao);
 			}
 			{
-				ssaoblur = std::make_shared<BoxBlurNode>("ssaoBlur", renderer.Width(), renderer.Height());
+				ssaoblur = std::make_shared<GaussianBlurNode>("ssaoBlur", renderer.Width(), renderer.Height());
 				addnode(ssaoblur);
 			}
 			{
@@ -89,7 +89,7 @@ namespace Fracture
 		std::shared_ptr<ToneMappingNode> ToneMap;
 		std::shared_ptr<ThresholdNode> BrightPass;
 		std::shared_ptr<SSAONode> ssao;
-		std::shared_ptr<BoxBlurNode> ssaoblur;
+		std::shared_ptr<GaussianBlurNode> ssaoblur;
 
 	};
 

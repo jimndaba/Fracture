@@ -52,6 +52,8 @@ namespace Fracture
 		std::shared_ptr<AnimationClip> m_CurrentAnimation;
 		std::vector<glm::mat4> m_Transforms;
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
+
 	private:
 
 		virtual AnimatorComponent* clone_impl(UUID id) const override

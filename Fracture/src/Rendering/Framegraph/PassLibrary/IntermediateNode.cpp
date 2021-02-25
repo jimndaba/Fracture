@@ -34,3 +34,8 @@ void Fracture::IntermediateNode::execute(Renderer& renderer)
 	resources["OutTexture"]->blit(resources["inputbuffer"]->GetBuffer(),m_width,m_height);
 	resources["OutTexture"]->Unbind();
 }
+
+nlohmann::json Fracture::IntermediateNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	visitor->visitIntermediateNode(*this);
+}

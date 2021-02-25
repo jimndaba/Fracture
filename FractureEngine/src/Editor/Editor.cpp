@@ -402,7 +402,6 @@ void Fracture::Editor::onRender()
 
     Render();   
 
-    ImGui::ShowDemoWindow();
 
     m_frame->end(); 
     m_window->swapBuffers();
@@ -457,7 +456,7 @@ void Fracture::Editor::Render()
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-    ImGui::Begin("DockSpace Demo", &p_open, window_flags);
+    ImGui::Begin("DockSpace", &p_open, window_flags);
    
         if (!opt_padding)
             ImGui::PopStyleVar();
@@ -468,7 +467,7 @@ void Fracture::Editor::Render()
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
-            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+            ImGuiID dockspace_id = ImGui::GetID("FractureDockspace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
@@ -581,7 +580,12 @@ void Fracture::Editor::DrawMenuBar()
                 SceneSerializer serializer(m_ActiveScene);
                 serializer.Serialize(m_properties->ScenesPath+"/"+m_ActiveScene->Name+".scene");
             }
-            ImGui::MenuItem("Save Scene As", NULL);
+            if (ImGui::MenuItem("Save FrameGraph", NULL))
+            {
+                FramaGraphSerialiser serialiser(m_graph);
+                serialiser.SerialiseGraph(m_properties->ScenesPath + "/" + m_ActiveScene->Name + ".graph");
+            }
+           
             if (ImGui::MenuItem("Exit", NULL))
             {
                 done = true;

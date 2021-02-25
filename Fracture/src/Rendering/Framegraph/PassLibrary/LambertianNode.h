@@ -13,7 +13,7 @@ namespace Fracture
 	public:
 		LambertianNode(const std::string& name,const int& width,const int& height,const std::shared_ptr<RenderBucket>& bucket);
 		void execute(Renderer& renderer) override;
-
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 	private:
 
 		std::shared_ptr<FrameResource> resource;

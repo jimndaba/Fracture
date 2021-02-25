@@ -6,6 +6,8 @@
 #include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/Renderer.h"
 
+
+
 Fracture::ToneMappingNode::ToneMappingNode(const std::string& name, const int& width, const int& height) :
 	FullScreenNode(name),
 	Gamma(1.0f),
@@ -40,4 +42,9 @@ void Fracture::ToneMappingNode::execute(Renderer& renderer)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_toneShader->unbind();
 	resources["colorOut"]->Unbind();
+}
+
+nlohmann::json Fracture::ToneMappingNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitToneMappingNode(*this);
 }

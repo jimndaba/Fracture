@@ -82,3 +82,8 @@ void Fracture::RigidBodyComponent::Translate(const glm::vec3& position)
 void Fracture::RigidBodyComponent::Accept(ISceneProbe* visitor)
 {
 }
+
+nlohmann::json Fracture::RigidBodyComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitRigidBodyComponent(*this);
+}

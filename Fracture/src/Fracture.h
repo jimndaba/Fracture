@@ -92,6 +92,7 @@
 #include "Serialisation/ProjectSerializer.h"
 #include "Serialisation/ProjectProperties.h"
 #include "Serialisation/GameSerializer.h"
+#include "Serialisation/FrameGraphSerialiser.h"
 #include "Serialisation/GameSettings.h"
 
 

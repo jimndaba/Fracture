@@ -131,3 +131,8 @@ std::vector<std::shared_ptr<Fracture::FrameNode>> Fracture::FrameGraph::GetNodes
 {
 	return m_nodes;
 }
+
+std::vector<std::shared_ptr<Fracture::Link>> Fracture::FrameGraph::GetLinks()
+{
+	return m_links;
+}

@@ -56,6 +56,7 @@ namespace Fracture
 		std::shared_ptr<SinkNode> GetOutput();
 
 		std::vector<std::shared_ptr<FrameNode>> GetNodes();
+		std::vector<std::shared_ptr<Link>> GetLinks();
 
 	private:
 		
@@ -64,9 +65,12 @@ namespace Fracture
 		std::shared_ptr<RenderTarget> m_backBufferTarget;
 		std::shared_ptr<SinkNode> outputbuffer;
 
+		//Main collections
+		std::vector<std::shared_ptr<FrameNode>> m_nodes;
 		std::vector<std::shared_ptr<Link>> m_links;
-		std::map<std::string, std::vector<std::shared_ptr<FrameNode>>> adjList;
-		std::vector<std::shared_ptr<FrameNode>> m_nodes;		
+
+		//DepthFirst Search and Sort
+		std::map<std::string, std::vector<std::shared_ptr<FrameNode>>> adjList;			
 		std::vector<std::shared_ptr<FrameNode>> m_FrameNodeQueue;
 
 	};

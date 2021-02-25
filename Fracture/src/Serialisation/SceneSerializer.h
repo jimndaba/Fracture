@@ -24,7 +24,7 @@ namespace Fracture
 		void Serialize(const std::string& filepath);
 		bool DeSerialize(const std::string& filepath);
 
-		nlohmann::json SerializeEntity(std::shared_ptr<Entity> entitys);
+		void SerializeComponents(nlohmann::json j);
 		void DeSerializeEntity(nlohmann::json entity);
 
 		bool exists(const json& j, const std::string& key)

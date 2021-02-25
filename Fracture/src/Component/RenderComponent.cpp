@@ -37,3 +37,8 @@ void Fracture::RenderComponent::Accept(ISceneProbe* visitor)
 {
 	visitor->VisitRenderComponent(this);
 }
+
+nlohmann::json Fracture::RenderComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitRenderComponent(*this);
+}

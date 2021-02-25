@@ -89,3 +89,8 @@ void Fracture::TransformComponent::Accept(ISceneProbe* visitor)
 {
 }
 
+nlohmann::json Fracture::TransformComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitTransformComponent(*this);
+}
+

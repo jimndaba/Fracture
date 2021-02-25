@@ -149,6 +149,11 @@ void Fracture::CameraControllerComponent::Accept(ISceneProbe* visitor)
 {
 }
 
+nlohmann::json Fracture::CameraControllerComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+    return visitor->visitCameraControllerComponent(*this);
+}
+
 void Fracture::CameraControllerComponent::UpdateCameraVectors()
 {
     glm::vec3 front;

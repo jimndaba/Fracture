@@ -10,11 +10,12 @@
 #include "OutputSocket.h"
 #include "FrameResource.h"
 #include "Logging/Logger.h"
+#include "Serialisation/FrameGraphSerialisation/FrameNodeSerialiser.h"
 
 namespace Fracture
 {
 	class Renderer;
-	class FrameNodeSerialiser;
+
 
 	class FrameNode
 	{
@@ -34,10 +35,10 @@ namespace Fracture
 
 		void LinkResource(std::string name, std::shared_ptr<FrameResource> res);
 
-		std::string GetName();
+		std::string GetName() const;
 		void Resize(unsigned int width, unsigned int height);
 
-		virtual void Accept(FrameNodeSerialiser* visitor) = 0;
+		virtual json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor) = 0;
 
 		bool isVisited;
 		std::map<std::string, std::shared_ptr<FrameResource>> resources;

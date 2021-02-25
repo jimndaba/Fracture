@@ -87,3 +87,8 @@ void Fracture::SSAONode::execute(Renderer& renderer)
 	resources["SSAOOutput"]->Unbind();
 
 }
+
+nlohmann::json Fracture::SSAONode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitSSAONode(*this);
+}

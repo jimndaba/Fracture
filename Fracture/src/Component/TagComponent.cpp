@@ -21,3 +21,8 @@ void Fracture::TagComponent::SetName(const std::string& name)
 void Fracture::TagComponent::Accept(ISceneProbe* visitor) 
 {
 }
+
+nlohmann::json Fracture::TagComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitTagComponent(*this);
+}

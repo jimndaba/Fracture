@@ -26,3 +26,8 @@ void Fracture::BoxColliderComponent::setScale(glm::vec3 scale)
 void Fracture::BoxColliderComponent::Accept(ISceneProbe* visitor)
 {
 }
+
+nlohmann::json Fracture::BoxColliderComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitBoxColliderComponent(*this);
+}

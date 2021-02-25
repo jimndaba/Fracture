@@ -30,6 +30,7 @@ namespace Fracture
 			return std::shared_ptr<ScriptComponent>(this->clone_impl(id));
 		}
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
 	
 	private:
 

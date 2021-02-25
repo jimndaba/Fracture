@@ -54,11 +54,12 @@ namespace Fracture
 
 		uint32_t noChildren = 0;
 		uint32_t m_parent;
+		
 		void SetParent(const UUID& parent);
 		void ChangeParent(const UUID& parent);
 		void AddChild(const UUID& child);
 		void RemoveChild(const UUID& child);
-		std::vector<UUID> GetChildren();
+		std::vector<UUID> GetChildren() const;
 
 		bool hasChildren();
 		bool hasParent = false;
@@ -69,6 +70,8 @@ namespace Fracture
 			return std::shared_ptr<RelationShipComponent>(this->clone_impl(id));
 		}
 
+
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
 
 	private:
 

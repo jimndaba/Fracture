@@ -10,8 +10,8 @@
 
 namespace Fracture
 {
-	class Panel;
 
+	class Panel;
 	class Frame
 	{
 

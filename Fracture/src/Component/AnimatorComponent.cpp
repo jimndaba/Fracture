@@ -55,3 +55,8 @@ void Fracture::AnimatorComponent::pushTransform()
     }
    
 }
+
+nlohmann::json Fracture::AnimatorComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+    return visitor->visitAnimatorComponent(*this);
+}

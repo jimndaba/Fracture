@@ -17,6 +17,8 @@ namespace Fracture
 
 		virtual void execute(Renderer& renderer);	
 		int amount = 10;
+
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<Shader> m_outPutshader;

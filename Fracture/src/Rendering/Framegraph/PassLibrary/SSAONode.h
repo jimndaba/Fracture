@@ -23,6 +23,8 @@ namespace Fracture
 		float falloff = 0.00001f;
 		float radius = 0.0025f;
 
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>&  visitor);
+
 	private:
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<Shader> m_blurshader;

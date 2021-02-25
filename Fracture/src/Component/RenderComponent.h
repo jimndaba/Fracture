@@ -45,6 +45,8 @@ namespace Fracture
 
 		glm::vec4 Color;
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
+
 	private:
 
 		virtual RenderComponent* clone_impl(UUID id) const override

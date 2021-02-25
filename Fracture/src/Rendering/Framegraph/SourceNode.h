@@ -36,8 +36,13 @@ namespace Fracture
 		{
 
 		}
-	private:
+
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+		{
+			return visitor->visitSourceNode(*this);
+		}
 		
+	private:		
 		std::shared_ptr<FrameResource> resource;
 
 	};
@@ -81,6 +86,11 @@ namespace Fracture
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 			m_shader->unbind();
 			resources["OutputRender"]->Unbind();
+		}
+
+		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+		{
+			return visitor->visitSinkNode(*this);
 		}
 		
 		std::shared_ptr<RenderTarget> outputColor;

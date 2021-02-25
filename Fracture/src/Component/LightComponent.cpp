@@ -92,65 +92,67 @@ void Fracture::LightComponent::SetRadiance(const glm::vec3& value)
 	sun->SetRadiance(value);
 }
 
-glm::vec4 Fracture::LightComponent::GetAmbient()
+glm::vec4 Fracture::LightComponent::GetAmbient()const
 {
 	return m_light->GetAmbient();
 }
 
-glm::vec4 Fracture::LightComponent::GetDiffuse()
+glm::vec4 Fracture::LightComponent::GetDiffuse()const
 {
 	return m_light->GetDiffuse();
 }
 
-glm::vec4 Fracture::LightComponent::GetSpecular()
+glm::vec4 Fracture::LightComponent::GetSpecular()const
 {
 	return m_light->GetSpecular();
 }
 
-glm::vec3 Fracture::LightComponent::GetPosition()
+glm::vec3 Fracture::LightComponent::GetPosition()const
 {
 	return m_light->GetPosition();
 }
 
-glm::vec3 Fracture::LightComponent::GetDirection()
+glm::vec3 Fracture::LightComponent::GetDirection()const
 {
 	return m_light->GetDirection();
 }
 
-float Fracture::LightComponent::GetConstant()
+float Fracture::LightComponent::GetConstant()const
 {
 	return m_light->GetConstant();
 }
 
-float Fracture::LightComponent::GetLinear()
+float Fracture::LightComponent::GetLinear()const
 {
 	return m_light->GetLinear();
 }
 
-float Fracture::LightComponent::GetQuadratic()
+float Fracture::LightComponent::GetQuadratic()const
 {
 	return m_light->GetQuadratic();
 }
 
-float Fracture::LightComponent::GetCutoff()
+float Fracture::LightComponent::GetCutoff()const
 {
 	return m_light->GetCutoff();
 }
 
-float Fracture::LightComponent::GetOuterCutOff()
+float Fracture::LightComponent::GetOuterCutOff()const
 {
 	return m_light->GetOuterCutOff();
 }
 
-float Fracture::LightComponent::Intensity()
+float Fracture::LightComponent::Intensity()const
 {
 	return m_light->Intensity();
 }
 
-glm::vec3 Fracture::LightComponent::GetRadiance()
+glm::vec3 Fracture::LightComponent::GetRadiance()const
 {
 	std::shared_ptr<SunLight> sun = std::dynamic_pointer_cast<SunLight>(m_light);
-	return sun->GetRadiance();
+	if(sun)
+		return sun->GetRadiance();
+	return glm::vec3(0.0f);
 }
 
 std::shared_ptr<Fracture::ILight> Fracture::LightComponent::GetLight()
@@ -189,6 +191,15 @@ void Fracture::LightComponent::ChangeLightType(LightType new_type)
 	}	
 }
 
+std::shared_ptr<Fracture::Environment> Fracture::LightComponent::GetEnvironment() const
+{
+	auto sky = std::dynamic_pointer_cast<SkyLight>(m_light);
+	if(sky)
+		return sky->GetEnvironment();
+
+	return nullptr;
+}
+
 void Fracture::LightComponent::ChangeEnvironment(const std::string& name)
 {
 	std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(m_light);
@@ -208,4 +219,9 @@ void Fracture::LightComponent::SetCastShadow(bool value)
 void Fracture::LightComponent::Accept(ISceneProbe* visitor)
 {
 	visitor->VisitLightComponent(this);
+}
+
+nlohmann::json Fracture::LightComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitLightComponent(*this);
 }

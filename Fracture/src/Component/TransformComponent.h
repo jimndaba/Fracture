@@ -60,6 +60,8 @@ namespace Fracture
 
 		void Accept(ISceneProbe* visitor)override;
 
+		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
+
 		std::shared_ptr<TransformComponent> clone(UUID id) const
 		{
 			return std::shared_ptr<TransformComponent>(this->clone_impl(id));

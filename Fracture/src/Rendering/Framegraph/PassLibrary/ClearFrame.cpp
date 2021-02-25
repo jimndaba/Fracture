@@ -27,3 +27,8 @@ void Fracture::ClearFrame::execute(Renderer& renderer)
 		res.second->Unbind();
 	}
 }
+
+nlohmann::json Fracture::ClearFrame::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
+{
+	return visitor->visitClearFrameNode(*this);
+}

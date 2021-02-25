@@ -23,3 +23,8 @@ void Fracture::BillboardComponent::Accept(ISceneProbe* visitor)
 {
 	visitor->VisitBillboardComponent(this);
 }
+
+nlohmann::json Fracture::BillboardComponent::serialise(const std::shared_ptr<ComponentSerialiser>& visitor)
+{
+	return visitor->visitBillboardComponent(*this);
+}

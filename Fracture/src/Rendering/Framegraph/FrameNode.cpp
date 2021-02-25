@@ -60,7 +60,7 @@ void Fracture::FrameNode::LinkResource(std::string name, std::shared_ptr<FrameRe
 	resources[name] = registered_res;
 }
 
-std::string Fracture::FrameNode::GetName()
+std::string Fracture::FrameNode::GetName()const
 {
 	return m_name;
 }

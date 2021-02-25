@@ -25,7 +25,6 @@ namespace Fracture
 
 	public: 
 		Environment(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader);
-		//Environment(std::shared_ptr<TextureCubeMap> environment, std::shared_ptr<Shader> shader); TODO take in dynamic cube map 
 		~Environment();
 
 		std::shared_ptr<RenderTarget> m_CaptureTarget;

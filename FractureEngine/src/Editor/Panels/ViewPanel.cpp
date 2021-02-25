@@ -78,11 +78,11 @@ void Fracture::ViewPanel::render()
 	ImGui::Text("Camera Pitch: %f ", m_renderer.ActiveCamera()->GetPitch());
 	ImGui::Text("Camera Roll: %f ", m_renderer.ActiveCamera()->GetRoll());
 
-	ImGuiComboFlags flags = ImGuiComboFlags_NoArrowButton;
+	ImGuiComboFlags flags = ImGuiComboFlags_None;
 	//View mode 
 	ImGui::PushItemWidth(100);
-	ImGui::SetCursorPos(ImVec2{ ImGui::GetContentRegionAvail().x - 100, 10 });
-	if (ImGui::BeginCombo("ViewMode", "Render", flags))
+	ImGui::SetCursorPos(ImVec2{ ImGui::GetContentRegionAvail().x - 150, 10 });
+	if (ImGui::BeginCombo("ViewMode", m_currentViewMode.c_str(), flags))
 	{
 
 		for (const auto& viewmode : m_viewModes)//

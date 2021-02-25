@@ -243,6 +243,7 @@
     <ClCompile Include="src\Scripting\LuaScriptHandle.cpp" />
     <ClCompile Include="src\Scripting\NativeScriptHandle.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.cpp" />
     <ClCompile Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.cpp" />
     <ClCompile Include="src\Serialisation\FrameGraphSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\GameSerializer.cpp" />
@@ -381,6 +382,8 @@
     <ClInclude Include="src\Scripting\LuaScriptHandle.h" />
     <ClInclude Include="src\Scripting\NativeScriptHandle.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
+    <ClInclude Include="src\Serialisation\ComponentSerialisers\ComponentSerialiser.h" />
+    <ClInclude Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.h" />
     <ClInclude Include="src\Serialisation\FrameGraphSerialisation\FrameNodeSerialiser.h" />
     <ClInclude Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.h" />
     <ClInclude Include="src\Serialisation\FrameGraphSerialiser.h" />

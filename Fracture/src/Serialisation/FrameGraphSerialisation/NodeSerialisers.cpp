@@ -18,119 +18,229 @@
 
 #pragma region CleaFrame
 
-Fracture::ClearFrameSerialiser::ClearFrameSerialiser(json node):FrameNodeSerialiser(node)
+Fracture::ClearFrameSerialiser::ClearFrameSerialiser():FrameNodeSerialiser()
 {}
 
-void Fracture::ClearFrameSerialiser::visitClearFrameNode(const std::shared_ptr<ClearFrame>& node) const
+nlohmann::json Fracture::ClearFrameSerialiser::visitClearFrameNode(const ClearFrame& node) const
 {
-	j()["Type"] = "ClearFrame";
-	j()["Name"] = node->GetName();
-	j()["Color"] = { node->Color.r, node->Color.g, node->Color.b };
+	json j;
+	j["Type"] = "ClearFrame";
+	j["Name"] = node.GetName();
+	j["Color"] = { node.Color.r, node.Color.g, node.Color.b };
+	return j;
 }
 
 #pragma endregion
 
 #pragma region AdditiveMix
-Fracture::AdditiveMixNodeSerialiser::AdditiveMixNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::AdditiveMixNodeSerialiser::AdditiveMixNodeSerialiser() :FrameNodeSerialiser()
 {}
 
 
-void Fracture::AdditiveMixNodeSerialiser::visitAdditiveMixNode(const std::shared_ptr<AdditiveMixNode>& node) const
+nlohmann::json Fracture::AdditiveMixNodeSerialiser::visitAdditiveMixNode(const AdditiveMixNode& node) const
 {
-	j()["Type"] = "AdditiveMixNode";
-	j()["Name"] = node->GetName();
+	json j;
+	j["Type"] = "AdditiveMixNode";
+	j["Name"] = node.GetName();
+	return j;
 }
 #pragma endregion
 
 #pragma region  Gaussian
-Fracture::GaussianBlurNodeSerialiser::GaussianBlurNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::GaussianBlurNodeSerialiser::GaussianBlurNodeSerialiser() :FrameNodeSerialiser()
 {
 
 }
 
 
-void Fracture::GaussianBlurNodeSerialiser::visitGaussianBlurNode(const std::shared_ptr<GaussianBlurNode>& node) const
+nlohmann::json Fracture::GaussianBlurNodeSerialiser::visitGaussianBlurNode(const GaussianBlurNode& node) const
 {
-	j()["Type"] = "GaussianBlurNode";
-	j()["Name"] = node->GetName();
-	j()["Amount"] = node->amount;
+	json j;
+	j["Type"] = "GaussianBlurNode";
+	j["Name"] = node.GetName();
+	j["Amount"] = node.amount;
+	return j;
 }
 #pragma endregion
 
 #pragma region  Depth
-Fracture::DepthNodeSerialiser::DepthNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::DepthNodeSerialiser::DepthNodeSerialiser() :FrameNodeSerialiser()
 {
 }
 
-void Fracture::DepthNodeSerialiser::visitDepthNode(const std::shared_ptr<DepthNode>& node) const
+nlohmann::json Fracture::DepthNodeSerialiser::visitDepthNode(const DepthNode& node) const
 {
-	j()["Type"] = "DepthNode";
-	j()["Name"] = node->GetName();
-	j()["Near"] = node->NearPlane;
-	j()["Far"] = node->FarPlane;
+	json j;
+	j["Type"] = "DepthNode";
+	j["Name"] = node.GetName();
+	j["Near"] = node.NearPlane;
+	j["Far"] = node.FarPlane;
+	return j;
 }
 #pragma endregion
 
 #pragma region  Intermediate
-Fracture::IntermediateNodeSerialiser::IntermediateNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::IntermediateNodeSerialiser::IntermediateNodeSerialiser() :FrameNodeSerialiser()
 {
 }
 
-void Fracture::IntermediateNodeSerialiser::visitIntermediateNode(const std::shared_ptr<IntermediateNode>& node) const
+nlohmann::json Fracture::IntermediateNodeSerialiser::visitIntermediateNode(const IntermediateNode& node) const
 {
-	j()["Type"] = "IntermediateNode";
-	j()["Name"] = node->GetName();
+	json j;
+	j["Type"] = "IntermediateNode";
+	j["Name"] = node.GetName();
+	return j;
 }
 #pragma endregion
 
 #pragma region  Lambertian
-Fracture::LambertianNodeSerialiser::LambertianNodeSerialiser(json node):FrameNodeSerialiser(node)
+Fracture::LambertianNodeSerialiser::LambertianNodeSerialiser():FrameNodeSerialiser()
 {
 }
 
-void Fracture::LambertianNodeSerialiser::visitLambertianNode(const std::shared_ptr<LambertianNode>& node) const
+nlohmann::json Fracture::LambertianNodeSerialiser::visitLambertianNode(const LambertianNode& node) const
 {
-	j()["Type"] = "LambertianNode";
-	j()["Name"] = node->GetName();
+	json j;
+	j["Type"] = "LambertianNode";
+	j["Name"] = node.GetName();
+	return j;
 }
 #pragma endregion
 
 #pragma region  Link
-Fracture::LinkSerialiser::LinkSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::LinkSerialiser::LinkSerialiser() :FrameNodeSerialiser()
 {
 	
 }
 
-void Fracture::LinkSerialiser::visitLink(const std::shared_ptr<Link>& link) const
+nlohmann::json Fracture::LinkSerialiser::visitLink(const Link& link) const
 {
-	j()["Type"] = "Link";
-	j()["NodeFrom"] = link->FrameNode_From;
-	j()["NodeTo"] = link->FrameNode_To;
-	j()["NodeSource"] = link->FrameNode_Source;
-	j()["NodeResource"] = link->FrameNode_Resource;
+	FRACTURE_INFO("Serialising Link");
+	json j;
+	j["Type"] = "Link";
+	j["NodeFrom"] = link.FrameNode_From;
+	j["NodeTo"] = link.FrameNode_To;
+	j["NodeSource"] = link.FrameNode_Source;
+	j["NodeResource"] = link.FrameNode_Resource;
+	return j;
 }
 #pragma endregion
 
 #pragma region  Sink
-Fracture::SinkNodeSerialiser::SinkNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::SinkNodeSerialiser::SinkNodeSerialiser() :FrameNodeSerialiser()
 {
 }
 
-void Fracture::SinkNodeSerialiser::visitSinkNode(const std::shared_ptr<SinkNode>& node) const
+nlohmann::json Fracture::SinkNodeSerialiser::visitSinkNode(const SinkNode& node) const
 {
-	j()["Type"] = "SinkNode";
-	j()["Name"] = node->GetName();
+	json j;
+	j["Type"] = "SinkNode";
+	j["Name"] = node.GetName();
+	return j;
 }
 #pragma endregion
 
 #pragma region  Source
-Fracture::SourceNodeSerialiser::SourceNodeSerialiser(json node) :FrameNodeSerialiser(node)
+Fracture::SourceNodeSerialiser::SourceNodeSerialiser():FrameNodeSerialiser()
 {	
 }
 
-void Fracture::SourceNodeSerialiser::visitSourceNode(const std::shared_ptr<SourceNode>& node) const
+nlohmann::json Fracture::SourceNodeSerialiser::visitSourceNode(const SourceNode& node) const
 {
-	j()["Type"] = "SourceNode";
-	j()["Name"] = node->GetName();
+	json j;
+	j["Type"] = "SourceNode";
+	j["Name"] = node.GetName();
+	return j;
+}
+#pragma endregion
+
+#pragma region  MultiplyMix
+Fracture::MultiplyMixNodeSerialiser::MultiplyMixNodeSerialiser():FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::MultiplyMixNodeSerialiser::visitMultiplyMixNode(const MultiplyMixNode& node) const
+{
+	json j;
+	j["Type"] = "MultiplyMix";
+	j["Name"] = node.GetName();
+	return j;
+}
+#pragma endregion
+
+#pragma region Outline
+Fracture::OutlineNodeSerialiser::OutlineNodeSerialiser() :FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::OutlineNodeSerialiser::visitOutlineNode(const OutlineNode& node) const
+{
+	json j;
+	j["Type"] = "Outline";
+	j["Name"] = node.GetName();
+	return j;
+}
+#pragma endregion
+
+#pragma region SSAO
+Fracture::SSAONodeSerialiser::SSAONodeSerialiser() :FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::SSAONodeSerialiser::visitSSAONode(const SSAONode& node) const
+{
+	json j;
+	j["Type"] = "SSAO";
+	j["Name"] = node.GetName();
+	j["Radius"] = node.radius;
+	j["Area"] = node.area;
+	j["Falloff"] = node.falloff;
+	j["Strenght"] = node.total_strength; 
+	return j;
+}
+#pragma endregion
+
+#pragma region Threshold
+Fracture::ThresholdNodeSerialiser::ThresholdNodeSerialiser() :FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::ThresholdNodeSerialiser::visitThresholdNode(const ThresholdNode& node) const
+{
+	json j;
+	j["Type"] = "Threshold";
+	j["Name"] = node.GetName();
+	j["Threshold"] = node.brightPassThreshold;
+	return j;
+}
+#pragma endregion
+
+#pragma region ToneMap
+Fracture::ToneMappingNodeSerialiser::ToneMappingNodeSerialiser() :FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::ToneMappingNodeSerialiser::visitToneMappingNode(const ToneMappingNode& node) const
+{
+	json j;
+	j["Type"] = "ToneMapping";
+	j["Name"] = node.GetName();
+	j["Gamma"] = node.Gamma;
+	j["Exposure"] = node.Exposure;
+	return j;
+}
+#pragma endregion
+
+#pragma region ToneMap
+Fracture::MixNodeSerialiser::MixNodeSerialiser() :FrameNodeSerialiser()
+{
+}
+
+nlohmann::json Fracture::MixNodeSerialiser::visitMixNode(const MixNode& node) const
+{
+	json j;
+	j["Type"] = "MixNode";
+	j["Name"] = node.GetName();
+	return j;
 }
 #pragma endregion

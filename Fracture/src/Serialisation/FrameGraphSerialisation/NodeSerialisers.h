@@ -6,70 +6,97 @@
 
 namespace Fracture
 {
-
 	class LinkSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		LinkSerialiser(json node);		
-		void visitLink(const std::shared_ptr<Link>& link)const override;
+		LinkSerialiser();		
+		json visitLink(const Link& link)const override;
 	};
 	class SinkNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		SinkNodeSerialiser(json node);
-		void visitSinkNode(const std::shared_ptr<SinkNode>& node)const override;
+		SinkNodeSerialiser();
+		json visitSinkNode(const SinkNode& node)const override;
 	};
 	class SourceNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		SourceNodeSerialiser(json node);		
-		void visitSourceNode(const std::shared_ptr<SourceNode>& node)const override;		
+		SourceNodeSerialiser();		
+		json visitSourceNode(const SourceNode& node)const override;		
 	};
 	class ClearFrameSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		ClearFrameSerialiser(json node);
-		void visitClearFrameNode(const std::shared_ptr<ClearFrame>& node)const override;
+		ClearFrameSerialiser();
+		json visitClearFrameNode(const ClearFrame& node)const override;
 	};
 	class AdditiveMixNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		AdditiveMixNodeSerialiser(json node);
-		void visitAdditiveMixNode(const std::shared_ptr<AdditiveMixNode>& node)const override;
+		AdditiveMixNodeSerialiser();
+		json visitAdditiveMixNode(const AdditiveMixNode& node)const override;
+	};
+	class MixNodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		MixNodeSerialiser();
+		json visitMixNode(const MixNode& node)const override;
 	};
 	class GaussianBlurNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		GaussianBlurNodeSerialiser(json node);
-		void visitGaussianBlurNode(const std::shared_ptr<GaussianBlurNode>& node)const override;
+		GaussianBlurNodeSerialiser();
+		json visitGaussianBlurNode(const GaussianBlurNode& node)const override;
 		
 	};
 	class DepthNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		DepthNodeSerialiser(json node);
-		void visitDepthNode(const std::shared_ptr<DepthNode>& node)const override;	
+		DepthNodeSerialiser();
+		json visitDepthNode(const DepthNode& node)const override;	
 	};
 	class IntermediateNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		IntermediateNodeSerialiser(json node);
-		void visitIntermediateNode(const std::shared_ptr<IntermediateNode>& node)const override;	
+		IntermediateNodeSerialiser();
+		json visitIntermediateNode(const IntermediateNode& node)const override;	
 	};
 	class LambertianNodeSerialiser :public FrameNodeSerialiser
 	{
 	public:
-		LambertianNodeSerialiser(json node);
-		void visitLambertianNode(const std::shared_ptr<LambertianNode>& node)const override;
+		LambertianNodeSerialiser();
+		json visitLambertianNode(const LambertianNode& node)const override;
 	};
-		
-	//class MixNode;
-	//class MultiplyMixNode;
-	//class OutlineNode;
-	//class SSAONode;
-	//class ThresholdNode;
-	//class ToneMappingNode;
-	
+	class MultiplyMixNodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		MultiplyMixNodeSerialiser();
+		json visitMultiplyMixNode(const MultiplyMixNode& node)const override;
+	};
+	class OutlineNodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		OutlineNodeSerialiser();
+		json visitOutlineNode(const OutlineNode& node)const override;
+	};
+	class SSAONodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		SSAONodeSerialiser();
+		json visitSSAONode(const SSAONode& node)const override;
+	};
+	class ThresholdNodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		ThresholdNodeSerialiser();
+		json visitThresholdNode(const ThresholdNode& node)const override;
+	};
+	class ToneMappingNodeSerialiser :public FrameNodeSerialiser
+	{
+	public:
+		ToneMappingNodeSerialiser();
+		json visitToneMappingNode(const ToneMappingNode& node)const override;
+	};
 }
 
 #endif
