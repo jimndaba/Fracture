@@ -160,7 +160,7 @@ std::shared_ptr<Fracture::ILight> Fracture::LightComponent::GetLight()
 	return m_light;
 }
 
-Fracture::LightType Fracture::LightComponent::GetLightType()
+Fracture::LightType Fracture::LightComponent::GetLightType() const
 {
 	return m_type;
 }

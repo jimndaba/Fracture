@@ -170,10 +170,176 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 	{
 		for (auto entity : input["Entities"])
 		{
-			std::cout << entity["Entity ID"];
-			DeSerializeEntity(entity);
+			uint32_t id = entity["EntityID"];
+			std::shared_ptr<Entity> m_entity = EntityManager::CreateEntity(UUID(id));
+			m_scene->addEntity(m_entity);		
 		}
-	}	
+	}		
+	if (exists(input, "TagComponents"))
+	{
+		for (auto tag : input["TagComponents"])
+		{
+			UUID id = UUID(tag["EntityID"]);
+			std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(id);
+			component->SetName(tag["Name"]);
+			ComponentManager::AddComponent<TagComponent>(component);
+		}
+
+	}
+	if (exists(input, "RelationshipComponents"))
+	{
+		for (auto rel : input["RelationshipComponents"])
+		{
+			UUID id = UUID(rel["EntityID"]);
+			std::shared_ptr<RelationShipComponent> component = std::make_shared<RelationShipComponent>(id);
+
+			bool hasParent = rel["HasParent"];
+			if (hasParent)
+			{
+				UUID p_id = UUID(rel["ParentID"]);
+				component->SetParent(p_id);
+			}
+
+			auto children = rel["Children"];
+			for (auto child : children)
+			{
+				component->AddChild(child["ChildID"].get<uint32_t>());
+			}
+
+			ComponentManager::AddComponent<RelationShipComponent>(component);
+		}
+	}
+	if (exists(input, "TransformComponents"))
+	{
+		for (auto transform: input["TransformComponents"])
+		{
+			uint32_t id = transform["EntityID"];
+			std::array<float, 3> pos = transform["Position"];
+			std::array<float, 3> sc = transform["Rotation"];
+			std::array<float, 3>rot = transform["Scale"];
+
+			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(UUID(id));
+			component->setPosition(glm::vec3(pos[0], pos[1], pos[2]));
+			component->setScale(glm::vec3(sc[0], sc[1], sc[2]));
+			component->setRotation(glm::vec3(rot[0], rot[1], rot[2]));
+			ComponentManager::AddComponent<TransformComponent>(component);
+		}
+	}
+	if (exists(input, "AnimatorComponents"))
+	{
+	}
+	if (exists(input, "BillboardComponents"))
+	{
+	}
+	if (exists(input, "CameraComponents"))
+	{
+		for (auto camera : input["TransformComponents"])
+		{
+			uint32_t id = camera["EntityID"];
+			float fov = camera["FoV"];
+			float Near = camera["Near"];
+			float Far = camera["Far"];
+			std::array<float, 3> pos = camera["Position"];
+
+			std::shared_ptr<CameraControllerComponent> component = std::make_shared<CameraControllerComponent>(UUID(id));
+			component->foV = fov;
+			component->farClip = Far;
+			component->nearClip = Near;
+			component->Position = glm::vec3(pos[0], pos[1], pos[2]);
+			ComponentManager::AddComponent<CameraControllerComponent>(component);
+		}
+	}
+	if (exists(input, "LightComponents"))
+	{
+		for (auto light : input["LightComponents"])
+		{
+			UUID id = UUID(light["EntityID"]);
+			LightType lType = (LightType)light["LightType"];
+
+			switch (lType)
+			{
+				case LightType::Sun:
+				{
+					std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(id, lType);
+					std::array<float, 3> direction = light["Direction"];
+					std::array<float, 3> radiance = light["Radiance"];
+					std::array<float, 4> diffuse = light["Diffuse"];
+					std::array<float, 4> ambient = light["Ambient"];
+					std::array<float, 4> specular = light["Specular"];
+					component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
+					component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+					component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+					component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+					component->SetRadiance(glm::vec3(radiance[0], radiance[1], radiance[2]));
+					component->SetIntensity(light["Intensity"]);
+					ComponentManager::AddComponent<LightComponent>(component);
+					break;
+				}
+				case LightType::Spot:
+				{
+					std::array<float, 3> direction = light["Direction"];
+					std::array<float, 3> position = light["Position"];
+					std::array<float, 4> diffuse = light["Diffuse"];
+					std::array<float, 4> ambient = light["Ambient"];
+					std::array<float, 4> specular = light["Specular"];
+					std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(id, lType);
+					component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+					component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+					component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+					component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
+					component->SetPosition(glm::vec3(position[0], position[1], position[2]));
+					component->SetLinear(light["Linear"]);
+					component->SetConstant(light["Constant"]);
+					component->SetQuadratic(light["Qaudratic"]);
+					component->SetCutoff(light["Cutoff"]);
+					component->SetOuterCutOff(light["OuterCutoff"]);
+					ComponentManager::AddComponent<LightComponent>(component);
+					break;
+				}
+				case LightType::Point:
+				{
+					std::array<float, 3> position = light["Position"];
+					std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(id, lType);
+					std::array<float, 4> diffuse = light["Diffuse"];
+					std::array<float, 4> ambient = light["Ambient"];
+					std::array<float, 4> specular = light["Specular"];
+					component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
+					component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
+					component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
+					component->SetPosition(glm::vec3(position[0], position[1], position[2]));
+					component->SetLinear(light["Linear"]);
+					component->SetConstant(light["Constant"]);
+					component->SetQuadratic(light["Qaudratic"]);
+					ComponentManager::AddComponent<LightComponent>(component);
+					break;
+				}
+				case LightType::Sky:
+				{
+					std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(id, lType);
+					component->SetIntensity(light["Intensity"]);
+					component->ChangeEnvironment(light["Environment"]);
+					ComponentManager::AddComponent<LightComponent>(component);
+					break;
+				}
+			}
+
+		}
+	}
+	if (exists(input, "RenderComponents"))
+	{
+		for (auto render : input["RenderComponents"])
+		{
+			UUID id = UUID(render["EntityID"]);
+			std::string model = render["Model"];
+			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
+			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(id, m_model);
+			ComponentManager::AddComponent<RenderComponent>(component);
+		}		
+	}
+	if (exists(input, "RigidbodyComponents"))
+	{
+	}
+
 	return true;
 }
 
@@ -184,84 +350,9 @@ void Fracture::SceneSerializer::SerializeComponents(json j)
 
 void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 {
+	/*
 	if (exists(j, "Tag Component"))
-	{
-		//Early Exit if it is Root Entity.
-		auto tagComponent = j["Tag Component"];
-		if (tagComponent["Entity Name"] == "Root")
-		{
-			return;
-		}
-
-		UUID id = UUID(j["Entity ID"]);
-		std::shared_ptr<Entity> entity = EntityManager::CreateEntity(id);		
-		std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(entity->GetId());		
-		component->SetName(tagComponent["Entity Name"]);
-		ComponentManager::AddComponent<TagComponent>(component);
-
-		if (exists(j, "Relationship Component"))
-		{
-			auto relationshipComponent = j["Relationship Component"];
-			std::shared_ptr<RelationShipComponent> component = std::make_shared<RelationShipComponent>(entity->GetId());
-
-			bool hasParent = relationshipComponent["Has Parent"];
-			if (hasParent)
-			{
-				std::cout << "Setting parent to: "<< relationshipComponent["Parent ID"] << "for Entity : " << entity->GetId()<< std::endl;
-				UUID p_id = UUID(relationshipComponent["Parent ID"]);
-				component->SetParent(p_id);
-			}
-			
-			auto children = relationshipComponent["Children"];
-
-			for (auto child : children)
-			{
-				component->AddChild(child["Child ID"].get<uint32_t>());
-			}
-
-			ComponentManager::AddComponent<RelationShipComponent>(component);
-		}
-
-		if (exists(j, "Camera Component"))
-		{
-			auto cameraComponent = j["Camera Component"];
-			float fov = cameraComponent["FOV"];
-			float Near = cameraComponent["Near Clip"];
-			float Far = cameraComponent["Far Clip"];
-			std::array<float, 3> pos = cameraComponent["Position"];
-			std::array<float, 3> up = cameraComponent["Up"];
-			std::array<float, 3> front = cameraComponent["Front"];
-			std::array<float, 3> right = cameraComponent["Right"];
-			std::array<float, 3> targetpos = cameraComponent["Target Position"];
-
-			std::shared_ptr<CameraControllerComponent> component = std::make_shared<CameraControllerComponent>(entity->GetId());
-			component->foV = fov;
-			component->farClip = Far;
-			component->nearClip = Near;
-			component->Position = glm::vec3(pos[0], pos[1], pos[2]);
-			component->Up = glm::vec3(up[0], up[1], up[2]);
-			component->Right = glm::vec3(right[0], right[1], right[2]);
-			component->Front= glm::vec3(front[0], front[1], front[2]);
-			component->m_TargetPosition = glm::vec3(targetpos[0], targetpos[1], targetpos[2]);
-			ComponentManager::AddComponent<CameraControllerComponent>(component);
-			m_scene->setCamera(entity);
-		}
-		
-		if (exists(j, "Transform Component"))
-		{
-			auto transformComponent = j["Transform Component"];
-			std::array<float, 3> pos = transformComponent["Position"];
-			std::array<float, 3> sc = transformComponent["Scale"];
-			std::array<float, 3>rot = transformComponent["Rotation"];
-
-			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(entity->GetId());
-			component->setPosition(glm::vec3(pos[0], pos[1], pos[2]));
-			component->setScale(glm::vec3(sc[0], sc[1], sc[2]));
-			component->setRotation(glm::vec3(rot[0], rot[1], rot[2]));
-			ComponentManager::AddComponent<TransformComponent>(component);
-
-		}
-
+	{	
 		if (exists(j, "Render Component"))
 		{
 			auto renderComponent = j["Render Component"];
@@ -367,7 +458,6 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 
 				AssetManager::AddMaterial(m_Name, material);
 
-
 				if (AssetManager::getMaterial("DefaultMaterial"))
 				{					
 					m_model->SetMaterial("DefaultMaterial", material);
@@ -400,85 +490,6 @@ void Fracture::SceneSerializer::DeSerializeEntity(nlohmann::json j)
 			std::shared_ptr<RigidBodyComponent> component = std::make_shared<RigidBodyComponent>(entity->GetId(), mass);
 			ComponentManager::AddComponent<RigidBodyComponent>(component);
 		}
-		
-		if (exists(j, "Light Component"))
-		{
-			auto lightComponent = j["Light Component"];
-			
-
-			LightType lType = (LightType)j["Light Type"];
-
-			switch (lType)
-			{
-			case LightType::Sun:
-			{											
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(),lType);
-				std::array<float, 3> direction = lightComponent["Direction"];
-				std::array<float, 4> diffuse = lightComponent["Diffuse"];
-				std::array<float, 4> ambient = lightComponent["Ambient"];
-				std::array<float, 4> specular = lightComponent["Specular"];
-				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
-				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));		
-				component->SetIntensity(lightComponent["Intensity"]);
-				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
-				break;
-			}
-			case LightType::Spot:
-			{
-				std::array<float, 3> direction = lightComponent["Direction"];
-				std::array<float, 3> position = lightComponent["Position"];
-				std::array<float, 4> diffuse = lightComponent["Diffuse"];
-				std::array<float, 4> ambient = lightComponent["Ambient"];
-				std::array<float, 4> specular = lightComponent["Specular"];
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
-				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));
-				component->SetDirection(glm::vec3(direction[0], direction[1], direction[2]));
-				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
-				component->SetLinear(lightComponent["Linear"]);
-				component->SetConstant(lightComponent["Constant"]);
-				component->SetQuadratic(lightComponent["Qaudratic"]);
-				component->SetCutoff(lightComponent["Cutoff"]);
-				component->SetOuterCutOff(lightComponent["OuterCutoff"]);			
-				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
-				break;
-			}
-			case LightType::Point:
-			{				
-				std::array<float, 3> position = lightComponent["Position"];
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
-				std::array<float, 4> diffuse = lightComponent["Diffuse"];
-				std::array<float, 4> ambient = lightComponent["Ambient"];
-				std::array<float, 4> specular = lightComponent["Specular"];
-				component->SetAmbient(glm::vec4(ambient[0], ambient[1], ambient[2], ambient[3]));
-				component->SetDiffuse(glm::vec4(diffuse[0], diffuse[1], diffuse[2], diffuse[3]));
-				component->SetSpecular(glm::vec4(specular[0], specular[1], specular[2], specular[3]));				
-				component->SetPosition(glm::vec3(position[0], position[1], position[2]));
-				component->SetLinear(lightComponent["Linear"]);
-				component->SetConstant(lightComponent["Constant"]);
-				component->SetQuadratic(lightComponent["Qaudratic"]);			
-				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
-				break;
-			}
-			case LightType::Sky:
-			{
-				std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(entity->GetId(), lType);
-				component->SetIntensity(lightComponent["Intensity"]);
-				component->ChangeEnvironment(lightComponent["Environment"]);
-				ComponentManager::AddComponent<LightComponent>(component);
-				ComponentManager::AddComponent<TransformComponent>(entity->GetId());
-				break;
-			}
-			}
-		}
-		
-
-		m_scene->addEntity(entity);
 	}
+	*/
 }

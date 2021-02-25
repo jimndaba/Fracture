@@ -16,6 +16,7 @@
 #include "Rendering/Model.h"
 #include "Rendering/Shader.h"
 #include "Rendering/OpenGL/Texture.h"
+#include "Rendering/OpenGL/Texture2D.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
@@ -183,8 +184,8 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	{
 		json a;
 		a["Texture Name"] = texture->first;
-		//a["Texture Path"] = texture->second->;
-		//a["Texture Type"] = texture->second->textureType;
+		a["Texture Path"] = texture->second->GetPath();
+		a["Texture Type"] = texture->second->GetType();
 		textures.push_back(a);
 	}
 	j["Textures"] = textures;

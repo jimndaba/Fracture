@@ -54,7 +54,7 @@ namespace Fracture
 		glm::vec3 GetRadiance()const;
 
 		std::shared_ptr<ILight> GetLight();
-		LightType GetLightType();
+		LightType GetLightType() const;
 		void ChangeLightType(LightType new_type);
 		std::shared_ptr<Environment> GetEnvironment()const;
 		void ChangeEnvironment(const std::string& name);

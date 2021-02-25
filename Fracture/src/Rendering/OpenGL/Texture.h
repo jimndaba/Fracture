@@ -64,9 +64,20 @@ namespace Fracture
 			m_Name = Name;
 		}
 
+		std::string GetPath()const
+		{
+			return m_Path;
+		}
+
+		void SetPath(const std::string path)
+		{
+			m_Path = path;
+		}
+
 	private:
 		TextureType m_TextureType;
 		std::string m_Name;
+		std::string m_Path;
 	};
 
 

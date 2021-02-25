@@ -81,6 +81,9 @@ nlohmann::json Fracture::CameraControllerComponentSerialiser::visitCameraControl
     j["ComponentType"] = "CameraController";
     j["EntityID"] = (uint32_t)node.GetID();
     j["Position"] = { node.Position.x,node.Position.y ,node.Position.z };
+    j["FoV"] = node.foV;
+    j["Near"] = node.nearClip;
+    j["Far"] = node.farClip;   
     return j;
 }
 
@@ -130,6 +133,7 @@ nlohmann::json Fracture::LightComponentSerialiser::visitLightComponent(const Lig
 {
     json j;
     j["ComponentType"] = "LightComponent";
+    j["LightType"] = node.GetLightType();
     j["EntityID"] = (uint32_t)node.GetID();
     j["Direction"] = { node.GetDirection().x, node.GetDirection().y, node.GetDirection().z };
     j["Position"] = { node.GetPosition().x, node.GetPosition().y, node.GetPosition().z };
