@@ -16,6 +16,7 @@ namespace Fracture
 
 	public:
 		SkyLight();
+		SkyLight(const std::shared_ptr<Texture2D>& hdr);
 		~SkyLight() = default;
 		virtual void SetAmbient(glm::vec4 ambient) { m_ambient = ambient; };
 		virtual void SetDiffuse(glm::vec4 diffuse) { m_diffuse = diffuse; };

@@ -20,6 +20,7 @@
 
 std::map<std::string, std::shared_ptr<Fracture::Mesh>>  Fracture::AssetManager::m_meshes;
 std::map<std::string, std::shared_ptr<Fracture::Texture2D>> Fracture::AssetManager::m_Textures;
+std::map<std::string, std::shared_ptr<Fracture::Texture2D>>  Fracture::AssetManager::m_HDRTextures;
 std::map<std::string, std::shared_ptr<Fracture::TextureMultiSample>> Fracture::AssetManager::m_MultiSampleTextures;
 std::map<std::string, std::shared_ptr<Fracture::TextureCubeMap>> Fracture::AssetManager::m_CubeMaps;
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
@@ -97,10 +98,8 @@ void Fracture::AssetManager::AddHDR(const std::string& name, const std::string& 
 {
 	std::shared_ptr<Texture2D> texture = TextureLoader::LoadHDR(name, path);
 	
-	m_Textures[name] = texture;
-
-	FRACTURE_TRACE("No Of Textures: {}", m_Textures.size());
-	FRACTURE_TRACE("Loaded Texture: {}", name);
+	m_HDRTextures[name] = texture;
+	FRACTURE_TRACE("Loaded HDR Texture: {}", name);
 }
 
 void Fracture::AssetManager::AddCubeMap(const std::string& name, const std::string& path, TextureType mtype)
@@ -170,6 +169,11 @@ std::shared_ptr<Fracture::Texture2D> Fracture::AssetManager::getTexture2D(const 
 	return m_Textures[name];
 }
 
+std::shared_ptr<Fracture::Texture2D> Fracture::AssetManager::getHDRTexture(const std::string& name)
+{
+	return m_HDRTextures[name];
+}
+
 std::map<std::string, std::shared_ptr<Fracture::Mesh>> Fracture::AssetManager::GetMeshes()
 {
 	return m_meshes;
@@ -178,6 +182,11 @@ std::map<std::string, std::shared_ptr<Fracture::Mesh>> Fracture::AssetManager::G
 std::map<std::string, std::shared_ptr<Fracture::Texture2D>> Fracture::AssetManager::GetTextures()
 {
 	return m_Textures;
+}
+
+std::map<std::string, std::shared_ptr<Fracture::Texture2D>> Fracture::AssetManager::GetHDRTextures()
+{
+	return m_HDRTextures;
 }
 
 std::map<std::string, std::shared_ptr<Fracture::TextureMultiSample>> Fracture::AssetManager::GetMultiSampleTextures()

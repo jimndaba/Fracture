@@ -88,6 +88,8 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	{		
 		json a;
 		a["Material Name"] = material.second->Name;
+		a["CastShadows"] = material.second->CastShadows();
+		a["Transparent"] = material.second->IsTransparent();
 		json serialised_unfiorms = json::array_t();
 		json serialised_sampleunfiorms = json::array_t();
 
@@ -185,11 +187,24 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 		json a;
 		a["Texture Name"] = texture->first;
 		a["Texture Path"] = texture->second->GetPath();
-		a["Texture Type"] = texture->second->GetType();
+		//a["Texture Type"] = texture->second->GetType();
 		textures.push_back(a);
 	}
 	j["Textures"] = textures;
+
+	json HDRtextures = json::array_t();
+	std::map<std::string, std::shared_ptr<Texture2D>> m_HDRtextures = AssetManager::GetHDRTextures();
+	for (auto texture = m_HDRtextures.begin(); texture != m_HDRtextures.end(); ++texture)
+	{
+		json a;
+		a["Texture Name"] = texture->first;
+		a["Texture Path"] = texture->second->GetPath();
+		//a["Texture Type"] = texture->second->GetType();
+		HDRtextures.push_back(a);
+	}
+	j["HDRTextures"] = HDRtextures;
 	
+	//TO DO Save other textures;
 
 	j["Physics Settings"] = "------------------------------------";
 	j["Gravity"] = "PhysicsSettings";
@@ -245,6 +260,14 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		}
 	}
 
+	if (exists(input, "HDRTextures"))
+	{
+		for (auto texture : input["HDRTextures"])
+		{
+			DeSerializeHDRTextures(texture);
+		}
+	}
+
 	if (exists(input, "Materials"))
 	{
 		for (auto material : input["Materials"])
@@ -276,6 +299,8 @@ void Fracture::ProjectSerializer::DeSerializeModels(nlohmann::json m)
 {
 	std::string name = m["Model Name"];
 	std::string path = m["Model Directory"];
+
+
 	AssetManager::AddModel(name, path);
 }
 
@@ -291,8 +316,14 @@ void Fracture::ProjectSerializer::DeSerializeMaterial(nlohmann::json m)
 {
 	std::string m_Name = m["Material Name"];
 	std::string shader = m["Shader"];
+	bool castshadows = m["CastShadows"];
+	bool transparent = m["Transparent"];
+
 	std::shared_ptr<Shader> mShader = AssetManager::getShader(shader);
 	std::shared_ptr<Material> material = std::make_shared<Material>(m_Name, mShader);
+
+	material->setCastShadows(castshadows);
+	material->setIsTransparent(transparent);
 
 	auto uniforms = m["MaterialUniforms"];
 	for (auto uniform : uniforms)
@@ -389,15 +420,24 @@ void Fracture::ProjectSerializer::DeSerializeTextures(nlohmann::json t)
 {
 	std::string name = t["Texture Name"];
 	std::string path = t["Texture Path"];
-	int _type = t["Texture Type"];
-	AssetManager::AddTexture2D(name, path, (TextureType)_type);
+	//int _type = t["Texture Type"];
+	AssetManager::AddTexture2D(name,path,TextureType::Diffuse);
+}
+
+void Fracture::ProjectSerializer::DeSerializeHDRTextures(nlohmann::json t)
+{
+	std::string name = t["Texture Name"];
+	std::string path = t["Texture Path"];
+	//int _type = t["Texture Type"];
+	AssetManager::AddHDR(name, path, TextureType::Diffuse);
 }
 
 void Fracture::ProjectSerializer::DeSerializeScene(nlohmann::json s)
 {
-	std::shared_ptr<Scene> scene = std::make_shared<Scene>();
-	SceneSerializer serializer(scene);
 	std::string name = s["Scene Name"];
+	std::shared_ptr<Scene> scene = std::make_shared<Scene>(name);
+	SceneSerializer serializer(scene);
+	
 	if (!serializer.DeSerialize(m_properties->ScenesPath + "/" + name + ".scene"))
 	{
 		FRACTURE_ERROR("Failed to Load Scene : {}", name);

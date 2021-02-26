@@ -30,6 +30,7 @@ namespace Fracture
 		void DeSerializeShaders(nlohmann::json entity);
 		void DeSerializeMaterial(nlohmann::json entity);
 		void DeSerializeTextures(nlohmann::json entity);
+		void DeSerializeHDRTextures(nlohmann::json entity);
 		void DeSerializeScene(nlohmann::json entity);
 		
 

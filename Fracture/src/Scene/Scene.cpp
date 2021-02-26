@@ -8,12 +8,16 @@ Fracture::Scene::Scene()
 {
 	//ROOT ENTITY
 	m_root = EntityManager::CreateEntity<Entity>();	
-
 	std::shared_ptr<RelationShipComponent> m_root_rel = std::shared_ptr<RelationShipComponent>(new RelationShipComponent(m_root->GetId()));
 	ComponentManager::AddComponent<RelationShipComponent>(m_root_rel);
 	ComponentManager::AddComponent<TransformComponent>(m_root->GetId(),glm::vec3(0.0f));
 	ComponentManager::AddComponent<TagComponent>(m_root->GetId(), "Root");
 	addEntity(m_root);
+}
+
+Fracture::Scene::Scene(const std::string& name):
+	Name(name)
+{
 }
 
 Fracture::Scene::~Scene()
@@ -29,6 +33,11 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::Root()
 void Fracture::Scene::addEntity(const std::shared_ptr<Entity>& entity)
 {
 	m_entities.push_back(entity);
+}
+
+void Fracture::Scene::SetRoot(const std::shared_ptr<Entity>& entity)
+{
+	m_root = entity;
 }
 
 void Fracture::Scene::Destroy(const std::shared_ptr<Entity>& entity)

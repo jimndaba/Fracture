@@ -68,7 +68,7 @@ HasDepthAndStencil(depthAndStencil)
 
     if (depthAndStencil && texturetarget == AttachmentTarget::CubeMapPosX)
     {
-        std::shared_ptr<TextureCubeMap> texture = TextureCubeMap::CreateTexture(InternalFormat::Depth24Stencil8, TextureFormat::DepthStencil, width, height, glWrap::ClampToEdge, FormatType::UInt24_8);
+        std::shared_ptr<TextureCubeMap> texture = TextureCubeMap::CreateTexture(InternalFormat::Depth24Stencil8, TextureFormat::DepthStencil, width, height, glWrap::ClampToEdge, FormatType::UInt24_8,false);
 
         m_framebuffer->AddAttachment(AttachmentType::Depth, texture->GetTextureID());
         glDrawBuffer(GL_NONE);

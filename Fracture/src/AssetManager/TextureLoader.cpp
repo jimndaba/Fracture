@@ -9,8 +9,12 @@
 #include "stbimage/stb_image.h"
 #include "Rendering/OpenGL/OpenGLBase.h"
 
+
+bool Fracture::TextureLoader::m_flipVertical = false;
+
 Fracture::TextureLoader::TextureLoader()
 {
+
 }
 
 std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(const std::string& name, const std::string& path)
@@ -19,6 +23,8 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 	int height;
 	int channel;
 	std::shared_ptr<Fracture::Texture2D> texture;	
+	
+	stbi_set_flip_vertically_on_load(true);
 
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channel, 0);
 
@@ -44,11 +50,11 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 		}
 
 		texture = Texture2D::CreateTexture(data, iformat, format, width, height, glWrap::Repeat, FormatType::UByte);
-
+		glGenerateMipmap(GL_TEXTURE_2D);
 		//texture->GenerateMips();
 
 		texture->SetName(name);
-
+		texture->SetPath(path);
 		stbi_image_free(data);
 	}
 	else
@@ -85,7 +91,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadHDR(const std:
 		texture = Texture2D::CreateTexture(data,InternalFormat::RGBA16, TextureFormat::RGB, width, height, glWrap::ClampToEdge, FormatType::Float);
 
 		texture->SetName(name);
-
+		texture->SetPath(path);
 		stbi_image_free(data);	
 	}
 	else
@@ -104,6 +110,11 @@ std::shared_ptr<Fracture::TextureCubeMap> Fracture::TextureLoader::LoadCubeMap(c
 std::shared_ptr<Fracture::TextureMultiSample> Fracture::TextureLoader::LoadTextureMultiSample(const std::string& name, const std::string& path)
 {
 	return std::shared_ptr<TextureMultiSample>();
+}
+
+void Fracture::TextureLoader::SetVerticalFlip(const bool& flip)
+{
+	m_flipVertical = flip;
 }
 
 

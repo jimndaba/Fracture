@@ -5,9 +5,14 @@
 
 Fracture::SkyLight::SkyLight():
 	ILight(),
-	m_environment(Environment::Create(std::static_pointer_cast<Texture2D>(AssetManager::getTexture2D("Loft")), AssetManager::getShader("CubeMap")))
+	m_environment(Environment::Create(std::static_pointer_cast<Texture2D>(AssetManager::getHDRTexture("Loft")), AssetManager::getShader("CubeMap")))
 {
 	
+}
+
+Fracture::SkyLight::SkyLight(const std::shared_ptr<Texture2D>& hdr):ILight(),
+m_environment(Environment::Create(hdr,AssetManager::getShader("CubeMap")))
+{
 }
 
 Fracture::LightType  Fracture::SkyLight::GetLightType()
@@ -37,7 +42,7 @@ std::shared_ptr<Fracture::Environment> Fracture::SkyLight::GetEnvironment()const
 
 void Fracture::SkyLight::ChangeEnvironment(const std::string& name)
 {
-	std::shared_ptr<Texture2D> texture = AssetManager::getTexture2D(name);
+	std::shared_ptr<Texture2D> texture = AssetManager::getHDRTexture(name);
 	std::shared_ptr<Environment> newEnvironment = Environment::Create(texture, AssetManager::getShader("CubeMap"));
 		
 	if (newEnvironment)

@@ -42,6 +42,7 @@ namespace Fracture
 
 	public:
 		Scene();
+		Scene(const std::string& name);
 		~Scene();
 
 		std::shared_ptr<Entity> Root();
@@ -49,7 +50,8 @@ namespace Fracture
 
 		virtual void onLoad() {};
 
-		void addEntity(const std::shared_ptr<Entity>& entity);				
+		void addEntity(const std::shared_ptr<Entity>& entity);		
+		void SetRoot(const std::shared_ptr<Entity>& entity);
 		void Destroy(const std::shared_ptr<Entity>& entity);
 		void Destroy(UUID id);
 		std::shared_ptr<Entity> Duplicate(const std::shared_ptr<Entity>& entity);

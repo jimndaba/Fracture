@@ -6,12 +6,14 @@
 #include "Component/RelationshipComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/LightComponent.h"
+#include "Entity/ILight.h"
 #include "Component/CameraControllerComponent.h"
 #include "Component/BillboardComponent.h"
 #include "Component/RelationshipComponent.h"
 #include "Component/RenderComponent.h"
 #include "Component/AnimatorComponent.h"
 #include "Rendering/Model.h"
+#include "Rendering/Material.h"
 #include "Rendering/Environment.h"
 #include "Rendering/OpenGL/Texture2D.h"
 
@@ -110,6 +112,17 @@ nlohmann::json Fracture::RenderComponentSerialiser::visitRenderComponent(const R
     j["ComponentType"] = "RenderComponent";
     j["EntityID"] = (uint32_t)node.GetID();
     j["Model"] = node.GetModel()->Name;
+   
+    json serialised_materials = json::array_t();
+    const auto& materials = node.GetModel()->GetMaterials();
+    for (auto& material : materials)
+    {
+        json c;
+        c["MaterialName"] = material->Name;
+        serialised_materials.push_back(c);
+    }
+    j["Materials"] = serialised_materials;
+
     return j;
 }
 
@@ -147,7 +160,11 @@ nlohmann::json Fracture::LightComponentSerialiser::visitLightComponent(const Lig
     j["Linear"] = node.GetLinear();
     j["Quadratic"] = node.GetQuadratic();
     j["Constant"] = node.GetConstant();
-    //j["Environment Map"] = node.GetEnvironment()->m_enviroment->GetName();
+
+    if (node.GetLightType() == LightType::Sky)
+    {
+        j["EnvironmentMap"] = node.GetEnvironment()->m_enviroment->GetName();
+    } 
     return j;
 }
 

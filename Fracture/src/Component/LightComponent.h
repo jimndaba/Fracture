@@ -11,12 +11,14 @@ namespace Fracture
 	class ILight;
 	enum class LightType;
 	class Environment;
+	class Texture2D;
 
 	class LightComponent:public Component
 	{
 
 	public:
 		LightComponent(UUID id,LightType lightType);
+		LightComponent(const UUID& id,const std::shared_ptr<Texture2D>& hdr);
 		~LightComponent() = default;
 
 		LightComponent(const LightComponent& component, UUID id) :Component(id)
@@ -61,6 +63,9 @@ namespace Fracture
 
 		bool CastShadow();
 		void SetCastShadow(bool value);
+
+		static std::shared_ptr<LightComponent> CreateComponent(const UUID& id,const std::shared_ptr<Texture2D>& hdr);
+
 
 		void Accept(ISceneProbe* visitor) override;
 

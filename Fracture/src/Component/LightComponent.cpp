@@ -27,6 +27,12 @@ Fracture::LightComponent::LightComponent(UUID id, LightType lightType):Component
 	}
 }
 
+Fracture::LightComponent::LightComponent(const UUID& id, const std::shared_ptr<Texture2D>& hdr):
+	Component(id),m_type(LightType::Sky)
+{
+	m_light = std::make_shared<SkyLight>(hdr);
+}
+
 void Fracture::LightComponent::onStart()
 {
 }
@@ -214,6 +220,11 @@ bool Fracture::LightComponent::CastShadow()
 void Fracture::LightComponent::SetCastShadow(bool value)
 {
 	m_light->SetCastShadows(value);
+}
+
+std::shared_ptr<Fracture::LightComponent> Fracture::LightComponent::CreateComponent(const UUID& id,const std::shared_ptr<Texture2D>& hdr)
+{
+	return std::make_shared<LightComponent>(id,hdr);;
 }
 
 void Fracture::LightComponent::Accept(ISceneProbe* visitor)

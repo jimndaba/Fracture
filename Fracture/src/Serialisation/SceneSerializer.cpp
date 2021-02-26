@@ -182,6 +182,12 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 			UUID id = UUID(tag["EntityID"]);
 			std::shared_ptr<TagComponent> component = std::make_shared<TagComponent>(id);
 			component->SetName(tag["Name"]);
+
+			if (tag["Name"] == "Root")
+			{
+				m_scene->SetRoot(m_scene->GetEntity(id));
+			}
+
 			ComponentManager::AddComponent<TagComponent>(component);
 		}
 
@@ -192,21 +198,24 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		{
 			UUID id = UUID(rel["EntityID"]);
 			std::shared_ptr<RelationShipComponent> component = std::make_shared<RelationShipComponent>(id);
-
-			bool hasParent = rel["HasParent"];
-			if (hasParent)
-			{
-				UUID p_id = UUID(rel["ParentID"]);
-				component->SetParent(p_id);
-			}
+			component->hasParent = rel["HasParent"];
+			ComponentManager::AddComponent<RelationShipComponent>(component);
 
 			auto children = rel["Children"];
 			for (auto child : children)
 			{
 				component->AddChild(child["ChildID"].get<uint32_t>());
 			}
-
-			ComponentManager::AddComponent<RelationShipComponent>(component);
+		}
+		for (auto rel : input["RelationshipComponents"])
+		{
+			UUID id = UUID(rel["EntityID"]);
+			auto& component = ComponentManager::GetComponent<RelationShipComponent>(id);
+			if (component->hasParent)
+			{
+				UUID p_id = UUID(rel["ParentID"]);
+				component->SetParent(p_id);
+			}
 		}
 	}
 	if (exists(input, "TransformComponents"))
@@ -215,8 +224,8 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		{
 			uint32_t id = transform["EntityID"];
 			std::array<float, 3> pos = transform["Position"];
-			std::array<float, 3> sc = transform["Rotation"];
-			std::array<float, 3>rot = transform["Scale"];
+			std::array<float, 3> sc = transform["Scale"];
+			std::array<float, 3>rot = transform["Rotation"];
 
 			std::shared_ptr<TransformComponent> component = std::make_shared<TransformComponent>(UUID(id));
 			component->setPosition(glm::vec3(pos[0], pos[1], pos[2]));
@@ -233,7 +242,7 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 	}
 	if (exists(input, "CameraComponents"))
 	{
-		for (auto camera : input["TransformComponents"])
+		for (auto camera : input["CameraComponents"])
 		{
 			uint32_t id = camera["EntityID"];
 			float fov = camera["FoV"];
@@ -290,9 +299,10 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 					component->SetPosition(glm::vec3(position[0], position[1], position[2]));
 					component->SetLinear(light["Linear"]);
 					component->SetConstant(light["Constant"]);
-					component->SetQuadratic(light["Qaudratic"]);
+					component->SetQuadratic(light["Quadratic"]);
 					component->SetCutoff(light["Cutoff"]);
 					component->SetOuterCutOff(light["OuterCutoff"]);
+					component->SetIntensity(light["Intensity"]);
 					ComponentManager::AddComponent<LightComponent>(component);
 					break;
 				}
@@ -309,15 +319,16 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 					component->SetPosition(glm::vec3(position[0], position[1], position[2]));
 					component->SetLinear(light["Linear"]);
 					component->SetConstant(light["Constant"]);
-					component->SetQuadratic(light["Qaudratic"]);
+					component->SetQuadratic(light["Quadratic"]);
+					component->SetIntensity(light["Intensity"]);
 					ComponentManager::AddComponent<LightComponent>(component);
 					break;
 				}
 				case LightType::Sky:
 				{
-					std::shared_ptr<LightComponent> component = std::make_shared<LightComponent>(id, lType);
+					std::shared_ptr<Texture2D> hdr = AssetManager::getHDRTexture(light["EnvironmentMap"]);
+					std::shared_ptr<LightComponent> component = LightComponent::CreateComponent(id,hdr);
 					component->SetIntensity(light["Intensity"]);
-					component->ChangeEnvironment(light["Environment"]);
 					ComponentManager::AddComponent<LightComponent>(component);
 					break;
 				}
@@ -331,8 +342,14 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		{
 			UUID id = UUID(render["EntityID"]);
 			std::string model = render["Model"];
+
+
+
 			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(id, m_model);
+
+
+
 			ComponentManager::AddComponent<RenderComponent>(component);
 		}		
 	}

@@ -1,44 +1,12 @@
-[23:29:24] [info] FRACTURE: Initializing Splash
-[23:29:25] [info] FRACTURE: OpenGL loaded
-[23:29:25] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[23:29:25] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[23:29:25] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[23:29:25] [info] FRACTURE: Asset Manager startup
-[23:29:25] [trace] FRACTURE: Loaded Texture: splash
-[23:29:25] [trace] FRACTURE: Loaded Texture: title
-[23:29:25] [info] FRACTURE: Completed Init
-[23:29:25] [info] FRACTURE: Show Splash
-[23:29:28] [info] FRACTURE: Close Splash
-[23:29:28] [info] FRACTURE: Asset Manager Shutdown
-[23:29:28] [info] FRACTURE: OpenGL loaded
-[23:29:28] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[23:29:28] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[23:29:28] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[23:29:28] [info] FRACTURE: Asset Manager startup
-[23:29:28] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[23:29:28] [trace] FRACTURE: Loaded Shader: BillboardShader
-[23:29:28] [trace] FRACTURE: Loaded Shader: BoxBlur
-[23:29:28] [trace] FRACTURE: Loaded Shader: ColorMap
-[23:29:28] [trace] FRACTURE: Loaded Shader: CubeMap
-[23:29:28] [trace] FRACTURE: Loaded Shader: DebugShader
-[23:29:28] [trace] FRACTURE: Loaded Shader: DepthPass
-[23:29:28] [trace] FRACTURE: Loaded Shader: DepthShader
-[23:29:28] [trace] FRACTURE: Loaded Shader: InvertColor
-[23:29:28] [trace] FRACTURE: Loaded Shader: MixNode
-[23:29:28] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[23:29:28] [trace] FRACTURE: Loaded Shader: OutlinePass
-[23:29:28] [trace] FRACTURE: Loaded Shader: PBRAnimated
-[23:29:28] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[23:29:28] [trace] FRACTURE: Loaded Shader: PBRStatic
-[23:29:28] [trace] FRACTURE: Loaded Shader: PickingShader
-[23:29:28] [trace] FRACTURE: Loaded Shader: PointShadows
-[23:29:28] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[23:29:28] [trace] FRACTURE: Loaded Shader: SSAOBLUR
-[23:29:28] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[23:29:28] [trace] FRACTURE: Loaded Shader: Skybox
-[23:29:28] [trace] FRACTURE: Loaded Shader: Threshold
-[23:29:28] [trace] FRACTURE: Loaded Shader: ToneMap
-[23:29:28] [trace] FRACTURE: Loaded Shader: bdrf
-[23:29:28] [trace] FRACTURE: Loaded Shader: default
-[23:29:28] [trace] FRACTURE: Loaded Shader: irradiance
-[23:29:28] [trace] FRACTURE: Loaded Shader: prefilter
+[19:44:32] [info] FRACTURE: Initializing Splash
+[19:44:33] [info] FRACTURE: OpenGL loaded
+[19:44:33] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[19:44:33] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[19:44:33] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[19:44:33] [info] FRACTURE: Asset Manager startup
+[19:44:33] [trace] FRACTURE: Loaded Texture: splash
+[19:44:33] [trace] FRACTURE: Loaded Texture: title
+[19:44:33] [info] FRACTURE: Completed Init
+[19:44:33] [info] FRACTURE: Show Splash
+[19:44:43] [info] FRACTURE: Close Splash
+[19:44:43] [info] FRACTURE: Asset Manager Shutdown

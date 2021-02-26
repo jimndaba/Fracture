@@ -22,6 +22,11 @@ namespace Fracture
 		static std::shared_ptr<TextureCubeMap> LoadCubeMap(const std::string& name, const std::string& path);
 		static std::shared_ptr<TextureMultiSample> LoadTextureMultiSample(const std::string& name, const std::string& path);
 
+		static void SetVerticalFlip(const bool& flip);
+
+	private:
+		static bool m_flipVertical;
+
 	};
 }
 

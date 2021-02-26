@@ -52,11 +52,13 @@ namespace Fracture
 		static std::shared_ptr<Model> getModel(const std::string &name);
 		static const std::shared_ptr<Material>& getMaterial(const std::string &name);
 		static std::shared_ptr<Texture2D> getTexture2D(const std::string &name);
+		static std::shared_ptr<Texture2D> getHDRTexture(const std::string& name);
 		static std::shared_ptr<TextureMultiSample> getMultiSampleTexture(const std::string& name);
 		static std::shared_ptr<TextureCubeMap> getCubeMapTexture(const std::string& name);
 
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
 		static std::map<std::string, std::shared_ptr<Texture2D>> GetTextures();
+		static std::map<std::string, std::shared_ptr<Texture2D>> GetHDRTextures();
 		static std::map<std::string, std::shared_ptr<TextureMultiSample>> GetMultiSampleTextures();
 		static std::map<std::string, std::shared_ptr<TextureCubeMap>> GetCubeMapTextures();
 		static std::map<std::string, std::shared_ptr<Model>> GetModels();
@@ -93,7 +95,7 @@ namespace Fracture
 
 		//Libraries
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
-		//static std::map<std::string, std::shared_ptr<Texture>> m_Textures;
+		static std::map<std::string, std::shared_ptr<Texture2D>> m_HDRTextures;
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
 		static std::map<std::string, std::shared_ptr<Shader>> m_Shaders;
 		static std::map<std::string, std::shared_ptr<Material>> m_Materials;
