@@ -36,6 +36,11 @@ namespace Fracture
 
 		void clear();
 
+		static void Log(const std::string& message);
+
+		static float GetAxis(const std::string& message);
+		
+
 		void onStart();
 		void OnUpdate(float dt);
 
@@ -56,7 +61,7 @@ namespace Fracture
 	private:
 
 		std::vector<std::shared_ptr<GameLogic>> m_scripts;
-		sol::state lua;
+		static sol::state lua;
 	};
 
 }

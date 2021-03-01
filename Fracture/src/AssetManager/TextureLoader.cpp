@@ -50,7 +50,7 @@ std::shared_ptr<Fracture::Texture2D> Fracture::TextureLoader::LoadTexture2D(cons
 		}
 
 		texture = Texture2D::CreateTexture(data, iformat, format, width, height, glWrap::Repeat, FormatType::UByte);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		//glGenerateMipmap(GL_TEXTURE_2D);
 		//texture->GenerateMips();
 
 		texture->SetName(name);
