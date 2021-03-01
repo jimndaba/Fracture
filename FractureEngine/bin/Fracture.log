@@ -1,164 +1,341 @@
-[10:49:00] [info] FRACTURE: Initializing Splash
-[10:49:01] [info] FRACTURE: OpenGL loaded
-[10:49:01] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:49:01] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:49:01] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[10:49:01] [info] FRACTURE: Asset Manager startup
-[10:49:01] [trace] FRACTURE: Loaded Texture: splash
-[10:49:01] [trace] FRACTURE: Loaded Texture: title
-[10:49:01] [info] FRACTURE: Completed Init
-[10:49:01] [info] FRACTURE: Show Splash
-[10:49:04] [info] FRACTURE: Close Splash
-[10:49:04] [info] FRACTURE: Asset Manager Shutdown
-[10:49:04] [info] FRACTURE: OpenGL loaded
-[10:49:04] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:49:04] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:49:04] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[10:49:04] [info] FRACTURE: Asset Manager startup
-[10:49:04] [info] FRACTURE: Renderer Init
-[10:49:04] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: RotateIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: CameraIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: LightIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: EyeIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: EyeIconC
-[10:49:04] [trace] FRACTURE: Loaded Texture: MeshIcon
-[10:49:04] [trace] FRACTURE: Loaded HDR Texture: Loft
-[10:49:04] [trace] FRACTURE: Loaded Shader: CubeMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: PointShadows
-[10:49:04] [trace] FRACTURE: Loaded Shader: irradiance
-[10:49:04] [trace] FRACTURE: Loaded Shader: prefilter
-[10:49:04] [trace] FRACTURE: Loaded Shader: bdrf
-[10:49:04] [trace] FRACTURE: Loaded Shader: Skybox
-[10:49:04] [trace] FRACTURE: Loaded Shader: DebugShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[10:49:04] [trace] FRACTURE: Loaded Shader: BillboardShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: DepthShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRStatic
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRAnimated
-[10:49:04] [trace] FRACTURE: Loaded Shader: PickingShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: default
-[10:49:04] [trace] FRACTURE: Loaded Shader: OutlinePass
-[10:49:04] [trace] FRACTURE: Loaded Shader: InvertColor
-[10:49:04] [trace] FRACTURE: Loaded Shader: ToneMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: Threshold
-[10:49:04] [trace] FRACTURE: Loaded Shader: MixNode
-[10:49:04] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[10:49:04] [trace] FRACTURE: Loaded Shader: ColorMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: BoxBlur
-[10:49:04] [trace] FRACTURE: Loaded Shader: DepthPass
-[10:49:04] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[10:49:04] [trace] FRACTURE: Loaded Shader: SSAOBLUR
-[10:49:04] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[10:49:04] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: billboardIcons
-[10:49:04] [trace] FRACTURE: Loaded Material: BaseMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: DebugMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: DepthMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: PickingMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: OutlinePass
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Plane
-[10:49:04] [trace] FRACTURE: loading Mesh: Plane
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Plane
-[10:49:04] [trace] FRACTURE: loading Child: Cube
-[10:49:04] [trace] FRACTURE: loading Mesh: Cube
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Cube
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Sphere
-[10:49:04] [trace] FRACTURE: loading Mesh: Sphere
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Sphere
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Cylinder
-[10:49:04] [trace] FRACTURE: loading Mesh: Cylinder
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Cylinder
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Torus
-[10:49:04] [trace] FRACTURE: loading Mesh: Torus
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Torus
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Suzanne
-[10:49:04] [trace] FRACTURE: loading Mesh: Suzanne
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Suzane
-[10:49:22] [error] FRACTURE: Can't read file
-[10:49:22] [error] FRACTURE: FAILED TO LOAD SCENE
-[10:49:31] [error] FRACTURE:  prefilter error: 1282
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: Out of Bounds
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:53] [info] FRACTURE: Asset Manager Shutdown
+[11:24:31] [info] FRACTURE: Initializing Splash
+[11:24:31] [info] FRACTURE: OpenGL loaded
+[11:24:31] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[11:24:31] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[11:24:31] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[11:24:31] [info] FRACTURE: Asset Manager startup
+[11:24:31] [trace] FRACTURE: Loaded Texture: splash
+[11:24:31] [trace] FRACTURE: Loaded Texture: title
+[11:24:31] [info] FRACTURE: Completed Init
+[11:24:31] [info] FRACTURE: Show Splash
+[11:24:34] [info] FRACTURE: Close Splash
+[11:24:34] [info] FRACTURE: Asset Manager Shutdown
+[11:24:35] [info] FRACTURE: OpenGL loaded
+[11:24:35] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[11:24:35] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[11:24:35] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[11:24:35] [info] FRACTURE: Asset Manager startup
+[11:24:35] [info] FRACTURE: Renderer Init
+[11:24:35] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: RotateIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: CameraIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: LightIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: EyeIcon
+[11:24:35] [trace] FRACTURE: Loaded Texture: EyeIconC
+[11:24:35] [trace] FRACTURE: Loaded Texture: MeshIcon
+[11:24:35] [trace] FRACTURE: Loaded HDR Texture: Loft
+[11:24:35] [trace] FRACTURE: Loaded Shader: CubeMap
+[11:24:35] [trace] FRACTURE: Loaded Shader: PointShadows
+[11:24:35] [trace] FRACTURE: Loaded Shader: irradiance
+[11:24:35] [trace] FRACTURE: Loaded Shader: prefilter
+[11:24:35] [trace] FRACTURE: Loaded Shader: bdrf
+[11:24:35] [trace] FRACTURE: Loaded Shader: Skybox
+[11:24:35] [trace] FRACTURE: Loaded Shader: DebugShader
+[11:24:35] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[11:24:35] [trace] FRACTURE: Loaded Shader: BillboardShader
+[11:24:35] [trace] FRACTURE: Loaded Shader: DepthShader
+[11:24:35] [trace] FRACTURE: Loaded Shader: PBRStatic
+[11:24:35] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[11:24:35] [trace] FRACTURE: Loaded Shader: PBRAnimated
+[11:24:35] [trace] FRACTURE: Loaded Shader: PickingShader
+[11:24:35] [trace] FRACTURE: Loaded Shader: default
+[11:24:35] [trace] FRACTURE: Loaded Shader: OutlinePass
+[11:24:35] [trace] FRACTURE: Loaded Shader: InvertColor
+[11:24:35] [trace] FRACTURE: Loaded Shader: ToneMap
+[11:24:35] [trace] FRACTURE: Loaded Shader: Threshold
+[11:24:35] [trace] FRACTURE: Loaded Shader: MixNode
+[11:24:35] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[11:24:35] [trace] FRACTURE: Loaded Shader: ColorMap
+[11:24:35] [trace] FRACTURE: Loaded Shader: BoxBlur
+[11:24:35] [trace] FRACTURE: Loaded Shader: DepthPass
+[11:24:35] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[11:24:35] [trace] FRACTURE: Loaded Shader: SSAOBLUR
+[11:24:35] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[11:24:35] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[11:24:35] [trace] FRACTURE: Loaded Material: billboardIcons
+[11:24:35] [trace] FRACTURE: Loaded Material: BaseMaterial
+[11:24:35] [trace] FRACTURE: Loaded Material: DebugMaterial
+[11:24:35] [trace] FRACTURE: Loaded Material: DepthMaterial
+[11:24:35] [trace] FRACTURE: Loaded Material: PickingMaterial
+[11:24:35] [trace] FRACTURE: Loaded Material: OutlinePass
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [trace] FRACTURE: loading Child: Plane
+[11:24:35] [trace] FRACTURE: loading Mesh: Plane
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Plane
+[11:24:35] [trace] FRACTURE: loading Child: Cube
+[11:24:35] [trace] FRACTURE: loading Mesh: Cube
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Cube
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [trace] FRACTURE: loading Child: Sphere
+[11:24:35] [trace] FRACTURE: loading Mesh: Sphere
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Sphere
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [trace] FRACTURE: loading Child: Cylinder
+[11:24:35] [trace] FRACTURE: loading Mesh: Cylinder
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Cylinder
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [trace] FRACTURE: loading Child: Torus
+[11:24:35] [trace] FRACTURE: loading Mesh: Torus
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Torus
+[11:24:35] [trace] FRACTURE: loading Child: Light
+[11:24:35] [trace] FRACTURE: loading Child: Camera
+[11:24:35] [trace] FRACTURE: loading Child: Suzanne
+[11:24:35] [trace] FRACTURE: loading Mesh: Suzanne
+[11:24:35] [error] FRACTURE: Number of Animations: 0
+[11:24:35] [trace] FRACTURE: Loaded model: Suzane
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: width: 1920
+[11:24:51] [info] FRACTURE: height: 1080
+[11:24:51] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:24:51] [info] FRACTURE: Out of Bounds
+[11:25:17] [trace] FRACTURE: loading Child: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [trace] FRACTURE: loading Mesh: Plane
+[11:25:17] [error] FRACTURE: Number of Animations: 0
+[11:25:17] [trace] FRACTURE: Loaded model: Scene
+[11:26:44] [trace] FRACTURE: Loaded HDR Texture: venice_sunset_2k
+[11:26:44] [error] FRACTURE:  prefilter error: 1282
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:09] [info] FRACTURE: width: 1920
+[11:27:09] [info] FRACTURE: height: 1080
+[11:27:09] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:11] [info] FRACTURE: width: 1920
+[11:27:11] [info] FRACTURE: height: 1080
+[11:27:11] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:16] [info] FRACTURE: width: 1920
+[11:27:16] [info] FRACTURE: height: 1080
+[11:27:16] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:16] [info] FRACTURE: width: 1920
+[11:27:16] [info] FRACTURE: height: 1080
+[11:27:16] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:16] [info] FRACTURE: width: 1920
+[11:27:16] [info] FRACTURE: height: 1080
+[11:27:16] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:16] [info] FRACTURE: width: 1920
+[11:27:16] [info] FRACTURE: height: 1080
+[11:27:16] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:25] [info] FRACTURE: width: 1920
+[11:27:25] [info] FRACTURE: height: 1080
+[11:27:25] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:28] [info] FRACTURE: width: 1920
+[11:27:28] [info] FRACTURE: height: 1080
+[11:27:28] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:29] [info] FRACTURE: width: 1920
+[11:27:29] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:30] [info] FRACTURE: width: 1920
+[11:27:30] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:30] [info] FRACTURE: width: 1920
+[11:27:30] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:30] [info] FRACTURE: width: 1920
+[11:27:30] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:30] [info] FRACTURE: width: 1920
+[11:27:30] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:27:30] [info] FRACTURE: width: 1920
+[11:27:30] [info] FRACTURE: height: 1080
+[11:27:30] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:06] [info] FRACTURE: width: 1920
+[11:28:06] [info] FRACTURE: height: 1080
+[11:28:06] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:15] [info] FRACTURE: width: 1920
+[11:28:15] [info] FRACTURE: height: 1080
+[11:28:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:15] [info] FRACTURE: width: 1920
+[11:28:15] [info] FRACTURE: height: 1080
+[11:28:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:15] [info] FRACTURE: width: 1920
+[11:28:15] [info] FRACTURE: height: 1080
+[11:28:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:15] [info] FRACTURE: width: 1920
+[11:28:15] [info] FRACTURE: height: 1080
+[11:28:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:33] [trace] FRACTURE: Loaded Texture: Ground040_1K_Color
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:38] [info] FRACTURE: width: 1920
+[11:28:38] [info] FRACTURE: height: 1080
+[11:28:38] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
+[11:28:50] [info] FRACTURE: Asset Manager Shutdown
