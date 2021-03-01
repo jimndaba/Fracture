@@ -1,8 +1,53 @@
-﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
+﻿  EditorCamera.cpp
+  Editor.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(878,113): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  Element.cpp
+  TabbedElement.cpp
+  TagComponentElement.cpp
+  MaterialFactory.cpp
+  FractureSplash.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(123,55): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(130,48): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  FreeCamera.cpp
+  AssetBrowserPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(166,85): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  Inspector.cpp
+  Panel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Panel.cpp(683,36): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Panel.cpp(705,36): warning C4312: 'type cast': conversion from 'const uint32_t' to 'void *' of greater size
+  SceneviewPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(292,75): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(296,74): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(300,79): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(305,59): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(348,84): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(356,8): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  TabbedPanel.cpp
+  ViewPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(23,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(38,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(54,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+  Frame.cpp
+  FileDialogue.cpp
+  main.cpp
+  ImGuizmo.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  Compiling...
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 17251 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    82 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1249): warning C4715: 'stringToEnum': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\Serialisation\FrameGraphSerialiser.cpp(55): warning C4715: 'hashit': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(139): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(154): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\Rendering\Framegraph\FrameGraph.cpp(41): warning C4715: 'Fracture::FrameGraph::getNode': not all control paths return a value
+  All 17251 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

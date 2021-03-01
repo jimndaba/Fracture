@@ -5,13 +5,15 @@
 /Fracture/.vs/Fracture/v16
 /Fracture/bin
 /Fracture/Debug
+/Fracture/Release/bin/Fracture.lib
 /Fracture/Release wSymbols
+/Fracture/Release wSymbols/bin/Fracture.lib
 /Fracture/int
 /Fracture/vendor
 /.vs
 /Sandbox/bin
 /Sandbox/int
-FractureEngine/bin/result.json
-FractureEngine/int
-FractureEngine/bin
-FractureEngine/vendor
+/FractureEngine/bin/result.json
+/FractureEngine/int
+/FractureEngine/bin
+/FractureEngine/vendor

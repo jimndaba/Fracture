@@ -2,7 +2,6 @@
 #ifndef FRACTURE_H
 #define FRACTURE_H
 
-
 #include <memory>
 #include <vector>
 #include <math.h>
