@@ -1,164 +1,99 @@
-[10:49:00] [info] FRACTURE: Initializing Splash
-[10:49:01] [info] FRACTURE: OpenGL loaded
-[10:49:01] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:49:01] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:49:01] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[10:49:01] [info] FRACTURE: Asset Manager startup
-[10:49:01] [trace] FRACTURE: Loaded Texture: splash
-[10:49:01] [trace] FRACTURE: Loaded Texture: title
-[10:49:01] [info] FRACTURE: Completed Init
-[10:49:01] [info] FRACTURE: Show Splash
-[10:49:04] [info] FRACTURE: Close Splash
-[10:49:04] [info] FRACTURE: Asset Manager Shutdown
-[10:49:04] [info] FRACTURE: OpenGL loaded
-[10:49:04] [info] FRACTURE: Vendor: ATI Technologies Inc.
-[10:49:04] [info] FRACTURE: Renderer: Radeon RX 590 Series
-[10:49:04] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
-[10:49:04] [info] FRACTURE: Asset Manager startup
-[10:49:04] [info] FRACTURE: Renderer Init
-[10:49:04] [trace] FRACTURE: Loaded Texture: TranslateIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: ScaleIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: RotateIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: GameObjectIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: CameraIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: LightIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: EyeIcon
-[10:49:04] [trace] FRACTURE: Loaded Texture: EyeIconC
-[10:49:04] [trace] FRACTURE: Loaded Texture: MeshIcon
-[10:49:04] [trace] FRACTURE: Loaded HDR Texture: Loft
-[10:49:04] [trace] FRACTURE: Loaded Shader: CubeMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: PointShadows
-[10:49:04] [trace] FRACTURE: Loaded Shader: irradiance
-[10:49:04] [trace] FRACTURE: Loaded Shader: prefilter
-[10:49:04] [trace] FRACTURE: Loaded Shader: bdrf
-[10:49:04] [trace] FRACTURE: Loaded Shader: Skybox
-[10:49:04] [trace] FRACTURE: Loaded Shader: DebugShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
-[10:49:04] [trace] FRACTURE: Loaded Shader: BillboardShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: DepthShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRStatic
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: PBRAnimated
-[10:49:04] [trace] FRACTURE: Loaded Shader: PickingShader
-[10:49:04] [trace] FRACTURE: Loaded Shader: default
-[10:49:04] [trace] FRACTURE: Loaded Shader: OutlinePass
-[10:49:04] [trace] FRACTURE: Loaded Shader: InvertColor
-[10:49:04] [trace] FRACTURE: Loaded Shader: ToneMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: Threshold
-[10:49:04] [trace] FRACTURE: Loaded Shader: MixNode
-[10:49:04] [trace] FRACTURE: Loaded Shader: AdditiveMix
-[10:49:04] [trace] FRACTURE: Loaded Shader: ColorMap
-[10:49:04] [trace] FRACTURE: Loaded Shader: BoxBlur
-[10:49:04] [trace] FRACTURE: Loaded Shader: DepthPass
-[10:49:04] [trace] FRACTURE: Loaded Shader: SSAOPASS
-[10:49:04] [trace] FRACTURE: Loaded Shader: SSAOBLUR
-[10:49:04] [trace] FRACTURE: Loaded Shader: MultiplyMix
-[10:49:04] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: billboardIcons
-[10:49:04] [trace] FRACTURE: Loaded Material: BaseMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: DebugMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: DepthMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: PickingMaterial
-[10:49:04] [trace] FRACTURE: Loaded Material: OutlinePass
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Plane
-[10:49:04] [trace] FRACTURE: loading Mesh: Plane
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Plane
-[10:49:04] [trace] FRACTURE: loading Child: Cube
-[10:49:04] [trace] FRACTURE: loading Mesh: Cube
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Cube
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Sphere
-[10:49:04] [trace] FRACTURE: loading Mesh: Sphere
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Sphere
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Cylinder
-[10:49:04] [trace] FRACTURE: loading Mesh: Cylinder
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Cylinder
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Torus
-[10:49:04] [trace] FRACTURE: loading Mesh: Torus
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Torus
-[10:49:04] [trace] FRACTURE: loading Child: Light
-[10:49:04] [trace] FRACTURE: loading Child: Camera
-[10:49:04] [trace] FRACTURE: loading Child: Suzanne
-[10:49:04] [trace] FRACTURE: loading Mesh: Suzanne
-[10:49:04] [error] FRACTURE: Number of Animations: 0
-[10:49:04] [trace] FRACTURE: Loaded model: Suzane
-[10:49:22] [error] FRACTURE: Can't read file
-[10:49:22] [error] FRACTURE: FAILED TO LOAD SCENE
-[10:49:31] [error] FRACTURE:  prefilter error: 1282
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:49:33] [info] FRACTURE: width: 1920
-[10:49:33] [info] FRACTURE: height: 1080
-[10:49:33] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: width: 1920
-[10:50:15] [info] FRACTURE: height: 1080
-[10:50:15] [error] FRACTURE: COULD NOT FIND ENTITY 4294967295
-[10:50:15] [info] FRACTURE: Out of Bounds
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:22] [info] FRACTURE: ADD COMPONENT TO ENTITY: 1624966793
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:25] [info] FRACTURE: ADD COMPONENT TO ENTITY: 2669441053
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:27] [info] FRACTURE: ADD COMPONENT TO ENTITY: 402530680
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:28] [info] FRACTURE: ADD COMPONENT TO ENTITY: 3231943728
-[10:50:53] [info] FRACTURE: Asset Manager Shutdown
+[13:03:54] [info] FRACTURE: Initializing Splash
+[13:03:55] [info] FRACTURE: OpenGL loaded
+[13:03:55] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:03:55] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:03:55] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[13:03:55] [info] FRACTURE: Asset Manager startup
+[13:03:55] [trace] FRACTURE: Loaded Texture: splash
+[13:03:55] [trace] FRACTURE: Loaded Texture: title
+[13:03:55] [info] FRACTURE: Completed Init
+[13:03:55] [info] FRACTURE: Show Splash
+[13:04:07] [info] FRACTURE: Close Splash
+[13:04:07] [info] FRACTURE: Asset Manager Shutdown
+[13:04:08] [info] FRACTURE: OpenGL loaded
+[13:04:08] [info] FRACTURE: Vendor: ATI Technologies Inc.
+[13:04:08] [info] FRACTURE: Renderer: Radeon RX 590 Series
+[13:04:08] [info] FRACTURE: Version: 4.6.14758 Compatibility Profile Context 21.2.1 27.20.14533.1000
+[13:04:08] [info] FRACTURE: Asset Manager startup
+[13:04:08] [info] FRACTURE: Renderer Init
+[13:04:08] [trace] FRACTURE: Loaded Texture: TranslateIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: ScaleIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: RotateIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: GameObjectIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: CameraIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: LightIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: EyeIcon
+[13:04:08] [trace] FRACTURE: Loaded Texture: EyeIconC
+[13:04:08] [trace] FRACTURE: Loaded Texture: MeshIcon
+[13:04:08] [trace] FRACTURE: Loaded HDR Texture: Loft
+[13:04:08] [trace] FRACTURE: Loaded Shader: CubeMap
+[13:04:08] [trace] FRACTURE: Loaded Shader: PointShadows
+[13:04:08] [trace] FRACTURE: Loaded Shader: irradiance
+[13:04:08] [trace] FRACTURE: Loaded Shader: prefilter
+[13:04:08] [trace] FRACTURE: Loaded Shader: bdrf
+[13:04:08] [trace] FRACTURE: Loaded Shader: Skybox
+[13:04:08] [trace] FRACTURE: Loaded Shader: DebugShader
+[13:04:08] [trace] FRACTURE: Loaded Shader: PrimitiveMaterial
+[13:04:08] [trace] FRACTURE: Loaded Shader: BillboardShader
+[13:04:08] [trace] FRACTURE: Loaded Shader: DepthShader
+[13:04:08] [trace] FRACTURE: Loaded Shader: PBRStatic
+[13:04:08] [trace] FRACTURE: Loaded Shader: PBRPlaneShader
+[13:04:08] [trace] FRACTURE: Loaded Shader: PBRAnimated
+[13:04:08] [trace] FRACTURE: Loaded Shader: PickingShader
+[13:04:08] [trace] FRACTURE: Loaded Shader: default
+[13:04:08] [trace] FRACTURE: Loaded Shader: OutlinePass
+[13:04:08] [trace] FRACTURE: Loaded Shader: InvertColor
+[13:04:08] [trace] FRACTURE: Loaded Shader: ToneMap
+[13:04:08] [trace] FRACTURE: Loaded Shader: Threshold
+[13:04:08] [trace] FRACTURE: Loaded Shader: MixNode
+[13:04:08] [trace] FRACTURE: Loaded Shader: AdditiveMix
+[13:04:08] [trace] FRACTURE: Loaded Shader: ColorMap
+[13:04:08] [trace] FRACTURE: Loaded Shader: BoxBlur
+[13:04:08] [trace] FRACTURE: Loaded Shader: DepthPass
+[13:04:08] [trace] FRACTURE: Loaded Shader: SSAOPASS
+[13:04:08] [trace] FRACTURE: Loaded Shader: SSAOBLUR
+[13:04:08] [trace] FRACTURE: Loaded Shader: MultiplyMix
+[13:04:08] [trace] FRACTURE: Loaded Material: PrimitiveMaterial
+[13:04:08] [trace] FRACTURE: Loaded Material: billboardIcons
+[13:04:08] [trace] FRACTURE: Loaded Material: BaseMaterial
+[13:04:08] [trace] FRACTURE: Loaded Material: DebugMaterial
+[13:04:08] [trace] FRACTURE: Loaded Material: DepthMaterial
+[13:04:08] [trace] FRACTURE: Loaded Material: PickingMaterial
+[13:04:08] [trace] FRACTURE: Loaded Material: OutlinePass
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [trace] FRACTURE: loading Child: Plane
+[13:04:08] [trace] FRACTURE: loading Mesh: Plane
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Plane
+[13:04:08] [trace] FRACTURE: loading Child: Cube
+[13:04:08] [trace] FRACTURE: loading Mesh: Cube
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Cube
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [trace] FRACTURE: loading Child: Sphere
+[13:04:08] [trace] FRACTURE: loading Mesh: Sphere
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Sphere
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [trace] FRACTURE: loading Child: Cylinder
+[13:04:08] [trace] FRACTURE: loading Mesh: Cylinder
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Cylinder
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [trace] FRACTURE: loading Child: Torus
+[13:04:08] [trace] FRACTURE: loading Mesh: Torus
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Torus
+[13:04:08] [trace] FRACTURE: loading Child: Light
+[13:04:08] [trace] FRACTURE: loading Child: Camera
+[13:04:08] [trace] FRACTURE: loading Child: Suzanne
+[13:04:08] [trace] FRACTURE: loading Mesh: Suzanne
+[13:04:08] [error] FRACTURE: Number of Animations: 0
+[13:04:08] [trace] FRACTURE: Loaded model: Suzane
+[13:04:11] [info] FRACTURE: Asset Manager Shutdown

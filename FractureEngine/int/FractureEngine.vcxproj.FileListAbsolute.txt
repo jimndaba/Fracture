@@ -1,0 +1,2 @@
+D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe.lastcodeanalysissucceeded
+D:\Dev\Fracture\FractureEngine\int\NativeCodeAnalysis.read.1.tlog
