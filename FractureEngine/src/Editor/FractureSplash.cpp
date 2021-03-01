@@ -120,14 +120,14 @@ void Fracture::FractureSplash::onRender()
 
     //ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f); 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-    ImGui::Image((ImTextureID)m_splash->GetTextureID(), ImVec2(300, 400));
+    ImGui::Image((ImTextureID)m_splash->GetTextureID(), ImVec2(300, 400),ImVec2 { 0, 1 }, ImVec2{ 1, 0 });
     ImGui::PopStyleVar();
     ImGui::End();
 
     ImGui::Begin("Project", 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
 
-    ImGui::Image((void*)m_title->GetTextureID(), ImVec2(500, 200));
+    ImGui::Image((void*)m_title->GetTextureID(), ImVec2(500, 200), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
     ImGui::PushID("##project");
     ImGui::Columns(3);
     ImGui::AlignTextToFramePadding();

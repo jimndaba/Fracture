@@ -257,6 +257,7 @@
     <ClInclude Include="src\AssetManager\ModelLoader.h" />
     <ClInclude Include="src\AssetManager\ShaderLoader.h" />
     <ClInclude Include="src\AssetManager\TextureLoader.h" />
+    <ClInclude Include="src\Core\FractureCore.h" />
     <ClInclude Include="src\Entity\PointLight.h" />
     <ClInclude Include="src\Entity\SpotLight.h" />
     <ClInclude Include="src\Animation\AnimationManager.h" />

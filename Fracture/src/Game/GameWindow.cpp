@@ -1,4 +1,5 @@
 #include "GameWindow.h"
+#include "Core/FractureCore.h"
 #include "Game/Game.h"
 #include "Event/Event.h"
 #include "Logging/Logger.h"
@@ -28,7 +29,8 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	}
 	
 
-	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	std::string fulltitle =title + " - "+  "Fracture Engine: " +Fracture_Verion;
+	window = glfwCreateWindow(width, height, fulltitle.c_str(), NULL, NULL);
 	if (!window)
 	{	
 		glfwTerminate();

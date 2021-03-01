@@ -926,6 +926,9 @@
     <ClInclude Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\FractureCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\glm\CMakeLists.txt" />

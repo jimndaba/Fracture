@@ -1,4 +1,5 @@
 #include "FrameGraphSerialiser.h"
+#include "Core/FractureCore.h"
 #include "Rendering/Framegraph/PassLibrary/ClearFrame.h"
 #include "Rendering/Framegraph/PassLibrary/LambertianNode.h"
 #include "Rendering/Framegraph/PassLibrary/ToneMappingNode.h"
@@ -62,7 +63,9 @@ void Fracture::FramaGraphSerialiser::SerialiseGraph(const std::string& filepath)
 {
 	m_OutputStream.open(filepath);
 	json j;
+	j["FactureVersion"] = Fracture_Verion;
 	j["FrameGraph"] = "Temporary Graph";
+
 
 	json serialised_nodes = json::array_t();
 	for (const auto& node : m_graph->GetNodes())

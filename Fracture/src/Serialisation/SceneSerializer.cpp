@@ -1,4 +1,5 @@
 #include "SceneSerializer.h"
+#include "Core/FractureCore.h"
 #include "Entity/EntityManager.h"
 #include "AssetManager/AssetManager.h"
 #include "Component/ComponentManager.h"
@@ -37,6 +38,7 @@ void Fracture::SceneSerializer::Serialize(const std::string& filepath)
 {
 	m_OutputStream.open(filepath);
 	json j;
+	j["FactureVersion"] = Fracture_Verion;
 	j["Scene"] = "Untitled";
 
 	json serialised_entities = json::array_t();

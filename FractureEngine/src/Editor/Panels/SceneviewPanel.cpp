@@ -300,7 +300,7 @@ void Fracture::SceneView::DrawEntityNode(const UUID& entity)
 				icon = (void*)AssetManager::getTexture2D("GameObjectIcon")->GetTextureID();
 			}
 
-			ImGui::Image(icon, size);
+			ImGui::Image(icon, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			ImGui::SameLine();
 			bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag->Name.c_str());
 
@@ -345,7 +345,7 @@ void Fracture::SceneView::DrawEntityNode(const UUID& entity)
 
 			if (tag->isVisible == true)
 			{
-				ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIcon")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1);
+				ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIcon")->GetTextureID(), size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }, 1);
 				if (ImGui::IsItemClicked(0))
 				{
 					tag->isVisible = !tag->isVisible;
@@ -353,7 +353,7 @@ void Fracture::SceneView::DrawEntityNode(const UUID& entity)
 			}
 			else
 			{
-				if (ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIconC")->GetTextureID(), size, ImVec2(0, 0), ImVec2(1, 1), 1))
+				if (ImGui::ImageButton((void*)AssetManager::getTexture2D("EyeIconC")->GetTextureID(), size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }, 1))
 				{
 					tag->isVisible = true;
 				}
