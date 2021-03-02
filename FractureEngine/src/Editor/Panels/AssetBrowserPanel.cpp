@@ -4,6 +4,13 @@
 #include "Math/Math.h"
 #include "../Factories/MaterialFactory.h"
 
+bool Fracture::AssetBrowserPanel::m_showModels;
+bool Fracture::AssetBrowserPanel::m_showTextures;
+bool Fracture::AssetBrowserPanel::m_showScenes;
+bool Fracture::AssetBrowserPanel::m_showMaterials;
+bool Fracture::AssetBrowserPanel::m_showShaders;
+float Fracture::AssetBrowserPanel::scroll_y = 0.0f;
+
 Fracture::AssetBrowserPanel::AssetBrowserPanel():Panel("AssetBrowser")
 {
 }
@@ -14,7 +21,7 @@ Fracture::AssetBrowserPanel::~AssetBrowserPanel()
 
 void Fracture::AssetBrowserPanel::render()
 {
-    static float scroll_y = 0.0f;
+  
 
     ImGui::BeginChild("Assets");
     float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
@@ -138,37 +145,125 @@ void Fracture::AssetBrowserPanel::render()
         ImGui::EndPopup();
     }
 
+    ImGuiSelectableFlags flags = ImGuiSelectableFlags_SelectOnClick | ImGuiSelectableFlags_SpanAvailWidth;
    
     ImGui::Columns(2, "tree", true);
     ImGui::SetColumnWidth(0, 80.0F);
-    if (ImGui::Selectable("Models"))
+    ImGui::Selectable("Models", &m_showModels,flags);    
+    ImGui::Selectable("Textures", &m_showTextures, flags);
+    ImGui::Selectable("Materials",&m_showMaterials,flags); 
+    ImGui::Selectable("Shaders",&m_showShaders,flags);
+    ImGui::Selectable("Scenes",&m_showScenes,flags);
+
+    int iconSize = 64;
+    int offset = 30;
+
+    if (m_showModels)
     {
-
+        ImVec2 region = ImGui::GetContentRegionAvail();
+        int iconSize = 64;
+        int offset = 30;
+        int columns = region.x / (iconSize + offset);
     }
-    if (ImGui::Selectable("Textures"))
+
+    if (m_showTextures)
     {
+        ImGui::NextColumn();
+        ImGui::BeginChild("AssetViewer");
+        ImGui::SetScrollY(scroll_y);     
+        ImVec2 region = ImGui::GetContentRegionAvail();
+        
+        int columns = region.x / (iconSize + offset);
 
+        const auto& m_textures =  AssetManager::GetTextures();
+
+        if (ImGui::BeginTable("split1", columns, m_tableflags))
+        {
+            for (auto& texture : m_textures)
+            {
+                ImGui::ImageButton((void*)texture.second->GetTextureID(), ImVec2(iconSize, iconSize), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                ImGui::Text(texture.first.c_str());
+                ImGui::TableNextColumn();
+            }
+            ImGui::EndTable();
+        } 
+        ImGui::EndChild();
     }
-    if (ImGui::Selectable("Materials"))
+
+    if (m_showShaders)
     {
+        ImGui::NextColumn();
+        ImGui::BeginChild("AssetViewer");
+        ImGui::SetScrollY(scroll_y);
+        ImVec2 region = ImGui::GetContentRegionAvail();
+      
+        int columns = region.x / (iconSize + offset);
 
+        const auto& m_shaders = AssetManager::GetShaders();
+    
+        if (ImGui::BeginTable("split1",columns, m_tableflags))
+        {
+            for (auto& shader : m_shaders)
+            {               
+                ImGui::ImageButton((void*)AssetManager::getTexture2D("ShaderIcon")->GetTextureID(), ImVec2(iconSize, iconSize), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                ImGui::Text(shader->Name.c_str());
+                ImGui::TableNextColumn();
+            }
+            ImGui::EndTable();
+        }
+        scroll_y = ImGui::GetScrollY();
+        ImGui::EndChild();
     }
-    if (ImGui::Selectable("Shaders"))
+
+    if (m_showScenes)
     {
+        ImGui::NextColumn();
+        ImGui::BeginChild("AssetViewer");
+        ImGui::SetScrollY(scroll_y);
+        ImVec2 region = ImGui::GetContentRegionAvail();
+        
+        int columns = region.x / (iconSize + offset);
 
+        const auto& m_scenes =SceneManager::GetScenes();
+
+        if (ImGui::BeginTable("split1", columns, m_tableflags))
+        {
+            for (auto& scene : m_scenes)
+            {
+                ImGui::ImageButton((void*)AssetManager::getTexture2D("SceneIcon")->GetTextureID(), ImVec2(iconSize, iconSize), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                ImGui::Text(scene.first.c_str());
+                ImGui::TableNextColumn();
+            }
+            ImGui::EndTable();
+        }
+        ImGui::EndChild();
     }
 
+    if (m_showMaterials)
+    {
+        ImGui::NextColumn();
+        ImGui::BeginChild("AssetViewer");
+        ImGui::SetScrollY(scroll_y);
+        ImVec2 region = ImGui::GetContentRegionAvail();
+      
+        int columns = region.x / (iconSize + offset);
+   
+        const auto& m_materials = AssetManager::GetMaterials();
 
-    ImGui::NextColumn();
-    ImGui::BeginChild("AssetViewer");
-    ImGui::SetScrollY(scroll_y);
-    ImGui::ImageButton(nullptr, ImVec2(64, 64));
-    ImGui::Image((void*)AssetManager::getTexture2D("GameObjectIcon")->GetTextureID(), ImVec2(16, 16));
+        if (ImGui::BeginTable("split1", columns,m_tableflags))
+        {
+            for (auto& material : m_materials)
+            {
+                ImGui::ImageButton((void*)AssetManager::getTexture2D("MaterialIcon")->GetTextureID(), ImVec2(iconSize, iconSize), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                ImGui::Text(material.first.c_str());
+                ImGui::TableNextColumn();
+            }
+            ImGui::EndTable();
+        }
+        ImGui::EndChild();
+    }    
 
-    scroll_y = ImGui::GetScrollY();
-    ImGui::EndChild();
-    ImGui::NextColumn();
-
+   
     ImGui::Columns(1);
     ImGui::EndChild();
 }

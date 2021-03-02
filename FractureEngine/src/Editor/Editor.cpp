@@ -174,7 +174,9 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddTexture2D("EyeIcon", "content/textures/EyeIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("EyeIconC", "content/textures/EyeIconC.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("MeshIcon", "content/textures/MeshIcon.png", TextureType::Diffuse); 
-   
+    m_AssetManger->AddTexture2D("SceneIcon", "content/textures/SceneIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("MaterialIcon", "content/textures/MaterialIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("ShaderIcon", "content/textures/ShaderIcon.png", TextureType::Diffuse);
 
     m_AssetManger->AddHDR("Loft",  "content/environments/Newport_Loft_Env.hdr",TextureType::Diffuse);
 

@@ -25,7 +25,16 @@ namespace Fracture
 
 
 		virtual void render() override;
+	private:
 
+		static bool m_showModels;
+		static bool m_showTextures;
+		static bool m_showScenes;
+		static bool m_showMaterials;
+		static bool m_showShaders;
+		static float scroll_y;
+
+		ImGuiTableFlags m_tableflags = ImGuiTableFlags_RowBg; //ImGuiTableFlags_NoSavedSettings
 
 	};
 
