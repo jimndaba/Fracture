@@ -16,7 +16,7 @@ namespace Fracture
 	class Entity;
 	class InputManager;
 	class Scene;
-	class ScriptManager;
+	//class ScriptManager;
 	class GameLogic;
 	class PhysicsManager;
 	class Logger;
@@ -76,7 +76,7 @@ namespace Fracture
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::shared_ptr<Eventbus> m_Eventbus;
 		static std::shared_ptr<Fracture::Scene> m_currentScene;
-		static std::unique_ptr<ScriptManager> m_ScriptManager;
+		//static std::unique_ptr<ScriptManager> m_ScriptManager;
 
 	};
 

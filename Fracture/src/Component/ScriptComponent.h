@@ -23,6 +23,7 @@ namespace Fracture
 
 		virtual void onStart();
 		std::shared_ptr<GameLogic> GetScript();
+
 		void Accept(ISceneProbe* visitor) override;
 
 		std::shared_ptr<ScriptComponent> clone(UUID id) const

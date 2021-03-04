@@ -54,7 +54,7 @@ void Fracture::StaticMesh::SetBufferLayout(const VertexBufferLayout& layout)
 
 void Fracture::StaticMesh::bind()
 {
-    /*
+   
     // vertex positions
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -72,8 +72,9 @@ void Fracture::StaticMesh::bind()
     // vertex texture coords
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));    
-    */
+   
 
+    /*
     uint32_t attribIndex = 0;
     
     auto& m_layout = m_VertexBuffer->GetLayout();
@@ -103,6 +104,7 @@ void Fracture::StaticMesh::bind()
 
         attribIndex++;
     }
+     */
     
 }
 

@@ -54,9 +54,6 @@
     <ClCompile Include="src\Rendering\RenderTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\ScriptManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Profiling\Profiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,9 +96,6 @@
     <ClCompile Include="src\Component\TransformComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\GameLogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scene\SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -127,12 +121,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Billboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\LuaScriptHandle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\NativeScriptHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Math.cpp">
@@ -312,6 +300,12 @@
     <ClCompile Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripting\ScriptManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\LuaScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -345,9 +339,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\GameLogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\vector_relational.hpp">
@@ -438,9 +429,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderTarget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\ScriptManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Profiling\Profiler.h">
@@ -647,19 +635,10 @@
     <ClInclude Include="src\Component\ICamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripting\NativeScriptHandle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\LuaScriptHandle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Environment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\lua\lua.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Component\FrustumPlane.h">
@@ -927,6 +906,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\FractureCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\ScriptManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\sol.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\LuaScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,66 +2,38 @@
 #ifndef SCRIPTMANAGER_H
 #define SCRIPTMANAGER_H
 
-#include <memory>
-#include <vector>
-#include "Event/PhysicsEvents.h"
-
-#include <fstream>
-#include <iostream>
-
 extern "C" {
-# include "lua.h"
-# include "lauxlib.h"
-# include "lualib.h"
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 }
 
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 
+
+
+
 namespace Fracture
 {
-
-	class GameLogic;
-
-
+	class LuaScript;
 	class ScriptManager
 	{
-		
+
 	public:
 		ScriptManager();
-		~ScriptManager();
 
-		void AddScript(std::shared_ptr<GameLogic> script);
-		void RemoveScript();
-
-		void clear();
-
-		static void Log(const std::string& message);
-
-		static float GetAxis(const std::string& message);
-		
+		void BindLog(sol::state& L);
+		void BindInput(sol::state& L);
 
 		void onStart();
-		void OnUpdate(float dt);
-
-		void OnCollision(CollisionEvent* collision);
-
-		void onEndFrame();
-
-		bool Start = true;
-
-	/// <summary>
-	/// Lua Script functions
-	/// </summary>
-	public:
-
-		void start();
-		void update(float dt);
+		void onExit();
+		void onUpdate(float dt);
 
 	private:
-
-		std::vector<std::shared_ptr<GameLogic>> m_scripts;
-		static sol::state lua;
+		sol::state lua;
+		std::shared_ptr<LuaScript> script;
+		std::shared_ptr<LuaScript> script2;
 	};
 
 }

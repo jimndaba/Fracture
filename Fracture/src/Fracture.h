@@ -63,7 +63,9 @@
 #include "Entity/SunLight.h"
 #include "Entity/SpotLight.h"
 #include "Entity/PointLight.h"
-#include "Scripting/GameLogic.h"
+
+//Scripting
+#include "Scripting/ScriptManager.h"
 
 #include "Component/Component.h"
 #include "Component/TagComponent.h"
@@ -83,9 +85,6 @@
 #include "Physics/RayHit.h"
 #include "Physics/Ray.h"
 #include "Physics/PhysicsManager.h"
-
-#include "Scripting/ScriptManager.h"
-#include "Scripting/GameLogic.h"
 
 #include "Serialisation/SceneSerializer.h"
 #include "Serialisation/ProjectSerializer.h"

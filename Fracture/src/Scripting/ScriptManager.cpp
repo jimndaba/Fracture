@@ -1,106 +1,86 @@
 #include "ScriptManager.h"
-#include "GameLogic.h"
-#include "Profiling/Profiler.h"
 #include "Logging/Logger.h"
-#include "Event/Eventbus.h"
-
-sol::state Fracture::ScriptManager::lua;
-
+#include "LuaScript.h"
 
 Fracture::ScriptManager::ScriptManager()
 {
-	Eventbus::Subscribe(this, &Fracture::ScriptManager::OnCollision);
-	lua.open_libraries(sol::lib::base, sol::lib::package);
-	lua.set_function("LogMessage", Fracture::ScriptManager::Log);
-	lua.set_function("GetAxis", Fracture::ScriptManager::GetAxis);
 
-	lua.do_file("content/scripts/test.lua");
+	lua.open_libraries(sol::lib::base);
 
-	sol::function update = lua["Update"];
-	update();
+	BindLog(lua);
+	
+	script = LuaScript::Create("CameraController", "content/scripts/");
+	script->Load(lua);
 
+	script2 = LuaScript::Create("PlayerController", "content/scripts/");
+	script2->Load(lua);
 }
 
-Fracture::ScriptManager::~ScriptManager()
+void Fracture::ScriptManager::BindLog(sol::state& L)
 {
+	auto log = L.create_table("Debug");
 
+	log.set_function("log", [&](sol::this_state s, std::string message) {
+		FRACTURE_INFO(message);
+		});
+
+	log.set_function("trace", [&](sol::this_state s, std::string message) {
+		FRACTURE_TRACE(message);
+		});
+
+	log.set_function("error", [&](sol::this_state s, std::string message) {
+		FRACTURE_ERROR(message);
+		});
+
+	log.set_function("warn", [&](sol::this_state s, std::string message) {
+		FRACTURE_WARN(message);
+		});
+
+	log.set_function("critical", [&](sol::this_state s, std::string message) {
+		FRACTURE_CRITICAL(message);
+		});
 }
 
-void Fracture::ScriptManager::AddScript(std::shared_ptr<GameLogic> script)
+void Fracture::ScriptManager::BindInput(sol::state& L)
 {
-		m_scripts.push_back(script);	
-}
-
-void Fracture::ScriptManager::RemoveScript()
-{
-}
-
-void Fracture::ScriptManager::clear()
-{
-	m_scripts.clear();
-}
-
-void Fracture::ScriptManager::Log(const std::string& message)
-{
-	FRACTURE_INFO(message);	
-}
-
-float Fracture::ScriptManager::GetAxis(const std::string& message)
-{
-	if (message == "vertical")
-	{
-		return 10.0f;
-	}
-
-	if (message == "horizontal")
-	{
-		return 100.0f;
-	}
-
-	return 2.0f;
+	auto input = L.create_table("Debug");
+	//
+	//log.set_function("log", [&](sol::this_state s, std::string message) {
+	//	FRACTURE_INFO(message);
+	//	});
+	//
+	//log.set_function("trace", [&](sol::this_state s, std::string message) {
+	//	FRACTURE_TRACE(message);
+	//	});
+	//
+	//log.set_function("error", [&](sol::this_state s, std::string message) {
+	//	FRACTURE_ERROR(message);
+	//	});
+	//
+	//log.set_function("warn", [&](sol::this_state s, std::string message) {
+	//	FRACTURE_WARN(message);
+	//	});
+	//
+	//log.set_function("critical", [&](sol::this_state s, std::string message) {
+	//	FRACTURE_CRITICAL(message);
+	//		});
 }
 
 void Fracture::ScriptManager::onStart()
 {
-	for (auto script : m_scripts)
-	{
-		script->onStart();
-	}
-
+	script->onStart(lua);
 }
 
-void Fracture::ScriptManager::OnUpdate(float dt)
+void Fracture::ScriptManager::onExit()
 {
-	ProfilerTimer timer("Script Update");
-	for (auto script : m_scripts)
-	{
-		if (!script->isStarted)
-		{
-			script->onStart();
-		}
-		script->onUpdate(dt);
-	}
-
+	script->onExit(lua);
 }
 
-void Fracture::ScriptManager::OnCollision(CollisionEvent* collision)
+void Fracture::ScriptManager::onUpdate(float dt)
 {
-	for (auto script : m_scripts)
-	{
-		script->onCollision(collision);
-	}
-}
+	script->Reload(lua);
+	script->onUpdate(lua,dt);
 
-void Fracture::ScriptManager::onEndFrame()
-{
-	clear();
+	script2->Reload(lua);
+	script2->onUpdate(lua, dt);
 }
-
-void Fracture::ScriptManager::start()
-{
-}
-
-void Fracture::ScriptManager::update(float dt)
-{
-}
-

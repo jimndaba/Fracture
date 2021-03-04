@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor\pxshared\include;$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -149,7 +149,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\release;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\lib\release;$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;lua54.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
+      <AdditionalDependencies>lua54.lib;opengl32.lib;glfw3.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -239,9 +239,7 @@
     <ClCompile Include="src\Rendering\ShadowPass.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
-    <ClCompile Include="src\Scripting\GameLogic.cpp" />
-    <ClCompile Include="src\Scripting\LuaScriptHandle.cpp" />
-    <ClCompile Include="src\Scripting\NativeScriptHandle.cpp" />
+    <ClCompile Include="src\Scripting\LuaScript.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
     <ClCompile Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.cpp" />
     <ClCompile Include="src\Serialisation\FrameGraphSerialisation\NodeSerialisers.cpp" />
@@ -379,9 +377,7 @@
     <ClInclude Include="src\Rendering\OpenGL\Vertex.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
-    <ClInclude Include="src\Scripting\GameLogic.h" />
-    <ClInclude Include="src\Scripting\LuaScriptHandle.h" />
-    <ClInclude Include="src\Scripting\NativeScriptHandle.h" />
+    <ClInclude Include="src\Scripting\LuaScript.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
     <ClInclude Include="src\Serialisation\ComponentSerialisers\ComponentSerialiser.h" />
     <ClInclude Include="src\Serialisation\ComponentSerialisers\ComponentSerialisers.h" />
@@ -420,8 +416,8 @@
     <ClInclude Include="vendor\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\vector_relational.hpp" />
     <ClInclude Include="vendor\KHR\khrplatform.h" />
-    <ClInclude Include="vendor\lua\lua.h" />
     <ClInclude Include="vendor\nlohmann\json.hpp" />
+    <ClInclude Include="vendor\sol\sol.hpp" />
     <ClInclude Include="vendor\yaml-cpp\anchor.h" />
     <ClInclude Include="vendor\yaml-cpp\binary.h" />
     <ClInclude Include="vendor\yaml-cpp\contrib\anchordict.h" />

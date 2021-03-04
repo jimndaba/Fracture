@@ -12,7 +12,6 @@
 #include "Input/InputManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
-#include "Scripting/ScriptManager.h"
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
 #include "Rendering/DebugRenderer.h"
@@ -26,7 +25,7 @@ const double dt = 0.01;
 double currentTime = glfwGetTime() / 1000.0;
 double accumulator = 0.0;
 
-std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager =0;
+//std::unique_ptr<Fracture::ScriptManager> Fracture::Game::m_ScriptManager =0;
 std::shared_ptr<Fracture::Eventbus> Fracture::Game::m_Eventbus=0;
 std::shared_ptr<Fracture::Scene> Fracture::Game::m_currentScene=0;
 std::unique_ptr<Fracture::SceneManager> Fracture::Game::m_SceneManager = 0;
@@ -60,7 +59,7 @@ void Fracture::Game::run()
 			update((float)dt);
 			accumulator -= dt;
 			t += dt;
-			m_ScriptManager->onEndFrame();
+			//m_ScriptManager->onEndFrame();
 		}
 	
 		render();
@@ -94,7 +93,7 @@ void Fracture::Game::init()
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
-	m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
+	//m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
 	m_debug = std::make_unique<DebugRenderer>();
@@ -121,12 +120,12 @@ void Fracture::Game::update(float dt)
 	ProfilerTimer timer("Update");
 	m_ComponentManager->onUpdate(dt);
 
-	if (m_ScriptManager->Start)
-	{
-		m_ScriptManager->onStart();
-		m_ScriptManager->Start = false;
-	}
-	m_ScriptManager->OnUpdate(dt);
+	//if (m_ScriptManager->Start)
+	//{
+	//	m_ScriptManager->start();
+	//	m_ScriptManager->Start = false;
+	//}
+	//m_ScriptManager->update(dt);
 
 	m_PhysicsManager->onUpdate(dt);
 		
@@ -232,7 +231,7 @@ std::shared_ptr<Fracture::Eventbus> Fracture::Game::GetEventbus()
 
 void Fracture::Game::AddScript(std::shared_ptr<GameLogic> script)
 {
-	m_ScriptManager->AddScript(script);
+	//m_ScriptManager->AddScript(script);
 }
 
 void Fracture::Game::onEvent(Event* mEvent)

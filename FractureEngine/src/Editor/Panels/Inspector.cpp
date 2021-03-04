@@ -607,8 +607,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				ComponentManager::AddComponent<TransformComponent>(entity.GetId());
 			}			
 			ImGui::CloseCurrentPopup();
-		}
-			
+		}			
 
 		if (ImGui::MenuItem("Camera"))
 		{
@@ -722,11 +721,11 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImGui::CloseCurrentPopup();
 		}
 
-		if (ImGui::MenuItem("Script"))
+		if (ImGui::MenuItem("LuaScript"))
 		{
 			if (m_scenegraph.SelectedEntity())
 			{
-				//ComponentManager::AddComponent<ScriptComponent>(entity.GetId());
+			
 			}
 			ImGui::CloseCurrentPopup();
 		}

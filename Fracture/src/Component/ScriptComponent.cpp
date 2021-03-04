@@ -1,5 +1,4 @@
 #include "ScriptComponent.h"
-#include "Scripting/GameLogic.h"
 
 Fracture::ScriptComponent::ScriptComponent(UUID id, std::shared_ptr<GameLogic> script):Component(id),m_script(script)
 {

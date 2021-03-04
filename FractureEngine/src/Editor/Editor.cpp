@@ -386,7 +386,7 @@ void Fracture::Editor::onUpdate(float dt)
     m_AnimationManger->OnUpdate(FIXED_STEP);
 
     //m_PhysicsManger->stepUpdate();  
-    m_ScriptManger->OnUpdate(dt);
+    m_ScriptManger->onUpdate(dt);
 
     m_viewpanel->onUpdate(dt);
     
