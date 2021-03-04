@@ -19,12 +19,12 @@ namespace Fracture
 	class LuaScript;
 	class ScriptManager
 	{
-
 	public:
 		ScriptManager();
 
 		void BindLog(sol::state& L);
 		void BindInput(sol::state& L);
+		void BindApplication(sol::state& L);
 
 		void onStart();
 		void onExit();

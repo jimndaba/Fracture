@@ -135,8 +135,7 @@ std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::stri
     std::ofstream script(path + name + ".lua");
 
     script << "--" + name + ".lua---" << std::endl;
-    script << std::endl;
-    script << "Debug.trace('Loaded Script: "<< name <<"')" << std::endl;
+   
     script << std::endl;
        ///main Script Table with properties inner table
     script << name +" = {" << std::endl;
@@ -145,7 +144,6 @@ std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::stri
     script << std::endl;
     ///onStart
     script << "function "+ name +":onStart()" << std::endl;
-    script << "--Start Code --" << std::endl;
     script << "end" << std::endl;
     script << std::endl;
 
@@ -158,7 +156,6 @@ std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::stri
     ///onUpdate
     script << "function " + name + ":onUpdate(dt)" << std::endl;
     script << "--Start Code --" << std::endl;
-    script << "print(dt)" << std::endl;
     script << "end" << std::endl;
     script << std::endl;
 

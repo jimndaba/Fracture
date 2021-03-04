@@ -345,14 +345,12 @@ void Fracture::Editor::run()
     //TODO - Set Editor Camera as camera;
     double lastTime = glfwGetTime();
 
+    m_ScriptManger->onStart();
     while (!m_window->ShouldClose() && !done)
     {       
         double currentTime = glfwGetTime();
         double frameTime = currentTime - lastTime;
         lastTime = currentTime;
-
-       
-
 
         while (frameTime > 0.0)
         {
