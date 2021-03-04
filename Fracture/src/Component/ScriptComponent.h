@@ -8,12 +8,13 @@
 namespace Fracture
 {
 	class GameLogic;
+	class LuaScript;
 
 	class ScriptComponent:public Component
 	{
 
 	public:
-		ScriptComponent(UUID id, std::shared_ptr<GameLogic>  script);
+		ScriptComponent(UUID id, std::shared_ptr<LuaScript>  script);
 		~ScriptComponent() = default;
 
 		ScriptComponent(const ScriptComponent& component, UUID id) :Component(id)
@@ -22,7 +23,9 @@ namespace Fracture
 		}
 
 		virtual void onStart();
-		std::shared_ptr<GameLogic> GetScript();
+
+		void SetScript(const std::shared_ptr<LuaScript>&  script);
+		std::shared_ptr<LuaScript> GetScript();
 
 		void Accept(ISceneProbe* visitor) override;
 
@@ -32,14 +35,17 @@ namespace Fracture
 		}
 
 		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
-	
+
+		static std::shared_ptr<ScriptComponent> Create(UUID id);
+		static std::shared_ptr<ScriptComponent> Create(UUID id,const std::shared_ptr<LuaScript>&  script);
+
 	private:
 
 		virtual ScriptComponent* clone_impl(UUID id) const override
 		{
 			return new ScriptComponent(*this, id);
 		}
-		std::shared_ptr<GameLogic> m_script;
+		std::shared_ptr<LuaScript> m_script;
 
 	};
 

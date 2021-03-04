@@ -173,3 +173,9 @@ void Fracture::ScriptManager::onUpdate(float dt)
 	script2->Reload(lua);
 	script2->onUpdate(lua, dt);
 }
+
+void Fracture::ScriptManager::Reload(std::shared_ptr<LuaScript> mscript)
+{
+	mscript->Reload(lua);
+	mscript->BindFunction(lua);
+}

@@ -72,8 +72,9 @@ namespace Fracture
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 2.0f);			
 			
-
-			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
+			//(void*)typeid(T).hash_code()
+			ImGui::PushID((void*)typeid(T).hash_code());
+			bool open = ImGui::TreeNodeEx("##component", treeNodeFlags, name.c_str());
 			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 			{
@@ -99,7 +100,8 @@ namespace Fracture
 			{
 				ComponentManager::RemoveComponent<T>(entity.GetId());
 			}
-		
+			ImGui::PopID();
+
 			ImGui::PopStyleColor(1);
 			ImGui::PopStyleVar(2);
 		}		

@@ -29,7 +29,7 @@ namespace Fracture
 		void Reload(sol::state& state);
 
 		std::string GetFilepath();
-
+		std::string GetName();
 
 		void BindFunction(sol::state& state);
 

@@ -39,6 +39,7 @@ std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::m_properties;
 std::shared_ptr<Fracture::GameSettings> Fracture::Editor::m_GameSettings;
 std::shared_ptr<Fracture::SceneView> Fracture::Editor::m_sceneview;
 std::unique_ptr<Fracture::Eventbus>  Fracture::Editor::m_Eventbus;
+std::shared_ptr<Fracture::ScriptManager> Fracture::Editor::m_ScriptManger;
 
 inline void Style();
 const float FIXED_STEP = 1/60.0f;
@@ -744,6 +745,11 @@ std::shared_ptr<Fracture::Scene> Fracture::Editor::ActiveScene()
     return m_SceneManager->GetActiveScene();
 }
 
+std::shared_ptr<Fracture::ScriptManager> Fracture::Editor::GetScriptManager()
+{
+    return m_ScriptManger;
+}
+
 std::shared_ptr<Fracture::Logger> Fracture::Editor::GetLogger()
 {
     return m_logger;
@@ -938,9 +944,11 @@ void Fracture::Editor::showProjectSettings(bool* p_open, std::shared_ptr<Fractur
         InspectorPanel::DrawTextInputControl("Content Directory", _properties->ContentDirectory);
         InspectorPanel::DrawTextInputControl("Scenes Path", _properties->ScenesPath);
         InspectorPanel::DrawTextInputControl("Shaders Path", _properties->ShadersPath);
+        InspectorPanel::DrawTextInputControl("Scripts Path", _properties->ScriptPath);
         InspectorPanel::DrawTextInputControl("Textures Path", _properties->TexturesPath);
         InspectorPanel::DrawTextInputControl("Models Path", _properties->ModelsPath);
         InspectorPanel::DrawTextInputControl("Game Config Path", _properties->GameConfigPath);
+
      
         std::string Gametitle = m_GameSettings->Title;
         InspectorPanel::DrawTextInputControl("Game Window Title", Gametitle);

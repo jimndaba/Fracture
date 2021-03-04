@@ -69,20 +69,12 @@ void Fracture::ComponentManager::onLoad()
 
 const void Fracture::ComponentManager::onUpdate(float dt)
 {	
-
 	ProfilerTimer timer("Component OnUpdate");
 	for (auto& component : GetAllComponents<CameraControllerComponent>())
 	{
 		std::shared_ptr<CameraControllerComponent> c = std::dynamic_pointer_cast<CameraControllerComponent>(component);
 		c->onUpdate(dt);			
-	}
-
-	for (auto& component : GetAllComponents<ScriptComponent>())
-	{	
-		std::shared_ptr<ScriptComponent> c = std::dynamic_pointer_cast<ScriptComponent>(component);
-		if(c)
-			Game::AddScript(c->GetScript());
-	}
+	}	
 }
 
 const void Fracture::ComponentManager::ClearComponents()

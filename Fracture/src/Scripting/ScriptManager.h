@@ -30,6 +30,8 @@ namespace Fracture
 		void onExit();
 		void onUpdate(float dt);
 
+		void Reload(std::shared_ptr<LuaScript> mscript);
+
 	private:
 		sol::state lua;
 		std::shared_ptr<LuaScript> script;

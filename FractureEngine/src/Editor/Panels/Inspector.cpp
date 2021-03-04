@@ -4,6 +4,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Material.h"
 #include "../utils/FileDialogue.h"
+#include "../Editor.h"
 
 Fracture::SampleUniformType stringToEnum(const std::string& m_type);
 
@@ -401,6 +402,61 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 	DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
 	{
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			ImVec2 buttonSize = { lineHeight + 50.0f, lineHeight };
+			
+			std::shared_ptr<ScriptComponent> scriptcomp = std::dynamic_pointer_cast<ScriptComponent>(component);
+
+			std::string scriptname;
+			if (scriptcomp->GetScript())
+			{
+				scriptname = scriptcomp->GetScript()->GetName();
+			}
+			else
+			{
+				scriptname = "";
+			}
+			
+			ImGui::Text(scriptname.c_str());
+		
+			if (ImGui::Button("NewScript",buttonSize))
+			{
+				ImGui::OpenPopup("Create Script");
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Reload", buttonSize))
+			{
+				Editor::GetScriptManager()->Reload(scriptcomp->GetScript());
+			}
+
+			if (ImGui::BeginPopupModal("Create Script", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("Script Name: .\n");
+				ImGui::SameLine();
+				static std::string name;
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), name.c_str());
+
+				if (ImGui::InputText("##script", buffer, sizeof(buffer)))
+				{
+					name = std::string(buffer);
+				}
+
+				if (ImGui::Button("OK", ImVec2(120, 0)))
+				{
+					if (!name.empty())
+					{
+						std::shared_ptr<LuaScript> script = LuaScript::Create(name,Editor::Properties()->ScriptPath+"/");
+						scriptcomp->SetScript(script);
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+				ImGui::EndPopup();
+			}
 
 	});
 
@@ -723,12 +779,10 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 
 		if (ImGui::MenuItem("LuaScript"))
 		{
-			if (m_scenegraph.SelectedEntity())
-			{
-			
-			}
-			ImGui::CloseCurrentPopup();
+			auto component = ScriptComponent::Create(m_scenegraph.SelectedEntity()->GetId());
+			ComponentManager::AddComponent<ScriptComponent>(component);
 		}
+		
 
 		if (ImGui::MenuItem("Animator"))
 		{
@@ -739,8 +793,12 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImGui::CloseCurrentPopup();
 		}
 
+
 		ImGui::EndPopup();
 	}
+
+	
+
 
 }
 /*

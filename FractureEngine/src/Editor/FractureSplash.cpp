@@ -210,6 +210,7 @@ void Fracture::FractureSplash::createNewProject(const std::string& filepath)
     m_editor->Properties()->GameConfigPath = filepath;      
     m_editor->Properties()->ScenesPath = filepath + "\\content\\scenes";
     m_editor->Properties()->ModelsPath = filepath + "\\content\\models";
+    m_editor->Properties()->ScriptPath = filepath + "\\content\\scripts";
     m_editor->Properties()->TexturesPath = filepath + "\\content\\textures";
     m_editor->Properties()->ShadersPath = filepath + "\\content\\shaders";
     m_editor->Properties()->FontsPath = filepath + "\\content\\fonts";
@@ -223,6 +224,7 @@ void Fracture::FractureSplash::createNewProject(const std::string& filepath)
     int models = mkdir(m_editor->Properties()->ModelsPath.c_str());
     int scenes = mkdir(m_editor->Properties()->ScenesPath.c_str());
     int shaders = mkdir(m_editor->Properties()->ShadersPath.c_str());
+    int scripts = mkdir(m_editor->Properties()->ScriptPath.c_str());
     int textures = mkdir(m_editor->Properties()->TexturesPath.c_str());
     int fonts = mkdir(m_editor->Properties()->FontsPath.c_str());
 

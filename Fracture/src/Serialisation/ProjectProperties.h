@@ -20,6 +20,7 @@ namespace Fracture
 		std::string ScenesPath;
 		std::string ShadersPath;
 		std::string ModelsPath;
+		std::string ScriptPath;
 		std::string TexturesPath;
 		std::string FontsPath;
 

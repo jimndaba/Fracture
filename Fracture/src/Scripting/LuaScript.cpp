@@ -129,6 +129,11 @@ std::string Fracture::LuaScript::GetFilepath()
     return m_filepath;
 }
 
+std::string Fracture::LuaScript::GetName()
+{
+    return m_name;
+}
+
 std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::string& name, const std::string& path)
 {
 

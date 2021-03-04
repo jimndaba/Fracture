@@ -66,6 +66,7 @@
 
 //Scripting
 #include "Scripting/ScriptManager.h"
+#include "Scripting/LuaScript.h"
 
 #include "Component/Component.h"
 #include "Component/TagComponent.h"
@@ -92,5 +93,6 @@
 #include "Serialisation/GameSerializer.h"
 #include "Serialisation/FrameGraphSerialiser.h"
 #include "Serialisation/GameSettings.h"
+#include "Serialisation/ProjectProperties.h"
 
 #endif
