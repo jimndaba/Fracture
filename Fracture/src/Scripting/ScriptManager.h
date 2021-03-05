@@ -24,6 +24,7 @@ namespace Fracture
 
 		void BindLog(sol::state& L);
 		void BindInput(sol::state& L);
+		void BindMaths(sol::state& L);
 		void BindApplication(sol::state& L);
 
 		void onStart();

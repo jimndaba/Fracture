@@ -2,7 +2,8 @@
 #include "Logging/Logger.h"
 
 Fracture::LuaScript::LuaScript(const std::string& name, const std::string& path):
-    m_name(name),m_filepath(path+name+".lua")
+    m_name(name),m_filepath(path+name+".lua"),
+    m_Properties(std::make_shared<std::unordered_map<std::string, std::shared_ptr<ScriptProperty>>>())
 {
    
 }
@@ -116,12 +117,14 @@ void Fracture::LuaScript::Load(sol::state& state)
 {
     state.script_file(m_filepath);
     BindFunction(state);
+    BindProperties(state);
 }
 
 void Fracture::LuaScript::Reload(sol::state& state)
 {
     state.do_file(m_filepath);
     BindFunction(state);
+    BindProperties(state);
 }
 
 std::string Fracture::LuaScript::GetFilepath()
@@ -195,6 +198,11 @@ std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::stri
     return std::make_shared<LuaScript>(name,path);
 }
 
+std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<Fracture::ScriptProperty>>> Fracture::LuaScript::GetProperties()
+{
+    return m_Properties;
+}
+
 void Fracture::LuaScript::BindFunction(sol::state& state)
 {   
     auto self = state[m_name];    
@@ -226,4 +234,66 @@ void Fracture::LuaScript::BindFunction(sol::state& state)
     if (!m_onTrigger->valid())
         m_onTrigger.reset();
 
+}
+
+void Fracture::LuaScript::BindProperties(sol::state& state)
+{
+    m_Properties->clear();
+
+    sol::optional<sol::table> self = state[m_name]["Properties"];
+    //sol::optional<sol::table> conf = lua["conf"];
+    //if (conf) {
+    //    for (const auto& key_value_pair : conf.value())
+    //    {
+    //        sol::object key = key_value_pair.first;
+    //        sol::object value = key_value_pair.second;
+    //        std::string k = key.as<std::string>();
+    //        sol::type t = value.get_type();
+    //        switch (t) {
+    //        case sol::type::string: {
+    //            std::cout << k << ": " << value.as<std::string>() << std::endl;
+    //        }
+    //                              break;
+    //        case sol::type::number: {
+    //            auto v = value.as<double>();
+    //            std::cout << k << ": " << v << std::endl;
+    //        }
+    //                              break;
+    //        default: {
+    //            std::cout << "hit the default case!" << std::endl;
+    //        }
+    //        }
+    //    }
+    //}
+
+    for (const auto& prop : self.value())
+    {
+        sol::object key = prop.first;
+        sol::object mvalue = prop.second;
+
+        std::string k = key.as<std::string>();       
+        sol::type t = mvalue.get_type();
+        switch (t)
+        {
+        case sol::type::string: 
+        {
+            std::shared_ptr<ScriptProperty> prop = std::make_shared<ScriptProperty>();
+            prop->Name = k;
+            prop->Type = PROPERTY_TYPE::STRING;
+            prop->String = mvalue.as<std::string>().c_str();       
+            m_Properties->emplace(k, prop);         
+        }
+        break;
+        case sol::type::number: 
+            {
+                std::shared_ptr<ScriptProperty> prop = std::make_shared<ScriptProperty>();
+                prop->Name = k;
+                prop->Type = PROPERTY_TYPE::FLOAT;
+                prop->Float = mvalue.as<double>();               
+                m_Properties->emplace(k, prop);              
+            }
+        break;        
+        }
+
+    }
 }

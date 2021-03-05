@@ -151,6 +151,10 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 		
 }
 
+void Fracture::ScriptManager::BindMaths(sol::state& L)
+{
+}
+
 void Fracture::ScriptManager::BindApplication(sol::state& L)
 {
 }

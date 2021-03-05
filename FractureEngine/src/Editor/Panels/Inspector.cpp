@@ -3,6 +3,7 @@
 #include "SceneviewPanel.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Material.h"
+#include "Scripting/LuaScript.h"
 #include "../utils/FileDialogue.h"
 #include "../Editor.h"
 
@@ -406,20 +407,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			ImVec2 buttonSize = { lineHeight + 50.0f, lineHeight };
 			
 			std::shared_ptr<ScriptComponent> scriptcomp = std::dynamic_pointer_cast<ScriptComponent>(component);
-
-			std::string scriptname;
-			if (scriptcomp->GetScript())
-			{
-				scriptname = scriptcomp->GetScript()->GetName();
-			}
-			else
-			{
-				scriptname = "";
-			}
-			
-			ImGui::Text(scriptname.c_str());
-		
-			if (ImGui::Button("NewScript",buttonSize))
+			if (ImGui::Button("NewScript", buttonSize))
 			{
 				ImGui::OpenPopup("Create Script");
 			}
@@ -447,7 +435,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				{
 					if (!name.empty())
 					{
-						std::shared_ptr<LuaScript> script = LuaScript::Create(name,Editor::Properties()->ScriptPath+"/");
+						std::shared_ptr<LuaScript> script = LuaScript::Create(name, Editor::Properties()->ScriptPath + "/");
 						scriptcomp->SetScript(script);
 						ImGui::CloseCurrentPopup();
 					}
@@ -458,6 +446,47 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				ImGui::EndPopup();
 			}
 
+			std::string scriptname;
+			if (scriptcomp->GetScript())
+			{
+				scriptname = scriptcomp->GetScript()->GetName();
+			}
+			else
+			{
+				scriptname = "";
+			}
+			
+
+			DrawTextInputControl("Script", scriptname);
+			ImGui::Separator();
+			ImGui::LabelText("##scriptlabel","Script Properties");
+
+			if (scriptcomp->GetScript())
+			{ 
+				const auto& m_properties = scriptcomp->GetScript()->GetProperties();
+				for (auto prop = m_properties->begin(); prop != m_properties->end(); ++prop)
+				{
+					switch (prop->second->Type)
+					{
+						case PROPERTY_TYPE::STRING:
+						{
+							DrawTextInputControl(prop->first, prop->second->String);
+						}
+						break;
+						case PROPERTY_TYPE::BOOL:
+						{
+							DrawBoolControl(prop->first, prop->second->Bool);
+						}
+						break;
+						case PROPERTY_TYPE::FLOAT:
+						{
+							DrawfloatControl(prop->first, prop->second->Float);
+						}
+						break;
+					}
+				}
+			}
+			
 	});
 
 	DrawComponent<LightComponent>("Light", entity, [](auto& component)

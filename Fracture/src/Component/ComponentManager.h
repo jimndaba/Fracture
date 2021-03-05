@@ -132,7 +132,16 @@ namespace Fracture
 	template<class T>
 	inline const std::vector<std::shared_ptr<T>>  Fracture::ComponentManager::GetComponents(const UUID& entitytId)
 	{
-		return Register[typeid(T)]->GetComponents(entitytId);
+		std::vector<std::shared_ptr<T>> m_collection;
+		const auto& components = Register[typeid(T)]->GetComponents(entitytId);
+
+		for (auto& c : components)
+		{
+			auto new_c = std::dynamic_pointer_cast<T>(c);
+			m_collection.push_back(new_c);
+		}
+
+		return m_collection;
 	}
 
 
