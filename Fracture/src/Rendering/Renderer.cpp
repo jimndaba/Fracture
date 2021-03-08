@@ -80,7 +80,7 @@ void Fracture::Renderer::onInit()
 
     SceneRenderTarget = RenderTarget::CreateRenderTarget("MainBuffer", m_width, m_Height, AttachmentTarget::Texture2D, FormatType::Float, 1, true);
     
-    m_grid = std::make_shared<Grid>(1000, 1000, 10.0f, 1.0f, 0.5);
+    m_grid = std::make_shared<Grid>(1000, 1000, 10.0f, 10.0f, 0.5);
     m_grid->SetColor(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
     
     m_ShadowPass = std::shared_ptr<ShadowPass>(new ShadowPass());     

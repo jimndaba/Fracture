@@ -264,6 +264,9 @@ void Fracture::Editor::onLoadNew()
     //Threshold Mapping Shader
     AssetManager::AddShader("MultiplyMix", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/MultiplyMix_frag.glsl");
 
+    //Threshold Mapping Shader
+    AssetManager::AddShader("StylisedWater", "content/shaders/StylisedWater/vertex.glsl", "content/shaders/StylisedWater/fragment.glsl");
+
     
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
@@ -299,6 +302,7 @@ void Fracture::Editor::onLoadNew()
 
     AssetManager::AddMaterial("BaseMaterial", base_material);
 
+   
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
 
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
@@ -324,6 +328,28 @@ void Fracture::Editor::onLoadNew()
     m_viewpanel->setRenderer(*m_Renderer.get());
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
     m_graph->Buildgraph();
+
+    std::shared_ptr<Material> stylisedWater = std::make_shared<Material>("StylisedWater", AssetManager::getShader("StylisedWater"));
+    stylisedWater->setIsTransparent(true);
+    stylisedWater->setFloat("nearPlane",0.1f);
+    stylisedWater->setFloat("farPlane", 100.0f);
+    stylisedWater->setFloat("height", 10.0f);
+
+    stylisedWater->setFloat("Transparency", 0.5f); 
+    stylisedWater->setFloat("DepthDensity", 0.5f);
+    stylisedWater->setFloat("EdgeFoamDepth", 10.0f);
+    stylisedWater->setFloat("DistanceDensity", 0.1f);
+    stylisedWater->setMat4("projection",m_Renderer->ActiveCamera()->getProjectionMatrix());
+
+    stylisedWater->setColor3("ShallowColor", glm::vec3(0.3686f, 1.0f, 0.9176f));
+    stylisedWater->setColor3("DeepColor", glm::vec3(0.0f, 0.0824f, 0.8392f));
+    stylisedWater->setColor3("FarColor", glm::vec3(0.0196f, 0.0f, 0.302f));
+    stylisedWater->setColor3("EdgeFoamColor", glm::vec3(1.0));
+
+    stylisedWater->SetTexture("depthTexture", m_graph->getNode("global_depthbuffer")->resources["outputDepthMap"]->GetColorTexture(0), 0);
+    AssetManager::AddMaterial("StylisedWater", stylisedWater);
+
+
 }
 
 void Fracture::Editor::run()

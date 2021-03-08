@@ -456,7 +456,6 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				scriptname = "";
 			}
 			
-
 			DrawTextInputControl("Script", scriptname);
 			ImGui::Separator();
 			ImGui::LabelText("##scriptlabel","Script Properties");

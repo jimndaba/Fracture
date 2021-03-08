@@ -39,14 +39,7 @@ void Fracture::DepthNode::execute(Renderer& renderer)
 	{
 		DrawCommand command = forwardRenderCommands[i];
 		renderer.Submit(command, m_shader.get());
-	}
-
-	for (unsigned int i = 0; i < alphaRenderCommands.size(); ++i)
-	{
-		DrawCommand command = alphaRenderCommands[i];
-		renderer.Submit(command, m_shader.get());
-	}
-   
+	}   
 	resources["outputDepthMap"]->Unbind();
 }
 

@@ -56,6 +56,7 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
     if (alphaRenderCommands.size() > 0)
     {
         glDisable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
         for (unsigned int i = 0; i < alphaRenderCommands.size(); ++i)
         {
             DrawCommand command = alphaRenderCommands[i];
@@ -82,6 +83,7 @@ void Fracture::RenderQueueNode::render(Renderer& renderer)
 
             renderer.Submit(command);
         }
+        glDisable(GL_BLEND);
         glEnable(GL_CULL_FACE);
     }
 }

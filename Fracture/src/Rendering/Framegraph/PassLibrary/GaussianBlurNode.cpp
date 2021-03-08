@@ -23,7 +23,7 @@ Fracture::GaussianBlurNode::GaussianBlurNode(const std::string& name, const int&
 	{
 		//m_blurPasses[i] = std::make_shared<RenderTarget>("blurPass"+i, width/8, height/8, TextureTarget::Texture2D, GL_FLOAT, 1, false);
 
-		m_blurPasses[i] = RenderTarget::CreateRenderTarget("blurPass" + i, width / 8, height / 8, AttachmentTarget::Texture2D,FormatType::Float, 1, false);
+		m_blurPasses[i] = RenderTarget::CreateRenderTarget("blurPass" + i, width , height, AttachmentTarget::Texture2D,FormatType::Float, 1, false);
 		m_blurPasses[i]->SetResizable(false);
 		AddResource("blurPass" + i, m_blurPasses[i]);
 	}
@@ -61,12 +61,6 @@ void Fracture::GaussianBlurNode::execute(Renderer& renderer)
 
 			m_blurPasses[horizontal]->blit(resources["colorTexture"]->GetBuffer(), srcWidth, srcHeight, dstWidth, dstHeight);
 			m_shader->setTexture("boxblur", m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);
-
-			//glBindFramebuffer(GL_READ_FRAMEBUFFER, resources["colorTexture"]->GetID());
-			//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_blurPasses[horizontal]->GetID());
-			//glBlitFramebuffer(0, 0, resources["colorTexture"]->GetColorTexture(0)->width,
-				//resources["colorTexture"]->GetColorTexture(0)->height, 0, 0, m_blurPasses[horizontal]->Width, m_blurPasses[horizontal]->Height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-			
 		}
 		else
 		{

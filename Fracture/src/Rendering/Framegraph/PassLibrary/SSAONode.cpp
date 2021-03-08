@@ -69,7 +69,8 @@ void Fracture::SSAONode::execute(Renderer& renderer)
 	m_shader->setFloat("radius", radius);
 	m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
 	m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
-	m_shader->setMat4("projection", glm::inverse(renderer.ActiveCamera()->getProjectionMatrix()));
+	m_shader->setMat4("invprojection", glm::inverse(renderer.ActiveCamera()->getProjectionMatrix()));
+	m_shader->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
 	m_shader->setTexture("depthTexture", resources["DepthTexture"]->GetColorTexture(0).get(), 0);
 	m_shader->setTexture("texNoise", m_noiseTexture.get(), 1);
 	glBindVertexArray(quadVAO);

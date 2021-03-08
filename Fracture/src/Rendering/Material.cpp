@@ -179,7 +179,7 @@ void Fracture::Material::setMat4(const std::string& name, const glm::mat4& mat) 
 	m_Uniforms->emplace(name, uniform);
 }
 
-void Fracture::Material::SetTexture(const std::string& name,const std::shared_ptr<Texture2D>& value, unsigned int unit)
+void Fracture::Material::SetTexture(const std::string& name,const std::shared_ptr<Texture>& value, unsigned int unit)
 {
 	std::shared_ptr<UniformValueSampler> sample = std::make_shared<UniformValueSampler>();
 	sample->Type = SHADER_TYPE::SHADER_TYPE_SAMPLER2D;
