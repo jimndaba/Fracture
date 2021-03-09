@@ -57,6 +57,21 @@ namespace Fracture
 		}
 	};
 
+	class NormalsViewMode :public ViewportMode
+	{
+	public:
+
+		NormalsViewMode() :ViewportMode()
+		{
+
+		}
+		void Render(const std::shared_ptr<FrameGraph>& graph, const ImVec2& size) override
+		{
+			ImGui::Image((ImTextureID)(graph->getNode("lamertianPass")->resources["outputNormal"]->GetColorTexture(1)->GetTextureID()),
+				size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		}
+	};
 
 }
 

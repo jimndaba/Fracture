@@ -12,17 +12,19 @@
 int Fracture::ViewPanel::gizmoMode;
 std::string Fracture::ViewPanel::m_currentViewMode;
 
-Fracture::ViewPanel::ViewPanel(std::string name,SceneView& scenegraph, Renderer& renderer):Panel(name), m_scenegraph(scenegraph),
+Fracture::ViewPanel::ViewPanel(std::string name, SceneView& scenegraph, Renderer& renderer) :Panel(name), m_scenegraph(scenegraph),
 m_renderer(renderer),
 m_RenderView(std::make_shared<RenderViewMode>()),
 m_SSAOView(std::make_shared<SSAOViewMode>()),
-m_DepthView(std::make_shared<DepthViewMode>())
+m_DepthView(std::make_shared<DepthViewMode>()),
+m_NormalView(std::make_shared<NormalsViewMode>())
 {
 	gizmoMode = 0;
 
 	m_viewModes["RenderView"] = m_RenderView;
 	m_viewModes["SSAO"] = m_SSAOView;
 	m_viewModes["Depth"] = m_DepthView;
+	m_viewModes["Normals"] = m_NormalView;
 }
 
 Fracture::ViewPanel::~ViewPanel()

@@ -53,6 +53,19 @@ HasDepthAndStencil(depthAndStencil)
        
     }
 
+    if (m_ColorAttachments.size() > 1)
+    {
+        int size = m_ColorAttachments.size();
+        unsigned int attachments[10];
+
+        for (int i = 0; i < m_ColorAttachments.size(); i++)
+        {           
+            attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+        }
+
+        glDrawBuffers(size, attachments);
+    }
+
     if (depthAndStencil && texturetarget == AttachmentTarget::Texture2D)
     {       
         std::shared_ptr<Texture2D> texture = Texture2D::CreateTexture(InternalFormat::Depth24Stencil8, TextureFormat::DepthStencil, width, height, glWrap::ClampToEdge, FormatType::UInt24_8);

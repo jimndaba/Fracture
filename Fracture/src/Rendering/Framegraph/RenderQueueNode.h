@@ -18,6 +18,9 @@ namespace Fracture
 		virtual void execute(Renderer& renderer);
 
 		void render(Renderer& renderer);
+
+		void renderOpaque(Renderer& renderer);
+		void renderTranslusent(Renderer& renderer);
 		
 		std::shared_ptr<RenderBucket> GetBucket();
 

@@ -106,6 +106,17 @@ void Fracture::Renderer::Subscribe(Eventbus& mbus)
     mbus.Subscribe(this, &Fracture::Renderer::onWindowResize);
 }
 
+void Fracture::Renderer::onUpdate(float dt)
+{
+    m_deltaTime = dt;
+
+    shader_time += m_deltaTime;
+    if (shader_time > 1)
+    {
+        //shader_time = 0;
+    }
+}
+
 void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
 {
     ProfilerTimer timer("Begin Frame");
@@ -353,6 +364,8 @@ void Fracture::Renderer::Submit(DrawCommand command)
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
     command.material->getShader()->setVec4("Color", command.Color);
+
+    command.material->getShader()->setFloat("dt", shader_time);
     command.material->getShader()->setInt("isAnimated", command.IsAnimated);
     if (command.IsAnimated)
     {

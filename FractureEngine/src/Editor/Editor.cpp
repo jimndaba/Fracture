@@ -178,6 +178,9 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddTexture2D("SceneIcon", "content/textures/SceneIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("MaterialIcon", "content/textures/MaterialIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("ShaderIcon", "content/textures/ShaderIcon.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("foamTexture", "content/textures/waterfoam.jpg", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("waveNormalTexture", "content/textures/waternormal.png", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("waterdudv", "content/textures/waterdudv.png", TextureType::Diffuse); 
 
     m_AssetManger->AddHDR("Loft",  "content/environments/Newport_Loft_Env.hdr",TextureType::Diffuse);
 
@@ -331,22 +334,39 @@ void Fracture::Editor::onLoadNew()
 
     std::shared_ptr<Material> stylisedWater = std::make_shared<Material>("StylisedWater", AssetManager::getShader("StylisedWater"));
     stylisedWater->setIsTransparent(true);
+   
+    //Properties
     stylisedWater->setFloat("nearPlane",0.1f);
-    stylisedWater->setFloat("farPlane", 100.0f);
-    stylisedWater->setFloat("height", 10.0f);
+    stylisedWater->setFloat("farPlane", 1000.0f);
+    stylisedWater->setFloat("Transparency", 1.0f); 
+    stylisedWater->setFloat("DepthDensity", 0.5f);  
+    stylisedWater->setFloat("DistanceDensity", 0.01f);
+    stylisedWater->setFloat("waterShininess", 0.8f);
 
-    stylisedWater->setFloat("Transparency", 0.5f); 
-    stylisedWater->setFloat("DepthDensity", 0.5f);
-    stylisedWater->setFloat("EdgeFoamDepth", 10.0f);
-    stylisedWater->setFloat("DistanceDensity", 0.1f);
-    stylisedWater->setMat4("projection",m_Renderer->ActiveCamera()->getProjectionMatrix());
+    //Foam
+    stylisedWater->setFloat("EdgeFoamDepth", 1.0f);
+    stylisedWater->setFloat("FoamNoise", 0.4f);
+    stylisedWater->setFloat("FoamNoiseScale", 0.5f);
+    stylisedWater->setFloat("FoamContribution", 1.0f);
 
+
+    //Waves
+    stylisedWater->setFloat("WaveSpeed", 0.05f);
+    stylisedWater->setFloat("tiling", 6.0f);
+
+    //Colors
     stylisedWater->setColor3("ShallowColor", glm::vec3(0.3686f, 1.0f, 0.9176f));
     stylisedWater->setColor3("DeepColor", glm::vec3(0.0f, 0.0824f, 0.8392f));
     stylisedWater->setColor3("FarColor", glm::vec3(0.0196f, 0.0f, 0.302f));
     stylisedWater->setColor3("EdgeFoamColor", glm::vec3(1.0));
 
+    //Samples
     stylisedWater->SetTexture("depthTexture", m_graph->getNode("global_depthbuffer")->resources["outputDepthMap"]->GetColorTexture(0), 0);
+    stylisedWater->SetTexture("grabTexture", m_graph->getNode("lamertianPass")->resources["GrabColor"]->GetColorTexture(0), 1);
+    stylisedWater->SetTexture("waveNormalTexture", AssetManager::getTexture2D("waveNormalTexture"), 2);
+    stylisedWater->SetTexture("foamTexture", AssetManager::getTexture2D("foamTexture"), 3);
+    stylisedWater->SetTexture("dudvMap", AssetManager::getTexture2D("waterdudv"), 4);
+
     AssetManager::AddMaterial("StylisedWater", stylisedWater);
 
 
@@ -384,6 +404,7 @@ void Fracture::Editor::run()
             ProfilerTimer timer("Update Accumulator");
             float deltaTime = (float)std::min(frameTime, dt);
             onUpdate(deltaTime);
+           
             frameTime -= deltaTime;
             time += deltaTime;
         }
@@ -412,6 +433,8 @@ void Fracture::Editor::onUpdate(float dt)
 
     //m_PhysicsManger->stepUpdate();  
     m_ScriptManger->onUpdate(dt);
+    
+    m_Renderer->onUpdate(dt);
 
     m_viewpanel->onUpdate(dt);
     

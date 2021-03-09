@@ -53,6 +53,7 @@ namespace Fracture
 
 		void onInit();
 		void Subscribe(Eventbus& bus);
+		void onUpdate(float dt);
 
 		void BeginFrame(std::shared_ptr<Scene> scene);
 		void RenderEnvironment();
@@ -138,6 +139,8 @@ namespace Fracture
 	private:
 		int m_width;
 		int m_Height;
+		float m_deltaTime;
+		float shader_time = 0.0f;
 		unsigned int uboMatrices;
 		static bool m_isDebugRender;
 		static bool m_drawgrid;
