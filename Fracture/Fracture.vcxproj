@@ -196,6 +196,7 @@
     <ClCompile Include="src\Rendering\DebugLine.cpp" />
     <ClCompile Include="src\Rendering\DebugRenderer.cpp" />
     <ClCompile Include="src\Rendering\Environment.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSRNode.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\BufferAttribute.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\FrameBuffer.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\FrameGraph.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="src\Physics\Ray.h" />
     <ClInclude Include="src\Physics\RayHit.h" />
     <ClInclude Include="src\Rendering\Bindable.h" />
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSRNode.h" />
     <ClInclude Include="src\Rendering\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameGraph.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameNode.h" />

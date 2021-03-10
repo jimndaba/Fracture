@@ -27,6 +27,7 @@
 #include "PassLibrary/IntermediateNode.h"
 #include "PassLibrary/OutlineNode.h"
 #include "PassLibrary/MixNode.h"
+#include "PassLibrary/SSRNode.h"
 
 
 namespace Fracture

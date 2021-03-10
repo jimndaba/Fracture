@@ -28,6 +28,7 @@ namespace Fracture
 	class SSAOViewMode;
 	class DepthViewMode;
 	class NormalsViewMode;
+	class SpecularViewMode;
 
 	class ViewPanel : public Panel
 	{
@@ -76,6 +77,7 @@ namespace Fracture
 		std::shared_ptr<SSAOViewMode> m_SSAOView;
 		std::shared_ptr<DepthViewMode> m_DepthView;
 		std::shared_ptr<NormalsViewMode> m_NormalView;
+		std::shared_ptr <SpecularViewMode> m_SpecularView;
 
 		//Gizmo stuff
 		//int gizmoCount = 1;

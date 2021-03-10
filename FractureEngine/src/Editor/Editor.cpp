@@ -217,9 +217,6 @@ void Fracture::Editor::onLoadNew()
     //PBR Shader
     AssetManager::AddShader("PBRStatic", "content/shaders/PBRStatic/vertex.glsl", "content/shaders/PBRStatic/fragment.glsl");
 
-    //PBR Primitives
-    AssetManager::AddShader("PBRPlaneShader", "content/shaders/PBRPrimitive/vertex.glsl", "content/shaders/PBRPrimitive/fragment.glsl");
-
     //PBR Animated
     AssetManager::AddShader("PBRAnimated", "content/shaders/PBRAnimated/vertex.glsl", "content/shaders/PBRAnimated/fragment.glsl");
     
@@ -259,6 +256,10 @@ void Fracture::Editor::onLoadNew()
     //SSAO Shader
     AssetManager::AddShader("SSAOPASS", "content/shaders/postprocess/SSAO_vert.glsl", "content/shaders/postprocess/SSAO_frag.glsl");
 
+    //SSR Shader
+    AssetManager::AddShader("SSRPASS", "content/shaders/postprocess/SSR_vert.glsl", "content/shaders/postprocess/SSR_frag.glsl");
+
+
     //SSAO BLUR Shader
     AssetManager::AddShader("SSAOBLUR", "content/shaders/postprocess/vertex.glsl", "content/shaders/postprocess/ssao_blur_frag.glsl");
 
@@ -279,32 +280,10 @@ void Fracture::Editor::onLoadNew()
     
     std::shared_ptr<Material> billboardMaterial = std::make_shared<Material>("billboardIcons", m_AssetManger->getShader("BillboardShader"));
     m_AssetManger->AddMaterial("billboardIcons", billboardMaterial);    
-
-    /*
-    std::shared_ptr<Material> pbrPrimitive = std::shared_ptr<Material>(new Material("PBRPlane", AssetManager::getShader("PBRPlaneShader")));
-    pbrPrimitive->setColor3("albedo", glm::vec3(1.0f, 0.0f, 0.0f));
-    pbrPrimitive->setFloat("metallic", 0.4f);
-    pbrPrimitive->setFloat("roughness", 0.2f);
-    pbrPrimitive->setFloat("ao", 1.0f);    
-    */
-
-    //std::shared_ptr<Material> pbrTextured = std::shared_ptr<Material>(new Material("PBRTextured", m_AssetManger->getShader("PBRStatic")));
-    //pbrTextured->SetTexture("albedoMap",AssetManager::getTexture2D("Rust_albedo"),3);
-    //pbrTextured->SetTexture("normalMap", AssetManager::getTexture2D("Rust_normal"), 4);
-    //pbrTextured->SetTexture("metallicMap", AssetManager::getTexture2D("Rust_metallic"),5);
-    //pbrTextured->SetTexture("roughnessMap", AssetManager::getTexture2D("Rust_roughness"),6);
-    //pbrTextured->SetTexture("aoMap", AssetManager::getTexture2D("Rust_ao"),7);
-    //pbrTextured->setFloat("albedoFlag", 1.0f);
-    //pbrTextured->setFloat("normalFlag", 1.0f);
-    //pbrTextured->setFloat("metallicFlag", 1.0f);
-    //pbrTextured->setFloat("roughnessFlag", 1.0f);
-    //pbrTextured->setFloat("aoFlag", 1.0f);
     
     std::shared_ptr<Material> base_material = std::shared_ptr<Material>(new Material("BaseMaterial", m_AssetManger->getShader("PBRStatic")));
-
     AssetManager::AddMaterial("BaseMaterial", base_material);
-
-   
+       
     AssetManager::AddMaterial("DebugMaterial", std::shared_ptr<Material>(new Material("DebugMaterial", AssetManager::getShader("DebugShader"))));
 
     AssetManager::AddMaterial("DepthMaterial", std::shared_ptr<Material>(new Material("DepthMaterial", AssetManager::getShader("DepthShader"))));
@@ -362,9 +341,9 @@ void Fracture::Editor::onLoadNew()
     stylisedWater->setColor3("EdgeFoamColor", glm::vec3(1.0));
 
     //local samples
-    stylisedWater->SetTexture("waveNormalTexture", AssetManager::getTexture2D("waveNormalTexture"), 2);
-    stylisedWater->SetTexture("foamTexture", AssetManager::getTexture2D("foamTexture"), 3);
-    stylisedWater->SetTexture("dudvMap", AssetManager::getTexture2D("waterdudv"), 4);
+    stylisedWater->SetTexture("waveNormalTexture", AssetManager::getTexture2D("waveNormalTexture"), 0);
+    stylisedWater->SetTexture("foamTexture", AssetManager::getTexture2D("foamTexture"), 1);
+    stylisedWater->SetTexture("dudvMap", AssetManager::getTexture2D("waterdudv"), 2);
 
     AssetManager::AddMaterial("StylisedWater", stylisedWater);
 

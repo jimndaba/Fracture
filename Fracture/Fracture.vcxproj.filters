@@ -306,6 +306,9 @@
     <ClCompile Include="src\Scripting\LuaScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSRNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -915,6 +918,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripting\LuaScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSRNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

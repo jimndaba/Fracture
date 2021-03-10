@@ -20,7 +20,11 @@ namespace Fracture
 		std::shared_ptr<FrameResource> resource;
 		std::shared_ptr<FrameResource> ssaoMap;
 		std::shared_ptr<FrameResource> outputColor;
+
+		std::shared_ptr<FrameResource> normalout;
 		std::shared_ptr<FrameResource> grabout;
+		std::shared_ptr<FrameResource> specularout;
+		std::shared_ptr<FrameResource> positionout;
 	};
 
 

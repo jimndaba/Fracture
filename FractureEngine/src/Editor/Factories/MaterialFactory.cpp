@@ -24,6 +24,8 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialFactory::PBRMaterial(const
 
      material->setFloat("normalFlag",0.0f);
 
+     material->setFloat("tiling", 1.0f);
+
      material->setFloat("metallicFlag", 0.0f);
      material->setFloat("u_metallic", 0.0f);
 

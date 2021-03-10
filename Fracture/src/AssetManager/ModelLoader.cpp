@@ -38,25 +38,25 @@ std::shared_ptr<Fracture::Model> Fracture::ModelLoader::LoadModel(const std::str
 	// process ASSIMP's root node recursively	
 	ProcessNode(m_model, scene->mRootNode, scene);
 
+	//Process model skeleton
 	if (m_model->m_IsAnimated)
 	{
 		processSkeleton(m_model->m_Skeleton->m_Root, m_model->m_Skeleton, scene->mRootNode);
 	}
 
+	//Get Model Materials
 	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
 	{
 		m_model->m_materials.resize(scene->mNumMaterials);
-
 		m_model->m_materials[i] = loadMeshMaterial(scene->mMaterials[i], scene->HasAnimations());
 	}
 
+	//Process model animations
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
 		m_model->m_animations.resize(scene->mNumAnimations);
 		m_model->m_animations[i] = loadModelAnimations(scene->mAnimations[i]);
 	}
-
-	FRACTURE_ERROR("Number of Animations: {}", m_model->m_animations.size());
 
 	return m_model;
 }
@@ -170,7 +170,6 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::ProcessStaticMesh(s
 	aiMatrix4x4 transform = node->mTransformation;
 
 	new_mesh->SetName(mesh_name);
-	//new_mesh->ModelName = model->Name;
 	new_mesh->SetMaterialIndex(mesh->mMaterialIndex);
 
 	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
@@ -388,7 +387,7 @@ void Fracture::ModelLoader::ImportMaterial(aiMaterial* material, std::shared_ptr
 
 
 	float roughness = 1.0f - glm::sqrt(shininess / 100.0f);
-
+	f_materail->setFloat("tiling",1.0f);
 	// process material
 	// 1. diffuse maps	
 	if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &aiTexPath) == AI_SUCCESS)

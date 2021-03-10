@@ -17,7 +17,8 @@ m_renderer(renderer),
 m_RenderView(std::make_shared<RenderViewMode>()),
 m_SSAOView(std::make_shared<SSAOViewMode>()),
 m_DepthView(std::make_shared<DepthViewMode>()),
-m_NormalView(std::make_shared<NormalsViewMode>())
+m_NormalView(std::make_shared<NormalsViewMode>()),
+m_SpecularView(std::make_shared<SpecularViewMode>())
 {
 	gizmoMode = 0;
 
@@ -25,6 +26,7 @@ m_NormalView(std::make_shared<NormalsViewMode>())
 	m_viewModes["SSAO"] = m_SSAOView;
 	m_viewModes["Depth"] = m_DepthView;
 	m_viewModes["Normals"] = m_NormalView;
+	m_viewModes["Specular"] = m_SpecularView;
 }
 
 Fracture::ViewPanel::~ViewPanel()

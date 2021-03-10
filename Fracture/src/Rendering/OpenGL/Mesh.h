@@ -58,7 +58,6 @@ namespace Fracture
 		{
 			m_Name = name;
 		}
-
 		void SetMaterialIndex(uint32_t index)
 		{
 			m_MaterialIndex = index;

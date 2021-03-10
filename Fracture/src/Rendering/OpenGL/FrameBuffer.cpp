@@ -61,17 +61,21 @@ std::shared_ptr<Fracture::RenderBuffer> Fracture::FrameBuffer::GetRenderBuffer(c
 	return buffer;
 }
 
-void Fracture::FrameBuffer::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight)
+void Fracture::FrameBuffer::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight, int attachment = 0)
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, otherBuffer->GetBufferID());
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_Id);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glBlitFramebuffer(0, 0, SrcDstWidth, SrcDstheight, 0, 0, SrcDstWidth, SrcDstheight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
-void Fracture::FrameBuffer::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight)
+void Fracture::FrameBuffer::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight, int attachment = 0)
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, otherBuffer->GetBufferID());
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_Id);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glBlitFramebuffer(0, 0,srcWidth, srcHeight, 0, 0, dstWidth, dstHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 

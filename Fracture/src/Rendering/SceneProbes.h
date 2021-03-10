@@ -30,37 +30,40 @@ namespace Fracture
 			ProfilerTimer timer("Visit Render Comp");
 			std::shared_ptr<TransformComponent> transform = ComponentManager::GetComponent<TransformComponent>(component->GetID());
 			std::vector<std::shared_ptr<Mesh>> meshes = component->GetModel()->GetMeshes();
+			DrawCommand command = DrawCommand{};
+			bool isVisible = true;
+
+
+			if (ComponentManager::HasComponent<AnimatorComponent>(component->GetID()))
+			{
+				auto& animator = ComponentManager::GetComponent<AnimatorComponent>(component->GetID());
+				command.AnimationTransforms = animator->getAnimationTransforms();
+				command.IsAnimated = true;
+			}
+
 			for (int i = 0 ; i < meshes.size();i++)
 			{
 				ProfilerTimer timer("Scene probe for each mesh");
-				auto mesh = meshes[i];
-				auto material = component->GetModel()->m_materials[mesh->MaterialIndex()];
+				
+				isVisible = mRenderer.ActiveCamera()->IsBoxInFrustum(meshes[i]->GetAABB()->min, meshes[i]->GetAABB()->max);				
 
-				std::shared_ptr<TransformComponent> m_transformComponent = ComponentManager::GetComponent<TransformComponent>(component->GetID());
-		
-				if (mRenderer.ActiveCamera()->IsBoxInFrustum(mesh->GetAABB()->min, mesh->GetAABB()->max))
-				{					
-					DrawCommand command = DrawCommand{};
-					command.VAO = mesh->RenderID();
+				if(isVisible)
+				{
+					auto material = component->GetModel()->m_materials[meshes[i]->MaterialIndex()];
+					command.VAO = meshes[i]->RenderID();
+					command.ID = component->GetID();
 					command.material = material.get();
 					command.CastShadows = material->CastShadows();
 					command.HasTransparency = material->IsTransparent();
 					command.IsOutlined = material->IsOutlined();
-					command.ID = component->GetID();
-					command.indiceSize = mesh->CountOfIndices();
-					command.Transform = m_transformComponent->GetWorldTransform();
-					command.Color = component->Color;;
-
-					if (ComponentManager::HasComponent<AnimatorComponent>(component->GetID()))
-					{
-						auto& animator = ComponentManager::GetComponent<AnimatorComponent>(component->GetID());
-						command.AnimationTransforms = animator->getAnimationTransforms();
-						command.IsAnimated = true;
-					}
+					command.indiceSize = meshes[i]->CountOfIndices();
+					command.Transform = transform->GetLocalTranform();
+					command.Color = component->Color;
 					mRenderer.PushCommand(command);
-				}		
-			}					
+				}				
+			}				
 		}
+
 	private:
 		Renderer& mRenderer;
 	};

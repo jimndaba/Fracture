@@ -25,6 +25,12 @@ namespace Fracture
 				auto lambertian = std::make_shared<LambertianNode>("lamertianPass", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 				addnode(lambertian);
 			}
+
+			{
+				auto ssr = std::make_shared<SSRNode>("ssrPass", renderer.Width(), renderer.Height());
+				addnode(ssr);
+			}
+
 			{
 				auto outline = std::make_shared<OutlineNode>("outlinePass", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 				addnode(outline);
@@ -59,9 +65,11 @@ namespace Fracture
 			}
 			
 
+			//addLink("global_output", "rendertarget", "mixOutlinePass", "Mix_out");// "mixPass", "output");
 
-			addLink("global_output", "rendertarget", "mixOutlinePass", "Mix_out");// "mixPass", "output");
+			addLink("global_output", "rendertarget", "ssrPass", "SSROutput");// "mixPass", "output");
 
+			
 			addLink("mixOutlinePass", "colorA", "outlinePass", "outline_out");
 			addLink("mixOutlinePass", "colorB", "AddPass", "output");
 
@@ -76,6 +84,12 @@ namespace Fracture
 			//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");			
 			
 			//main lambertian pass
+
+			addLink("ssrPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
+			addLink("ssrPass", "MaskTexture", "lamertianPass", "outputSpecular");
+			addLink("ssrPass", "NormalTexture", "lamertianPass", "outputNormal");
+			addLink("ssrPass", "PositionTexture", "lamertianPass", "outputPosition");
+
 			addLink("lamertianPass", "buffer", "clearframe", "buffer");
 			addLink("lamertianPass", "SSAOMap", "ssaoPass", "SSAOOutput");
 

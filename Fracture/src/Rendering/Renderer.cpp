@@ -372,7 +372,7 @@ void Fracture::Renderer::Submit(DrawCommand command)
     command.material->getShader()->setVec4("Color", command.Color);
 
     //Samples
-    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)TextureType::DirShadowMap);//(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)TextureType::DirShadowMap);
     
     if (m_graph)
     {

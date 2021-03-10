@@ -28,8 +28,8 @@ namespace Fracture
 		void AddRenderBuffer(const std::string& name,AttachmentType attachmentType,const std::shared_ptr<RenderBuffer>& buffer);
 		std::shared_ptr<RenderBuffer> GetRenderBuffer(const std::string& name);
 
-		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight);
-		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight);
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight, int attachment);
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight, int attachment);
 
 		/// <summary>
 		/// TO DO  - Got to add blit functionallity here.

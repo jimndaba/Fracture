@@ -41,8 +41,8 @@ namespace Fracture
 		std::shared_ptr<FrameBuffer> GetBuffer() override;
 		
 		void bind() override;
-		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight) override;
-		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight) override;
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight, int attachment) override;
+		void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight,int attachment) override;
 		void Unbind();
 
 		void Resize(unsigned int width, unsigned int height);

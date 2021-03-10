@@ -119,14 +119,14 @@ void Fracture::RenderTarget::bind()
     m_framebuffer->bind();
 }
 
-void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight)
+void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight, int attachment = 0)
 {
-    m_framebuffer->blit(otherBuffer,SrcDstWidth,SrcDstheight);
+    m_framebuffer->blit(otherBuffer,SrcDstWidth,SrcDstheight,attachment);
 }
 
-void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight)
+void Fracture::RenderTarget::blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight, int attachment = 0)
 {
-    m_framebuffer->blit(otherBuffer, srcWidth,srcHeight,dstWidth,dstHeight);
+    m_framebuffer->blit(otherBuffer, srcWidth,srcHeight,dstWidth,dstHeight,attachment);
 }
 
 void Fracture::RenderTarget::Unbind()

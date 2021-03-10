@@ -67,11 +67,28 @@ namespace Fracture
 		}
 		void Render(const std::shared_ptr<FrameGraph>& graph, const ImVec2& size) override
 		{
-			ImGui::Image((ImTextureID)(graph->getNode("lamertianPass")->resources["outputNormal"]->GetColorTexture(1)->GetTextureID()),
+			ImGui::Image((ImTextureID)(graph->getNode("lamertianPass")->resources["outputNormal"]->GetColorTexture(0)->GetTextureID()),
 				size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		}
 	};
+
+	class SpecularViewMode :public ViewportMode
+	{
+	public:
+
+		SpecularViewMode() :ViewportMode()
+		{
+
+		}
+		void Render(const std::shared_ptr<FrameGraph>& graph, const ImVec2& size) override
+		{
+			ImGui::Image((ImTextureID)(graph->getNode("lamertianPass")->resources["outputSpecular"]->GetColorTexture(0)->GetTextureID()),
+				size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		}
+	};
+
 
 }
 

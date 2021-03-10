@@ -21,8 +21,8 @@ namespace Fracture
 		virtual void SetResizable(bool value) {};
 		virtual bool IsMultiSampled() { return false; };
 		virtual bool IsResizable() { return true; };
-		virtual void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight){ };
-		virtual void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight) { };
+		virtual void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& SrcDstWidth, const uint32_t& SrcDstheight ,int attachment = 0){ };
+		virtual void blit(const std::shared_ptr<FrameBuffer>& otherBuffer, const uint32_t& srcWidth, const uint32_t& srcHeight, const uint32_t& dstWidth, const uint32_t& dstHeight, int attachment = 0) { };
 		virtual std::shared_ptr<Texture> GetDepthStencilTexture() { return nullptr; };
 		virtual std::shared_ptr<Texture> GetColorTexture(unsigned int index) { return nullptr; };
 	private:

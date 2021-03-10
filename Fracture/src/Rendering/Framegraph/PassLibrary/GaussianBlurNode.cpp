@@ -59,7 +59,7 @@ void Fracture::GaussianBlurNode::execute(Renderer& renderer)
 			uint32_t dstWidth = m_blurPasses[horizontal]->Width;
 			uint32_t dstHeight = m_blurPasses[horizontal]->Height;
 
-			m_blurPasses[horizontal]->blit(resources["colorTexture"]->GetBuffer(), srcWidth, srcHeight, dstWidth, dstHeight);
+			m_blurPasses[horizontal]->blit(resources["colorTexture"]->GetBuffer(), srcWidth, srcHeight, dstWidth, dstHeight,0);
 			m_shader->setTexture("boxblur", m_blurPasses[horizontal]->GetColorTexture(0).get(), 0);
 		}
 		else
