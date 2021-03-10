@@ -28,6 +28,8 @@ namespace Fracture
 		PreFilterMap,
 		Brdf,
 		DirShadowMap,
+		Grab,
+		Depth,
 	};
 
 	class Texture

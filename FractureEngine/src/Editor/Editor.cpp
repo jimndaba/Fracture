@@ -133,7 +133,6 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
     camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
-    //m_Renderer = std::make_shared<Renderer>();
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
 
    
@@ -332,6 +331,8 @@ void Fracture::Editor::onLoadNew()
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
     m_graph->Buildgraph();
 
+    m_Renderer->setFrameGraph(m_graph);
+
     std::shared_ptr<Material> stylisedWater = std::make_shared<Material>("StylisedWater", AssetManager::getShader("StylisedWater"));
     stylisedWater->setIsTransparent(true);
    
@@ -360,9 +361,7 @@ void Fracture::Editor::onLoadNew()
     stylisedWater->setColor3("FarColor", glm::vec3(0.0196f, 0.0f, 0.302f));
     stylisedWater->setColor3("EdgeFoamColor", glm::vec3(1.0));
 
-    //Samples
-    stylisedWater->SetTexture("depthTexture", m_graph->getNode("global_depthbuffer")->resources["outputDepthMap"]->GetColorTexture(0), 0);
-    stylisedWater->SetTexture("grabTexture", m_graph->getNode("lamertianPass")->resources["GrabColor"]->GetColorTexture(0), 1);
+    //local samples
     stylisedWater->SetTexture("waveNormalTexture", AssetManager::getTexture2D("waveNormalTexture"), 2);
     stylisedWater->SetTexture("foamTexture", AssetManager::getTexture2D("foamTexture"), 3);
     stylisedWater->SetTexture("dudvMap", AssetManager::getTexture2D("waterdudv"), 4);

@@ -42,6 +42,7 @@
 #include "Grid.h"
 #include "SceneProbes.h"
 #include "Entity/UUID.h"
+#include "Framegraph/FrameGraph.h"
 
 
 #ifndef GLERROR_H
@@ -99,6 +100,11 @@ void Fracture::Renderer::onInit()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
+}
+
+void Fracture::Renderer::setFrameGraph(const std::shared_ptr<FrameGraph>& graph)
+{
+    m_graph = graph;
 }
 
 void Fracture::Renderer::Subscribe(Eventbus& mbus)
@@ -360,10 +366,20 @@ void Fracture::Renderer::Submit(DrawCommand command)
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
-    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)TextureType::DirShadowMap);//(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
+    
     command.material->getShader()->setVec3("viewPos", m_camera->getPosition());
     command.material->getShader()->setMat4("model", command.Transform);
     command.material->getShader()->setVec4("Color", command.Color);
+
+    //Samples
+    command.material->getShader()->setTexture("shadowMap", m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture().get(), (int)TextureType::DirShadowMap);//(int)m_ShadowPass->GetRenderTarget()->GetDepthStencilTexture()->TextureUnit());
+    
+    if (m_graph)
+    {
+        command.material->getShader()->setTexture("depthTexture", m_graph->getNode("global_depthbuffer")->resources["outputDepthMap"]->GetColorTexture(0).get(), (int)TextureType::Depth);
+        command.material->getShader()->setTexture("grabTexture", m_graph->getNode("lamertianPass")->resources["GrabColor"]->GetColorTexture(0).get(), (int)TextureType::Grab);
+    }
+    
 
     command.material->getShader()->setFloat("dt", shader_time);
     command.material->getShader()->setInt("isAnimated", command.IsAnimated);

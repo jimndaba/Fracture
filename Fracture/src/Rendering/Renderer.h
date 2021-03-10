@@ -44,6 +44,7 @@ namespace Fracture
 	class Eventbus;
 	struct WindowResizeEvent;
 	class UUID;
+	class FrameGraph;
 
 	class Renderer
 	{
@@ -52,6 +53,7 @@ namespace Fracture
 		~Renderer() = default;	
 
 		void onInit();
+		void setFrameGraph(const  std::shared_ptr<FrameGraph>& graph);
 		void Subscribe(Eventbus& bus);
 		void onUpdate(float dt);
 
@@ -144,7 +146,10 @@ namespace Fracture
 		unsigned int uboMatrices;
 		static bool m_isDebugRender;
 		static bool m_drawgrid;
-		static std::shared_ptr<Renderer> instance;		
+		static std::shared_ptr<Renderer> instance;	
+
+		//Framegraph
+		std::shared_ptr<FrameGraph> m_graph;
 
 		//camera
 		static std::shared_ptr<ICamera> m_camera;
