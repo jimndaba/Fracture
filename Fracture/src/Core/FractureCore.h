@@ -8,7 +8,7 @@ namespace Fracture
 {
 	const std::string Fracture_Verion = "0.5.5";
 
-	const bool Fracture_Profiling = false;
+	const bool Fracture_Profiling = true;
 
 
 

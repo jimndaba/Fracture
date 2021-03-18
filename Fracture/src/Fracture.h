@@ -30,6 +30,7 @@
 #include "glm/gtx/compatibility.hpp"
 #include "Math/Math.h"
 
+//Renderings
 #include "Rendering/DrawCommand.h"
 #include "Rendering/RenderBucket.h"
 #include "Rendering/Model.h"
@@ -43,6 +44,7 @@
 #include "Rendering/Material.h"
 #include "Rendering/Environment.h"
 #include "Rendering/Framegraph/FrameGraph.h"
+#include "Rendering/UIGraph/UIGraph.h"
 
 ////// Input
 #include "Input/MouseState.h"
@@ -53,10 +55,11 @@
 #include "Animation/AnimationClip.h"
 #include "Animation/Skeleton.h"
 
+//Scene
 #include "Scene/Scene.h"
 #include "Scene/SceneManager.h"
 
-
+//Entitie
 #include "Entity/Entity.h"
 #include "Entity/ILight.h"
 #include "Entity/SkyLight.h"
@@ -68,6 +71,7 @@
 #include "Scripting/ScriptManager.h"
 #include "Scripting/LuaScript.h"
 
+//Components
 #include "Component/Component.h"
 #include "Component/TagComponent.h"
 #include "Component/TransformComponent.h"
@@ -81,12 +85,14 @@
 #include "Component/LightComponent.h"
 #include "Component/AnimatorComponent.h"
 
+//Physcis
 #include "Physics/CollisionFilter.h"
 #include "Physics/Collisions.h"
 #include "Physics/RayHit.h"
 #include "Physics/Ray.h"
 #include "Physics/PhysicsManager.h"
 
+//Serialisation
 #include "Serialisation/SceneSerializer.h"
 #include "Serialisation/ProjectSerializer.h"
 #include "Serialisation/ProjectProperties.h"

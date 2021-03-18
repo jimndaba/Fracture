@@ -71,6 +71,64 @@ std::shared_ptr<Fracture::SkeletonMesh> Fracture::ModelLoader::LoadSkeletonMesh(
 	return std::shared_ptr<SkeletonMesh>();
 }
 
+std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::GeneratePlane(const int& width, const int& depth)
+{
+	std::shared_ptr<StaticMesh> new_mesh;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<std::shared_ptr<Texture2D>> textures;
+	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
+
+	int i = 0;
+	
+	for (int i = 0, y = 0; y <= depth; y++)
+	{
+		for (int x = 0; x <= width; x++, i++)
+		{
+			Vertex v;
+			v.Position = glm::vec3(x, 0, y) - glm::vec3(width / 2.0f, 0, depth / 2.0f);
+			v.Uvs = glm::vec2((float)x / width, (float)y / depth);
+			v.Normal = glm::vec3(0, 1, 0);
+			v.Tangent = glm::vec3(1.0f, 0.0f, 0.0f);
+			vertices.push_back(v);
+		}
+	}		
+
+	// Defining triangles.
+	unsigned int indexSize = width * depth * 6; // 2 - polygon per quad, 3 - corners per polygon
+	unsigned int offset = 0;
+
+	indices.resize(indexSize);
+
+	for (int ti = 0, vi = 0, y = 0; y < depth; y++, vi++) 
+	{
+		for (int x = 0; x < width; x++, ti += 6, vi++) 
+		{
+			indices[ti] = vi;
+			indices[ti + 3] = indices [ti + 2] = vi + 1;
+			indices[ti + 4] = indices [ti + 1] = vi + width + 1;
+			indices[ti + 5] = vi + width + 2;
+		}
+	}
+
+	new_mesh = StaticMesh::Create(vertices, indices, textures);
+	//process aabb
+	for (size_t i = 0; i < vertices.size(); i++)
+	{
+		Vertex vertex;
+		vertex.Position = vertices[i].Position;
+		aabb->min.x = glm::min(vertex.Position.x, aabb->min.x);
+		aabb->min.y = glm::min(vertex.Position.y, aabb->min.y);
+		aabb->min.z = glm::min(vertex.Position.z, aabb->min.z);
+		aabb->max.x = glm::max(vertex.Position.x, aabb->max.x);
+		aabb->max.y = glm::max(vertex.Position.y, aabb->max.y);
+		aabb->max.z = glm::max(vertex.Position.z, aabb->max.z);
+	}
+	new_mesh->SetAABB(aabb);
+
+	return new_mesh;
+}
+
 void Fracture::ModelLoader::ProcessNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene)
 {
 	bool isAnimated = scene->HasAnimations();
@@ -190,7 +248,6 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::ProcessStaticMesh(s
 
 	return new_mesh;
 }
-
 
 std::shared_ptr<Fracture::SkeletonMesh> Fracture::ModelLoader::ProcessSkeletonMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiNode* node)
 {
@@ -618,3 +675,4 @@ std::shared_ptr<Fracture::AnimationClip > Fracture::ModelLoader::loadModelAnimat
 
 	return clip;
 }
+

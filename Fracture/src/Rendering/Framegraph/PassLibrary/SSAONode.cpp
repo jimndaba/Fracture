@@ -31,6 +31,8 @@ Fracture::SSAONode::SSAONode(const std::string& name,const int& width,const int&
 	//Link Sockets to Resources
 	AddInputResource(m_Input, resource);
 	AddOutputResource(m_output, outputTexture);
+
+	
 	
 	//noise TODO Move to Noise Texture Node
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0

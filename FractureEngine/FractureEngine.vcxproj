@@ -149,6 +149,7 @@
     <ClInclude Include="src\Editor\Panels\AssetBrowserPanel.h" />
     <ClInclude Include="src\Editor\Panels\Inspector.h" />
     <ClInclude Include="src\Editor\Panels\Panel.h" />
+    <ClInclude Include="src\Editor\Panels\RenderSettings.h" />
     <ClInclude Include="src\Editor\Panels\SceneviewPanel.h" />
     <ClInclude Include="src\Editor\Panels\EditorViewModes.h" />
     <ClInclude Include="src\Editor\Panels\TabbedPanel.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\Editor\Panels\AssetBrowserPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\Inspector.cpp" />
     <ClCompile Include="src\Editor\Panels\Panel.cpp" />
+    <ClCompile Include="src\Editor\Panels\RenderSettings.cpp" />
     <ClCompile Include="src\Editor\Panels\SceneviewPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\TabbedPanel.cpp" />
     <ClCompile Include="src\Editor\Panels\ViewPanel.cpp" />

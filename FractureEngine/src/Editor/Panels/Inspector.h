@@ -48,11 +48,8 @@ namespace Fracture
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 	
 		if (Fracture::ComponentManager::HasComponent<T>(entity.GetId()))
-		{
-			
-			
-			auto& components = ComponentManager::GetComponents<T>(entity.GetId()); 
-					
+		{					
+			auto& components = ComponentManager::GetComponents<T>(entity.GetId()); 					
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize;
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.70f, 0.70f, 0.70f, 1.00f));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });

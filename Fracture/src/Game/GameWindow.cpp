@@ -16,7 +16,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	{
 		FRACTURE_CRITICAL("FAILED TO INIT SDL");
 		glfwTerminate();
-	return;
+		return;
 	}
 
 	if (IsResizable)
@@ -27,18 +27,9 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	{
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	}
-	
-
-	std::string fulltitle =title + " - "+  "Fracture Engine: " +Fracture_Verion;
-	window = glfwCreateWindow(width, height, fulltitle.c_str(), NULL, NULL);
-	if (!window)
-	{	
-		glfwTerminate();
-		return;
-	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 8); // 4x antialiasing
@@ -48,6 +39,16 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	glfwWindowHint(GLFW_ALPHA_BITS, 8);
 	glfwWindowHint(GLFW_DEPTH_BITS, 24);
 	glfwWindowHint(GLFW_STENCIL_BITS, 8);
+
+	std::string fulltitle =title + " - "+  "Fracture Engine: " +Fracture_Verion;
+	window = glfwCreateWindow(width, height, fulltitle.c_str(), NULL, NULL);
+	if (!window)
+	{	
+		glfwTerminate();
+		return;
+	}
+
+	
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);

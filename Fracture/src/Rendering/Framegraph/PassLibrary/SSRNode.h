@@ -18,11 +18,7 @@ namespace Fracture
 
 		virtual void execute(Renderer& renderer);
 
-		float total_strength = 1.0f;
-		float area = 0.002f;
-		float falloff = 0.00001f;
-		float radius = 0.0025f;
-
+		
 		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor);
 
 	private:

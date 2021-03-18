@@ -29,6 +29,8 @@ namespace Fracture
 		static std::shared_ptr<Model> LoadModel(const std::string& name, const std::string& path);
 		static std::shared_ptr<StaticMesh> LoadStaticMesh(const std::string& name, const std::string& path);
 		static std::shared_ptr<SkeletonMesh> LoadSkeletonMesh(const std::string& name, const std::string& path);
+		static std::shared_ptr<StaticMesh> GeneratePlane(const int& width,const int& depth);
+
 
 	private:
 

@@ -15,7 +15,7 @@ namespace Fracture
 
 		virtual void execute(Renderer& renderer);		
 		// screen quad VAO
-		unsigned int quadVAO, quadVBO;
+		unsigned int quadVAO, quadVBO;		
 	private:
 		
 

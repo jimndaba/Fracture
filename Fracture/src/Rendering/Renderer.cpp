@@ -134,6 +134,7 @@ void Fracture::Renderer::BeginFrame(std::shared_ptr<Scene> scene)
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
+    glEnable(GL_CLIP_DISTANCE0);
    
     glCullFace(GL_BACK);
     glDepthMask(GL_TRUE);
@@ -412,7 +413,6 @@ void Fracture::Renderer::Submit(DrawCommand command,Shader* shader)
 
 }
 
-
 void Fracture::Renderer::Draw(DrawCommand command)
 {
     ProfilerTimer timer("Draw");
@@ -649,6 +649,7 @@ void Fracture::Renderer::onWindowResize(WindowResizeEvent* mevent)
     m_Height = mevent->Height;  
     m_PickingPass->Resize(mevent->Width, mevent->Height);
     SceneRenderTarget->Resize(mevent->Width, mevent->Height);  
+    setViewport(m_width, m_Height);
 }
 
 std::shared_ptr<Fracture::Renderer> Fracture::Renderer::getInstance()

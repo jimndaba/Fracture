@@ -57,6 +57,11 @@ void Fracture::AssetManager::AddShader(const std::string& name, const std::strin
 	FRACTURE_TRACE("Loaded Shader: {}", m_shader->Name);
 }
 
+void Fracture::AssetManager::AddModel(const std::string& name, const std::shared_ptr<Model>& model)
+{
+	m_Models.emplace(name, model);
+}
+
 void Fracture::AssetManager::AddModel(const std::string& name, const std::string& path)
 {
 	std::shared_ptr<Model> model = ModelLoader::LoadModel(name, path);

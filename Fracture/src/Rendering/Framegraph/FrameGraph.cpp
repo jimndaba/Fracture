@@ -6,6 +6,7 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 		auto backbuffer = std::make_shared<SourceNode>("global_backbuffer", m_backBufferTarget);
 		addnode(backbuffer);
 	}
+
 	{
 		outputbuffer = std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height());
 		addnode(outputbuffer);
@@ -37,7 +38,6 @@ std::shared_ptr<Fracture::FrameNode> Fracture::FrameGraph::getNode(const std::st
 			return n;
 		}
 	}
-
 }
 
 void Fracture::FrameGraph::execute(Renderer& renderer)

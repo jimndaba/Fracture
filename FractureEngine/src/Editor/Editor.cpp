@@ -5,6 +5,7 @@
 #include "Panels/SceneviewPanel.h"
 #include "Panels/Inspector.h"
 #include "Panels/ViewPanel.h"
+#include "Panels/RenderSettings.h"
 #include "Panels/TabbedPanel.h"
 #include "Rendering/ShadowPass.h"
 #include "Rendering/RenderTarget.h"
@@ -13,6 +14,9 @@
 #include "EditorCamera.h"
 #include "FreeCamera.h"
 #include "EditorFrameGraph.h"
+#include "Rendering/UIGraph/NodeLibrary/UIOutputNode.h"
+#include "AssetManager/ModelLoader.h"
+#include "Rendering/OpenGL/StaticMesh.h"
 
 
 bool Fracture::Editor::opt_padding;
@@ -30,7 +34,9 @@ bool Fracture::Editor::showLogger;
 bool Fracture::Editor::showScenegraph = true;
 bool Fracture::Editor::showAssets;
 bool Fracture::Editor::showViewport = true;
+bool Fracture::Editor::showRenderSettings;
 
+std::shared_ptr<Fracture::Editor> Fracture::Editor::m_instance;
 std::shared_ptr<Fracture::EditorFrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
@@ -52,10 +58,6 @@ Fracture::Editor::Editor()
     currentTime = glfwGetTime();
 }
 
-Fracture::Editor::~Editor()
-{
-    
-}
 
 void Fracture::Editor::onInit()
 {      
@@ -121,6 +123,7 @@ void Fracture::Editor::onInit()
     m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get(),*m_Renderer.get()));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
+   
 
     ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
    
@@ -130,6 +133,7 @@ void Fracture::Editor::onInit()
     m_frame->AddPanel(m_viewpanel);
     m_frame->AddPanel(m_TabbedPanel);
     m_frame->AddPanel(m_AssetBrowser);
+    
    
     m_PhysicsManger->Init();
     camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
@@ -158,6 +162,10 @@ bool Fracture::Editor::onLoad()
     m_viewpanel->setRenderer(*m_Renderer.get());   
     SetScene();   
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
+    m_uigraph = std::make_unique<UIGraph>(*m_Renderer);
+    m_RenderSettings = std::make_shared<RenderSettingsPanel>("RenderSettings", *m_graph);
+    m_frame->AddPanel(m_RenderSettings);
+
     m_graph->Buildgraph();
     return true;
 }
@@ -177,7 +185,7 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddTexture2D("SceneIcon", "content/textures/SceneIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("MaterialIcon", "content/textures/MaterialIcon.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("ShaderIcon", "content/textures/ShaderIcon.png", TextureType::Diffuse);
-    m_AssetManger->AddTexture2D("foamTexture", "content/textures/waterfoam.jpg", TextureType::Diffuse);
+    m_AssetManger->AddTexture2D("foamTexture", "content/textures/waterfoam2.jpg", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("waveNormalTexture", "content/textures/waternormal.png", TextureType::Diffuse);
     m_AssetManger->AddTexture2D("waterdudv", "content/textures/waterdudv.png", TextureType::Diffuse); 
 
@@ -270,7 +278,11 @@ void Fracture::Editor::onLoadNew()
     //Threshold Mapping Shader
     AssetManager::AddShader("StylisedWater", "content/shaders/StylisedWater/vertex.glsl", "content/shaders/StylisedWater/fragment.glsl");
 
+    //UIBOX Shader
+    AssetManager::AddShader("UIBox", "content/shaders/UIShaders/vertex.glsl", "content/shaders/UIShaders/UIbox_frag.glsl");
+
     
+ 
     
     std::shared_ptr<Material> primitivesMaterial = std::make_shared<Material>("PrimitiveMaterial", m_AssetManger->getShader("PrimitiveMaterial"));
     primitivesMaterial->setColor3("material.diffuse", glm::vec3(0.9, 0.3, 0.5));
@@ -308,9 +320,15 @@ void Fracture::Editor::onLoadNew()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(*m_Renderer.get());
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
+    m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get());
+
+    m_uigraph->Buildgraph();
     m_graph->Buildgraph();
 
     m_Renderer->setFrameGraph(m_graph);
+    m_RenderSettings = std::make_shared<RenderSettingsPanel>("RenderSettings", *m_graph);
+    m_frame->AddPanel(m_RenderSettings);
+
 
     std::shared_ptr<Material> stylisedWater = std::make_shared<Material>("StylisedWater", AssetManager::getShader("StylisedWater"));
     stylisedWater->setIsTransparent(true);
@@ -324,14 +342,16 @@ void Fracture::Editor::onLoadNew()
     stylisedWater->setFloat("waterShininess", 0.8f);
 
     //Foam
-    stylisedWater->setFloat("EdgeFoamDepth", 1.0f);
+    stylisedWater->setFloat("EdgeFoamDepth", 0.2f);
     stylisedWater->setFloat("FoamNoise", 0.4f);
     stylisedWater->setFloat("FoamNoiseScale", 0.5f);
     stylisedWater->setFloat("FoamContribution", 1.0f);
 
 
     //Waves
-    stylisedWater->setFloat("WaveSpeed", 0.05f);
+    stylisedWater->setFloat("WaveSpeed", 0.01f);
+    stylisedWater->setFloat("WaveAmplitude", 0.2f);
+    stylisedWater->setFloat("Wavelength", 4.00f);
     stylisedWater->setFloat("tiling", 6.0f);
 
     //Colors
@@ -347,7 +367,15 @@ void Fracture::Editor::onLoadNew()
 
     AssetManager::AddMaterial("StylisedWater", stylisedWater);
 
+    std::shared_ptr<Model> m_water = std::shared_ptr<Model>(new Model());
+    std::shared_ptr<Mesh> m_mesh;
+    m_mesh = ModelLoader::GeneratePlane(100, 100);
+    m_mesh->SetMaterialIndex(0);
+    m_water->addMaterial(stylisedWater);
+    m_water->addMesh(m_mesh);
 
+    m_water->Name = "water";
+    AssetManager::AddModel("water", m_water);
 }
 
 void Fracture::Editor::run()
@@ -501,8 +529,12 @@ void Fracture::Editor::Render()
 
         DrawMenuBar();
 
-        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());      
-        m_graph->execute(*m_Renderer);          
+      
+        m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());     
+        //Draw UI
+        m_uigraph->execute(*m_Renderer); 
+        m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);
+        m_graph->execute(*m_Renderer); 
         m_Renderer->EndFrame();
        
         if (showScenegraph)
@@ -538,6 +570,13 @@ void Fracture::Editor::Render()
             m_AssetBrowser->begin(&showAssets);
             m_AssetBrowser->render();
             m_AssetBrowser->end();
+        }
+
+        if (showRenderSettings)
+        {
+            m_RenderSettings->begin(&showRenderSettings);
+            m_RenderSettings->render();
+            m_RenderSettings->end();
         }
 
 
@@ -647,6 +686,7 @@ void Fracture::Editor::DrawMenuBar()
             ImGui::MenuItem("Inspector", NULL,&showInspector);
             ImGui::MenuItem("Asset Viewer", NULL,&showAssets);
             ImGui::MenuItem("Logging", NULL,&showLogger);
+            ImGui::MenuItem("FramegraphSettings", NULL, &showRenderSettings);
             ImGui::EndMenu();
         }
 
@@ -787,6 +827,17 @@ std::shared_ptr<Fracture::ProjectProperties> Fracture::Editor::Properties()
     return m_properties;
 }
 
+std::shared_ptr<Fracture::Editor> Fracture::Editor::CreateInstance()
+{
+    if (!m_instance)
+    {
+        auto instance = std::make_shared<Editor>();
+        FRACTURE_WARN("Creating New Instance of Editor");
+        return instance;
+    }
+    FRACTURE_ERROR("Editor Already Exits");
+    return m_instance;
+}
 
 void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::Renderer>& _renderer)
 {

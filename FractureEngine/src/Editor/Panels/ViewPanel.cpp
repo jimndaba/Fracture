@@ -47,8 +47,8 @@ void Fracture::ViewPanel::render()
 {
 	ProfilerTimer timer("viewPanel Render");
 
-	float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
-	float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
+	//float width = static_cast<float>(ImGui::GetWindowContentRegionMax().x - ImGui::GetWindowContentRegionMin().x);
+	//float height = static_cast<float>(ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y);
 
 	// Get offset
 	//Vector2 offset = Vector2(ImGui::GetWindowPos()) + m_window_padding;
@@ -63,11 +63,19 @@ void Fracture::ViewPanel::render()
 	ImGui::BeginChild("SceneView");
 
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { width ,  height };
+	m_ViewportSize = { viewportPanelSize.x ,  viewportPanelSize.y };
 	m_ViewportFocused = ImGui::IsWindowFocused();
 	m_ViewportHovered = ImGui::IsWindowHovered();
 
 	//Render Current View Mode
+	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+		(m_renderer.SceneRenderTarget->Width != m_ViewportSize.x || m_renderer.SceneRenderTarget->Height != m_ViewportSize.y))
+	{
+		//Editor::oEvent(new WindowResizeEvent((int)m_ViewportSize.x, (int)m_ViewportSize.y));
+		m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+	}
+
 	m_Viewportmode->Render(Editor::m_graph, ImVec2{ m_ViewportSize.x,m_ViewportSize.y });
 		
 	ImGui::SetCursorPos(ImVec2{10,10});
@@ -136,10 +144,10 @@ void Fracture::ViewPanel::render()
 		
 			
 			float region_x = screen_pos.x-pos.x;
-			float region_y = height - ((pos.y - screen_pos.y)*-1) ;
+			float region_y = m_ViewportSize.y - ((pos.y - screen_pos.y)*-1) ;
 			region_y = region_y - 50.0f; //remove Offset from menubar
 			
-			if (region_x > 0 && region_x < width && region_y > 0 && region_y < height)
+			if (region_x > 0 && region_x < m_ViewportSize.x && region_y > 0 && region_y < m_ViewportSize.y)
 			{		
 				UUID id = m_renderer.GetEntityID((int)region_x,(int)region_y);
 				if(id)
@@ -236,13 +244,7 @@ void Fracture::ViewPanel::onUpdate(float dt)
 	Mouse m_mouse = InputManager::GetMouse();
 	
 	
-	if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-		(m_renderer.SceneRenderTarget->Width != m_ViewportSize.x || m_renderer.SceneRenderTarget->Height != m_ViewportSize.y))
-	{				
-		//Editor::oEvent(new WindowResizeEvent((int)m_ViewportSize.x, (int)m_ViewportSize.y));
-		m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
-		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);	
-	}
+	
 
 	if(m_ViewportHovered && m_camera)
 	{ 

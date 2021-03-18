@@ -63,11 +63,18 @@ namespace Fracture
 				auto mixoutline = std::make_shared<MixNode>("mixOutlinePass", renderer.Width(), renderer.Height());
 				addnode(mixoutline);
 			}
+			{
+				UIMix = std::make_shared<MixNode>("UIPass", renderer.Width(), renderer.Height());
+				addnode(UIMix);
+			}
 			
 
-			//addLink("global_output", "rendertarget", "mixOutlinePass", "Mix_out");// "mixPass", "output");
+			addLink("global_output", "rendertarget", "UIPass", "Mix_out");// "mixPass", "output");
 
-			addLink("global_output", "rendertarget", "ssrPass", "SSROutput");// "mixPass", "output");
+			//addLink("global_output", "rendertarget", "ssrPass", "SSROutput");// "mixPass", "output");
+
+			addLink("UIPass", "colorA", "UIPass", "Texture");
+			addLink("UIPass", "colorB", "AddPass", "output");
 
 			
 			addLink("mixOutlinePass", "colorA", "outlinePass", "outline_out");
@@ -84,11 +91,11 @@ namespace Fracture
 			//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");			
 			
 			//main lambertian pass
-
-			addLink("ssrPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
-			addLink("ssrPass", "MaskTexture", "lamertianPass", "outputSpecular");
-			addLink("ssrPass", "NormalTexture", "lamertianPass", "outputNormal");
-			addLink("ssrPass", "PositionTexture", "lamertianPass", "outputPosition");
+			///addLink("ssrPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");			
+			//addLink("ssrPass", "AlbedoTexture", "lamertianPass", "outputColor");
+			//addLink("ssrPass", "MaskTexture", "lamertianPass", "outputSpecular");
+			//addLink("ssrPass", "NormalTexture", "lamertianPass", "outputNormal");
+			//addLink("ssrPass", "PositionTexture", "lamertianPass", "outputPosition");
 
 			addLink("lamertianPass", "buffer", "clearframe", "buffer");
 			addLink("lamertianPass", "SSAOMap", "ssaoPass", "SSAOOutput");
@@ -99,6 +106,8 @@ namespace Fracture
 			
 			
 		}
+
+		std::shared_ptr<MixNode> UIMix;
 
 		std::shared_ptr<ToneMappingNode> ToneMap;
 		std::shared_ptr<ThresholdNode> BrightPass;

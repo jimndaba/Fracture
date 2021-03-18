@@ -58,6 +58,11 @@ std::vector<std::shared_ptr<Fracture::Material>> Fracture::Model::GetMaterials()
 	return m_materials;
 }
 
+void Fracture::Model::clearMaterials()
+{
+	m_materials.clear();
+}
+
 std::vector<std::shared_ptr<Fracture::Mesh>> Fracture::Model::GetMeshes()
 {
 	return m_meshes;

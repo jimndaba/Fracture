@@ -17,6 +17,7 @@ namespace Fracture
 	class InspectorPanel;
 	class ViewPanel;
 	class TabbedPanel;
+	class RenderSettingsPanel;
 	class AssetBrowserPanel;
 	class EntityFactory;
 	struct ProjectProperties;
@@ -32,7 +33,7 @@ namespace Fracture
 	{
 	public:
 		Editor();
-		~Editor();
+		~Editor() = default;
 
 		void onInit();
 		bool onLoad();
@@ -61,8 +62,14 @@ namespace Fracture
 		static std::shared_ptr<ProjectProperties> Properties();
 
 		static std::shared_ptr<EditorFrameGraph> m_graph; //TODO rename or hide
-	private:
 
+		static std::shared_ptr<Editor> CreateInstance();
+
+	private:
+		//Singleton
+		static std::shared_ptr<Editor> m_instance;
+
+		std::unique_ptr<UIGraph> m_uigraph;
 	
 		bool frameLimiter = true;
 		double time = 0.0;
@@ -99,6 +106,7 @@ namespace Fracture
 		std::shared_ptr<Frame> m_frame;
 		static std::shared_ptr<SceneView> m_sceneview;
 		std::shared_ptr<InspectorPanel> m_inspectorpanel;
+		std::shared_ptr<RenderSettingsPanel> m_RenderSettings;
 		std::shared_ptr<ViewPanel> m_viewpanel;
 		std::shared_ptr<TabbedPanel> m_TabbedPanel;
 		std::shared_ptr<AssetBrowserPanel> m_AssetBrowser;
@@ -123,6 +131,7 @@ namespace Fracture
 		static bool showScenegraph ;
 		static bool showAssets;
 		static bool showViewport;
+		static bool showRenderSettings;
 
 		static void showRenderManager(bool* p_open, std::shared_ptr<Fracture::Renderer>& _renderer);
 		static void showAudioManager(bool* p_open);

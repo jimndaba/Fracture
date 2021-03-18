@@ -14,6 +14,7 @@ Fracture::SSRNode::SSRNode(const std::string& name, const int& width, const int&
     m_shader(AssetManager::getShader("SSRPASS"))
 {
     std::shared_ptr<InputSocket> m_Input = std::make_shared<InputSocket>("DepthTexture");
+    std::shared_ptr<InputSocket> m_AlbedoInput = std::make_shared<InputSocket>("AlbedoTexture");
     std::shared_ptr<InputSocket> m_MaskInput = std::make_shared<InputSocket>("MaskTexture");
     std::shared_ptr<InputSocket> m_NormalInput = std::make_shared<InputSocket>("NormalTexture");
     std::shared_ptr<InputSocket> m_PositionlInput = std::make_shared<InputSocket>("PositionTexture");
@@ -26,6 +27,7 @@ Fracture::SSRNode::SSRNode(const std::string& name, const int& width, const int&
 
     //Sockets
     AddInputSocket(m_Input);
+    AddInputSocket(m_AlbedoInput);
     AddInputSocket(m_MaskInput);
     AddInputSocket(m_NormalInput);
     AddInputSocket(m_PositionlInput);
@@ -39,17 +41,19 @@ void Fracture::SSRNode::execute(Renderer& renderer)
 {
     resources["ssrtexture"]->bind();
     m_shader->use();
-    float TanHalfFOV = tanf(renderer.ActiveCamera()->GetFOV() / 2.0f);
-    m_shader->setFloat("gAspectRatio", renderer.ActiveCamera()->GetApectRatio());
-    m_shader->setFloat("gTanHalfFOV", TanHalfFOV);    
+  
+    m_shader->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
+    m_shader->setMat4("invprojection", glm::inverse(renderer.ActiveCamera()->getProjectionMatrix()));
+    m_shader->setMat4("view", renderer.ActiveCamera()->getViewMatrix());
+    m_shader->setMat4("invView", glm::inverse(renderer.ActiveCamera()->getViewMatrix()));
     m_shader->setFloat("nearPlane", renderer.ActiveCamera()->Near());
     m_shader->setFloat("farPlane", renderer.ActiveCamera()->Far());
-    m_shader->setMat4("projection", renderer.ActiveCamera()->getProjectionMatrix());
 
     m_shader->setTexture("depthTexture", resources["DepthTexture"]->GetColorTexture(0).get(), 0);
-    m_shader->setTexture("maskTexture", resources["MaskTexture"]->GetColorTexture(0).get(), 1);
-    m_shader->setTexture("normalTexture", resources["NormalTexture"]->GetColorTexture(0).get(), 2);
-    m_shader->setTexture("positionTexture", resources["PositionTexture"]->GetColorTexture(0).get(),3);
+    m_shader->setTexture("albedoTexture", resources["AlbedoTexture"]->GetColorTexture(0).get(), 1);
+    m_shader->setTexture("maskTexture", resources["MaskTexture"]->GetColorTexture(0).get(), 2);
+    m_shader->setTexture("normalTexture", resources["NormalTexture"]->GetColorTexture(0).get(), 3);
+    m_shader->setTexture("positionTexture", resources["PositionTexture"]->GetColorTexture(0).get(),4);
 
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);

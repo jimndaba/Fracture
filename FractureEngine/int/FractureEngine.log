@@ -1,10 +1,8 @@
-﻿  Editor.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(911,113): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
-     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
+﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 19083 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  3 of 19951 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    85 functions had inline decision re-evaluated but remain unchanged
+    84 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

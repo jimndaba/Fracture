@@ -344,13 +344,17 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		{
 			UUID id = UUID(render["EntityID"]);
 			std::string model = render["Model"];
-
-
-
 			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
+			//m_model->clearMaterials();
+
+			auto& materials = render["Materials"];
+			for (auto material : materials) 
+			{
+				std::string m_Name = material["MaterialName"];
+				m_model->addMaterial(AssetManager::getMaterial(m_Name));
+			}			
+
 			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(id, m_model);
-
-
 
 			ComponentManager::AddComponent<RenderComponent>(component);
 		}		

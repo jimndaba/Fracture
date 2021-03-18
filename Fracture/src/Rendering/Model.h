@@ -33,6 +33,7 @@ namespace Fracture
 
 		std::shared_ptr<Mesh> GetMesh(std::string name);
 		std::vector<std::shared_ptr<Material>> GetMaterials();
+		void clearMaterials();
 		std::vector<std::shared_ptr<Mesh>> GetMeshes();
 
 		std::vector<std::shared_ptr<Material>> m_materials;

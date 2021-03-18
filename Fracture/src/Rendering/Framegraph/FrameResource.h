@@ -9,7 +9,6 @@ namespace Fracture
 
 	class FrameResource
 	{
-
 	public:
 		FrameResource() {};
 		virtual void bind() = 0;
