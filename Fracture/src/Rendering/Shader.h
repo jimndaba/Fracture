@@ -39,6 +39,7 @@ namespace Fracture {
 		void setMat4(const std::string& name, glm::mat4 value) const;
 
 		void setTexture(const std::string& name, const Texture* value, unsigned int unit) const;
+		void setTexture(const std::string& name, const unsigned int value, unsigned int unit) const;
 		void setCubeMap(const std::string& name, const  unsigned int value, unsigned int unit) const;
 
 		std::string Name;

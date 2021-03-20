@@ -3,9 +3,13 @@
 #define UIRESOURCE_H
 
 #include <string>
+#include <memory>
+
 
 namespace Fracture
 {
+	class Renderer2D;
+
 	class UIResource
 	{
 	public:
@@ -16,6 +20,7 @@ namespace Fracture
 
 		
 		virtual void submit(Renderer& renderer) {};
+		virtual void submit2D(Renderer2D& renderer) {};
 		
 		std::string GetName() const
 		{

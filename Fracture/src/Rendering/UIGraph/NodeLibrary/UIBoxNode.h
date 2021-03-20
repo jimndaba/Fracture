@@ -7,6 +7,7 @@
 #include <glm/common.hpp>
 #include <glm/gtx/transform.hpp> 
 #include <glm/gtc/matrix_transform.hpp>
+#include "Rendering/OpenGL/Vertex.h"
 
 namespace Fracture
 {
@@ -14,6 +15,13 @@ namespace Fracture
 	class UIVec3;
 	class Shader;
 	class Renderer;
+	class Renderer2D;
+
+
+	class VertexArray;
+	class VertexBuffer;
+	class IndexBuffer;
+	class VertexBufferLayout;
 
 	template<class T, typename ...Args>
 	class UIFunction;
@@ -35,6 +43,7 @@ namespace Fracture
 
 		void UpdateTransforms();
 
+		void create();
 	
 	private:
 		std::shared_ptr<Shader> m_shader;
@@ -43,6 +52,15 @@ namespace Fracture
 		std::shared_ptr<UIVec3> m_Position;
 		std::shared_ptr<UIVec3> m_Scale;
 		std::shared_ptr<UIVec3> m_Rotation;
+		glm::vec3 m_Size;
+
+		//Buffers
+		std::shared_ptr<VertexArray> m_VerterArray;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+
+		std::vector<Vertex> m_vertices;
+		std::vector<unsigned int> m_Indices;
 
 		std::shared_ptr<UIFunction<UIBoxNode>> m_execute;
 

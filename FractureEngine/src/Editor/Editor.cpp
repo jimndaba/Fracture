@@ -66,6 +66,7 @@ void Fracture::Editor::onInit()
     m_window = GameWindow::Create(1920, 1080, "Fracture Engine: " + m_properties->ProjectName);
     m_window->MaximiseWindow();
     m_Renderer = std::make_shared<Renderer>();
+    m_Renderer2D = std::make_shared<Renderer2D>();
     m_AssetManger = std::make_unique<AssetManager>(m_properties);
     m_SceneManager = std::make_unique<SceneManager>();
     m_InputManager = std::make_unique<InputManager>();
@@ -120,12 +121,12 @@ void Fracture::Editor::onInit()
 
     m_sceneview = std::shared_ptr<Fracture::SceneView>(new SceneView("Scene"));
     m_inspectorpanel = std::shared_ptr<Fracture::InspectorPanel>(new InspectorPanel("Property editor",*m_sceneview.get()));
-    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get(),*m_Renderer.get()));
+    m_viewpanel = std::shared_ptr<ViewPanel>(new ViewPanel("Viewport", *m_sceneview.get(),*m_Renderer.get(),*m_Renderer2D.get()));
     m_TabbedPanel = std::shared_ptr<TabbedPanel>(new TabbedPanel("Tab panel"));
     m_AssetBrowser = std::make_shared<AssetBrowserPanel>();
    
 
-    ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 14.0f);
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("content/fonts/Roboto-Regular.TTF", 12.0f);
    
 
     m_frame->AddPanel(m_sceneview);
@@ -137,6 +138,8 @@ void Fracture::Editor::onInit()
    
     m_PhysicsManger->Init();
     camera = std::make_shared<FreeCamera>();//TODO - update init of camera;
+    camera2D = std::make_shared<Camera2D>();
+
     m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
 
    
@@ -161,8 +164,11 @@ bool Fracture::Editor::onLoad()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(*m_Renderer.get());   
     SetScene();   
-    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer));
-    m_uigraph = std::make_unique<UIGraph>(*m_Renderer);
+  
+    m_Renderer2D->SetFont("roboto");
+
+    m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
+    m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get(), *m_Renderer2D.get());
     m_RenderSettings = std::make_shared<RenderSettingsPanel>("RenderSettings", *m_graph);
     m_frame->AddPanel(m_RenderSettings);
 
@@ -190,6 +196,8 @@ void Fracture::Editor::onLoadNew()
     m_AssetManger->AddTexture2D("waterdudv", "content/textures/waterdudv.png", TextureType::Diffuse); 
 
     m_AssetManger->AddHDR("Loft",  "content/environments/Newport_Loft_Env.hdr",TextureType::Diffuse);
+
+    m_AssetManger->AddFont("roboto","content/fonts/Roboto-Regular.ttf");
 
     //Environment
     m_AssetManger->AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
@@ -281,6 +289,9 @@ void Fracture::Editor::onLoadNew()
     //UIBOX Shader
     AssetManager::AddShader("UIBox", "content/shaders/UIShaders/vertex.glsl", "content/shaders/UIShaders/UIbox_frag.glsl");
 
+    //UIBOX Shader
+    AssetManager::AddShader("FontShader", "content/shaders/font/vertex.glsl", "content/shaders/font/fragment.glsl");
+
     
  
     
@@ -317,16 +328,25 @@ void Fracture::Editor::onLoadNew()
     m_SceneManager->SetScene("empty");
     SetScene();
     m_viewpanel->init();
+
+
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(*m_Renderer.get());
+    m_Renderer2D = std::make_shared<Renderer2D>();
+    m_Renderer2D->SetFont("roboto");
+
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
-    m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get());
+    m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get(), *m_Renderer2D.get());
 
     m_uigraph->Buildgraph();
     m_graph->Buildgraph();
 
     m_Renderer->setFrameGraph(m_graph);
+
     m_RenderSettings = std::make_shared<RenderSettingsPanel>("RenderSettings", *m_graph);
+
+    
+
     m_frame->AddPanel(m_RenderSettings);
 
 
@@ -531,10 +551,19 @@ void Fracture::Editor::Render()
 
       
         m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());     
+        
         //Draw UI
-        m_uigraph->execute(*m_Renderer); 
-        m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);
+       // m_Renderer->SetCamera(camera2D);
+        m_Renderer2D->SetCamera(camera2D);    
+
+        
+        m_uigraph->execute(*m_Renderer);
+       
+        //Draw Scene
+        m_Renderer->SetCamera(camera);
+        m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);        
         m_graph->execute(*m_Renderer); 
+
         m_Renderer->EndFrame();
        
         if (showScenegraph)
@@ -1147,9 +1176,9 @@ void Style()
 
 
     style.PopupRounding = 3;
-    style.WindowPadding = ImVec2(4, 4);
-    style.FramePadding = ImVec2(6, 4);
-    style.ItemSpacing = ImVec2(6, 2);
+    style.WindowPadding = ImVec2(4, 2);
+    style.FramePadding = ImVec2(1, 2);
+    style.ItemSpacing = ImVec2(6, 3);
 
     style.ScrollbarSize = 18;
 
@@ -1159,9 +1188,11 @@ void Style()
     style.FrameBorderSize = (float)is3D;
 
     style.WindowRounding = 2;
-    style.ChildRounding = 3;
-    style.FrameRounding = 4;
+    style.ChildRounding = 2;
+    style.FrameRounding = 2;
     style.ScrollbarRounding = 2;
+    style.ItemInnerSpacing = ImVec2(8,4);
+    style.IndentSpacing = 0;
     style.GrabRounding = 2;
 
 #ifdef IMGUI_HAS_DOCK 

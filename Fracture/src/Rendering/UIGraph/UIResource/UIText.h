@@ -7,7 +7,8 @@
 
 namespace Fracture
 {
-	class UIText: public UIResource
+	class UIText
+		: public UIResource
 	{
 	public:
 		UIText(const std::string& name):UIResource(name)
@@ -18,6 +19,11 @@ namespace Fracture
 		void bind() override{};
 
 		std::string Value;
+
+		static std::shared_ptr<UIText> Make(const std::string& name)
+		{
+			return std::make_shared<UIText>(name);
+		}
 
 	};
 

@@ -32,10 +32,12 @@ namespace Fracture
 	class Model;
 	class Material; 
 	class AnimationClip;
+	class Font;
 
 	class TextureLoader;
 	class ShaderLoader;
 	class ModelLoader;
+	class FontLoader;
 
 	struct ProjectProperties;
 
@@ -56,6 +58,8 @@ namespace Fracture
 		static std::shared_ptr<TextureMultiSample> getMultiSampleTexture(const std::string& name);
 		static std::shared_ptr<TextureCubeMap> getCubeMapTexture(const std::string& name);
 
+		static std::shared_ptr<Font> getFont(const std::string& name);
+
 		static std::map<std::string, std::shared_ptr<Mesh>> GetMeshes();
 		static std::map<std::string, std::shared_ptr<Texture2D>> GetTextures();
 		static std::map<std::string, std::shared_ptr<Texture2D>> GetHDRTextures();
@@ -73,11 +77,14 @@ namespace Fracture
 
 		static void AddModel(const std::string& name,const std::shared_ptr<Model>& model);
 		static void AddModel(const std::string& name, const std::string& path);		
+		
 		static void AddTexture2D(const std::string& name, const std::shared_ptr<Texture2D>& texture);
 		static void AddTexture2D(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddMultiSampleTexture(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddHDR(const std::string& name, const std::string& path, TextureType mtype);
 		static void AddCubeMap(const std::string& name, const std::string& path, TextureType mtype);
+
+		static void AddFont(const std::string& name, const std::string& path);
 
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Shader>& shader);
 		static void AddMaterial(const std::string& name,const std::shared_ptr<Material>& material);
@@ -92,6 +99,7 @@ namespace Fracture
 		static std::unique_ptr<TextureLoader> m_TextureLoader;
 		static std::unique_ptr<ShaderLoader> m_ShaderLoader;
 		static std::unique_ptr<ModelLoader> m_ModelLoader;
+		static std::unique_ptr<FontLoader> m_FontLoader;
 
 		//Libraries
 		static std::map<std::string, std::shared_ptr<Mesh>> m_meshes;
@@ -102,7 +110,7 @@ namespace Fracture
 		static std::map<std::string, std::shared_ptr<Texture2D>> m_Textures;
 		static std::map<std::string, std::shared_ptr<TextureMultiSample>> m_MultiSampleTextures;
 		static std::map<std::string, std::shared_ptr<TextureCubeMap>> m_CubeMaps;
-		
+		static std::map<std::string, std::shared_ptr<Font>> m_Fonts;
 		//Functions
 		
 	

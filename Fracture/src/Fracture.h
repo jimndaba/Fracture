@@ -17,6 +17,7 @@
 #include "Game/GameWindow.h"
 #include "Game/Game.h"
 #include "Rendering/Renderer.h"
+#include "Rendering/Renderer2D/Renderer2D.h"
 #include "AssetManager/AssetManager.h"
 #include "Entity/EntityManager.h"
 #include "Input/InputManager.h"
@@ -66,6 +67,7 @@
 #include "Entity/SunLight.h"
 #include "Entity/SpotLight.h"
 #include "Entity/PointLight.h"
+#include "Entity/Camera2D.h"
 
 //Scripting
 #include "Scripting/ScriptManager.h"

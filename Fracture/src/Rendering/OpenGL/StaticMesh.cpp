@@ -19,9 +19,7 @@ Fracture::StaticMesh::StaticMesh(std::vector<Vertex> vertices, std::vector<unsig
     m_VertexBuffer = VertexBuffer::Create(&m_vertices[0], m_vertices.size() * sizeof(Vertex));
     m_IndexBuffer = IndexBuffer::Create(&m_Indices[0], m_Indices.size() * sizeof(unsigned int));
     
-    VertexBufferLayout vertexLayout;
-
-    vertexLayout = 
+    VertexBufferLayout vertexLayout = 
     {
         { ShaderDataType::Float3, "aPos" },   
         { ShaderDataType::Float3, "aNormal" },

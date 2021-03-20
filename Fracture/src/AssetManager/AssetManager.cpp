@@ -13,7 +13,9 @@
 #include "Rendering/OpenGL/TextureCubeMap.h"
 #include "ShaderLoader.h"
 #include "ModelLoader.h"
+#include "FontLoader.h"
 #include "Logging/Logger.h"
+
 #include "Serialisation/ProjectProperties.h"
 
 
@@ -26,6 +28,7 @@ std::map<std::string, std::shared_ptr<Fracture::TextureCubeMap>> Fracture::Asset
 std::map<std::string, std::shared_ptr<Fracture::Model>> Fracture::AssetManager::m_Models;
 std::map<std::string, std::shared_ptr<Fracture::Shader>> Fracture::AssetManager::m_Shaders;
 std::map<std::string, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::m_Materials;
+std::map<std::string, std::shared_ptr<Fracture::Font>> Fracture::AssetManager::m_Fonts;
 std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::m_props;
 
 std::unique_ptr<Fracture::TextureLoader> Fracture::AssetManager::m_TextureLoader;
@@ -116,6 +119,13 @@ void Fracture::AssetManager::AddCubeMap(const std::string& name, const std::stri
 	FRACTURE_TRACE("Loaded Texture: {}", name);
 }
 
+void Fracture::AssetManager::AddFont(const std::string& name, const std::string& path)
+{
+	std::shared_ptr<Font> font = FontLoader::AddFont(name, path);
+	m_Fonts[name] = font;
+	FRACTURE_TRACE("Loaded font: {}", name);
+}
+
 void Fracture::AssetManager::AddMaterial(const std::string& name, const std::shared_ptr<Shader>& shader)
 {
 	std::shared_ptr<Material> material = std::shared_ptr<Material>(new Material(name,shader));
@@ -167,6 +177,11 @@ std::shared_ptr<Fracture::TextureMultiSample> Fracture::AssetManager::getMultiSa
 std::shared_ptr<Fracture::TextureCubeMap> Fracture::AssetManager::getCubeMapTexture(const std::string& name)
 {
 	return m_CubeMaps[name];
+}
+
+std::shared_ptr<Fracture::Font> Fracture::AssetManager::getFont(const std::string& name)
+{
+	return m_Fonts[name];
 }
 
 std::shared_ptr<Fracture::Texture2D> Fracture::AssetManager::getTexture2D(const std::string& name)

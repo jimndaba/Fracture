@@ -24,6 +24,7 @@ namespace Fracture
 	struct GameSettings;
 	class EditorCamera;
 	class FreeCamera;
+	class Camera2D;
 	class EditorFrameGraph;
 	class AnimationManager;
 	class AnimatorProbe;
@@ -80,6 +81,7 @@ namespace Fracture
 		std::shared_ptr<Logger> m_logger;
 		std::unique_ptr<Profiler> m_Profiler;
 		std::shared_ptr<Renderer> m_Renderer;
+		std::shared_ptr<Renderer2D> m_Renderer2D;
 		std::shared_ptr<GameWindow> m_window;
 		static std::unique_ptr<Eventbus> m_Eventbus;
 		std::unique_ptr<InputManager> m_InputManager;
@@ -94,6 +96,7 @@ namespace Fracture
 		static std::shared_ptr<Scene> m_ActiveScene;
 		//std::shared_ptr<EditorCamera> camera;
 		std::shared_ptr<FreeCamera> camera;
+		std::shared_ptr<Camera2D> camera2D;
 
 		std::shared_ptr<Texture> m_irradiance;
 		std::shared_ptr<Texture> m_prefilter;

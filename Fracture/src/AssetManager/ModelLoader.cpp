@@ -79,8 +79,6 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::GeneratePlane(const
 	std::vector<std::shared_ptr<Texture2D>> textures;
 	std::shared_ptr<BoundingBox> aabb = std::make_shared<BoundingBox>();
 
-	int i = 0;
-	
 	for (int i = 0, y = 0; y <= depth; y++)
 	{
 		for (int x = 0; x <= width; x++, i++)
@@ -96,7 +94,7 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::ModelLoader::GeneratePlane(const
 
 	// Defining triangles.
 	unsigned int indexSize = width * depth * 6; // 2 - polygon per quad, 3 - corners per polygon
-	unsigned int offset = 0;
+	//unsigned int offset = 0;
 
 	indices.resize(indexSize);
 

@@ -5,6 +5,7 @@
 #include "../UINode.h"
 #include "Rendering/DrawCommand.h"
 #include "Rendering/Framegraph/FullscreenNode.h"
+#include "Rendering/Renderer2D/Renderer2D.h"
 
 namespace Fracture
 {
@@ -23,13 +24,14 @@ namespace Fracture
 	class UIOutputNode : public UINode
 	{
 	public:
-		UIOutputNode(const std::string Name, int width, int height);
+		UIOutputNode(Renderer2D& renderer2D,const std::string Name, int width, int height);
 
 		void execute(Renderer& renderer) override;
 
 		void AddSubmit(UISocket input);
 
 		UIMultiSocket Submit;
+		UIMultiSocket Submit2D;
 
 		std::vector<DrawCommand> RenderCommands();
 		std::shared_ptr<RenderTarget> RenderOut;
@@ -38,9 +40,11 @@ namespace Fracture
 		unsigned int quadVAO, quadVBO;
 
 		std::vector<UISocket> m_submitInputs;
+		std::vector<UISocket> m_submit2DInputs;
 
 		std::shared_ptr<UIFunction<UIOutputNode>> m_submitFunction;
 		std::shared_ptr<UIVector<DrawCommand>> m_GraphCommands;
+		Renderer2D& m_2DRenderer;
 
 	};
 

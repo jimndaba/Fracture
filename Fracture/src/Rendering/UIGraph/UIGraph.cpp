@@ -8,26 +8,37 @@
 #include "UIResource/UICollections.h"
 #include "NodeLibrary/UIOutputNode.h"
 #include "NodeLibrary/UIBoxNode.h"
+#include "NodeLibrary/UISectorNode.h"
 #include "NodeLibrary/UISetPositionNode.h"
 #include "NodeLibrary/UILoopNode.h"
 #include "UIResource/UIFunction.h"
+#include "NodeLibrary/UILabelNode.h"
 #include "Profiling/Profiler.h"
 
-Fracture::UIGraph::UIGraph(Renderer& renderer):
+Fracture::UIGraph::UIGraph(Renderer& renderer, Renderer2D& renderer2D):
 	m_Renderer(renderer),
-	output(std::make_shared<UIOutputNode>("Output",renderer.Width(),renderer.Height()))
+	m_Renderer2D(renderer2D),
+	output(std::make_shared<UIOutputNode>(renderer2D,"Output",renderer.Width(),renderer.Height()))
 {	
 	addnode(output);	
 	output->Submit.AddChildSocket("Box1");
 	output->Submit.AddChildSocket("Box2");
 	output->Submit.AddChildSocket("Box3");
-	output->Submit.AddChildSocket("Box4");
+	output->Submit.AddChildSocket("Circle");
+	output->Submit2D.AddChildSocket("Label");
 	
 	auto box = UINode::Make<UIBoxNode>("Box");
 	addnode(box);
 
+	auto circle = UINode::Make<UISectorNode>("Circle");
+	addnode(circle);
+
+	auto label = UINode::Make<UILabelNode>("Label");
+	label->SetText("FRACTURE ENGINE TEXT");
+	addnode(label);
+
 	auto position = UINode::Make<UISetPositionNode>("box2pos");
-	position->SetPosition(glm::vec3(5.0f,0.0f,-5.0f));
+	position->SetPosition(glm::vec3(5.0f,1.0f,0.0f));
 	addnode(position);
 	
 	auto box2 = UINode::Make<UIBoxNode>("Box2");
@@ -36,26 +47,21 @@ Fracture::UIGraph::UIGraph(Renderer& renderer):
 	auto box3 = UINode::Make<UIBoxNode>("Box3");
 	addnode(box3);
 
-	auto box4 = UINode::Make<UIBoxNode>("Box4");
-	addnode(box4);
+	
 
 	auto position3 = UINode::Make<UISetPositionNode>("box3pos");
-	position3->SetPosition(glm::vec3(5.0f, 20.0f, -5.0f));
+	position3->SetPosition(glm::vec3(2.0f, 4.0f, 1.0f));
 	addnode(position3);
 
 
-	auto position4 = UINode::Make<UISetPositionNode>("box4pos");
-	position4->SetPosition(glm::vec3(10.0f, 10.0f, -5.0f));
-	addnode(position4);
-	
-	addLink(box3, box3->PositionSocket, position3, position3->Output);
-	addLink(box4, box4->PositionSocket, position4, position4->Output);
+	addLink(circle, circle->PositionSocket, position3, position3->Output);	
 	addLink(box2, box2->PositionSocket, position, position->Output);
-
-	addLink(output, output->Submit.GetSocket("Box3"), box3, box3->Exectue);
-	addLink(output, output->Submit.GetSocket("Box4"), box4, box4->Exectue);
+	
+	addLink(output, output->Submit.GetSocket("Circle"), circle, circle->Exectue);
+	addLink(output, output->Submit.GetSocket("Box3"), box3, box3->Exectue);	
 	addLink(output, output->Submit.GetSocket("Box1"), box2, box2->Exectue);
 	addLink(output, output->Submit.GetSocket("Box2"), box, box->Exectue);
+	addLink(output, output->Submit2D.GetSocket("Label"), label, label->Exectue);
 
 	
 }
@@ -95,17 +101,11 @@ void Fracture::UIGraph::execute(Renderer& renderer)
 		{
 			if (m->From == node->GetName())
 			{
-				for (const auto& n : m_nodes)
-				{
-					if (n->GetName() == m->To)
-					{
-						std::shared_ptr<UIResource> resource = n->getResource(m->FromResource);
-						node->LinkUIResource(m->ToSource, resource);					
-					}						
-				}
+				const auto& ToNode = getNode(m->To);
+				std::shared_ptr<UIResource> resource =ToNode->getResource(m->FromResource);
+				node->LinkUIResource(m->ToSource, resource);
 			}	
 		}		
-
 		node->execute(renderer);
 	}	
 }

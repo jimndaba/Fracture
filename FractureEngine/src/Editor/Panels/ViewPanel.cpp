@@ -12,8 +12,9 @@
 int Fracture::ViewPanel::gizmoMode;
 std::string Fracture::ViewPanel::m_currentViewMode;
 
-Fracture::ViewPanel::ViewPanel(std::string name, SceneView& scenegraph, Renderer& renderer) :Panel(name), m_scenegraph(scenegraph),
+Fracture::ViewPanel::ViewPanel(std::string name, SceneView& scenegraph, Renderer& renderer, Renderer2D& renderer2D) :Panel(name), m_scenegraph(scenegraph),
 m_renderer(renderer),
+m_renderer2D(renderer2D),
 m_RenderView(std::make_shared<RenderViewMode>()),
 m_SSAOView(std::make_shared<SSAOViewMode>()),
 m_DepthView(std::make_shared<DepthViewMode>()),
@@ -73,6 +74,7 @@ void Fracture::ViewPanel::render()
 	{
 		//Editor::oEvent(new WindowResizeEvent((int)m_ViewportSize.x, (int)m_ViewportSize.y));
 		m_renderer.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
+		m_renderer2D.setViewport((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 		Editor::m_graph->Resize((int)m_ViewportSize.x, (int)m_ViewportSize.y);
 	}
 

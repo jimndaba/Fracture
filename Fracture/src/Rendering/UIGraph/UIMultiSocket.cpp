@@ -1,6 +1,6 @@
 #include "UIMultiSocket.h"
 
-Fracture::UIMultiSocket::UIMultiSocket(const std::string& Name)
+Fracture::UIMultiSocket::UIMultiSocket(const std::string& Name):m_name(Name)
 {
 }
 

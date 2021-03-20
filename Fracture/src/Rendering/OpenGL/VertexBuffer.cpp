@@ -10,6 +10,13 @@ Fracture::VertexBuffer::VertexBuffer(void* data, uint32_t size)
 	glNamedBufferData(m_RenderID, size, data, GL_STATIC_DRAW);
 }
 
+Fracture::VertexBuffer::VertexBuffer(void* data, uint32_t size, BUFFERUSAGE usage):m_usage(usage)
+{
+	glGenBuffers(1, &m_RenderID);
+	glBindBuffer(GL_ARRAY_BUFFER, m_RenderID);
+	glNamedBufferData(m_RenderID, size, data,(GLenum)usage);
+}
+
 Fracture::VertexBuffer::~VertexBuffer()
 {
 	glDeleteBuffers(1, &m_RenderID);
@@ -18,7 +25,9 @@ Fracture::VertexBuffer::~VertexBuffer()
 void Fracture::VertexBuffer::SetData(void* data, uint32_t offset, uint32_t size)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_RenderID);
-	glNamedBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+	//glNamedBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Fracture::VertexBuffer::bind() const
@@ -44,4 +53,9 @@ uint32_t Fracture::VertexBuffer::GetRenderID()
 std::shared_ptr<Fracture::VertexBuffer > Fracture::VertexBuffer::Create(void* data, uint32_t size)
 {
 	return std::make_shared<VertexBuffer>(data,size);
+}
+
+std::shared_ptr<Fracture::VertexBuffer > Fracture::VertexBuffer::Create(void* data, uint32_t size,BUFFERUSAGE usage)
+{
+	return std::make_shared<VertexBuffer>(data, size,usage);
 }

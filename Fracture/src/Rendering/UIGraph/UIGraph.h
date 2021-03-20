@@ -14,6 +14,7 @@
 namespace Fracture
 {
 	class Renderer;
+	class Renderer2D;
 	class UISocket;
 	class UILink;
 	class UINode;
@@ -27,7 +28,7 @@ namespace Fracture
 	class UIGraph
 	{
 	public:
-		UIGraph(Renderer& renderer);
+		UIGraph(Renderer& renderer, Renderer2D& renderer2D);
 
 		void addLink(const std::shared_ptr<UINode>& from, const UISocket& output, const std::shared_ptr<UINode>& to, const UISocket& input);
 
@@ -52,7 +53,7 @@ namespace Fracture
 	private:
 
 		Renderer& m_Renderer;
-		
+		Renderer2D& m_Renderer2D;
 
 		//Main collections		
 		std::vector<std::shared_ptr<UINode>> m_nodes;

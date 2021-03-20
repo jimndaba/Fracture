@@ -22,6 +22,12 @@ namespace Fracture
 		RGBA32 = GL_RGBA32F
 	};
 
+	enum class BUFFERUSAGE
+	{
+		STATIC = GL_STATIC_DRAW,
+		DYNAMIC = GL_DYNAMIC_DRAW,
+	};
+
 	enum class TextureFormat
 	{
 		Red = GL_RED,

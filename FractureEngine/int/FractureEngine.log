@@ -1,8 +1,8 @@
 ﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  3 of 19951 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 20457 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    84 functions had inline decision re-evaluated but remain unchanged
+    85 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

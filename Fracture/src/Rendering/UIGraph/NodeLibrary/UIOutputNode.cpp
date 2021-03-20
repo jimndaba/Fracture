@@ -8,17 +8,18 @@
 #include "Rendering/OpenGL/OpenGLBase.h"
 #include <typeinfo>
 
-Fracture::UIOutputNode::UIOutputNode(const std::string Name,int width, int height):
+Fracture::UIOutputNode::UIOutputNode(Renderer2D& renderer2D,const std::string Name,int width, int height):
 	UINode(Name),
-    Submit("Submit")
+    Submit("Submit"),
+    Submit2D("Submit2D"),
+    m_2DRenderer(renderer2D)
 {
 	m_GraphCommands = std::make_shared<UIVector<DrawCommand>>("UICommands");
 
     RenderOut = RenderTarget::CreateRenderTarget("Sink_Color_In", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
-
-
+    
     AddMultiInputSocket(Submit);
-
+    AddMultiInputSocket(Submit2D);
 
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // positions   // texCoords
@@ -50,14 +51,22 @@ Fracture::UIOutputNode::UIOutputNode(const std::string Name,int width, int heigh
 
 void Fracture::UIOutputNode::execute(Renderer& renderer)
 {  
+    glDisable(GL_CULL_FACE);
     RenderOut->bind(); 
     renderer.clear();
     for (const auto& input : Submit.ChildSockets)
     {
        const auto& func = resources[input.GetName()];
-       func->submit(renderer);     
+       func->submit(renderer);  
     }   
+    
+    for (const auto& input : Submit2D.ChildSockets)
+    {
+        const auto& func = resources[input.GetName()];
+        func->submit2D(m_2DRenderer);
+    }
     RenderOut->Unbind();
+    glEnable(GL_CULL_FACE);
 }
 
 void Fracture::UIOutputNode::AddSubmit(UISocket input)

@@ -34,7 +34,7 @@ namespace Fracture
 	{
 
 	public:
-		ViewPanel(std::string name, SceneView& scenegraph, Renderer& m_renderer);
+		ViewPanel(std::string name, SceneView& scenegraph, Renderer& m_renderer, Renderer2D& renderer2D);
 		~ViewPanel();
 
 		void init();
@@ -60,6 +60,7 @@ namespace Fracture
 
 	private:
 		Renderer& m_renderer;
+		Renderer2D& m_renderer2D;
 		static bool m_showViewport;
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		bool m_MousePicking = false;
