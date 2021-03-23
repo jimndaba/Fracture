@@ -351,6 +351,9 @@
     <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UILabelNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UIWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Game.h">
@@ -1026,6 +1029,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UILabelNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIDimension.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

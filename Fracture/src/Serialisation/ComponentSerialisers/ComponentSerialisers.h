@@ -12,6 +12,7 @@ namespace Fracture
 		TagComponentSerialiser();
 		json visitTagComponent(const TagComponent& node)const override;
 	};
+	
 	class RelationShipComponentSerialiser : public ComponentSerialiser
 	{
 	public:

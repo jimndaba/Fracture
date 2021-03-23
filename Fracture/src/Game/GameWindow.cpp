@@ -48,12 +48,9 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 		return;
 	}
 
-	
-
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-
-		
+			
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		FRACTURE_ERROR("Failed to initialize GLAD");
@@ -92,7 +89,7 @@ bool Fracture::GameWindow::ShouldClose()
 void Fracture::GameWindow::close()
 {
 	glfwTerminate();
-	glfwDestroyWindow(window);
+	//glfwDestroyWindow(window);
 }
 
 std::shared_ptr<Fracture::GameWindow> Fracture::GameWindow::Create(int width, int height, std::string title, bool resizable)

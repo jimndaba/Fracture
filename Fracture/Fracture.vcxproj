@@ -248,6 +248,7 @@
     <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UIOutputNode.cpp" />
     <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UISectorNode.cpp" />
     <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UISetPositionNode.cpp" />
+    <ClCompile Include="src\Rendering\UIGraph\NodeLibrary\UIWindow.cpp" />
     <ClCompile Include="src\Rendering\UIGraph\UIGraph.cpp" />
     <ClCompile Include="src\Rendering\UIGraph\UIMultiSocket.cpp" />
     <ClCompile Include="src\Rendering\UIGraph\UINode.cpp" />
@@ -395,12 +396,14 @@
     <ClInclude Include="src\Rendering\ShadowPass.h" />
     <ClInclude Include="src\Rendering\OpenGL\Texture.h" />
     <ClInclude Include="src\Rendering\OpenGL\Vertex.h" />
+    <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIDimension.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UILabelNode.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UILoopNode.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIOutputNode.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIBoxNode.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UISectorNode.h" />
     <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UISetPositionNode.h" />
+    <ClInclude Include="src\Rendering\UIGraph\NodeLibrary\UIWindow.h" />
     <ClInclude Include="src\Rendering\UIGraph\UIGraph.h" />
     <ClInclude Include="src\Rendering\UIGraph\UILink.h" />
     <ClInclude Include="src\Rendering\UIGraph\UIMultiSocket.h" />

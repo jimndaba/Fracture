@@ -199,6 +199,8 @@ void Fracture::Editor::onLoadNew()
 
     m_AssetManger->AddFont("roboto","content/fonts/Roboto-Regular.ttf");
 
+    m_AssetManger->AddFont("Pacifico", "content/fonts/Pacifico.ttf"); 
+
     //Environment
     m_AssetManger->AddShader("CubeMap", "content/shaders/CubeMap/vertex.glsl", "content/shaders/CubeMap/fragment.glsl");
 
@@ -333,7 +335,7 @@ void Fracture::Editor::onLoadNew()
     m_Renderer->SetCamera(camera);
     m_viewpanel->setRenderer(*m_Renderer.get());
     m_Renderer2D = std::make_shared<Renderer2D>();
-    m_Renderer2D->SetFont("roboto");
+    m_Renderer2D->SetFont("Pacifico");
 
     m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
     m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get(), *m_Renderer2D.get());

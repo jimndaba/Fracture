@@ -1,8 +1,31 @@
 ﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 20457 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  4 of 20455 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     85 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
+Fracture.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftdebug.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(winfnt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(type42.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(type1.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(type1.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(truetype.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(truetype.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(smooth.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(smooth.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(sfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(sfnt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(raster.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(raster.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(psmodule.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(psmodule.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(pshinter.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(pshinter.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(psaux.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(psaux.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(pfr.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(pfr.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(pcf.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(pcf.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftlzw.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftlzw.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftgzip.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftgzip.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(type1cid.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(type1cid.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(cff.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(cff.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(bdf.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(bdf.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftsystem.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftsystem.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftinit.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftinit.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftbitmap.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftbitmap.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(ftbase.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftbase.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
+Fracture.lib(autofit.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(autofit.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
   FractureEngine.vcxproj -> D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exe

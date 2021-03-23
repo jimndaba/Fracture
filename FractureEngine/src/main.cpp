@@ -7,14 +7,12 @@
 int main(int argc, char* args[])
 {
 	std::shared_ptr<Fracture::Editor> FractureEngine = Fracture::Editor::CreateInstance();
-	std::unique_ptr<Fracture::FractureSplash> splash = std::make_unique<Fracture::FractureSplash>(FractureEngine.get());
-	
+	std::unique_ptr<Fracture::FractureSplash> splash = std::make_unique<Fracture::FractureSplash>(FractureEngine.get());	
 	
 	if (!splash->Show())
 	{
 		return 0;
 	}
-	splash.reset();
 
 	FractureEngine->run();
 	FractureEngine.reset();

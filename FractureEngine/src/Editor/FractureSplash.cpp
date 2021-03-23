@@ -6,18 +6,20 @@
 
 bool Fracture::FractureSplash::p_open;
 
-Fracture::FractureSplash::FractureSplash(Editor* editor) :m_editor(editor)
+Fracture::FractureSplash::FractureSplash(Editor* editor) :
+    m_editor(editor),
+    m_isShow(true),
+    m_run(false)
 {
-    FRACTURE_INFO("Initializing Splash");
-	m_isShow = true;
-    m_run = false;
     m_logger = m_editor->GetLogger();
+    FRACTURE_INFO("Initializing Splash");
 	m_window = std::make_unique<GameWindow>(800,400,"Splash",false);
     m_AssetManger = std::make_unique<AssetManager>(m_editor->Properties());  
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+    ImGui::CreateNewWindowSettings("SplashScreen");
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
 

@@ -45,25 +45,20 @@ namespace Fracture
 		void onShutdown();
 		void Render();
 		void SetScene();
-
 		static void oEvent(Event* m_event);
 
 		static void onChangeTitleName(std::string title);
-
 		bool done;
 
 		void DrawMenuBar();
-
 		static void isNewProject(bool isnew);
 
 		static std::shared_ptr<Scene> ActiveScene();
 		static std::shared_ptr<ScriptManager> GetScriptManager();
 
 		std::shared_ptr<Logger> GetLogger();
-		static std::shared_ptr<ProjectProperties> Properties();
-
-		static std::shared_ptr<EditorFrameGraph> m_graph; //TODO rename or hide
-
+		static std::shared_ptr<ProjectProperties> Properties();		
+		static std::shared_ptr<EditorFrameGraph> m_graph;
 		static std::shared_ptr<Editor> CreateInstance();
 
 	private:
