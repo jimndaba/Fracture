@@ -109,13 +109,28 @@ namespace Fracture
 			return newEntity;
 		}
 
-		static std::shared_ptr<Entity> CreateSkylight(std::shared_ptr<Scene> scene)
+		static std::shared_ptr<Entity> CreateStaticSkylight(std::shared_ptr<Scene> scene)
 		{
 			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
 			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "Skylight");
 			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
 			relationship->SetParent(scene->Root()->GetId());
 			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::Sky);
+
+
+			ComponentManager::AddComponent<RelationShipComponent>(relationship);
+			ComponentManager::AddComponent<LightComponent>(light);
+
+			return newEntity;
+		}
+
+		static std::shared_ptr<Entity> CreateDynamicSkylight(std::shared_ptr<Scene> scene)
+		{
+			std::shared_ptr<Entity> newEntity = EntityManager::CreateEntity<Entity>();
+			ComponentManager::AddComponent<TagComponent>(newEntity->GetId(), "DynamicSkylight");
+			std::shared_ptr<RelationShipComponent> relationship = std::make_shared<RelationShipComponent>(newEntity->GetId());
+			relationship->SetParent(scene->Root()->GetId());
+			std::shared_ptr<LightComponent> light = std::make_shared<LightComponent>(newEntity->GetId(), LightType::DynamicSky);
 
 
 			ComponentManager::AddComponent<RelationShipComponent>(relationship);

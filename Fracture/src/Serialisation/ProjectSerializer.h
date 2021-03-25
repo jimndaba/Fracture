@@ -23,6 +23,7 @@ namespace Fracture
 		~ProjectSerializer();
 
 		void Serialize(const std::string& filepath);
+		bool DeSerializeProperties(const std::string& filepath);
 		bool DeSerialize(const std::string& filepath);
 
 		//void DeSerializeProperties(nlohmann::json entity);

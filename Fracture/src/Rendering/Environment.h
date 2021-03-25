@@ -2,13 +2,13 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
-#include "GLAD/glad.h"
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <memory>
-
+#include <string>
+#include "AssetManager/AssetManager.h"
 
 namespace Fracture
 {
@@ -24,25 +24,38 @@ namespace Fracture
 	{
 
 	public: 
-		Environment(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader);
+		Environment(const std::string& name,const std::shared_ptr<Shader>& rendershader);
+
 		~Environment();
 
-		std::shared_ptr<RenderTarget> m_CaptureTarget;
-	
+		
 		std::shared_ptr<Shader> m_irradiance;
 		std::shared_ptr<Shader> m_prefilter;
 		std::shared_ptr<Shader> m_bdrf;
-
-		std::shared_ptr<Texture2D> m_enviroment;
 		std::shared_ptr<Texture2D> m_bdrfTexture;
-
 		std::shared_ptr<TextureCubeMap> m_PrefilterMap;
 		std::shared_ptr<TextureCubeMap> m_IrradianceMap;
+
+		std::shared_ptr<RenderTarget> m_CaptureTarget;
+		std::shared_ptr<Texture2D> m_enviroment;
+		
+		
 		std::shared_ptr<TextureCubeMap> m_CubeMap;
 		
-		void Render(std::shared_ptr<Shader> shader, glm::mat4 view, glm::mat4 projection);
+		void Render(glm::mat4 view, glm::mat4 projection);
 
-		static std::shared_ptr<Environment> Create(std::shared_ptr<Texture2D> texture, std::shared_ptr<Shader> shader);
+		void RenderCube();
+		void RenderQuad();
+
+		void CreateCubeMaptexture();
+		void SetupMatricies();
+		void SetupDynameCubemap();
+		void ConvertHDRtoCubeMap();
+		void CreateIrradianceMap();
+		void CreatePreFilterMap();
+		void CreateBDRF();
+
+		std::shared_ptr<Shader> GetShader();
 
 	private:
 		unsigned int cubeVAO = 0;
@@ -50,20 +63,12 @@ namespace Fracture
 		unsigned int quadVAO = 0;
 		unsigned int quadVBO = 0;
 		
-		std::shared_ptr<Shader> shader;
+		std::shared_ptr<Shader> m_Cubeshader;
+		std::shared_ptr<Shader> m_Rendershader;
 
 		glm::mat4 captureProjection;
 		glm::mat4 captureViews[6];
-
-		void CreateCubeMaptexture();
-		void SetupMatricies();
-		void ConvertHDRtoCubeMap();
-		void CreateIrradianceMap();
-		void CreatePreFilterMap();
-		void CreateBDRF();
-
-		void Render();
-		void RenderQuad();
+		
 	};
 }
 

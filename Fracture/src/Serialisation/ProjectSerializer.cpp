@@ -218,6 +218,35 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	m_OutputStream.close();
 }
 
+bool Fracture::ProjectSerializer::DeSerializeProperties(const std::string& filepath)
+{
+	std::ifstream stream(filepath);
+	json input;
+
+	if (!stream.good())
+	{
+		FRACTURE_ERROR("Can't read file");
+		return false;
+	}
+
+	stream >> input;
+	if (input.is_null())
+	{
+		FRACTURE_ERROR("File is either non-json file or corrupt;");
+		return false;
+	}
+
+	m_properties->ProjectName = input["Project"];
+	m_properties->GameConfigPath = input["Game Config Path"];
+	m_properties->TexturesPath = input["Textures Path"];
+	m_properties->ShadersPath = input["Shaders Path"];
+	m_properties->ModelsPath = input["Models Path"];
+	m_properties->ScenesPath = input["Scenes Path"];
+	m_properties->ActiveScene = input["Active Scene"];
+
+	return true;
+}
+
 bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 {
 	std::ifstream stream(filepath);
@@ -235,14 +264,7 @@ bool Fracture::ProjectSerializer::DeSerialize(const std::string& filepath)
 		FRACTURE_ERROR("File is either non-json file or corrupt;");
 		return false;
 	}
-		
-	m_properties->ProjectName = input["Project"];
-	m_properties->GameConfigPath = input["Game Config Path"];
-	m_properties->TexturesPath = input["Textures Path"];
-	m_properties->ShadersPath = input["Shaders Path"];
-	m_properties->ModelsPath = input["Models Path"];
-	m_properties->ScenesPath = input["Scenes Path"];
-	m_properties->ActiveScene = input["Active Scene"];
+
 
 	if (exists(input, "Shaders"))
 	{

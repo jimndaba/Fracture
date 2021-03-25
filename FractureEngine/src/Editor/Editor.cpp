@@ -13,7 +13,9 @@
 #include "Entity/EntityFactory.h"
 #include "EditorCamera.h"
 #include "FreeCamera.h"
+#include "Rendering/Framegraph/FrameGraph.h"
 #include "EditorFrameGraph.h"
+#include "Serialisation/FrameGraphSerialiser.h"
 #include "Rendering/UIGraph/NodeLibrary/UIOutputNode.h"
 #include "AssetManager/ModelLoader.h"
 #include "Rendering/OpenGL/StaticMesh.h"
@@ -219,6 +221,10 @@ void Fracture::Editor::onLoadNew()
 
     //Skybox
     AssetManager::AddShader("Skybox", "content/shaders/Environment/vertex.glsl", "content/shaders/Environment/fragment.glsl");
+
+    //ProceduralSkybox
+    AssetManager::AddShader("ProcedualSkybox", "content/shaders/ProceduralEnvironment/vertex.glsl", "content/shaders/ProceduralEnvironment/fragment.glsl");
+
 
     //DebugShaders
     AssetManager::AddShader("DebugShader", "content/shaders/debug/vertex.glsl", "content/shaders/debug/fragment.glsl");
@@ -680,10 +686,9 @@ void Fracture::Editor::DrawMenuBar()
             }
             if (ImGui::MenuItem("Save FrameGraph", NULL))
             {
-                FramaGraphSerialiser serialiser(m_graph);
-                serialiser.SerialiseGraph(m_properties->ScenesPath + "/" + m_ActiveScene->Name + ".graph");
+                //FrameGraphSerialiser serialiser = FrameGraphSerialiser(m_graph,*m_Renderer);
+                //serialiser.SerialiseGraph(m_properties->ScenesPath + "/" + m_ActiveScene->Name + ".graph");
             }
-           
             if (ImGui::MenuItem("Exit", NULL))
             {
                 done = true;
@@ -750,9 +755,15 @@ void Fracture::Editor::DrawMenuBar()
                 m_ActiveScene->addEntity(entity);
                 m_sceneview->setSelectEntity(entity);
             };
-            if (ImGui::MenuItem("Skylight", NULL))
+            if (ImGui::MenuItem("StaticSkylight", NULL))
             {
-                std::shared_ptr<Entity> entity = EntityFactory::CreateSkylight(m_ActiveScene);
+                std::shared_ptr<Entity> entity = EntityFactory::CreateStaticSkylight(m_ActiveScene);
+                m_ActiveScene->addEntity(entity);
+                m_sceneview->setSelectEntity(entity);
+            };
+            if (ImGui::MenuItem("DynamicSkylight", NULL))
+            {
+                std::shared_ptr<Entity> entity = EntityFactory::CreateDynamicSkylight(m_ActiveScene);
                 m_ActiveScene->addEntity(entity);
                 m_sceneview->setSelectEntity(entity);
             };

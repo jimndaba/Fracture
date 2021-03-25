@@ -128,6 +128,7 @@ void Fracture::SceneSerializer::Serialize(const std::string& filepath)
 		serialised_animatec.push_back(component->serialise(std::make_shared<AnimatorComponentSerialiser>()));
 	}
 
+	j["ActiveCameraID"] = (uint32_t)m_scene->ActiveCamera()->GetId();
 	j["TagComponents"] = serialised_tagc;
 	j["TransformComponents"] = serialised_transformc;
 	j["AnimatorComponents"] = serialised_animatec;
@@ -167,7 +168,6 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		FRACTURE_ERROR("No Fracture Scene in file!");
 		return false;
 	}
-
 	if (exists(input, "Entities"))
 	{
 		for (auto entity : input["Entities"])
@@ -361,6 +361,16 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 	}
 	if (exists(input, "RigidbodyComponents"))
 	{
+	}
+	if (exists(input, "ActiveCameraID"))
+	{
+		uint32_t id =(uint32_t)input["ActiveCameraID"];
+		m_scene->setCamera(id);
+		return false;
+	}
+	else
+	{
+		FRACTURE_ERROR("No Active Camera Set!!");
 	}
 
 	return true;

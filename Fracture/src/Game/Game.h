@@ -20,11 +20,12 @@ namespace Fracture
 	class GameLogic;
 	class PhysicsManager;
 	class Logger;
-	class DebugRenderer;
+	//class DebugRenderer;
 	class Eventbus;
 	class SceneManager;
 	struct Event;
 	struct GameSettings;
+	struct ProjectProperties;
 
 	
 	class Game
@@ -41,6 +42,7 @@ namespace Fracture
 		void render();
 		void unloadContent();
 		void shutdown();
+		void onQuit();
 
 		//scene management
 		static void addScene(std::string name, std::shared_ptr<Fracture::Scene> scene);
@@ -48,21 +50,20 @@ namespace Fracture
 		static void removeScene(std::string name);
 		static void changeScene(std::string name);
 		std::shared_ptr<Fracture::Scene> CurrentScene();
-		static std::shared_ptr<Eventbus> GetEventbus();
-
+	
 		//Scripting
 		static void AddScript(std::shared_ptr<GameLogic> script);
+		
 		//events
+		static std::shared_ptr<Eventbus> GetEventbus();
 		static void onEvent(Event* mEvent);
-
-		void onQuit();
-
 		void onWindowResize(int width, int height);
 
-		Renderer* GetRenderer();
+		static std::shared_ptr<Game> Create();
 
 	private:
 		bool m_isRunning = true;
+		std::shared_ptr<ProjectProperties> m_properties;
 		std::unique_ptr<GameWindow> m_GameWindow;
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
@@ -71,7 +72,7 @@ namespace Fracture
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
 		std::unique_ptr<Logger> m_logger;
-		std::unique_ptr<DebugRenderer> m_debug;
+		//std::unique_ptr<DebugRenderer> m_debug;
 		std::shared_ptr<GameSettings> m_GameSettings;
 		static std::unique_ptr<SceneManager> m_SceneManager;
 		static std::shared_ptr<Eventbus> m_Eventbus;
@@ -80,7 +81,6 @@ namespace Fracture
 
 	};
 
-	
 }
 #endif
 

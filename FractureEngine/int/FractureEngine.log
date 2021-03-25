@@ -1,9 +1,9 @@
 ﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  4 of 20455 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  6 of 20094 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    85 functions had inline decision re-evaluated but remain unchanged
+    95 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 Fracture.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftdebug.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
 Fracture.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(winfnt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info

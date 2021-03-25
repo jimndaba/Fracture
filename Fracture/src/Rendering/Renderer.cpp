@@ -16,6 +16,7 @@
 #include "Component/LightComponent.h"
 #include "Entity/ILight.h"
 #include "Entity/SkyLight.h"
+#include "Entity/DynamicSkylight.h"
 #include "Entity/SunLight.h"
 #include "Entity/SpotLight.h"
 #include "Entity/PointLight.h"
@@ -38,6 +39,8 @@
 #include "ShadowPass.h"
 #include "Framegraph/PassLibrary/PickingPass.h"
 #include "Environment.h"
+#include "StaticEnvironment.h"
+#include "DynamicEnvironment.h"
 #include "BillBoard.h"
 #include "Grid.h"
 #include "SceneProbes.h"
@@ -162,7 +165,22 @@ void Fracture::Renderer::RenderEnvironment()
         if (light->GetLightType() == LightType::Sky)
         {
             std::shared_ptr<SkyLight> sky = std::dynamic_pointer_cast<SkyLight>(light);
-            sky->GetEnvironment()->Render(AssetManager::getShader("Skybox"), m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
+            sky->GetEnvironment()->Render(m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
+        }
+        if (light->GetLightType() == LightType::DynamicSky)
+        {
+            std::shared_ptr<DynamicSkyLight> sky = std::dynamic_pointer_cast<DynamicSkyLight>(light);
+            const auto& material = sky->GetMaterial();
+            material->getShader()->use();
+            const auto& mUnis = sky->GetMaterial()->GetUniforms();
+            for (const auto& uniform : *mUnis.get())
+            {
+                WriteUniformData(*sky->GetEnvironment()->GetShader(), uniform.first, uniform.second);
+            }
+            material->getShader()->setVec3("viewPos", m_camera->getPosition());
+            material->getShader()->setFloat("viewHeight",m_Height);
+
+            sky->GetEnvironment()->Render(m_camera.get()->getViewMatrix(), m_camera->getProjectionMatrix());
         }
     }
 
@@ -284,7 +302,6 @@ void Fracture::Renderer::RenderDebugRetained()
     m_DebugMaterial->getShader()->unbind();
 }
 
-
 void Fracture::Renderer::EndFrame()
 {
     ProfilerTimer timer("End Frame");
@@ -301,6 +318,7 @@ void Fracture::Renderer::EndFrame()
 
 void Fracture::Renderer::WriteUniformData(Shader shader,std::string name, UniformValue value)
 {
+    shader.use();
     switch (value.Type)
     {
     case SHADER_TYPE_BOOL:
@@ -597,6 +615,15 @@ void Fracture::Renderer::SetupLighting(Material* material)
                 material->getShader()->setCubeMap("irradianceMap",sky->GetIrradianceMap()->GetTextureID(),(int)TextureType::IrradianceMap);
                 material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap()->GetTextureID(), (int)TextureType::PreFilterMap);
                 material->getShader()->setTexture("brdfLUT",sky->GetBDRFMap().get(), (int)TextureType::Brdf);
+                break;
+            }
+            case LightType::DynamicSky:
+            {
+                std::shared_ptr<DynamicSkyLight> sky = std::dynamic_pointer_cast<DynamicSkyLight>(m_lights[i]);
+                material->getShader()->setFloat("intensity", sky->Intensity());
+                material->getShader()->setCubeMap("irradianceMap", sky->GetIrradianceMap()->GetTextureID(), (int)TextureType::IrradianceMap);
+                material->getShader()->setCubeMap("prefilterMap", sky->GetPreFilterMap()->GetTextureID(), (int)TextureType::PreFilterMap);
+                material->getShader()->setTexture("brdfLUT", sky->GetBDRFMap().get(), (int)TextureType::Brdf);
                 break;
             }
         }       

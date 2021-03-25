@@ -59,6 +59,12 @@ namespace Fracture
 		std::vector<std::shared_ptr<FrameNode>> GetNodes();
 		std::vector<std::shared_ptr<Link>> GetLinks();
 
+		template<class T>
+		static std::shared_ptr<T> Create(Renderer& renderer)
+		{
+			return std::make_shared<T>(renderer);
+		}
+
 	private:
 		
 		Renderer& m_Renderer;	

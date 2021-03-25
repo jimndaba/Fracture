@@ -55,11 +55,32 @@ nodeType hashit(std::string const& inString) {
 	if (inString == "class Fracture::SourceNode") return nodeType::Source;
 }
 
-Fracture::FramaGraphSerialiser::FramaGraphSerialiser(const std::shared_ptr<FrameGraph>& graph):m_graph(graph)
+std::string EnumToString(nodeType nType)
+{
+	if (nType == nodeType::ClearFrame) return "0";
+	if (nType == nodeType::AdditiveMix) return "1";
+	if (nType == nodeType::Depth) return "4";
+	if (nType == nodeType::GaussianBlur) return "3";
+	if (nType == nodeType::Intermediate) return "5";
+	if (nType == nodeType::Lambertian) return "6";
+	if (nType == nodeType::Link) return "12";
+	if (nType == nodeType::Mix) return "2";
+	if (nType == nodeType::MultiplyMix) return "7";
+	if (nType == nodeType::Outline) return "8";
+	if (nType == nodeType::Sink) return "13";
+	if (nType == nodeType::Source) return "14";
+	if (nType == nodeType::SSAO) return "9";
+	if (nType == nodeType::Threshold) return "10";
+	if (nType == nodeType::ToneMapping) return "11";
+}
+
+Fracture::FrameGraphSerialiser::FrameGraphSerialiser(std::shared_ptr<FrameGraph>& graph, Renderer& renderer)
+	:m_graph(graph),
+	m_renderer(renderer)
 {
 }
 
-void Fracture::FramaGraphSerialiser::SerialiseGraph(const std::string& filepath)
+void Fracture::FrameGraphSerialiser::SerialiseGraph(const std::string& filepath)
 {
 	m_OutputStream.open(filepath);
 	json j;
@@ -160,7 +181,7 @@ void Fracture::FramaGraphSerialiser::SerialiseGraph(const std::string& filepath)
 	m_OutputStream.close();
 }
 
-bool Fracture::FramaGraphSerialiser::DeSerialiseGraph(const std::string& filepath)
+bool Fracture::FrameGraphSerialiser::DeSerialiseGraph(const std::string& filepath)
 {
 	std::ifstream stream(filepath);
 	json input;
@@ -181,9 +202,9 @@ bool Fracture::FramaGraphSerialiser::DeSerialiseGraph(const std::string& filepat
 	FRACTURE_TRACE("Fracture DeSerializing Scene");
 	if (exists(input, "FrameNodes"))
 	{
-		for (auto entity : input["FrameNodes"])
+		for (auto node : input["FrameNodes"])
 		{			
-			DeserializeNode(entity);
+			DeserializeNode(node);
 		}
 		
 	}
@@ -198,11 +219,99 @@ bool Fracture::FramaGraphSerialiser::DeSerialiseGraph(const std::string& filepat
 	return true;
 }
 
-void Fracture::FramaGraphSerialiser::DeserializeNode(nlohmann::json node)
+void Fracture::FrameGraphSerialiser::DeserializeNode(nlohmann::json n)
 {
+	if (n["Type"] == "ClearFrame")
+	{
+		auto node = std::make_shared<ClearFrame>(n["Name"]);
+		std::array<float, 3> vec3 = n["Color"];
+		node->Color = glm::vec3(vec3[0], vec3[1], vec3[2]);
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "AdditiveMixNode")
+	{
+		auto node = std::make_shared<AdditiveMixNode>(n["Name"],m_renderer.Width(),m_renderer.Height());
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "GaussianBlurNode")
+	{
+		auto node = std::make_shared<GaussianBlurNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+		node->amount = n["Amount"];
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "DepthNode")
+	{
+		auto node = std::make_shared<DepthNode>(n["Name"], m_renderer.Width(), m_renderer.Height(),m_renderer.m_Bucket);
+		node->NearPlane = n["Near"];
+		node->FarPlane = n["Far"];
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "IntermediateNode")
+	{
+		auto node = std::make_shared<IntermediateNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "LambertianNode")
+	{
+		auto node = std::make_shared<LambertianNode>(n["Name"], m_renderer.Width(), m_renderer.Height(),m_renderer.m_Bucket);
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "SinkNode")
+	{
+		auto node = std::make_shared<SinkNode>(n["Name"], m_renderer.Width(),m_renderer.Height());
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "SourceNode")
+	{
+		auto node = std::make_shared<SourceNode>(n["Name"]);
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "MultiplyMix")
+	{
+		auto node = std::make_shared<MultiplyMixNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "Outline")
+	{
+		auto node = std::make_shared<OutlineNode>(n["Name"], m_renderer.Width(), m_renderer.Height(),m_renderer.m_Bucket);
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "SSAO")
+	{
+		auto node = std::make_shared<SSAONode>(n["Name"], m_renderer.Width(), m_renderer.Height());		
+		node->radius = n["Radius"];
+		node->area = n["Area"];
+		node->falloff = n["Falloff"];
+		node->total_strength = n["Strenght"];
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "Threshold")
+	{
+		auto node = std::make_shared<ThresholdNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+		node->brightPassThreshold = n["Threshold"];
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "ToneMapping")
+	{
+		auto node = std::make_shared<ToneMappingNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+		node->Gamma  = n["Gamma"];
+		node->Exposure = n["Exposure"];
+		m_graph->addnode(node);
+	}
+	if (n["Type"] == "MixNode")
+	{
+		auto node = std::make_shared<MixNode>(n["Name"], m_renderer.Width(), m_renderer.Height());
+	
+		m_graph->addnode(node);
+	}
 }
 
-void Fracture::FramaGraphSerialiser::DeserializeLink(nlohmann::json link)
+void Fracture::FrameGraphSerialiser::DeserializeLink(nlohmann::json l)
 {
+	std::string from = l["NodeFrom"];
+	std::string to = l["NodeTo"];
+	std::string res = l["NodeSource"];
+	std::string source = l["NodeResource"];
+	m_graph->addLink(from, source, to, res);
 }
 

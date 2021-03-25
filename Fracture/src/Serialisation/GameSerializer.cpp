@@ -1,7 +1,7 @@
 #include "GameSerializer.h"
 #include "GameSettings.h"
 
-Fracture::GameSerializer::GameSerializer(std::shared_ptr<GameSettings> properties):m_settings(properties)
+Fracture::GameSerializer::GameSerializer(std::shared_ptr<GameSettings> gamesettings):m_settings(gamesettings)
 {
 }
 

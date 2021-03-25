@@ -1,8 +1,10 @@
 #include "LightComponent.h"
 #include "ComponentManager.h"
 #include "TransformComponent.h"
+#include "Rendering/StaticEnvironment.h"
 #include "Entity/ILight.h"
 #include "Entity/SkyLight.h"
+#include "Entity/DynamicSkylight.h"
 #include "Entity/SunLight.h"
 #include "Entity/PointLight.h"
 #include "Entity/SpotLight.h"
@@ -22,7 +24,10 @@ Fracture::LightComponent::LightComponent(UUID id, LightType lightType):Component
 		m_light = std::make_shared<SpotLight>();
 		break;
 	case LightType::Sky:
-		m_light = std::make_shared<SkyLight>();
+		m_light = std::make_shared<SkyLight>("Skylight");
+		break;
+	case LightType::DynamicSky:
+		m_light = std::make_shared<DynamicSkyLight>("DynamicSkylight");
 		break;
 	}
 }
@@ -30,7 +35,7 @@ Fracture::LightComponent::LightComponent(UUID id, LightType lightType):Component
 Fracture::LightComponent::LightComponent(const UUID& id, const std::shared_ptr<Texture2D>& hdr):
 	Component(id),m_type(LightType::Sky)
 {
-	m_light = std::make_shared<SkyLight>(hdr);
+	m_light = std::make_shared<SkyLight>("Skylight",hdr);
 }
 
 void Fracture::LightComponent::onStart()

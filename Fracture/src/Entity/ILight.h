@@ -15,7 +15,8 @@ namespace Fracture
 		Sun,
 		Point,
 		Spot,
-		Sky
+		Sky,
+		DynamicSky
 	};
 
 	class ILight

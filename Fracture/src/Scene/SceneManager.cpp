@@ -37,7 +37,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::NewScene()
 	
 
 	//SKYLIGHT ENTITY
-	std::shared_ptr<Entity> main_skylight = EntityFactory::CreateSkylight(newScene);
+	std::shared_ptr<Entity> main_skylight = EntityFactory::CreateStaticSkylight(newScene);
 
 	newScene->addEntity(main_Camera);
 	newScene->addEntity(main_sunlight);

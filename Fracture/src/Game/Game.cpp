@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Logging/Logger.h"
 #include "GameWindow.h"
+#include "Serialisation/ProjectProperties.h"
 #include "Rendering/Renderer.h"
 #include "Serialisation/GameSettings.h"
 #include "AssetManager/AssetManager.h"
@@ -14,11 +15,12 @@
 #include "Scene/SceneManager.h"
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
-#include "Rendering/DebugRenderer.h"
+//#include "Rendering/DebugRenderer.h"
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
 #include "Serialisation/GameSerializer.h"
-
+#include "Serialisation/ProjectSerializer.h"
+#include "Serialisation/SceneSerializer.h"
 
 double t = 0.0;
 const double dt = 0.01;
@@ -32,7 +34,7 @@ std::unique_ptr<Fracture::SceneManager> Fracture::Game::m_SceneManager = 0;
 
 Fracture::Game::Game()
 {
-	init();
+	
 }
 
 Fracture::Game::~Game()
@@ -41,7 +43,10 @@ Fracture::Game::~Game()
 
 void Fracture::Game::run()
 {
+
 	Profiler::Get().BeginSession("Profile");	
+
+	init();
 
 	loadContent();
 	while (!m_GameWindow->ShouldClose() && m_isRunning)
@@ -80,34 +85,61 @@ void Fracture::Game::init()
 	GameSerializer loader = GameSerializer(m_GameSettings);
 	loader.DeSerialize("Game.config");
 
+	m_properties = std::make_shared<ProjectProperties>();
+
+	ProjectSerializer seriliazer(m_properties);
+	if (!seriliazer.DeSerializeProperties("CubeWars.Fracture"))
+	{
+		FRACTURE_ERROR("FAiLED to load Properties");
+		return;
+	}
+
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(
 		m_GameSettings->Resolution_Width, 
 		m_GameSettings->Resolution_Height,
 		m_GameSettings->Title,
 		m_GameSettings->IsResizable));
 
-	//m_AssetManager = std::make_shared<AssetManager>();
+	
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_ComponentManager->onInit();
 
 	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
-	m_InputManager = std::unique_ptr<InputManager>(new InputManager());
-	//m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
+	m_InputManager = std::unique_ptr<InputManager>(new InputManager());	
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
-	m_debug = std::make_unique<DebugRenderer>();
+	m_AssetManager = std::unique_ptr<AssetManager>(new AssetManager(m_properties));
+	//m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
+	//m_debug = std::make_unique<DebugRenderer>();
 
 
 	m_Renderer->onInit();
 	m_PhysicsManager->Init();
-	
-
 }
 
 void Fracture::Game::loadContent()
 {
 	ProfilerTimer timer("loadContent");
+	ProjectSerializer seriliazer(m_properties);
+	if (!seriliazer.DeSerialize("CubeWars.Fracture"))
+	{
+		FRACTURE_ERROR("FAiLED to load Project");
+		return;
+	}
+
+	m_SceneManager->SetScene(m_properties->ActiveScene);
+	
+	//m_Renderer->SetCamera(camera);
+	
+	//m_Renderer2D->SetFont("roboto");
+
+	//m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
+
+	//m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get(), *m_Renderer2D.get());	
+	//m_graph->Buildgraph();
+
+
 	if (m_SceneManager->GetActiveScene())
 	{
 		m_SceneManager->GetActiveScene()->onLoad();
@@ -133,6 +165,7 @@ void Fracture::Game::update(float dt)
 
 	float mouseX = m_InputManager->GetMousePosition().x;
 	float mouseY = m_InputManager->GetMousePosition().y;
+
 	/*
 	if (InputManager::IsMouseDown(MOUSECODE::ButtonRight))
 	{
@@ -176,9 +209,15 @@ void Fracture::Game::render()
 {
 	ProfilerTimer timer("Render");
 	m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
-	m_Renderer->clearColor(0.3f, 0.5f, 9.0f);
-	m_Renderer->clear();
-	//m_Renderer->RenderPasses();
+	//Draw UI
+   // m_Renderer->SetCamera(camera2D);
+	//m_Renderer2D->SetCamera(camera2D);
+
+	//m_uigraph->execute(*m_Renderer);
+	//Draw Scene
+	//m_Renderer->SetCamera(camera);
+	//m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);
+	//m_graph->execute(*m_Renderer);
 	m_Renderer->EndFrame();
 }
 
@@ -249,8 +288,7 @@ void Fracture::Game::onWindowResize(int width, int height)
 	m_Renderer->setViewport(width, height);
 }
 
-Fracture::Renderer* Fracture::Game::GetRenderer()
+std::shared_ptr<Fracture::Game> Fracture::Game::Create()
 {
-	return m_Renderer.get();
+	return std::make_shared<Game>();
 }
-

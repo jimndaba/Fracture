@@ -6,21 +6,23 @@
 #include <string>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "Rendering/Renderer.h"
+#include "Rendering/Framegraph/FrameGraph.h"
 
 namespace Fracture
 {
-	class FrameGraph;
 	using json = nlohmann::json;
 
-	class FramaGraphSerialiser
+	class FrameGraphSerialiser
 	{
 	public:
-		FramaGraphSerialiser(const std::shared_ptr<FrameGraph>&  graph);
+		FrameGraphSerialiser(std::shared_ptr<FrameGraph>&  graph, Renderer& renderer);
 		void SerialiseGraph(const std::string& filepath);
 		bool DeSerialiseGraph(const std::string& filepath);
 	private:
-		std::shared_ptr<FrameGraph>  m_graph;
+		std::shared_ptr<FrameGraph>&  m_graph;
 		std::ofstream m_OutputStream;
+		Renderer& m_renderer;
 
 		void DeserializeNode(json node);
 		void DeserializeLink(json link);

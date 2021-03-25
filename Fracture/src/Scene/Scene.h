@@ -59,6 +59,7 @@ namespace Fracture
 
 		static std::shared_ptr<Entity> ActiveCamera();
 		static void setCamera(std::shared_ptr<Entity> camera);
+		static void setCamera(UUID id);
 
 		std::vector<std::shared_ptr<Entity>> Entities();
 		static std::shared_ptr<Entity> GetEntity(UUID id);

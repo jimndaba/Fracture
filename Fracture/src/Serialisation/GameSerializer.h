@@ -15,7 +15,7 @@ namespace Fracture
 	class GameSerializer
 	{
 	public:
-		GameSerializer(std::shared_ptr<GameSettings> properties);
+		GameSerializer(std::shared_ptr<GameSettings> gamesettings);
 		~GameSerializer();
 
 		void Serialize(const std::string& filepath);

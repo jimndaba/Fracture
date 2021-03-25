@@ -109,6 +109,18 @@ void Fracture::Scene::setCamera(std::shared_ptr<Entity> camera)
 	active_Camera = camera;
 }
 
+void Fracture::Scene::setCamera(Fracture::UUID id)
+{
+	if (ComponentManager::HasComponent<CameraControllerComponent>(id))
+	{
+		active_Camera = GetEntity(id);
+	}
+	else
+	{
+		FRACTURE_ERROR("Entity ID: {} - Has No CameraComponent!");
+	}
+}
+
 std::vector<std::shared_ptr<Fracture::Entity>> Fracture::Scene::Entities()
 {
 	return m_entities;

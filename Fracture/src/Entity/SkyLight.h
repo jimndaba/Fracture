@@ -7,7 +7,7 @@
 
 namespace Fracture
 {
-	class Environment;
+	class StaticEnvironment;
 	class Texture2D;
 	class TextureCubeMap;
 
@@ -15,8 +15,8 @@ namespace Fracture
 	{
 
 	public:
-		SkyLight();
-		SkyLight(const std::shared_ptr<Texture2D>& hdr);
+		SkyLight(const std::string& name);
+		SkyLight(const std::string& name,const std::shared_ptr<Texture2D>& hdr);
 		~SkyLight() = default;
 		virtual void SetAmbient(glm::vec4 ambient) { m_ambient = ambient; };
 		virtual void SetDiffuse(glm::vec4 diffuse) { m_diffuse = diffuse; };
@@ -34,13 +34,12 @@ namespace Fracture
 
 		std::shared_ptr<Texture2D> GetBDRFMap();
 
-		std::shared_ptr<Environment> GetEnvironment()const;	
+		std::shared_ptr<StaticEnvironment> GetEnvironment()const;	
 
-		void ChangeEnvironment(const std::string& name);
-		
+		void ChangeEnvironment(const std::string& name);		
 
 	private:
-		std::shared_ptr<Environment> m_environment;
+		std::shared_ptr<StaticEnvironment> m_environment;
 		glm::vec4 m_ambient = glm::vec4(1.0f);
 		glm::vec4 m_diffuse = glm::vec4(0.6f);
 		glm::vec4 m_specular = glm::vec4(0.6f);
