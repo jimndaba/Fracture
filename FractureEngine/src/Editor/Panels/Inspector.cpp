@@ -5,6 +5,8 @@
 #include "Rendering/Material.h"
 #include "Scripting/LuaScript.h"
 #include "../utils/FileDialogue.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
 #include "../Editor.h"
 
 Fracture::SampleUniformType stringToEnum(const std::string& m_type);
@@ -99,6 +101,13 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 				}
 
 				ImGui::EndCombo();
+			}
+
+			bool activeCam = camera->IsActveCamera;
+			if (ImGui::Checkbox("ActiveSceneCamera", &activeCam))
+			{
+				SceneManager::GetActiveScene()->setCamera(camera->GetID());
+				camera->IsActveCamera = activeCam;
 			}
 
 			float perspectiveVerticalFov = camera->foV;

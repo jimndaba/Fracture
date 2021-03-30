@@ -25,7 +25,7 @@ namespace Fracture
 	class EditorCamera;
 	class FreeCamera;
 	class Camera2D;
-	class EditorFrameGraph;
+	class FrameGraph;
 	class AnimationManager;
 	class AnimatorProbe;
 	struct Event;
@@ -58,7 +58,7 @@ namespace Fracture
 
 		std::shared_ptr<Logger> GetLogger();
 		static std::shared_ptr<ProjectProperties> Properties();		
-		static std::shared_ptr<EditorFrameGraph> m_graph;
+		static std::shared_ptr<FrameGraph> m_graph;
 		static std::shared_ptr<Editor> CreateInstance();
 
 	private:

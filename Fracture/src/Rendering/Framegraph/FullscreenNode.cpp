@@ -1,6 +1,6 @@
 #include "FullscreenNode.h"
 #include "FrameResource.h"
-#include "GLAD/glad.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 
 Fracture::FullScreenNode::FullScreenNode(const std::string& name):FrameNode(name)
 {

@@ -1,5 +1,5 @@
 #include "DebugLine.h"
-#include "GLAD/glad.h"
+#include "OpenGL/OpenGLBase.h"
 
 
 

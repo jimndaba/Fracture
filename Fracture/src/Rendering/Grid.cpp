@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "Shader.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include <glm\gtc\type_ptr.hpp>
 
 Fracture::Grid::Grid(int width, int height, float offsetx, float offsety, double thickness):m_thickness(thickness)

@@ -35,6 +35,7 @@
 #include "Rendering/DrawCommand.h"
 #include "Rendering/RenderBucket.h"
 #include "Rendering/Model.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 #include "Rendering/OpenGL/Mesh.h"
 #include "Rendering/OpenGL/Vertex.h"
 #include "Rendering/Shader.h"

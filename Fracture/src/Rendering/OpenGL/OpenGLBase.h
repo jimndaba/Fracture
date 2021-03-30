@@ -2,7 +2,8 @@
 #ifndef OPENGLBASE_H
 #define OPENGLBASE_H
 
-#include <GLAD\glad.h>
+
+#include "GL/glew.h"
 
 
 namespace Fracture

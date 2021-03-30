@@ -100,6 +100,8 @@ namespace Fracture
 
 		json serialise(const std::shared_ptr<ComponentSerialiser>& visitor) override;
 
+		bool IsActveCamera = false;
+
 	private:
 
 		virtual CameraControllerComponent* clone_impl(UUID id) const override
@@ -112,6 +114,7 @@ namespace Fracture
 
 		glm::mat4 m_viewMatrix;
 
+		
 	
 		float m_TargetYaw = -1.0f;
 		float m_TargetPitch = 0.0f;

@@ -26,6 +26,7 @@ namespace Fracture
 	struct Event;
 	struct GameSettings;
 	struct ProjectProperties;
+	class FrameGraph;
 
 	
 	class Game
@@ -59,19 +60,18 @@ namespace Fracture
 		static void onEvent(Event* mEvent);
 		void onWindowResize(int width, int height);
 
-		static std::shared_ptr<Game> Create();
-
 	private:
 		bool m_isRunning = true;
 		std::shared_ptr<ProjectProperties> m_properties;
 		std::unique_ptr<GameWindow> m_GameWindow;
-		std::unique_ptr<Renderer> m_Renderer;
+		std::shared_ptr<Renderer> m_Renderer;
 		std::unique_ptr<ComponentManager> m_ComponentManager;
 		std::unique_ptr<AssetManager> m_AssetManager;
 		std::unique_ptr<EntityManager> m_EntityManager;
 		std::unique_ptr<InputManager> m_InputManager;
 		std::unique_ptr<PhysicsManager> m_PhysicsManager;
 		std::unique_ptr<Logger> m_logger;
+		std::shared_ptr<FrameGraph> m_framegraph;
 		//std::unique_ptr<DebugRenderer> m_debug;
 		std::shared_ptr<GameSettings> m_GameSettings;
 		static std::unique_ptr<SceneManager> m_SceneManager;

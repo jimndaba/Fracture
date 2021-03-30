@@ -6,7 +6,7 @@
 #include "Rendering/RenderBucket.h"
 #include "AssetManager/AssetManager.h"
 #include "Profiling/Profiler.h"
-#include "GLAD/glad.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 
 Fracture::RenderQueueNode::RenderQueueNode(std::string name, const std::shared_ptr<RenderBucket>& bucket):FrameNode(name),m_bucket(bucket)
 {

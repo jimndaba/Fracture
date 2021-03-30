@@ -16,11 +16,16 @@
 #include "Profiling/Profiler.h"
 #include "Physics/PhysicsManager.h"
 //#include "Rendering/DebugRenderer.h"
+#include "Rendering/Framegraph/FrameGraph.h"
+#include "GameFramegraph.h"
 #include "Event/Event.h"
 #include "Event/Eventbus.h"
 #include "Serialisation/GameSerializer.h"
 #include "Serialisation/ProjectSerializer.h"
 #include "Serialisation/SceneSerializer.h"
+#include "Serialisation/FrameGraphSerialiser.h"
+
+#include <iostream>
 
 double t = 0.0;
 const double dt = 0.01;
@@ -33,8 +38,11 @@ std::shared_ptr<Fracture::Scene> Fracture::Game::m_currentScene=0;
 std::unique_ptr<Fracture::SceneManager> Fracture::Game::m_SceneManager = 0;
 
 Fracture::Game::Game()
-{
-	
+{	
+	std::cout << " NEW GAME" << std::endl;
+	m_logger = std::make_unique<Logger>();
+	m_Eventbus = std::make_shared<Eventbus>();
+	m_GameSettings = std::make_shared<GameSettings>();
 }
 
 Fracture::Game::~Game()
@@ -43,10 +51,10 @@ Fracture::Game::~Game()
 
 void Fracture::Game::run()
 {
-
+	std::cout << " NEW GAME" << std::endl;
 	Profiler::Get().BeginSession("Profile");	
-
-	init();
+	FRACTURE_TRACE("Engine Run");
+	//init();
 
 	loadContent();
 	while (!m_GameWindow->ShouldClose() && m_isRunning)
@@ -78,15 +86,15 @@ void Fracture::Game::run()
 void Fracture::Game::init()
 {	
 	ProfilerTimer timer("Init");
-	m_logger = std::make_unique<Logger>();
-	m_Eventbus = std::make_shared<Eventbus>();
-	m_GameSettings = std::make_shared<GameSettings>();
-
+	FRACTURE_TRACE("Engine Init");
+	FRACTURE_TRACE("Load Game settings");
 	GameSerializer loader = GameSerializer(m_GameSettings);
 	loader.DeSerialize("Game.config");
 
 	m_properties = std::make_shared<ProjectProperties>();
 
+
+	FRACTURE_TRACE("Load Properties");
 	ProjectSerializer seriliazer(m_properties);
 	if (!seriliazer.DeSerializeProperties("CubeWars.Fracture"))
 	{
@@ -94,6 +102,7 @@ void Fracture::Game::init()
 		return;
 	}
 
+	FRACTURE_INFO("Create Window");
 	m_GameWindow = std::unique_ptr<GameWindow>(new GameWindow(
 		m_GameSettings->Resolution_Width, 
 		m_GameSettings->Resolution_Height,
@@ -104,22 +113,26 @@ void Fracture::Game::init()
 	m_ComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
 	m_ComponentManager->onInit();
 
-	m_Renderer = std::unique_ptr<Renderer>(new Renderer());
+	m_Renderer = std::shared_ptr<Renderer>(new Renderer());
 	m_EntityManager = std::unique_ptr<EntityManager>(new EntityManager());
 	m_InputManager = std::unique_ptr<InputManager>(new InputManager());	
 	m_PhysicsManager = std::unique_ptr<PhysicsManager>(new PhysicsManager());
 	m_SceneManager = std::make_unique<SceneManager>();
 	m_AssetManager = std::unique_ptr<AssetManager>(new AssetManager(m_properties));
+	m_framegraph = std::make_shared<GameFrameGraph>(*m_Renderer.get());
 	//m_ScriptManager = std::unique_ptr<ScriptManager>(new ScriptManager());
 	//m_debug = std::make_unique<DebugRenderer>();
 
-
+	FRACTURE_INFO("Init Renderer");
 	m_Renderer->onInit();
+	m_Renderer->clearColor(1.0f, 0.0f, 0.0f);
+	FRACTURE_INFO("Init Physcis");
 	m_PhysicsManager->Init();
 }
 
 void Fracture::Game::loadContent()
 {
+	FRACTURE_TRACE("Engine LoadContent");
 	ProfilerTimer timer("loadContent");
 	ProjectSerializer seriliazer(m_properties);
 	if (!seriliazer.DeSerialize("CubeWars.Fracture"))
@@ -129,20 +142,18 @@ void Fracture::Game::loadContent()
 	}
 
 	m_SceneManager->SetScene(m_properties->ActiveScene);
-	
-	//m_Renderer->SetCamera(camera);
-	
-	//m_Renderer2D->SetFont("roboto");
 
-	//m_graph = std::shared_ptr<EditorFrameGraph>(new EditorFrameGraph(*m_Renderer.get()));
-
-	//m_uigraph = std::make_unique<UIGraph>(*m_Renderer.get(), *m_Renderer2D.get());	
-	//m_graph->Buildgraph();
-
+	{
+		FRACTURE_TRACE("Load Framegraph");
+		//Deserialise Scene Graph and build graph
+		FrameGraphSerialiser graphSerialiser = FrameGraphSerialiser(m_framegraph, *m_Renderer.get());
+		graphSerialiser.DeSerialiseGraph(m_properties->ScenesPath + "/" + m_properties->ActiveScene + ".graph");
+		m_framegraph->Buildgraph();
+	}
 
 	if (m_SceneManager->GetActiveScene())
 	{
-		m_SceneManager->GetActiveScene()->onLoad();
+		//m_SceneManager->GetActiveScene()->onLoad();
 		m_ComponentManager->onLoad();
 	}
 }
@@ -209,15 +220,9 @@ void Fracture::Game::render()
 {
 	ProfilerTimer timer("Render");
 	m_Renderer->BeginFrame(m_SceneManager->GetActiveScene());
-	//Draw UI
-   // m_Renderer->SetCamera(camera2D);
-	//m_Renderer2D->SetCamera(camera2D);
 
-	//m_uigraph->execute(*m_Renderer);
-	//Draw Scene
-	//m_Renderer->SetCamera(camera);
-	//m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);
-	//m_graph->execute(*m_Renderer);
+	m_framegraph->execute(*m_Renderer);
+
 	m_Renderer->EndFrame();
 }
 
@@ -230,7 +235,7 @@ void Fracture::Game::shutdown()
 {
 	Profiler::Get().EndSession();
 	m_AssetManager.release();
-	m_Renderer.release();
+	m_Renderer.reset();
 	m_ComponentManager.release();
 	m_EntityManager.release();
 	m_GameWindow.release();
@@ -286,9 +291,4 @@ void Fracture::Game::onQuit()
 void Fracture::Game::onWindowResize(int width, int height)
 {
 	m_Renderer->setViewport(width, height);
-}
-
-std::shared_ptr<Fracture::Game> Fracture::Game::Create()
-{
-	return std::make_shared<Game>();
 }

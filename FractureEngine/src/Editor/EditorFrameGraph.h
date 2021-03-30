@@ -10,13 +10,10 @@ namespace Fracture
 	class EditorFrameGraph : public FrameGraph
 	{
 	public:
-		EditorFrameGraph(Fracture::Renderer& renderer):FrameGraph(renderer)
+		EditorFrameGraph(Fracture::Renderer& renderer) :FrameGraph(renderer)
 		{
+
 			
-			{
-				auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket);
-				addnode(depthbuffer);
-			}
 			{
 				auto clear = std::make_shared<ClearFrame>("clearframe");
 				addnode(clear);
@@ -26,10 +23,10 @@ namespace Fracture
 				addnode(lambertian);
 			}
 
-			{
-				auto ssr = std::make_shared<SSRNode>("ssrPass", renderer.Width(), renderer.Height());
-				addnode(ssr);
-			}
+			//{
+			//	auto ssr = std::make_shared<SSRNode>("ssrPass", renderer.Width(), renderer.Height());
+			//	addnode(ssr);
+			//}
 
 			{
 				auto outline = std::make_shared<OutlineNode>("outlinePass", renderer.Width(), renderer.Height(), renderer.m_Bucket);
@@ -63,33 +60,33 @@ namespace Fracture
 				auto mixoutline = std::make_shared<MixNode>("mixOutlinePass", renderer.Width(), renderer.Height());
 				addnode(mixoutline);
 			}
-			{
-				UIMix = std::make_shared<MixNode>("UIPass", renderer.Width(), renderer.Height());
-				addnode(UIMix);
-			}
-			
+			//{
+			//	UIMix = std::make_shared<MixNode>("UIPass", renderer.Width(), renderer.Height());
+			//	addnode(UIMix);
+			//}
 
-			addLink("global_output", "rendertarget", "UIPass", "Mix_out");// "mixPass", "output");
+
+			addLink("global_output", "rendertarget", "mixOutlinePass", "Mix_out");// "mixPass", "output");
 
 			//addLink("global_output", "rendertarget", "ssrPass", "SSROutput");// "mixPass", "output");
 
-			addLink("UIPass", "colorA", "UIPass", "Texture");
-			addLink("UIPass", "colorB", "AddPass", "output");
+			//addLink("UIPass", "colorA", "UIPass", "Texture");
+			//addLink("UIPass", "colorB", "AddPass", "output");
 
-			
+
 			addLink("mixOutlinePass", "colorA", "outlinePass", "outline_out");
 			addLink("mixOutlinePass", "colorB", "AddPass", "output");
 
 			addLink("AddPass", "colorA", "lamertianPass", "outputColor");
 			addLink("AddPass", "colorB", "BoxBlurPass", "blurOutput");
-			
+
 			//blooom
-			addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");			
-			addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");			
+			addLink("BoxBlurPass", "colorTexture", "thresholdPass", "thresholdMap");
+			addLink("thresholdPass", "colorTexture", "ToneMapPass", "colorOut");
 			addLink("ToneMapPass", "buffer", "lamertianPass", "outputColor");
-			
+
 			//addLink("intermediatePass", "inputbuffer", "lamertianPass",  "outputColor");			
-			
+
 			//main lambertian pass
 			///addLink("ssrPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");			
 			//addLink("ssrPass", "AlbedoTexture", "lamertianPass", "outputColor");
@@ -98,14 +95,20 @@ namespace Fracture
 			//addLink("ssrPass", "PositionTexture", "lamertianPass", "outputPosition");
 
 			addLink("lamertianPass", "buffer", "clearframe", "buffer");
-			addLink("lamertianPass", "SSAOMap", "ssaoPass", "SSAOOutput");
+
+			addLink("lamertianPass", "SSAOMap", "ssaoBlur", "blurOutput");
+
+			addLink("ssaoBlur", "colorTexture", "ssaoPass", "SSAOOutput");
 
 			addLink("ssaoPass", "DepthTexture", "global_depthbuffer", "outputDepthMap");
-			
-			addLink("clearframe", "buffer", "global_backbuffer", "rendertarget");		
-			
-			
+
+			addLink("clearframe", "buffer", "global_backbuffer", "rendertarget");
+
+
 		}
+		
+		~EditorFrameGraph() {};
+
 
 		std::shared_ptr<MixNode> UIMix;
 

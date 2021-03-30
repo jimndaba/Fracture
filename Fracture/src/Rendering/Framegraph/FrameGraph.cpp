@@ -1,6 +1,9 @@
 #include "FrameGraph.h"
 
-Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_backBufferTarget(renderer.SceneRenderTarget)
+Fracture::FrameGraph::FrameGraph(Renderer& renderer) :
+	m_Renderer(renderer), 
+	m_backBufferTarget(renderer.SceneRenderTarget),
+	outputbuffer(std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height()))
 {
 	{
 		auto backbuffer = std::make_shared<SourceNode>("global_backbuffer", m_backBufferTarget);
@@ -8,11 +11,19 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :m_Renderer(renderer), m_ba
 	}
 
 	{
-		outputbuffer = std::make_shared<SinkNode>("global_output", renderer.Width(), renderer.Height());
+		auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket);
+		addnode(depthbuffer);
+	}
+
+	{
 		addnode(outputbuffer);
 	}
 
+
+
 }
+
+Fracture::FrameGraph::~FrameGraph() {};
 
 void Fracture::FrameGraph::addLink(const std::string& from, const std::string& source, const std::string& to, const std::string& resouce)
 {
@@ -92,7 +103,8 @@ void Fracture::FrameGraph::DFSUtil(std::shared_ptr<FrameNode> v)
 			v->isVisited = true;
 		}
 
-		for (const auto& adjNode : adjList[v->GetName()])
+		std::string name = v->GetName();
+		for (const auto& adjNode : adjList[name])
 		{
 			if (!adjNode->isVisited)
 			{

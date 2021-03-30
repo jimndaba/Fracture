@@ -37,6 +37,7 @@ namespace Fracture
 
 	public:
 		FrameGraph(Renderer& renderer);
+		virtual ~FrameGraph() = 0;
 
 		void addLink(const std::string& from,const std::string& source,const std::string& to,const std::string& resouce);	
 		
@@ -81,6 +82,8 @@ namespace Fracture
 		std::vector<std::shared_ptr<FrameNode>> m_FrameNodeQueue;
 
 	};
+
+
 
 }
 #endif

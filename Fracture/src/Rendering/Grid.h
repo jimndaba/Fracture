@@ -4,8 +4,6 @@
 #define GRID_H
 
 #include <cstdint>
-#include "GLAD/glad.h"
-
 #include <memory>
 #include "glm/glm.hpp"
 #include <vector>

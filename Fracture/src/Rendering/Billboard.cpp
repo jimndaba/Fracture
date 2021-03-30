@@ -1,5 +1,5 @@
 #include "Billboard.h"
-#include "GLAD/glad.h"
+#include "OpenGL/OpenGLBase.h"
 
 Fracture::Billboard::Billboard()
 {

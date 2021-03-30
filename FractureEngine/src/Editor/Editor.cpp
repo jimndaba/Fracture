@@ -39,7 +39,7 @@ bool Fracture::Editor::showViewport = true;
 bool Fracture::Editor::showRenderSettings;
 
 std::shared_ptr<Fracture::Editor> Fracture::Editor::m_instance;
-std::shared_ptr<Fracture::EditorFrameGraph> Fracture::Editor::m_graph;
+std::shared_ptr<Fracture::FrameGraph> Fracture::Editor::m_graph;
 std::shared_ptr<Fracture::Scene> Fracture::Editor::m_ActiveScene;
 std::unique_ptr<Fracture::SceneManager> Fracture::Editor::m_SceneManager;
 std::unique_ptr<Fracture::EntityFactory> Fracture::Editor::m_EntityFactory;
@@ -569,7 +569,7 @@ void Fracture::Editor::Render()
        
         //Draw Scene
         m_Renderer->SetCamera(camera);
-        m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);        
+        //m_graph->UIMix->AddResource("Texture", m_uigraph->output->RenderOut);        
         m_graph->execute(*m_Renderer); 
 
         m_Renderer->EndFrame();
@@ -686,8 +686,8 @@ void Fracture::Editor::DrawMenuBar()
             }
             if (ImGui::MenuItem("Save FrameGraph", NULL))
             {
-                //FrameGraphSerialiser serialiser = FrameGraphSerialiser(m_graph,*m_Renderer);
-                //serialiser.SerialiseGraph(m_properties->ScenesPath + "/" + m_ActiveScene->Name + ".graph");
+                FrameGraphSerialiser serialiser = FrameGraphSerialiser(m_graph,*m_Renderer.get());
+                serialiser.SerialiseGraph(m_properties->ScenesPath + "/" + m_ActiveScene->Name + ".graph");
             }
             if (ImGui::MenuItem("Exit", NULL))
             {
@@ -736,7 +736,12 @@ void Fracture::Editor::DrawMenuBar()
                 m_ActiveScene->addEntity(entity);
                 m_sceneview->setSelectEntity(entity);
             };
-            if (ImGui::MenuItem("Camera", NULL)) {};
+            if (ImGui::MenuItem("Camera", NULL)) 
+            {
+                std::shared_ptr<Entity> entity = EntityFactory::CreateCamera(m_ActiveScene);
+                m_ActiveScene->addEntity(entity);
+                m_sceneview->setSelectEntity(entity);
+            };
             if (ImGui::MenuItem("Sunlight", NULL))
             {
                 std::shared_ptr<Entity> entity = EntityFactory::CreateSunlight(m_ActiveScene);
@@ -940,43 +945,6 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PushFont(boldFont);
         ImGui::Checkbox("##drawdebug", &isWindowResizable);
         m_GameSettings->IsResizable = isWindowResizable;
-        ImGui::PopFont();
-        ImGui::Separator();
-
-        ImGui::Separator();
-        bool bloom ;
-        ImGui::NextColumn();
-        ImGui::Text("Exposure /Gamma");
-        ImGui::NextColumn();
-
-        ImGui::PushFont(boldFont);
-        ImGui::Checkbox("##Bloom", &bloom);
-        ImGui::DragFloat("##exp", &m_graph->ToneMap->Exposure, 0.1f, 0.0f, 5.0f, "%.2f");
-        ImGui::DragFloat("##gam", &m_graph->ToneMap->Gamma, 0.1f, 0.0f, 5.0f, "%.2f");
-        ImGui::DragFloat("##bright", &m_graph->BrightPass->brightPassThreshold, 0.1f, 0.0f, 5.0f, "%.2f");
-        ImGui::DragInt("##size", &m_graph->ssaoblur->amount, 1, 0, 5, "%.2f");
-  
-        ImGui::NextColumn();
-        ImGui::Text("SSAO");
-        ImGui::SameLine();
-        ImGui::NextColumn();
-
-        ImGui::Text("Strength");
-        ImGui::SameLine();
-        ImGui::DragFloat("##strength", &m_graph->ssao->total_strength, 0.001f, 0.0001f, 0.0f, "%.2f");
-
-        ImGui::Text("Area");
-        ImGui::SameLine();
-        ImGui::DragFloat("##area", &m_graph->ssao->area, 0.001f, 0.0001f, 0.0f, "%.2f");
-
-        ImGui::Text("Radius");
-        ImGui::SameLine();
-        ImGui::DragFloat("##radius", &m_graph->ssao->radius, 0.001f, 0.0001f, 0.0f, "%.2f");
-
-        ImGui::Text("Falloff");
-        ImGui::SameLine();
-        ImGui::DragFloat("##falloff", &m_graph->ssao->falloff, 0.001f, 0.0001f, 0.0f, "%.2f");
-
         ImGui::PopFont();
 
         ImGui::Separator();

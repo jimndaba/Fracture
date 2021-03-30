@@ -3,7 +3,7 @@
 #include "Game/Game.h"
 #include "Event/Event.h"
 #include "Logging/Logger.h"
-#include "GLAD/glad.h"
+#include "Rendering/OpenGL/OpenGLBase.h"
 
 
 GLFWwindow* Fracture::GameWindow::window;
@@ -50,12 +50,22 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-			
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
 	{
-		FRACTURE_ERROR("Failed to initialize GLAD");
+		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+		glfwTerminate();
 		return;
 	}
+
+	glewExperimental = true;
+
+	//if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	//{
+	//	FRACTURE_ERROR("Failed to initialize GLAD");
+	//	return;
+	//}
 
 	glfwSwapInterval(0);
 		

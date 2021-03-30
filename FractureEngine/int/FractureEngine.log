@@ -1,10 +1,97 @@
-﻿     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
+﻿  Editor.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(972,113): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  EditorCamera.cpp
+  TabbedElement.cpp
+  MaterialFactory.cpp
+  FractureSplash.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(125,55): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(132,48): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  FreeCamera.cpp
+  AssetBrowserPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(166,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(176,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(184,73): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(184,92): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(184,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(200,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(208,99): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(208,118): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(208,108): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(225,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(233,98): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(233,117): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(233,107): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(249,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(257,101): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(257,120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\AssetBrowserPanel.cpp(257,110): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Inspector.cpp
+  Panel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Panel.cpp(683,36): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Panel.cpp(705,36): warning C4312: 'type cast': conversion from 'const uint32_t' to 'void *' of greater size
+  RenderSettings.cpp
+  SceneviewPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(292,75): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(296,74): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(300,79): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(305,59): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(348,84): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\SceneviewPanel.cpp(356,8): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  TabbedPanel.cpp
+  ViewPanel.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(23,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(38,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(54,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(70,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(86,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+  main.cpp
+  imgui_impl_opengl3.cpp
+     Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  6 of 20094 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    95 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1343): warning C4715: 'stringToEnum': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\Serialisation\FrameGraphSerialiser.cpp(56): warning C4715: 'hashit': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(154): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(169): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\Rendering\UIGraph\UIMultiSocket.cpp(25): warning C4715: 'Fracture::UIMultiSocket::GetSocket': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\Rendering\UIGraph\UIGraph.cpp(93): warning C4715: 'Fracture::UIGraph::getNode': not all control paths return a value
+D:\Dev\Fracture\Fracture\src\Rendering\Framegraph\FrameGraph.cpp(52): warning C4715: 'Fracture::FrameGraph::getNode': not all control paths return a value
+  All 20466 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
+LINK : warning LNK4286: symbol '__glewLinkProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteBuffers' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetProgramInfoLog' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDetachShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewShaderSource' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBlendEquation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBlendEquationSeparate' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewAttachShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBufferData' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewActiveTexture' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteVertexArrays' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBlendFuncSeparate' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetShaderInfoLog' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUniform1i' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetProgramiv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetAttribLocation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCreateShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCreateProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDrawElementsBaseVertex' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetShaderiv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCompileShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBindSampler' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUseProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
 Fracture.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftdebug.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
 Fracture.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(winfnt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
 Fracture.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(type42.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info

@@ -77,8 +77,7 @@ void Fracture::Scene::Destroy(UUID id)
 
 std::shared_ptr<Fracture::Entity> Fracture::Scene::Duplicate(const std::shared_ptr<Entity>& entity)
 {
-	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();	
-
+	std::shared_ptr<Entity> new_entity = EntityManager::CreateEntity<Entity>();
 	CopyComponentIfExists<TagComponent>(new_entity, entity);	
 	CopyComponentIfExists<RelationShipComponent>(new_entity, entity);
 	CopyComponentIfExists<TransformComponent>(new_entity, entity);
@@ -86,8 +85,7 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::Duplicate(const std::shared_p
 	CopyComponentIfExists<LightComponent>(new_entity, entity);
 	CopyComponentIfExists<RigidBodyComponent>(new_entity, entity);
 	CopyComponentIfExists<BoxColliderComponent>(new_entity, entity);
-	CopyComponentIfExists<ScriptComponent>(new_entity, entity);
-	
+	CopyComponentIfExists<ScriptComponent>(new_entity, entity);	
 	return new_entity;
 }
 
@@ -105,15 +103,31 @@ std::shared_ptr<Fracture::Entity> Fracture::Scene::ActiveCamera()
 }
 
 void Fracture::Scene::setCamera(std::shared_ptr<Entity> camera)
-{
+{	
+	if (active_Camera)
+	{
+		auto oldcamera = ComponentManager::GetComponent<CameraControllerComponent>(active_Camera->GetId());
+		oldcamera->IsActveCamera = false;
+	}
+
 	active_Camera = camera;
+	auto cameraComp = ComponentManager::GetComponent<CameraControllerComponent>(camera->GetId());
+	cameraComp->IsActveCamera = true;
 }
 
 void Fracture::Scene::setCamera(Fracture::UUID id)
 {
 	if (ComponentManager::HasComponent<CameraControllerComponent>(id))
 	{
+		if (active_Camera)
+		{
+			auto oldcamera = ComponentManager::GetComponent<CameraControllerComponent>(active_Camera->GetId());
+			oldcamera->IsActveCamera = false;
+		}
+
 		active_Camera = GetEntity(id);
+		auto camera = ComponentManager::GetComponent<CameraControllerComponent>(id);
+		camera->IsActveCamera = true;
 	}
 	else
 	{

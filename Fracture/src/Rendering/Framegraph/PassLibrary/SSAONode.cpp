@@ -82,7 +82,7 @@ void Fracture::SSAONode::execute(Renderer& renderer)
 
 	resources["SSAOOutput"]->bind();
 	m_blurshader->use();
-	m_shader->setTexture("ssaoInput", resources["ssaopass"]->GetColorTexture(0).get(), 0);
+	m_blurshader->setTexture("ssaoInput", resources["ssaopass"]->GetColorTexture(0).get(), 0);
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindTexture(GL_TEXTURE_2D, 0);
