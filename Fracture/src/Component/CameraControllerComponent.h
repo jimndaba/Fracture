@@ -12,11 +12,11 @@ namespace Fracture
 {
 	
 
-	const float YAW = -1.0f;
-	const float PITCH = 0.0f;
-	const float SPEED = 5.0f;
-	const float SENSITIVITY = 0.1f;
-	const float ZOOM = 45.0f;
+	const float cYAW = 0.5f;
+	const float cPITCH = 0.0f;
+	const float cSPEED = 5.0f;
+	const float cSENSITIVITY = 0.1f;
+	const float cZOOM = 45.0f;
 
 	class Ray;
 
@@ -25,7 +25,7 @@ namespace Fracture
 	{
 
 	public:
-		CameraControllerComponent(UUID id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+		CameraControllerComponent(UUID id, glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = cYAW, float pitch = cPITCH);
 		~CameraControllerComponent();
 
 		CameraControllerComponent(const CameraControllerComponent& component, UUID id) :Component(id)
@@ -49,13 +49,13 @@ namespace Fracture
 
 		// Camera Attributes
 		glm::vec3 Position = glm::vec3(0.0f, 5.0f, 15.0f);
-		glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 Front = glm::vec3(0.0f, 0.0f, 1.0f);
 		glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::vec3 Right = glm::vec3(1.0f, 0.0f, 0.0f);
 		glm::vec3 LookTarget = glm::vec3(0,0,0);
-		glm::vec3 WorldUp;
+		glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		// euler Angles
-		float Yaw = -1.0f;
+		float Yaw = 0.0f;
 		float Pitch = 0.0f;
 		float Roll = 0.0f;
 		// camera options

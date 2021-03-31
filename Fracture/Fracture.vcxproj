@@ -131,7 +131,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\;$(SolutionDir)src\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)vendor\;$(SolutionDir)vendor\Bullet\include;$(SolutionDir)vendor\lua</AdditionalUsingDirectories>
@@ -149,7 +149,8 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\release;$(SolutionDir)vendor\Bullet\lib;$(SolutionDir)vendor\Bullet\lib\release;$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype.lib;lua54.lib;opengl32.lib;glfw3.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;lua54.lib;opengl32.lib;glfw3.lib;assimp-vc141-mt.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -185,7 +186,6 @@
     <ClCompile Include="src\Entity\SkyLight.cpp" />
     <ClCompile Include="src\Entity\UUID.cpp" />
     <ClCompile Include="src\Event\Eventbus.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\GameWindow.cpp" />
     <ClCompile Include="src\Input\IInputState.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
@@ -201,6 +201,7 @@
     <ClCompile Include="src\Rendering\Environment.cpp" />
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framegraph\PassLibrary\SSRNode.cpp" />
+    <ClCompile Include="src\Rendering\Framegraph\SinkNode.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\BufferAttribute.cpp" />
     <ClCompile Include="src\Rendering\DynamicEnvironment.cpp" />
     <ClCompile Include="src\Rendering\StaticEnvironment.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="src\Rendering\Bindable.h" />
     <ClInclude Include="src\Rendering\Font.h" />
     <ClInclude Include="src\Rendering\Framegraph\PassLibrary\SSRNode.h" />
+    <ClInclude Include="src\Rendering\Framegraph\SinkNode.h" />
     <ClInclude Include="src\Rendering\StaticEnvironment.h" />
     <ClInclude Include="src\Rendering\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\Rendering\Framegraph\FrameGraph.h" />
@@ -374,7 +376,6 @@
     <ClInclude Include="src\Event\PhysicsEvents.h" />
     <ClInclude Include="src\Event\WindowEvents.h" />
     <ClInclude Include="src\Fracture.h" />
-    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\GameWindow.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Input\Keycode.h" />

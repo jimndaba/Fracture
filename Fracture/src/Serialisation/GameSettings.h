@@ -9,16 +9,14 @@ namespace Fracture
 
 	struct GameSettings
 	{
-		std::string Title = "Sandbox";
+		std::string Title;
 		//Display Settings
-		int Resolution_Width = 1280;
-		int Resolution_Height = 720;
+		int Resolution_Width;
+		int Resolution_Height;
 		bool IsFullScreen;
 		bool IsResizable;
 		//FrameGraph Settings
-
 		//Game Setup
-
 		//System Settings
 
 

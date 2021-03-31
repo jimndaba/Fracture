@@ -1,5 +1,6 @@
 #include "GameSerializer.h"
 #include "GameSettings.h"
+#include "Logging/Logger.h"
 
 Fracture::GameSerializer::GameSerializer(std::shared_ptr<GameSettings> gamesettings):m_settings(gamesettings)
 {
@@ -29,14 +30,14 @@ bool Fracture::GameSerializer::DeSerialize(const std::string& filepath)
 
 	if (!stream.good())
 	{
-		//FRACTURE_ERROR("Can't read file");
+		FRACTURE_ERROR("Can't read file");
 		return false;
 	}
 
 	stream >> input;
 	if (input.is_null())
 	{
-		//FRACTURE_ERROR("File is either non-json file or corrupt;");
+		FRACTURE_ERROR("File is either non-json file or corrupt;");
 		return false;
 	}
 

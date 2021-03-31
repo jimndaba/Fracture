@@ -1,6 +1,5 @@
 #include "GameWindow.h"
 #include "Core/FractureCore.h"
-#include "Game/Game.h"
 #include "Event/Event.h"
 #include "Logging/Logger.h"
 #include "Rendering/OpenGL/OpenGLBase.h"
@@ -51,6 +50,8 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 		
+	glewExperimental = GL_TRUE;
+
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -59,7 +60,7 @@ Fracture::GameWindow::GameWindow(int width, int height, std::string title, bool 
 		return;
 	}
 
-	glewExperimental = true;
+	
 
 	//if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	//{

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\GameWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -363,11 +360,11 @@
     <ClCompile Include="src\Rendering\OpenGL\VertexBufferLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Framegraph\SinkNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\GameWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1053,6 +1050,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\OpenGL\VertexBufferLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Framegraph\SinkNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

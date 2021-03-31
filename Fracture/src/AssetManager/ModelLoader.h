@@ -56,7 +56,7 @@ namespace Fracture
 		static void processSkeleton(std::shared_ptr<Bone> bone, std::shared_ptr<Skeleton> skeleton, aiNode* node);
 		static void ImportMaterial(aiMaterial* material, std::shared_ptr<Material> f_materail);
 		static std::shared_ptr<Texture2D> loadMaterialTexture(aiMaterial* mat, aiTextureType type, TextureType typeName);
-		static std::shared_ptr<Fracture::Material> loadMeshMaterial(aiMaterial* material, bool isAnimated);
+		static std::shared_ptr<Fracture::Material> loadMeshMaterial(int index,aiMaterial* material, bool isAnimated);
 		static std::shared_ptr<AnimationClip> loadModelAnimations(aiAnimation* animation);
 	};
 }

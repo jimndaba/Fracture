@@ -171,7 +171,7 @@ void Fracture::InspectorPanel::DrawComponents(Entity entity)
 			// Model can have more that 1 material
 			ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap;// | ImGuiTreeNodeFlags_FramePadding;
 			
-			for (auto material : render->GetModel()->GetMaterials())//
+			for (auto& material : render->GetModel()->GetMaterials())//
 			{
 				
 				bool open = ImGui::TreeNodeEx(material->Name.c_str(), treeNodeFlags, material->Name.c_str());

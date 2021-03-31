@@ -50,7 +50,7 @@ namespace Fracture
 		AssetManager(std::shared_ptr<ProjectProperties> m_properties);
 		~AssetManager();
 
-		static const std::shared_ptr<Shader>& getShader(const std::string &name);
+		static std::shared_ptr<Shader>& getShader(const std::string &name);
 		static std::shared_ptr<Model> getModel(const std::string &name);
 		static const std::shared_ptr<Material>& getMaterial(const std::string &name);
 		static std::shared_ptr<Texture2D> getTexture2D(const std::string &name);

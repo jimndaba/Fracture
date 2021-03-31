@@ -11,6 +11,7 @@
 #include "Link.h"
 #include "FrameNode.h"
 #include "SourceNode.h"
+#include "SinkNode.h"
 #include "Rendering/RenderTarget.h"
 #include "PassLibrary/ClearFrame.h"
 #include "PassLibrary/LambertianNode.h"
@@ -44,6 +45,8 @@ namespace Fracture
 		void addnode(std::shared_ptr<FrameNode> n);		
 
 		std::shared_ptr<FrameNode> getNode(const std::string& name);
+
+		void LinkResources();
 
 		void execute(Renderer& renderer);	
 

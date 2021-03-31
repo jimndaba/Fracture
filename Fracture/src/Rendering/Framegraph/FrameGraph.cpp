@@ -9,18 +9,13 @@ Fracture::FrameGraph::FrameGraph(Renderer& renderer) :
 		auto backbuffer = std::make_shared<SourceNode>("global_backbuffer", m_backBufferTarget);
 		addnode(backbuffer);
 	}
-
 	{
 		auto depthbuffer = std::make_shared<DepthNode>("global_depthbuffer", renderer.Width(), renderer.Height(), renderer.m_Bucket);
 		addnode(depthbuffer);
 	}
-
 	{
 		addnode(outputbuffer);
 	}
-
-
-
 }
 
 Fracture::FrameGraph::~FrameGraph() {};
@@ -37,6 +32,15 @@ void Fracture::FrameGraph::addLink(const std::string& from, const std::string& s
 
 void Fracture::FrameGraph::addnode(std::shared_ptr<FrameNode> n)
 {
+	for(auto& node : m_nodes)
+	{
+		if (node->GetName() == n->GetName())
+		{
+			FRACTURE_INFO("Node: {} , already Exists", n->GetName());
+			return;
+		}
+	}
+
 	m_nodes.push_back(n);
 }
 
@@ -51,25 +55,35 @@ std::shared_ptr<Fracture::FrameNode> Fracture::FrameGraph::getNode(const std::st
 	}
 }
 
-void Fracture::FrameGraph::execute(Renderer& renderer)
+void Fracture::FrameGraph::LinkResources()
 {
-	ProfilerTimer timer("Execute Framegraph");
 	for (const auto& node : m_FrameNodeQueue)
 	{
 		for (auto& m : m_links)
 		{
-			if (m->FrameNode_From == node->GetName())
-			{				
+			std::string node_n = node->GetName();
+			if (m->FrameNode_From == node_n)
+			{
 				for (const auto& n : m_nodes)
 				{
-					if (n->GetName() == m->FrameNode_To)
+					std::string node_name = n->GetName();
+					if (node_name == m->FrameNode_To)
 					{
-						std::shared_ptr<FrameResource> resource = n->getResource(m->FrameNode_Resource);
+						std::string res_name = m->FrameNode_Resource;
+						std::shared_ptr<FrameResource> resource = n->getResource(res_name);
 						node->LinkResource(m->FrameNode_Source, resource);
 					}
 				}
 			}
 		}
+	}
+}
+
+void Fracture::FrameGraph::execute(Renderer& renderer)
+{
+	ProfilerTimer timer("Execute Framegraph");
+	for (const auto& node : m_FrameNodeQueue)
+	{
 		node->execute(renderer);
 	}
 }
@@ -84,7 +98,7 @@ void Fracture::FrameGraph::Buildgraph()
 	}
 
 	DFS(outputbuffer);
-	//DFS(adjList["global_output"][0]);
+	LinkResources();
 }
 
 void Fracture::FrameGraph::DFSUtil(std::shared_ptr<FrameNode> v)

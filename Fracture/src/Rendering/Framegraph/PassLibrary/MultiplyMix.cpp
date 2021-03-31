@@ -45,5 +45,5 @@ void Fracture::MultiplyMixNode::execute(Renderer& renderer)
 
 nlohmann::json Fracture::MultiplyMixNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
 {
-	visitor->visitMultiplyMixNode(*this);
+	return visitor->visitMultiplyMixNode(*this);
 }

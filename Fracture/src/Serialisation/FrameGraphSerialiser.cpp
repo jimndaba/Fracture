@@ -310,8 +310,10 @@ void Fracture::FrameGraphSerialiser::DeserializeLink(nlohmann::json l)
 {
 	std::string from = l["NodeFrom"];
 	std::string to = l["NodeTo"];
-	std::string res = l["NodeSource"];
-	std::string source = l["NodeResource"];
+	std::string res = l["NodeResource"];
+	std::string source = l["NodeSource"];
+
+	FRACTURE_TRACE("Adding Link:from - {}:{}, to - {}:{},",from,source,to,res );
 	m_graph->addLink(from, source, to, res);
 }
 

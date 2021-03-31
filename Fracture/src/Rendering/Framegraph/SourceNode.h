@@ -47,61 +47,6 @@ namespace Fracture
 
 	};
 
-	class SinkNode :public FullScreenNode
-	{
-	public:
-		SinkNode(std::string name) :FullScreenNode(name)
-		{
-			std::shared_ptr<InputSocket> m_output = std::make_shared<InputSocket>("rendertarget");
-			m_shader = AssetManager::getShader("ColorMap");
-
-			AddInputSocket(m_output);
-			AddInputResource(m_output,colorIn);
-		}
-
-		SinkNode(std::string name, int width, int height) :FullScreenNode(name)
-		{
-			std::shared_ptr<InputSocket> m_input = std::make_shared<InputSocket>("rendertarget");
-
-			m_shader = AssetManager::getShader("ColorMap");
-			
-			colorIn = RenderTarget::CreateRenderTarget("Sink_Color_In",width, height,AttachmentTarget::Texture2D,FormatType::Float, 1, false);	
-			
-			outputColor = RenderTarget::CreateRenderTarget("Sink_Color_In", width, height, AttachmentTarget::Texture2D, FormatType::Float, 1, false);
-
-			AddInputSocket(m_input);
-			AddInputResource(m_input,colorIn);
-			AddResource("OutputRender", outputColor);
-	
-		}
-
-		void execute(Renderer& renderer) override
-		{		
-			//renderer.clear();
-			glDisable(GL_DEPTH_TEST);
-			resources["OutputRender"]->bind();
-			m_shader->use();			
-			glBindVertexArray(quadVAO);
-			m_shader->setTexture("OutMainBuffer", resources["rendertarget"]->GetColorTexture(0).get(), 0);			
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			m_shader->unbind();
-			resources["OutputRender"]->Unbind();
-		}
-
-		json Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
-		{
-			return visitor->visitSinkNode(*this);
-		}
-		
-		std::shared_ptr<RenderTarget> outputColor;
-	private:
-		std::shared_ptr<Shader> m_shader;
-		std::shared_ptr<FrameResource> colorIn;
-	
-
-	};
-
-
 }
 
 #endif

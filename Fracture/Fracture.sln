@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FractureEngine", "..\Fractu
 		{47AFA82F-B3AD-4F3B-8D34-84C97A852504} = {47AFA82F-B3AD-4F3B-8D34-84C97A852504}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cubewars", "..\..\Cubewars\Cubewars\Cubewars.vcxproj", "{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{47AFA82F-B3AD-4F3B-8D34-84C97A852504} = {47AFA82F-B3AD-4F3B-8D34-84C97A852504}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -38,6 +43,17 @@ Global
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.ActiveCfg = Release|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x64.Build.0 = Release|x64
 		{6CBD171B-C85C-486F-A9C1-237BC5562131}.Release|x86.ActiveCfg = Release|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Debug|x64.ActiveCfg = Debug|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Debug|x64.Build.0 = Debug|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Debug|x86.ActiveCfg = Debug|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release wSymbols|x64.ActiveCfg = Release|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release wSymbols|x64.Build.0 = Release|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release wSymbols|x86.ActiveCfg = Release|Win32
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release wSymbols|x86.Build.0 = Release|Win32
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release|x64.ActiveCfg = Release|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release|x64.Build.0 = Release|x64
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release|x86.ActiveCfg = Release|Win32
+		{07004DB1-C2B7-4427-882A-DEEC0D6F24C8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

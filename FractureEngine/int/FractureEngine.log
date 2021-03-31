@@ -1,7 +1,9 @@
-﻿  Editor.cpp
-D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(972,113): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
-  EditorCamera.cpp
+﻿  EditorCamera.cpp
+  Editor.cpp
+D:\Dev\Fracture\FractureEngine\src\Editor\Editor.cpp(988,113): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+  Element.cpp
   TabbedElement.cpp
+  TagComponentElement.cpp
   MaterialFactory.cpp
   FractureSplash.cpp
 D:\Dev\Fracture\FractureEngine\src\Editor\FractureSplash.cpp(125,55): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
@@ -44,54 +46,54 @@ D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(38,1): warnin
 D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(54,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
 D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(70,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
 D:\Dev\Fracture\FractureEngine\src\Editor\Panels\EditorViewModes.h(86,1): warning C4312: 'type cast': conversion from 'uint32_t' to 'ImTextureID' of greater size
+  Frame.cpp
+  FileDialogue.cpp
   main.cpp
+  ImGuizmo.cpp
+  imgui.cpp
+  Compiling...
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
   imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
      Creating library D:\Dev\Fracture\FractureEngine\bin\FractureEngine.lib and object D:\Dev\Fracture\FractureEngine\bin\FractureEngine.exp
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
   Previous IPDB not found, fall back to full compilation.
 D:\Dev\Fracture\FractureEngine\src\Editor\Panels\Inspector.cpp(1343): warning C4715: 'stringToEnum': not all control paths return a value
 D:\Dev\Fracture\Fracture\src\Serialisation\FrameGraphSerialiser.cpp(56): warning C4715: 'hashit': not all control paths return a value
-D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(154): warning C4172: returning address of local variable or temporary
-D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(169): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\AssetManager\AssetManager.cpp(164): warning C4172: returning address of local variable or temporary
+D:\Dev\Fracture\Fracture\src\Rendering\Framegraph\FrameGraph.cpp(56): warning C4715: 'Fracture::FrameGraph::getNode': not all control paths return a value
 D:\Dev\Fracture\Fracture\src\Rendering\UIGraph\UIMultiSocket.cpp(25): warning C4715: 'Fracture::UIMultiSocket::GetSocket': not all control paths return a value
 D:\Dev\Fracture\Fracture\src\Rendering\UIGraph\UIGraph.cpp(93): warning C4715: 'Fracture::UIGraph::getNode': not all control paths return a value
-D:\Dev\Fracture\Fracture\src\Rendering\Framegraph\FrameGraph.cpp(52): warning C4715: 'Fracture::FrameGraph::getNode': not all control paths return a value
-  All 20466 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 20907 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-LINK : warning LNK4286: symbol '__glewLinkProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDeleteBuffers' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDeleteShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetProgramInfoLog' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDetachShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewShaderSource' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBlendEquation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBlendEquationSeparate' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewAttachShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBufferData' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDeleteProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewActiveTexture' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDeleteVertexArrays' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBlendFuncSeparate' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetShaderInfoLog' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewUniform1i' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetProgramiv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetAttribLocation' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewCreateShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewCreateProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewDrawElementsBaseVertex' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewGetShaderiv' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewCompileShader' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBindSampler' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewUseProgram' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
-LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'Fracture.lib(glew.obj)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewLinkProgram' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGenBuffers' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetProgramInfoLog' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteShader' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUniformMatrix4fv' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewShaderSource' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewDeleteProgram' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBufferData' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewActiveTexture' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewAttachShader' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetProgramiv' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUniform1i' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetShaderInfoLog' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCreateShader' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCompileShader' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewGetShaderiv' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewCreateProgram' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBindBuffer' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewUseProgram' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
+LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in '* CIL library *(* CIL module *)' is imported by 'imgui_impl_opengl3.obj'
 Fracture.lib(ftdebug.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(ftdebug.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
 Fracture.lib(winfnt.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(winfnt.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info
 Fracture.lib(type42.obj) : warning LNK4099: PDB 'freetype.pdb' was not found with 'Fracture.lib(type42.obj)' or at 'D:\Dev\Fracture\FractureEngine\bin\freetype.pdb'; linking object as if no debug info

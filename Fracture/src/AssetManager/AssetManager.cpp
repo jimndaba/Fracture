@@ -144,14 +144,9 @@ std::shared_ptr<Fracture::ProjectProperties> Fracture::AssetManager::GetProperti
 	return m_props;
 }
 
-const std::shared_ptr<Fracture::Shader>& Fracture::AssetManager::getShader(const std::string& name)
+std::shared_ptr<Fracture::Shader>& Fracture::AssetManager::getShader(const std::string& name)
 {
-	for (auto it = m_Shaders.begin(); it != m_Shaders.end(); ++it)
-	{
-		if (it->first == name)
-			return it->second;
-	}
-	return nullptr;
+	return m_Shaders[name];
 }
 
 std::shared_ptr<Fracture::Model> Fracture::AssetManager::getModel(const std::string& name)

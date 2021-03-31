@@ -4,8 +4,8 @@
 
 Fracture::CameraControllerComponent::CameraControllerComponent(UUID id, glm::vec3 position, glm::vec3 up, float yaw, float pitch):Component(id)
 {
-    Yaw = -90.0f;
-    Pitch = 0.0f;
+    Yaw = yaw;
+    Pitch = pitch;
     WorldUp = up;
     Right = glm::vec3(1.0f, 0.0f, 0.0f);
 }
@@ -44,6 +44,7 @@ glm::vec3 Fracture::CameraControllerComponent::getPosition()
 
 void Fracture::CameraControllerComponent::onUpdate(float dt)
 {
+    
     foV = glm::lerp(foV, targetZoom, dt * 3.0f);
     Position = glm::lerp(Position, m_TargetPosition, dt * Damping);
     Yaw = glm::lerp(Yaw, m_TargetYaw, dt * Damping * 5.0f);

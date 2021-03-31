@@ -35,7 +35,7 @@ namespace Fracture
 	private:
 		std::ofstream m_OutputStream;
 		std::shared_ptr<Scene> m_scene;
-
+	
 	};
 
 }

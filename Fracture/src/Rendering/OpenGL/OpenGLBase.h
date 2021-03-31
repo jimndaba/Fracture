@@ -2,7 +2,7 @@
 #ifndef OPENGLBASE_H
 #define OPENGLBASE_H
 
-
+#define GLEW_STATIC
 #include "GL/glew.h"
 
 

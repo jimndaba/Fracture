@@ -43,6 +43,7 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 	j["Shaders Path"] = m_properties->ShadersPath;
 	j["Models Path"] = m_properties->ModelsPath;
 	j["Scenes Path"] = m_properties->ScenesPath;
+	j["Scripts Path"] = m_properties->ScriptPath;
 	j["Active Scene"] = SceneManager::GetActiveScene()->Name;
 
 	json scenes = json::array_t();
@@ -90,6 +91,7 @@ void Fracture::ProjectSerializer::Serialize(const std::string& filepath)
 		a["Material Name"] = material.second->Name;
 		a["CastShadows"] = material.second->CastShadows();
 		a["Transparent"] = material.second->IsTransparent();
+		a["Index"] = material.second->MaterialCount;
 		json serialised_unfiorms = json::array_t();
 		json serialised_sampleunfiorms = json::array_t();
 
@@ -242,6 +244,7 @@ bool Fracture::ProjectSerializer::DeSerializeProperties(const std::string& filep
 	m_properties->ShadersPath = input["Shaders Path"];
 	m_properties->ModelsPath = input["Models Path"];
 	m_properties->ScenesPath = input["Scenes Path"];
+	m_properties->ScriptPath = input["Scripts Path"];
 	m_properties->ActiveScene = input["Active Scene"];
 
 	return true;
@@ -322,7 +325,6 @@ void Fracture::ProjectSerializer::DeSerializeModels(nlohmann::json m)
 	std::string name = m["Model Name"];
 	std::string path = m["Model Directory"];
 
-
 	AssetManager::AddModel(name, path);
 }
 
@@ -339,11 +341,13 @@ void Fracture::ProjectSerializer::DeSerializeMaterial(nlohmann::json m)
 	std::string m_Name = m["Material Name"];
 	std::string shader = m["Shader"];
 	bool castshadows = m["CastShadows"];
+	int index = m["Index"];
 	bool transparent = m["Transparent"];
 
 	std::shared_ptr<Shader> mShader = AssetManager::getShader(shader);
 	std::shared_ptr<Material> material = std::make_shared<Material>(m_Name, mShader);
 
+	material->MaterialCount = index;
 	material->setCastShadows(castshadows);
 	material->setIsTransparent(transparent);
 
@@ -458,8 +462,7 @@ void Fracture::ProjectSerializer::DeSerializeScene(nlohmann::json s)
 {
 	std::string name = s["Scene Name"];
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>(name);
-	SceneSerializer serializer(scene);
-	
+	SceneSerializer serializer(scene);	
 	if (!serializer.DeSerialize(m_properties->ScenesPath + "/" + name + ".scene"))
 	{
 		FRACTURE_ERROR("Failed to Load Scene : {}", name);

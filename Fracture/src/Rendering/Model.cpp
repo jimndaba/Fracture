@@ -26,7 +26,9 @@ void Fracture::Model::addMesh(std::shared_ptr<Mesh> mesh)
 
 void Fracture::Model::addMaterial(std::shared_ptr<Material> material)
 {
-	m_materials.push_back(material);
+	int newsize = m_materials.size();
+	m_materials.resize((material->MaterialCount + 1));
+	m_materials[material->MaterialCount] = material;
 }
 
 void Fracture::Model::SetMaterial(const std::string& oldMaterial ,const std::shared_ptr<Material>& material)

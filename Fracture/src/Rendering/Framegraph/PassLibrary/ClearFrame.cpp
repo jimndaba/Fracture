@@ -19,13 +19,10 @@ Fracture::ClearFrame::ClearFrame(const std::string& Name):FrameNode(Name)
 void Fracture::ClearFrame::execute(Renderer& renderer)
 {
 	ProfilerTimer timer("Clear Frame");
-	for (auto& res : resources)
-	{
-		res.second->bind();
-		renderer.clearColor(Color.x, Color.y, Color.z);
-		renderer.clear();
-		res.second->Unbind();
-	}
+	resources["buffer"]->bind();
+	renderer.clearColor(Color.x, Color.y, Color.z);
+	renderer.clear();
+	resources["buffer"]->Unbind();
 }
 
 nlohmann::json Fracture::ClearFrame::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)

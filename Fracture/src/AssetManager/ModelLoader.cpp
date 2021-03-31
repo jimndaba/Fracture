@@ -45,10 +45,10 @@ std::shared_ptr<Fracture::Model> Fracture::ModelLoader::LoadModel(const std::str
 	}
 
 	//Get Model Materials
-	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+	for (unsigned int index = 0; index < scene->mNumMaterials; index++)
 	{
 		m_model->m_materials.resize(scene->mNumMaterials);
-		m_model->m_materials[i] = loadMeshMaterial(scene->mMaterials[i], scene->HasAnimations());
+		m_model->m_materials[index] = loadMeshMaterial(index,scene->mMaterials[index], scene->HasAnimations());
 	}
 
 	//Process model animations
@@ -599,17 +599,20 @@ std::shared_ptr<Fracture::Texture2D> Fracture::ModelLoader::loadMaterialTexture(
 	return texture;
 }
 
-std::shared_ptr<Fracture::Material> Fracture::ModelLoader::loadMeshMaterial(aiMaterial* material, bool isAnimated)
+std::shared_ptr<Fracture::Material> Fracture::ModelLoader::loadMeshMaterial(int index ,aiMaterial* material, bool isAnimated)
 {
 	std::string name = material->GetName().data;
 	std::shared_ptr<Material> m_material;
+	
 	if (isAnimated)
 	{
 		m_material = std::make_shared<Material>(name, AssetManager::getShader("PBRAnimated")); //m_base->Create(name);
+		m_material->MaterialCount = index;
 	}
 	else
 	{
 		m_material = std::make_shared<Material>(name, AssetManager::getShader("PBRStatic")); //m_base->Create(name);
+		m_material->MaterialCount = index;
 	}
 
 	ImportMaterial(material, m_material);

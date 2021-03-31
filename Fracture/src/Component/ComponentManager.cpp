@@ -16,7 +16,6 @@
 #include "RenderComponent.h"
 #include "Physics/PhysicsManager.h"
 #include "AnimatorComponent.h"
-#include "Game/Game.h"
 
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_tagComponents;
 std::unique_ptr<Fracture::ComponentSet> Fracture::ComponentManager::m_RelationshipComponents;

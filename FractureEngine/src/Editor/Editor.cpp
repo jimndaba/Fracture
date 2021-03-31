@@ -154,6 +154,13 @@ bool Fracture::Editor::onLoad()
 {   
 
     ProjectSerializer seriliazer(m_properties);
+
+    if (!seriliazer.DeSerializeProperties(m_properties->ProjectFilePath))
+    {
+        FRACTURE_ERROR("FAiLED to load Properties");
+        return false;
+    }
+
     if (!seriliazer.DeSerialize(m_properties->ProjectFilePath))
     {
         FRACTURE_ERROR("FAiLED to load Project");
@@ -359,6 +366,7 @@ void Fracture::Editor::onLoadNew()
 
 
     std::shared_ptr<Material> stylisedWater = std::make_shared<Material>("StylisedWater", AssetManager::getShader("StylisedWater"));
+    stylisedWater->MaterialCount = 0;
     stylisedWater->setIsTransparent(true);
    
     //Properties
@@ -904,17 +912,22 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
 
         float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-        ImVec2 buttonSize = { lineHeight + 20.0f, lineHeight };      
+        ImVec2 buttonSize = { lineHeight + 20.0f, lineHeight };   
+
+        int Res_width = _renderer->Width();
+        int Res_height = _renderer->Height();
 
         ImGui::Separator();
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
         ImGui::PushFont(boldFont);
+        m_GameSettings->Resolution_Width = Res_width;
         if (ImGui::Button("Width", buttonSize))
         {
             m_GameSettings->Resolution_Width = 0;
         }         
+       
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
@@ -922,6 +935,7 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PopItemWidth();
         ImGui::SameLine();
 
+        m_GameSettings->Resolution_Height = Res_height;
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
@@ -937,6 +951,8 @@ void Fracture::Editor::showRenderManager(bool* p_open,std::shared_ptr<Fracture::
         ImGui::PopItemWidth();
         ImGui::SameLine();
         ImGui::PopStyleVar();
+
+        _renderer->setViewport(m_GameSettings->Resolution_Width, m_GameSettings->Resolution_Height);
 
         bool isWindowResizable = m_GameSettings->IsResizable;
         ImGui::NextColumn();

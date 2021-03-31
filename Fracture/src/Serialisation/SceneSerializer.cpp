@@ -146,6 +146,7 @@ void Fracture::SceneSerializer::Serialize(const std::string& filepath)
 
 bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 {	
+	bool m_passed = true;
 	std::ifstream stream(filepath);
 	json input;
 
@@ -343,37 +344,35 @@ bool Fracture::SceneSerializer::DeSerialize(const std::string& filepath)
 		for (auto render : input["RenderComponents"])
 		{
 			UUID id = UUID(render["EntityID"]);
-			std::string model = render["Model"];
-			std::shared_ptr<Model> m_model = AssetManager::getModel(model);
-			//m_model->clearMaterials();
-
+			std::string model = render["Model"];			
 			auto& materials = render["Materials"];
 			for (auto material : materials) 
 			{
 				std::string m_Name = material["MaterialName"];
-				m_model->addMaterial(AssetManager::getMaterial(m_Name));
+				AssetManager::getModel(model)->addMaterial(AssetManager::getMaterial(m_Name));
 			}			
 
-			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(id, m_model);
-
+			std::shared_ptr<RenderComponent> component = std::make_shared<RenderComponent>(id, AssetManager::getModel(model));
 			ComponentManager::AddComponent<RenderComponent>(component);
 		}		
 	}
 	if (exists(input, "RigidbodyComponents"))
 	{
 	}
+	
 	if (exists(input, "ActiveCameraID"))
 	{
+		FRACTURE_INFO("Active Camera Set!!");
 		uint32_t id =(uint32_t)input["ActiveCameraID"];
-		m_scene->setCamera(id);
-		return false;
+		m_scene->setCamera(id);	
 	}
 	else
 	{
 		FRACTURE_ERROR("No Active Camera Set!!");
+		m_passed = false;
 	}
-
-	return true;
+	FRACTURE_INFO("Scene: {} Loaded!!", m_scene->Name);
+	return m_passed;
 }
 
 void Fracture::SceneSerializer::SerializeComponents(json j)

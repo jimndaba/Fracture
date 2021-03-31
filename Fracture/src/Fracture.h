@@ -15,7 +15,6 @@
 #include "Component/ComponentManager.h"
 #include "Component/ComponentSet.h"
 #include "Game/GameWindow.h"
-#include "Game/Game.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/Renderer2D/Renderer2D.h"
 #include "AssetManager/AssetManager.h"
@@ -103,5 +102,6 @@
 #include "Serialisation/FrameGraphSerialiser.h"
 #include "Serialisation/GameSettings.h"
 #include "Serialisation/ProjectProperties.h"
+#include "Game/GameFramegraph.h"
 
 #endif

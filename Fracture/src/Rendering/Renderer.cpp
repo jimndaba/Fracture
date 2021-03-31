@@ -26,7 +26,6 @@
 #include "Component/TagComponent.h"
 #include "Component/ICamera.h"
 #include "Component/BillboardComponent.h"
-#include "Game/Game.h"
 #include "Scene/Scene.h"
 #include "RenderTarget.h"
 #include "Entity/Entity.h"
@@ -103,6 +102,26 @@ void Fracture::Renderer::onInit()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     // define the range of the buffer that links to a uniform binding point
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 4 * sizeof(glm::mat4));
+
+    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
 void Fracture::Renderer::setFrameGraph(const std::shared_ptr<FrameGraph>& graph)
@@ -251,6 +270,18 @@ void Fracture::Renderer::RenderPasses()
 
         SceneRenderTarget->Unbind();  
     }
+}
+
+void Fracture::Renderer::RenderScreenQuad(const std::shared_ptr<FrameGraph>& graph)
+{
+    clear();
+    glDisable(GL_DEPTH_TEST);   
+    AssetManager::getShader("ColorMap")->use();
+    glBindVertexArray(quadVAO);
+    AssetManager::getShader("ColorMap")->setTexture("OutMainBuffer", graph->getNode("global_output")->getResource("rendertarget")->GetColorTexture(0).get(), 0);
+    //AssetManager::getShader("ColorMap")->setTexture("OutMainBuffer", SceneRenderTarget->GetColorTexture(0).get(), 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    AssetManager::getShader("ColorMap")->unbind();
 }
 
 void Fracture::Renderer::DrawGrid()
@@ -662,6 +693,12 @@ void Fracture::Renderer::SetCamera(std::shared_ptr<ICamera> camera)
 {
     m_camera = camera;
     m_camera->setProjection(m_width,m_Height);
+}
+
+void Fracture::Renderer::SetCamera(std::shared_ptr<Entity> camera)
+{
+    m_camera = std::dynamic_pointer_cast<ICamera>(ComponentManager::GetComponent<CameraControllerComponent>(camera->GetId()));
+    m_camera->setProjection(m_width, m_Height);
 }
 
 std::shared_ptr<Fracture::ICamera> Fracture::Renderer::ActiveCamera()

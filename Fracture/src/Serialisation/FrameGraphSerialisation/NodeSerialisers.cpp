@@ -14,6 +14,7 @@
 #include "Rendering/Framegraph/PassLibrary/MixNode.h"
 #include "Rendering/Framegraph/Link.h"
 #include "Rendering/Framegraph/SourceNode.h"
+#include "Rendering/Framegraph/SinkNode.h"
 
 
 #pragma region CleaFrame

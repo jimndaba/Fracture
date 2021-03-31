@@ -37,5 +37,5 @@ void Fracture::IntermediateNode::execute(Renderer& renderer)
 
 nlohmann::json Fracture::IntermediateNode::Accept(const std::shared_ptr<FrameNodeSerialiser>& visitor)
 {
-	visitor->visitIntermediateNode(*this);
+	return visitor->visitIntermediateNode(*this);
 }

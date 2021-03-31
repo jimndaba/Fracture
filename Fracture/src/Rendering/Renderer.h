@@ -61,6 +61,7 @@ namespace Fracture
 		void RenderEnvironment();
 		void RenderDirectLightShadows();
 		void RenderPasses();
+		void RenderScreenQuad(const std::shared_ptr<FrameGraph>& graph);
 		void DrawGrid();
 		void RenderDebug();
 		void RenderDebugRetained();		
@@ -102,6 +103,7 @@ namespace Fracture
 		void RenderScene(std::shared_ptr<Scene> scene);
 
 		void SetCamera(std::shared_ptr<ICamera> camera);
+		void SetCamera(std::shared_ptr<Entity> camera);
 		static std::shared_ptr<ICamera> ActiveCamera();
 			
 
@@ -168,6 +170,7 @@ namespace Fracture
 
 		std::shared_ptr<Material> m_DebugMaterial;
 		std::shared_ptr<Grid> m_grid;
+		unsigned int quadVAO, quadVBO;
 	};
 
 }
