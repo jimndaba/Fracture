@@ -102,7 +102,7 @@ namespace Fracture
 		float Roll = 0.0f;
 		float FoV = 45.0f;
 		float Near = 0.1f;
-		float Far = 100.0f;
+		float Far = 1000.0f;
 		float Width = 800;
 		float Height = 640;
 		float FocalLength = 100.0f;
