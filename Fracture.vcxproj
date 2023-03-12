@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{bd6cf6a6-46d3-4468-982c-9afaeef0a6df}</ProjectGuid>
+    <RootNamespace>Fracture</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
+    <IntDir>int\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
+    <IntDir>int\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\rel\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;assimp-vc143-mt.lib</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Assets\AssetManager.h" />
+    <ClInclude Include="src\Assets\AssetRegistries.h" />
+    <ClInclude Include="src\Assets\ImagerLoader.h" />
+    <ClInclude Include="src\Assets\MeshLoader.h" />
+    <ClInclude Include="src\Common\AppWindow.h" />
+    <ClInclude Include="src\EventSystem\Event.h" />
+    <ClInclude Include="src\EventSystem\Eventbus.h" />
+    <ClInclude Include="src\Fracture.h" />
+    <ClInclude Include="src\Common\FractureApp.h" />
+    <ClInclude Include="src\Common\Logger.h" />
+    <ClInclude Include="src\FracturePCH.h" />
+    <ClInclude Include="src\Input\Gamepad.h" />
+    <ClInclude Include="src\Input\Input.h" />
+    <ClInclude Include="src\Input\Keyboard.h" />
+    <ClInclude Include="src\Input\Mouse.h" />
+    <ClInclude Include="src\Rendering\Buffer.h" />
+    <ClInclude Include="src\Rendering\Color.h" />
+    <ClInclude Include="src\Rendering\Command.h" />
+    <ClInclude Include="src\Rendering\GraphicsDevice.h" />
+    <ClInclude Include="src\Common\UUID.h" />
+    <ClInclude Include="src\Rendering\IGraphicsResource.h" />
+    <ClInclude Include="src\Rendering\Mesh.h" />
+    <ClInclude Include="src\Rendering\PipelineState.h" />
+    <ClInclude Include="src\Rendering\PostProcessingParams.h" />
+    <ClInclude Include="src\Rendering\RenderCommands.h" />
+    <ClInclude Include="src\Rendering\RenderContext.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ForwardPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\GridPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\IPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\PresentPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Rendergraph.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\RenderGraphBuilder.h" />
+    <ClInclude Include="src\Rendering\RenderTarget.h" />
+    <ClInclude Include="src\Rendering\Scissor.h" />
+    <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Rendering\Texture.h" />
+    <ClInclude Include="src\Rendering\Vertex.h" />
+    <ClInclude Include="src\Rendering\VertexArray.h" />
+    <ClInclude Include="src\Rendering\Viewport.h" />
+    <ClInclude Include="src\Serialisation\SceneSerialiser.h" />
+    <ClInclude Include="src\Serialisation\Serialiser.h" />
+    <ClInclude Include="src\World\CameraSystem.h" />
+    <ClInclude Include="src\World\Components.h" />
+    <ClInclude Include="src\World\Entity.h" />
+    <ClInclude Include="src\World\Scene.h" />
+    <ClInclude Include="src\World\Scenegraph.h" />
+    <ClInclude Include="src\World\SceneManager.h" />
+    <ClInclude Include="src\World\TransformSystem.h" />
+    <ClInclude Include="vendor\nlohmann\json.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\Assets\ImagerLoader.cpp" />
+    <ClCompile Include="src\Assets\MeshLoader.cpp" />
+    <ClCompile Include="src\Common\AppWindow.cpp" />
+    <ClCompile Include="src\Common\FractureApp.cpp" />
+    <ClCompile Include="src\Common\Logger.cpp" />
+    <ClCompile Include="src\Common\UUID.cpp" />
+    <ClCompile Include="src\EventSystem\Eventbus.cpp" />
+    <ClCompile Include="src\FracturePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Rendering\Buffer.cpp" />
+    <ClCompile Include="src\Rendering\Color.cpp" />
+    <ClCompile Include="src\Rendering\Command.cpp" />
+    <ClCompile Include="src\Rendering\GraphicsDevice.cpp" />
+    <ClCompile Include="src\Rendering\Mesh.cpp" />
+    <ClCompile Include="src\Rendering\PipelineState.cpp" />
+    <ClCompile Include="src\Rendering\RenderCommands.cpp" />
+    <ClCompile Include="src\Rendering\RenderContext.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ForwardPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\IPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\PresentPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Rendergraph.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\RenderGraphBuilder.cpp" />
+    <ClCompile Include="src\Rendering\RenderTarget.cpp" />
+    <ClCompile Include="src\Rendering\Scissor.cpp" />
+    <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="src\Rendering\Texture.cpp" />
+    <ClCompile Include="src\Rendering\Vertex.cpp" />
+    <ClCompile Include="src\Rendering\VertexArray.cpp" />
+    <ClCompile Include="src\Rendering\Viewport.cpp" />
+    <ClCompile Include="src\Serialisation\SceneSerialiser.cpp" />
+    <ClCompile Include="src\Serialisation\Serialiser.cpp" />
+    <ClCompile Include="src\World\CameraSystem.cpp" />
+    <ClCompile Include="src\World\Components.cpp" />
+    <ClCompile Include="src\World\Entity.cpp" />
+    <ClCompile Include="src\World\Scene.cpp" />
+    <ClCompile Include="src\World\Scenegraph.cpp" />
+    <ClCompile Include="src\World\SceneManager.cpp" />
+    <ClCompile Include="src\World\TransformSystem.cpp" />
+    <ClCompile Include="vendor\glad\glad.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

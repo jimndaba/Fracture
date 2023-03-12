@@ -1,0 +1,32 @@
+#include "FracturePCH.h"
+#include "ClearTargetPass.h"
+#include "ForwardPass.h"
+
+std::string Fracture::ClearTargetSockets::InBuffer = "InBuffer";
+std::string Fracture::ClearTargetSockets::OutBuffer = "OutBuffer";
+
+
+Fracture::ClearTargetPass::ClearTargetPass(const std::string& name, RenderContext* context, const ClearTargetPassDef& info):IPass(name,context), Properties(info)
+{
+}
+
+
+void Fracture::ClearTargetPass::Setup()
+{
+}
+
+void Fracture::ClearTargetPass::Execute()
+{
+
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
+
+	if (!global_color)
+		return;
+
+
+	RenderCommands::SetRenderTarget(Context, global_color);
+	RenderCommands::ClearColor(Context, Properties.ClearColor);	
+	RenderCommands::ClearTarget(Context,Properties.BufferTarget);
+
+
+}
