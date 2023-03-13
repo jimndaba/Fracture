@@ -52,9 +52,8 @@ void Fracture::ISerialiser::Property(const std::string& name, bool value)
 	}
 }
 
-void Fracture::ISerialiser::Property(const std::string& name, const Fracture::UUID& value)
+void Fracture::ISerialiser::Property(const std::string& name, Fracture::UUID value)
 {
-
 	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto& j = mStructStack.top();
@@ -165,6 +164,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::Me
 void Fracture::ISerialiser::Property(const std::string& name, const Fracture::ShaderRegistry& value)
 {
 
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::SceneRegistry& value)
+{
 	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto& j = mStructStack.top();
@@ -587,24 +600,36 @@ uint32_t Fracture::ISerialiser::GetCollectionSize()
 
 Fracture::UUID Fracture::ISerialiser::ID(const std::string& name)
 {
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		auto uid = (uint32_t)j.at(mCollectionIndex.top())[name];	
-		return uid;
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
+	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto j = mStructStack.top();
 		if (exists(j, name))
 			return (uint32_t)j[name];
 	}
-	
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		auto uid = (uint32_t)j.at(mCollectionIndex.top())[name];
+		return uid;
+	}	
 	return UUID();
 }
 
 bool Fracture::ISerialiser::BOOL(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -615,11 +640,24 @@ bool Fracture::ISerialiser::BOOL(const std::string& name)
 		auto j = mStructStack.top();
 		return j[name];
 	}
+	*/
 	return 0;
 }
 
 int Fracture::ISerialiser::INT(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -631,11 +669,24 @@ int Fracture::ISerialiser::INT(const std::string& name)
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return 0;
 }
 
 float Fracture::ISerialiser::FLOAT(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -649,11 +700,24 @@ float Fracture::ISerialiser::FLOAT(const std::string& name)
 			return j[name];
 		}
 	}
+	*/
 	return 0.0f;
 }
 
 std::vector<unsigned int> Fracture::ISerialiser::UINT_VECTOR(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -665,11 +729,24 @@ std::vector<unsigned int> Fracture::ISerialiser::UINT_VECTOR(const std::string& 
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return std::vector<unsigned int>();
 }
 
 std::vector<glm::vec2> Fracture::ISerialiser::VEC2_VECTOR(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -681,11 +758,24 @@ std::vector<glm::vec2> Fracture::ISerialiser::VEC2_VECTOR(const std::string& nam
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return std::vector<glm::vec2>();
 }
 
 std::vector<glm::vec3> Fracture::ISerialiser::VEC3_VECTOR(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -697,11 +787,24 @@ std::vector<glm::vec3> Fracture::ISerialiser::VEC3_VECTOR(const std::string& nam
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return std::vector<glm::vec3>();
 }
 
 std::vector<glm::vec4> Fracture::ISerialiser::VEC4_VECTOR(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -713,11 +816,24 @@ std::vector<glm::vec4> Fracture::ISerialiser::VEC4_VECTOR(const std::string& nam
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return std::vector<glm::vec4>();
 }
 
 std::vector<Fracture::SubMesh> Fracture::ISerialiser::SUBMESH_VECTOR(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -729,11 +845,24 @@ std::vector<Fracture::SubMesh> Fracture::ISerialiser::SUBMESH_VECTOR(const std::
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return std::vector<Fracture::SubMesh>();
 }
 
 std::string Fracture::ISerialiser::STRING(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -743,13 +872,25 @@ std::string Fracture::ISerialiser::STRING(const std::string& name)
 	{
 		auto j = mStructStack.top();
 		if (exists(j, name))
-			return j[name];
-	}
+			
+			*/
 	return "";
 }
 
 glm::vec2 Fracture::ISerialiser::VEC2(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -763,11 +904,24 @@ glm::vec2 Fracture::ISerialiser::VEC2(const std::string& name)
 			return j[name];
 		}
 	}
+	*/
 	return glm::vec2();
 }
 
 glm::vec3 Fracture::ISerialiser::VEC3(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -779,11 +933,24 @@ glm::vec3 Fracture::ISerialiser::VEC3(const std::string& name)
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return glm::vec3(0.0);
 }
 
 glm::vec4 Fracture::ISerialiser::VEC4(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -795,11 +962,24 @@ glm::vec4 Fracture::ISerialiser::VEC4(const std::string& name)
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return glm::vec4();
 }
 
 Fracture::ShaderRegistry Fracture::ISerialiser::SHADERREG(const std::string& name)
 {
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
 	if (!mCollectionStack.empty())
 	{
 		auto j = mCollectionStack.top();
@@ -811,7 +991,37 @@ Fracture::ShaderRegistry Fracture::ISerialiser::SHADERREG(const std::string& nam
 		if (exists(j, name))
 			return j[name];
 	}
+	*/
 	return ShaderRegistry();
+}
+
+Fracture::SceneRegistry Fracture::ISerialiser::SCENEREG(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	/*
+	if (!mCollectionStack.empty())
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	else if (!mStructStack.empty() && mCollectionStack.empty())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	*/
+	return SceneRegistry();
 }
 
 nlohmann::json Fracture::ISerialiser::GetOutput()

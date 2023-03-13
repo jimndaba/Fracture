@@ -44,7 +44,7 @@ namespace Fracture
 	struct MeshComponent : public IComponent
 	{
 		MeshComponent() :IComponent() {};
-		MeshComponent(UUID id,UUID mesh):
+		MeshComponent(UUID id,UUID mesh = UUID()):
 			IComponent(),entity(id),Mesh(mesh)
 		{}
 		MeshComponent(UUID id, UUID mesh,UUID shader) :

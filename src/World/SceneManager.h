@@ -3,16 +3,10 @@
 #define SCENEMANGER_H
 
 #include "Scene.h"
+#include "Assets/AssetRegistries.h"
 
 namespace Fracture
 {
-	struct SceneRegistry
-	{
-		UUID ID;
-		std::string Name;
-		std::string Path;
-		//TODO Scene VERSIONING {probable best to use time stamp}
-	};
 
 	class SceneManager
 	{
@@ -23,7 +17,7 @@ namespace Fracture
 
 		static std::shared_ptr<Scene> CreateNewScene(const UUID& root = UUID());
 
-		static UUID& AddEntity();
+		static UUID AddEntity();
 		static void AddEntity(const UUID& entity);
 		static void RemoveEntity(const UUID& entity);
 
@@ -31,13 +25,13 @@ namespace Fracture
 		static void AddComponent(const UUID& entity, Args&&... params);
 
 		template< class T, typename... Args >
-		static void AddComponent(const UUID& entity, const std::shared_ptr<IComponent>& component);
+		static void AddComponentByInstance(const UUID& entity, const std::shared_ptr<T>& component);
 
 		template<class T>
 		static void RemoveComponent(const UUID& entity);
 
 		template<class T>
-		static void RemoveComponent(const std::shared_ptr<IComponent>& component);
+		static void RemoveComponent(const std::shared_ptr<T>& component);
 
 		template <class T>
 		static T* GetComponent(const UUID& entity);
@@ -54,14 +48,22 @@ namespace Fracture
 
 		static Scene* CurrentScene();
 
+		static void LoadScene(const std::string& scene);
+		static UUID& LoadSceneFromFile(const std::string& path);
+		static std::map<UUID,int> LoadSceneByID(const UUID& scene);
+		static void UnloadScene(const std::string& scene);
+		static void UnloadSceneByID(const UUID& scene);
+
 		static void SetScene(const std::shared_ptr<Scene>& scene);
 		static void SetSceneByName(const std::string& scene);
-		static void SetSceneByID(const UUID& scene);
+		static std::map<UUID, int> SetSceneByID(const UUID& scene);
 
 		static void RegisterScene(const SceneRegistry& reg);
+		static bool HasScenePath(const std::string& path);
 
-		static std::shared_ptr<Scene> LoadSceneFromFile(const std::string& path);
-		static void SaveSceneToFile(const std::string& path);
+		static std::map<UUID, SceneRegistry> mSceneRegister;
+		static std::map<std::string, UUID> mSceneIDLookUp;
+		static std::unordered_map<UUID, std::shared_ptr<Scene>> mScenes;
 
 	private:
 
@@ -74,6 +76,9 @@ namespace Fracture
 	template<class T, typename ...Args>
 	inline void SceneManager::AddComponent(const UUID& entity, Args && ...params)
 	{
+		if (!mCurrentScene)
+			return;
+
 		if (mCurrentScene)
 		{
 			auto component = std::make_shared<T>(entity, params...);
@@ -82,8 +87,11 @@ namespace Fracture
 	}
 
 	template< class T, typename... Args >
-	inline void SceneManager::AddComponent(const UUID& entity, const std::shared_ptr<IComponent>& component)
+	inline void SceneManager::AddComponentByInstance(const UUID& entity, const std::shared_ptr<T>& component)
 	{
+		if (!mCurrentScene)
+			return;
+
 		if (mCurrentScene)
 		{		
 			mCurrentScene->ComponentReg[typeid(T)][entity] = std::move(component);
@@ -93,6 +101,7 @@ namespace Fracture
 	template<class T>
 	inline void SceneManager::RemoveComponent(const UUID& entity)
 	{
+
 		if (mCurrentScene)
 		{
 			if (!mCurrentScene->ComponentReg[typeid(T)].empty())
@@ -106,7 +115,7 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline void SceneManager::RemoveComponent(const std::shared_ptr<IComponent>& component)
+	inline void SceneManager::RemoveComponent(const std::shared_ptr<T>& component)
 	{
 		if (mCurrentScene)
 		{

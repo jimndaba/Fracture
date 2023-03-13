@@ -7,7 +7,7 @@
 
 namespace Fracture
 {
-	class Scene;
+	struct Scene;
 	struct TagComponent;
 	struct TransformComponent;
 	struct HierachyComponent;
@@ -36,8 +36,15 @@ namespace Fracture
 		void SerialiseComponent(Fracture::RigidbodyComponent* component);
 		void SerialiseComponent(Fracture::ColliderComponent* component);
 
+		void ReadTagComponentIfExists(Fracture::UUID entity_id);
+		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
+		void ReadHierachyComponentIfExists(Fracture::UUID entity_id);
+		void ReadMeshComponentIfExists(Fracture::UUID entity_id);
+
 		void WriteScene(Scene* scene);
 		std::shared_ptr<Scene> ReadScene();
+
+		std::map<Fracture::UUID,int> MeshesToLoad;
 
 		template <class T>
 		void WriteEntityComponentOfType(const UUID& entity);

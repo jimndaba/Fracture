@@ -6,16 +6,26 @@
 #include <future>
 #include <queue>
 #include "AssetRegistries.h"
+#include "EventSystem/Eventbus.h"
 
 namespace Fracture
 {
 	struct StaticMesh;
 	struct Shader;	
+	struct Scene;
+	struct AsyncLoadMeshEvent : public Event
+	{
+		AsyncLoadMeshEvent(UUID id) : Event(),MeshID(id) {};
+		UUID MeshID;
+		const char* Name() { return  "Async Load Mesh"; };
+	};
 
 	class AssetManager
 	{
 	public:
 		AssetManager();
+
+		void RegisterCallbacks(Eventbus* bus);
 
 		static void OnInit(const std::string& assetfilepath);
 		static void OnSave(const std::string& path);
@@ -36,6 +46,8 @@ namespace Fracture
 		static Shader* GetShader(const std::string& Name);
 		static Shader* GetShaderByID(const Fracture::UUID& id);
 
+		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
+
 		static std::map<UUID, MeshRegistry> mMeshRegister;
 		static std::map<std::string, UUID> mMeshIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<StaticMesh>> mMeshes;
@@ -44,6 +56,7 @@ namespace Fracture
 		static std::map<UUID, ShaderRegistry> mShaderRegister;
 		static std::map<std::string, UUID> mShaderIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<Shader>> mShaders;
+
 
 		static AssetManager* Instance();
 

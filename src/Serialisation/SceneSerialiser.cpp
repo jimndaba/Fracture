@@ -1,6 +1,7 @@
 #include "FracturePCH.h"
 #include "SceneSerialiser.h"
 #include "Common/UUID.h"
+#include "World/Components.h"
 #include "World/SceneManager.h"
 
 Fracture::SceneSerialiser::SceneSerialiser(IOMode mode, SerialiseFormat format) :
@@ -37,9 +38,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::HierachyComponent* 
 	BeginCollection("Children");
 	for (const auto& child : component->Children)
 	{
-		BeginStruct("Child");
 		Property("ChildID", child);
-		EndStruct();
 	}
 	EndCollection();
 	EndStruct();
@@ -47,7 +46,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::HierachyComponent* 
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::MeshComponent* component)
 {
-	BeginStruct("MeshComponent");
+	BeginStruct("Mesh");
 	Property("MeshID", component->Mesh);
 	Property("MaterialID", component->Material);
 	Property("ShaderID", component->Shader);
@@ -114,12 +113,72 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ColliderComponent* 
 }
 
 
+void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("Tag"))
+	{
+		auto tag = std::make_shared<TagComponent>(entity_id, STRING("Name"));
+		tag->IsActive = BOOL("IsActive");
+		SceneManager::AddComponentByInstance<TagComponent>(entity_id, tag);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("Transform"))
+	{
+		auto transform = std::make_shared<TransformComponent>(entity_id);
+		transform->Position = VEC3("Position");
+		transform->Scale = VEC3("Scale");
+		transform->Rotation = glm::quat(VEC3("Rotation"));
+		SceneManager::AddComponentByInstance<TransformComponent>(entity_id, transform);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("Hierachy"))
+	{
+		auto comp = std::make_shared<HierachyComponent>(entity_id);
+		comp->Parent = ID("Parent");
+		comp->HasParent = BOOL("Parent");
+		BeginCollection("Children");
+		while (CurrentCollectionIndex() < GetCollectionSize())
+		{
+			comp->Children.push_back(ID("ChildID"));
+			NextInCollection();
+		}
+		EndCollection();
+		SceneManager::AddComponentByInstance<HierachyComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("Mesh"))
+	{
+		auto comp = std::make_shared<MeshComponent>(entity_id);
+		comp->Mesh = ID("MeshID");
+		comp->Shader = ID("ShaderID");
+		comp->Material = ID("MaterialID");
+		comp->meshType = (MeshComponent::MeshType)INT("MeshType");
+				
+		MeshesToLoad[comp->Mesh] += 1;
+		SceneManager::AddComponentByInstance<MeshComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
 	{
-		Property("RootID", scene->ID);
-		// Property("ActiveCamera", mScene.ActiveCamera);
+		Property("ID", scene->ID);
+		Property("RootID", scene->RootID);
+		Property("ActiveCamera", scene->ActiveCameraID);
 
 		BeginCollection("Entities");
 		for (const auto& entity : scene->Entities)
@@ -155,109 +214,39 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 	if (BeginStruct("Scene"))
 	{
 		auto new_Scene = SceneManager::CreateNewScene(ID("RootID"));
-		//Application::GetSceneManager()->SetScene(new_Scene);
-		//new_Scene->ActiveCamera = ID("ActiveCamera");	
+		new_Scene->ID = ID("ID");
+		new_Scene->ActiveCameraID = ID("ActiveCamera");	
+	
+		SceneManager::SetScene(new_Scene);
 
-		BeginCollection("Entities");
-		while (CurrentCollectionIndex() < GetCollectionSize())
+		if (BeginCollection("Entities"))
 		{
-			BeginStruct("Entity");
-			auto entity_id = ID("Entity_ID");
-			SceneManager::AddEntity(entity_id);
-
-
-			BeginCollection("Components");
 			while (CurrentCollectionIndex() < GetCollectionSize())
 			{
-				if (BeginStruct("Tag"))
+				if (BeginStruct("Entity"))
 				{
-					auto name = STRING("Name");
-					SceneManager::AddComponent<TagComponent>(entity_id, name);
-					EndStruct();
-				}
-				/*
-				if (BeginStruct("Transform"))
-				{
-					auto position = VEC3("Position");
-					auto scale = VEC3("Scale");
-					auto rotation = VEC3("Rotation");
-					Application::GetSceneManager()->AddComponent(entity_id, std::make_shared<TransformComponent>(entity_id, position, scale, rotation));
-					EndStruct();
-				}
-				if (BeginStruct("Camera"))
-				{
-					CameraComponentParams p;
-					p.Damping = FLOAT("Damping");
-					p.Far = FLOAT("Far");
-					p.Near = FLOAT("Near");
-					p.Yaw = FLOAT("Yaw");
-					p.Pitch = FLOAT("Pitch");
-					p.Roll = FLOAT("Roll");
-					p.Position = VEC3("Position");
-					Application::GetSceneManager()->AddComponent(entity_id, std::make_shared<CameraComponent>(entity_id, p));
-					EndStruct();
-				}
-				if (BeginStruct("Hierachy"))
-				{
-					HierachyParams p;
-					p.HasParent = BOOL("HasParent");
+					auto entity_id = ID("Entity_ID");
+					SceneManager::AddEntity(entity_id);
 
-					if (p.HasParent)
+					if (BeginCollection("Components"))
 					{
-						p.Parent = ID("Parent");
-					}
-
-					BeginCollection("Children");
-					while (CurrentCollectionIndex() < GetCollectionSize())
-					{
-						if (BeginStruct("Child"))
+						while (CurrentCollectionIndex() < GetCollectionSize())
 						{
-							auto child_id = ID("Child_ID");
-							p.Children.push_back(child_id);
-							EndStruct();
+							ReadTagComponentIfExists(entity_id);
+							ReadTransformComponentIfExists(entity_id);
+							ReadHierachyComponentIfExists(entity_id);
+							ReadMeshComponentIfExists(entity_id);
+							NextInCollection();
 						}
-						NextInCollection();
-					}
-					EndCollection();
-
-					Application::GetSceneManager()->AddComponent(entity_id, std::make_shared<HierachyComponent>(entity_id, p));
-
-					EndStruct();
-				}
-				if (BeginStruct("StaticMesh"))
-				{
-					auto MeshName = STRING("Mesh");
-					auto mesh = AssetManager::GetStaticMesh(MeshName.c_str());
-					if (mesh)
-					{
-						auto component = std::make_shared<StaticMeshComponent>(MeshName, mesh, entity_id);
-						component->OverrideMeshMaterial = BOOL("Override Material");
-						component->MaterialID = ID("MaterialID");
-						Application::GetSceneManager()->AddComponent(entity_id, component);
+						EndCollection();
 					}
 					EndStruct();
 				}
-				if (BeginStruct("Pointlight"))
-				{
-					PointlightParams p;
-					p.Diffuse = VEC3("Diffuse");
-					p.Specular = VEC3("Specular");
-					p.Intensity = FLOAT("Intensity");
-					p.Radius = FLOAT("Radius");
-					p.Compression = FLOAT("Compression");
-					Application::GetSceneManager()->AddComponent(entity_id, std::make_shared<PointlightComponent>(entity_id, p));
-					EndStruct();
-				}
-				*/
 				NextInCollection();
 			}
+
 			EndCollection();
-
-			EndStruct();
-			NextInCollection();
 		}
-
-		EndCollection();
 		EndStruct();
 
 		return new_Scene;

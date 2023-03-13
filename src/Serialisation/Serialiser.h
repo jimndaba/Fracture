@@ -54,6 +54,14 @@ namespace nlohmann
 			{"TesEval_Path", reg.TessalationEval_Path}
 		};
 	}
+	inline void  to_json(json& j, const Fracture::SceneRegistry& reg)
+	{
+		j = json{
+			{"ID", (uint32_t)reg.ID},
+			{"Name", reg.Name},
+			{"Path", reg.Path}
+		};
+	}
 
 
 	inline void from_json(const json& j, Fracture::ShaderRegistry& reg) {
@@ -75,6 +83,14 @@ namespace nlohmann
 		j.at("Name").get_to(reg.Name);
 		j.at("Path").get_to(reg.Path);
 		j.at("Type").get_to(reg.meshType);
+		reg.ID = id;
+	}
+
+	inline void from_json(const json& j, Fracture::SceneRegistry& reg) {
+		uint32_t id;
+		j.at("ID").get_to(id);
+		j.at("Name").get_to(reg.Name);
+		j.at("Path").get_to(reg.Path);
 		reg.ID = id;
 	}
 
@@ -131,12 +147,13 @@ namespace Fracture
 		void Property(const std::string& name, uint32_t value);
 		void Property(const std::string& name, int value);
 		void Property(const std::string& name, bool  value);
-		void Property(const std::string& name, const Fracture::UUID& value);
+		void Property(const std::string& name, Fracture::UUID value);
 		void Property(const std::string& name, const float& value);
 		void Property(const std::string& name, const char* value);
 		void Property(const std::string& name, const std::string& value);
 		void Property(const std::string& name, const Fracture::MeshRegistry& value);
 		void Property(const std::string& name, const Fracture::ShaderRegistry& value);
+		void Property(const std::string& name, const Fracture::SceneRegistry& value);
 		void Property(const std::string& name, const glm::vec2& value);
 		void Property(const std::string& name, const glm::vec3& value);
 		void Property(const std::string& name, const glm::vec4& value);
@@ -173,6 +190,7 @@ namespace Fracture
 		glm::vec3 VEC3(const std::string& name);
 		glm::vec4 VEC4(const std::string& name);
 		ShaderRegistry SHADERREG(const std::string& name);
+		SceneRegistry SCENEREG(const std::string& name);
 
 
 		json GetOutput();

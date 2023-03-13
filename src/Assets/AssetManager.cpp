@@ -7,6 +7,8 @@
 #include "Rendering/GraphicsDevice.h"
 #include "Rendering/Shader.h"
 
+#include "World/SceneManager.h"
+
 std::map<Fracture::UUID, Fracture::MeshRegistry> Fracture::AssetManager::mMeshRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMeshIDLookUp;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::StaticMesh>> Fracture::AssetManager::mMeshes;
@@ -25,6 +27,11 @@ Fracture::AssetManager::AssetManager()
 {
 }
 
+void Fracture::AssetManager::RegisterCallbacks(Eventbus* bus)
+{
+	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadMesh);
+}
+
 void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 {
 	ISerialiser reg_serialiser = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
@@ -34,6 +41,7 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 	{
 		if (reg_serialiser.BeginCollection("Mesh Registry"))
 		{
+			FRACTURE_TRACE("Loading Mesh Assets");
 			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
 			{
 				MeshRegistry reg;
@@ -46,11 +54,12 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 				
 			}
 			reg_serialiser.EndCollection();
-			FRACTURE_TRACE("Loading Mesh Assets");
+			
 		}
 
 		if (reg_serialiser.BeginCollection("Shader Registry"))
 		{
+			FRACTURE_TRACE("Loading Shader Assets");
 			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
 			{
 				ShaderRegistry reg;	
@@ -65,8 +74,22 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 				RegisterShader(reg);
 				reg_serialiser.NextInCollection();
 			}
-			reg_serialiser.EndCollection();
-			FRACTURE_TRACE("Loading Shader Assets");
+			reg_serialiser.EndCollection();			
+		}
+
+		if (reg_serialiser.BeginCollection("Scene Registry"))
+		{
+			FRACTURE_TRACE("Loading Scene Assets");
+			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
+			{
+				SceneRegistry reg;
+				reg.ID = reg_serialiser.ID("ID");
+				reg.Name = reg_serialiser.STRING("Name");
+				reg.Path = reg_serialiser.STRING("Path");				
+				SceneManager::RegisterScene(reg);
+				reg_serialiser.NextInCollection();
+			}
+			reg_serialiser.EndCollection();			
 		}
 
 		reg_serialiser.EndStruct();
@@ -94,6 +117,13 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 	for (const auto& reg : mShaderRegister)
 	{
 		reg_serialiser.Property("Shader", reg.second);
+	}
+	reg_serialiser.EndCollection();
+
+	reg_serialiser.BeginCollection("Scene Registry");
+	for (const auto& reg : SceneManager::mSceneRegister)
+	{
+		reg_serialiser.Property("Scene", reg.second);
 	}
 	reg_serialiser.EndCollection();
 
@@ -262,28 +292,34 @@ Fracture::Shader* Fracture::AssetManager::GetShader(const std::string& Name)
 Fracture::Shader* Fracture::AssetManager::GetShaderByID(const Fracture::UUID& id)
 {
 	{
-		auto it = mShaders.find(id);	
-		if (it != mShaders.end())
+		auto it = mShaderRegister.find(id);
+		if (it != mShaderRegister.end())
 		{
-			if (!mShaders[id]->IsLoaded)
-			{
-				ShaderDescription desc;
-				desc.VertexPath = mShaderRegister[id].Vertex_Path;
-				desc.FragmentPath = mShaderRegister[id].Fragment_Path;
-				desc.GeometryPath = mShaderRegister[id].Geometry_Path;
-				desc.ComputePath = mShaderRegister[id].Compute_Path;
-				desc.TesselationControlPath = mShaderRegister[id].TessalationControl_Path;
-				desc.TesselationEvaluationPath = mShaderRegister[id].TessalationEval_Path;
-				desc.Name = mShaderRegister[id].Name;
-				mShaders[id] = GraphicsDevice::Instance()->CreateShader(desc);
-				mShaders[id]->IsLoaded = true;
-				mShaders[id]->ID = id;
-			}
+			if (mShaders[id])
+				return mShaders[id].get();
+
+			ShaderDescription desc;
+			desc.VertexPath = mShaderRegister[id].Vertex_Path;
+			desc.FragmentPath = mShaderRegister[id].Fragment_Path;
+			desc.GeometryPath = mShaderRegister[id].Geometry_Path;
+			desc.ComputePath = mShaderRegister[id].Compute_Path;
+			desc.TesselationControlPath = mShaderRegister[id].TessalationControl_Path;
+			desc.TesselationEvaluationPath = mShaderRegister[id].TessalationEval_Path;
+			desc.Name = mShaderRegister[id].Name;
+			mShaders[id] = GraphicsDevice::Instance()->CreateShader(desc);
+			mShaders[id]->IsLoaded = true;
+			mShaders[id]->ID = id;
 			return mShaders[id].get();
 		}
 	}
 	FRACTURE_ERROR("Could not find Shader: {}", id);
 	return nullptr;
+}
+
+void Fracture::AssetManager::OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt)
+{
+	if(!IsMeshLoaded(evnt->MeshID))
+		AsyncLoadMeshByID(evnt->MeshID);
 }
 
 void Fracture::AssetManager::AsyncLoadMesh(const std::string& Name)

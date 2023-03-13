@@ -34,6 +34,5 @@ Fracture::Buffer::Buffer() :
 }
 
 Fracture::Buffer::~Buffer()
-{
-	FRACTURE_INFO("Deleted Buffers : {}", RenderID);
+{	
 }

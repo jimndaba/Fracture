@@ -14,9 +14,10 @@ namespace Fracture
 	struct Scene
 	{
 		UUID ID;
+		UUID RootID;
+		UUID ActiveCameraID;
 		std::vector<std::shared_ptr<Entity>> Entities;
 		std::unordered_map<std::type_index, ComponentSet> ComponentReg;
-		std::shared_ptr<SceneNode> RootNode;
 		std::string Name = "Untitled";
 	};
 }

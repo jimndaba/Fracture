@@ -37,6 +37,13 @@ namespace Fracture
 		std::string TessalationEval_Path;
 	};
 
+	struct SceneRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
+
 
 
 }
