@@ -31,6 +31,7 @@ namespace Fracture
 			:IComponent(), Position(pos), Scale(scale), Rotation(rot),entity(id) {}
 
 		UUID entity;
+		bool IsDirty = true;
 		glm::vec3 Position;
 		glm::vec3 Scale;
 		glm::quat Rotation;
@@ -127,19 +128,42 @@ namespace Fracture
 
 	struct PointlightComponent : public IComponent
 	{
+		PointlightComponent(const UUID& id) :IComponent(), entity(id) {}
 		UUID entity;
+
+		float Radius = 1.0f;
+		float Compression = 1.0f;
+		float Strength = 1.0f;
+		glm::vec3 Diffuse = glm::vec3(1.0f);
+
 		UUID GetID() { return entity; }
 	};
 
 	struct SpotlightComponent : public IComponent
 	{
+		SpotlightComponent(const UUID& id) :IComponent(), entity(id) {}
 		UUID entity;
+
+		float Strength = 1.0f;
+		float InnerCutoff = 10.0f;
+		float OutCutoff  = 30.0f;
+		float Linear = 0.09f;
+		float Quadratic = 0.032f;
+		float Constant = 1.0f;
+		
+		glm::vec3 Diffuse = glm::vec3(1.0f);
+		
 		UUID GetID() { return entity; }
 	};
 
 	struct SunlightComponent : public IComponent
 	{
+		SunlightComponent(const UUID& id) :IComponent(), entity(id) {}
 		UUID entity;
+
+		float Strength = 1.0f;
+		glm::vec3 Diffuse = glm::vec3(1.0f);
+
 		UUID GetID() { return entity; }
 	};
 

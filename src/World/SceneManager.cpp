@@ -37,8 +37,10 @@ void Fracture::SceneManager::AddEntity(const UUID& id)
     if (!mCurrentScene)
         return;
 
+
     auto entity = std::make_shared<Entity>();
     entity->ID = id;
+   
     mCurrentScene->Entities.push_back(std::move(entity));
 }
 

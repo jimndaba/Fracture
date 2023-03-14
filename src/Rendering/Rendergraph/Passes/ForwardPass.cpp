@@ -42,7 +42,7 @@ void Fracture::ForwardPass::Execute()
 			{
 				const auto& transform = SceneManager::GetComponent<TransformComponent>(entity->GetID());
 				// [Shader][Mesh]
-				Renderable_batch[entity->Shader][entity->Mesh].push_back(transform->LocalTransform);
+				Renderable_batch[entity->Shader][entity->Mesh].push_back(transform->WorldTransform);
 			}
 		}
 	}

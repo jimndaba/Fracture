@@ -63,7 +63,6 @@ namespace nlohmann
 		};
 	}
 
-
 	inline void from_json(const json& j, Fracture::ShaderRegistry& reg) {
 		uint32_t id;
 		j.at("ID").get_to(id);

@@ -40,6 +40,18 @@ namespace Fracture
 		glm::vec4 Camera_Position;
 	};
 
+	struct LightData
+	{
+		glm::vec4 DirectionXYZ_StrengthW = glm::vec4(0);
+		glm::vec4 PositionXYZ_RadiusW = glm::vec4(0); //Radius for Point lights 
+		glm::vec4 ComprX_Y_Z_InnerW = glm::vec4(0);
+		glm::vec4 CnstX_LnrY_QuadZ_OuterW = glm::vec4(0);
+		glm::vec4 Diffuse = glm::vec4(0);
+		int enabled = 0;//0_ OFF, 1 _ ON
+		int type = 0; // 0 _ invalid ,1 _ Direc, 2 _ Point , 3 _ Spot
+		glm::vec2 _pad;
+	};
+
 
 
 	class GraphicsDevice
@@ -49,6 +61,10 @@ namespace Fracture
 		std::map<std::string, std::shared_ptr<IGraphicsResource>> mGlobalResources;
 
 		std::shared_ptr<Buffer> mGFrameData;
+		std::shared_ptr<Buffer> mGLightBuffer;
+
+		const int MAX_LIGHTS = 1024;
+		std::vector<LightData> mLightData;
 
 	public:
 		GraphicsDevice();
@@ -58,6 +74,7 @@ namespace Fracture
 
 		void Startup();
 		void UpdateGlobalFrameData(const GlobalFrameData& data);
+		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void Shutdown();
 
 		void ClearBuffers(uint32_t bufferbit);

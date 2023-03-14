@@ -34,6 +34,7 @@ void Fracture::AssetManager::RegisterCallbacks(Eventbus* bus)
 
 void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 {
+
 	ISerialiser reg_serialiser = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
 	reg_serialiser.Open(assetfilepath);//"Content/AssetRegister.json"
 	

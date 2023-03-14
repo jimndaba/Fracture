@@ -2,19 +2,16 @@
 #ifndef TRANSFORMSYSTEM_H
 #define TRANSFORMSYSTEM_H
 
+#include "SceneManager.h"
 
 namespace Fracture
 {
-	struct TransformComponent;
 
 	struct TransformSystem
 	{
 		TransformSystem();
 
-
-		static void Update(float dt, TransformComponent& component);
-
-
+		static void Update(Fracture::SceneManager* manager, Fracture::UUID root);
 	};
 
 

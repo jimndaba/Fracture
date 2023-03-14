@@ -144,7 +144,7 @@ namespace Fracture
 		void DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& cmd);
 
 		template<class T>
-	    void MapDataTobuffer(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size);
+	    void MapDataTobuffer(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size,BufferAccess access = BufferAccess::WriteOnly);
 		void UnMapbuffer(Fracture::RenderContext* cntxt,uint32_t buffer);
 
 		template<RenderTargetType E>
@@ -164,15 +164,14 @@ namespace Fracture
 		void SetTexture(Fracture::RenderContext* cntxt,Fracture::Shader* shader, const std::string& name, const uint32_t& RenderID, unsigned int unit);		
 				
 		template<class T>
-		void MapDataTobuffer(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size)
+		void MapDataTobuffer(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size, BufferAccess access)
 		{
 			Fracture::Command cmd;
-			cmd.fnc = [cntxt, buffer, data, size]() {
-				auto ptr = glMapNamedBuffer(buffer, GL_WRITE_ONLY);
+			cmd.fnc = [cntxt, buffer, data, size,access]() {
+				auto ptr = glMapNamedBuffer(buffer, (GLenum)access);
 				memcpy(ptr, data.data(), size);				
 			};
-			cntxt->Push(cmd);
-
+			cntxt->Push(cmd);	
 			UnMapbuffer(cntxt, buffer);
 		}
 		

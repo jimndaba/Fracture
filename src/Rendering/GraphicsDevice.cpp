@@ -72,16 +72,28 @@ void Fracture::GraphicsDevice::Startup()
         glEnable(GL_SCISSOR_TEST);
     }
 
-
-    BufferDescription desc;
-    desc.Name = "Global Frame Data Buffer";
-    desc.bufferType = BufferType::UniformBuffer;
-    desc.data = NULL;
-    desc.size = sizeof(GlobalFrameData);
-    desc.usage = BufferUsage::Stream;
-    mGFrameData = std::make_shared<Buffer>();
-    CreateBuffer(mGFrameData.get(), desc);
-    SetBufferIndexRange(mGFrameData.get(), 0, 0);
+    {
+        BufferDescription desc;
+        desc.Name = "Global Frame Data Buffer";
+        desc.bufferType = BufferType::UniformBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(GlobalFrameData);
+        desc.usage = BufferUsage::Stream;
+        mGFrameData = std::make_shared<Buffer>();
+        CreateBuffer(mGFrameData.get(), desc);
+        SetBufferIndexRange(mGFrameData.get(), 0, 0);
+    }
+    {
+        BufferDescription desc;
+        desc.Name = "Global Light Data Buffer";
+        desc.bufferType = BufferType::ShaderStorageBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(LightData) * MAX_LIGHTS;
+        desc.usage = BufferUsage::Stream;
+        mGLightBuffer = std::make_shared<Buffer>();
+        CreateBuffer(mGLightBuffer.get(), desc);
+        SetBufferIndexRange(mGLightBuffer.get(), 0, 0);
+    }
 }
 
 
@@ -90,6 +102,13 @@ void Fracture::GraphicsDevice::UpdateGlobalFrameData(const GlobalFrameData& data
 {   
     GraphicsDevice::Instance()->UpdateBufferData(mGFrameData.get(), 0, sizeof(GlobalFrameData), &data);
 }
+
+//Update Global Light Buffers
+void Fracture::GraphicsDevice::UpdateGlobalLightData(const std::vector<LightData>& data)
+{
+    GraphicsDevice::Instance()->UpdateBufferData(mGLightBuffer.get(), 0, sizeof(LightData) * data.size(), data.data());
+}
+
 
 void Fracture::GraphicsDevice::Shutdown()
 {

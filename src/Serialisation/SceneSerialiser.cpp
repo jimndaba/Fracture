@@ -37,8 +37,10 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::HierachyComponent* 
 
 	BeginCollection("Children");
 	for (const auto& child : component->Children)
-	{
-		Property("ChildID", child);
+	{	
+		BeginStruct("Child");
+		Property("ChildID", child);		
+		EndStruct();
 	}
 	EndCollection();
 	EndStruct();
@@ -79,18 +81,31 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CameraComponent* co
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::PointlightComponent* component)
 {
 	BeginStruct("PointlightComponent");
+	Property("Compression", component->Compression);
+	Property("Diffuse", component->Diffuse);
+	Property("Radius", component->Radius);
+	Property("Strength", component->Strength);
 	EndStruct();
 }
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::SpotlightComponent* component)
 {
 	BeginStruct("SpotlightComponent");
+	Property("Constant", component->Constant);
+	Property("Diffuse", component->Diffuse);
+	Property("Linear", component->Linear);
+	Property("Quadratic", component->Quadratic);
+	Property("InnerCutoff", component->InnerCutoff);
+	Property("OuterCutoff", component->OutCutoff);
+	Property("Strength", component->Strength);
 	EndStruct();
 }
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::SunlightComponent* component)
 {
 	BeginStruct("SunlightComponent");
+	Property("Diffuse", component->Diffuse);
+	Property("Strength", component->Strength);
 	EndStruct();
 }
 
@@ -142,12 +157,16 @@ void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID ent
 	if (BeginStruct("Hierachy"))
 	{
 		auto comp = std::make_shared<HierachyComponent>(entity_id);
-		comp->Parent = ID("Parent");
-		comp->HasParent = BOOL("Parent");
+		comp->Parent = ID("ParentID");
+		comp->HasParent = BOOL("HasParent");
 		BeginCollection("Children");
 		while (CurrentCollectionIndex() < GetCollectionSize())
 		{
-			comp->Children.push_back(ID("ChildID"));
+			if (BeginStruct("Child"))
+			{
+				comp->Children.push_back(ID("ChildID"));
+				EndStruct();
+			}			
 			NextInCollection();
 		}
 		EndCollection();
@@ -171,6 +190,50 @@ void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_
 		EndStruct();
 	}
 }
+
+void Fracture::SceneSerialiser::ReadSpotlightComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("SpotlightComponent"))
+	{
+		auto comp = std::make_shared<SpotlightComponent>(entity_id);
+		comp->Diffuse = VEC3("Diffuse");
+		comp->Strength = FLOAT("Strength");
+		comp->Constant = FLOAT("Constant");
+		comp->Linear = FLOAT("Linear");
+		comp->Quadratic = FLOAT("Quadratic");
+		comp->InnerCutoff = FLOAT("InnerCutoff");
+		comp->OutCutoff = FLOAT("OuterCutoff");
+		SceneManager::AddComponentByInstance<SpotlightComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadPointlightComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("PointlightComponent"))
+	{
+		auto comp = std::make_shared<PointlightComponent>(entity_id);
+		comp->Diffuse = VEC3("Diffuse");
+		comp->Strength = FLOAT("Strength");
+		comp->Compression = FLOAT("Compression");
+		comp->Radius = FLOAT("Radius");		
+		SceneManager::AddComponentByInstance<PointlightComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadSunlightComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("SunlightComponent"))
+	{
+		auto comp = std::make_shared<SunlightComponent>(entity_id);
+		comp->Diffuse = VEC3("Diffuse");
+		comp->Strength = FLOAT("Strength");				
+		SceneManager::AddComponentByInstance<SunlightComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
@@ -215,6 +278,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 	{
 		auto new_Scene = SceneManager::CreateNewScene(ID("RootID"));
 		new_Scene->ID = ID("ID");
+		new_Scene->RootID = ID("RootID");
 		new_Scene->ActiveCameraID = ID("ActiveCamera");	
 	
 		SceneManager::SetScene(new_Scene);
@@ -236,6 +300,9 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadTransformComponentIfExists(entity_id);
 							ReadHierachyComponentIfExists(entity_id);
 							ReadMeshComponentIfExists(entity_id);
+							ReadSpotlightComponentIfExists(entity_id);
+							ReadPointlightComponentIfExists(entity_id);
+							ReadSunlightComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
