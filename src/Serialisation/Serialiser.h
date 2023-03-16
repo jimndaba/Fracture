@@ -63,6 +63,15 @@ namespace nlohmann
 		};
 	}
 
+	inline void  to_json(json& j, const Fracture::TextureRegistry& reg)
+	{
+		j = json{
+			{"ID", (uint32_t)reg.ID},
+			{"Name", reg.Name},
+			{"Path", reg.Path}
+		};
+	}
+
 	inline void from_json(const json& j, Fracture::ShaderRegistry& reg) {
 		uint32_t id;
 		j.at("ID").get_to(id);
@@ -98,6 +107,15 @@ namespace nlohmann
 		j.at("BaseVertex").get_to(sub.BaseVertex);
 		j.at("IndexCount").get_to(sub.IndexCount);
 		j.at("MaterialIndex").get_to(sub.MaterialIndex);
+	}
+
+
+	inline void from_json(const json& j, Fracture::TextureRegistry& reg) {
+		uint32_t id;
+		j.at("ID").get_to(id);
+		j.at("Name").get_to(reg.Name);
+		j.at("Path").get_to(reg.Path);
+		reg.ID = id;
 	}
 
 	inline void from_json(const json& j, glm::vec2& vec) {
@@ -153,6 +171,7 @@ namespace Fracture
 		void Property(const std::string& name, const Fracture::MeshRegistry& value);
 		void Property(const std::string& name, const Fracture::ShaderRegistry& value);
 		void Property(const std::string& name, const Fracture::SceneRegistry& value);
+		void Property(const std::string& name, const Fracture::TextureRegistry& value);
 		void Property(const std::string& name, const glm::vec2& value);
 		void Property(const std::string& name, const glm::vec3& value);
 		void Property(const std::string& name, const glm::vec4& value);
@@ -161,6 +180,8 @@ namespace Fracture
 		void Property(const std::string& name, const std::vector<glm::vec3>& value);
 		void Property(const std::string& name, const std::vector<glm::vec4>& value);
 		void Property(const std::string& name, const std::vector<Fracture::SubMesh>& value);
+		void Property(const std::string& name, const std::vector<unsigned char>& value);
+		void Property(const std::string& name, const std::vector<float>& value);
 
 
 		void Save(const std::string& path);
@@ -180,6 +201,8 @@ namespace Fracture
 		int INT(const std::string& name);
 		float FLOAT(const std::string& name);
 		std::vector<unsigned int> UINT_VECTOR(const std::string& name);
+		std::vector<unsigned char> UCHAR_VECTOR(const std::string& name);
+		std::vector<float> FLOAT_VECTOR(const std::string& name);
 		std::vector<glm::vec2> VEC2_VECTOR(const std::string& name);
 		std::vector<glm::vec3> VEC3_VECTOR(const std::string& name);
 		std::vector<glm::vec4> VEC4_VECTOR(const std::string& name);

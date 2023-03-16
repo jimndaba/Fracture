@@ -21,8 +21,42 @@ namespace Fracture
 		MeshType meshType;
 	};
 
+	struct MeshFileHeader
+	{		
+		uint32_t magicValue;
+		UUID ID;
+		uint32_t SubMeshCount;
+		uint32_t VertexCount;
+		uint32_t IndexCount;
+		uint32_t datablockOffset;
+		uint32_t SubMeshDataSize;
+		uint32_t IndexDataSize;
+		uint32_t VertexDataSize;
+	};
+
+	struct TextureFileHeader
+	{
+		uint32_t magicValue;
+		UUID ID;
+		uint32_t Width;
+		uint32_t Height;
+		uint32_t Channels;
+		uint32_t Count;
+		uint32_t DataSize;
+	};
+
+	struct MaterialRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
+
 	struct TextureRegistry
 	{
+		UUID ID;
+		std::string Name;
+		std::string Path;	
 	};
 
 	struct ShaderRegistry

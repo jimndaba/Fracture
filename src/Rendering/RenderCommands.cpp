@@ -198,6 +198,17 @@ void Fracture::RenderCommands::DrawElementsBaseVertex(Fracture::RenderContext* c
 {
 }
 
+void Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Fracture::RenderContext* cntxt, const Fracture::DrawElementsInstancedBaseVertex& render_cmd)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [render_cmd]() {
+		glDrawElementsInstancedBaseVertex((GLenum)render_cmd.mode, render_cmd.count, GL_UNSIGNED_INT,render_cmd.indices, render_cmd.instancecount, render_cmd.basevertex);
+
+		GraphicsDevice::DRAWCALL_COUNT++;
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& render_cmd)
 {
 	Fracture::Command cmd;

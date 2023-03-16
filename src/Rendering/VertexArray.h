@@ -42,6 +42,7 @@ namespace Fracture
 		uint32_t Size;
 		mutable uint32_t Offset;
 		bool Instanced = false;
+		bool Interleaved = false;
 		int divisor = 0;
 
 

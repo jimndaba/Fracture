@@ -199,29 +199,27 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
             {
               
                 glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE,((sizeof(float) * count) * i)); glCheckError();               
+                glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE,((sizeof(float) * count) * i)); glCheckError(); 
                 glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
                 glVertexArrayBindingDivisor(vao, attribIndex, 1);	glCheckError();
 
                 attribIndex++;
             }
         }
+        if (attribute.Interleaved)
+        {
+            glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+            glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
+            glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
+            attribIndex++;
+        }
         else
         {
-            if (attribute.Instanced)
-            {
-            
-                glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
-                glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
-            }
-            else
-            {
-               
-                glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, 0); glCheckError();
-                glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
-            }
+            glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+            glVertexArrayAttribBinding(vao, attribIndex, 0); glCheckError();
+            glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
+         
+
             attribIndex++;
         }
         bindingIndex++;

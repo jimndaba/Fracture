@@ -74,10 +74,15 @@ void Fracture::ForwardPass::Execute()
 
 			Fracture::RenderCommands::BindVertexArrayObject(Context, mesh->VAO);
 
-			DrawElementsArraysInstanced cmd;
-			cmd.element_count = mesh->Indices.size();
-			cmd.instance_count = entity.second.size();
-			Fracture::RenderCommands::DrawElementsArrayInstanced(Context, cmd);
+			for (const auto& sub : mesh->SubMeshes)
+			{
+				DrawElementsInstancedBaseVertex cmd;
+				cmd.basevertex = sub.BaseVertex;
+				cmd.instancecount = entity.second.size();
+				cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
+				cmd.count = sub.IndexCount;
+				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+			}
 		}
 
 

@@ -41,13 +41,13 @@ namespace Fracture
 		UUID ID;
 		std::string Name;
 		std::vector<SubMesh> SubMeshes;
-		std::vector<unsigned int> Indices;;
-		std::vector<glm::vec3> mPositions;
-		std::vector<glm::vec2> mUVs;
-		std::vector<glm::vec3> mNormals;
+		std::vector<unsigned int> Indices;
+		std::vector<Vertex> mVerticies;
 		
 		uint32_t VAO;
 		std::shared_ptr<Buffer> Matrix_Buffer;
+		std::shared_ptr<Buffer> VBO_Buffer;
+		std::shared_ptr<Buffer> EBO_Buffer;
 
 	private:
 		// pure virtual implementation

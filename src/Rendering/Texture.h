@@ -107,10 +107,17 @@ namespace Fracture
 		Float32U248 = GL_FLOAT_32_UNSIGNED_INT_24_8_REV
 	};
 
-
 	struct TextureCreationInfo
 	{
 		UUID ID = UUID(0, false);
+		enum class TextureType
+		{
+			Texture2D,
+			HDR,
+			CubeMap
+		};
+
+		TextureType Texture_Type;
 		std::string Name;
 		std::string Path;		
 		TextureTarget TextureTarget = TextureTarget::Texture2D;
@@ -142,7 +149,6 @@ namespace Fracture
 		~Texture();
 		TextureCreationInfo Description;		
 		uint32_t Handle = 0;
-
 	private:
 		// pure virtual implementation
 		void bind() {};

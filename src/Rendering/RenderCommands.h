@@ -74,6 +74,15 @@ namespace Fracture
 		uint32_t count;
 	};
 
+	struct DrawElementsInstancedBaseVertex
+	{
+		DrawMode mode = DrawMode::Triangles;
+		uint32_t count;
+		void* indices;
+		uint32_t instancecount;
+		uint32_t basevertex;	
+	};
+
 	struct DrawElementsIndirectCommand {
 		uint32_t  count;
 		uint32_t  instanceCount;
@@ -140,6 +149,8 @@ namespace Fracture
 		void DrawElementsArray(Fracture::RenderContext* cntxt,const Fracture::DrawElementsArray& cmd);
 		void DrawElementsArrayInstanced(Fracture::RenderContext* cntxt,const Fracture::DrawElementsArraysInstanced& cmd);
 		void DrawElementsBaseVertex(Fracture::RenderContext* cntxt,const Fracture::DrawElementsBaseVertex& cmd);
+
+		void DrawElementsInstancedBaseVertex(Fracture::RenderContext* cntxt, const Fracture::DrawElementsInstancedBaseVertex& cmd);
 
 		void DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& cmd);
 
