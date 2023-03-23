@@ -8,8 +8,31 @@
 #include "RenderTarget.h"
 
 #include "Shader.h"
+#include "Material.h"
 
 #include "GraphicsDevice.h"
+
+#include "Assets/AssetManager.h"
+
+std::function mErroCallback = [](std::string fnc) {
+	GLenum errorCode;
+	while ((errorCode = glGetError()) != GL_NO_ERROR)
+	{
+		std::string error;
+		switch (errorCode)
+		{
+		case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+		case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+		case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+		case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+		case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+		case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+		case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+		}
+		std::printf("GL Error %s at %s \n",fnc.c_str(), error.c_str());
+	}
+};
+
 
 void Fracture::RenderCommands::Enable(Fracture::RenderContext* cntxt, GLCapability ability)
 {	
@@ -133,6 +156,15 @@ void Fracture::RenderCommands::DepthFunction(Fracture::RenderContext* cntxt, Dep
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::DepthMask(Fracture::RenderContext* cntxt, bool mask)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [mask]() {
+		glDepthMask(mask);
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor)
 {
 	Fracture::Command cmd;
@@ -147,6 +179,15 @@ void Fracture::RenderCommands::StencilFunction(Fracture::RenderContext* cntxt, S
 	Fracture::Command cmd;
 	cmd.fnc = [fnc, ref,mask]() {
 		glStencilFunc((GLenum)fnc,ref,mask);
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [r,g,b,a]() {
+		glColorMask(r,g,b,a);
 	};
 	cntxt->Push(cmd);
 }
@@ -204,6 +245,8 @@ void Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Fracture::RenderC
 	cmd.fnc = [render_cmd]() {
 		glDrawElementsInstancedBaseVertex((GLenum)render_cmd.mode, render_cmd.count, GL_UNSIGNED_INT,render_cmd.indices, render_cmd.instancecount, render_cmd.basevertex);
 
+		mErroCallback("DrawInstance");
+
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
 	cntxt->Push(cmd);
@@ -214,6 +257,10 @@ void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderC
 	Fracture::Command cmd;
 	cmd.fnc = [render_cmd]() {
 		glDrawArraysInstancedBaseInstance((GLenum)render_cmd.mode, render_cmd.firstIndex , render_cmd.count,render_cmd.instanceCount,render_cmd.baseInstance);
+
+
+		mErroCallback("DrawInstance Base Vert");
+
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
 	cntxt->Push(cmd);
@@ -224,9 +271,21 @@ void Fracture::RenderCommands::UnMapbuffer(Fracture::RenderContext* cntxt, uint3
 	Fracture::Command cmd;
 	cmd.fnc = [buffer]() {
 		glUnmapNamedBuffer(buffer);
+
+		mErroCallback("UnMap");
 	};
 	cntxt->Push(cmd);
 	
+}
+
+void Fracture::RenderCommands::ClearImage(Fracture::RenderContext* cntxt, uint32_t image, int level, int* clearValue)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [image, level,clearValue]() {
+		glClearTexImage(image, level, GL_RGBA, GL_UNSIGNED_BYTE,clearValue);
+		mErroCallback("");
+	};
+	cntxt->Push(cmd);
 }
 
 void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32_t program)
@@ -236,6 +295,9 @@ void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32
 	cmd.fnc = [program,cntxt]() {
 		glUseProgram(program);
 		cntxt->CurrentProgram = program;
+	
+
+		mErroCallback("");
 	};
 	cntxt->Push(cmd);
 }
@@ -249,8 +311,11 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location =  shader->getUniformLocation(name);	
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform1i(location, value);
+
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);	
@@ -260,8 +325,11 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform1f(location, value);
+
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -273,8 +341,10 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform1i(location, value);
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -285,8 +355,11 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform2f(location, value.x,value.y);
+
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -296,8 +369,10 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform3f(location, value.x, value.y,value.z);
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -308,8 +383,9 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform4f(location, value.x, value.y, value.z,value.w);
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -319,8 +395,10 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -330,8 +408,10 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value,name]() {
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -342,8 +422,12 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, value]() {
+	cmd.fnc = [location, value, name]() {
 		glUniform4f(location, value.R, value.G, value.B, value.A);
+
+
+		mErroCallback(name);
+
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
@@ -353,13 +437,83 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, unit, RenderID]() {
+	cmd.fnc = [location, unit, RenderID, name]() {
 		glBindTextureUnit(unit, RenderID);
+		mErroCallback("Bind Unit");
 		glUniform1i(location, unit);
+		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
 
+}
+
+void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Fracture::Shader* shader, Fracture::Material* material)
+{
+	if (material)
+	{
+		for (const auto& uniform : material->Uniforms)
+		{
+			switch (uniform.type)
+			{
+				case UniformType::INT:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.INT);
+
+				}
+				case UniformType::BOOL:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.BOOL);
+					break;
+				}
+				case UniformType::FLOAT:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.FLOAT);
+					break;
+				}
+				case UniformType::VEC2:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.VEC2);
+					break;
+				}
+				case UniformType::VEC3:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.VEC3);
+					break;
+				}
+				case UniformType::VEC4:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.VEC4);
+					break;
+				}
+				case UniformType::COLOR3:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.COLOR3);
+					break;
+				}
+				case UniformType::COLOR4:
+				{
+					SetUniform(cntxt, shader, uniform.Name, uniform.data.COLOR4);
+					break;
+				}
+				case UniformType::SAMPLE2D:
+				{
+
+					const auto& texture = AssetManager::GetTextureByID(uniform.TextureID);
+					if (texture)
+						SetTexture(cntxt, shader, uniform.Name, texture->Handle,material->TextureUnits[uniform.Name]);
+					break;
+				}
+				case UniformType::SAMPLECUBE:
+				{
+					const auto& texture = AssetManager::GetTextureByID(uniform.TextureID);
+					if (texture)
+						SetTexture(cntxt, shader, uniform.Name, texture->Handle, material->TextureUnits[uniform.Name]);
+					break;
+				}
+			}
+		}
+	}
 }
 
 #pragma endregion

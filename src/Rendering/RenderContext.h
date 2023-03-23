@@ -22,6 +22,8 @@ namespace Fracture
 		void BeginState(const SortKey& key);
 		void EndState();
 
+		void Begin();
+
 		void Push(Fracture::Command& cmd);
 
 		void Sort(DepthSortOrder order);
@@ -30,6 +32,8 @@ namespace Fracture
 
 		std::vector<Fracture::Command> Commands;
 		std::stack<SortKey> KeyStack;
+
+		std::map<Fracture::UUID, std::map<Fracture::UUID, std::vector<glm::mat4>>> Renderable_batch;
 
 		uint32_t CurrentProgram;
 

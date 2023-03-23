@@ -146,7 +146,7 @@ void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID en
 		auto transform = std::make_shared<TransformComponent>(entity_id);
 		transform->Position = VEC3("Position");
 		transform->Scale = VEC3("Scale");
-		transform->Rotation = glm::quat(VEC3("Rotation"));
+		transform->Rotation = glm::quat(glm::radians(VEC3("Rotation")));
 		SceneManager::AddComponentByInstance<TransformComponent>(entity_id, transform);
 		EndStruct();
 	}

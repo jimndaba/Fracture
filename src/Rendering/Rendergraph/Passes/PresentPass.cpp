@@ -30,7 +30,7 @@ void Fracture::PresentPass::Execute()
 
 
 	Fracture::RenderCommands::UseProgram(Context, AssetManager::GetShader("Fullscreen")->Handle);
-	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Fullscreen"), "aDiffuse", global_color->ColorAttachments[0]->Handle, 0);
+	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Fullscreen").get(), "aDiffuse", global_color->ColorAttachments[0]->Handle, 0);
 
 	DrawArray cmd =
 	{

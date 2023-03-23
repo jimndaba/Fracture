@@ -59,7 +59,7 @@ namespace Fracture
 		if (SceneManager::HasComponent<T>(entity))
 		{
 			const auto& component = SceneManager::GetComponent<T>(entity);
-			SerialiseComponent(component);
+			SerialiseComponent(component.get());
 		}
 	}
 

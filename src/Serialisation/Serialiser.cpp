@@ -169,6 +169,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::Te
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::MaterialRegistry& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec2& value)
 {
 

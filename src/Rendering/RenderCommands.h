@@ -16,6 +16,7 @@ namespace Fracture
 
 	struct RenderTarget;
 	struct Shader;
+	struct Material;
 
 	enum ClearFlags : uint32_t
 	{
@@ -129,6 +130,7 @@ namespace Fracture
 
 	namespace RenderCommands
 	{
+		
 		void Enable(Fracture::RenderContext* cntxt, GLCapability abiltiy);
 		void Disable(Fracture::RenderContext* cntxt, GLCapability abiltiy);
 		void ClearTarget(Fracture::RenderContext* cntxt, uint32_t flags);
@@ -140,8 +142,10 @@ namespace Fracture
 		void SetCullMode(Fracture::RenderContext* cntxt, CullMode mode);
 
 		void DepthFunction(Fracture::RenderContext* cntxt, DepthFunc fnc);
+		void DepthMask(Fracture::RenderContext* cntxt,bool mask);
 		void BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor);
 		void StencilFunction(Fracture::RenderContext* cntxt, StencilFunc fnc, int ref, uint32_t mask);
+		void SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a);
 
 		void BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao);
 		void DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& cmd);
@@ -161,6 +165,7 @@ namespace Fracture
 		template<RenderTargetType E>
 		void CopyRenderTarget(RenderTarget* from_buffer, RenderTarget* to_buffer, uint32_t attachment_index);
 
+		void ClearImage(Fracture::RenderContext* cntxt, uint32_t image, int level,int* clearValue);
 
 		void UseProgram(Fracture::RenderContext* cntxt, uint32_t program);
 		void SetUniform(Fracture::RenderContext* cntxt,Fracture::Shader* shader,const std::string name, const int& value);
@@ -173,6 +178,8 @@ namespace Fracture
 		void SetUniform(Fracture::RenderContext* cntxt,Fracture::Shader* shader,const std::string name, const glm::mat4& value);
 		void SetUniform(Fracture::RenderContext* cntxt,Fracture::Shader* shader, const std::string name, const Fracture::Colour& value);
 		void SetTexture(Fracture::RenderContext* cntxt,Fracture::Shader* shader, const std::string& name, const uint32_t& RenderID, unsigned int unit);		
+
+		void BindMaterial(Fracture::RenderContext* cntxt, Fracture::Shader* shader, Fracture::Material* material);
 				
 		template<class T>
 		void MapDataTobuffer(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size, BufferAccess access)

@@ -43,6 +43,7 @@ namespace Fracture
 		std::vector<SubMesh> SubMeshes;
 		std::vector<unsigned int> Indices;
 		std::vector<Vertex> mVerticies;
+		std::vector<uint32_t> mMaterials;
 		
 		uint32_t VAO;
 		std::shared_ptr<Buffer> Matrix_Buffer;

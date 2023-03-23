@@ -34,10 +34,10 @@ namespace Fracture
 		static void RemoveComponent(const std::shared_ptr<T>& component);
 
 		template <class T>
-		static T* GetComponent(const UUID& entity);
+		static std::shared_ptr<T> GetComponent(const UUID& entity);
 
 		template <class T>
-		static std::vector<T*>GetAllComponents();
+		static std::vector<std::shared_ptr<T>>GetAllComponents();
 
 		template<class T>
 		static bool HasComponent(const UUID& id);
@@ -127,29 +127,29 @@ namespace Fracture
 	}
 
 	template<class T>
-	inline T* SceneManager::GetComponent(const UUID& entity)
+	inline std::shared_ptr<T> SceneManager::GetComponent(const UUID& entity)
 	{
 		if (mCurrentScene)
 		{
 			if (mCurrentScene->ComponentReg[typeid(T)][entity])
 			{
-				return static_cast<T*>(mCurrentScene->ComponentReg[typeid(T)][entity].get());
+				return std::dynamic_pointer_cast<T>(mCurrentScene->ComponentReg[typeid(T)][entity]);
 			}
 		}
 		return nullptr;
 	}
 
 	template<class T>
-	inline std::vector<T*> SceneManager::GetAllComponents()
+	inline std::vector<std::shared_ptr<T>> SceneManager::GetAllComponents()
 	{
-		std::vector<T*> components;
+		std::vector<std::shared_ptr<T>> components;
 		if (mCurrentScene)
 		{
 			const auto& reg = mCurrentScene->ComponentReg[typeid(T)];
 			for (const auto& component : reg)
 			{
 				if(component.second)
-					components.push_back(static_cast<T*>(component.second.get()));
+					components.push_back(std::dynamic_pointer_cast<T>(component.second));
 			}
 		}
 		return components;
@@ -158,7 +158,7 @@ namespace Fracture
 	template<class T>
 	inline bool SceneManager::HasComponent(const UUID& id)
 	{
-		return GetComponent<T>(id);
+		return GetComponent<T>(id).get();
 	}
 
 }

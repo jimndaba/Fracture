@@ -22,7 +22,6 @@ void Fracture::GridPass::Execute()
 	RenderCommands::SetRenderTarget(Context, global_color);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::DepthFunction(Context,Fracture::DepthFunc::Less);
-
 	RenderCommands::Enable(Context, Fracture::GLCapability::SmoothLines);
 	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
 	RenderCommands::BlendFunction(Context,Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);

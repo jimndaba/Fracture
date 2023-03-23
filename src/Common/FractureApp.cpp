@@ -37,7 +37,7 @@ bool Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
     glfwWindowHint(GLFW_MAXIMIZED, info->IsMaximised);
-    glfwSwapInterval(info->IsVsync);
+
     glfwWindowHint(GLFW_RESIZABLE, info->IsResizable);
     glfwWindowHint(GLFW_DECORATED, info->IsBordered);
 
@@ -65,6 +65,8 @@ bool Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(mWindow->Context);  
+
+    glfwSwapInterval(1);
 
     mWindow->Init();
    

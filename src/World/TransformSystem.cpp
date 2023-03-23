@@ -11,6 +11,8 @@ void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture
 	const auto& entity = manager->GetComponent<HierachyComponent>(root);
 	const auto& entity_transform = manager->GetComponent<TransformComponent>(root);
 
+	if (!entity_transform || !entity) return; 
+
 	if(entity_transform->IsDirty)
 	{ 
 		glm::mat4 mTransform = glm::mat4(1.0f);

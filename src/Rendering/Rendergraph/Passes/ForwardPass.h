@@ -17,7 +17,12 @@ namespace Fracture
 		ForwardPass(const std::string& name,RenderContext* context,const ForwardPassDef& info);
 
 		void Setup();
+
 		void Execute();
+
+		void PickPass();
+
+		float SpecularLevel = 16.0f;
 
 		ForwardPassDef definition;
 

@@ -57,6 +57,7 @@ namespace Fracture
 		RGB16 = GL_RGB16,
 		RGB16F = GL_RGB16F,
 		RGBA = GL_RGBA,
+		RGBA8 = GL_RGBA8,
 		RGBA16 = GL_RGBA16,
 		RGBA16F = GL_RGB16F,
 		RGBA32F = GL_RGBA32F,
@@ -122,7 +123,7 @@ namespace Fracture
 		std::string Path;		
 		TextureTarget TextureTarget = TextureTarget::Texture2D;
 		AttachmentTarget AttachmentTrgt = AttachmentTarget::Color;
-		InternalFormat internalFormat = InternalFormat::RGB8;
+		InternalFormat internalFormat = InternalFormat::RGB16;
 		TextureFormat format = TextureFormat::RGB;
 		TextureFormatType formatType = TextureFormatType::UByte;
 		TextureMagFilter magFilter = TextureMagFilter::Linear;
@@ -135,7 +136,7 @@ namespace Fracture
 		uint32_t MipLevels = 1;
 		int TextureArrayLevels = 1;
 		bool GenMinMaps = false;
-		void* data = nullptr;
+		std::vector<uint8_t> data;
 
 		uint32_t CaclMipLevels() const
 		{

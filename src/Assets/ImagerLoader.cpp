@@ -40,7 +40,7 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 	}
 
 	fclose(f);
-	info.data = data.data();
+	info.data = data;
 	info.Width = header.Width;
 	info.Height = header.Height;
 

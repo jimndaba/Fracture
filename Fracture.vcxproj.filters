@@ -165,6 +165,18 @@
     <ClInclude Include="src\Assets\AssetRegistries.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Serialisation\MaterialSerialiser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets\MaterialLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ZPrePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -291,6 +303,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assets\MaterialLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ZPrePass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

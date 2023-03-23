@@ -20,6 +20,7 @@ void Fracture::AppWindow::Init()
 void Fracture::AppWindow::SwapBuffers()
 {
 	glfwSwapBuffers(Context);
+
 }
 
 void Fracture::AppWindow::PollEvents(bool waitforInput)

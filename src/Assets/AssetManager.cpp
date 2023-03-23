@@ -5,6 +5,7 @@
 
 #include "Rendering/Mesh.h"
 #include "Serialisation/Serialiser.h"
+#include "MaterialLoader.h"
 #include "Rendering/GraphicsDevice.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
@@ -31,8 +32,18 @@ std::vector<Fracture::UUID> Fracture::AssetManager::mLoadedTextures;
 std::unordered_map<Fracture::UUID, std::future<std::shared_ptr<Fracture::Texture>>> Fracture::AssetManager::mTextureFutures;
 std::queue<Fracture::TextureRegistry> Fracture::AssetManager::mTexturesToLoad;
 
+std::vector<Fracture::UUID> Fracture::AssetManager::mLoadedMaterials;
+std::unordered_map<Fracture::UUID, std::future<std::shared_ptr<Fracture::Material>>> Fracture::AssetManager::mMaterialFutures;
+std::queue<Fracture::MaterialRegistry> Fracture::AssetManager::mMaterialToLoad;
+
+std::map<Fracture::UUID, Fracture::MaterialRegistry> Fracture::AssetManager::mMaterialRegister;
+std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMaterialIDLookUp;
+std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::Material>> Fracture::AssetManager::mMaterials;
+
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::mInstance;
+
+bool Fracture::AssetManager::IsRegisterDirty = true;
 
 Fracture::AssetManager::AssetManager()
 {
@@ -122,11 +133,28 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 			reg_serialiser.EndCollection();			
 		}
 
+		if (reg_serialiser.BeginCollection("Material Registry"))
+		{
+			FRACTURE_TRACE("Loading Material Assets");
+			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
+			{
+				MaterialRegistry reg;
+				reg.ID = reg_serialiser.ID("ID");
+				reg.Name = reg_serialiser.STRING("Name");
+				reg.Path = reg_serialiser.STRING("Path");
+				RegisterMaterial(reg);
+				reg_serialiser.NextInCollection();
+			}
+			reg_serialiser.EndCollection();
+		}
+
 		reg_serialiser.EndStruct();
 	}
 
 	FRACTURE_TRACE("Regiseted {} Meshes", mMeshRegister.size());
 	FRACTURE_TRACE("Regiseted {} Shaders", mShaderRegister.size());
+	FRACTURE_TRACE("Regiseted {} Materials", mMaterialRegister.size());
+	FRACTURE_TRACE("Regiseted {} Textures", mTextureRegister.size());
 }
 
 void Fracture::AssetManager::OnSave(const std::string& path)
@@ -165,10 +193,17 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 	reg_serialiser.EndCollection();
 
 
+	reg_serialiser.BeginCollection("Material Registry");
+	for (const auto& reg : mMaterialRegister)
+	{
+		reg_serialiser.Property("Material", reg.second);
+	}
+	reg_serialiser.EndCollection();
+
 	reg_serialiser.EndStruct();
 
-
 	reg_serialiser.Save(path);
+	IsRegisterDirty = false;
 	FRACTURE_INFO("Asset Register Update: {}", path);
 }
 
@@ -271,14 +306,55 @@ void Fracture::AssetManager::OnLoad()
 				mTextures[mf.first] = texture;
 				GraphicsDevice::Instance()->CreateTexture(mTextures[mf.first], mTextures[mf.first]->Description);
 				
-				if(texture->Description.data)
-					delete(texture->Description.data);
+				//if(texture->Description.data.size())
+					//delete(texture->Description.data);
 				
 				mLoadedTextures.push_back(mf.first);
 				mTextureFutures.erase(mf.first);
 			}
 		}
 	}
+
+	while (!mMaterialToLoad.empty())
+	{		
+		if (IsMaterialLoaded(mMaterialToLoad.front().ID))
+		{
+			mMaterialToLoad.pop();
+			continue;
+		}
+
+		auto  material = MaterialLoader::LoadMaterial(mMaterialToLoad.front().Path);
+		if (material)
+		{
+			mMaterials[mMaterialToLoad.front().ID] = material;
+			mLoadedMaterials.push_back(mMaterialToLoad.front().ID);
+		}
+		
+		else
+		{
+			FRACTURE_ERROR("Failed to load Material: {}", mMaterialToLoad.front().Path);
+		}
+
+		mMaterialToLoad.pop();
+	}
+
+	/*
+	for (auto& mf : mMaterialFutures)
+	{
+		if (mMaterialFutures.empty())
+			return;
+
+		if (mf.second._Is_ready())
+		{
+			auto material = mf.second.get();
+			{
+				mMaterials[mf.first] = material;				
+				mLoadedMaterials.push_back(mf.first);
+				mMaterialFutures.erase(mf.first);
+			}
+		}
+	}
+	*/
 }
 
 void Fracture::AssetManager::RegisterMesh(const MeshRegistry& reg)
@@ -287,6 +363,8 @@ void Fracture::AssetManager::RegisterMesh(const MeshRegistry& reg)
 	{
 		mMeshRegister[reg.ID] = reg;
 		mMeshIDLookUp[reg.Name] = reg.ID;
+		IsRegisterDirty = true;
+		FRACTURE_TRACE("Registering Mesh: {}", reg.Path);
 	}
 }
 
@@ -299,45 +377,46 @@ void Fracture::AssetManager::LoadMesh(const std::string& Name)
 		MeshLoader loader{};
 		auto mesh = loader.LoadStaticMesh(it->second.Path);
 		mMeshes[mesh_ID] = mesh;
+		mLoadedMeshes.push_back(mesh_ID);
 	}
 }
 
-Fracture::Shader* Fracture::AssetManager::GetShader(const std::string& Name)
+std::shared_ptr<Fracture::Shader> Fracture::AssetManager::GetShader(const std::string& Name)
 {
 	{
-		auto it = mShaderIDLookUp.find(Name);
-		if (it != mShaderIDLookUp.end())
+		auto it = mShaderRegister.find(mShaderIDLookUp[Name]);
+		if (it != mShaderRegister.end())
 		{
-			auto check_shader = mShaders.find(it->second);
-			if (check_shader == mShaders.end())
+			auto findshader = mShaders.find(it->first);
+			if (findshader == mShaders.end())
 			{
 				ShaderDescription desc;
-				desc.VertexPath = mShaderRegister[it->second].Vertex_Path;
-				desc.FragmentPath = mShaderRegister[it->second].Fragment_Path;
-				desc.GeometryPath = mShaderRegister[it->second].Geometry_Path;
-				desc.ComputePath = mShaderRegister[it->second].Compute_Path;
-				desc.TesselationControlPath = mShaderRegister[it->second].TessalationControl_Path;
-				desc.TesselationEvaluationPath = mShaderRegister[it->second].TessalationEval_Path;
+				desc.VertexPath = mShaderRegister[it->first].Vertex_Path;
+				desc.FragmentPath = mShaderRegister[it->first].Fragment_Path;
+				desc.GeometryPath = mShaderRegister[it->first].Geometry_Path;
+				desc.ComputePath = mShaderRegister[it->first].Compute_Path;
+				desc.TesselationControlPath = mShaderRegister[it->first].TessalationControl_Path;
+				desc.TesselationEvaluationPath = mShaderRegister[it->first].TessalationEval_Path;
 				desc.Name = Name;
-				mShaders[it->second] = GraphicsDevice::Instance()->CreateShader(desc);
-				mShaders[it->second]->IsLoaded = true;
-				mShaders[it->second]->ID = it->second;
+				mShaders[it->first] = GraphicsDevice::Instance()->CreateShader(desc);
+				mShaders[it->first]->IsLoaded = true;
+				mShaders[it->first]->ID = it->first;
 			}
-			return mShaders[it->second].get();
+			return mShaders[it->first];
 		}
 	}
 	FRACTURE_ERROR("Could not find Shader: {}", Name);
 	return nullptr;
 }
 
-Fracture::Shader* Fracture::AssetManager::GetShaderByID(const Fracture::UUID& id)
+std::shared_ptr<Fracture::Shader> Fracture::AssetManager::GetShaderByID(const Fracture::UUID& id)
 {
 	{
 		auto it = mShaderRegister.find(id);
 		if (it != mShaderRegister.end())
 		{
 			if (mShaders[id])
-				return mShaders[id].get();
+				return mShaders[id];
 
 			ShaderDescription desc;
 			desc.VertexPath = mShaderRegister[id].Vertex_Path;
@@ -350,7 +429,7 @@ Fracture::Shader* Fracture::AssetManager::GetShaderByID(const Fracture::UUID& id
 			mShaders[id] = GraphicsDevice::Instance()->CreateShader(desc);
 			mShaders[id]->IsLoaded = true;
 			mShaders[id]->ID = id;
-			return mShaders[id].get();
+			return mShaders[id];
 		}
 	}
 	FRACTURE_ERROR("Could not find Shader: {}", id);
@@ -361,9 +440,12 @@ void Fracture::AssetManager::RegisterTexture(const TextureRegistry& reg)
 {
 	mTextureRegister[reg.ID] = reg;
 	mTextureIDLookUp[reg.Name] = reg.ID;
+	IsRegisterDirty = true;
+
+	FRACTURE_TRACE("Registering Texture:{} - {} ",reg.ID, reg.Path);
 }
 
-Fracture::Texture* Fracture::AssetManager::GetTexture(const std::string& Name)
+std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTexture(const std::string& Name)
 {
 	{
 		auto it = mTextureIDLookUp.find(Name);
@@ -372,7 +454,7 @@ Fracture::Texture* Fracture::AssetManager::GetTexture(const std::string& Name)
 			auto check_texture = mTextures.find(it->second);
 			if (check_texture != mTextures.end())
 			{	
-				return mTextures[it->second].get();
+				return mTextures[it->second];
 			}		
 		};
 	}
@@ -380,16 +462,86 @@ Fracture::Texture* Fracture::AssetManager::GetTexture(const std::string& Name)
 	return nullptr;
 }
 
-Fracture::Texture* Fracture::AssetManager::GetTextureByID(const Fracture::UUID& id)
+std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTextureByID(const Fracture::UUID& id)
 {
 	{
-		auto it = mTextures.find(id);
-		if (it != mTextures.end())
+		if (!IsTextureLoaded(id))
 		{
-			return mTextures[id].get();
+			auto it = mTextureRegister.find(id);
+			if (it != mTextureRegister.end())
+			{
+				mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
+				GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
+				mLoadedTextures.push_back(id);
+				FRACTURE_TRACE("Loaded Texture: {}", mTextureRegister[id].Path);
+			}
+			else
+			{
+				FRACTURE_ERROR("Texture: {} , Is not Registered", id);
+			}
+		}
+		else
+		{
+			return mTextures[id];
+		}
+
+			
+	}
+	FRACTURE_ERROR("Could not find texture: {}", id);
+	return nullptr;
+}
+
+void Fracture::AssetManager::RegisterMaterial(const MaterialRegistry& reg)
+{
+	mMaterialRegister[reg.ID] = reg;
+	mMaterialIDLookUp[reg.Name] = reg.ID;
+	IsRegisterDirty = true;
+
+	FRACTURE_TRACE("Registering Material : {} ", reg.Path);
+}
+
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::GetMaterial(const std::string& Name)
+{	
+	{
+		if (!IsMaterialLoaded(Name))
+		{
+			auto it = mMaterialRegister.find(mMaterialIDLookUp[Name]);
+			if (it != mMaterialRegister.end())
+				mMaterials[mMaterialIDLookUp[Name]] = MaterialLoader::LoadMaterial(mMaterialRegister[mMaterialIDLookUp[Name]].Path);
+		}
+
+
+		auto it = mMaterialIDLookUp.find(Name);
+		if (it != mMaterialIDLookUp.end())
+		{
+			auto check_texture = mMaterials.find(it->second);
+			if (check_texture != mMaterials.end())
+			{
+				return mMaterials[it->second];
+			}
 		};
 	}
-	FRACTURE_ERROR("Could not find Shader: {}", id);
+	FRACTURE_ERROR("Could not find Material: {}", Name);
+	return nullptr;
+}
+
+std::shared_ptr<Fracture::Material> Fracture::AssetManager::GetMaterialByID(const Fracture::UUID& id)
+{
+	{
+		if (!IsMaterialLoaded(mMaterialRegister[id].ID))
+		{
+			const auto& path = mMaterialRegister[id].Path;
+			mMaterials[id] = MaterialLoader::LoadMaterial(path);
+			mLoadedMaterials.push_back(id);		
+		}
+
+		auto it = mMaterials.find(id);
+		if (it != mMaterials.end())
+		{
+			return mMaterials[id];
+		}		
+	}
+	FRACTURE_ERROR("Could not find Material: {}", id);
 	return nullptr;
 }
 
@@ -405,6 +557,12 @@ void Fracture::AssetManager::OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadT
 	{
 		AsyncLoadTextureByID(evnt->TextureID);
 	}
+}
+
+void Fracture::AssetManager::OnAsyncLoadMaterial(const std::shared_ptr<AsyncLoadMaterialEvent>& evnt)
+{
+	if (!IsMaterialLoaded(evnt->MaterialID))
+		AsyncLoadMaterialByID(evnt->MaterialID);
 }
 
 void Fracture::AssetManager::AsyncLoadMesh(const std::string& Name)
@@ -443,6 +601,24 @@ void Fracture::AssetManager::AsyncLoadTextureByID(const UUID& id)
 	}
 }
 
+void Fracture::AssetManager::AsyncLoadMaterial(const std::string& Name)
+{
+	auto it = mMaterialIDLookUp.find(Name);
+	if (it != mMaterialIDLookUp.end())
+	{
+		mMaterialToLoad.push(mMaterialRegister[it->second]);
+	}
+}
+
+void Fracture::AssetManager::AsyncLoadMaterialByID(const UUID& id)
+{
+	auto it = mMaterialRegister.find(id);
+	if (it != mMaterialRegister.end())
+	{
+		mMaterialToLoad.push(mMaterialRegister[it->first]);
+	}
+}
+
 bool Fracture::AssetManager::IsMeshLoaded(const std::string& Name)
 {
 	return std::find(mLoadedMeshes.begin(), mLoadedMeshes.end(), mMeshIDLookUp[Name]) != mLoadedMeshes.end();
@@ -463,6 +639,16 @@ bool Fracture::AssetManager::IsTextureLoaded(const std::string& Name)
 	return std::find(mLoadedTextures.begin(), mLoadedTextures.end(), mTextureIDLookUp[Name]) != mLoadedTextures.end();
 }
 
+bool Fracture::AssetManager::IsMaterialLoaded(const UUID& id)
+{
+	return std::find(mLoadedMaterials.begin(), mLoadedMaterials.end(), id) != mLoadedMaterials.end();
+}
+
+bool Fracture::AssetManager::IsMaterialLoaded(const std::string& Name)
+{
+	return std::find(mLoadedMaterials.begin(), mLoadedMaterials.end(), mMaterialIDLookUp[Name]) != mLoadedMaterials.end();
+}
+
 Fracture::UUID Fracture::AssetManager::GetMeshID(const std::string& Name)
 {
 	auto it = mMeshIDLookUp.find(Name);
@@ -472,25 +658,25 @@ Fracture::UUID Fracture::AssetManager::GetMeshID(const std::string& Name)
 	}
 }
 
-Fracture::StaticMesh* Fracture::AssetManager::GetStaticMesh(const std::string& Name)
+std::shared_ptr<Fracture::StaticMesh> Fracture::AssetManager::GetStaticMesh(const std::string& Name)
 {
 	{
 		auto it = mMeshIDLookUp.find(Name);
 		if (it != mMeshIDLookUp.end())
 		{
-			return mMeshes[it->second].get();
+			return mMeshes[it->second];
 		}
 	}
 	return nullptr;
 }
 
-Fracture::StaticMesh* Fracture::AssetManager::GetStaticByIDMesh(const UUID& id)
+std::shared_ptr<Fracture::StaticMesh>  Fracture::AssetManager::GetStaticByIDMesh(const UUID& id)
 {
 	{
 		auto it = mMeshes.find(id);
 		if (it != mMeshes.end())
 		{
-			return mMeshes[id].get();
+			return mMeshes[id];
 		}
 	}
 	return nullptr;
@@ -516,10 +702,22 @@ bool Fracture::AssetManager::HasTexturePath(const std::string& path)
 	return false;
 }
 
+bool Fracture::AssetManager::HasMaterialPath(const std::string& path)
+{
+	for (const auto& reg : mMaterialRegister)
+	{
+		if (reg.second.Path == path)
+			return true;
+	}
+	return false;
+}
+
 void Fracture::AssetManager::RegisterShader(const ShaderRegistry& reg)
 {
 	mShaderRegister[reg.ID] = reg;
 	mShaderIDLookUp[reg.Name] = reg.ID;
+	IsRegisterDirty = true;
+	FRACTURE_INFO("Registered Shader: {} {}", reg.ID, reg.Name);
 }
 
 Fracture::AssetManager* Fracture::AssetManager::Instance()

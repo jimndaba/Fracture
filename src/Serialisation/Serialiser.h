@@ -62,7 +62,14 @@ namespace nlohmann
 			{"Path", reg.Path}
 		};
 	}
-
+	inline void  to_json(json& j, const Fracture::MaterialRegistry& reg)
+	{
+		j = json{
+			{"ID", (uint32_t)reg.ID},
+			{"Name", reg.Name},
+			{"Path", reg.Path}
+		};
+	}
 	inline void  to_json(json& j, const Fracture::TextureRegistry& reg)
 	{
 		j = json{
@@ -84,7 +91,6 @@ namespace nlohmann
 		j.at("TesEval_Path").get_to(reg.TessalationEval_Path);
 		reg.ID = id;
 	}
-
 	inline void from_json(const json& j, Fracture::MeshRegistry& reg) {
 		uint32_t id;
 		j.at("ID").get_to(id);
@@ -93,7 +99,6 @@ namespace nlohmann
 		j.at("Type").get_to(reg.meshType);
 		reg.ID = id;
 	}
-
 	inline void from_json(const json& j, Fracture::SceneRegistry& reg) {
 		uint32_t id;
 		j.at("ID").get_to(id);
@@ -101,15 +106,19 @@ namespace nlohmann
 		j.at("Path").get_to(reg.Path);
 		reg.ID = id;
 	}
-
 	inline void from_json(const json& j, Fracture::SubMesh& sub) {
 		j.at("BaseIndex").get_to(sub.BaseIndex);
 		j.at("BaseVertex").get_to(sub.BaseVertex);
 		j.at("IndexCount").get_to(sub.IndexCount);
 		j.at("MaterialIndex").get_to(sub.MaterialIndex);
 	}
-
-
+	inline void from_json(const json& j, Fracture::MaterialRegistry& reg) {
+		uint32_t id;
+		j.at("ID").get_to(id);
+		j.at("Name").get_to(reg.Name);
+		j.at("Path").get_to(reg.Path);
+		reg.ID = id;
+	}
 	inline void from_json(const json& j, Fracture::TextureRegistry& reg) {
 		uint32_t id;
 		j.at("ID").get_to(id);
@@ -117,18 +126,15 @@ namespace nlohmann
 		j.at("Path").get_to(reg.Path);
 		reg.ID = id;
 	}
-
 	inline void from_json(const json& j, glm::vec2& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
 	}
-
 	inline void from_json(const json& j, glm::vec3& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
 		j.at("z").get_to(vec.z);
 	}
-
 	inline void from_json(const json& j, glm::vec4& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
@@ -172,6 +178,7 @@ namespace Fracture
 		void Property(const std::string& name, const Fracture::ShaderRegistry& value);
 		void Property(const std::string& name, const Fracture::SceneRegistry& value);
 		void Property(const std::string& name, const Fracture::TextureRegistry& value);
+		void Property(const std::string& name, const Fracture::MaterialRegistry& value);
 		void Property(const std::string& name, const glm::vec2& value);
 		void Property(const std::string& name, const glm::vec3& value);
 		void Property(const std::string& name, const glm::vec4& value);

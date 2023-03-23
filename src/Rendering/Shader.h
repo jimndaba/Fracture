@@ -68,6 +68,7 @@ namespace Fracture
 		UniformType type = UniformType::NONE;
 		uint32_t TextureUnit = 0;
 		std::string TextureName = "";
+		Fracture::UUID TextureID;
 		Data data = {};
 
 	};

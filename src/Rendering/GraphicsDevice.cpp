@@ -236,7 +236,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     unsigned int MagFilter = GLenum(info.magFilter);
     unsigned int wrap = GLenum(info.Wrap);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   glCheckError();
+   
     glGenTextures(1, &texture->Handle);   glCheckError();
     glBindTexture(target, texture->Handle); glCheckError();
 
@@ -258,9 +258,9 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     if (info.TextureTarget == TextureTarget::Texture2DArray || info.TextureTarget == TextureTarget::Texture3D)
     {
 
-        if (info.data)
+        if (info.data.size())
         {
-            glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data);
+            glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());
             glCheckError();
         }
         else
@@ -297,24 +297,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         }
         else
         {
-            //if (texture->mem)
-            //{
-            //    //glTexImage2D(target, 0, internalFormat, desc.Width, desc.Height, 0, textureformat, formatType, texture->mem);
-            //    uint32_t levels = 1;
-            //    if (desc.GenMinMaps && desc.MipLevels == 0)
-            //    {
-            //        levels = desc.CaclMipLevels();
-            //    }
-            //    else
-            //    {
-            //        levels = desc.MipLevels;
-            //    }
-            //
-            //    glTextureStorage2D(texture->RenderID, levels, internalFormat, desc.Width, desc.Height); glCheckError();
-            //    glTexSubImage2D(target, 0, 0, 0, desc.Width, desc.Height, textureformat, formatType, texture->mem);
-            //    glCheckError();
-            //}
-            if (info.data)
+            if (info.data.size())
             {
                 // glTexImage2D(target, 0, internalFormat, desc.Width, desc.Height, 0, textureformat, formatType, texture->Data);
                 uint32_t levels = 1;
@@ -327,9 +310,12 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
                     levels = info.MipLevels;
                 }
 
-                glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
-                glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, info.data);
-                glCheckError();
+                //glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                glTexImage2D(target, 0,internalFormat, info.Width, info.Height,0,textureformat,formatType,info.data.data()); glCheckError();
+
+                //glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, info.data);  glCheckError();
+              
             }
             else
             {
@@ -342,9 +328,11 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
                 else
                 {
                     levels = info.MipLevels;
-                }                
-                glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
-                glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();
+                }       
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, NULL); glCheckError();
+                //glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
+               // glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();
 
             }
         }
@@ -357,7 +345,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         glCheckError();
     }
 
-    if (info.data)
+    if (info.data.size())
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         //TextureLoader::FreeData(texture->Data);
@@ -519,12 +507,9 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
         
         if (!info.DepthStencilAttachments.empty())
         {
-            for (unsigned int n = 0; n < info.DepthStencilAttachments.size(); n++)
-            {              
-                auto texture = std::make_shared<Texture>(info.DepthStencilAttachments[n]);
-                CreateTexture(texture, info.DepthStencilAttachments[n]);             
-                glNamedFramebufferTexture(target->Handle, GLenum(info.DepthStencilAttachments[n].AttachmentTrgt), texture->Handle, 0);  glCheckError();
-            }
+            target->DepthStencilAttachment = std::make_shared<Texture>(info.DepthStencilAttachments[0]);
+            CreateTexture(target->DepthStencilAttachment, info.DepthStencilAttachments[0]);
+            glNamedFramebufferTexture(target->Handle, GLenum(info.DepthStencilAttachments[0].AttachmentTrgt), target->DepthStencilAttachment->Handle, 0);  glCheckError();           
         }
 
     }
@@ -535,10 +520,10 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
             for (unsigned int n = 0; n < info.DepthStencilAttachments.size(); n++)
             {
                 TextureCreationInfo t_info;
-                auto texture = std::make_shared<Texture>(info.DepthStencilAttachments[n]);
-                CreateTexture(texture, info.DepthStencilAttachments[n]);
+                target->DepthStencilAttachment = std::make_shared<Texture>(info.DepthStencilAttachments[n]);
+                CreateTexture(target->DepthStencilAttachment, info.DepthStencilAttachments[n]);
                 glCheckError();
-                glNamedFramebufferTexture(target->Handle, GLenum(info.Target), texture->Handle, 0);  glCheckError();
+                glNamedFramebufferTexture(target->Handle, GLenum(info.Target), target->DepthStencilAttachment->Handle, 0);  glCheckError();
             }
         }
     }

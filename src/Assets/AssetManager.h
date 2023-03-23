@@ -31,6 +31,13 @@ namespace Fracture
 		const char* Name() { return  "Async Load Texture"; };
 	};
 
+	struct AsyncLoadMaterialEvent : public Event
+	{
+		AsyncLoadMaterialEvent(UUID id) : Event(), MaterialID(id) {};
+		UUID MaterialID;
+		const char* Name() { return  "Async Load Material"; };
+	};
+
 	class AssetManager
 	{
 	public:
@@ -50,28 +57,40 @@ namespace Fracture
 		static void AsyncLoadMeshByID(const UUID& id);
 		static void AsyncLoadTexture(const std::string& Name);
 		static void AsyncLoadTextureByID(const UUID& id);
-
+		static void AsyncLoadMaterial(const std::string& Name);
+		static void AsyncLoadMaterialByID(const UUID& id);
 
 		static bool IsMeshLoaded(const std::string& Name);
 		static bool IsMeshLoaded(const UUID& Name);
 		static bool IsTextureLoaded(const UUID& Name);
 		static bool IsTextureLoaded(const std::string& Name);
+		static bool IsMaterialLoaded(const UUID& Name);
+		static bool IsMaterialLoaded(const std::string& Name);
+
 		static UUID GetMeshID(const std::string& Name);
-		static StaticMesh* GetStaticMesh(const std::string& Name);
-		static StaticMesh* GetStaticByIDMesh(const UUID& Name);
+		static std::shared_ptr<Fracture::StaticMesh> GetStaticMesh(const std::string& Name);
+		static std::shared_ptr<Fracture::StaticMesh> GetStaticByIDMesh(const UUID& Name);
+
 		static bool HasMeshPath(const std::string& path);
 		static bool HasTexturePath(const std::string& path);
+		static bool HasMaterialPath(const std::string& path);
 
 		static void RegisterShader(const ShaderRegistry& reg);		
-		static Shader* GetShader(const std::string& Name);
-		static Shader* GetShaderByID(const Fracture::UUID& id);
+		static std::shared_ptr<Shader> GetShader(const std::string& Name);
+		static std::shared_ptr<Shader> GetShaderByID(const Fracture::UUID& id);
 
 		static void RegisterTexture(const TextureRegistry& reg);
-		static Texture* GetTexture(const std::string& Name);
-		static Texture* GetTextureByID(const Fracture::UUID& id);
+		static std::shared_ptr<Texture> GetTexture(const std::string& Name);
+		static std::shared_ptr<Texture> GetTextureByID(const Fracture::UUID& id);
+
+		static void RegisterMaterial(const MaterialRegistry& reg);
+		static std::shared_ptr<Material> GetMaterial(const std::string& Name);
+		static std::shared_ptr<Material> GetMaterialByID(const Fracture::UUID& id);
+
 
 		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
 		void OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadTextureEvent>& evnt);
+		void OnAsyncLoadMaterial(const std::shared_ptr<AsyncLoadMaterialEvent>& evnt);
 
 		static std::map<UUID, MeshRegistry> mMeshRegister;
 		static std::map<std::string, UUID> mMeshIDLookUp;
@@ -86,8 +105,14 @@ namespace Fracture
 		static std::map<std::string, UUID> mTextureIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<Texture>> mTextures;
 
+		static std::map<UUID, MaterialRegistry> mMaterialRegister;
+		static std::map<std::string, UUID> mMaterialIDLookUp;
+		static std::unordered_map<UUID, std::shared_ptr<Material>> mMaterials;
+
 
 		static AssetManager* Instance();
+
+		static bool IsRegisterDirty;
 
 	private:
 		static std::vector<UUID> mLoadedMeshes;
@@ -98,7 +123,13 @@ namespace Fracture
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Texture>>> mTextureFutures;
 		static std::queue<TextureRegistry> mTexturesToLoad;
 
+		static std::vector<UUID> mLoadedMaterials;
+		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Material>>> mMaterialFutures;
+		static std::queue<MaterialRegistry> mMaterialToLoad;
+
 		static std::unique_ptr<AssetManager> mInstance;
+
+
 	};
 
 

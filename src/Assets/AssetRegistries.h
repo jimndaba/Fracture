@@ -28,6 +28,7 @@ namespace Fracture
 		uint32_t SubMeshCount;
 		uint32_t VertexCount;
 		uint32_t IndexCount;
+		uint32_t MaterialCount;
 		uint32_t datablockOffset;
 		uint32_t SubMeshDataSize;
 		uint32_t IndexDataSize;
@@ -57,6 +58,7 @@ namespace Fracture
 		UUID ID;
 		std::string Name;
 		std::string Path;	
+		bool Success = false;
 	};
 
 	struct ShaderRegistry
