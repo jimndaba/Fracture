@@ -30,20 +30,8 @@ void Fracture::ZPrePass::Execute()
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);
 	RenderCommands::DepthMask(Context, true);
 
-	const auto& renderables = SceneManager::GetAllComponents<MeshComponent>();
-	for (const auto& entity : renderables)
-	{
-		if (entity)
-		{
-			if (AssetManager::Instance()->IsMeshLoaded(entity->Mesh))
-			{
-				const auto& transform = SceneManager::GetComponent<TransformComponent>(entity->GetID());
-				// [Shader][Mesh]
-				Context->Renderable_batch[mShader->ID][entity->Mesh].push_back(transform->WorldTransform);
-			}
-		}
-	}
-
+	RenderCommands::SetColorMask(Context, 0, 0, 0, 0);
+	
 	//Issue out Batch Commands.
 
 	if (Context->Renderable_batch.empty())
@@ -78,8 +66,8 @@ void Fracture::ZPrePass::Execute()
 		}
 	}
 
+	RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
 	RenderCommands::ReleaseRenderTarget(Context);
-	RenderCommands::SetColorMask(Context,1, 1, 1, 1);
 	RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
 
 }

@@ -6,6 +6,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::mCurrentScene;
 std::map<Fracture::UUID, Fracture::SceneRegistry> Fracture::SceneManager::mSceneRegister;
 std::map<std::string, Fracture::UUID> Fracture::SceneManager::mSceneIDLookUp;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::Scene>> Fracture::SceneManager::mScenes;
+std::shared_ptr<Fracture::CameraComponent> Fracture::SceneManager::mActiveCamera;
 
 Fracture::SceneManager::SceneManager()
 {
@@ -76,6 +77,19 @@ void Fracture::SceneManager::DettachScript()
 Fracture::Scene* Fracture::SceneManager::CurrentScene()
 {
     return mCurrentScene.get();
+}
+
+std::shared_ptr<Fracture::CameraComponent> Fracture::SceneManager::ActiveCamera()
+{
+    if (!mActiveCamera)
+        return nullptr;
+
+    return mActiveCamera;
+}
+
+void Fracture::SceneManager::SetActiveCamera(const std::shared_ptr<CameraComponent>& mcamera)
+{
+    mActiveCamera = mcamera;
 }
 
 void Fracture::SceneManager::LoadScene(const std::string& name)

@@ -201,6 +201,28 @@ void Fracture::RenderCommands::BindVertexArrayObject(Fracture::RenderContext* cn
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [x,y,z]() {
+		glDispatchCompute(x,y,z);
+		mErroCallback("Dispatch Compute");
+
+		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+		mErroCallback("Memory Barrier");
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
+{
+	Fracture::Command cmd;
+	cmd.fnc = []() {
+		//TODO glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt, const Fracture::DrawElementsArray& render_cmd)
 {
 	Fracture::Command cmd;

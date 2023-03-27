@@ -102,8 +102,8 @@ namespace Fracture
 		float Pitch = 0.0f;
 		float Roll = 0.0f;
 		float FoV = 45.0f;
-		float Near = 0.5f;
-		float Far = 100.0f;
+		float Near = 0.1f;
+		float Far = 500.0f;
 		float Width = 800;
 		float Height = 640;
 		float FocalLength = 100.0f;
@@ -128,7 +128,8 @@ namespace Fracture
 
 	struct PointlightComponent : public IComponent
 	{
-		PointlightComponent(const UUID& id) :IComponent(), entity(id) {}
+		PointlightComponent(const UUID& id,glm::vec3 color = glm::vec3(1.0f),float radius = 10.0f) :IComponent(), entity(id),Diffuse(color),Radius(radius) {}
+
 		UUID entity;
 
 		float Radius = 1.0f;
@@ -175,14 +176,39 @@ namespace Fracture
 
 	struct RigidbodyComponent : public IComponent
 	{
+		RigidbodyComponent(const Fracture::UUID& id) :IComponent(), entity(id) {}
 		UUID entity;
 		UUID GetID() { return entity; }
+
+		float Mass = 1.0f;
+		float Friction = 0.5f;
+		float Bouncyness = 0.0f;
+		bool IsDynamic = false;
+		bool LinearConstraints[3] = {0,0,0};
+		bool AngularConstraints[3] = { 0,0,0 };
+	};
+
+	enum class ColliderType
+	{
+		Sphere,
+		Box,
+		Cylinder,
+		Cone,
+		Capsule
 	};
 
 	struct ColliderComponent : public IComponent
 	{
+		ColliderComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {}
+
 		UUID entity;
 		UUID GetID() { return entity; }
+
+		ColliderType Shape = ColliderType::Sphere;
+		glm::vec3 Size = glm::vec3(1.0f);
+		float Radius = 1.0f;
+		float Height = 1.0f;
 	};
 
 

@@ -69,7 +69,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib;Bullet3Dynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,6 +85,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,7 +95,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\rel\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;assimp-vc143-mt.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;Bullet3Common.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -114,9 +115,12 @@
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\Keyboard.h" />
     <ClInclude Include="src\Input\Mouse.h" />
+    <ClInclude Include="src\Physics\PhysicsEvents.h" />
+    <ClInclude Include="src\Physics\PhysicsManager.h" />
     <ClInclude Include="src\Rendering\Buffer.h" />
     <ClInclude Include="src\Rendering\Color.h" />
     <ClInclude Include="src\Rendering\Command.h" />
+    <ClInclude Include="src\Rendering\GPUData.h" />
     <ClInclude Include="src\Rendering\GraphicsDevice.h" />
     <ClInclude Include="src\Common\UUID.h" />
     <ClInclude Include="src\Rendering\IGraphicsResource.h" />
@@ -126,11 +130,17 @@
     <ClInclude Include="src\Rendering\PostProcessingParams.h" />
     <ClInclude Include="src\Rendering\RenderCommands.h" />
     <ClInclude Include="src\Rendering\RenderContext.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\OutlinePass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCastersPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ForwardPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\GridPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\IPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\LightCullingPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\PresentPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\SSAOPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\SSRPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ToneMapPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ZPrePass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Rendergraph.h" />
     <ClInclude Include="src\Rendering\Rendergraph\RenderGraphBuilder.h" />
@@ -168,9 +178,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
+    <ClCompile Include="src\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Rendering\Buffer.cpp" />
     <ClCompile Include="src\Rendering\Color.cpp" />
     <ClCompile Include="src\Rendering\Command.cpp" />
+    <ClCompile Include="src\Rendering\GPUData.cpp" />
     <ClCompile Include="src\Rendering\GraphicsDevice.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
@@ -181,6 +194,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ForwardPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\IPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\LightCullingPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\PresentPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ZPrePass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Rendergraph.cpp" />

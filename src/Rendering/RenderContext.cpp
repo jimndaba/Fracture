@@ -18,17 +18,14 @@ void Fracture::RenderContext::EndState()
 void Fracture::RenderContext::Begin()
 {
 	Renderable_batch.clear();
-	const auto& renderables = SceneManager::GetAllComponents<MeshComponent>();
-	for (const auto& entity : renderables)
+	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
+	for (const auto& meshcomponent : components)
 	{
-		if (entity)
+		if (AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
 		{
-			if (AssetManager::Instance()->IsMeshLoaded(entity->Mesh))
-			{
-				const auto& transform = SceneManager::GetComponent<TransformComponent>(entity->GetID());
-				// [Shader][Mesh]
-				Renderable_batch[entity->Shader][entity->Mesh].push_back(transform->WorldTransform);
-			}
+			const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
+			// [Shader][Mesh]
+			Renderable_batch[meshcomponent->Shader][meshcomponent->Mesh].push_back(transform->WorldTransform);
 		}
 	}
 

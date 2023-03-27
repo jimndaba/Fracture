@@ -36,8 +36,11 @@ namespace Fracture
 	struct GlobalFrameData
 	{
 		glm::mat4 Camera_Projection;
+		glm::mat4 Camera_InvProjection;
 		glm::mat4 Camera_View;
+		glm::mat4 Camera_InvView;
 		glm::vec4 Camera_Position;
+		glm::vec4 Near_Far_Width_Height;
 	};
 
 	struct LightData

@@ -94,6 +94,7 @@ void Fracture::GraphicsDevice::Startup()
         CreateBuffer(mGLightBuffer.get(), desc);
         SetBufferIndexRange(mGLightBuffer.get(), 0, 0);
     }
+
 }
 
 

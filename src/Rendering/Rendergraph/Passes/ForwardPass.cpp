@@ -46,12 +46,10 @@ void Fracture::ForwardPass::Execute()
 	{
 		if (batch.second.empty())
 			continue;
-
-		//Set Shader
-
+		
 		const auto& shader = AssetManager::Instance()->GetShaderByID(batch.first);
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
-
+		//Set Shader
 		for (auto entity : batch.second)
 		{
 			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);
@@ -84,8 +82,9 @@ void Fracture::ForwardPass::Execute()
 				cmd.instancecount = entity.second.size();
 				cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
 				cmd.count = sub.IndexCount;
-				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);				
 			}
+			Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 		}
 	}
 

@@ -51,3 +51,5 @@
 
 #include "Serialisation/Serialiser.h"
 #include "Serialisation/SceneSerialiser.h"
+
+#include "Physics/PhysicsManager.h"

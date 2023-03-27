@@ -38,6 +38,7 @@ namespace Fracture
 	struct StaticMesh : public IGraphicsResource
 	{
 		StaticMesh(const UUID& id = UUID());
+		~StaticMesh();
 		UUID ID;
 		std::string Name;
 		std::vector<SubMesh> SubMeshes;

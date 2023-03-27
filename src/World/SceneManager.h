@@ -47,6 +47,9 @@ namespace Fracture
 		static void DettachScript();
 
 		static Scene* CurrentScene();
+		static std::shared_ptr<CameraComponent> ActiveCamera();
+
+		static void SetActiveCamera(const std::shared_ptr<CameraComponent>& mcamera);
 
 		static void LoadScene(const std::string& scene);
 		static UUID& LoadSceneFromFile(const std::string& path);
@@ -68,7 +71,7 @@ namespace Fracture
 	private:
 
 		static std::shared_ptr<Scene> mCurrentScene;
-
+		static std::shared_ptr<CameraComponent> mActiveCamera;
 	};
 
 
@@ -158,7 +161,7 @@ namespace Fracture
 	template<class T>
 	inline bool SceneManager::HasComponent(const UUID& id)
 	{
-		return GetComponent<T>(id).get();
+		return (mCurrentScene->ComponentReg[typeid(T)].find(id) != mCurrentScene->ComponentReg[typeid(T)].end());
 	}
 
 }

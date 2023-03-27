@@ -24,7 +24,8 @@ namespace Fracture
 	{
 		Static = GL_STATIC_DRAW,
 		Dynamic = GL_DYNAMIC_DRAW,
-		Stream = GL_STREAM_DRAW
+		Stream = GL_STREAM_DRAW,
+		StaticCopy = GL_STATIC_COPY
 	};
 
 	enum class BufferType

@@ -43,6 +43,8 @@ namespace Fracture
 		void ReadSpotlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadPointlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadSunlightComponentIfExists(Fracture::UUID entity_id);
+		void ReadRigidbodyComponentIfExists(Fracture::UUID entity_id);
+		void ReadColliderComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
 		std::shared_ptr<Scene> ReadScene();

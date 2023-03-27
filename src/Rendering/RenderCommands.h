@@ -148,14 +148,16 @@ namespace Fracture
 		void SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a);
 
 		void BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao);
+		
+		void DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z);
+		void Barrier(Fracture::RenderContext* cntxt);
+		
 		void DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& cmd);
 		void DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& cmd);
 		void DrawElementsArray(Fracture::RenderContext* cntxt,const Fracture::DrawElementsArray& cmd);
 		void DrawElementsArrayInstanced(Fracture::RenderContext* cntxt,const Fracture::DrawElementsArraysInstanced& cmd);
 		void DrawElementsBaseVertex(Fracture::RenderContext* cntxt,const Fracture::DrawElementsBaseVertex& cmd);
-
 		void DrawElementsInstancedBaseVertex(Fracture::RenderContext* cntxt, const Fracture::DrawElementsInstancedBaseVertex& cmd);
-
 		void DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& cmd);
 
 		template<class T>

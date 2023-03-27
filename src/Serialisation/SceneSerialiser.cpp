@@ -118,12 +118,29 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ShadowCasterCompone
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::RigidbodyComponent* component)
 {
 	BeginStruct("RigidbodyComponent");
+	Property("Mass", component->Mass);
+	Property("IsDynamic", component->IsDynamic);
+	Property("Bouncyness", component->Bouncyness);
+	Property("Friction", component->Friction);
+
+	Property("MovementConstraintX", component->LinearConstraints[0]);
+	Property("MovementConstraintY", component->LinearConstraints[1]);
+	Property("MovementConstraintZ", component->LinearConstraints[2]);
+
+	Property("RotationConstraintX", component->AngularConstraints[0]);
+	Property("RotationConstraintY", component->AngularConstraints[1]);
+	Property("RotationConstraintZ", component->AngularConstraints[2]);
+
 	EndStruct();
 }
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ColliderComponent* component)
 {
 	BeginStruct("ColliderComponent");
+	Property("Type",(int)component->Shape);
+	Property("Size",component->Size);
+	Property("Radius",component->Radius);
+	Property("Height",component->Height);
 	EndStruct();
 }
 
@@ -234,6 +251,42 @@ void Fracture::SceneSerialiser::ReadSunlightComponentIfExists(Fracture::UUID ent
 	}
 }
 
+void Fracture::SceneSerialiser::ReadRigidbodyComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("RigidbodyComponent"))
+	{
+		auto comp = std::make_shared<RigidbodyComponent>(entity_id);
+		comp->Mass = FLOAT("Mass");
+		comp->Friction = FLOAT("Friction");
+		comp->Bouncyness = FLOAT("Bouncyness");
+		comp->IsDynamic = BOOL("IsDynamic");
+
+		comp->LinearConstraints[0] = FLOAT("MovementConstraintX");
+		comp->LinearConstraints[1] = FLOAT("MovementConstraintY");
+		comp->LinearConstraints[2] = FLOAT("MovementConstraintZ");
+		
+		comp->AngularConstraints[0] = FLOAT("RotationConstraintX");
+		comp->AngularConstraints[1] = FLOAT("RotationConstraintY");
+		comp->AngularConstraints[2] = FLOAT("RotationConstraintZ");
+
+		SceneManager::AddComponentByInstance<RigidbodyComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadColliderComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("ColliderComponent"))
+	{
+		auto comp = std::make_shared<ColliderComponent>(entity_id);
+		comp->Size = VEC3("Size");
+		comp->Shape = (ColliderType)INT("Type");
+		comp->Radius = FLOAT("Radius");
+		comp->Height = FLOAT("Height");
+		SceneManager::AddComponentByInstance<ColliderComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
 
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
@@ -303,6 +356,8 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadSpotlightComponentIfExists(entity_id);
 							ReadPointlightComponentIfExists(entity_id);
 							ReadSunlightComponentIfExists(entity_id);
+							ReadRigidbodyComponentIfExists(entity_id);
+							ReadColliderComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
