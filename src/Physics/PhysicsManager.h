@@ -9,7 +9,7 @@ namespace Fracture
 {
 	struct PhysicsConfiguration
 	{
-		glm::vec3 Gravity = {0,-9.81,0};
+		glm::vec3 Gravity = { 0, -10, 0 };
 
 	};
 
@@ -38,8 +38,8 @@ namespace Fracture
 		void RemoveRigidBody(const Fracture::UUID& entity);
 
 		PhysicsConfiguration Config;
-		std::unordered_map<Fracture::UUID, std::shared_ptr<btRigidBody>> mRigidBodies;
-		std::unordered_map<Fracture::UUID, std::shared_ptr<btCollisionShape>> mCollisionShapes;
+		std::unordered_map<Fracture::UUID, std::unique_ptr<btRigidBody>> mRigidBodies;
+		std::unordered_map<Fracture::UUID, std::unique_ptr<btCollisionShape>> mCollisionShapes;
 
 	private:
 		btBroadphaseInterface* _broadphase;

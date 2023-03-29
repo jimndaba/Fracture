@@ -16,8 +16,8 @@ namespace Fracture
 		bool IsVsync = true;
 		bool IsResizable = true;
 		bool IsFullscreen = false;
-		bool IsMaximised = false;
-		bool IsBordered = true;
+		bool IsMaximised = true;
+		bool IsBordered = false;
 	};
 
 	class AppWindow

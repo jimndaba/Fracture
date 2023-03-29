@@ -49,6 +49,7 @@ bool Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
         glfwWindowHint(GLFW_DECORATED, info->IsBordered);
+
         mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, glfwGetPrimaryMonitor(), NULL);
     }
     else

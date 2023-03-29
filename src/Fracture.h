@@ -35,6 +35,7 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/RenderCommands.h"
 #include "Rendering/Color.h"
+#include "Rendering/DebugRenderer.h"
 
 
 //Input

@@ -141,6 +141,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ColliderComponent* 
 	Property("Size",component->Size);
 	Property("Radius",component->Radius);
 	Property("Height",component->Height);
+	Property("Offset",component->Offset);
 	EndStruct();
 }
 
@@ -283,6 +284,7 @@ void Fracture::SceneSerialiser::ReadColliderComponentIfExists(Fracture::UUID ent
 		comp->Shape = (ColliderType)INT("Type");
 		comp->Radius = FLOAT("Radius");
 		comp->Height = FLOAT("Height");
+		comp->Offset = VEC3("Offset");
 		SceneManager::AddComponentByInstance<ColliderComponent>(entity_id, comp);
 		EndStruct();
 	}

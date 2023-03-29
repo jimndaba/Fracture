@@ -62,6 +62,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -69,7 +70,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib;Bullet3Dynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;Bullet3Common_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,6 +121,7 @@
     <ClInclude Include="src\Rendering\Buffer.h" />
     <ClInclude Include="src\Rendering\Color.h" />
     <ClInclude Include="src\Rendering\Command.h" />
+    <ClInclude Include="src\Rendering\DebugRenderer.h" />
     <ClInclude Include="src\Rendering\GPUData.h" />
     <ClInclude Include="src\Rendering\GraphicsDevice.h" />
     <ClInclude Include="src\Common\UUID.h" />
@@ -130,6 +132,7 @@
     <ClInclude Include="src\Rendering\PostProcessingParams.h" />
     <ClInclude Include="src\Rendering\RenderCommands.h" />
     <ClInclude Include="src\Rendering\RenderContext.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\OutlinePass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCastersPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.h" />
@@ -183,6 +186,7 @@
     <ClCompile Include="src\Rendering\Buffer.cpp" />
     <ClCompile Include="src\Rendering\Color.cpp" />
     <ClCompile Include="src\Rendering\Command.cpp" />
+    <ClCompile Include="src\Rendering\DebugRenderer.cpp" />
     <ClCompile Include="src\Rendering\GPUData.cpp" />
     <ClCompile Include="src\Rendering\GraphicsDevice.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
@@ -191,6 +195,7 @@
     <ClCompile Include="src\Rendering\RenderCommands.cpp" />
     <ClCompile Include="src\Rendering\RenderContext.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ForwardPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\IPass.cpp" />

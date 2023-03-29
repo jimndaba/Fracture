@@ -3,6 +3,7 @@
 #define COMPONETNS_H
 
 #include "Entity.h"
+#include "bullet/btBulletDynamicsCommon.h"
 
 namespace Fracture
 {
@@ -58,6 +59,7 @@ namespace Fracture
 			Static,
 			Skinned
 		};
+
 		UUID Mesh;
 		UUID Material;
 		UUID Shader;
@@ -183,9 +185,10 @@ namespace Fracture
 		float Mass = 1.0f;
 		float Friction = 0.5f;
 		float Bouncyness = 0.0f;
-		bool IsDynamic = false;
+		bool IsDynamic = true;
 		bool LinearConstraints[3] = {0,0,0};
 		bool AngularConstraints[3] = { 0,0,0 };
+		btDefaultMotionState* motionState;
 	};
 
 	enum class ColliderType
@@ -209,6 +212,7 @@ namespace Fracture
 		glm::vec3 Size = glm::vec3(1.0f);
 		float Radius = 1.0f;
 		float Height = 1.0f;
+		glm::vec3 Offset = glm::vec3(0);
 	};
 
 

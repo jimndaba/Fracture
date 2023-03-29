@@ -16,8 +16,9 @@ void Fracture::PhysicsManager::OnInit()
 	_collisionDispatcher = new btCollisionDispatcher(_collisionConfig);
 	_solver = new btSequentialImpulseConstraintSolver();
 	_world = new btDiscreteDynamicsWorld(_collisionDispatcher,_broadphase,_solver,_collisionConfig);
-
-	_world->setGravity(btVector3(Config.Gravity.x, Config.Gravity.y, Config.Gravity.z));
+	_world->setGravity(btVector3(0, -10, 0));
+	
+	FRACTURE_INFO("Physics Initialised");
 }
 
 void Fracture::PhysicsManager::OnShutdown()
@@ -45,25 +46,62 @@ void Fracture::PhysicsManager::OnClearPhysicsWorld()
 
 void Fracture::PhysicsManager::OnPhysicsUpdate(float dt)
 {
-	_world->stepSimulation(1.0f / 60.0f, 10);
+	_world->stepSimulation(dt,10);
 
-	for (const auto& body : mRigidBodies)
+
+	// Feedback physics engine state to system:
+	for (int i = 0; i < _world->getCollisionObjectArray().size(); ++i)
 	{
-		if (body.second->getMotionState())
+		btCollisionObject* collisionobject = _world->getCollisionObjectArray()[i];
+		auto rigidbody = (RigidbodyComponent*)collisionobject->getUserPointer();
+		btRigidBody* mbody = btRigidBody::upcast(collisionobject);
+
+		if (mbody != nullptr)
 		{
-			const auto& entity = (Fracture::UUID)body.second->getUserPointer();
-			const auto& rigidbody = SceneManager::GetComponent<RigidbodyComponent>(entity);
 			if (!rigidbody->IsDynamic)
 			{
 				continue;
 			}
 
-			const auto& transform = SceneManager::GetComponent<TransformComponent>(entity);
-			btTransform trans = body.second->getWorldTransform();
+			const auto& transform = SceneManager::GetComponent<TransformComponent>(rigidbody->GetID());
+			btTransform trans = mbody->getWorldTransform();
 			transform->Position = { trans.getOrigin().getX(),trans.getOrigin().getY() ,trans.getOrigin().getZ() };
 			transform->Rotation = { trans.getRotation().getX(),trans.getRotation().getY() ,trans.getRotation().getZ() ,trans.getRotation().getW() };
+			transform->IsDirty = true;
 		}
 	}
+
+	/*
+	for (const auto& body : mRigidBodies)
+	{
+		btTransform trans;
+		if (body.second && body.second->getMotionState())
+		{
+			body.second->getMotionState()->getWorldTransform(trans);
+		}
+		else
+		{
+			trans = body.second->getWorldTransform();
+		}
+
+	
+		const auto& entity = (RigidbodyComponent*)body.second->getUserPointer();
+		if (SceneManager::HasComponent<RigidbodyComponent>(entity->GetID()))
+		{
+			const auto& rigidbody = SceneManager::GetComponent<RigidbodyComponent>(entity->GetID());
+			if (!rigidbody->IsDynamic)
+			{
+				continue;
+			}
+
+			const auto& transform = SceneManager::GetComponent<TransformComponent>(entity->GetID());
+			transform->Position = { trans.getOrigin().getX(),trans.getOrigin().getY() ,trans.getOrigin().getZ() };
+			transform->Rotation = { trans.getRotation().getX(),trans.getRotation().getY() ,trans.getRotation().getZ() ,trans.getRotation().getW() };
+			transform->IsDirty = true;
+		}
+		
+	}
+	*/
 }
 
 void Fracture::PhysicsManager::OnCollisionUpdate()
@@ -116,6 +154,9 @@ void Fracture::PhysicsManager::SetRotationConstraints(const Fracture::UUID& enti
 
 void Fracture::PhysicsManager::AddRigidBodyToWorld(Fracture::UUID entity)
 {
+	if (!SceneManager::HasComponent<RigidbodyComponent>(entity))
+		return;
+
 	if (mCollisionShapes.find(entity) == mCollisionShapes.end())
 	{
 		FRACTURE_ERROR("No Collider Assigned to entity: {}", entity);
@@ -125,64 +166,78 @@ void Fracture::PhysicsManager::AddRigidBodyToWorld(Fracture::UUID entity)
 
 	const auto& transform = SceneManager::GetComponent<TransformComponent>(entity);
 	const auto& rigidbody = SceneManager::GetComponent<RigidbodyComponent>(entity);
-
+	
 	btQuaternion rotation = {transform->Rotation.x,transform->Rotation.y,transform->Rotation.z ,transform->Rotation.w};
 	btVector3 position = btVector3(transform->Position.x, transform->Position.y, transform->Position.z);
-	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(rotation, position));
 
 	btScalar bodyMass = rigidbody->Mass;
-	btVector3 bodyInertia;
+	btVector3 bodyInertia(0, 0, 0);
 	
+	if(rigidbody->IsDynamic)
+		mCollisionShapes[entity]->calculateLocalInertia(bodyMass, bodyInertia);
+
+
+	btVector3 S(transform->Scale.x, transform->Scale.y, transform->Scale.z);
+	mCollisionShapes[entity]->setLocalScaling(S);
 	
-	mCollisionShapes[entity]->calculateLocalInertia(bodyMass, bodyInertia);
+	btTransform mbtTransform;
+	mbtTransform.setIdentity();
+	mbtTransform.setOrigin(position);
+	mbtTransform.setRotation(rotation);
+	rigidbody->motionState = new btDefaultMotionState(mbtTransform);
 
-	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, motionState, mCollisionShapes[entity].get(), bodyInertia);
-	bodyCI.m_restitution = 1.0f;
-	bodyCI.m_friction = 0.5f;
-
-	mRigidBodies[entity] = std::make_shared<btRigidBody>(bodyCI);
-	mRigidBodies[entity]->setUserPointer(&entity);
+	btRigidBody::btRigidBodyConstructionInfo bodyCI = btRigidBody::btRigidBodyConstructionInfo(bodyMass, rigidbody->motionState, mCollisionShapes[entity].get(), bodyInertia);
+	bodyCI.m_restitution = rigidbody->Bouncyness;
+	bodyCI.m_friction = rigidbody->Friction;
+	mRigidBodies[entity] = std::make_unique<btRigidBody>(bodyCI);
 	mRigidBodies[entity]->setLinearFactor(btVector3(rigidbody->LinearConstraints[0], rigidbody->LinearConstraints[1], rigidbody->LinearConstraints[2]));
 	mRigidBodies[entity]->setAngularFactor(btVector3(rigidbody->AngularConstraints[0], rigidbody->AngularConstraints[1], rigidbody->AngularConstraints[2]));
-
+	mRigidBodies[entity]->setUserPointer((void*)rigidbody.get());
+	mRigidBodies[entity]->setWorldTransform(btTransform(rotation, position));
+	mRigidBodies[entity]->forceActivationState(DISABLE_DEACTIVATION);
+	mRigidBodies[entity]->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT | btCollisionObject::CF_STATIC_OBJECT);
 
 	_world->addRigidBody(mRigidBodies[entity].get());	
+	FRACTURE_INFO("Added RigidBody {}", entity);
 }
 
 void Fracture::PhysicsManager::AttachCollisionShape(const Fracture::UUID& entity)
 {
+	if (!SceneManager::HasComponent<ColliderComponent>(entity))
+		return;
+
 	if (mCollisionShapes[entity])
 	{
 		return;
 	}
+
 	const auto& colliderComp = SceneManager::GetComponent<ColliderComponent>(entity);
 
 	switch (colliderComp->Shape)
 	{
 		case ColliderType::Sphere:
 		{
-			mCollisionShapes[entity] = std::make_shared<btSphereShape>(colliderComp->Radius);
+			mCollisionShapes[entity] = std::make_unique<btSphereShape>(colliderComp->Radius);
 			break;
 		}
 		case ColliderType::Box:
 		{
-			mCollisionShapes[entity] = std::make_shared<btBoxShape>(btVector3(colliderComp->Size.x / 2, colliderComp->Size.y / 2, colliderComp->Size.z / 2));
+			mCollisionShapes[entity] = std::make_unique<btBoxShape>(btVector3(colliderComp->Size.x / 2, colliderComp->Size.y / 2, colliderComp->Size.z / 2));
 			break;
 		}
 		case ColliderType::Capsule:
 		{
-			mCollisionShapes[entity] = std::make_shared<btCapsuleShape>(colliderComp->Radius,colliderComp->Height);
+			mCollisionShapes[entity] = std::make_unique<btCapsuleShape>(colliderComp->Radius, colliderComp->Height);
 			break;
 		}
 		case ColliderType::Cone:
 		{
-			mCollisionShapes[entity] = std::make_shared<btConeShape>(colliderComp->Radius, colliderComp->Height);
+			mCollisionShapes[entity] = std::make_unique<btConeShape>(colliderComp->Radius, colliderComp->Height);
 			break;
 		}
 		case ColliderType::Cylinder:
 		{
-			
-			mCollisionShapes[entity] = std::make_shared<btCylinderShape>(btVector3(colliderComp->Size.x / 2, colliderComp->Size.y / 2, colliderComp->Size.z / 2));
+			mCollisionShapes[entity] = std::make_unique<btCylinderShape>(btVector3(colliderComp->Size.x / 2, colliderComp->Size.y / 2, colliderComp->Size.z / 2));
 			break;
 		}
 	}
