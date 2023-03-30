@@ -37,6 +37,7 @@ namespace Fracture
 		static void DrawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(0.9f, 0.4f, 0.3f, 1.0f));
 		//static void DrawLineRetained(const glm::vec3& start, const glm::vec3& end);
 		//static void DrawAABB(const AABB& aabb, const glm::vec4& color = glm::vec4(0.6f, 0.9f, 0.3f, 1.0f));
+		static void DrawAABB(const glm::vec3& min, const glm::vec3& max, const glm::vec4& color = glm::vec4(0.6f, 0.9f, 0.3f, 1.0f));
 		static void DrawCircle(const glm::vec3& center, const float& radius, const glm::vec4& color = glm::vec4(0.9f, 0.4f, 0.3f, 1.0f));
 		static void DrawBillboard(const uint32_t& texture, const glm::vec3& position, const glm::vec4& color);
 		static void DrawSphere(const glm::vec3& position, const float& radius, const glm::vec4& color = glm::vec4(0.9f, 0.4f, 0.3f, 1.0f));

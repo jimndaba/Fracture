@@ -3,8 +3,7 @@
 #define COMPONETNS_H
 
 #include "Entity.h"
-#include "bullet/btBulletDynamicsCommon.h"
-
+#include "physx/PxPhysicsAPI.h"
 namespace Fracture
 {
 	struct IComponent
@@ -176,6 +175,10 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
+
+	enum class CollisionDetectionType { Discrete, Continuous, ContinuousSpeculative };
+
+
 	struct RigidbodyComponent : public IComponent
 	{
 		RigidbodyComponent(const Fracture::UUID& id) :IComponent(), entity(id) {}
@@ -188,7 +191,9 @@ namespace Fracture
 		bool IsDynamic = true;
 		bool LinearConstraints[3] = {0,0,0};
 		bool AngularConstraints[3] = { 0,0,0 };
-		btDefaultMotionState* motionState;
+
+		CollisionDetectionType DetectionType = CollisionDetectionType::Discrete;
+		physx::PxRigidActor* btBody;
 	};
 
 	enum class ColliderType
@@ -197,7 +202,9 @@ namespace Fracture
 		Box,
 		Cylinder,
 		Cone,
-		Capsule
+		Capsule,
+		ConvexMesh, 
+		TriangleMesh
 	};
 
 	struct ColliderComponent : public IComponent
@@ -213,6 +220,13 @@ namespace Fracture
 		float Radius = 1.0f;
 		float Height = 1.0f;
 		glm::vec3 Offset = glm::vec3(0);
+
+		physx::PxShape& GetShape()
+		{
+			return *btCollisionShape;
+		}
+
+		physx::PxShape* btCollisionShape;
 	};
 
 

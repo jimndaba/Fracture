@@ -128,6 +128,35 @@ void Fracture::DebugRenderer::DrawLine(const glm::vec3& start, const glm::vec3& 
     mLines.push_back(lineEnd);
 }
 
+void Fracture::DebugRenderer::DrawAABB(const glm::vec3& min, const glm::vec3& max, const glm::vec4& color)
+{
+    glm::vec3 boundPoint1 = min;
+    glm::vec3 boundPoint2 = max;
+    glm::vec3 boundPoint3 = glm::vec3(boundPoint1.x, boundPoint1.y, boundPoint2.z);
+    glm::vec3 boundPoint4 = glm::vec3(boundPoint1.x, boundPoint2.y, boundPoint1.z);
+    glm::vec3 boundPoint5 = glm::vec3(boundPoint2.x, boundPoint1.y, boundPoint1.z);
+    glm::vec3 boundPoint6 = glm::vec3(boundPoint1.x, boundPoint2.y, boundPoint2.z);
+    glm::vec3 boundPoint7 = glm::vec3(boundPoint2.x, boundPoint1.y, boundPoint2.z);
+    glm::vec3 boundPoint8 = glm::vec3(boundPoint2.x, boundPoint2.y, boundPoint1.z);
+
+
+
+    DrawLine(boundPoint6, boundPoint2, color);
+    DrawLine(boundPoint2, boundPoint8, color);
+    DrawLine(boundPoint8, boundPoint4, color);
+    DrawLine(boundPoint4, boundPoint6, color);
+
+    DrawLine(boundPoint3, boundPoint7, color);
+    DrawLine(boundPoint7, boundPoint5, color);
+    DrawLine(boundPoint5, boundPoint1, color);
+    DrawLine(boundPoint1, boundPoint3, color);
+
+    DrawLine(boundPoint6, boundPoint3, color);
+    DrawLine(boundPoint2, boundPoint7, color);
+    DrawLine(boundPoint8, boundPoint5, color);
+    DrawLine(boundPoint4, boundPoint1, color);
+}
+
 void Fracture::DebugRenderer::DrawCircle(const glm::vec3& center, const float& radius, const glm::vec4& color)
 {
     float twicePi = 2.0f * 3.14159265359f;

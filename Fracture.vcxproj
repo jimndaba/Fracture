@@ -59,9 +59,9 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx;$(ProjectDir)vendor\pxshared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx;$(ProjectDir)vendor\pxshared</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -70,7 +70,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;Bullet3Common_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,13 +79,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX20_CISO646_REMOVED_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -96,7 +96,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\rel\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;Bullet3Common.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -106,6 +106,8 @@
     <ClInclude Include="src\Assets\MaterialLoader.h" />
     <ClInclude Include="src\Assets\MeshLoader.h" />
     <ClInclude Include="src\Common\AppWindow.h" />
+    <ClInclude Include="src\Common\Frustum.h" />
+    <ClInclude Include="src\Common\Math.h" />
     <ClInclude Include="src\EventSystem\Event.h" />
     <ClInclude Include="src\EventSystem\Eventbus.h" />
     <ClInclude Include="src\Fracture.h" />
@@ -116,8 +118,12 @@
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\Keyboard.h" />
     <ClInclude Include="src\Input\Mouse.h" />
+    <ClInclude Include="src\Physics\ContactListener.h" />
     <ClInclude Include="src\Physics\PhysicsEvents.h" />
+    <ClInclude Include="src\Physics\PhysicsHelpers.h" />
     <ClInclude Include="src\Physics\PhysicsManager.h" />
+    <ClInclude Include="src\Physics\PhysicsScene.h" />
+    <ClInclude Include="src\Physics\Ray.h" />
     <ClInclude Include="src\Rendering\Buffer.h" />
     <ClInclude Include="src\Rendering\Color.h" />
     <ClInclude Include="src\Rendering\Command.h" />
@@ -173,7 +179,9 @@
     <ClCompile Include="src\Assets\MeshLoader.cpp" />
     <ClCompile Include="src\Common\AppWindow.cpp" />
     <ClCompile Include="src\Common\FractureApp.cpp" />
+    <ClCompile Include="src\Common\Frustum.cpp" />
     <ClCompile Include="src\Common\Logger.cpp" />
+    <ClCompile Include="src\Common\Math.cpp" />
     <ClCompile Include="src\Common\UUID.cpp" />
     <ClCompile Include="src\EventSystem\Eventbus.cpp" />
     <ClCompile Include="src\FracturePCH.cpp">
@@ -181,8 +189,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Physics\ContactListener.cpp" />
     <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
+    <ClCompile Include="src\Physics\PhysicsHelpers.cpp" />
     <ClCompile Include="src\Physics\PhysicsManager.cpp" />
+    <ClCompile Include="src\Physics\PhysicsScene.cpp" />
+    <ClCompile Include="src\Physics\Ray.cpp" />
     <ClCompile Include="src\Rendering\Buffer.cpp" />
     <ClCompile Include="src\Rendering\Color.cpp" />
     <ClCompile Include="src\Rendering\Command.cpp" />

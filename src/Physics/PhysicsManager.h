@@ -2,54 +2,59 @@
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
-#include "bullet/btBulletDynamicsCommon.h"
-
+#include "physx/PxPhysXConfig.h"
+#include "physx/PxPhysicsAPI.h"
+#include "physx/extensions/PxExtensionsAPI.h"
+#include "physx/extensions/PxDefaultAllocator.h"
+#include "physx/extensions/PxDefaultErrorCallback.h"
+#include "physx/pvd/PxPvdTransport.h"
 
 namespace Fracture
 {
-	struct PhysicsConfiguration
-	{
-		glm::vec3 Gravity = { 0, -10, 0 };
-
-	};
+	class PhysicsScene;
 
 	class PhysicsManager
 	{
 
 	public:
-		PhysicsManager(const PhysicsConfiguration& config);
+		PhysicsManager();
 
-		void OnInit();
-		void OnShutdown();
+		void Init();
+		void FixedUpdate(const float& dt);
+		void Shutdown();
 
-		void OnClearPhysicsWorld();
+		std::shared_ptr<PhysicsScene> GetScene();
+		void CreateScene();
+		void DestroyScene();
 
-		void OnPhysicsUpdate(float dt);
-		void OnCollisionUpdate();
+		void AddActors(const UUID& mEntity);
+		void RemoveActors(const UUID& mEntity);
+		void OnDebugDraw();
 
-		void SetGravity(const glm::vec3& gravity);
-		void SetMovementConstraints(const Fracture::UUID& entity, const bool c[3]);
-		void SetRotationConstraints(const Fracture::UUID& entity, const bool c[3]);
 
-		void AddRigidBodyToWorld(Fracture::UUID entity);
-		void AttachCollisionShape(const Fracture::UUID& entity);
 
-		void RemoveCollider(const Fracture::UUID& entity);
-		void RemoveRigidBody(const Fracture::UUID& entity);
+		physx::PxPhysics& GetPhysicsSDK();
+		physx::PxCpuDispatcher* GetCPUDispatcher();
 
-		PhysicsConfiguration Config;
-		std::unordered_map<Fracture::UUID, std::unique_ptr<btRigidBody>> mRigidBodies;
-		std::unordered_map<Fracture::UUID, std::unique_ptr<btCollisionShape>> mCollisionShapes;
+		physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, physx::PxFilterObjectAttributes attributes1,
+			physx::PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize);
+
 
 	private:
-		btBroadphaseInterface* _broadphase;
-		btDefaultCollisionConfiguration* _collisionConfig;
-		btCollisionDispatcher* _collisionDispatcher;
-		btSequentialImpulseConstraintSolver* _solver;
-		btDiscreteDynamicsWorld* _world;
+		static physx::PxPhysics* mPhysics;
+		static physx::PxCpuDispatcher* mDispacther;
+		static std::shared_ptr<PhysicsScene> mScene;
 
+
+
+		static std::unordered_map<UUID, physx::PxRigidActor*> mActors;
+		static std::unordered_map<UUID, physx::PxShape*> mColliders;
+		static std::unordered_map<UUID, physx::PxMaterial*> mMaterials;
+
+		physx::PxFoundation* gFoundation = NULL;
+		physx::PxPvd* mPvd;		
+		physx::PxCooking* mCooking;
 	};
-
 
 
 
