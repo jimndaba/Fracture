@@ -15,7 +15,7 @@ namespace Fracture
 
 		void FixedUpdate(float ts);
 
-		static std::shared_ptr<PhysicsScene> Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
+		static std::unique_ptr<PhysicsScene> Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
 		void Destroy();
 
 		void OnDebugDraw();

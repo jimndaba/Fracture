@@ -44,22 +44,18 @@ Fracture::PhysicsScene::PhysicsScene(physx::PxPhysics* mPhysics, physx::PxCpuDis
 
 void Fracture::PhysicsScene::FixedUpdate(float ts)
 {
-	bool advanced = Advance(ts);	
-	//physx::PxActorTypeFlags desiredTypes = physx::PxActorTypeFlag::eRIGID_DYNAMIC;// | physx::PxActorTypeFlag::eRIGID_STATIC;
-
-	//FRACTURE_INFO("Dynamic: {}",(uint32_t)mScene->getNbActors(desiredTypes));
-	
+	bool advanced = Advance(ts);		
 }
 
-std::shared_ptr<Fracture::PhysicsScene> Fracture::PhysicsScene::Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
+std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsScene::Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
 {
-	return std::make_shared<Fracture::PhysicsScene>(mPhysics,dispatcher);
+	return std::make_unique<Fracture::PhysicsScene>(mPhysics,dispatcher);
 }
 
 void Fracture::PhysicsScene::Destroy()
 {
 	mScene->release();
-	//mScene = nullptr;
+	mScene = nullptr;
 }
 
 void Fracture::PhysicsScene::OnDebugDraw()

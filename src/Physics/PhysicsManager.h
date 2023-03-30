@@ -23,7 +23,7 @@ namespace Fracture
 		void FixedUpdate(const float& dt);
 		void Shutdown();
 
-		std::shared_ptr<PhysicsScene> GetScene();
+		PhysicsScene* GetScene();
 		void CreateScene();
 		void DestroyScene();
 
@@ -43,7 +43,7 @@ namespace Fracture
 	private:
 		static physx::PxPhysics* mPhysics;
 		static physx::PxCpuDispatcher* mDispacther;
-		static std::shared_ptr<PhysicsScene> mScene;
+		static std::unique_ptr<PhysicsScene> mScene;
 
 
 
