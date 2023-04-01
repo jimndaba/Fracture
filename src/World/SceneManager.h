@@ -7,6 +7,7 @@
 
 namespace Fracture
 {
+	class LuaScript;
 
 	class SceneManager
 	{
@@ -42,9 +43,12 @@ namespace Fracture
 		template<class T>
 		static bool HasComponent(const UUID& id);
 
-
-		static void AttachScript();
-		static void DettachScript();
+		static void AttachScript(const UUID& entity_id);
+		static void AttachScript(const UUID& entity_id,const UUID& script_id);
+		static void DettachScript(const UUID& entity_id, const UUID& script_id);
+		static std::shared_ptr<ScriptComponent> GetScript(const UUID& entity_id, const UUID& script_id);
+		static std::vector<std::shared_ptr<ScriptComponent>> GetAllEntityScripts(const UUID& entity_id);
+		static bool HasScripts(const UUID& entity_id);
 
 		static Scene* CurrentScene();
 		static std::shared_ptr<CameraComponent> ActiveCamera();
@@ -66,7 +70,8 @@ namespace Fracture
 
 		static std::map<UUID, SceneRegistry> mSceneRegister;
 		static std::map<std::string, UUID> mSceneIDLookUp;
-		static std::unordered_map<UUID, std::shared_ptr<Scene>> mScenes;
+		static std::unordered_map<UUID, std::shared_ptr<Scene>> mScenes;	
+		static std::unordered_map<UUID, std::vector<UUID>> mScript_Entities;
 
 	private:
 

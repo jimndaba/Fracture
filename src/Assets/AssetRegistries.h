@@ -80,6 +80,13 @@ namespace Fracture
 		std::string Path;
 	};
 
+	struct LuaScriptRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
+
 
 
 }

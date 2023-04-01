@@ -6,12 +6,12 @@ Fracture::LuaScript::LuaScript(const LuaScriptRegistry& reg):Description(reg)
 }
 
 
-void Fracture::LuaScript::OnStart(sol::state& state, const UUID& id)
+void Fracture::LuaScript::OnStart(sol::state& state,const Fracture::UUID& entity)
 {
     if (m_onStart)
     {
         auto self = state[m_name];
-        auto result = m_onStart->call(self, id);
+        auto result = m_onStart->call(self,entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -22,12 +22,12 @@ void Fracture::LuaScript::OnStart(sol::state& state, const UUID& id)
     isStarted = true;
 }
 
-void Fracture::LuaScript::OnExit(sol::state& state, const UUID& id)
+void Fracture::LuaScript::OnExit(sol::state& state, const Fracture::UUID& entity)
 {
     if (m_onExit)
     {
         auto self = state[m_name];
-        sol::protected_function_result result = m_onExit->call(self);
+        sol::protected_function_result result = m_onExit->call(self, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -38,13 +38,12 @@ void Fracture::LuaScript::OnExit(sol::state& state, const UUID& id)
     isStarted = false;
 }
 
-
-void Fracture::LuaScript::OnUpdate(sol::state& state, const UUID& id, float dt)
+void Fracture::LuaScript::OnUpdate(sol::state& state, float dt, const Fracture::UUID& entity)
 {
     if (m_onUpdate)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onUpdate->call(self, id, dt);
+        sol::protected_function_result result = m_onUpdate->call(self, dt, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -54,12 +53,12 @@ void Fracture::LuaScript::OnUpdate(sol::state& state, const UUID& id, float dt)
     }
 }
 
-void Fracture::LuaScript::OnLateUpate(sol::state& state, const UUID& id, float dt)
+void Fracture::LuaScript::OnLateUpate(sol::state& state, float dt, const Fracture::UUID& entity)
 {
     if (m_onLateUpdate)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onLateUpdate->call(self, dt);
+        sol::protected_function_result result = m_onLateUpdate->call(self, dt, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -69,12 +68,12 @@ void Fracture::LuaScript::OnLateUpate(sol::state& state, const UUID& id, float d
     }
 }
 
-void Fracture::LuaScript::OnFixedUpdate(sol::state& state, const UUID& id, float dt)
+void Fracture::LuaScript::OnFixedUpdate(sol::state& state, float dt, const Fracture::UUID& entity)
 {
     if (m_onFixedUpdate)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onFixedUpdate->call(self, dt);
+        sol::protected_function_result result = m_onFixedUpdate->call(self, dt, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -84,12 +83,12 @@ void Fracture::LuaScript::OnFixedUpdate(sol::state& state, const UUID& id, float
     }
 }
 
-void Fracture::LuaScript::OnCollision(sol::state& state)
+void Fracture::LuaScript::OnCollision(sol::state& state, const Fracture::UUID& entity)
 {
     if (m_onCollision)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onCollision->call(self);
+        sol::protected_function_result result = m_onCollision->call(self, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -99,12 +98,12 @@ void Fracture::LuaScript::OnCollision(sol::state& state)
     }
 }
 
-void Fracture::LuaScript::OnTrigger(sol::state& state)
+void Fracture::LuaScript::OnTrigger(sol::state& state, const Fracture::UUID& entity)
 {
     if (m_onTrigger)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onTrigger->call(self);
+        sol::protected_function_result result = m_onTrigger->call(self, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -112,6 +111,13 @@ void Fracture::LuaScript::OnTrigger(sol::state& state)
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
+}
+
+void Fracture::LuaScript::DoScript(sol::state& state)
+{
+    state.script_file(Description.Path);
+    BindFunctions(state);
+    BindProperties(state);
 }
 
 void Fracture::LuaScript::Load(sol::state& state)
@@ -126,6 +132,7 @@ void Fracture::LuaScript::Reload(sol::state& state)
     state.do_file(Description.Path);
     BindFunctions(state);
     BindProperties(state);
+    FRACTURE_TRACE("Reloaded Script");
 }
 
 bool Fracture::LuaScript::IsStarted() const
@@ -180,55 +187,57 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
         sol::type t = mvalue.get_type();
         switch (t)
         {
-        case sol::type::boolean:
-        {
-            auto prop = ScriptProperty();
-            prop.Name = k;
-            prop.Type = PROPERTY_TYPE::BOOL;
-            prop.Bool = mvalue.as<bool>();
-            m_Properties.emplace(k, prop);
-        }
-        break;
-        case sol::type::string:
-        {
-            auto prop = ScriptProperty();
-            prop.Name = k;
-            prop.Type = PROPERTY_TYPE::STRING;
-            prop.String = mvalue.as<std::string>().c_str();
-            m_Properties.emplace(k, prop);
-        }
-        break;
-        case sol::type::number:
-        {
-            auto prop = ScriptProperty();
-            prop.Name = k;
-            prop.Type = PROPERTY_TYPE::FLOAT;
-            prop.Float = mvalue.as<float>();
-            m_Properties.emplace(k, prop);
-        }
-        break;
-        case sol::type::userdata:
-        {
-            auto prop = ScriptProperty();
-            if (mvalue.is<glm::vec2>())
+            case sol::type::boolean:
             {
-                prop.Type = PROPERTY_TYPE::VEC2;
-                prop.Vec2 = mvalue.as<glm::vec2>();
+                auto prop = ScriptProperty();
+                prop.Name = k;
+                prop.Type = PROPERTY_TYPE::BOOL;
+                prop.Bool = mvalue.as<bool>();
+                m_Properties.emplace(k, prop);
+                break;
             }
-            if (mvalue.is<glm::vec3>())
+      
+            case sol::type::string:
             {
-                prop.Type = PROPERTY_TYPE::VEC3;
-                prop.Vec3 = mvalue.as<glm::vec3>();
+                auto prop = ScriptProperty();
+                prop.Name = k;
+                prop.Type = PROPERTY_TYPE::STRING;
+                prop.String = mvalue.as<std::string>();
+                m_Properties.emplace(k, prop);
+                break;
             }
-            if (mvalue.is<glm::vec4>())
+            case sol::type::number:
             {
-                prop.Type = PROPERTY_TYPE::VEC4;
-                prop.Vec4 = mvalue.as<glm::vec4>();
+                auto prop = ScriptProperty();
+                prop.Name = k;
+                prop.Type = PROPERTY_TYPE::FLOAT;
+                prop.Float = mvalue.as<float>();
+                m_Properties.emplace(k, prop);
+                break;
             }
-            prop.Name = k;
-            m_Properties.emplace(k, prop);
-        }
-        break;
+            case sol::type::userdata:
+            {
+                auto prop = ScriptProperty();
+                if (mvalue.is<glm::vec2>())
+                {
+                    prop.Type = PROPERTY_TYPE::VEC2;
+                    prop.Vec2 = mvalue.as<glm::vec2>();
+                }
+                if (mvalue.is<glm::vec3>())
+                {
+                    prop.Type = PROPERTY_TYPE::VEC3;
+                    prop.Vec3 = mvalue.as<glm::vec3>();
+                }
+                if (mvalue.is<glm::vec4>())
+                {
+                    prop.Type = PROPERTY_TYPE::VEC4;
+                    prop.Vec4 = mvalue.as<glm::vec4>();
+                }
+                prop.Name = k;
+                m_Properties.emplace(k, prop);
+                break;
+            }
+      
         }
 
     }
@@ -269,72 +278,6 @@ void Fracture::LuaScript::OnPropertyUpdate(sol::state& state, const Fracture::Sc
     }
     break;
     }
-}
-
-std::shared_ptr<Fracture::LuaScript> Fracture::LuaScript::Create(const std::string& name, const std::string& path)
-{
-    std::ofstream script(path);
-
-    script << "--" + name + ".lua---" << std::endl;
-
-    script << std::endl;
-    ///main Script Table with properties inner table
-    script << name + " = {" << std::endl;
-    script << "Properties = {}" << std::endl;
-    script << "}" << std::endl;
-    script << std::endl;
-
-    ///onStart
-    script << "function " + name + ":OnStart(id)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onExit
-    script << "function " + name + ":OnExit(id)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onUpdate
-    script << "function " + name + ":OnUpdate(id,dt)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onLateUpdate
-    script << "function " + name + ":OnLateUpdate(id,dt)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onFixedUpdate
-    script << "function " + name + ":OnFixedUpdate(id,dt)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onCollision
-    script << "function " + name + ":OnCollision(id)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    ///onTrigger
-    script << "function " + name + ":OnTrigger(id)" << std::endl;
-    script << "--Start Code --" << std::endl;
-    script << "end" << std::endl;
-    script << std::endl;
-
-    script << "return " + name << std::endl;
-
-    script.close();
-   
-    LuaScriptRegistry reg;
-    reg.Name = name;
-    reg.Path = path;
-    reg.ID = UUID();
-    return std::make_shared<LuaScript>(reg);
 }
 
 std::unordered_map<std::string, Fracture::ScriptProperty> Fracture::LuaScript::GetProperties()

@@ -183,6 +183,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::Ma
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::LuaScriptRegistry& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec2& value)
 {
 
@@ -386,7 +400,7 @@ void Fracture::ISerialiser::Open(const std::string& path)
 		m_InputStream = std::ifstream(path);
 		if (!m_InputStream.good())
 		{
-			FRACTURE_WARN("Can't read Scene file : {}", path);
+			FRACTURE_WARN("Can't read file : {}", path);
 		}
 
 		m_InputStream >> Output;
@@ -650,18 +664,6 @@ bool Fracture::ISerialiser::BOOL(const std::string& name)
 		return j.at(mCollectionIndex.top())[name];
 	}
 
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		return j[name];
-	}
-	*/
 	return 0;
 }
 

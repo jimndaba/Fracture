@@ -8,6 +8,7 @@
 namespace Fracture
 {
 	class LuaScript;
+	struct LuaScriptRegistry;
 	struct Entity;
 
 	class ScriptManager
@@ -26,18 +27,28 @@ namespace Fracture
 		void onStart();
 		void onExit();
 		void onUpdate(float dt);
-
 		void Shutdown();
 
-		void Reload(LuaScript* mscript);
+		static void RegisterScript(const LuaScriptRegistry& reg);
 
+		void Reload(LuaScript* mscript);
 		static void LoadScript(const std::shared_ptr<LuaScript>& mscript);
+		static std::shared_ptr<LuaScript> GetInstanceOfScript(const UUID& id);
+
+		static void CreateNewScript(const LuaScriptRegistry& reg);
 
 		static sol::state* GetState();
+
+		bool HasScript(const UUID& script);
+
+		static std::unordered_map<UUID, std::shared_ptr<LuaScript>> mScripts;
+		static std::map<UUID, LuaScriptRegistry> mScriptRegister;
+
 	private:
 
-		static sol::state* lua;
 
+
+		static sol::state* lua;
 		template<class T>
 		static T* GetComponentByType(const Fracture::UUID& id);
 		static Fracture::Entity* GetEntity(const std::string& name);

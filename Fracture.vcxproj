@@ -160,6 +160,8 @@
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
     <ClInclude Include="src\Rendering\Viewport.h" />
+    <ClInclude Include="src\Scripting\LuaComponentBindings.h" />
+    <ClInclude Include="src\Scripting\LuaMathBindings.h" />
     <ClInclude Include="src\Scripting\LuaScript.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
     <ClInclude Include="src\Serialisation\MaterialSerialiser.h" />
@@ -225,6 +227,8 @@
     <ClCompile Include="src\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Rendering\VertexArray.cpp" />
     <ClCompile Include="src\Rendering\Viewport.cpp" />
+    <ClCompile Include="src\Scripting\LuaComponentBindings.cpp" />
+    <ClCompile Include="src\Scripting\LuaMathBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaScript.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
     <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp" />

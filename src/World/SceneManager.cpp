@@ -1,12 +1,16 @@
 #include "FracturePCH.h"
 #include "SceneManager.h"
 #include "Serialisation/SceneSerialiser.h"
+#include "Scripting/ScriptManager.h"
+#include "Scripting/LuaScript.h"
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::mCurrentScene;
 std::map<Fracture::UUID, Fracture::SceneRegistry> Fracture::SceneManager::mSceneRegister;
 std::map<std::string, Fracture::UUID> Fracture::SceneManager::mSceneIDLookUp;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::Scene>> Fracture::SceneManager::mScenes;
 std::shared_ptr<Fracture::CameraComponent> Fracture::SceneManager::mActiveCamera;
+std::unordered_map<Fracture::UUID, std::vector<Fracture::UUID>> Fracture::SceneManager::mScript_Entities;
+
 
 Fracture::SceneManager::SceneManager()
 {
@@ -66,12 +70,77 @@ void Fracture::SceneManager::RemoveEntity(const UUID& entity)
     }
 }
 
-void Fracture::SceneManager::AttachScript()
+void Fracture::SceneManager::AttachScript(const UUID& entity_id)
 {
+    auto scriptcomp = std::make_shared<ScriptComponent>(entity_id);
+    scriptcomp->HasScriptAttached = false;
+    mCurrentScene->mScriptReg[entity_id].push_back(std::move(scriptcomp));
 }
 
-void Fracture::SceneManager::DettachScript()
+void Fracture::SceneManager::AttachScript(const UUID& entity_id, const UUID& script_id)
 {
+    auto scriptcomp = std::make_shared<ScriptComponent>(entity_id);
+    scriptcomp->HasScriptAttached = true;
+    scriptcomp->Script = script_id;  
+    mCurrentScene->mScriptReg[entity_id].push_back(std::move(scriptcomp));
+   
+    mScript_Entities[script_id].push_back(entity_id);
+}
+
+void Fracture::SceneManager::DettachScript(const UUID& entity_id, const UUID& script_id)
+{
+    if (mCurrentScene->mScriptReg.find(entity_id) == mCurrentScene->mScriptReg.end())
+        return;
+
+    auto& script_array = mCurrentScene->mScriptReg[entity_id];
+
+    const auto& it = std::find_if(std::begin(script_array), std::end(script_array), [&](std::shared_ptr<ScriptComponent> p) { return p->Script == script_id; });
+
+    if (it != script_array.end())
+    {
+        int index = std::distance(script_array.begin(), it);
+
+        FRACTURE_TRACE("Dettaching Script: {}", script_id);
+
+        script_array.erase(
+            std::remove(std::begin(script_array),
+                std::end(script_array), script_array[index]),
+            std::end(script_array));
+    }
+}
+
+std::shared_ptr<Fracture::ScriptComponent> Fracture::SceneManager::GetScript(const UUID& entity_id, const UUID& script_id)
+{
+    if(mCurrentScene->mScriptReg.find(entity_id) == mCurrentScene->mScriptReg.end())
+    return nullptr;
+        
+    const auto& script_array = mCurrentScene->mScriptReg[entity_id];
+
+    auto it = std::find_if(std::begin(script_array), std::end(script_array), [&](std::shared_ptr<ScriptComponent> p) { return p->Script == script_id; });
+
+    if (it != script_array.end())
+    {
+        return std::static_pointer_cast<ScriptComponent>(*it);
+    }
+
+    FRACTURE_ERROR("No Scipt {} found");
+        
+}
+
+std::vector<std::shared_ptr<Fracture::ScriptComponent>> Fracture::SceneManager::GetAllEntityScripts(const UUID& entity_id)
+{
+    if (mCurrentScene->mScriptReg.find(entity_id) == mCurrentScene->mScriptReg.end())
+        return std::vector<std::shared_ptr<Fracture::ScriptComponent>>();
+
+    return mCurrentScene->mScriptReg[entity_id];
+}
+
+bool Fracture::SceneManager::HasScripts(const UUID& entity_id)
+{
+    if (mCurrentScene->mScriptReg.find(entity_id) == mCurrentScene->mScriptReg.end())
+        return false;
+
+    return mCurrentScene->mScriptReg[entity_id].size();
 }
 
 Fracture::Scene* Fracture::SceneManager::CurrentScene()
@@ -152,6 +221,7 @@ void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
     auto it = mSceneRegister.find(scene_ID);
     if (it != mSceneRegister.end())
     {
+        mScenes[scene_ID]->mScriptReg.clear();
         mScenes[scene_ID]->ComponentReg.clear();
         mScenes[scene_ID]->Entities.clear();
         mScenes.erase(scene_ID);
@@ -215,4 +285,5 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
     }
     return false;
 }
+
 

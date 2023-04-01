@@ -3,18 +3,11 @@
 #define LUASCRIPT_H
 
 #include "sol/sol.hpp"
+#include "Assets/AssetRegistries.h"
 
 namespace Fracture
 {
-
-	struct LuaScriptRegistry
-	{
-		UUID ID;
-		std::string Name;
-		std::string Path;
-	};
-
-	enum PROPERTY_TYPE
+	enum class PROPERTY_TYPE
 	{
 		STRING,
 		BOOL,
@@ -59,14 +52,15 @@ namespace Fracture
 	public:
 		LuaScript(const LuaScriptRegistry& reg);
 
-		void OnStart(sol::state& state, const UUID& id);
-		void OnExit(sol::state& state, const UUID& id);
-		void OnUpdate(sol::state& state, const UUID& id, float dt);
-		void OnLateUpate(sol::state& state, const UUID& id, float dt);
-		void OnFixedUpdate(sol::state& state, const UUID& id, float dt);
-		void OnCollision(sol::state& state);
-		void OnTrigger(sol::state& state);
+		void OnStart(sol::state& state,const Fracture::UUID& entity);
+		void OnExit(sol::state& state, const Fracture::UUID& entity);
+		void OnUpdate(sol::state& state, float dt, const Fracture::UUID& entity);
+		void OnLateUpate(sol::state& state, float dt, const Fracture::UUID& entity);
+		void OnFixedUpdate(sol::state& state,float dt, const Fracture::UUID& entity);
+		void OnCollision(sol::state& state, const Fracture::UUID& entity);
+		void OnTrigger(sol::state& state, const Fracture::UUID& entity);
 
+		void DoScript(sol::state& state);
 		void Load(sol::state& state);
 		void Reload(sol::state& state);
 
@@ -77,8 +71,8 @@ namespace Fracture
 
 		void OnPropertyUpdate(sol::state& state, const Fracture::ScriptProperty& prop);
 
-		static std::shared_ptr<Fracture::LuaScript> Create(const std::string& name, const std::string& path);
-		std::unordered_map<std::string, ScriptProperty> GetProperties();
+		
+		std::unordered_map<std::string, Fracture::ScriptProperty> GetProperties();
 
 		LuaScriptRegistry Description;
 	private:

@@ -11,6 +11,7 @@
 #include "Rendering/Texture.h"
 
 #include "World/SceneManager.h"
+#include "Scripting/ScriptManager.h"
 
 std::map<Fracture::UUID, Fracture::MeshRegistry> Fracture::AssetManager::mMeshRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMeshIDLookUp;
@@ -148,6 +149,22 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 			reg_serialiser.EndCollection();
 		}
 
+		if (reg_serialiser.BeginCollection("Script Registry"))
+		{
+			FRACTURE_TRACE("Loading Script Assets");
+			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
+			{
+				
+				LuaScriptRegistry reg;
+				reg.ID = reg_serialiser.ID("ID");
+				reg.Name = reg_serialiser.STRING("Name");
+				reg.Path = reg_serialiser.STRING("Path");
+				ScriptManager::RegisterScript(reg);
+				reg_serialiser.NextInCollection();
+			}
+			reg_serialiser.EndCollection();
+		}
+
 		reg_serialiser.EndStruct();
 	}
 
@@ -189,6 +206,13 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 	for (const auto& reg : mTextureRegister)
 	{
 		reg_serialiser.Property("Texture", reg.second);
+	}
+	reg_serialiser.EndCollection();
+
+	reg_serialiser.BeginCollection("Script Registry");
+	for (const auto& reg : ScriptManager::mScriptRegister)
+	{
+		reg_serialiser.Property("Script", reg.second);
 	}
 	reg_serialiser.EndCollection();
 
@@ -338,23 +362,6 @@ void Fracture::AssetManager::OnLoad()
 		mMaterialToLoad.pop();
 	}
 
-	/*
-	for (auto& mf : mMaterialFutures)
-	{
-		if (mMaterialFutures.empty())
-			return;
-
-		if (mf.second._Is_ready())
-		{
-			auto material = mf.second.get();
-			{
-				mMaterials[mf.first] = material;				
-				mLoadedMaterials.push_back(mf.first);
-				mMaterialFutures.erase(mf.first);
-			}
-		}
-	}
-	*/
 }
 
 void Fracture::AssetManager::RegisterMesh(const MeshRegistry& reg)

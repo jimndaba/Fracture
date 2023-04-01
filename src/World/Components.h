@@ -188,6 +188,7 @@ namespace Fracture
 		float Mass = 1.0f;
 		float Friction = 0.5f;
 		float Bouncyness = 0.0f;
+		bool IsKinematic = false;
 		bool IsDynamic = true;
 		bool LinearConstraints[3] = {0,0,0};
 		bool AngularConstraints[3] = { 0,0,0 };
@@ -229,6 +230,20 @@ namespace Fracture
 		physx::PxShape* btCollisionShape;
 	};
 
+	struct ScriptComponent : public IComponent
+	{
+		ScriptComponent(const Fracture::UUID& id, bool ScriptAttached = false) :
+			IComponent(), entity(id), HasScriptAttached(ScriptAttached) {}
+
+		ScriptComponent(const Fracture::UUID& id,const Fracture::UUID& script,bool ScriptAttached =true):
+			IComponent(), entity(id),Script(script),HasScriptAttached(ScriptAttached) {}
+
+		bool HasScriptAttached;
+		bool HasStarted;
+		UUID Script;
+		UUID entity;
+		UUID GetID() { return entity; }
+	};
 
 }
 

@@ -5,7 +5,12 @@
 #include "Input/Input.h"
 #include "LuaScript.h"
 
+#include "LuaMathBindings.h"
+#include "LuaComponentBindings.h"
+
 sol::state* Fracture::ScriptManager::lua;
+std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
+std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::LuaScript>> Fracture::ScriptManager::mScripts;
 
 Fracture::ScriptManager::ScriptManager()
 {
@@ -176,9 +181,9 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 }
 void Fracture::ScriptManager::BindMaths(sol::state& L)
 {
-	//LuaBindGLM::BindVec2(L);
-	//LuaBindGLM::BindVec3(L);
-	//LuaBindGLM::BindVec4(L);
+	LuaBindGLM::BindVec2(L);
+	LuaBindGLM::BindVec3(L);
+	LuaBindGLM::BindVec4(L);
 }
 void Fracture::ScriptManager::BindApplication(sol::state& L)
 {
@@ -196,35 +201,82 @@ void Fracture::ScriptManager::Init()
 	BindMaths(*lua);
 
 	//LuaBindEntity::BindEntity(*lua);
-	//LuaBindComponents::BindTagComponent(*lua);
-	//LuaBindComponents::BindAnimatorComponent(*lua);
-	//LuaBindComponents::BindCameraComponent(*lua);
-	//LuaBindComponents::BindColliderComponent(*lua);
-	//LuaBindComponents::BindLightComponent(*lua);
-	//LuaBindComponents::BindRelationShipComponent(*lua);
-	//LuaBindComponents::BindRenderComponent(*lua);
-	//LuaBindComponents::BindRigidBodyComponent(*lua);
-	//LuaBindComponents::BindTagComponent(*lua);
-	//LuaBindComponents::BindTransformComponent(*lua);
+	LuaBindComponents::BindTagComponent(*lua);
+	LuaBindComponents::BindAnimatorComponent(*lua);
+	LuaBindComponents::BindCameraComponent(*lua);
+	LuaBindComponents::BindColliderComponent(*lua);
+	LuaBindComponents::BindPointLightComponent(*lua);
+	LuaBindComponents::BindSpotLightComponent(*lua);
+	LuaBindComponents::BindSunLightComponent(*lua);
+	LuaBindComponents::BindHierachyComponent(*lua);
+	LuaBindComponents::BindMeshComponent(*lua);
+	LuaBindComponents::BindRigidbodyComponent(*lua);
+	LuaBindComponents::BindTagComponent(*lua);
+	LuaBindComponents::BindTransformComponent(*lua);
 	FRACTURE_INFO("Script Manager Init");
 
 }
+
 void Fracture::ScriptManager::onStart()
 {
+	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	{
+		if (mScripts.find(component->Script) == mScripts.end())
+			continue;
 
+		if (!component->HasScriptAttached)
+			continue;	
+
+		if (component->HasStarted)
+			continue;
+
+		const auto& script = mScripts[component->Script];
+		script->Load(*lua);
+		script->BindFunctions(*lua);
+		script->BindProperties(*lua);
+		script->OnStart(*lua, component->GetID());
+	}
 }
+
 void Fracture::ScriptManager::onExit()
 {
+	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	{
+		if (mScripts.find(component->Script) == mScripts.end())
+			continue;
 
+		if (!component->HasScriptAttached)
+			continue;
+
+		const auto& script = mScripts[component->Script];
+		script->OnExit(*lua, component->GetID());
+	}
 }
+
 void Fracture::ScriptManager::onUpdate(float dt)
 {
+	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	{
+		if (mScripts.find(component->Script) == mScripts.end())
+			continue;
 
+		if (!component->HasScriptAttached)
+			continue;
+		
+		const auto& script = mScripts[component->Script];
+		script->OnUpdate(*lua,dt,component->GetID());
+		
+	}
 }
 
 void Fracture::ScriptManager::Shutdown()
 {
 	delete(lua);
+}
+
+void Fracture::ScriptManager::RegisterScript(const LuaScriptRegistry& reg)
+{
+	mScriptRegister[reg.ID] = reg;
 }
 
 void Fracture::ScriptManager::Reload(LuaScript* mscript)
@@ -238,11 +290,81 @@ void Fracture::ScriptManager::LoadScript(const std::shared_ptr<LuaScript>& mscri
 	mscript->Load(*lua);
 }
 
+std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScript(const UUID& id)
+{
+	if (mScriptRegister.find(id) == mScriptRegister.end())
+	{
+		FRACTURE_ERROR("Could not find Script");
+		return nullptr;
+	}
+
+	return std::make_shared<LuaScript>(mScriptRegister[id]);
+}
+
+void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
+{
+	std::ofstream script(reg.Path);
+
+	script << "--" + reg.Name + ".lua---" << std::endl;
+
+	script << std::endl;
+	///main Script Table with properties inner table
+	script << reg.Name + " = {" << std::endl;
+	script << "Properties = {}" << std::endl;
+	script << "}" << std::endl;
+	script << std::endl;
+
+	///onStart
+	script << "function " + reg.Name + ":OnStart(id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onExit
+	script << "function " + reg.Name + ":OnExit(id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onUpdate
+	script << "function " + reg.Name + ":OnUpdate(dt,id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onLateUpdate
+	script << "function " + reg.Name + ":OnLateUpdate(dt,id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onFixedUpdate
+	script << "function " + reg.Name + ":OnFixedUpdate(dt,id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onCollision
+	script << "function " + reg.Name + ":OnCollision(id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	///onTrigger
+	script << "function " + reg.Name + ":OnTrigger(id)" << std::endl;
+	script << "--Start Code --" << std::endl;
+	script << "end" << std::endl;
+	script << std::endl;
+
+	script << "return " + reg.Name << std::endl;
+
+	script.close();
+}
+
 sol::state* Fracture::ScriptManager::GetState()
 {
 	return lua;
 }
-
 
 Fracture::Entity* Fracture::ScriptManager::GetEntity(const std::string& name)
 {
@@ -255,4 +377,9 @@ Fracture::Entity* Fracture::ScriptManager::GetEntity(const std::string& name)
 	}
 	FRACTURE_ERROR("Cannot Find Entity: {}", name);
 	return nullptr;
+}
+
+bool Fracture::ScriptManager::HasScript(const UUID& script)
+{
+	return mScriptRegister.find(script) != mScriptRegister.end();
 }

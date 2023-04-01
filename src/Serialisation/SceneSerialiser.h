@@ -19,6 +19,7 @@ namespace Fracture
 	struct ShadowCasterComponent;
 	struct RigidbodyComponent;
 	struct ColliderComponent;
+	struct ScriptComponent;
 
 	struct SceneSerialiser : public ISerialiser
 	{
@@ -35,6 +36,7 @@ namespace Fracture
 		void SerialiseComponent(Fracture::ShadowCasterComponent* component);
 		void SerialiseComponent(Fracture::RigidbodyComponent* component);
 		void SerialiseComponent(Fracture::ColliderComponent* component);
+		void SerialiseComponent(Fracture::ScriptComponent* component);
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
@@ -45,6 +47,7 @@ namespace Fracture
 		void ReadSunlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadRigidbodyComponentIfExists(Fracture::UUID entity_id);
 		void ReadColliderComponentIfExists(Fracture::UUID entity_id);
+		void ReadScriptComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
 		std::shared_ptr<Scene> ReadScene();

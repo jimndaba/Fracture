@@ -120,6 +120,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::RigidbodyComponent*
 	BeginStruct("RigidbodyComponent");
 	Property("Mass", component->Mass);
 	Property("IsDynamic", component->IsDynamic);
+	Property("IsKinematic", component->IsKinematic);
 	Property("Bouncyness", component->Bouncyness);
 	Property("Friction", component->Friction);
 
@@ -142,6 +143,14 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ColliderComponent* 
 	Property("Radius",component->Radius);
 	Property("Height",component->Height);
 	Property("Offset",component->Offset);
+	EndStruct();
+}
+
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ScriptComponent* component)
+{
+	BeginStruct("ScriptComponent");
+	Property("Script", component->Script);
+	Property("HasScript", component->HasStarted);	
 	EndStruct();
 }
 
@@ -261,6 +270,7 @@ void Fracture::SceneSerialiser::ReadRigidbodyComponentIfExists(Fracture::UUID en
 		comp->Friction = FLOAT("Friction");
 		comp->Bouncyness = FLOAT("Bouncyness");
 		comp->IsDynamic = BOOL("IsDynamic");
+		comp->IsKinematic = BOOL("IsKinematic");
 
 		comp->LinearConstraints[0] = FLOAT("MovementConstraintX");
 		comp->LinearConstraints[1] = FLOAT("MovementConstraintY");
@@ -290,6 +300,20 @@ void Fracture::SceneSerialiser::ReadColliderComponentIfExists(Fracture::UUID ent
 	}
 }
 
+void Fracture::SceneSerialiser::ReadScriptComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("ScriptComponent"))
+	{
+		auto comp = std::make_shared<ScriptComponent>(entity_id);
+		comp->Script = ID("Script");		
+		comp->HasStarted = BOOL("HasScript");		
+		SceneManager::AddComponentByInstance<ScriptComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
@@ -317,6 +341,23 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<SunlightComponent>(entity->ID);
 					WriteEntityComponentOfType<ShadowCasterComponent>(entity->ID);
 					WriteEntityComponentOfType<ColliderComponent>(entity->ID);
+					WriteEntityComponentOfType<ScriptComponent>(entity->ID);
+				}
+				EndCollection();
+
+				BeginCollection("Scripts");
+				{
+					for (const auto& script : SceneManager::mScript_Entities)
+					{
+						auto it = std::find_if(std::begin(script.second), std::end(script.second), [&](Fracture::UUID p) { return p == entity->ID; });
+
+						if (it != script.second.end())
+						{
+							BeginStruct("LuaScript");
+							Property("ScriptID", script.first);
+							EndStruct();
+						}
+					}
 				}
 				EndCollection();
 			}
@@ -360,6 +401,22 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadSunlightComponentIfExists(entity_id);
 							ReadRigidbodyComponentIfExists(entity_id);
 							ReadColliderComponentIfExists(entity_id);
+							ReadScriptComponentIfExists(entity_id);
+							NextInCollection();
+						}
+						EndCollection();
+					}
+
+					if (BeginCollection("Scripts"))
+					{
+						while (CurrentCollectionIndex() < GetCollectionSize())
+						{
+							if (BeginStruct("LuaScript"))
+							{
+								auto script_id = ID("ScriptID");
+								SceneManager::AttachScript(entity_id, script_id);
+								EndStruct();
+							}
 							NextInCollection();
 						}
 						EndCollection();
