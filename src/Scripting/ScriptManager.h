@@ -4,6 +4,7 @@
 
 #include "sol/sol.hpp"
 
+#include "World/SceneManager.h"
 
 namespace Fracture
 {
@@ -50,16 +51,15 @@ namespace Fracture
 
 		static sol::state* lua;
 		template<class T>
-		static T* GetComponentByType(const Fracture::UUID& id);
+		static std::shared_ptr<T> GetComponentByType(const Fracture::UUID& id);
 		static Fracture::Entity* GetEntity(const std::string& name);
 
 	};
 
 	template<class T>
-	inline T* ScriptManager::GetComponentByType(const UUID& id)
-	{
-		/*
-		auto component = Application::CurrentScene()->GetComponent<T>(id);
+	inline std::shared_ptr<T> ScriptManager::GetComponentByType(const UUID& id)
+	{		
+		const auto& component = SceneManager::GetComponent<T>(id);
 		if (component)
 		{
 			return component;
@@ -69,8 +69,6 @@ namespace Fracture
 			FRACTURE_ERROR("Couldnt find component");
 			return nullptr;
 		}
-		*/
-		return nullptr;
 	}
 
 }

@@ -123,6 +123,7 @@ namespace Fracture
 		bool FirstMove = true;
 		bool IsDirty = true;
 		bool EnableDepthOfField = false;
+		bool IsActiveCamera = false;
 
 		virtual UUID GetID() { return entity; };
 	};
@@ -188,10 +189,16 @@ namespace Fracture
 		float Mass = 1.0f;
 		float Friction = 0.5f;
 		float Bouncyness = 0.0f;
+		float AngularDrag = 0.0f;
+		float LinearDrag = 0.0f;
 		bool IsKinematic = false;
 		bool IsDynamic = true;
 		bool LinearConstraints[3] = {0,0,0};
 		bool AngularConstraints[3] = { 0,0,0 };
+
+		glm::vec3 LinearVelocity = glm::vec3(0);
+		glm::vec3 AngularVelocity = glm::vec3(0);
+
 
 		CollisionDetectionType DetectionType = CollisionDetectionType::Discrete;
 		physx::PxRigidActor* btBody;

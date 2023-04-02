@@ -161,6 +161,15 @@ void Fracture::SceneManager::SetActiveCamera(const std::shared_ptr<CameraCompone
     mActiveCamera = mcamera;
 }
 
+void Fracture::SceneManager::SetActiveCamera(const Fracture::UUID& camera_id)
+{
+    if (HasComponent<CameraComponent>(camera_id))
+    {
+        mCurrentScene->ActiveCameraID = camera_id;
+        mActiveCamera = GetComponent<CameraComponent>(mCurrentScene->ActiveCameraID);
+    }
+}
+
 void Fracture::SceneManager::LoadScene(const std::string& name)
 {
     auto scene_ID = mSceneIDLookUp[name];

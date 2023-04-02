@@ -2,12 +2,8 @@
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
-#include "physx/PxPhysXConfig.h"
+
 #include "physx/PxPhysicsAPI.h"
-#include "physx/extensions/PxExtensionsAPI.h"
-#include "physx/extensions/PxDefaultAllocator.h"
-#include "physx/extensions/PxDefaultErrorCallback.h"
-#include "physx/pvd/PxPvdTransport.h"
 
 namespace Fracture
 {
@@ -18,6 +14,7 @@ namespace Fracture
 
 	public:
 		PhysicsManager();
+		~PhysicsManager();
 
 		void Init();
 		void FixedUpdate(const float& dt);
@@ -38,7 +35,7 @@ namespace Fracture
 
 		physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, physx::PxFilterObjectAttributes attributes1,
 			physx::PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize);
-
+		static physx::PxRigidActor* GetRigidBody(const Fracture::UUID& entity);
 
 	private:
 		static physx::PxPhysics* mPhysics;
@@ -52,7 +49,7 @@ namespace Fracture
 		static std::unordered_map<UUID, physx::PxMaterial*> mMaterials;
 
 		physx::PxFoundation* gFoundation = NULL;
-		physx::PxPvd* mPvd;		
+		physx::PxPvd* mPvd = NULL;
 		physx::PxCooking* mCooking;
 	};
 

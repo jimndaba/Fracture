@@ -52,8 +52,8 @@ namespace Fracture
 
 		static Scene* CurrentScene();
 		static std::shared_ptr<CameraComponent> ActiveCamera();
-
 		static void SetActiveCamera(const std::shared_ptr<CameraComponent>& mcamera);
+		static void SetActiveCamera(const Fracture::UUID& camera_id);
 
 		static void LoadScene(const std::string& scene);
 		static UUID& LoadSceneFromFile(const std::string& path);

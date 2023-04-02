@@ -38,4 +38,35 @@ void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture
 
 }
 
+void Fracture::TransformSystem::Translate(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value)
+{
+	transform->Position += value;
+	transform->IsDirty = true;
+}
+
+void Fracture::TransformSystem::LookAt(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value, const glm::vec3& up)
+{
+	if ((value - transform->Position) == glm::vec3(0, 0, 0)) return;
+
+	glm::mat4 lookMat = glm::lookAt(transform->Position, value, up);
+	transform->Rotation = conjugate(glm::toQuat(lookMat));
+	transform->IsDirty = true;
+}
+
+void Fracture::TransformSystem::SetPosition(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value)
+{
+	transform->Position = value;
+	transform->IsDirty = true;
+}
+void Fracture::TransformSystem::SetScale(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value)
+{
+	transform->Scale = value;
+	transform->IsDirty = true;
+}
+void Fracture::TransformSystem::SetRotation(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value)
+{
+	transform->Rotation = glm::quat(value);
+	transform->IsDirty = true;
+}
+
 

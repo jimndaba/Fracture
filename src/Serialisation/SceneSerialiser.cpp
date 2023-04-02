@@ -58,7 +58,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::MeshComponent* comp
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CameraComponent* component)
 {
-	BeginStruct("CameraComponent");
+	BeginStruct("Camera");
 	Property("Damping", component->Damping);
 	Property("EnableDepthOfField", component->EnableDepthOfField);
 	Property("Far", component->Far);
@@ -75,6 +75,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CameraComponent* co
 	Property("Up", component->Up);
 	Property("Front", component->Front);
 	Property("Right", component->Right);
+	Property("IsActiveCamera", component->IsActiveCamera);
 	EndStruct();
 }
 
@@ -153,7 +154,6 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ScriptComponent* co
 	Property("HasScript", component->HasStarted);	
 	EndStruct();
 }
-
 
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
@@ -312,7 +312,48 @@ void Fracture::SceneSerialiser::ReadScriptComponentIfExists(Fracture::UUID entit
 	}
 }
 
+void Fracture::SceneSerialiser::ReadCameraComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("Camera"))
+	{
+		auto camera = std::make_shared<CameraComponent>(entity_id);
+		camera->IsActiveCamera = BOOL("IsActiveCamera");
 
+		camera->Position = VEC3("Position");
+		camera->TargetPosition = camera->Position;
+
+		camera->Pitch = FLOAT("Pitch");
+		camera->TargetPitch = camera->TargetPitch;
+
+		camera->Yaw = FLOAT("Yaw");
+		camera->TargetYaw = camera->Yaw;
+
+		camera->Roll = FLOAT("Roll");
+		camera->TargetRoll = camera->Roll;
+		
+
+		camera->FoV = FLOAT("FOV");
+		camera->TargetFoV = camera->FoV;
+
+		camera->Up = VEC3("Up");
+		camera->Right = VEC3("Right");
+		camera->Front = VEC3("Front");
+
+				
+		camera->EnableDepthOfField = BOOL("EnableDepthOfField");
+		camera->Damping = FLOAT("Damping");
+		camera->Far = FLOAT("Far");
+		camera->Near = FLOAT("Neaer");
+		camera->FocalLength = FLOAT("FocalLength");
+		camera->FocalRange = FLOAT("FocalRange");
+	
+		camera->Speed = FLOAT("Speed");
+		camera->Sensitivity = FLOAT("Sensitivity");
+	
+		SceneManager::AddComponentByInstance<CameraComponent>(entity_id, camera);
+		EndStruct();
+	}
+}
 
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {

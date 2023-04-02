@@ -189,52 +189,52 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
         {
             case sol::type::boolean:
             {
-                auto prop = ScriptProperty();
-                prop.Name = k;
-                prop.Type = PROPERTY_TYPE::BOOL;
-                prop.Bool = mvalue.as<bool>();
-                m_Properties.emplace(k, prop);
+                auto prop = std::make_shared<ScriptProperty>();
+                prop->Name = k;
+                prop->Type = PROPERTY_TYPE::BOOL;
+                prop->Bool = mvalue.as<bool>();
+                m_Properties.push_back(prop);
                 break;
             }
       
             case sol::type::string:
             {
-                auto prop = ScriptProperty();
-                prop.Name = k;
-                prop.Type = PROPERTY_TYPE::STRING;
-                prop.String = mvalue.as<std::string>();
-                m_Properties.emplace(k, prop);
+                auto prop = std::make_shared<ScriptProperty>();
+                prop->Name = k;
+                prop->Type = PROPERTY_TYPE::STRING;
+                prop->String = mvalue.as<std::string>();
+                m_Properties.push_back(prop);
                 break;
             }
             case sol::type::number:
             {
-                auto prop = ScriptProperty();
-                prop.Name = k;
-                prop.Type = PROPERTY_TYPE::FLOAT;
-                prop.Float = mvalue.as<float>();
-                m_Properties.emplace(k, prop);
+                auto prop = std::make_shared<ScriptProperty>();
+                prop->Name = k;
+                prop->Type = PROPERTY_TYPE::FLOAT;
+                prop->Float = mvalue.as<float>();
+                m_Properties.push_back(prop);
                 break;
             }
             case sol::type::userdata:
             {
-                auto prop = ScriptProperty();
+                auto prop = std::make_shared<ScriptProperty>();
                 if (mvalue.is<glm::vec2>())
                 {
-                    prop.Type = PROPERTY_TYPE::VEC2;
-                    prop.Vec2 = mvalue.as<glm::vec2>();
+                    prop->Type = PROPERTY_TYPE::VEC2;
+                    prop->Vec2 = mvalue.as<glm::vec2>();
                 }
                 if (mvalue.is<glm::vec3>())
                 {
-                    prop.Type = PROPERTY_TYPE::VEC3;
-                    prop.Vec3 = mvalue.as<glm::vec3>();
+                    prop->Type = PROPERTY_TYPE::VEC3;
+                    prop->Vec3 = mvalue.as<glm::vec3>();
                 }
                 if (mvalue.is<glm::vec4>())
                 {
-                    prop.Type = PROPERTY_TYPE::VEC4;
-                    prop.Vec4 = mvalue.as<glm::vec4>();
+                    prop->Type = PROPERTY_TYPE::VEC4;
+                    prop->Vec4 = mvalue.as<glm::vec4>();
                 }
-                prop.Name = k;
-                m_Properties.emplace(k, prop);
+                prop->Name = k;
+                m_Properties.push_back(prop);
                 break;
             }
       
@@ -280,7 +280,7 @@ void Fracture::LuaScript::OnPropertyUpdate(sol::state& state, const Fracture::Sc
     }
 }
 
-std::unordered_map<std::string, Fracture::ScriptProperty> Fracture::LuaScript::GetProperties()
+std::vector<std::shared_ptr<Fracture::ScriptProperty>> Fracture::LuaScript::GetProperties()
 {
     return m_Properties;
 }

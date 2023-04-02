@@ -40,33 +40,45 @@ void Fracture::ScriptManager::BindLog(sol::state& L)
 		FRACTURE_CRITICAL(message);
 		});
 }
+
 void Fracture::ScriptManager::BindCore(sol::state& lua)
 {
 	lua.new_usertype<Fracture::IComponent>("Component",
 		sol::meta_function::to_string, [](Fracture::IComponent& e) { return fmt::format("Component : {}", e.GetID()); }
 	);
 }
+
 void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 {
 	//lua.set_function("GetEntity", [](sol::this_state s, std::string name)->Entity* {
 	//	return ScriptManager::GetEntity(name);
 	//	});
 
-	lua.set_function("GetTagComponent", [](sol::this_state s, UUID id)->TagComponent* {
+	lua.set_function("GetTagComponent", [](sol::this_state s, UUID id)->std::shared_ptr<TagComponent> {
 		return ScriptManager::GetComponentByType<TagComponent>(id);
 		});
-	lua.set_function("GetTransformComponent", [](sol::this_state s, UUID id)->TransformComponent* {
+	lua.set_function("GetTransformComponent", [](sol::this_state s, UUID id)->std::shared_ptr<TransformComponent> {
 		return ScriptManager::GetComponentByType<TransformComponent>(id);
 		});
-	lua.set_function("GetCameraComponent", [](sol::this_state s, UUID id)->CameraComponent* {
+	lua.set_function("GetCameraComponent", [](sol::this_state s, UUID id)->std::shared_ptr<CameraComponent> {
 		return ScriptManager::GetComponentByType<CameraComponent>(id);
 		});
-	lua.set_function("GetRigidBodyComponent", [](sol::this_state s, UUID id)->RigidbodyComponent* {
+	lua.set_function("GetRigidBodyComponent", [](sol::this_state s, UUID id)->std::shared_ptr<RigidbodyComponent> {
 		return ScriptManager::GetComponentByType<RigidbodyComponent>(id);
 		});
-	lua.set_function("GetColliderComponent", [](sol::this_state s, UUID id)->ColliderComponent* {
+	lua.set_function("GetColliderComponent", [](sol::this_state s, UUID id)->std::shared_ptr<ColliderComponent> {
 		return ScriptManager::GetComponentByType<ColliderComponent>(id);
 		});
+	lua.set_function("GetSpolightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<SpotlightComponent> {
+		return ScriptManager::GetComponentByType<SpotlightComponent>(id);
+		});
+	lua.set_function("GetPointlightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<PointlightComponent> {
+		return ScriptManager::GetComponentByType<PointlightComponent>(id);
+		});
+	lua.set_function("GetSunlightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<SunlightComponent> {
+		return ScriptManager::GetComponentByType<SunlightComponent>(id);
+		});
+
 	lua.set_function("Destroy", sol::overload([](sol::this_state s, UUID id) {
 		return SceneManager::RemoveEntity(id);
 		}));
@@ -74,11 +86,16 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 		return SceneManager::RemoveEntity(entity.ID);
 		}));
 }
+
 void Fracture::ScriptManager::BindInput(sol::state& L)
 {
 	auto input = L.create_table("Input");
 	input.set_function("IsKeyPressed", [](Fracture::KeyCode key) -> bool {
 		return Input::IsKeyDown(key);
+		});
+
+	input.set_function("GetMousePosition", []() -> bool {
+		return Input::GetMousePosition;
 		});
 
 	std::initializer_list<std::pair<sol::string_view, Fracture::KeyCode>> keyItems =
@@ -179,12 +196,14 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 	};
 	L.new_enum<Fracture::KeyCode, false>("key", keyItems);
 }
+
 void Fracture::ScriptManager::BindMaths(sol::state& L)
 {
 	LuaBindGLM::BindVec2(L);
 	LuaBindGLM::BindVec3(L);
 	LuaBindGLM::BindVec4(L);
 }
+
 void Fracture::ScriptManager::BindApplication(sol::state& L)
 {
 
@@ -219,53 +238,61 @@ void Fracture::ScriptManager::Init()
 
 void Fracture::ScriptManager::onStart()
 {
-	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
 	{
-		if (mScripts.find(component->Script) == mScripts.end())
-			continue;
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
 
-		if (!component->HasScriptAttached)
-			continue;	
+			if (!component->HasScriptAttached)
+				continue;
 
-		if (component->HasStarted)
-			continue;
-
-		const auto& script = mScripts[component->Script];
-		script->Load(*lua);
-		script->BindFunctions(*lua);
-		script->BindProperties(*lua);
-		script->OnStart(*lua, component->GetID());
+			const auto& script = mScripts[component->Script];
+			script->Load(*lua);
+			script->BindFunctions(*lua);
+			script->BindProperties(*lua);
+			script->OnStart(*lua, component->GetID());
+		}
 	}
 }
 
 void Fracture::ScriptManager::onExit()
 {
-	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
 	{
-		if (mScripts.find(component->Script) == mScripts.end())
-			continue;
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
 
-		if (!component->HasScriptAttached)
-			continue;
+			if (!component->HasScriptAttached)
+				continue;
 
-		const auto& script = mScripts[component->Script];
-		script->OnExit(*lua, component->GetID());
+			const auto& script = mScripts[component->Script];
+			script->OnExit(*lua, component->GetID());
+		}
 	}
 }
 
 void Fracture::ScriptManager::onUpdate(float dt)
 {
-	for (const auto& component : SceneManager::GetAllComponents<ScriptComponent>())
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
 	{
-		if (mScripts.find(component->Script) == mScripts.end())
-			continue;
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
 
-		if (!component->HasScriptAttached)
-			continue;
-		
-		const auto& script = mScripts[component->Script];
-		script->OnUpdate(*lua,dt,component->GetID());
-		
+			if (!component->HasScriptAttached)
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnUpdate(*lua, dt, component->GetID());
+		}
 	}
 }
 

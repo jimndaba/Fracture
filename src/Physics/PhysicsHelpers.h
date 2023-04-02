@@ -14,16 +14,7 @@ namespace Fracture
 		Failure
 	};
 
-	enum class ForceMode : uint8_t
-	{
-		Force = 0,
-		Impulse,
-		VelocityChange,
-		Acceleration
-	};
-
-
-
+	
 	namespace PhysicsHelpers {
 
 		

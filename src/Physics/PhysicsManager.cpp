@@ -19,9 +19,14 @@ Fracture::PhysicsManager::PhysicsManager()
 {
 }
 
+Fracture::PhysicsManager::~PhysicsManager()
+{
+	Shutdown();
+}
+
 void Fracture::PhysicsManager::Init()
 {
-	static PxDefaultErrorCallback errorCallback; // the error appears because of this line
+	static PxDefaultErrorCallback errorCallback;
 	static PxDefaultAllocator allocatorCallback;
 
 	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocatorCallback, errorCallback);
@@ -38,18 +43,15 @@ void Fracture::PhysicsManager::Init()
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 	mPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	PxTolerancesScale scale = PxTolerancesScale();
-	//customizeTolerances(scale);
-
 	mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation,
-		scale, recordMemoryAllocations, mPvd);
+		PxTolerancesScale(), recordMemoryAllocations, mPvd);
 	if (!mPhysics)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Physics");
 		return;
 	}
 
-	mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(scale));
+	mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(PxTolerancesScale()));
 	if (!mCooking)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Cooking");
@@ -80,17 +82,22 @@ void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 
 void Fracture::PhysicsManager::Shutdown()
 {
-	DestroyScene();
+	//DestroyScene();
 
-	mActors.clear();
-	mColliders.clear();
-	mMaterials.clear();
-	mScene.release();
+	//mActors.clear();
+	//mColliders.clear();
+	//mMaterials.clear();
+	//mScene.release();
 	
 	if(mCooking)
 		mCooking->release();
+	
+	if (mPvd)
+	  mPvd->release();
+
 	if(mPhysics)
 		mPhysics->release();
+	
 	if(gFoundation)
 		gFoundation->release();
 }
@@ -113,7 +120,7 @@ void Fracture::PhysicsManager::DestroyScene()
 
 	if(mScene)
 		mScene->Destroy();
-	//FRACTURE_INFO("Physics Scene Destroyed");
+	FRACTURE_INFO("Physics Scene Destroyed");
 }
 
 void Fracture::PhysicsManager::OnDebugDraw()
@@ -241,4 +248,12 @@ physx::PxFilterFlags Fracture::PhysicsManager::FilterShader(physx::PxFilterObjec
 
 	return physx::PxFilterFlag::eSUPPRESS; 
 
+}
+
+physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID& entity)
+{
+	if (mActors.find(entity) == mActors.end())
+		return nullptr;
+
+	return mActors[entity];
 }

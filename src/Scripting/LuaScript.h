@@ -44,6 +44,11 @@ namespace Fracture
 		ScriptProperty(const ScriptProperty& other) {
 		}
 
+		inline bool operator == (const ScriptProperty& other) const {
+			return Name == other.Name;
+		}
+
+
 		~ScriptProperty() {};
 	};
 
@@ -72,7 +77,7 @@ namespace Fracture
 		void OnPropertyUpdate(sol::state& state, const Fracture::ScriptProperty& prop);
 
 		
-		std::unordered_map<std::string, Fracture::ScriptProperty> GetProperties();
+		std::vector<std::shared_ptr<Fracture::ScriptProperty>> GetProperties();
 
 		LuaScriptRegistry Description;
 	private:
@@ -88,7 +93,7 @@ namespace Fracture
 		std::shared_ptr<sol::protected_function> m_onCollision;
 		std::shared_ptr<sol::protected_function> m_onTrigger;
 
-		std::unordered_map<std::string, ScriptProperty> m_Properties;
+		std::vector<std::shared_ptr<Fracture::ScriptProperty>> m_Properties;
 
 	};
 
