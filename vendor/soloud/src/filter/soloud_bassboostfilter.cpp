@@ -21,10 +21,10 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
+#include "FracturePCH.h"
 #include <string.h>
-#include "soloud.h"
-#include "soloud_bassboostfilter.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_bassboostfilter.h"
 
 
 namespace SoLoud

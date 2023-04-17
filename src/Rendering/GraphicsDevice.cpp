@@ -93,7 +93,10 @@ void Fracture::GraphicsDevice::Startup()
         mGLightBuffer = std::make_shared<Buffer>();
         CreateBuffer(mGLightBuffer.get(), desc);
         SetBufferIndexRange(mGLightBuffer.get(), 0, 0);
+
+        mLightData.resize(MAX_LIGHTS);
     }
+
 
 }
 
@@ -299,8 +302,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         else
         {
             if (info.data.size())
-            {
-                // glTexImage2D(target, 0, internalFormat, desc.Width, desc.Height, 0, textureformat, formatType, texture->Data);
+            {               
                 uint32_t levels = 1;
                 if (info.GenMinMaps && info.MipLevels == 0)
                 {
@@ -310,17 +312,11 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
                 {
                     levels = info.MipLevels;
                 }
-
-                //glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 glTexImage2D(target, 0,internalFormat, info.Width, info.Height,0,textureformat,formatType,info.data.data()); glCheckError();
-
-                //glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, info.data);  glCheckError();
-              
             }
             else
-            {
-                //glTexImage2D(target, 0, internalFormat, desc.Width, desc.Height, 0, textureformat, formatType, NULL);
+            {                
                 uint32_t levels = 1;
                 if (info.GenMinMaps && info.MipLevels == 0)
                 {
@@ -332,30 +328,20 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
                 }       
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, NULL); glCheckError();
-                //glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
-               // glTexSubImage2D(target, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();
-
             }
         }
     }
 
     if (info.GenMinMaps)
     {
-        //glGenerateMipmap(target);
         glGenerateTextureMipmap(texture->Handle);
         glCheckError();
     }
 
     if (info.data.size())
     {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-        //TextureLoader::FreeData(texture->Data);
-
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      
     }
-
-
-    //mGraphicsMemory += texture->Description.GetSize();
-
     glBindTexture(target, 0);
        
 }

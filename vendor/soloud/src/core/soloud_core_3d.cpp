@@ -22,8 +22,9 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "FracturePCH.h"
 #include <math.h>
-#include "soloud_internal.h"
+#include "soloud/soloud_internal.h"
 
 // 3d audio operations
 

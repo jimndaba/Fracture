@@ -24,11 +24,11 @@ distribution.
 
 #undef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-
+#include "FracturePCH.h"
 #include <stdio.h>
 #include <string.h>
-#include "soloud.h"
-#include "soloud_file.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_file.h"
 
 namespace SoLoud
 {

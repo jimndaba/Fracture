@@ -59,6 +59,8 @@ freely, subject to the following restrictions:
 #define WITH_SDL1_STATIC
 #endif
 
+#define WITH_OPENAL
+
 #ifndef M_PI
 #define M_PI 3.14159265359
 #endif

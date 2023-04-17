@@ -22,6 +22,7 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "FracturePCH.h"
 #if defined(_WIN32)||defined(_WIN64)
 #include <windows.h>
 #else
@@ -31,8 +32,9 @@ freely, subject to the following restrictions:
 #include <time.h>
 #endif
 
-#include "soloud.h"
-#include "soloud_thread.h"
+
+#include "soloud/soloud.h"
+#include "soloud/soloud_thread.h"
 
 namespace SoLoud
 {

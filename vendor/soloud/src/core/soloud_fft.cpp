@@ -23,9 +23,9 @@ freely, subject to the following restrictions:
 */
 
 // FFT based on fftreal by Laurent de Soras, under WTFPL
-
-#include "soloud.h"
-#include "soloud_fft.h"
+#include "FracturePCH.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_fft.h"
 #include <string.h>
 
 namespace fftimpl

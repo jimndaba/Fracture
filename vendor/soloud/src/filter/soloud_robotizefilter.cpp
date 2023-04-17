@@ -21,11 +21,11 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
+#include "FracturePCH.h"
 #include <string.h>
-#include "soloud.h"
-#include "soloud_misc.h"
-#include "soloud_robotizefilter.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_misc.h"
+#include "soloud/soloud_robotizefilter.h"
 
 namespace SoLoud
 {

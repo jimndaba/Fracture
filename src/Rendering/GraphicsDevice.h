@@ -65,6 +65,7 @@ namespace Fracture
 
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGLightBuffer;
+		std::shared_ptr<Buffer> mPostProcessingBuffer;
 
 		const int MAX_LIGHTS = 1024;
 		std::vector<LightData> mLightData;

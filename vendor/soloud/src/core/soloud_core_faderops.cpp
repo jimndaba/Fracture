@@ -21,8 +21,8 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
-#include "soloud_internal.h"
+#include "FracturePCH.h"
+#include "soloud/soloud_internal.h"
 
 // Core operations related to faders (not including filters)
 

@@ -59,9 +59,9 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx;$(ProjectDir)vendor\pxshared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\soloud\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx;$(ProjectDir)vendor\pxshared</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\physx\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\soloud\</AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -69,8 +69,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;lua54.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\;E:\Development\Fracture\vendor\soloud\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;lua54.lib;common.lib;ex-common.lib;OpenAL32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -105,6 +105,7 @@
     <ClInclude Include="src\Assets\ImagerLoader.h" />
     <ClInclude Include="src\Assets\MaterialLoader.h" />
     <ClInclude Include="src\Assets\MeshLoader.h" />
+    <ClInclude Include="src\Audio\AudioManager.h" />
     <ClInclude Include="src\Common\AppWindow.h" />
     <ClInclude Include="src\Common\Frustum.h" />
     <ClInclude Include="src\Common\Math.h" />
@@ -176,12 +177,52 @@
     <ClInclude Include="src\World\SceneManager.h" />
     <ClInclude Include="src\World\TransformSystem.h" />
     <ClInclude Include="vendor\nlohmann\json.hpp" />
+    <ClInclude Include="vendor\soloud\soloud.h" />
+    <ClInclude Include="vendor\soloud\soloud_audiosource.h" />
+    <ClInclude Include="vendor\soloud\soloud_bassboostfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_biquadresonantfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_bus.h" />
+    <ClInclude Include="vendor\soloud\soloud_c.h" />
+    <ClInclude Include="vendor\soloud\soloud_dcremovalfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_echofilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_error.h" />
+    <ClInclude Include="vendor\soloud\soloud_fader.h" />
+    <ClInclude Include="vendor\soloud\soloud_fft.h" />
+    <ClInclude Include="vendor\soloud\soloud_fftfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_file.h" />
+    <ClInclude Include="vendor\soloud\soloud_file_hack_off.h" />
+    <ClInclude Include="vendor\soloud\soloud_file_hack_on.h" />
+    <ClInclude Include="vendor\soloud\soloud_filter.h" />
+    <ClInclude Include="vendor\soloud\soloud_flangerfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_freeverbfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_internal.h" />
+    <ClInclude Include="vendor\soloud\soloud_lofifilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_misc.h" />
+    <ClInclude Include="vendor\soloud\soloud_monotone.h" />
+    <ClInclude Include="vendor\soloud\soloud_noise.h" />
+    <ClInclude Include="vendor\soloud\soloud_openmpt.h" />
+    <ClInclude Include="vendor\soloud\soloud_queue.h" />
+    <ClInclude Include="vendor\soloud\soloud_robotizefilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_sfxr.h" />
+    <ClInclude Include="vendor\soloud\soloud_speech.h" />
+    <ClInclude Include="vendor\soloud\soloud_tedsid.h" />
+    <ClInclude Include="vendor\soloud\soloud_thread.h" />
+    <ClInclude Include="vendor\soloud\soloud_vic.h" />
+    <ClInclude Include="vendor\soloud\soloud_vizsn.h" />
+    <ClInclude Include="vendor\soloud\soloud_wav.h" />
+    <ClInclude Include="vendor\soloud\soloud_waveshaperfilter.h" />
+    <ClInclude Include="vendor\soloud\soloud_wavstream.h" />
+    <ClInclude Include="vendor\soloud\src\audiosource\wav\dr_flac.h" />
+    <ClInclude Include="vendor\soloud\src\audiosource\wav\dr_mp3.h" />
+    <ClInclude Include="vendor\soloud\src\audiosource\wav\dr_wav.h" />
+    <ClInclude Include="vendor\soloud\src\audiosource\wav\stb_vorbis.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Assets\AssetManager.cpp" />
     <ClCompile Include="src\Assets\ImagerLoader.cpp" />
     <ClCompile Include="src\Assets\MaterialLoader.cpp" />
     <ClCompile Include="src\Assets\MeshLoader.cpp" />
+    <ClCompile Include="src\Audio\AudioManager.cpp" />
     <ClCompile Include="src\Common\AppWindow.cpp" />
     <ClCompile Include="src\Common\FractureApp.cpp" />
     <ClCompile Include="src\Common\Frustum.cpp" />
@@ -247,6 +288,110 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="vendor\soloud\soloud_openal_dll.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\audiosource\wav\dr_impl.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\audiosource\wav\soloud_wav.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\audiosource\wav\soloud_wavstream.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\audiosource\wav\stb_vorbis.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_audiosource.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_bus.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_3d.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_basicops.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_faderops.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_filterops.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_getters.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_setters.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_voicegroup.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_core_voiceops.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_fader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_fft.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_fft_lut.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_file.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_filter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_misc.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_queue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\core\soloud_thread.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_bassboostfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_biquadresonantfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_dcremovalfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_echofilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_fftfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_flangerfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_freeverbfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_lofifilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_robotizefilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\src\filter\soloud_waveshaperfilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\soloud\soloud_openal.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

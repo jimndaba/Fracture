@@ -21,13 +21,13 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
+#include "FracturePCH.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "soloud.h"
-#include "soloud_wav.h"
-#include "soloud_file.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_wav.h"
+#include "soloud/soloud_file.h"
 #include "stb_vorbis.h"
 #include "dr_mp3.h"
 #include "dr_wav.h"

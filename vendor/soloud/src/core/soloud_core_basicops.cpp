@@ -21,9 +21,9 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
+#include "FracturePCH.h"
 #include <string.h>
-#include "soloud_internal.h"
+#include "soloud/soloud_internal.h"
 
 // Core "basic" operations - play, stop, etc
 

@@ -22,10 +22,11 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+#include "FracturePCH.h"
 #include <math.h>
 #include <string.h>
-#include "soloud.h"
-#include "soloud_freeverbfilter.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_freeverbfilter.h"
 
 
 namespace SoLoud

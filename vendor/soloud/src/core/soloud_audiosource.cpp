@@ -21,8 +21,8 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 */
-
-#include "soloud.h"
+#include "FracturePCH.h"
+#include "soloud/soloud.h"
 
 namespace SoLoud
 {

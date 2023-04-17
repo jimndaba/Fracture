@@ -26,11 +26,11 @@ freely, subject to the following restrictions:
 Based on "Using the Biquad Resonant Filter", 
 Phil Burk, Game Programming Gems 3, p. 606
 */
-
+#include "FracturePCH.h"
 #include <math.h>
 #include <string.h>
-#include "soloud.h"
-#include "soloud_biquadresonantfilter.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_biquadresonantfilter.h"
 
 namespace SoLoud
 {

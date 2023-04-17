@@ -28,7 +28,7 @@ freely, subject to the following restrictions:
 */
 
 /* SoLoud Lookup Table Generator (c)2015 Jari Komppa http://iki.fi/sol/ */
-
+#include "FracturePCH.h"
 int Soloud_fft_bitrev_10[1024] = {
 0, 512, 256, 768, 128, 640, 384, 896, 64, 576, 320, 832, 192, 704, 448, 
 960, 32, 544, 288, 800, 160, 672, 416, 928, 96, 608, 352, 864, 224, 736, 

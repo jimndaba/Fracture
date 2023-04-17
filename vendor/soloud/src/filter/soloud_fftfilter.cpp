@@ -22,10 +22,12 @@ freely, subject to the following restrictions:
    distribution.
 */
 
+
+#include "FracturePCH.h"
 #include <string.h>
-#include "soloud.h"
-#include "soloud_fftfilter.h"
-#include "soloud_fft.h"
+#include "soloud/soloud.h"
+#include "soloud/soloud_fftfilter.h"
+#include "soloud/soloud_fft.h"
 
 
 namespace SoLoud
