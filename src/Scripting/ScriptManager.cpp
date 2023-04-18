@@ -46,6 +46,17 @@ void Fracture::ScriptManager::BindCore(sol::state& lua)
 	lua.new_usertype<Fracture::IComponent>("Component",
 		sol::meta_function::to_string, [](Fracture::IComponent& e) { return fmt::format("Component : {}", e.GetID()); }
 	);
+
+	lua.new_usertype<Fracture::UUID>("UUID",
+		// Constructor 
+		sol::constructors <
+		UUID()>(),
+
+		sol::meta_function::to_string, [](Fracture::UUID& e) { return fmt::format("UUID : {}", e); }
+	);
+
+	//Constructors
+	lua.set_function("UUID", []() {return UUID(); });
 }
 
 void Fracture::ScriptManager::BindFunctions(sol::state& lua)
@@ -213,6 +224,7 @@ void Fracture::ScriptManager::Init()
 {
 	lua = new(sol::state);
 	lua->open_libraries(sol::lib::base);
+
 	BindCore(*lua);
 	BindLog(*lua);
 	BindInput(*lua);

@@ -233,6 +233,11 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
                     prop->Type = PROPERTY_TYPE::VEC4;
                     prop->Vec4 = mvalue.as<glm::vec4>();
                 }
+                if (mvalue.is<Fracture::UUID>())
+                {
+                    prop->Type = PROPERTY_TYPE::UUID;
+                    prop->ID = mvalue.as<Fracture::UUID>();
+                }
                 prop->Name = k;
                 m_Properties.push_back(prop);
                 break;

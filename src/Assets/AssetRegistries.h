@@ -87,6 +87,12 @@ namespace Fracture
 		std::string Path;
 	};
 
+	struct AudioRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
 
 
 }

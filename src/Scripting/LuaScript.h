@@ -9,6 +9,7 @@ namespace Fracture
 {
 	enum class PROPERTY_TYPE
 	{
+		UUID,
 		STRING,
 		BOOL,
 		INT,
@@ -37,6 +38,7 @@ namespace Fracture
 			glm::vec4 Vec4;
 			glm::vec3 Color3;
 			glm::vec4 Color4;
+			Fracture::UUID ID;
 		};
 
 		ScriptProperty() {};

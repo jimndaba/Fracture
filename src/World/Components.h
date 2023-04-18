@@ -252,6 +252,24 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
+
+	struct AudioSourceComponent : public IComponent
+	{
+		AudioSourceComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {}
+
+		UUID entity;
+		UUID GetID() { return entity; }
+
+		UUID AudiClip;
+
+		float Volume;
+		float Pan;
+
+		bool Mute;
+		bool Looping;
+		bool Is3DSource;
+	};
 }
 
 

@@ -155,6 +155,18 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ScriptComponent* co
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::AudioSourceComponent* component)
+{
+	BeginStruct("AudioSourceComponent");
+	Property("AudioClip", component->AudiClip);
+	Property("Volume", component->Volume);
+	Property("Pan", component->Pan);
+	Property("Is3DSource", component->Is3DSource);
+	Property("Looping", component->Looping);
+	Property("Mute", component->Mute);
+	EndStruct();
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -351,6 +363,22 @@ void Fracture::SceneSerialiser::ReadCameraComponentIfExists(Fracture::UUID entit
 		camera->Sensitivity = FLOAT("Sensitivity");
 	
 		SceneManager::AddComponentByInstance<CameraComponent>(entity_id, camera);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadAudioSourceComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("AudioSourceComponent"))
+	{
+		auto comp = std::make_shared<AudioSourceComponent>(entity_id);
+		comp->AudiClip = ID("AudioClip");
+		comp->Pan = FLOAT("Pan");
+		comp->Volume = FLOAT("Pan");
+		comp->Is3DSource = BOOL("Is3DSource");
+		comp->Looping = BOOL("Looping");
+		comp->Mute = BOOL("Mute");
+		SceneManager::AddComponentByInstance<AudioSourceComponent>(entity_id, comp);
 		EndStruct();
 	}
 }
