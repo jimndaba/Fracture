@@ -6,8 +6,8 @@
 
 #### Member
 
-`Transform.Name` : The Entity Name Tag
-`Transform.ID`   : The Entity ID
+>`Transform.Name` : The Entity Name Tag
+>`Transform.ID`   : The Entity ID
 
 * * *
 
