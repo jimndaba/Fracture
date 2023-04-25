@@ -25,4 +25,5 @@ Fracture::Frustum Fracture::Frustum::CreateFrustumFromCamera(const CameraCompone
                             glm::cross(frontMultFar + cam->Up * halfVSide, cam->Right) };
     return frustum;
     */
+    return Fracture::Frustum();
 }

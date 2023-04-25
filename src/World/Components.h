@@ -27,7 +27,7 @@ namespace Fracture
 	struct TransformComponent : public IComponent
 	{
 		TransformComponent() :IComponent() {};
-		TransformComponent(const UUID& id, glm::vec3 pos = glm::vec3(0), glm::vec3 scale = glm::vec3(1), glm::quat rot = glm::quat(0,0,0,0))
+		TransformComponent(const UUID& id, glm::vec3 pos = glm::vec3(0), glm::vec3 scale = glm::vec3(1), glm::quat rot = glm::quat(0,-1,0,0))
 			:IComponent(), Position(pos), Scale(scale), Rotation(rot),entity(id) {}
 
 		UUID entity;
@@ -228,13 +228,7 @@ namespace Fracture
 		float Radius = 1.0f;
 		float Height = 1.0f;
 		glm::vec3 Offset = glm::vec3(0);
-
-		physx::PxShape& GetShape()
-		{
-			return *btCollisionShape;
-		}
-
-		physx::PxShape* btCollisionShape;
+		bool IsTrigger = false;
 	};
 
 	struct ScriptComponent : public IComponent

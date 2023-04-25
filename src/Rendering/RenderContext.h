@@ -34,6 +34,7 @@ namespace Fracture
 		std::stack<SortKey> KeyStack;
 
 		std::map<Fracture::UUID, std::map<Fracture::UUID, std::vector<glm::mat4>>> Renderable_batch;
+		std::map<Fracture::UUID, std::vector<glm::vec4>> EntityIndeces;
 
 		uint32_t CurrentProgram;
 

@@ -25,6 +25,7 @@ GLenum ShaderDataTypeToOpenGLBaseType(Fracture::ShaderDataType type)
     case Fracture::ShaderDataType::Float2:   return GL_FLOAT;
     case Fracture::ShaderDataType::Float3:   return GL_FLOAT;
     case Fracture::ShaderDataType::Float4:   return GL_FLOAT;
+    case Fracture::ShaderDataType::Float4Instanced:   return GL_FLOAT;
     case Fracture::ShaderDataType::Mat3:     return GL_FLOAT;
     case Fracture::ShaderDataType::Mat4:     return GL_FLOAT;
     case Fracture::ShaderDataType::Int:      return GL_INT;
@@ -191,42 +192,104 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
 {
     uint32_t attribIndex = 0;
     uint32_t bindingIndex = 0;
+    bool lastWasInterleaved = false;
     for (const auto& attribute : info.Layout.Attributes)
     {
         auto shadertype = ShaderDataTypeToOpenGLBaseType(attribute.Type);
         auto count = attribute.GetCount();
         auto stride = info.Layout.GetStride();     
-        
-        if (attribute.Type == ShaderDataType::Mat4)
+            
+
+
+        switch (attribute.Type)
         {
-            for (uint32_t i = 0; i < count; i++)
+            case ShaderDataType::Mat3:
+            case ShaderDataType::Mat4:
             {
-              
-                glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE,((sizeof(float) * count) * i)); glCheckError(); 
-                glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
-                glVertexArrayBindingDivisor(vao, attribIndex, 1);	glCheckError();
+                for (uint32_t i = 0; i < count; i++)
+                {
 
-                attribIndex++;
+                    glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, ((sizeof(float) * count) * i)); glCheckError();
+                    glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    if (attribute.Instanced)
+                        glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
+
+                    attribIndex++;
+                }
+                bindingIndex += count;
+                break;
+            }           
+            case ShaderDataType::Int:
+            case ShaderDataType::Int2:
+            case ShaderDataType::Int3:
+            case ShaderDataType::Int4:
+            {
+                if (attribute.Interleaved)
+                {
+                    glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    glVertexArrayAttribBinding(vao, attribIndex, 0); glCheckError();
+                    glVertexArrayAttribIFormat(vao, attribIndex, count, shadertype, attribute.Offset); glCheckError();
+
+                    if (attribute.Instanced)
+                    {
+                        glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
+                    }
+                    attribIndex++;
+                }
+                else
+                {
+                    glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
+                    glVertexArrayAttribIFormat(vao, attribIndex, count, shadertype, 0); glCheckError();
+
+                    if (attribute.Instanced)
+                    {
+                        glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
+
+                    }
+                    attribIndex++;
+                }
+                bindingIndex++;
+                break;
             }
-        }
-        if (attribute.Interleaved)
-        {
-            glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
-            glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-            glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
-            attribIndex++;
-        }
-        else
-        {
-            glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
-            glVertexArrayAttribBinding(vao, attribIndex, 0); glCheckError();
-            glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
-         
+            case ShaderDataType::Bool:
+            case ShaderDataType::Float:
+            case ShaderDataType::Float2:
+            case ShaderDataType::Float3:
+            case ShaderDataType::Float4:
+            case ShaderDataType::Float4Instanced:
+            {
+                if (attribute.Interleaved)
+                {
+                    glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    glVertexArrayAttribBinding(vao, attribIndex, 0); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
 
-            attribIndex++;
+                    if (attribute.Instanced)
+                    {
+                        glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
+                    }
+                    attribIndex++;
+                }
+                else
+                {
+                    glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, 0); glCheckError();
+
+                    if (attribute.Instanced)
+                    {
+                        glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
+
+                    }
+                    attribIndex++;
+                }
+                bindingIndex++;
+                break;
+            }       
         }
-        bindingIndex++;
+        
     }
 }
 

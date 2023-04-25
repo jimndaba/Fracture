@@ -15,6 +15,7 @@ namespace Fracture
 		case Fracture::ShaderDataType::Float2:   return 4 * 2;
 		case Fracture::ShaderDataType::Float3:   return 4 * 3;
 		case Fracture::ShaderDataType::Float4:   return 4 * 4;
+		case Fracture::ShaderDataType::Float4Instanced:   return 4 * 4;
 		case Fracture::ShaderDataType::Mat3:     return 4 * 3 * 3;
 		case Fracture::ShaderDataType::Mat4:     return 4 * 4 * 4;
 		case Fracture::ShaderDataType::Int:      return 4;
@@ -28,11 +29,13 @@ namespace Fracture
 
 	struct VertexArrayAttribute
 	{
-		VertexArrayAttribute(ShaderDataType shadertype, const std::string& name, int Divisor = 0) :
-			Name(name), Type(shadertype), Offset(0), Size(ShaderDataTypeSize(shadertype)), divisor(Divisor)
+		VertexArrayAttribute(ShaderDataType shadertype, const std::string& name, int Divisor = 0, bool interleaved = false) :
+			Name(name), Type(shadertype), Offset(0), Size(ShaderDataTypeSize(shadertype)), divisor(Divisor),Interleaved(interleaved)
 		{
 			if (Divisor > 0)
 				Instanced = true;
+
+
 		}
 
 		~VertexArrayAttribute() = default;
@@ -61,6 +64,7 @@ namespace Fracture
 			case ShaderDataType::Int3:    return 3;
 			case ShaderDataType::Int4:    return 4;
 			case ShaderDataType::Bool:    return 1;
+			case ShaderDataType::Float4Instanced:    return 4;
 			}
 
 			return 0;

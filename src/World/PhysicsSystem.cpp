@@ -16,7 +16,7 @@ void Fracture::PhysicsSystem::AddForce(const std::shared_ptr<RigidbodyComponent>
 		FRACTURE_WARN("Trying to add force to non-dynamic PhysicsActor.");
 		return;
 	}
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->addForce(PhysicsHelpers::ToPhysXVector(force), (physx::PxForceMode::Enum)mode);
 }
 
@@ -28,7 +28,7 @@ void Fracture::PhysicsSystem::AddTorque(const std::shared_ptr<RigidbodyComponent
 		return;
 	}
 
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->addTorque(PhysicsHelpers::ToPhysXVector(torque), (physx::PxForceMode::Enum)forceMode);
 }
 
@@ -40,7 +40,7 @@ void Fracture::PhysicsSystem::SetLinearVelocity(const std::shared_ptr<RigidbodyC
 		return;
 	}
 
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->setLinearVelocity(PhysicsHelpers::ToPhysXVector(velocity));
 }
 
@@ -52,7 +52,7 @@ void Fracture::PhysicsSystem::SetAngularVelocity(const std::shared_ptr<Rigidbody
 		return;
 	}
 
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->setAngularVelocity(PhysicsHelpers::ToPhysXVector(velocity));
 
 }
@@ -65,7 +65,7 @@ void Fracture::PhysicsSystem::SetLinearDrag(const std::shared_ptr<RigidbodyCompo
 		return;
 	}
 
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->setLinearDamping(drag);
 	component->LinearDrag = drag;
 }
@@ -77,7 +77,7 @@ void Fracture::PhysicsSystem::SetAngularDrag(const std::shared_ptr<RigidbodyComp
 		FRACTURE_WARN("Trying to set angular drag of non-dynamic PhysicsActor.");
 	}
 
-	physx::PxRigidDynamic* actor = PhysicsManager::GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
+	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
 	actor->setAngularDamping(drag);
 	component->AngularDrag = drag;
 }

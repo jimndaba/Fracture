@@ -7,13 +7,17 @@
 
 using namespace physx;
 
+std::unique_ptr<Fracture::PhysicsManager> Fracture::PhysicsManager::mInstance;
 
-std::unordered_map<Fracture::UUID, physx::PxRigidActor*> Fracture::PhysicsManager::mActors;
-std::unordered_map<Fracture::UUID, physx::PxShape*> Fracture::PhysicsManager::mColliders;
-std::unordered_map<Fracture::UUID, physx::PxMaterial*> Fracture::PhysicsManager::mMaterials;
-physx::PxPhysics* Fracture::PhysicsManager::mPhysics;
-physx::PxCpuDispatcher* Fracture::PhysicsManager::mDispacther;
-std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsManager::mScene;
+//std::unordered_map<Fracture::UUID, physx::PxRigidActor*> Fracture::PhysicsManager::mActors;
+//std::unordered_map<Fracture::UUID, physx::PxShape*> Fracture::PhysicsManager::mColliders;
+//std::unordered_map<Fracture::UUID, physx::PxMaterial*> Fracture::PhysicsManager::mMaterials;
+//physx::PxPhysics* Fracture::PhysicsManager::mPhysics;
+//physx::PxCpuDispatcher* Fracture::PhysicsManager::mDispacther;
+//std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsManager::mScene;
+
+static PxDefaultErrorCallback errorCallback;
+static PxDefaultAllocator allocatorCallback;
 
 Fracture::PhysicsManager::PhysicsManager()
 {
@@ -21,16 +25,17 @@ Fracture::PhysicsManager::PhysicsManager()
 
 Fracture::PhysicsManager::~PhysicsManager()
 {
-	Shutdown();
+
 }
 
 void Fracture::PhysicsManager::Init()
 {
-	static PxDefaultErrorCallback errorCallback;
-	static PxDefaultAllocator allocatorCallback;
+	mInstance = std::make_unique<PhysicsManager>();
 
-	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocatorCallback, errorCallback);
-	if (!gFoundation)
+	
+
+	mInstance->gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocatorCallback, errorCallback);
+	if (!mInstance->gFoundation)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Foundation");
 		return;
@@ -39,101 +44,115 @@ void Fracture::PhysicsManager::Init()
 
 	bool recordMemoryAllocations = true;
 
-	mPvd = PxCreatePvd(*gFoundation);
+	mInstance->mPvd = PxCreatePvd(*mInstance->gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
-	mPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
+	mInstance->mPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation,
-		PxTolerancesScale(), recordMemoryAllocations, mPvd);
-	if (!mPhysics)
+	mInstance->mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mInstance->gFoundation,
+		PxTolerancesScale(), recordMemoryAllocations, mInstance->mPvd);
+	if (!mInstance->mPhysics)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Physics");
 		return;
 	}
 
-	mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(PxTolerancesScale()));
-	if (!mCooking)
+	mInstance->mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *mInstance->gFoundation, PxCookingParams(PxTolerancesScale()));
+	if (!mInstance->mCooking)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Cooking");
 		return;
 	}
 	FRACTURE_INFO("Physics Engine Init");
 
-	mDispacther = physx::PxDefaultCpuDispatcherCreate(2);
+	mInstance->mDispacther = physx::PxDefaultCpuDispatcherCreate(2);
 	
 }
 
 void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 {
-	mScene->FixedUpdate(dt);
-
+	mInstance->mScene->FixedUpdate(dt);
 	
 	const auto& components = SceneManager::GetAllComponents<RigidbodyComponent>();
 	for (const auto& rigidbody : components)
 	{
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(rigidbody->GetID());
-		physx::PxTransform actorPose = mActors[rigidbody->GetID()]->getGlobalPose();
+		physx::PxTransform actorPose = mInstance->mActors[rigidbody->GetID()]->getGlobalPose();
 		transform->Position = PhysicsHelpers::FromPhysXVector(actorPose.p);		
 		transform->Rotation = PhysicsHelpers::FromPhysXQuat(actorPose.q);
 		transform->IsDirty = true;
-
 	}
+
 }
+
 
 void Fracture::PhysicsManager::Shutdown()
 {
-	//DestroyScene();
+	if (mInstance)
+	{
+		mInstance->DestroyScene();
 
-	//mActors.clear();
-	//mColliders.clear();
-	//mMaterials.clear();
-	//mScene.release();
-	
-	if(mCooking)
-		mCooking->release();
-	
-	if (mPvd)
-	  mPvd->release();
+		if (mInstance->mPhysics)
+		{
+			mInstance->mPhysics->release();
+			mInstance->mPhysics = NULL;
+		}
 
-	if(mPhysics)
-		mPhysics->release();
-	
-	if(gFoundation)
-		gFoundation->release();
+		if (mInstance->mCooking)
+		{
+			mInstance->mCooking->release();
+			mInstance->mCooking = NULL;
+		}
+
+		if (mInstance->mPvd)
+		{
+			mInstance->mPvd->release();
+			mInstance->mPvd = NULL;
+		}
+
+		if (gFoundation)
+		{
+			mInstance->gFoundation->release();
+			mInstance->gFoundation = NULL;
+		}
+	}
+
 }
 
 Fracture::PhysicsScene* Fracture::PhysicsManager::GetScene()
 {
-	return mScene.get();
+	return mInstance->mScene.get();
 }
 
 void Fracture::PhysicsManager::CreateScene()
 {
-	mScene = PhysicsScene::Create(mPhysics, mDispacther);
+	mInstance->mScene = PhysicsScene::Create(mInstance->mPhysics, mInstance->mDispacther);
 }
 
 void Fracture::PhysicsManager::DestroyScene()
 {
-	mActors.clear();
-	mColliders.clear();
-	mMaterials.clear();
+	if (mInstance->mScene)
+	{
+		mInstance->mActors.clear();
+		mInstance->mColliders.clear();
+		mInstance->mMaterials.clear();
 
-	if(mScene)
-		mScene->Destroy();
-	FRACTURE_INFO("Physics Scene Destroyed");
+		if (mInstance->mScene)
+			mInstance->mScene->Destroy();
+		FRACTURE_INFO("Physics Scene Destroyed");
+	}
 }
 
 void Fracture::PhysicsManager::OnDebugDraw()
 {
-	if (mScene)
+	if (mInstance->mScene)
 	{
-		mScene->OnDebugDraw();
+		mInstance->mScene->OnDebugDraw();
 	}
 }
 
 void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 {
-	if (mScene)
+	if (mInstance->mScene)
 	{
 		if (SceneManager::HasComponent<RigidbodyComponent>(mEntity))
 		{
@@ -142,14 +161,14 @@ void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 
 			if (!rigidbody->IsDynamic)
 			{
-				mActors[mEntity] = mPhysics->createRigidStatic(PhysicsHelpers::ToPhysXTransform(transform->WorldTransform));
+				mInstance->mActors[mEntity] = mInstance->mPhysics->createRigidStatic(PhysicsHelpers::ToPhysXTransform(transform->WorldTransform));
 			}
 			else
 			{
-				mActors[mEntity] = mPhysics->createRigidDynamic(PhysicsHelpers::ToPhysXTransform(transform->WorldTransform));
+				mInstance->mActors[mEntity] = mInstance->mPhysics->createRigidDynamic(PhysicsHelpers::ToPhysXTransform(transform->WorldTransform));
 				FRACTURE_TRACE("Creating Dynamic Rigidbody");
 
-				const auto& actor = mActors[mEntity]->is<physx::PxRigidDynamic>();
+				const auto& actor = mInstance->mActors[mEntity]->is<physx::PxRigidDynamic>();
 				actor->setMass(rigidbody->Mass);
 				//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
@@ -167,58 +186,58 @@ void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 					case ColliderType::Sphere:
 					{
 						physx::PxSphereGeometry geometry = physx::PxSphereGeometry(collider->Radius);
-						mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mActors[mEntity], geometry, *mMaterials[mEntity]);
-						mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
 
 						break;
 					}
 					case ColliderType::Box:
 					{
 						physx::PxBoxGeometry geometry = physx::PxBoxGeometry(collider->Size.x, collider->Size.y, collider->Size.z);
-						mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mActors[mEntity], geometry, *mMaterials[mEntity]);
-						mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
 						break;
 					}
 					case ColliderType::Capsule:
 					{
 						physx::PxCapsuleGeometry geometry = physx::PxCapsuleGeometry(collider->Radius, collider->Height);
-						mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mActors[mEntity], geometry, *mMaterials[mEntity]);
-						mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
 						break;
 					}
 					}
 
 				}
-				mActors[mEntity]->attachShape(*mColliders[mEntity]);
+				mInstance->mActors[mEntity]->attachShape(*mInstance->mColliders[mEntity]);
 			}
 
 			//const auto& name = SceneManager::CurrenScene()->GetComponent<TagComponent>(ID)->Name;
 			//m_RigidActor->setName(name.c_str());
-			mActors[mEntity]->userData = rigidbody.get();
+			mInstance->mActors[mEntity]->userData = rigidbody.get();
 
 
-			mScene->AddActor(*mActors[mEntity]);
+			mInstance->mScene->AddActor(*mActors[mEntity]);
 		}
 	}
 }
 
 void Fracture::PhysicsManager::RemoveActors(const UUID& mEntity)
 {
-	if (mScene)
-		mScene->RemoveActor(*mActors[mEntity]);
+	if (mInstance->mScene)
+		mInstance->mScene->RemoveActor(*mInstance->mActors[mEntity]);
 }
 
 physx::PxPhysics& Fracture::PhysicsManager::GetPhysicsSDK()
 {
-	return *mPhysics;
+	return *mInstance->mPhysics;
 }
 
 physx::PxCpuDispatcher* Fracture::PhysicsManager::GetCPUDispatcher()
 {
-	return mDispacther;
+	return mInstance->mDispacther;
 }
 
 physx::PxFilterFlags Fracture::PhysicsManager::FilterShader(physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize)
@@ -252,8 +271,13 @@ physx::PxFilterFlags Fracture::PhysicsManager::FilterShader(physx::PxFilterObjec
 
 physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID& entity)
 {
-	if (mActors.find(entity) == mActors.end())
+	if (mInstance->mActors.find(entity) == mInstance->mActors.end())
 		return nullptr;
 
-	return mActors[entity];
+	return mInstance->mActors[entity];
+}
+
+Fracture::PhysicsManager* Fracture::PhysicsManager::Instance()
+{
+	return mInstance.get();
 }

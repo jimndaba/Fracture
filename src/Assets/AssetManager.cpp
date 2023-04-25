@@ -252,10 +252,11 @@ void Fracture::AssetManager::OnLoad()
 				VertexArrayCreationInfo info;
 				info.Layout =
 				{
-					{ ShaderDataType::Float3,"aPos" },
-					{ ShaderDataType::Float3,"aNormal" },
-					{ ShaderDataType::Float2,"aUV" },
-					{ ShaderDataType::Mat4, "instanceMatrix;" }
+					{ ShaderDataType::Float3,"aPos",0,true },
+					{ ShaderDataType::Float3,"aNormal" ,0,true},
+					{ ShaderDataType::Float2,"aUV" ,0,true},
+					{ ShaderDataType::Mat4, "instanceMatrix",1 },
+					{ ShaderDataType::Int4,"aEntityID",1 }
 				};
 
 			
@@ -272,7 +273,18 @@ void Fracture::AssetManager::OnLoad()
 					mesh->VBO_Buffer = std::make_shared<Buffer>();
 					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
-				}				
+				}					
+				{
+					BufferDescription desc;
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(glm::vec4) * 1024;
+					desc.usage = BufferUsage::Static;
+					desc.Name = "EntityIDBuffer";
+					desc.data = nullptr;
+					mesh->EntityID_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
+				}
 				{
 					BufferDescription desc;
 					desc.bufferType = BufferType::ArrayBuffer;

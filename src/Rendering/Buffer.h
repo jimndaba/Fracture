@@ -17,7 +17,8 @@ namespace Fracture
 		Int2,
 		Int3,
 		Int4,
-		Bool
+		Bool,
+		Float4Instanced
 	};
 
 	enum class BufferUsage
@@ -68,6 +69,7 @@ namespace Fracture
 			case ShaderDataType::Int3:    return 3;
 			case ShaderDataType::Int4:    return 4;
 			case ShaderDataType::Bool:    return 1;
+			case ShaderDataType::Float4Instanced:    return 4;
 			}
 
 			return 0;

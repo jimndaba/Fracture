@@ -47,6 +47,7 @@ namespace Fracture
 		std::vector<uint32_t> mMaterials;
 		
 		uint32_t VAO;
+		std::shared_ptr<Buffer> EntityID_Buffer;
 		std::shared_ptr<Buffer> Matrix_Buffer;
 		std::shared_ptr<Buffer> VBO_Buffer;
 		std::shared_ptr<Buffer> EBO_Buffer;

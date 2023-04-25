@@ -64,16 +64,6 @@ void Fracture::ForwardPass::Execute()
 						AssetManager::Instance()->AsyncLoadMaterialByID(mesh->mMaterials[sub.MaterialIndex]);
 				}			
 
-			
-				int r = ((uint32_t)entity.first & 0x000000FF) >> 0;
-				int g = ((uint32_t)entity.first & 0x0000FF00) >> 8;
-				int b = ((uint32_t)entity.first & 0x00FF0000) >> 16;
-
-				RenderCommands::SetUniform(Context,shader.get(),"PickingID", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
-
-
-
-
 				if (mesh->mMaterials.size())
 					Fracture::RenderCommands::BindMaterial(Context, shader.get(), AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex]).get());
 

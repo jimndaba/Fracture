@@ -56,10 +56,10 @@ void LuaBindComponents::BindColliderComponent(sol::state& lua)
 		"ColliderComponent", sol::no_constructor,
 		sol::base_classes, sol::bases<Fracture::IComponent>(),
 		//Properties
-		"height", sol::readonly_property(&Fracture::ColliderComponent::Height),
-		"size", sol::readonly_property(&Fracture::ColliderComponent::Size),
-		"radius", sol::readonly_property(&Fracture::ColliderComponent::Radius),
-		"offset", sol::readonly_property(&Fracture::ColliderComponent::Offset),
+		"Height", sol::readonly_property(&Fracture::ColliderComponent::Height),
+		"Size", sol::readonly_property(&Fracture::ColliderComponent::Size),
+		"Radius", sol::readonly_property(&Fracture::ColliderComponent::Radius),
+		"Offset", sol::readonly_property(&Fracture::ColliderComponent::Offset),
 		"ID", sol::readonly_property(&Fracture::ColliderComponent::GetID),
 
 		//Methods

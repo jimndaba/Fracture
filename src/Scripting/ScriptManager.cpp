@@ -310,7 +310,7 @@ void Fracture::ScriptManager::onUpdate(float dt)
 
 void Fracture::ScriptManager::Shutdown()
 {
-	delete(lua);
+
 }
 
 void Fracture::ScriptManager::RegisterScript(const LuaScriptRegistry& reg)

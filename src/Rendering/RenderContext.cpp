@@ -18,7 +18,10 @@ void Fracture::RenderContext::EndState()
 void Fracture::RenderContext::Begin()
 {
 	Renderable_batch.clear();
+	EntityIndeces.clear();
+
 	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
+
 	for (const auto& meshcomponent : components)
 	{
 		if (AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
@@ -26,6 +29,21 @@ void Fracture::RenderContext::Begin()
 			const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
 			// [Shader][Mesh]
 			Renderable_batch[meshcomponent->Shader][meshcomponent->Mesh].push_back(transform->WorldTransform);
+
+			glm::vec4 color(0);
+
+			color.r = ((meshcomponent->GetID() >> 16) & 0XFF)/255.0f;
+			color.g = ((meshcomponent->GetID() >> 8) & 0XFF) / 255.0f;
+			color.b = ((meshcomponent->GetID() >> 0) & 0XFF) / 255.0f;
+			color.a = ((meshcomponent->GetID() >> 24) & 0XFF) / 255.0f;
+
+			//color.r = ((meshcomponent->GetID() & 0xFF) >> 16) / 255.f;
+			//color.g = ((meshcomponent->GetID() & 0xFF) >> 8) / 255.f;
+			//color.b = (meshcomponent->GetID() & 0xFF) / 255.f ;
+			//color.a = ((meshcomponent->GetID() & 0xFF) >> 24) / 255.f;
+			
+			EntityIndeces[meshcomponent->Mesh].push_back(color);
+		
 		}
 	}
 
@@ -35,8 +53,13 @@ void Fracture::RenderContext::Begin()
 			continue;
 		for (auto entity : batch.second)
 		{
-			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);		
-			Fracture::RenderCommands::MapDataTobuffer<glm::mat4>(this, mesh->Matrix_Buffer->RenderID, entity.second, entity.second.size() * sizeof(glm::mat4));	
+			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);
+
+			Fracture::RenderCommands::MapDataTobuffer<glm::mat4>(this, mesh->Matrix_Buffer->RenderID, entity.second, entity.second.size() * sizeof(glm::mat4));
+
+			Fracture::RenderCommands::MapDataTobuffer<glm::vec4>(this, mesh->EntityID_Buffer->RenderID, EntityIndeces[entity.first], EntityIndeces[entity.first].size() * sizeof(glm::vec4));
+
+		
 		}
 	}
 }
