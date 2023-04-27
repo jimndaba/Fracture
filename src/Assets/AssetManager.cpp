@@ -4,8 +4,10 @@
 #include "Assets/ImagerLoader.h"
 
 #include "Rendering/Mesh.h"
+#include "Rendering/Material.h"
 #include "Serialisation/Serialiser.h"
 #include "MaterialLoader.h"
+#include "Serialisation/MaterialSerialiser.h"
 #include "Rendering/GraphicsDevice.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
@@ -221,6 +223,17 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 	for (const auto& reg : mMaterialRegister)
 	{
 		reg_serialiser.Property("Material", reg.second);
+
+
+		MaterialSerialiser s = MaterialSerialiser(Fracture::ISerialiser::IOMode::Save, Fracture::ISerialiser::SerialiseFormat::Json);
+		if (IsMaterialLoaded(reg.first))
+		{
+			if (mMaterials[reg.first]->IsDirty)
+			{
+				s.WriteMaterial(mMaterials[reg.first].get());
+				s.Save(reg.second.Path);
+			}
+		}		
 	}
 	reg_serialiser.EndCollection();
 

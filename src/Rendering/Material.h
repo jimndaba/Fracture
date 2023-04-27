@@ -46,6 +46,7 @@ namespace Fracture
 
 		bool CastsShadows;
 		bool IsTranslucent;
+		bool IsDirty;
 
 		Fracture::UUID ID;
 		Fracture::UUID Shader;

@@ -391,7 +391,7 @@ void Fracture::ISerialiser::Save(const std::string& path)
 	}
 }
 
-void Fracture::ISerialiser::Open(const std::string& path)
+bool Fracture::ISerialiser::Open(const std::string& path)
 {
 	switch (mFormat)
 	{
@@ -401,14 +401,16 @@ void Fracture::ISerialiser::Open(const std::string& path)
 		if (!m_InputStream.good())
 		{
 			FRACTURE_WARN("Can't read file : {}", path);
+			return false;
 		}
 
 		m_InputStream >> Output;
 		if (Output.is_null())
 		{
 			FRACTURE_WARN("File is either non-json file or corrupt;");
+			return false;
 		}
-		FRACTURE_TRACE("Opening File: {}", path);
+		FRACTURE_TRACE("Opening File: {}", path);		
 		break;
 	}
 	case SerialiseFormat::Binary:
@@ -417,6 +419,7 @@ void Fracture::ISerialiser::Open(const std::string& path)
 		if (!m_InputStream.good())
 		{
 			FRACTURE_WARN("Can't read Scene file : {}", path);
+			return false;
 		}
 
 		// copies all data into buffer
@@ -426,6 +429,7 @@ void Fracture::ISerialiser::Open(const std::string& path)
 		break;
 	}
 	}
+	return true;
 }
 
 bool Fracture::ISerialiser::BeginStruct(const std::string& name)

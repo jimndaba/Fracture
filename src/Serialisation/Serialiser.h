@@ -210,7 +210,7 @@ namespace Fracture
 
 
 		void Save(const std::string& path);
-		void Open(const std::string& path);
+		bool Open(const std::string& path);
 
 		bool BeginStruct(const std::string& name);
 		void EndStruct();
