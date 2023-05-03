@@ -16,6 +16,14 @@ namespace Fracture
 		TagComponent() :IComponent() {};
 		TagComponent(const UUID& id, const std::string& name = "") :IComponent(), entity(id), Name(name) {}
 
+		TagComponent(TagComponent& other,UUID new_entity) :IComponent()
+		{
+			entity = new_entity;
+			Name = other.Name;
+			IsActive = other.IsActive;
+			Tags = other.Tags;
+		}
+
 		UUID entity;
 		std::string Name;
 		bool IsActive = true;
@@ -29,6 +37,14 @@ namespace Fracture
 		TransformComponent() :IComponent() {};
 		TransformComponent(const UUID& id, glm::vec3 pos = glm::vec3(0), glm::vec3 scale = glm::vec3(1), glm::quat rot = glm::quat(glm::vec3(0.0f)))
 			:IComponent(), Position(pos), Scale(scale), Rotation(rot),entity(id) {}
+
+		TransformComponent(TransformComponent& other, UUID new_entity) :IComponent()
+		{
+			entity = new_entity;
+			Position = other.Position;
+			Scale = other.Scale;
+			Rotation = other.Rotation;
+		}
 
 		UUID entity;
 		bool IsDirty = true;
@@ -51,6 +67,16 @@ namespace Fracture
 		MeshComponent(UUID id, UUID mesh,UUID shader) :
 			IComponent(), entity(id), Mesh(mesh),Shader(shader)
 		{}
+
+		MeshComponent(MeshComponent& other, UUID new_entity):
+			IComponent()
+		{
+			entity = new_entity;
+			Mesh = other.Mesh;
+			Material = other.Material;
+			Shader = other.Shader;
+			meshType = other.meshType;
+		}
 		
 		UUID entity;
 		enum class MeshType
@@ -73,6 +99,16 @@ namespace Fracture
 		HierachyComponent(const UUID& id) :
 			IComponent(), entity(id)
 		{}
+
+		HierachyComponent(HierachyComponent& other, UUID new_entity)
+			:IComponent()
+		{
+			entity = new_entity;
+			HasParent = other.HasParent;
+			Parent = other.Parent;
+			Children = other.Children;
+		}
+
 		UUID entity;
 		bool HasParent = false;
 		UUID Parent;
@@ -90,6 +126,31 @@ namespace Fracture
 		};
 
 		CameraComponent(const UUID& id) :entity(id) {}
+
+		CameraComponent(CameraComponent& other, UUID new_entity):
+			IComponent()
+		{
+			entity = new_entity;
+			Damping = other.Damping;
+			Sensitivity = other.Sensitivity;
+			Speed = other.Speed;
+			Position = other.Position;
+			Front = other.Front;
+			Up = other.Up;
+			Right = other.Right;
+			Yaw = other.Yaw;
+			Pitch = other.Pitch;
+			Roll = other.Roll;
+			Near = other.Near;
+			Far = other.Far;
+			FocalLength = other.FocalLength;
+			FocalRange = other.FocalRange;
+			FoV = other.FoV;
+			EnableDepthOfField = other.EnableDepthOfField;
+
+			ProjectionMode = other.ProjectionMode;
+		}
+
 		UUID entity;
 
 		float Damping = 5.0f;
@@ -132,6 +193,15 @@ namespace Fracture
 	{
 		PointlightComponent(const UUID& id,glm::vec3 color = glm::vec3(1.0f),float radius = 10.0f) :IComponent(), entity(id),Diffuse(color),Radius(radius) {}
 
+		PointlightComponent(PointlightComponent& other, UUID new_entity) :IComponent()
+		{
+			entity = new_entity;
+			Radius = other.Radius;
+			Compression = other.Compression;
+			Strength = other.Strength;
+			Diffuse = other.Diffuse;
+		}
+
 		UUID entity;
 
 		float Radius = 1.0f;
@@ -145,8 +215,21 @@ namespace Fracture
 	struct SpotlightComponent : public IComponent
 	{
 		SpotlightComponent(const UUID& id) :IComponent(), entity(id) {}
-		UUID entity;
 
+		SpotlightComponent(SpotlightComponent& other, UUID new_entity) :IComponent()
+		{
+			entity = new_entity;
+			Strength = other.Strength;
+			InnerCutoff = other.InnerCutoff;
+			OutCutoff = other.OutCutoff;
+			Linear = other.Linear;
+			Quadratic = other.Quadratic;
+			Constant = other.Constant;
+			Diffuse = other.Diffuse;
+		}
+
+
+		UUID entity;
 		float Strength = 1.0f;
 		float InnerCutoff = 10.0f;
 		float OutCutoff  = 30.0f;
@@ -162,8 +245,16 @@ namespace Fracture
 	struct SunlightComponent : public IComponent
 	{
 		SunlightComponent(const UUID& id) :IComponent(), entity(id) {}
-		UUID entity;
+		
+		SunlightComponent(SunlightComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			Strength = other.Strength;
+			Diffuse = other.Diffuse;
+		}
 
+		UUID entity;
 		float Strength = 1.0f;
 		glm::vec3 Diffuse = glm::vec3(1.0f);
 
@@ -183,9 +274,32 @@ namespace Fracture
 	struct RigidbodyComponent : public IComponent
 	{
 		RigidbodyComponent(const Fracture::UUID& id) :IComponent(), entity(id) {}
-		UUID entity;
-		UUID GetID() { return entity; }
 
+		RigidbodyComponent(RigidbodyComponent& other, UUID new_entity) :IComponent()
+		{
+			entity = new_entity;
+			Mass = other.Mass;
+			Friction = other.Friction;
+			Bouncyness = other.Bouncyness;
+			AngularDrag = other.AngularDrag;
+			LinearDrag = other.AngularDrag;
+			IsKinematic = other.IsKinematic;
+			IsDynamic = other.IsDynamic;
+			for (int i = 0; i < 3; i++)
+			{
+				LinearConstraints[i] = other.LinearConstraints[i];
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				AngularConstraints[i] = other.AngularConstraints[i];
+			}
+			LinearVelocity = other.LinearVelocity;
+			AngularVelocity = other.AngularVelocity;
+			
+		}
+
+
+		UUID entity;
 		float Mass = 1.0f;
 		float Friction = 0.5f;
 		float Bouncyness = 0.0f;
@@ -195,13 +309,14 @@ namespace Fracture
 		bool IsDynamic = true;
 		bool LinearConstraints[3] = {0,0,0};
 		bool AngularConstraints[3] = { 0,0,0 };
-
 		glm::vec3 LinearVelocity = glm::vec3(0);
 		glm::vec3 AngularVelocity = glm::vec3(0);
 
 
 		CollisionDetectionType DetectionType = CollisionDetectionType::Discrete;
 		physx::PxRigidActor* btBody;
+
+		UUID GetID() { return entity; }
 	};
 
 	enum class ColliderType
@@ -219,6 +334,18 @@ namespace Fracture
 	{
 		ColliderComponent(const Fracture::UUID& id) :
 			IComponent(), entity(id) {}
+
+		ColliderComponent(ColliderComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			Shape = other.Shape;
+			Size = other.Size;
+			Radius = other.Radius;
+			Height = other.Height;
+			Offset = other.Offset;
+			IsTrigger = other.IsTrigger;
+		}
 
 		UUID entity;
 		UUID GetID() { return entity; }
@@ -239,6 +366,15 @@ namespace Fracture
 		ScriptComponent(const Fracture::UUID& id,const Fracture::UUID& script,bool ScriptAttached =true):
 			IComponent(), entity(id),Script(script),HasScriptAttached(ScriptAttached) {}
 
+		ScriptComponent(ScriptComponent& other, UUID new_entity):
+			IComponent()
+		{
+			HasScriptAttached = other.HasScriptAttached;
+			HasStarted = other.HasStarted;
+			Script = other.Script;
+			entity = new_entity;
+		}
+
 		bool HasScriptAttached;
 		bool HasStarted;
 		UUID Script;
@@ -252,14 +388,24 @@ namespace Fracture
 		AudioSourceComponent(const Fracture::UUID& id) :
 			IComponent(), entity(id) {}
 
+		AudioSourceComponent(AudioSourceComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			AudioClip = other.AudioClip;
+			Volume = other.Volume;
+			Pan = other.Pan;
+			Mute = other.Mute;
+			Looping = other.Looping;
+			Is3DSource = other.Is3DSource;
+		}
+
 		UUID entity;
 		UUID GetID() { return entity; }
 
-		UUID AudiClip;
-
+		UUID AudioClip;
 		float Volume;
 		float Pan;
-
 		bool Mute;
 		bool Looping;
 		bool Is3DSource;

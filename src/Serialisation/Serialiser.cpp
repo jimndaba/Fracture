@@ -449,7 +449,7 @@ bool Fracture::ISerialiser::BeginStruct(const std::string& name)
 		{
 			if (!mStructStack.empty() && mCollectionStack.empty())
 			{
-				if (exists(mStructStack.top()[name], name))
+				if (exists(mStructStack.top(), name))
 				{
 					auto j = mStructStack.top()[name];
 					mStructStack.push(j);

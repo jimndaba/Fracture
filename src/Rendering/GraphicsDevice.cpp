@@ -6,6 +6,7 @@
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
+Fracture::GlobalPostProcessParams Fracture::GraphicsDevice::RenderSettings;
 
 std::string ShaderTypeToString(Fracture::ShaderType tpe)
 {

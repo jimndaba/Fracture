@@ -9,10 +9,28 @@
 #include "Shader.h"
 #include "RenderTarget.h"
 #include "RenderCommands.h"
+#include "PostProcessingParams.h"
 #include <map>
 
 namespace Fracture
 {
+	enum class ShaderUniformIndex
+	{
+		GlobalFrameData,
+		Debuglines,
+		SSAO_Kernel
+	};
+
+	enum class ShaderStorageBufferIndex
+	{
+		LightList,
+		ClusterAABB,
+		ScreenToView,
+		LightIndexSSBO,
+		LightGridSSBO,
+		GlobalIndexCountSSBO
+	};
+
 	enum class ClearBufferBit : uint32_t
 	{
 		Color = GL_COLOR_BUFFER_BIT,
@@ -110,6 +128,8 @@ namespace Fracture
 		void CHECKGLERRRORS();
 
 		static uint16_t DRAWCALL_COUNT;
+
+		static GlobalPostProcessParams RenderSettings;
 
 		unsigned int CompileShader(const std::string& name, const std::string& path, ShaderType shadertype);
 		void checkCompileErrors(const std::string& name, unsigned int shader, const std::string& type);

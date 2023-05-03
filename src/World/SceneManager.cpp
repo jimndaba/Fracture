@@ -22,6 +22,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneManager::CreateNewScene(const UU
     mScenes[id] = std::make_shared<Scene>();
     mScenes[id]->Name = "Untitled";
     mScenes[id]->ID = id;
+    mScenes[id]->RootID = root;   
     return  mScenes[id];
 }
 

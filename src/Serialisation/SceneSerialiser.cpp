@@ -159,7 +159,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ScriptComponent* co
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::AudioSourceComponent* component)
 {
 	BeginStruct("AudioSourceComponent");
-	Property("AudioClip", component->AudiClip);
+	Property("AudioClip", component->AudioClip);
 	Property("Volume", component->Volume);
 	Property("Pan", component->Pan);
 	Property("Is3DSource", component->Is3DSource);
@@ -374,7 +374,7 @@ void Fracture::SceneSerialiser::ReadAudioSourceComponentIfExists(Fracture::UUID 
 	if (BeginStruct("AudioSourceComponent"))
 	{
 		auto comp = std::make_shared<AudioSourceComponent>(entity_id);
-		comp->AudiClip = ID("AudioClip");
+		comp->AudioClip = ID("AudioClip");
 		comp->Pan = FLOAT("Pan");
 		comp->Volume = FLOAT("Pan");
 		comp->Is3DSource = BOOL("Is3DSource");
@@ -390,8 +390,16 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 	BeginStruct("Scene");
 	{
 		Property("ID", scene->ID);
-		Property("RootID", scene->RootID);
 		Property("ActiveCamera", scene->ActiveCameraID);
+		Property("RootID", scene->RootID);
+
+		BeginStruct("Root");
+		{			
+			WriteEntityComponentOfType<TagComponent>(scene->RootID);
+			WriteEntityComponentOfType<TransformComponent>(scene->RootID);
+			WriteEntityComponentOfType<HierachyComponent>(scene->RootID);
+			EndStruct();
+		}
 
 		BeginCollection("Entities");
 		for (const auto& entity : scene->Entities)
@@ -446,9 +454,17 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 		auto new_Scene = SceneManager::CreateNewScene(ID("RootID"));
 		new_Scene->ID = ID("ID");
 		new_Scene->RootID = ID("RootID");
-		new_Scene->ActiveCameraID = ID("ActiveCamera");	
-	
+		new_Scene->ActiveCameraID = ID("ActiveCamera");
+
 		SceneManager::SetScene(new_Scene);
+		if (BeginStruct("Root"))
+		{			
+			ReadTagComponentIfExists(new_Scene->RootID);
+			ReadTransformComponentIfExists(new_Scene->RootID);
+			ReadHierachyComponentIfExists(new_Scene->RootID);
+			EndStruct();
+		}
+
 
 		if (BeginCollection("Entities"))
 		{

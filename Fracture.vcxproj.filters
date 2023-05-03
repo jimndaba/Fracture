@@ -668,5 +668,8 @@
     <ClCompile Include="src\Scripting\LuaAudioBindings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\SSAOPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
