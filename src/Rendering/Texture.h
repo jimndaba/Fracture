@@ -50,6 +50,12 @@ namespace Fracture
 		DepthStencil = GL_DEPTH_STENCIL,
 		Depth = GL_DEPTH,
 		R = GL_R,
+		R8 = GL_R8,
+		R16 = GL_R16,
+		R16F = GL_R16F,
+		R16I = GL_R16I,
+		R32F = GL_R32F,
+		R32I = GL_R32I,
 		RG = GL_RG,
 		RG16 = GL_RG16,
 		RGB = GL_RGB,
@@ -139,6 +145,7 @@ namespace Fracture
 		int TextureArrayLevels = 1;
 		bool GenMinMaps = false;
 		std::vector<uint8_t> data;
+		void* texture_data = nullptr;
 
 		uint32_t CaclMipLevels() const
 		{

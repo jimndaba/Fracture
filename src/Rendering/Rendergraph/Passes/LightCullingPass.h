@@ -10,14 +10,14 @@ namespace Fracture
 {
 	struct LightCullPassDef
 	{
-		const unsigned int gridSizeX = 16;
-		const unsigned int gridSizeY = 9;
+		const unsigned int gridSizeX = 8;
+		const unsigned int gridSizeY = 8;
 		const unsigned int gridSizeZ = 24;
 		const unsigned int numClusters = gridSizeX * gridSizeY * gridSizeZ;
 		unsigned int sizeX, sizeY;
 		unsigned int numLights;
-		const unsigned int maxLights = 1000; // pretty overkill for sponza, but ok for testing
-		const unsigned int maxLightsPerTile = 50;
+		const unsigned int maxLights = 1024; // pretty overkill for sponza, but ok for testing
+		const unsigned int maxLightsPerTile = 24;
 
 		ScreenToView screen2View;
 	};

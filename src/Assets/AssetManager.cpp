@@ -391,7 +391,7 @@ void Fracture::AssetManager::OnLoad()
 
 void Fracture::AssetManager::RegisterMesh(const MeshRegistry& reg)
 {
-	if (!HasMeshPath(reg.Path))
+	if (!HasMeshPath(reg.Path) && reg.IsValid)
 	{
 		mMeshRegister[reg.ID] = reg;
 		mMeshIDLookUp[reg.Name] = reg.ID;
@@ -751,6 +751,17 @@ void Fracture::AssetManager::RegisterShader(const ShaderRegistry& reg)
 	IsRegisterDirty = true;
 	FRACTURE_INFO("Registered Shader: {} {}", reg.ID, reg.Name);
 }
+
+int Fracture::AssetManager::CountUseCountMesh(UUID mesh)
+{
+	if (IsMeshLoaded(mesh))
+	{
+		return GetStaticByIDMesh(mesh).use_count();
+	}
+
+	return 0;
+}
+
 
 Fracture::AssetManager* Fracture::AssetManager::Instance()
 {

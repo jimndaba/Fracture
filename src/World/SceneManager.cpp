@@ -296,4 +296,12 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
     return false;
 }
 
+void Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position)
+{
+
+
+
+
+}
+
 

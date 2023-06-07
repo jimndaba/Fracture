@@ -24,7 +24,7 @@ namespace Fracture
 
 	struct ClearTargetPassDef
 	{
-		uint32_t BufferTarget;
+		uint32_t BufferTarget = (uint32_t)ClearBufferBit::Color || (uint32_t)ClearBufferBit::Depth;
 		Fracture::Colour ClearColor = Fracture::Colour::Red;
 	};
 

@@ -16,9 +16,11 @@ namespace Fracture
 {
 	enum class ShaderUniformIndex
 	{
-		GlobalFrameData,
-		Debuglines,
-		SSAO_Kernel
+		GlobalFrameData,		
+		GlobalRenderSettings,
+		SSAO_Kernel,
+		ShadowMatrix,
+		ShadowPlanes
 	};
 
 	enum class ShaderStorageBufferIndex
@@ -28,8 +30,18 @@ namespace Fracture
 		ScreenToView,
 		LightIndexSSBO,
 		LightGridSSBO,
-		GlobalIndexCountSSBO
+		GlobalIndexCountSSBO,
+		Debuglines
 	};
+
+	enum class GlobalColorAttachments
+	{
+		Color,
+		Picking,
+		Normal,
+		Position
+	};
+
 
 	enum class ClearBufferBit : uint32_t
 	{
@@ -96,6 +108,7 @@ namespace Fracture
 
 		void Startup();
 		void UpdateGlobalFrameData(const GlobalFrameData& data);
+		void UpdateGlobalRenderSettings();
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void Shutdown();
 
@@ -130,6 +143,9 @@ namespace Fracture
 		static uint16_t DRAWCALL_COUNT;
 
 		static GlobalPostProcessParams RenderSettings;
+
+		int Viewport_Width = 1920;
+		int Viewport_Height = 1080;
 
 		unsigned int CompileShader(const std::string& name, const std::string& path, ShaderType shadertype);
 		void checkCompileErrors(const std::string& name, unsigned int shader, const std::string& type);

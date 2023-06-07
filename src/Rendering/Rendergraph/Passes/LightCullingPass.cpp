@@ -21,7 +21,12 @@ void Fracture::LightCullPass::Setup()
         GraphicsDevice::Instance()->SetBufferIndexRange(VolumeGridSSBO.get(), 1, 0);
 	}
     {
-        Properties.sizeX = (unsigned int)std::ceilf(1920 / (float)Properties.gridSizeX);
+        //workGroupsX = (SCREEN_SIZE.x + (SCREEN_SIZE.x % 16)) / 16;
+        //workGroupsY = (SCREEN_SIZE.y + (SCREEN_SIZE.y % 16)) / 16;
+        //size_t numberOfTiles = workGroupsX * workGroupsY;
+
+        Properties.sizeX = (unsigned int)(1920 + (1920 % Properties.gridSizeX))/ Properties.gridSizeX;
+        Properties.sizeY = (unsigned int)(1080 + (1080 % Properties.gridSizeY))/ Properties.gridSizeY;
         Properties.screen2View.screenWidth = 1920;
         Properties.screen2View.screenHeight = 1080;
         Properties.screen2View.tileSizes[0] = Properties.gridSizeX;
@@ -43,7 +48,7 @@ void Fracture::LightCullPass::Setup()
         GraphicsDevice::Instance()->SetBufferIndexRange(ScreenToViewSSBO.get(), 2, 0);
     }
     {
-        unsigned int totalNumLights = Properties.numClusters * Properties.maxLightsPerTile; //50 lights per tile max
+        unsigned int totalNumLights = Properties.numClusters * Properties.maxLightsPerTile; //25 lights per tile max
         BufferDescription desc;
         desc.Name = "Light Index SSBO";
         desc.bufferType = BufferType::ShaderStorageBuffer;
@@ -85,14 +90,17 @@ void Fracture::LightCullPass::Setup()
 
 void Fracture::LightCullPass::Execute()
 {
-    if (dirty)
-    {
-        RenderCommands::UseProgram(Context, mClusterComputeShader->Handle);
-        RenderCommands::DispatchComputeShader(Context, (float)Properties.gridSizeX, (float)Properties.gridSizeY, (float)Properties.gridSizeZ);
-        dirty = false;
-    }
+    RenderCommands::UseProgram(Context, mClusterComputeShader->Handle);
+    RenderCommands::DispatchComputeShader(Context, (float)Properties.gridSizeX, (float)Properties.gridSizeY, (float)Properties.gridSizeZ);
+    dirty = false;
+    RenderCommands::UseProgram(Context, 0);
+
 
     RenderCommands::UseProgram(Context, mLightCullComputeShader->Handle);
-    RenderCommands::DispatchComputeShader(Context,1,1, 6);
+    RenderCommands::DispatchComputeShader(Context, 1, 1, 6);
+    RenderCommands::UseProgram(Context, 0);
 
+
+
+   
 }

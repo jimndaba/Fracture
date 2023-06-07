@@ -59,6 +59,8 @@ void Fracture::ComposeRenderersPass::Execute()
 	RenderCommands::BindVertexArrayObject(Context, Vao);
 	RenderCommands::DrawArray(Context, cmd);
 
+	Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Compose").get());
+	Fracture::RenderCommands::UseProgram(Context, 0);
 	RenderCommands::Disable(Context, GLCapability::Blending);
 	RenderCommands::ReleaseRenderTarget(Context);
 }

@@ -228,6 +228,7 @@ void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt,
 	Fracture::Command cmd;
 	cmd.fnc = [render_cmd]() {
 		glDrawElements((GLenum)render_cmd.mode,render_cmd.count,GL_UNSIGNED_INT,0);
+		mErroCallback("Draw Elements");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
 	cntxt->Push(cmd);
@@ -238,6 +239,7 @@ void Fracture::RenderCommands::DrawArray(Fracture::RenderContext* cntxt, const F
 	Fracture::Command cmd;
 	cmd.fnc = [render_cmd]() {
 		glDrawArrays((GLenum)render_cmd.mode, render_cmd.first, render_cmd.count);
+		mErroCallback("Draw Arrays");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
 	cntxt->Push(cmd);
@@ -252,6 +254,7 @@ void Fracture::RenderCommands::DrawElementsArrayInstanced(Fracture::RenderContex
 	Fracture::Command cmd;
 	cmd.fnc = [render_cmd]() {
 		glDrawElementsInstanced((GLenum)render_cmd.mode, render_cmd.element_count, GL_UNSIGNED_INT, 0, render_cmd.instance_count);
+		mErroCallback("Draw ELements Instanced");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
 	cntxt->Push(cmd);
@@ -267,7 +270,7 @@ void Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Fracture::RenderC
 	cmd.fnc = [render_cmd]() {
 		glDrawElementsInstancedBaseVertex((GLenum)render_cmd.mode, render_cmd.count, GL_UNSIGNED_INT,render_cmd.indices, render_cmd.instancecount, render_cmd.basevertex);
 
-		mErroCallback("DrawInstance");
+		mErroCallback("DrawElementsBaseInstance");
 
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
@@ -281,7 +284,7 @@ void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderC
 		glDrawArraysInstancedBaseInstance((GLenum)render_cmd.mode, render_cmd.firstIndex , render_cmd.count,render_cmd.instanceCount,render_cmd.baseInstance);
 
 
-		mErroCallback("DrawInstance Base Vert");
+		mErroCallback("DrawArrays Instance Base Vert");
 
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
@@ -305,7 +308,7 @@ void Fracture::RenderCommands::ClearImage(Fracture::RenderContext* cntxt, uint32
 	Fracture::Command cmd;
 	cmd.fnc = [image, level,clearValue]() {
 		glClearTexImage(image, level, GL_RGBA, GL_UNSIGNED_BYTE,clearValue);
-		mErroCallback("");
+		mErroCallback("ClearImage");
 	};
 	cntxt->Push(cmd);
 }
@@ -319,7 +322,7 @@ void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32
 		cntxt->CurrentProgram = program;
 	
 
-		mErroCallback("");
+		mErroCallback("UseProgram");
 	};
 	cntxt->Push(cmd);
 }
@@ -337,7 +340,7 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		glUniform1i(location, value);
 
 
-		mErroCallback(name);
+		mErroCallback("SetUnfirom: " + name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);	
@@ -467,6 +470,7 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cntxt->Push(cmd);
+	cntxt->ActiveTextureUnits++;
 
 }
 
@@ -537,5 +541,23 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 		}
 	}
 }
+
+
+void Fracture::RenderCommands::ResetTextureUnits(Fracture::RenderContext* cntxt,Fracture::Shader* shader)
+{
+	Fracture::Command cmd;	
+	for (int i = 0; i < cntxt->ActiveTextureUnits; i++)
+	{
+		cmd.fnc = [i]() {
+			glBindTextureUnit(i, 0);
+			mErroCallback("Reset Texture Unit");		
+		};
+	}
+	
+	cmd.Key.ShaderIndex = shader->Handle;
+	cntxt->Push(cmd);
+	cntxt->ActiveTextureUnits = 0;
+}
+
 
 #pragma endregion

@@ -4,6 +4,7 @@
 
 
 #include "IPass.h"
+#include <random>
 
 namespace Fracture
 {
@@ -26,6 +27,9 @@ namespace Fracture
 		std::shared_ptr<Buffer>  mKernelBuffer;
 		std::shared_ptr<Shader>  mSSAO_Shader;
 		std::shared_ptr<Shader>  mBlur_Shader;
+		std::shared_ptr<Texture> mNoise;
+
+		std::shared_ptr<RenderTarget> mSSAOrt;
 	private:
 
 		float lerp(float a, float b, float f);

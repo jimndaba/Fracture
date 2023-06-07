@@ -10,6 +10,8 @@ namespace Fracture
 {
 	struct MeshRegistry
 	{
+		MeshRegistry(bool valid = true) :IsValid(valid) {};
+
 		enum class MeshType
 		{
 			Static,
@@ -19,6 +21,7 @@ namespace Fracture
 		std::string Name;
 		std::string Path;
 		MeshType meshType;
+		bool IsValid = false;
 	};
 
 	struct MeshFileHeader

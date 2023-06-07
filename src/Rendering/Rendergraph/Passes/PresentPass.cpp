@@ -42,4 +42,7 @@ void Fracture::PresentPass::Execute()
 	RenderCommands::BindVertexArrayObject(Context, Vao);
 	RenderCommands::DrawArray(Context, cmd);
 
+
+	Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Fullscreen").get());
+	Fracture::RenderCommands::UseProgram(Context, 0);
 }

@@ -109,6 +109,8 @@ namespace Fracture
 		static std::map<std::string, UUID> mMaterialIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<Material>> mMaterials;
 
+		static int CountUseCountMesh(UUID mesh);
+
 
 		static AssetManager* Instance();
 

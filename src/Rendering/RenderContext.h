@@ -37,7 +37,7 @@ namespace Fracture
 		std::map<Fracture::UUID, std::vector<glm::vec4>> EntityIndeces;
 
 		uint32_t CurrentProgram;
-
+		int ActiveTextureUnits = 0;
 		Viewport ContextViewport;
 		Scissor ContextScissor;
 		bool CullFaceEnabled = true;

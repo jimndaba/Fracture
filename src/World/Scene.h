@@ -15,8 +15,7 @@ namespace Fracture
 	{
 		UUID ID;
 		UUID RootID;
-		UUID ActiveCameraID;
-		
+		UUID ActiveCameraID;		
 		std::vector<std::shared_ptr<Entity>> Entities;
 		std::unordered_map<std::type_index, ComponentSet> ComponentReg;
 		std::unordered_map<UUID, std::vector<std::shared_ptr<ScriptComponent>>> mScriptReg;

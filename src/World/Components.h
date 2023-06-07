@@ -76,6 +76,7 @@ namespace Fracture
 			Material = other.Material;
 			Shader = other.Shader;
 			meshType = other.meshType;
+			MaterialOverride = other.MaterialOverride;
 		}
 		
 		UUID entity;
@@ -88,6 +89,7 @@ namespace Fracture
 		UUID Mesh;
 		UUID Material;
 		UUID Shader;
+		bool MaterialOverride = false;
 		MeshType meshType = MeshType::Static;
 
 
@@ -265,6 +267,7 @@ namespace Fracture
 	{
 		UUID entity;
 		UUID GetID() { return entity; }
+		int ShadowResolution = 1024;
 	};
 
 

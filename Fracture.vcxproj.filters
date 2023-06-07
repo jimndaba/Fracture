@@ -183,9 +183,6 @@
     <ClInclude Include="src\Rendering\GPUData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCastersPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Rendergraph\Passes\SSAOPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -364,6 +361,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripting\LuaAudioBindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -669,6 +669,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Rendergraph\Passes\SSAOPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

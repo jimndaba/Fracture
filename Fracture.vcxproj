@@ -145,7 +145,7 @@
     <ClInclude Include="src\Rendering\RenderContext.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\OutlinePass.h" />
-    <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCastersPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ForwardPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\GridPass.h" />
@@ -264,6 +264,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Passes\IPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\LightCullingPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\PresentPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\SSAOPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ZPrePass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Rendergraph.cpp" />

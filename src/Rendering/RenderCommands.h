@@ -182,7 +182,8 @@ namespace Fracture
 		void SetTexture(Fracture::RenderContext* cntxt,Fracture::Shader* shader, const std::string& name, const uint32_t& RenderID, unsigned int unit);		
 
 		void BindMaterial(Fracture::RenderContext* cntxt, Fracture::Shader* shader, Fracture::Material* material);
-				
+		void ResetTextureUnits(Fracture::RenderContext* cntxt, Fracture::Shader* shader);
+
 		template<class T>
 		void MapDataTobuffer(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size, BufferAccess access)
 		{

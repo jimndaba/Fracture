@@ -32,10 +32,10 @@ void Fracture::RenderContext::Begin()
 
 			glm::vec4 color(0);
 
-			color.r = ((meshcomponent->GetID() >> 16) & 0XFF)/255.0f;
+			color.r = ((meshcomponent->GetID() >> 0) & 0XFF) / 255.0f;
 			color.g = ((meshcomponent->GetID() >> 8) & 0XFF) / 255.0f;
-			color.b = ((meshcomponent->GetID() >> 0) & 0XFF) / 255.0f;
-			color.a = ((meshcomponent->GetID() >> 24) & 0XFF) / 255.0f;
+			color.b = ((meshcomponent->GetID() >> 16) & 0XFF) / 255.0f;
+			color.a = 1.0f;
 
 			//color.r = ((meshcomponent->GetID() & 0xFF) >> 16) / 255.f;
 			//color.g = ((meshcomponent->GetID() & 0xFF) >> 8) / 255.f;

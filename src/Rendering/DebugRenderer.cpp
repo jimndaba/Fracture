@@ -19,19 +19,19 @@ void Fracture::DebugRenderer::OnInit()
     VertexArrayCreationInfo info;
     info.Layout =
     {
-        { ShaderDataType::Float3,"aPos" }
     };
+
     GraphicsDevice::Instance()->CreateVertexArray(LineVAO, info);
     {
         BufferDescription desc;
-        desc.bufferType = BufferType::UniformBuffer;
+        desc.bufferType = BufferType::ShaderStorageBuffer;
         desc.size = MaxLines * sizeof(Line);
         desc.data = mLines.data();
         desc.usage = BufferUsage::Dynamic;
         mlineBufferSSBO = std::make_shared<Buffer>();
         mlineBufferSSBO->Description = desc;
         GraphicsDevice::Instance()->CreateBuffer(mlineBufferSSBO.get(), mlineBufferSSBO->Description);
-        GraphicsDevice::Instance()->SetBufferIndexRange(mlineBufferSSBO.get(), 1, 0);
+        GraphicsDevice::Instance()->SetBufferIndexRange(mlineBufferSSBO.get(), (int)ShaderStorageBufferIndex::Debuglines, 0);
     }
     GraphicsDevice::Instance()->VertexArray_BindAttributes(LineVAO, info);
     {
@@ -68,15 +68,17 @@ void Fracture::DebugRenderer::OnRender()
     if (target)
     {
 
-        const auto& mShader = AssetManager::GetShader("Debug");
+        
         RenderCommands::SetRenderTarget(mContext.get(),target);
         RenderCommands::SetViewport(mContext.get(),1920, 1080,0,0);
         RenderCommands::ClearColor(mContext.get(), glm::vec4(0, 0, 0, 0));
         RenderCommands::ClearTarget(mContext.get(), ClearFlags::Color);
-        RenderCommands::UseProgram(mContext.get(), mShader->Handle);
+      
        
         if (mLines.size() > 0)
         {
+            const auto& mShader = AssetManager::GetShader("Debug");
+            RenderCommands::UseProgram(mContext.get(), mShader->Handle);
             RenderCommands::BindVertexArrayObject(mContext.get(), LineVAO);
          
             glLineWidth(3.0f);

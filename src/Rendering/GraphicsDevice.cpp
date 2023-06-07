@@ -83,7 +83,7 @@ void Fracture::GraphicsDevice::Startup()
         desc.usage = BufferUsage::Stream;
         mGFrameData = std::make_shared<Buffer>();
         CreateBuffer(mGFrameData.get(), desc);
-        SetBufferIndexRange(mGFrameData.get(), 0, 0);
+        SetBufferIndexRange(mGFrameData.get(), (int)ShaderUniformIndex::GlobalFrameData, 0);
     }
     {
         BufferDescription desc;
@@ -94,11 +94,21 @@ void Fracture::GraphicsDevice::Startup()
         desc.usage = BufferUsage::Stream;
         mGLightBuffer = std::make_shared<Buffer>();
         CreateBuffer(mGLightBuffer.get(), desc);
-        SetBufferIndexRange(mGLightBuffer.get(), 0, 0);
+        SetBufferIndexRange(mGLightBuffer.get(), (int)ShaderStorageBufferIndex::LightList, 0);
 
         mLightData.resize(MAX_LIGHTS);
     }
-
+    {
+        BufferDescription desc;
+        desc.Name = "Global Render Settings";
+        desc.bufferType = BufferType::UniformBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(GlobalPostProcessParams);
+        desc.usage = BufferUsage::Stream;
+        mPostProcessingBuffer = std::make_shared<Buffer>();
+        CreateBuffer(mPostProcessingBuffer.get(), desc);
+        SetBufferIndexRange(mPostProcessingBuffer.get(),(int)ShaderUniformIndex::GlobalRenderSettings, 0);
+    }
 
 }
 
@@ -107,6 +117,11 @@ void Fracture::GraphicsDevice::Startup()
 void Fracture::GraphicsDevice::UpdateGlobalFrameData(const GlobalFrameData& data)
 {   
     GraphicsDevice::Instance()->UpdateBufferData(mGFrameData.get(), 0, sizeof(GlobalFrameData), &data);
+}
+
+void Fracture::GraphicsDevice::UpdateGlobalRenderSettings()
+{
+    GraphicsDevice::Instance()->UpdateBufferData(mPostProcessingBuffer.get(), 0, sizeof(GlobalPostProcessParams), &RenderSettings);
 }
 
 //Update Global Light Buffers
@@ -333,7 +348,8 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         }
         else
         {
-            glTexImage3D(target, 0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL); glCheckError();
+            glTexImage3D(target, 0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL); 
+            glCheckError();
         }
 
     }
@@ -365,7 +381,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         }
         else
         {
-            if (info.data.size())
+            if (info.data.size() || info.texture_data != nullptr)
             {               
                 uint32_t levels = 1;
                 if (info.GenMinMaps && info.MipLevels == 0)
@@ -377,7 +393,11 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
                     levels = info.MipLevels;
                 }
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                glTexImage2D(target, 0,internalFormat, info.Width, info.Height,0,textureformat,formatType,info.data.data()); glCheckError();
+                if(!info.data.empty())
+                    glTexImage2D(target, 0,internalFormat, info.Width, info.Height,0,textureformat,formatType,info.data.data()); glCheckError();
+
+                if(info.texture_data)
+                    glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.texture_data); glCheckError();
             }
             else
             {                
@@ -562,7 +582,17 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
             CreateTexture(target->DepthStencilAttachment, info.DepthStencilAttachments[0]);
             glNamedFramebufferTexture(target->Handle, GLenum(info.DepthStencilAttachments[0].AttachmentTrgt), target->DepthStencilAttachment->Handle, 0);  glCheckError();           
         }
+        else
+        {
+            //glGenRenderbuffers(1, &target->RenderBufferHandle);
+           // glBindRenderbuffer(GL_RENDERBUFFER, target->RenderBufferHandle);
+            //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
+            //glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
+            //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, target->RenderBufferHandle);
+        }
+
+        SetDrawBuffers(target);
     }
     else
     {
@@ -576,10 +606,12 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
                 glCheckError();
                 glNamedFramebufferTexture(target->Handle, GLenum(info.Target), target->DepthStencilAttachment->Handle, 0);  glCheckError();
             }
+            glNamedFramebufferDrawBuffer(target->Handle, GL_NONE);   glCheckError();
+            glNamedFramebufferReadBuffer(target->Handle, GL_NONE);   glCheckError();
         }
     }
 
-    SetDrawBuffers(target);
+
 
     auto fboState = glCheckNamedFramebufferStatus(target->Handle, GL_FRAMEBUFFER);
     if (fboState != GL_FRAMEBUFFER_COMPLETE)
@@ -610,6 +642,7 @@ void Fracture::GraphicsDevice::SetDrawBuffers(std::shared_ptr<RenderTarget>& rt)
     }
     else
     {
+        FRACTURE_ERROR("No Color Tagrets set");
         glNamedFramebufferDrawBuffer(rt->Handle, GL_NONE);   glCheckError();
         glNamedFramebufferReadBuffer(rt->Handle, GL_NONE);   glCheckError();
 

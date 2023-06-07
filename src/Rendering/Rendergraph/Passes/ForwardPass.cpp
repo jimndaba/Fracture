@@ -49,6 +49,18 @@ void Fracture::ForwardPass::Execute()
 		
 		const auto& shader = AssetManager::Instance()->GetShaderByID(batch.first);
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
+
+
+		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
+		{
+			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_SSAO");
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, 0);
+		}		
+		{
+			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_Shadow");
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, 1);
+		}
+
 		//Set Shader
 		for (auto entity : batch.second)
 		{
@@ -67,16 +79,27 @@ void Fracture::ForwardPass::Execute()
 				if (mesh->mMaterials.size())
 					Fracture::RenderCommands::BindMaterial(Context, shader.get(), AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex]).get());
 
+				
+
 				DrawElementsInstancedBaseVertex cmd;
 				cmd.basevertex = sub.BaseVertex;
 				cmd.instancecount = entity.second.size();
 				cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
 				cmd.count = sub.IndexCount;
-				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);				
+				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);		
+
+				//Fracture::RenderCommands::ResetTextureUnits(Context, shader.get());
 			}
 			Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 		}
+
+		Fracture::RenderCommands::UseProgram(Context, 0);
+
+
 	}
+
+
+	
 
 	RenderCommands::ReleaseRenderTarget(Context);
 	

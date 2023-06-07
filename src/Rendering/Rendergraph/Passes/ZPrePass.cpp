@@ -27,12 +27,7 @@ void Fracture::ZPrePass::Execute()
 	RenderCommands::SetCullMode(Context, CullMode::Back);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
-	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);
-	//RenderCommands::DepthMask(Context, true);
-
-	//RenderCommands::SetColorMask(Context, 0, 0, 0, 0);
-	
-	//Issue out Batch Commands.
+	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);	
 
 	if (Context->Renderable_batch.empty())
 	{
@@ -77,32 +72,6 @@ void Fracture::ZPrePass::Execute()
 		}
 	}
 
-	/*
-	for (auto& batch : Context->Renderable_batch)
-	{
-		if (batch.second.empty())
-			continue;
-
-		Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
-
-		for (auto entity : batch.second)
-		{
-			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);
-			Fracture::RenderCommands::BindVertexArrayObject(Context, mesh->VAO);	
-
-			for (const auto& sub : mesh->SubMeshes)
-			{
-				DrawElementsInstancedBaseVertex cmd;
-				cmd.basevertex = sub.BaseVertex;
-				cmd.instancecount = entity.second.size();
-				cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
-				cmd.count = sub.IndexCount;
-				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
-			}
-		}
-	}
-	*/
-	//RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
 	RenderCommands::ReleaseRenderTarget(Context);
 	RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
 

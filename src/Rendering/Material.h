@@ -53,7 +53,7 @@ namespace Fracture
 		std::string Name;
 		std::vector<Uniform> Uniforms;
 		std::map<std::string, uint32_t> TextureUnits;
-		uint32_t UnitCount = 0;
+		uint32_t UnitCount = 1;
 	};
 
 }
