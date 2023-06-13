@@ -6,6 +6,7 @@
 #include "nlohmann/json.hpp"
 #include "Buffer.h"
 #include "IGraphicsResource.h"
+#include "AABB.h"
 
 namespace Fracture
 {
@@ -16,6 +17,7 @@ namespace Fracture
 		uint32_t BaseIndex;
 		uint32_t MaterialIndex;
 		uint32_t IndexCount;	
+		AABB BoundingBox;
 		std::string NodeName, MeshName;
 		bool IsVisible;
 	};
@@ -41,10 +43,12 @@ namespace Fracture
 		~StaticMesh();
 		UUID ID;
 		std::string Name;
+		AABB BoundingBox;
 		std::vector<SubMesh> SubMeshes;
 		std::vector<unsigned int> Indices;
 		std::vector<Vertex> mVerticies;
 		std::vector<uint32_t> mMaterials;
+		std::vector<MeshTriangle> mTriangleCache;
 		
 		uint32_t VAO;
 		std::shared_ptr<Buffer> EntityID_Buffer;

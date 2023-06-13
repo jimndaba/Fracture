@@ -247,3 +247,127 @@ void Fracture::DebugRenderer::DrawArrow(const glm::vec3& pos, const glm::vec3& d
     DrawLine(upCornerOutLeft, upCornerInLeft, color);
     DrawLine(upCornerInLeft, baseLeft, color);
 }
+
+/*
+void DrawContext::DrawCone(Transform const& transform, Radians coneAngle, float length, Float4 const& color, float thickness, DepthTestState depthTestState, Seconds TTL)
+{
+    Vector const capOffset = (transform.GetForwardVector() * length);
+    float const coneCapRadius = Math::Tan(coneAngle.ToFloat()) * length;
+
+    Transform capTransform = transform;
+    capTransform.SetScale(coneCapRadius);
+    capTransform.AddTranslation(capOffset);
+
+    // Draw cone cap
+    //-------------------------------------------------------------------------
+
+    auto verts = EE_STACK_ARRAY_ALLOC(Vector, g_numCircleVertices);
+    for (auto i = 0; i < g_numCircleVertices; i++)
+    {
+        verts[i] = capTransform.TransformPoint(g_circleVerticesYUp[i]);
+    }
+
+    // Register line commands
+    for (auto i = 1; i < g_numCircleVertices; i++)
+    {
+        InternalDrawLine(m_commandBuffer, transform.GetTranslation(), verts[i], color, thickness, depthTestState, TTL);
+        InternalDrawLine(m_commandBuffer, verts[i - 1], verts[i], color, thickness, depthTestState, TTL);
+    }
+
+    InternalDrawLine(m_commandBuffer, transform.GetTranslation(), verts[0], color, thickness, depthTestState, TTL);
+    InternalDrawLine(m_commandBuffer, verts[0], verts[g_numCircleVertices - 1], color, thickness, depthTestState, TTL);
+}
+
+
+    void DrawContext::InternalDrawCylinderOrCapsule( bool isCapsule, Transform const& worldTransform, float radius, float halfHeight, Float4 const& color, float thickness, DepthTestState depthTestState, Seconds TTL )
+    {
+        Vector const axisX = worldTransform.GetAxisX();
+        Vector const axisY = worldTransform.GetAxisY();
+        Vector const axisZ = worldTransform.GetAxisZ();
+
+        Vector const origin = worldTransform.GetTranslation();
+        Vector const halfHeightOffset = ( axisZ * halfHeight );
+
+        Vector const cylinderCenterTop = origin + halfHeightOffset;
+        Vector const cylinderCenterBottom = origin - halfHeightOffset;
+
+        // 8 lines
+        //-------------------------------------------------------------------------
+
+        Vector xOffset = ( axisX * radius );
+        Vector lt0 = cylinderCenterTop + xOffset;
+        Vector lt1 = cylinderCenterTop - xOffset;
+        Vector lb0 = cylinderCenterBottom + xOffset;
+        Vector lb1 = cylinderCenterBottom - xOffset;
+
+        DrawLine( lt0, lb0, color, thickness, depthTestState, TTL );
+        DrawLine( lt1, lb1, color, thickness, depthTestState, TTL );
+
+        Vector yOffset = ( axisY * radius );
+        Vector lt2 = cylinderCenterTop + yOffset;
+        Vector lt3 = cylinderCenterTop - yOffset;
+        Vector lb2 = cylinderCenterBottom + yOffset;
+        Vector lb3 = cylinderCenterBottom - yOffset;
+
+        DrawLine( lt2, lb2, color, thickness, depthTestState, TTL );
+        DrawLine( lt3, lb3, color, thickness, depthTestState, TTL );
+
+        Vector xzOffset0 = ( axisX + axisY ).GetNormalized3() * radius;
+        Vector lt4 = cylinderCenterTop + xzOffset0;
+        Vector lt5 = cylinderCenterTop - xzOffset0;
+        Vector lb4 = cylinderCenterBottom + xzOffset0;
+        Vector lb5 = cylinderCenterBottom - xzOffset0;
+
+        DrawLine( lt4, lb4, color, thickness, depthTestState, TTL );
+        DrawLine( lt5, lb5, color, thickness, depthTestState, TTL );
+
+        Vector xzOffset1 = ( axisX - axisY ).GetNormalized3() * radius;
+        Vector lt6 = cylinderCenterTop + xzOffset1;
+        Vector lt7 = cylinderCenterTop - xzOffset1;
+        Vector lb6 = cylinderCenterBottom + xzOffset1;
+        Vector lb7 = cylinderCenterBottom - xzOffset1;
+
+        DrawLine( lt6, lb6, color, thickness, depthTestState, TTL );
+        DrawLine( lt7, lb7, color, thickness, depthTestState, TTL );
+
+        // Caps
+        //-------------------------------------------------------------------------
+
+        DrawCircle( Transform( worldTransform.GetRotation(), cylinderCenterTop ), Axis::Z, radius, color, thickness, depthTestState, TTL );
+        DrawCircle( Transform( worldTransform.GetRotation(), cylinderCenterBottom ), Axis::Z, radius, color, thickness, depthTestState, TTL );
+
+        //-------------------------------------------------------------------------
+
+        if ( isCapsule )
+        {
+            Radians const radiansPerEdge( Math::TwoPi / g_numCircleVertices );
+
+            auto DrawSemiCircle = [&]( Vector const& startPoint, Vector const& capCenterPoint, Vector const& shapeOrigin )
+            {
+                Vector planeVector = startPoint - capCenterPoint;
+                Vector const rotationAxis = ( startPoint - capCenterPoint ).Cross3( startPoint - shapeOrigin ).GetNormalized3();
+                Quaternion const rotation( rotationAxis, radiansPerEdge );
+
+                Vector prevPlaneVector = planeVector;
+                for ( auto c = 0; c < g_numCircleVertices / 2; c++ )
+                {
+                    prevPlaneVector = planeVector;
+                    planeVector = rotation.RotateVector( planeVector );
+                    DrawLine( capCenterPoint + prevPlaneVector, capCenterPoint + planeVector, color, thickness, depthTestState, TTL );
+                }
+            };
+
+            DrawSemiCircle( lt0, cylinderCenterTop, origin );
+            DrawSemiCircle( lt2, cylinderCenterTop, origin );
+            DrawSemiCircle( lt4, cylinderCenterTop, origin );
+            DrawSemiCircle( lt6, cylinderCenterTop, origin );
+
+            DrawSemiCircle( lb0, cylinderCenterBottom, origin );
+            DrawSemiCircle( lb2, cylinderCenterBottom, origin );
+            DrawSemiCircle( lb4, cylinderCenterBottom, origin );
+            DrawSemiCircle( lb6, cylinderCenterBottom, origin );
+        }
+    }
+
+
+*/

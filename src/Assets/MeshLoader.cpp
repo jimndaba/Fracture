@@ -40,6 +40,7 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 	mesh->mVerticies.resize(header.VertexCount);
 	mesh->Indices.resize(header.IndexCount);
 	mesh->mMaterials.resize(header.MaterialCount);
+	mesh->mTriangleCache.resize(header.MeshTriangleSize);
 
 	if (fread(mesh->SubMeshes.data(), sizeof(SubMesh), header.SubMeshCount, f) != header.SubMeshCount)
 	{
@@ -59,16 +60,26 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 		//return nullptr;
 	}
 
+	if (fread(mesh->mTriangleCache.data(), sizeof(MeshTriangle), header.MeshTriangleCount, f) != header.MeshTriangleCount)
+	{
+		FRACTURE_ERROR("Unable to read material data");
+		//return nullptr;
+	}
+
 	if (fread(mesh->mMaterials.data(), sizeof(uint32_t), header.MaterialCount, f) != header.MaterialCount)
 	{
 		FRACTURE_ERROR("Unable to read material data");
 		//return nullptr;
 	}
 
-	for (const auto& mID : mesh->mMaterials)
+	
+	
+
+	for (const auto& submesh : mesh->SubMeshes)
 	{
-		FRACTURE_TRACE("Loading Mesh Material : {}", mID);
+		mesh->BoundingBox = mesh->BoundingBox.Merge(submesh.BoundingBox);
 	}
+
 
 	fclose(f);
 	return mesh;

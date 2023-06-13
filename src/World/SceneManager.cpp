@@ -14,6 +14,7 @@ std::unordered_map<Fracture::UUID, std::vector<Fracture::UUID>> Fracture::SceneM
 
 Fracture::SceneManager::SceneManager()
 {
+    mCurrentScene = nullptr;
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::CreateNewScene(const UUID& root)
@@ -208,9 +209,13 @@ std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& s
         SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
         loader.Open(mSceneRegister[scene_ID].Path);
         auto scene = loader.ReadScene();
-        scene->ID = scene_ID;
-        mScenes[scene_ID] = scene;
-        mCurrentScene = mScenes[scene_ID];
+
+        if (scene)
+        {
+            scene->ID = scene_ID;
+            mScenes[scene_ID] = scene;
+            mCurrentScene = mScenes[scene_ID];
+        }
         return loader.MeshesToLoad; 
     }
     return std::map<Fracture::UUID, int>();
@@ -234,6 +239,7 @@ void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
         mScenes[scene_ID]->mScriptReg.clear();
         mScenes[scene_ID]->ComponentReg.clear();
         mScenes[scene_ID]->Entities.clear();
+        mScenes[scene_ID].reset();
         mScenes.erase(scene_ID);
     }
 }

@@ -26,7 +26,7 @@
 #include "Common/AppWindow.h"
 #include "Common/FractureApp.h"
 #include "EventSystem/Eventbus.h"
-
+#include "Physics/PhysicsEvents.h"
 
 //Graphics
 #include "Rendering/GraphicsDevice.h"
@@ -47,7 +47,6 @@
 #include "World/Components.h"
 #include "World/CameraSystem.h"
 #include "World/TransformSystem.h"
-
 #include "Assets/AssetManager.h"
 
 #include "Serialisation/Serialiser.h"

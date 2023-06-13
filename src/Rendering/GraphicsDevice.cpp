@@ -441,7 +441,10 @@ Fracture::RenderTarget* Fracture::GraphicsDevice::GetGlobalRenderTarget(const st
 {
     auto it = mGlobalResources.find(Name);
     if (it == mGlobalResources.end())
+    {
+        FRACTURE_ERROR("Could not find Render Target {}", Name);
         return nullptr;
+    }
 
     return static_cast<RenderTarget*>(mGlobalResources[Name].get());
 }

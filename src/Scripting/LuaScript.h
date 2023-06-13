@@ -7,6 +7,8 @@
 
 namespace Fracture
 {
+	struct CollisionContext;
+
 	enum class PROPERTY_TYPE
 	{
 		UUID,
@@ -64,7 +66,7 @@ namespace Fracture
 		void OnUpdate(sol::state& state, float dt, const Fracture::UUID& entity);
 		void OnLateUpate(sol::state& state, float dt, const Fracture::UUID& entity);
 		void OnFixedUpdate(sol::state& state,float dt, const Fracture::UUID& entity);
-		void OnCollision(sol::state& state, const Fracture::UUID& entity);
+		void OnCollision(sol::state& state, const Fracture::CollisionContext& cntxt);
 		void OnTrigger(sol::state& state, const Fracture::UUID& entity);
 
 		void DoScript(sol::state& state);

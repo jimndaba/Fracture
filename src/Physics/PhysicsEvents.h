@@ -9,15 +9,16 @@ namespace Fracture
 	struct CollisionContext
 	{
 		Fracture::UUID entity;
+		Fracture::UUID other;
 		std::string Tag;
 	};
 
 	struct OnCollisionEvent : public Event
 	{
-		OnCollisionEvent(CollisionContext a, CollisionContext b);
+		OnCollisionEvent(CollisionContext c);
 
-		CollisionContext EntityA;
-		CollisionContext EntityB;
+		CollisionContext Collision;
+
 
 		const char* Name() { return "OnCollision"; };
 	};

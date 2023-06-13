@@ -57,6 +57,7 @@ void Fracture::PhysicsManager::Init()
 	}
 
 	mInstance->mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *mInstance->gFoundation, PxCookingParams(PxTolerancesScale()));
+
 	if (!mInstance->mCooking)
 	{
 		FRACTURE_CRITICAL("Failed to Init Physx Cooking");
@@ -136,8 +137,9 @@ void Fracture::PhysicsManager::DestroyScene()
 		mInstance->mColliders.clear();
 		mInstance->mMaterials.clear();
 
-		if (mInstance->mScene)
-			mInstance->mScene->Destroy();
+		mInstance->mScene->Destroy();
+		mInstance->mScene.reset();
+			
 		FRACTURE_INFO("Physics Scene Destroyed");
 	}
 }
@@ -173,6 +175,9 @@ void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 				//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, rigidbody->DetectionType == CollisionDetectionType::ContinuousSpeculative);
+				PxRigidBodyExt::updateMassAndInertia(*actor, 10.0f);
+
+				
 			}
 
 
@@ -187,8 +192,12 @@ void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 					{
 						physx::PxSphereGeometry geometry = physx::PxSphereGeometry(collider->Radius);
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						PxFilterData filterData;
+						filterData.word0 = FilterGroup::eOne; // word0 = own ID
+						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
+						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
 
 						break;
 					}
@@ -196,30 +205,39 @@ void Fracture::PhysicsManager::AddActors(const UUID& mEntity)
 					{
 						physx::PxBoxGeometry geometry = physx::PxBoxGeometry(collider->Size.x, collider->Size.y, collider->Size.z);
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						
+						PxFilterData filterData;
+						filterData.word0 = FilterGroup::eOne; // word0 = own ID
+						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
+						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
 						break;
 					}
 					case ColliderType::Capsule:
 					{
 						physx::PxCapsuleGeometry geometry = physx::PxCapsuleGeometry(collider->Radius, collider->Height);
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
-						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mActors[mEntity], geometry, *mMaterials[mEntity]);
+						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
+						PxFilterData filterData;
+						filterData.word0 = FilterGroup::eOne; // word0 = own ID
+						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
+						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+
 						break;
 					}
 					}
 
 				}
 				mInstance->mActors[mEntity]->attachShape(*mInstance->mColliders[mEntity]);
+				mInstance->mColliders[mEntity]->release();
 			}
 
 			//const auto& name = SceneManager::CurrenScene()->GetComponent<TagComponent>(ID)->Name;
 			//m_RigidActor->setName(name.c_str());
 			mInstance->mActors[mEntity]->userData = rigidbody.get();
-
-
-			mInstance->mScene->AddActor(*mActors[mEntity]);
+			mInstance->mScene->AddActor(*mInstance->mActors[mEntity]);
 		}
 	}
 }
@@ -240,34 +258,7 @@ physx::PxCpuDispatcher* Fracture::PhysicsManager::GetCPUDispatcher()
 	return mInstance->mDispacther;
 }
 
-physx::PxFilterFlags Fracture::PhysicsManager::FilterShader(physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize)
-{
-	if (physx::PxFilterObjectIsTrigger(attributes0) || physx::PxFilterObjectIsTrigger(attributes1))
-	{
-		pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
-		return physx::PxFilterFlag::eDEFAULT;
-	}
 
-	pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
-
-	/*
-	if (filterData0.word2 == (uint32_t)RigidBodyComponent::CollisionDetectionType::Continuous || filterData1.word2 == (uint32_t)RigidBodyComponent::CollisionDetectionType::Continuous)
-	{
-		pairFlags |= physx::PxPairFlag::eDETECT_DISCRETE_CONTACT;
-		pairFlags |= physx::PxPairFlag::eDETECT_CCD_CONTACT;
-	}
-	*/
-
-	if ((filterData0.word0 & filterData1.word1) || (filterData1.word0 & filterData0.word1))
-	{
-		pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
-		pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_LOST;
-		return physx::PxFilterFlag::eDEFAULT;
-	}
-
-	return physx::PxFilterFlag::eSUPPRESS; 
-
-}
 
 physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID& entity)
 {

@@ -4,9 +4,13 @@
 #include "World/SceneManager.h"
 #include "Input/Input.h"
 #include "LuaScript.h"
+#include "EventSystem/Eventbus.h"
 
 #include "LuaMathBindings.h"
 #include "LuaComponentBindings.h"
+#include "LuaPhysicsBindings.h"
+
+#include "Physics/PhysicsEvents.h"
 
 sol::state* Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
@@ -22,6 +26,10 @@ void Fracture::ScriptManager::BindLog(sol::state& L)
 	auto log = L.create_table("Debug");
 	log.set_function("log", [&](sol::this_state s, std::string message) {
 		FRACTURE_INFO(message);
+		});
+
+	log.set_function("log", [&](sol::this_state s, Fracture::UUID id) {
+		FRACTURE_INFO(id);
 		});
 
 	log.set_function("trace", [&](sol::this_state s, std::string message) {
@@ -53,8 +61,8 @@ void Fracture::ScriptManager::BindCore(sol::state& lua)
 		UUID()>(),
 
 		sol::meta_function::to_string, [](Fracture::UUID& e) { return fmt::format("UUID : {}", e); }
-	);
-
+	);	
+	
 	//Constructors
 	lua.set_function("UUID", []() {return UUID(); });
 }
@@ -223,13 +231,24 @@ void Fracture::ScriptManager::BindApplication(sol::state& L)
 void Fracture::ScriptManager::Init()
 {
 	lua = new(sol::state);
-	lua->open_libraries(sol::lib::base);
+	lua->open_libraries(
+		sol::lib::base,
+		sol::lib::package,
+		sol::lib::string,
+		sol::lib::os,
+		sol::lib::math,
+		sol::lib::table,
+		sol::lib::debug,
+		sol::lib::bit32,
+		sol::lib::io
+	);
 
 	BindCore(*lua);
 	BindLog(*lua);
 	BindInput(*lua);
 	BindFunctions(*lua);
 	BindMaths(*lua);
+	BindPhysicsEvents(*lua);
 
 	//LuaBindEntity::BindEntity(*lua);
 	LuaBindComponents::BindTagComponent(*lua);
@@ -244,7 +263,13 @@ void Fracture::ScriptManager::Init()
 	LuaBindComponents::BindRigidbodyComponent(*lua);
 	LuaBindComponents::BindTagComponent(*lua);
 	LuaBindComponents::BindTransformComponent(*lua);
+
+
+	Fracture::Eventbus::Subscribe(this, &ScriptManager::OnCollision);
+
 	FRACTURE_INFO("Script Manager Init");
+
+
 
 }
 
@@ -267,7 +292,7 @@ void Fracture::ScriptManager::onStart()
 			script->BindProperties(*lua);
 			script->OnStart(*lua, component->GetID());
 		}
-	}
+	}	
 }
 
 void Fracture::ScriptManager::onExit()
@@ -296,12 +321,12 @@ void Fracture::ScriptManager::onUpdate(float dt)
 		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
 		for (const auto& component : s)
 		{
-			if (mScripts.find(component->Script) == mScripts.end())
-				continue;
-
 			if (!component->HasScriptAttached)
 				continue;
 
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+			
 			const auto& script = mScripts[component->Script];
 			script->OnUpdate(*lua, dt, component->GetID());
 		}
@@ -310,7 +335,25 @@ void Fracture::ScriptManager::onUpdate(float dt)
 
 void Fracture::ScriptManager::Shutdown()
 {
+}
 
+void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt)
+{
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnCollision(*lua, evnt->Collision);
+		}
+	}
 }
 
 void Fracture::ScriptManager::RegisterScript(const LuaScriptRegistry& reg)
@@ -384,7 +427,7 @@ void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
 	script << std::endl;
 
 	///onCollision
-	script << "function " + reg.Name + ":OnCollision(id)" << std::endl;
+	script << "function " + reg.Name + ":OnCollision(contactInfo)" << std::endl;
 	script << "--Start Code --" << std::endl;
 	script << "end" << std::endl;
 	script << std::endl;

@@ -9,6 +9,18 @@ namespace Fracture
 {
 	class PhysicsScene;
 
+	struct FilterGroup
+	{
+		enum Enum
+		{
+			eOne = (1 << 0),
+			eTwo = (1 << 1),
+			eThree = (1 << 2),
+			eFour = (1 << 3),
+			eFive = (1 << 4),
+		};
+	};
+
 	class PhysicsManager 
 	{
 
@@ -30,9 +42,6 @@ namespace Fracture
 
 		physx::PxPhysics& GetPhysicsSDK();
 		physx::PxCpuDispatcher* GetCPUDispatcher();
-
-		physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0, physx::PxFilterObjectAttributes attributes1,
-			physx::PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize);
 
 		physx::PxRigidActor* GetRigidBody(const Fracture::UUID& entity);
 

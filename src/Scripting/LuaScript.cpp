@@ -1,5 +1,6 @@
 #include "FracturePCH.h"
 #include "LuaScript.h"
+#include "Physics/PhysicsEvents.h"
 
 Fracture::LuaScript::LuaScript(const LuaScriptRegistry& reg):Description(reg)
 {
@@ -15,7 +16,7 @@ void Fracture::LuaScript::OnStart(sol::state& state,const Fracture::UUID& entity
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnStart function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
@@ -31,7 +32,7 @@ void Fracture::LuaScript::OnExit(sol::state& state, const Fracture::UUID& entity
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnExit function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
@@ -43,7 +44,7 @@ void Fracture::LuaScript::OnUpdate(sol::state& state, float dt, const Fracture::
     if (m_onUpdate)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onUpdate->call(self, dt, entity);
+        sol::protected_function_result result = m_onUpdate->call(dt, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -62,7 +63,7 @@ void Fracture::LuaScript::OnLateUpate(sol::state& state, float dt, const Fractur
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnLateUpdate function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
@@ -77,22 +78,22 @@ void Fracture::LuaScript::OnFixedUpdate(sol::state& state, float dt, const Fract
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnFixedUpdate function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
 }
 
-void Fracture::LuaScript::OnCollision(sol::state& state, const Fracture::UUID& entity)
+void Fracture::LuaScript::OnCollision(sol::state& state, const Fracture::CollisionContext& cntxt)
 {
     if (m_onCollision)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onCollision->call(self, entity);
+        sol::protected_function_result result = m_onCollision->call(self, cntxt);
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnCollision function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }
@@ -107,7 +108,7 @@ void Fracture::LuaScript::OnTrigger(sol::state& state, const Fracture::UUID& ent
         if (!result.valid())
         {
             sol::error err = result;
-            FRACTURE_ERROR("Failed to Execute Script Lua OnUpdate function");
+            FRACTURE_ERROR("Failed to Execute Script Lua OnTrigger function");
             FRACTURE_ERROR("Error : {0}", err.what());
         }
     }

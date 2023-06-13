@@ -25,9 +25,9 @@ void LuaBindComponents::BindTransformComponent(sol::state& lua)
 		"TransformComponent", sol::no_constructor,
 		sol::base_classes, sol::bases<Fracture::IComponent>(),
 		//Properties
-		"Position", sol::readonly_property(&Fracture::TransformComponent::Position),
-		"Rotation", sol::readonly_property(&Fracture::TransformComponent::Rotation),
-		"Scale", sol::readonly_property(&Fracture::TransformComponent::Scale),
+		"Position", &Fracture::TransformComponent::Position,
+		"Rotation", &Fracture::TransformComponent::Rotation,
+		"Scale", &Fracture::TransformComponent::Scale,
 		"ID", sol::readonly_property(&Fracture::TransformComponent::GetID),
 
 		//Methods

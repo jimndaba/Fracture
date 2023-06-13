@@ -32,16 +32,27 @@ void Fracture::RenderContext::Begin()
 
 			glm::vec4 color(0);
 
-			color.r = ((meshcomponent->GetID() >> 0) & 0XFF) / 255.0f;
-			color.g = ((meshcomponent->GetID() >> 8) & 0XFF) / 255.0f;
-			color.b = ((meshcomponent->GetID() >> 16) & 0XFF) / 255.0f;
-			color.a = 1.0f;
+			//color.r = (meshcomponent->GetID() >> 0)  / 255.0f;
+			//color.g = (meshcomponent->GetID() >> 8) / 255.0f;
+			//color.b = (meshcomponent->GetID() >> 16) / 255.0f;
 
-			//color.r = ((meshcomponent->GetID() & 0xFF) >> 16) / 255.f;
-			//color.g = ((meshcomponent->GetID() & 0xFF) >> 8) / 255.f;
-			//color.b = (meshcomponent->GetID() & 0xFF) / 255.f ;
-			//color.a = ((meshcomponent->GetID() & 0xFF) >> 24) / 255.f;
-			
+			uint32_t id = meshcomponent->GetID();
+			//r = (id & 0x000000FF) >> 0;
+			//g = (id & 0x0000FF00) >> 8;
+			//b = (id & 0x00FF0000) >> 16;
+			//a = 255;
+
+			uint8_t r = (id >> 24) & 0xFF; // Red component
+			uint8_t g = (id >> 16) & 0xFF; // Green component
+			uint8_t b = (id >> 8) & 0xFF;  // Blue component
+			uint8_t a = id & 0xFF;         // Alpha component
+
+
+			color.r = (float)r / 255.0f;
+			color.g = (float)g / 255.0f;
+			color.b = (float)b / 255.0f;
+			color.a = (float)a / 255.0f;
+
 			EntityIndeces[meshcomponent->Mesh].push_back(color);
 		
 		}

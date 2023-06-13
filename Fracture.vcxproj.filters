@@ -366,6 +366,12 @@
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\LuaPhysicsBindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -672,6 +678,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\LuaPhysicsBindings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

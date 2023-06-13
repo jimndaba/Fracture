@@ -1,6 +1,6 @@
 #include "FracturePCH.h"
 #include "PhysicsEvents.h"
 
-Fracture::OnCollisionEvent::OnCollisionEvent(CollisionContext a, CollisionContext b) :Event(),EntityA(a),EntityB(b)
+Fracture::OnCollisionEvent::OnCollisionEvent(CollisionContext c) :Event(),Collision(c)
 {
 }

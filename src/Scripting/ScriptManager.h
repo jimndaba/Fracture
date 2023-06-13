@@ -11,6 +11,7 @@ namespace Fracture
 	class LuaScript;
 	struct LuaScriptRegistry;
 	struct Entity;
+	struct OnCollisionEvent;
 
 	class ScriptManager
 	{
@@ -29,6 +30,8 @@ namespace Fracture
 		void onExit();
 		void onUpdate(float dt);
 		void Shutdown();
+
+		void OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt);
 
 		static void RegisterScript(const LuaScriptRegistry& reg);
 

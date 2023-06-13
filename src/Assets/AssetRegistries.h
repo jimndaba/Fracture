@@ -32,10 +32,12 @@ namespace Fracture
 		uint32_t VertexCount;
 		uint32_t IndexCount;
 		uint32_t MaterialCount;
+		uint32_t MeshTriangleCount;
 		uint32_t datablockOffset;
 		uint32_t SubMeshDataSize;
 		uint32_t IndexDataSize;
 		uint32_t VertexDataSize;
+		uint32_t MeshTriangleSize;
 	};
 
 	struct TextureFileHeader

@@ -19,6 +19,7 @@ namespace Fracture
 		std::vector<std::shared_ptr<Entity>> Entities;
 		std::unordered_map<std::type_index, ComponentSet> ComponentReg;
 		std::unordered_map<UUID, std::vector<std::shared_ptr<ScriptComponent>>> mScriptReg;
+		std::unordered_map<UUID, Scene> mPrefabs;
 		std::string Name = "Untitled";
 	};
 }

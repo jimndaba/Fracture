@@ -129,6 +129,7 @@
     <ClInclude Include="src\Physics\PhysicsManager.h" />
     <ClInclude Include="src\Physics\PhysicsScene.h" />
     <ClInclude Include="src\Physics\Ray.h" />
+    <ClInclude Include="src\Rendering\AABB.h" />
     <ClInclude Include="src\Rendering\Buffer.h" />
     <ClInclude Include="src\Rendering\Color.h" />
     <ClInclude Include="src\Rendering\Command.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\Scripting\LuaAudioBindings.h" />
     <ClInclude Include="src\Scripting\LuaComponentBindings.h" />
     <ClInclude Include="src\Scripting\LuaMathBindings.h" />
+    <ClInclude Include="src\Scripting\LuaPhysicsBindings.h" />
     <ClInclude Include="src\Scripting\LuaScript.h" />
     <ClInclude Include="src\Scripting\ScriptManager.h" />
     <ClInclude Include="src\Serialisation\MaterialSerialiser.h" />
@@ -246,6 +248,7 @@
     <ClCompile Include="src\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Physics\PhysicsScene.cpp" />
     <ClCompile Include="src\Physics\Ray.cpp" />
+    <ClCompile Include="src\Rendering\AABB.cpp" />
     <ClCompile Include="src\Rendering\Buffer.cpp" />
     <ClCompile Include="src\Rendering\Color.cpp" />
     <ClCompile Include="src\Rendering\Command.cpp" />
@@ -279,6 +282,7 @@
     <ClCompile Include="src\Scripting\LuaAudioBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaComponentBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaMathBindings.cpp" />
+    <ClCompile Include="src\Scripting\LuaPhysicsBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaScript.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
     <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp" />

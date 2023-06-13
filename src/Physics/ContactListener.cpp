@@ -1,5 +1,8 @@
 #include "FracturePCH.h"
 #include "ContactListener.h"
+#include "World/Components.h"
+#include "EventSystem/Eventbus.h"
+#include "PhysicsEvents.h"
 
 void Fracture::ContactListener::onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count)
 {
@@ -16,15 +19,24 @@ void Fracture::ContactListener::onSleep(physx::PxActor** actors, physx::PxU32 co
 
 void Fracture::ContactListener::onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs)
 {
+	PX_UNUSED((pairHeader));
 	for (physx::PxU32 i = 0; i < nbPairs; i++)
 	{
 		const physx::PxContactPair& cp = pairs[i];
-
 		if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 		{
-			FRACTURE_TRACE("On Contact Enter");
+			auto actor_a = reinterpret_cast<Fracture::RigidbodyComponent*>(pairHeader.actors[0]->userData);
+			auto actor_other = reinterpret_cast<Fracture::RigidbodyComponent*>(pairHeader.actors[1]->userData);		
+
+			CollisionContext cntxt;
+			cntxt.entity = actor_a->GetID();
+			cntxt.other = actor_other->GetID();
+			Eventbus::Publish<OnCollisionEvent>(cntxt);
+			break;
 		}
 	}
+
+
    
 }
 
