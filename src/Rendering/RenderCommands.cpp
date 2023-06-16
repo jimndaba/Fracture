@@ -489,6 +489,81 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 	{
 		SetUniform(cntxt, shader, "TextureSpace",(int)material->TextureSpace);
 		SetUniform(cntxt, shader, "Tiling",material->TextureTiling);
+		SetUniform(cntxt, shader, "pDiffuse",material->AlbedoColour);
+		SetUniform(cntxt, shader, "pEmission",material->EmissionColour);
+		SetUniform(cntxt, shader, "pAO",material->AOLevel);
+		SetUniform(cntxt, shader, "pMetalness",material->MetalicLevel);
+		SetUniform(cntxt, shader, "pRoughness",material->RoughnessLevel);
+		SetUniform(cntxt, shader, "EmissionStrength",material->EmmisionStrength);
+		SetUniform(cntxt, shader, "SpecularLevel",material->SpecularLevel);
+		SetUniform(cntxt, shader, "SpecularIntensity",material->SpecularIntensity);
+
+		SetUniform(cntxt, shader, "_AlbedoFlag", material->HasAlbedoTexture);
+		SetUniform(cntxt, shader, "_SpecularFlag", material->HasSpecularTexture);
+		SetUniform(cntxt, shader, "_NormalFlag", material->HasNormalTexture);
+		SetUniform(cntxt, shader, "_RoughnessFlag", material->HasRoughnessTexture);
+		SetUniform(cntxt, shader, "_MetalnessFlag", material->HasMetalTexture);
+		SetUniform(cntxt, shader, "_AOFlag", material->HasAOTexture); 
+		SetUniform(cntxt, shader, "_EmissionFlag", material->HasEmissionTexture);
+
+		if (material->HasAlbedoTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->AlbedoTexture);
+			if (texture)
+			{			
+				SetTexture(cntxt, shader, "aAlbedo", texture->Handle, (int)TEXTURESLOT::Albedo);
+			}
+		}
+		if (material->HasSpecularTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->SpecularTexture);
+			if (texture)
+			{			
+				SetTexture(cntxt, shader, "aSpecular", texture->Handle, (int)TEXTURESLOT::Specular);
+			}
+		}
+		if (material->HasNormalTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->NormalTexture);
+			if (texture)
+			{				
+				SetTexture(cntxt, shader, "aNormal", texture->Handle, (int)TEXTURESLOT::Normal);
+			}
+		}
+		if (material->HasRoughnessTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->RoughnessTexture);
+			if (texture)
+			{				
+				SetTexture(cntxt, shader, "aRoughness", texture->Handle, (int)TEXTURESLOT::Roughness);
+			}
+		}
+		if (material->HasMetalTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->MetallicTexture);
+			if (texture)
+			{			
+				SetTexture(cntxt, shader, "aMetalness", texture->Handle, (int)TEXTURESLOT::Metalness);
+			}
+		}
+		if (material->HasAOTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->AOTexture);
+			if (texture)
+			{			
+				SetTexture(cntxt, shader, "aAO", texture->Handle, (int)TEXTURESLOT::AO);
+			}
+		}
+		if (material->HasEmissionTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->EmmissionTexture);
+			if (texture)
+			{				
+				SetTexture(cntxt, shader, "aEmission", texture->Handle, (int)TEXTURESLOT::Emmission);
+			}
+		}
+
+		
 
 		for (const auto& uniform : material->Uniforms)
 		{

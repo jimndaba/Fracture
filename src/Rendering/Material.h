@@ -10,12 +10,15 @@ namespace Fracture
 {
 	enum class TEXTURESLOT
 	{
+		GlobalAO,
+		DirectShadows,
 		Albedo,
 		Normal,
 		Specular,
 		Roughness,
 		Metalness,
 		Emmission,
+		AO,
 		TotalSlots
 	};
 
@@ -50,15 +53,35 @@ namespace Fracture
 		bool HasSpecularTexture = false;
 		bool HasRoughnessTexture = false;
 		bool HasMetalTexture = false;
+		bool HasAOTexture = false;
 		bool HasEmissionTexture = false;
+
+		Fracture::UUID AlbedoTexture;
+		Fracture::UUID NormalTexture;
+		Fracture::UUID SpecularTexture;
+		Fracture::UUID RoughnessTexture;
+		Fracture::UUID MetallicTexture;
+		Fracture::UUID AOTexture;
+		Fracture::UUID EmmissionTexture;
+
+		glm::vec4 AlbedoColour = glm::vec4(1.0);
+		glm::vec4 SpecularColour = glm::vec4(1.0);
+		glm::vec4 EmissionColour = glm::vec4(0.0);;
+		float RoughnessLevel = 0.0f;
+		float SpecularLevel = 128.0f;
+		float SpecularIntensity = 1.0f;
+		float AOLevel = 1.0f;
+		float MetalicLevel = 0.0f;
+		float EmmisionStrength = 0.0f;
+
 
 		CullMode cullmode = CullMode::Back;
 		UVSpace TextureSpace = UVSpace::Object;
 		float TextureTiling = 1.0f;
 
-		bool CastsShadows;
-		bool IsTranslucent;
-		bool IsDirty;
+		bool CastsShadows = true;
+		bool IsTranslucent = false;
+		bool IsDirty = false;
 
 		Fracture::UUID ID;
 		Fracture::UUID Shader;

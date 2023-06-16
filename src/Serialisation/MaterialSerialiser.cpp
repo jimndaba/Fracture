@@ -22,8 +22,32 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("HasNormal", material->HasNormalTexture);
 		Property("HasRoughness", material->HasRoughnessTexture);
 		Property("HasSpecular", material->HasSpecularTexture);
+		Property("HasEmmision", material->HasEmissionTexture);
+		Property("HasAO", material->HasAOTexture);
+
+		Property("AlbedoTexture", material->AlbedoTexture);
+		Property("NormalTexture", material->NormalTexture);
+		Property("SpecularTexture", material->SpecularTexture);
+		Property("RoughnessTexture", material->RoughnessTexture);
+		Property("MetallicTexture", material->MetallicTexture);
+		Property("AOTexture", material->AOTexture);
+		Property("EmissionTexture", material->EmmissionTexture);
+
+		Property("AlbedoColour", material->AlbedoColour);
+		Property("SpecularColour", material->SpecularColour);
+		Property("SpecularIntensity", material->SpecularIntensity);
+		Property("SpecularLevel", material->SpecularLevel);
+		Property("RoughnessLevel", material->RoughnessLevel);
+		Property("MetallicLevel", material->MetalicLevel);
+		Property("EmissionColour", material->EmissionColour);
+		Property("EmissionStrength", material->EmmisionStrength);
+		Property("AOLevel", material->AOLevel);
+
 
 		Property("CastsShadows", material->CastsShadows);
+		Property("CullMode", (int)material->cullmode);
+		Property("TextureSpace", (int)material->TextureSpace);
+		Property("TextureTiling", material->TextureTiling);
 		Property("IsTranslucent", material->IsTranslucent);
 
 
@@ -55,6 +79,30 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		material->HasSpecularTexture = BOOL("HasSpecular");
 		material->IsTranslucent = BOOL("IsTranslucent");
 		material->CastsShadows = BOOL("CastsShadows");
+
+		material->AlbedoTexture = ID("AlbedoTexture");
+		material->SpecularTexture = ID("SpecularTexture");
+		material->NormalTexture = ID("NormalTexture");
+		material->RoughnessTexture = ID("RoughnessTexture");
+		material->MetallicTexture = ID("MetallicTexture");
+		material->AOTexture = ID("AOTexture");
+		material->EmmissionTexture = ID("EmissionTexture");
+
+		material->AlbedoColour = VEC4("AlbedoColour");
+		material->SpecularColour = VEC4("SpecularColour");
+		material->EmissionColour = VEC4("EmissionColour");
+
+		material->SpecularLevel = FLOAT("SpecularLevel");
+		material->SpecularIntensity = FLOAT("SpecularIntensity");
+		material->SpecularIntensity = FLOAT("RoughnessLevel");
+		material->SpecularIntensity = FLOAT("MetallicLevel");
+		material->SpecularIntensity = FLOAT("EmissionStrength");
+		material->SpecularIntensity = FLOAT("AOLevel");
+		
+		
+		material->cullmode = (CullMode)INT("CullMode");
+		material->TextureSpace = (UVSpace)INT("TextureSpace");
+		material->TextureTiling = FLOAT("TextureTiling");
 
 		if (BeginCollection("Uniforms"))
 		{

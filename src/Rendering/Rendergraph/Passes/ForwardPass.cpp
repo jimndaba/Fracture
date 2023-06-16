@@ -54,11 +54,11 @@ void Fracture::ForwardPass::Execute()
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
 		{
 			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
-			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, 0);
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, (int)TEXTURESLOT::GlobalAO);
 		}		
 		{
 			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
-			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, 1);
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::DirectShadows);
 		}
 
 		//Set Shader
@@ -89,7 +89,6 @@ void Fracture::ForwardPass::Execute()
 				cmd.count = sub.IndexCount;
 				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);		
 
-				//Fracture::RenderCommands::ResetTextureUnits(Context, shader.get());
 			}
 			Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 		}
