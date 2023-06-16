@@ -559,6 +559,9 @@ std::shared_ptr<Fracture::Material> Fracture::AssetManager::GetMaterial(const st
 
 std::shared_ptr<Fracture::Material> Fracture::AssetManager::GetMaterialByID(const Fracture::UUID& id)
 {
+	if (!id)
+		return nullptr;
+
 	{
 		if (!IsMaterialLoaded(mMaterialRegister[id].ID))
 		{

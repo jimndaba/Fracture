@@ -138,6 +138,7 @@ namespace Fracture
 		void SetViewport(Fracture::RenderContext* cntxt, float width, float height, float x, float y);
 		void SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x, float y);
 		void SetRenderTarget(Fracture::RenderContext* cntxt, RenderTarget* rt);
+		void SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt);
 		void ReleaseRenderTarget(Fracture::RenderContext* cntxt);
 		void SetCullMode(Fracture::RenderContext* cntxt, CullMode mode);
 

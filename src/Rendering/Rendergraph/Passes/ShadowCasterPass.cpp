@@ -3,6 +3,7 @@
 #include "World/SceneManager.h"
 #include "Assets/AssetManager.h"
 #include "Rendering/Mesh.h"
+#include "Rendering/GraphicsDevice.h"
 
 Fracture::ShadowCasterPass::ShadowCasterPass(const std::string& name, RenderContext* context, const ShadowCasterPassDef& info):
 	IPass(name,context),
@@ -14,14 +15,15 @@ Fracture::ShadowCasterPass::ShadowCasterPass(const std::string& name, RenderCont
 
 void Fracture::ShadowCasterPass::Setup()
 {
-	shadowCascadeLevels = { (1000.0f / 50.0f), (1000.0f / 25.0f), (1000.0f / 10.0f), (1000.0f / 2.0f) };
+    auto farPlane = SceneManager::ActiveCamera()->Far;
+	shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
     GraphicsDevice::Instance()->RenderSettings.ShadowCascadeCont = shadowCascadeLevels.size();
     
     Fracture::RenderTargetCreationInfo info;
     {
         Fracture::TextureCreationInfo desc;
-        desc.Width = 1024;
-        desc.Height = 1024;
+        desc.Width = GraphicsDevice::RenderSettings.Shadow_Resolution;
+        desc.Height = GraphicsDevice::RenderSettings.Shadow_Resolution;
         desc.TextureTarget = TextureTarget::Texture2DArray;
         desc.AttachmentTrgt = Fracture::AttachmentTarget::Depth;
         desc.format = Fracture::TextureFormat::DepthComponent;
@@ -33,12 +35,12 @@ void Fracture::ShadowCasterPass::Setup()
         desc.Name = "Shadows";
         desc.Wrap = TextureWrap::CampToBorder;
 
-        info.Width = 1024;
-        info.Height = 1024;
+        info.Width = GraphicsDevice::RenderSettings.Shadow_Resolution;
+        info.Height = GraphicsDevice::RenderSettings.Shadow_Resolution;
         info.Target = AttachmentTarget::Depth;
         info.DepthStencilAttachments.push_back(desc);
     }    
-    GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_Shadow", info);
+    GraphicsDevice::Instance()->CreateGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows, info);
 
     
 
@@ -78,22 +80,24 @@ void Fracture::ShadowCasterPass::Execute()
     //Update Cascade Shadow Levels
     {
         auto farPlane = SceneManager::ActiveCamera()->Far;
-        //shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
+        shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
         for (int i = 0; i < shadowCascadeLevels.size(); i++)
         {
             GraphicsDevice::Instance()->UpdateBufferData(mSplaneDistances.get(), i * shadowCascadeLevels.size() * sizeof(shadowCascadeLevels[0]), sizeof(shadowCascadeLevels[0]), &shadowCascadeLevels[i]);
         }
     }
     {
-        const auto& global_shadow = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_Shadow");
+        const auto& global_shadow = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 
         if (!global_shadow)
             return;
 
         RenderCommands::SetRenderTarget(Context, global_shadow);
+        
+        RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.Shadow_Resolution, GraphicsDevice::RenderSettings.Shadow_Resolution, 0, 0);
+        RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.Shadow_Resolution, GraphicsDevice::RenderSettings.Shadow_Resolution, 0, 0);
         RenderCommands::ClearTarget(Context, (uint32_t)ClearBufferBit::Depth);
-        RenderCommands::SetViewport(Context, 1024, 1024, 0, 0);
-        RenderCommands::SetScissor(Context, 1024, 1024, 0, 0);
+
         RenderCommands::SetCullMode(Context, CullMode::Back);
         RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 

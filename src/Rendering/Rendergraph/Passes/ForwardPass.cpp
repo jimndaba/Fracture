@@ -3,6 +3,7 @@
 #include "World/SceneManager.h"
 #include "Assets/AssetManager.h"
 #include "Rendering/Mesh.h"
+#include "Rendering/Material.h"
 
 Fracture::ForwardPass::ForwardPass(const std::string& name, RenderContext* context, const ForwardPassDef& info):IPass(name,context),definition(info)
 {
@@ -16,7 +17,7 @@ void Fracture::ForwardPass::Setup()
 
 void Fracture::ForwardPass::Execute()
 {
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)
 		return;
@@ -27,7 +28,6 @@ void Fracture::ForwardPass::Execute()
 	RenderCommands::SetRenderTarget(Context, global_color);
 	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
 	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetCullMode(Context, CullMode::Back);	
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
 
@@ -53,11 +53,11 @@ void Fracture::ForwardPass::Execute()
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
 		{
-			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_SSAO");
+			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, 0);
 		}		
 		{
-			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_Shadow");
+			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, 1);
 		}
 
@@ -79,7 +79,8 @@ void Fracture::ForwardPass::Execute()
 				if (mesh->mMaterials.size())
 					Fracture::RenderCommands::BindMaterial(Context, shader.get(), AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex]).get());
 
-				
+				RenderCommands::SetCullMode(Context, AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex])->cullmode);
+
 
 				DrawElementsInstancedBaseVertex cmd;
 				cmd.basevertex = sub.BaseVertex;

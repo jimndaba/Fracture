@@ -4,6 +4,7 @@
 
 #include "Shader.h"
 #include "Color.h"
+#include "PipelineState.h"
 
 namespace Fracture
 {
@@ -16,6 +17,13 @@ namespace Fracture
 		Metalness,
 		Emmission,
 		TotalSlots
+	};
+
+	enum class UVSpace
+	{
+		Object,
+		Screen,
+		World
 	};
 
 	struct Material
@@ -43,6 +51,10 @@ namespace Fracture
 		bool HasRoughnessTexture = false;
 		bool HasMetalTexture = false;
 		bool HasEmissionTexture = false;
+
+		CullMode cullmode = CullMode::Back;
+		UVSpace TextureSpace = UVSpace::Object;
+		float TextureTiling = 1.0f;
 
 		bool CastsShadows;
 		bool IsTranslucent;

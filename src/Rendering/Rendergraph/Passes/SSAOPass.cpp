@@ -59,7 +59,7 @@ void Fracture::SSAOPass::Setup()
 			desc.Name = "SSAO";
 			info.ColorAttachments.push_back(desc);
 		}		
-		GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_SSAO", info);
+		GraphicsDevice::Instance()->CreateGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO, info);
 	}
 	{
 		Fracture::RenderTargetCreationInfo info;
@@ -118,8 +118,8 @@ void Fracture::SSAOPass::Setup()
 
 void Fracture::SSAOPass::Execute()
 {
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
-	const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_SSAO");
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
+	const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
 
 	if (!global_color)
 		return;

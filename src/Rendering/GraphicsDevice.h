@@ -14,6 +14,15 @@
 
 namespace Fracture
 {
+	struct GlobalRenderTargets
+	{
+		static std::string GlobalColour;
+		static std::string GlobalSSAO;
+		static std::string GlobalDebug;
+		static std::string GlobalDirectShadows;
+		static std::string GlobalFinalOut;
+	};
+
 	enum class ShaderUniformIndex
 	{
 		GlobalFrameData,		
@@ -85,7 +94,7 @@ namespace Fracture
 		glm::vec2 _pad;
 	};
 
-
+	struct PostProcessPipeline;
 
 	class GraphicsDevice
 	{
@@ -96,6 +105,7 @@ namespace Fracture
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
+		std::shared_ptr<PostProcessPipeline> mPostProcessPipeline;
 
 		const int MAX_LIGHTS = 1024;
 		std::vector<LightData> mLightData;
@@ -144,6 +154,8 @@ namespace Fracture
 
 		static GlobalPostProcessParams RenderSettings;
 
+		PostProcessPipeline* PostProcessStack();
+		
 		int Viewport_Width = 1920;
 		int Viewport_Height = 1080;
 

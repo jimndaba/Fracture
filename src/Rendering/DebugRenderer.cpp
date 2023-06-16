@@ -3,10 +3,12 @@
 #include "GraphicsDevice.h"
 #include "Assets/AssetManager.h"
 #include "RenderCommands.h"
+#include "AABB.h"
 
 std::vector<Fracture::Line> Fracture::DebugRenderer::mLines;
 std::vector<glm::vec4> Fracture::DebugRenderer::mLinesColors;
 std::map<uint32_t, Fracture::BillboardData> Fracture::DebugRenderer::mBillboardDrawCalls;
+int Fracture::DebugRenderer::g_numCircleVertices = 50;
 
 Fracture::DebugRenderer::DebugRenderer()
 {
@@ -44,10 +46,10 @@ void Fracture::DebugRenderer::OnInit()
         desc.format = Fracture::TextureFormat::RGBA;
         desc.internalFormat = Fracture::InternalFormat::RGBA8;
         desc.formatType = Fracture::TextureFormatType::UByte;
-        desc.Name = "ColorBuffer";
+        desc.Name = "DebugBuffer";
         info.ColorAttachments.push_back(desc);
 
-        GraphicsDevice::Instance()->CreateGlobalRenderTarget("Debug", info);
+        GraphicsDevice::Instance()->CreateGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug, info);
     }
 
     mContext = std::make_unique<RenderContext>();
@@ -64,7 +66,7 @@ void Fracture::DebugRenderer::OnRender()
     mContext->BeginState(SortKey());
     mContext->Begin();
 
-    const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget("Debug");
+    const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
     if (target)
     {
 
@@ -130,6 +132,11 @@ void Fracture::DebugRenderer::DrawLine(const glm::vec3& start, const glm::vec3& 
     mLines.push_back(lineEnd);
 }
 
+void  Fracture::DebugRenderer::DrawAABB(const AABB& aabb, const glm::vec4& color)
+{
+    DrawAABB(aabb.min, aabb.max);
+}
+
 void Fracture::DebugRenderer::DrawAABB(const glm::vec3& min, const glm::vec3& max, const glm::vec4& color)
 {
     glm::vec3 boundPoint1 = min;
@@ -159,12 +166,25 @@ void Fracture::DebugRenderer::DrawAABB(const glm::vec3& min, const glm::vec3& ma
     DrawLine(boundPoint4, boundPoint1, color);
 }
 
-void Fracture::DebugRenderer::DrawCircle(const glm::vec3& center, const float& radius, const glm::vec4& color)
+void Fracture::DebugRenderer::DrawCircle(const glm::vec3& center, const float& radius, const glm::vec3& rotation, const glm::vec4& color)
 {
     float twicePi = 2.0f * 3.14159265359f;
-    for (int i = 0; i < 50; i++) {
+   
+
+    for (int i = 0; i < g_numCircleVertices; i++) {
+
+        float angle = twicePi * i / g_numCircleVertices;
+        float rotatedAngleX = angle + rotation.x;
+        float rotatedAngleY = angle + rotation.y;
+        float rotatedAngleZ = angle + rotation.z;
+
+        float x = center.x + radius * std::cos(rotatedAngleX);
+        float y = center.y + radius * std::sin(rotatedAngleY);
+        float z = center.z;
+
         Line p;
-        p.Point = glm::vec4(center.x + (radius * cos(i * twicePi / 50)), center.y + (radius * sin(i * twicePi / 50)), center.z, 1.0f);
+       // p.Point = glm::vec4(center.x + (radius * cos(i * twicePi / 50)), center.y + (radius * sin(i * twicePi / 50)), center.z, 1.0f);
+        p.Point = glm::vec4(x, y, z, 1.0f);
         p.Color = color;
         mLines.push_back(p);
     }
@@ -248,6 +268,33 @@ void Fracture::DebugRenderer::DrawArrow(const glm::vec3& pos, const glm::vec3& d
     DrawLine(upCornerInLeft, baseLeft, color);
 }
 
+
+void Fracture::DebugRenderer::DrawCone(const glm::vec3& pos, const glm::quat& rotation, float length, float radius, const glm::vec4& color)
+{
+    int detail = 16;
+    std::vector<glm::vec3> vertices;
+    vertices.reserve(detail);
+    float twicePi = 2.0f * 3.14159265359f;
+    
+
+    glm::vec3 topVertex = pos + (rotation * glm::vec3(0, length, 0));
+
+    for (std::size_t i = 0; i <= detail; ++i)
+    {
+        float r = twicePi * (i / (float)detail);
+        glm::vec3 vertex(radius * cos(r), 0.0f, radius * sin(r));
+        vertices.push_back(pos + (rotation * vertex));
+    }
+
+    for (std::size_t i = 0; i < detail; ++i)
+    {
+        DrawLine(vertices[i], vertices[i + 1], color);
+        DrawLine(vertices[i], topVertex, color);
+    }    
+
+
+
+}
 /*
 void DrawContext::DrawCone(Transform const& transform, Radians coneAngle, float length, Float4 const& color, float thickness, DepthTestState depthTestState, Seconds TTL)
 {

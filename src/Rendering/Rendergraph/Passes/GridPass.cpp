@@ -16,7 +16,7 @@ void Fracture::GridPass::Setup()
 
 void Fracture::GridPass::Execute()
 {
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)
 		return;

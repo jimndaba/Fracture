@@ -98,6 +98,15 @@ void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, F
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [rt]() {
+		glBindFramebuffer(GL_FRAMEBUFFER, rt);
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::ReleaseRenderTarget(Fracture::RenderContext* cntxt)
 {
 	Fracture::Command cmd;
@@ -478,6 +487,9 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 {
 	if (material)
 	{
+		SetUniform(cntxt, shader, "TextureSpace",(int)material->TextureSpace);
+		SetUniform(cntxt, shader, "Tiling",material->TextureTiling);
+
 		for (const auto& uniform : material->Uniforms)
 		{
 			switch (uniform.type)

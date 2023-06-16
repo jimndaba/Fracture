@@ -1,12 +1,18 @@
 #include "FracturePCH.h"
 #include "GraphicsDevice.h"
-
+#include "PostProcessPipeline.h"
 
 #include "Common/Logger.h"
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
 Fracture::GlobalPostProcessParams Fracture::GraphicsDevice::RenderSettings;
+
+std::string Fracture::GlobalRenderTargets::GlobalColour = "Global_ColorBuffer";
+std::string Fracture::GlobalRenderTargets::GlobalSSAO = "Global_SSAO";
+std::string Fracture::GlobalRenderTargets::GlobalDebug = "Global_Debug";
+std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows";
+std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";;
 
 std::string ShaderTypeToString(Fracture::ShaderType tpe)
 {
@@ -109,6 +115,9 @@ void Fracture::GraphicsDevice::Startup()
         CreateBuffer(mPostProcessingBuffer.get(), desc);
         SetBufferIndexRange(mPostProcessingBuffer.get(),(int)ShaderUniformIndex::GlobalRenderSettings, 0);
     }
+
+    mPostProcessPipeline = std::make_shared<PostProcessPipeline>();
+    mPostProcessPipeline->Init();
 
 }
 
@@ -655,6 +664,11 @@ void Fracture::GraphicsDevice::SetDrawBuffers(std::shared_ptr<RenderTarget>& rt)
 void Fracture::GraphicsDevice::CHECKGLERRRORS()
 {
     glCheckError();
+}
+
+Fracture::PostProcessPipeline* Fracture::GraphicsDevice::PostProcessStack()
+{
+    return mPostProcessPipeline.get();
 }
 
 unsigned int Fracture::GraphicsDevice::CompileShader(const std::string& name, const std::string& path, ShaderType shadertype)

@@ -1,5 +1,6 @@
 #include "FracturePCH.h"
 #include "Material.h"
+#include "GraphicsDevice.h"
 
 
 Fracture::Material::Material()

@@ -2,6 +2,7 @@
 #include "PresentPass.h"
 #include "Rendering/VertexArray.h"
 #include "Assets/AssetManager.h"
+#include "Rendering/PostProcessPipeline.h"
 
 Fracture::PresentPass::PresentPass(const std::string& name,RenderContext* context, const PresentPassDef& info):IPass(name,context),definition(info)
 {
@@ -15,10 +16,7 @@ void Fracture::PresentPass::Setup()
 
 void Fracture::PresentPass::Execute()
 {
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
-
-	if (!global_color)
-		return;
+	const auto& aColor = GraphicsDevice::Instance()->PostProcessStack()->GetOutputImage();
 
 	Fracture::RenderCommands::ReleaseRenderTarget(Context);
 
@@ -30,7 +28,7 @@ void Fracture::PresentPass::Execute()
 
 
 	Fracture::RenderCommands::UseProgram(Context, AssetManager::GetShader("Fullscreen")->Handle);
-	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Fullscreen").get(), "aDiffuse", global_color->ColorAttachments[0]->Handle, 0);
+	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Fullscreen").get(), "aDiffuse", aColor, 0);
 
 	DrawArray cmd =
 	{

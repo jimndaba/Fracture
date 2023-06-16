@@ -15,7 +15,7 @@ void Fracture::ZPrePass::Setup()
 
 void Fracture::ZPrePass::Execute()
 {
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)
 		return;
@@ -24,7 +24,7 @@ void Fracture::ZPrePass::Execute()
 	RenderCommands::SetRenderTarget(Context, global_color);
 	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
 	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetCullMode(Context, CullMode::Back);
+	RenderCommands::SetCullMode(Context, CullMode::None);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);	

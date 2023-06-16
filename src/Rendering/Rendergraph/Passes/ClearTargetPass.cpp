@@ -18,7 +18,7 @@ void Fracture::ClearTargetPass::Setup()
 void Fracture::ClearTargetPass::Execute()
 {
 
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)
 		return;

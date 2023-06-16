@@ -19,7 +19,7 @@ void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture
 		glm::mat4 m_rotation, m_translation, m_scale;
 		m_translation = glm::translate(entity_transform->Position);
 		m_scale = glm::scale(entity_transform->Scale);
-		m_rotation = glm::toMat4(entity_transform->Rotation);
+		m_rotation = glm::toMat4(glm::normalize(entity_transform->Rotation));
 		entity_transform->LocalTransform = m_translation * m_rotation * m_scale;
 	}
 

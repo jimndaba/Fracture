@@ -1,6 +1,7 @@
 #include "FracturePCH.h"
 #include "ComposeRenderersPass.h"
 #include "Assets/AssetManager.h"
+#include "Rendering/PostProcessPipeline.h"
 
 Fracture::ComposeRenderersPass::ComposeRenderersPass(const std::string& name, RenderContext* context, const ComposeRenderersPassDef& info):IPass(name,context)
 {
@@ -31,8 +32,11 @@ void Fracture::ComposeRenderersPass::Setup()
 void Fracture::ComposeRenderersPass::Execute()
 {
 	const auto& final_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("FinalOut");
-	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_ColorBuffer");
-	const auto& global_Debug = GraphicsDevice::Instance()->GetGlobalRenderTarget("Debug");
+	const auto& postprocessed_color = GraphicsDevice::Instance()->PostProcessStack()->GetOutputImage();
+	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
+	const auto& global_Debug = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
+
+	bool post_processing = false;
 
 	if (!global_color)
 		return;
@@ -44,7 +48,10 @@ void Fracture::ComposeRenderersPass::Execute()
 
 	Fracture::RenderCommands::UseProgram(Context, AssetManager::GetShader("Compose")->Handle);
 	
-	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aScene", global_color->ColorAttachments[0]->Handle, 0);
+	if(post_processing)
+		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aScene", postprocessed_color, 0);
+	else
+		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aScene", global_color->ColorAttachments[0]->Handle, 0);
 	
 	if(global_Debug)
 		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aDebug", global_Debug->ColorAttachments[0]->Handle, 1);

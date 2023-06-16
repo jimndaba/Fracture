@@ -72,6 +72,8 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		}
 	}
 
+	info.Wrap = TextureWrap::Repeat;
+	
 	std::shared_ptr<Fracture::Texture> texture = std::make_shared<Fracture::Texture>(info);
     return texture;
 }

@@ -1,14 +1,16 @@
 #pragma once
-#ifndef ZPREPASS_H
-#define ZPREPASS_H
+#ifndef PRESENTNODE_H
+#define PRESENTNODE_H
 
 #include "../RenderNode.h"
 
+
 namespace Fracture
 {
-	struct ZPrePassNode : public RenderNode
+
+	struct PresentNode : public RenderNode
 	{
-		ZPrePassNode(DeviceContext& context, const  std::string& name,
+		PresentNode(DeviceContext& context, const  std::string& name,
 			const std::vector<std::string>& inputs,
 			const std::vector<std::string>& outputs);
 		void Setup();
