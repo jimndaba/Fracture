@@ -101,7 +101,7 @@ void Fracture::ShadowCasterPass::Execute()
         RenderCommands::SetCullMode(Context, CullMode::Back);
         RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 
-        if (Context->Renderable_batch.empty())
+        if (Context->mBatches.empty())
         {
             RenderCommands::ReleaseRenderTarget(Context);
             RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
@@ -109,24 +109,33 @@ void Fracture::ShadowCasterPass::Execute()
             return;
         }
 
-        for (auto& batch : Context->Renderable_batch)
+        for (auto& batches : Context->mBatches)
         {
-            if (batch.second.empty())
+            if (batches.second.empty())
                 continue;
 
             Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
-            //Set Shader
-            for (auto entity : batch.second)
-            {
-                const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);
 
-                Fracture::RenderCommands::BindVertexArrayObject(Context, mesh->VAO);
+            if (!AssetManager::Instance()->IsMaterialLoaded(batches.first))
+            {
+                AssetManager::Instance()->AsyncLoadMaterialByID(batches.first);
+                continue;
+            }
+
+            const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
+            Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
+
+            //Set Shader
+            for (auto batch : batches.second)
+            {
+                const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
+                Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
 
                 for (const auto& sub : mesh->SubMeshes)
-                {                    
+                {
                     DrawElementsInstancedBaseVertex cmd;
                     cmd.basevertex = sub.BaseVertex;
-                    cmd.instancecount = entity.second.size();
+                    cmd.instancecount = batch.second->Transforms.size();
                     cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
                     cmd.count = sub.IndexCount;
                     Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);

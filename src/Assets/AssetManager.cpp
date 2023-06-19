@@ -21,7 +21,11 @@ std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::StaticMesh>> Fractu
 
 std::vector<Fracture::UUID> Fracture::AssetManager::mLoadedMeshes;
 std::unordered_map<Fracture::UUID, std::future<std::shared_ptr<Fracture::StaticMesh>>> Fracture::AssetManager::mMeshFutures;
+
 std::queue<Fracture::MeshRegistry> Fracture::AssetManager::mMeshesToLoad;
+std::queue<Fracture::LoadandAttachContext> Fracture::AssetManager::mMeshesToLoadandAttach;
+std::unordered_map<Fracture::LoadandAttachContext, std::future<std::shared_ptr<Fracture::StaticMesh>>>  Fracture::AssetManager::mMeshAndAttachFutures;
+
 
 std::map<Fracture::UUID, Fracture::ShaderRegistry>  Fracture::AssetManager::mShaderRegister;
 std::map<std::string, Fracture::UUID>  Fracture::AssetManager::mShaderIDLookUp;
@@ -56,6 +60,7 @@ void Fracture::AssetManager::RegisterCallbacks(Eventbus* bus)
 {
 	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadMesh);
 	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadTexture);
+	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadandAttach);
 }
 
 void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
@@ -336,6 +341,99 @@ void Fracture::AssetManager::OnLoad()
 		}
 	}
 
+	while (!mMeshesToLoadandAttach.empty())
+	{
+		auto cntxt = mMeshesToLoadandAttach.front();
+		auto reg = mMeshRegister[cntxt.Mesh];
+		mMeshAndAttachFutures[cntxt] = std::async(std::launch::async, [reg]() { return MeshLoader::LoadStaticMesh(reg.Path); });
+		mMeshesToLoadandAttach.pop();
+	}
+
+	for (auto& mf : mMeshAndAttachFutures)
+	{
+		if (mMeshAndAttachFutures.empty())
+			return;
+
+		if (mf.second._Is_ready())
+		{
+			auto mesh = mf.second.get();
+			{
+				VertexArrayCreationInfo info;
+				info.Layout =
+				{
+					{ ShaderDataType::Float3,"aPos",0,true },
+					{ ShaderDataType::Float3,"aNormal" ,0,true},
+					{ ShaderDataType::Float2,"aUV" ,0,true},
+					{ ShaderDataType::Mat4, "instanceMatrix",1 },
+					{ ShaderDataType::Int4,"aEntityID",1 }
+				};
+
+
+
+				GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
+
+				{
+					BufferDescription desc;
+					desc.data = mesh->mVerticies.data();
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(mesh->mVerticies[0]) * mesh->mVerticies.size();
+					desc.usage = BufferUsage::Static;
+					desc.Name = "Verticies";
+					mesh->VBO_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
+				}
+				{
+					BufferDescription desc;
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(glm::vec4) * 1024;
+					desc.usage = BufferUsage::Static;
+					desc.Name = "EntityIDBuffer";
+					desc.data = nullptr;
+					mesh->EntityID_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
+				}
+				{
+					BufferDescription desc;
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(glm::mat4) * 1024;
+					desc.usage = BufferUsage::Static;
+					desc.Name = "MatrixBuffer";
+					desc.data = nullptr;
+					mesh->Matrix_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->Matrix_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 3, sizeof(glm::mat4), mesh->Matrix_Buffer->RenderID);
+				}
+				{
+					BufferDescription desc;
+					desc.data = mesh->Indices.data();
+					desc.bufferType = BufferType::ElementArrayBuffer;
+					desc.size = sizeof(mesh->Indices[0]) * mesh->Indices.size();
+					desc.usage = BufferUsage::Static;
+					desc.Name = "IndexBuffer";
+					mesh->EBO_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
+				}
+
+
+				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+			}
+
+			mesh->ID = mf.first.Mesh;
+			//mesh->mVerticies.clear();		
+			//mesh->SubMeshes.clear();
+			mLoadedMeshes.push_back(mesh->ID);
+			mMeshes[mf.first.Mesh] = mesh;
+
+			SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mesh->mMaterials);
+			
+
+			mMeshAndAttachFutures.erase(mf.first);
+		}
+	}
+
 	while (!mTexturesToLoad.empty())
 	{
 		auto reg = mTexturesToLoad.front();
@@ -598,6 +696,22 @@ void Fracture::AssetManager::OnAsyncLoadMaterial(const std::shared_ptr<AsyncLoad
 {
 	if (!IsMaterialLoaded(evnt->MaterialID))
 		AsyncLoadMaterialByID(evnt->MaterialID);
+}
+
+void Fracture::AssetManager::OnAsyncLoadandAttach(const std::shared_ptr<AsyncLoadMeshAndAttachEvent>& evnt)
+{
+	if (IsMeshLoaded(evnt->MeshID))
+	{
+		SceneManager::AddComponent<MeshComponent>(evnt->EntityID, evnt->MeshID,mMeshes[evnt->MeshID]->mMaterials);
+	}
+	auto it = mMeshRegister.find(evnt->MeshID);
+	if (it != mMeshRegister.end())
+	{
+		LoadandAttachContext cntxt;
+		cntxt.Entity = evnt->EntityID;
+		cntxt.Mesh = it->first;
+		mMeshesToLoadandAttach.push(cntxt);
+	}
 }
 
 void Fracture::AssetManager::AsyncLoadMesh(const std::string& Name)

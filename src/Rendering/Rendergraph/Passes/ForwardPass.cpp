@@ -36,69 +36,60 @@ void Fracture::ForwardPass::Execute()
 
 	//Issue out Batch Commands.
 
-	if (Context->Renderable_batch.empty())
+	if (Context->mBatches.empty())
 	{
 		RenderCommands::ReleaseRenderTarget(Context);
 		return;
 	}
 
-	for (auto& batch : Context->Renderable_batch)
+	for (auto& batches : Context->mBatches)
 	{
-		if (batch.second.empty())
+		if (batches.second.empty())
 			continue;
-		
-		const auto& shader = AssetManager::Instance()->GetShaderByID(batch.first);
-		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
 
+		if (!AssetManager::Instance()->IsMaterialLoaded(batches.first))
+		{
+			AssetManager::Instance()->AsyncLoadMaterialByID(batches.first);
+			continue;
+		}
+
+		const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
+		const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
+
+		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
+		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
+		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
 		{
 			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, (int)TEXTURESLOT::GlobalAO);
-		}		
+		}
 		{
 			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::DirectShadows);
 		}
 
 		//Set Shader
-		for (auto entity : batch.second)
+		for (auto batch : batches.second)
 		{
-			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(entity.first);
-			
-			Fracture::RenderCommands::BindVertexArrayObject(Context, mesh->VAO);		
+			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
+			Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
 
 			for (const auto& sub : mesh->SubMeshes)
 			{
-				if (!AssetManager::Instance()->IsMaterialLoaded(mesh->mMaterials[sub.MaterialIndex]))
-				{
-					if (mesh->mMaterials.size())
-						AssetManager::Instance()->AsyncLoadMaterialByID(mesh->mMaterials[sub.MaterialIndex]);
-				}			
-
-				if (mesh->mMaterials.size())
-					Fracture::RenderCommands::BindMaterial(Context, shader.get(), AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex]).get());
-
-				RenderCommands::SetCullMode(Context, AssetManager::Instance()->GetMaterialByID(mesh->mMaterials[sub.MaterialIndex])->cullmode);
-
-
 				DrawElementsInstancedBaseVertex cmd;
 				cmd.basevertex = sub.BaseVertex;
-				cmd.instancecount = entity.second.size();
+				cmd.instancecount = batch.second->Transforms.size();
 				cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
 				cmd.count = sub.IndexCount;
-				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);		
-
+				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
 			}
 			Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 		}
 
 		Fracture::RenderCommands::UseProgram(Context, 0);
-
-
 	}
-
-
 	
 
 	RenderCommands::ReleaseRenderTarget(Context);

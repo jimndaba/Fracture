@@ -64,8 +64,9 @@ namespace Fracture
 		MeshComponent(UUID id,UUID mesh = UUID()):
 			IComponent(),entity(id),Mesh(mesh)
 		{}
-		MeshComponent(UUID id, UUID mesh,UUID shader) :
-			IComponent(), entity(id), Mesh(mesh),Shader(shader)
+
+		MeshComponent(UUID id, UUID mesh, std::vector<uint32_t> materials ) :
+			IComponent(), entity(id), Mesh(mesh), Materials(materials)
 		{}
 
 		MeshComponent(MeshComponent& other, UUID new_entity):
@@ -73,10 +74,8 @@ namespace Fracture
 		{
 			entity = new_entity;
 			Mesh = other.Mesh;
-			Material = other.Material;
-			Shader = other.Shader;
+			Materials = other.Materials;
 			meshType = other.meshType;
-			MaterialOverride = other.MaterialOverride;
 		}
 		
 		UUID entity;
@@ -87,9 +86,7 @@ namespace Fracture
 		};
 
 		UUID Mesh;
-		UUID Material;
-		UUID Shader;
-		bool MaterialOverride = false;
+		std::vector<uint32_t> Materials;
 		MeshType meshType = MeshType::Static;
 
 

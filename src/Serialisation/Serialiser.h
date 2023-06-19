@@ -201,6 +201,7 @@ namespace Fracture
 		void Property(const std::string& name, const glm::vec3& value);
 		void Property(const std::string& name, const glm::vec4& value);
 		void Property(const std::string& name, const std::vector<unsigned int>& value);
+		void PropertyI(const std::string& name, const std::vector<uint32_t>& value);
 		void Property(const std::string& name, const std::vector<glm::vec2>& value);
 		void Property(const std::string& name, const std::vector<glm::vec3>& value);
 		void Property(const std::string& name, const std::vector<glm::vec4>& value);
@@ -226,6 +227,7 @@ namespace Fracture
 		int INT(const std::string& name);
 		float FLOAT(const std::string& name);
 		std::vector<unsigned int> UINT_VECTOR(const std::string& name);
+		std::vector<uint32_t> UINT32_VECTOR(const std::string& name);
 		std::vector<unsigned char> UCHAR_VECTOR(const std::string& name);
 		std::vector<float> FLOAT_VECTOR(const std::string& name);
 		std::vector<glm::vec2> VEC2_VECTOR(const std::string& name);

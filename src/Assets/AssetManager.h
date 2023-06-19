@@ -24,6 +24,14 @@ namespace Fracture
 		const char* Name() { return  "Async Load Mesh"; };
 	};
 
+	struct AsyncLoadMeshAndAttachEvent : public Event
+	{
+		AsyncLoadMeshAndAttachEvent(UUID entity,UUID mesh) : Event(), MeshID(mesh),EntityID(entity) {};
+		UUID MeshID;
+		UUID EntityID;
+		const char* Name() { return  "Async Load Mesh"; };
+	};
+
 	struct AsyncLoadTextureEvent : public Event
 	{
 		AsyncLoadTextureEvent(UUID id) : Event(), TextureID(id) {};
@@ -37,6 +45,19 @@ namespace Fracture
 		UUID MaterialID;
 		const char* Name() { return  "Async Load Material"; };
 	};
+
+	struct LoadandAttachContext
+	{
+		UUID Mesh;
+		UUID Entity;
+
+		// `operator==` is required to compare keys in case of a hash collision
+		bool operator==(const LoadandAttachContext& p) const {
+			return Mesh == p.Mesh && Entity == p.Entity;
+		}
+	};
+
+
 
 	class AssetManager
 	{
@@ -91,6 +112,7 @@ namespace Fracture
 		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
 		void OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadTextureEvent>& evnt);
 		void OnAsyncLoadMaterial(const std::shared_ptr<AsyncLoadMaterialEvent>& evnt);
+		void OnAsyncLoadandAttach(const std::shared_ptr<AsyncLoadMeshAndAttachEvent>& evnt);
 
 		static std::map<UUID, MeshRegistry> mMeshRegister;
 		static std::map<std::string, UUID> mMeshIDLookUp;
@@ -119,7 +141,9 @@ namespace Fracture
 	private:
 		static std::vector<UUID> mLoadedMeshes;
 		static std::unordered_map<UUID,std::future<std::shared_ptr<Fracture::StaticMesh>>> mMeshFutures;
+		static std::unordered_map<LoadandAttachContext,std::future<std::shared_ptr<Fracture::StaticMesh>>> mMeshAndAttachFutures;
 		static std::queue<MeshRegistry> mMeshesToLoad;
+		static std::queue<LoadandAttachContext> mMeshesToLoadandAttach;
 
 		static std::vector<UUID> mLoadedTextures;
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Texture>>> mTextureFutures;
@@ -134,12 +158,24 @@ namespace Fracture
 
 	};
 
+}
 
+namespace std
+{
+	template<>
+	struct hash<Fracture::LoadandAttachContext>
+	{
+		std::size_t operator() (const Fracture::LoadandAttachContext& node) const
+		{
+			std::size_t h1 = std::hash<uint32_t>()(node.Entity);
+			std::size_t h2 = std::hash<uint32_t>()(node.Mesh);
 
+			return h1 ^ h2;
+		}
+	};
 
 
 }
-
 
 
 

@@ -50,8 +50,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::MeshComponent* comp
 {
 	BeginStruct("Mesh");
 	Property("MeshID", component->Mesh);
-	Property("MaterialID", component->Material);
-	Property("ShaderID", component->Shader);
+	Property("Materials", component->Materials);
 	Property("MeshType", (int)component->meshType);
 	EndStruct();
 }
@@ -221,8 +220,7 @@ void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_
 	{
 		auto comp = std::make_shared<MeshComponent>(entity_id);
 		comp->Mesh = ID("MeshID");
-		comp->Shader = ID("ShaderID");
-		comp->Material = ID("MaterialID");
+		comp->Materials = UINT32_VECTOR("MaterialID");
 		comp->meshType = (MeshComponent::MeshType)INT("MeshType");
 				
 		MeshesToLoad[comp->Mesh] += 1;

@@ -319,6 +319,7 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
 }
 
 void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, const TextureCreationInfo& info)
+
 { 
     unsigned int target = GLenum(info.TextureTarget);
     unsigned int internalFormat =GLenum(info.internalFormat);

@@ -242,6 +242,7 @@ void Fracture::ISerialiser::Property(const std::string& name, const glm::vec4& v
 	}
 }
 
+
 void Fracture::ISerialiser::Property(const std::string& name, const std::vector<unsigned int>& value)
 {
 
@@ -256,6 +257,7 @@ void Fracture::ISerialiser::Property(const std::string& name, const std::vector<
 		j.push_back(value);
 	}
 }
+
 
 void Fracture::ISerialiser::Property(const std::string& name, const std::vector<unsigned char>& value)
 {
@@ -272,6 +274,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const std::vector<
 }
 
 void Fracture::ISerialiser::Property(const std::string& name, const std::vector<float>& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
+void Fracture::ISerialiser::PropertyI(const std::string& name, const std::vector<uint32_t>& value)
 {
 	if (mStructStack.size() > mCollectionStack.size())
 	{
@@ -732,6 +748,22 @@ float Fracture::ISerialiser::FLOAT(const std::string& name)
 }
 
 std::vector<unsigned int> Fracture::ISerialiser::UINT_VECTOR(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	return std::vector<unsigned int>();
+}
+
+std::vector<uint32_t> Fracture::ISerialiser::UINT32_VECTOR(const std::string& name)
 {
 	if (mStructStack.size() > mCollectionStack.size())
 	{
