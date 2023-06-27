@@ -186,6 +186,7 @@
     <ClInclude Include="src\World\Scenegraph.h" />
     <ClInclude Include="src\World\SceneManager.h" />
     <ClInclude Include="src\World\TransformSystem.h" />
+    <ClInclude Include="src\World\WorldEvents.h" />
     <ClInclude Include="vendor\nlohmann\json.hpp" />
     <ClInclude Include="vendor\soloud\soloud.h" />
     <ClInclude Include="vendor\soloud\soloud_audiosource.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Passes\PresentPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\SSAOPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\SSRPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ToneMappingPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ZPrePass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Rendergraph.cpp" />
@@ -302,6 +304,7 @@
     <ClCompile Include="src\World\Scenegraph.cpp" />
     <ClCompile Include="src\World\SceneManager.cpp" />
     <ClCompile Include="src\World\TransformSystem.cpp" />
+    <ClCompile Include="src\World\WorldEvent.cpp" />
     <ClCompile Include="vendor\glad\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

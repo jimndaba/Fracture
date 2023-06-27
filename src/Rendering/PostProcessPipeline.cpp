@@ -40,7 +40,8 @@ void Fracture::PostProcessPipeline::Init()
 		mPingPongBuffer[i]->Info.Name = name.c_str();
 	}
 
-	Context = std::make_unique<RenderContext>();
+	RenderContextFlags flags;
+	Context = std::make_unique<RenderContext>(flags);
 
 	VertexArrayCreationInfo vao_info;
 	GraphicsDevice::Instance()->CreateVertexArray(Vao, vao_info);
@@ -89,7 +90,7 @@ void Fracture::PostProcessPipeline::OnSetupPipeline()
 
 void Fracture::PostProcessPipeline::OnRender()
 {
-	auto input_texture = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour)->ColorAttachments[0];
+	auto input_texture = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSR)->ColorAttachments[0];
 	const auto& cntxt = Context.get();
 
 	Fracture::SortKey key;

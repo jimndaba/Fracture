@@ -76,6 +76,27 @@ void Fracture::ForwardPass::Execute()
 			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
 			Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
 
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer-//>RenderID, 0);
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer-//>RenderID, sizeof(glm::vec3));
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer-//>RenderID, sizeof(glm::vec3) * 2);
+			//
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 3, sizeof(glm::vec4), batch.second->EntityID_Buffer-/>RenderID);
+			//
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 4, 16, batch.second->Matrix_Buffer->RenderID, 0);
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 5, 16, batch.second->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 1) * 4));
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 6, 16, batch.second->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 2) * 4));
+			//Fracture::RenderCommands::BindVertexArrayVertexBuffer(Context, batch.second->VAO, 7, 16, batch.second->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 3) * 4));
+			//
+			//Fracture::RenderCommands::BindVertexArraySetDivisor(Context, batch.second->VAO, 4, 1);
+			//Fracture::RenderCommands::BindVertexArraySetDivisor(Context, batch.second->VAO, 5, 1);
+			//Fracture::RenderCommands::BindVertexArraySetDivisor(Context, batch.second->VAO, 6, 1);
+			//Fracture::RenderCommands::BindVertexArraySetDivisor(Context, batch.second->VAO, 7, 1);
+			//
+			//Fracture::RenderCommands::BindVertexArrayIndexBuffer(Context, batch.second->VAO, mesh->EBO_Buffer->RenderID);
+
 			for (const auto& sub : mesh->SubMeshes)
 			{
 				DrawElementsInstancedBaseVertex cmd;

@@ -9,6 +9,7 @@ namespace Fracture
 {
 	class LuaScript;
 
+
 	class SceneManager
 	{
 
@@ -28,6 +29,7 @@ namespace Fracture
 		template< class T, typename... Args >
 		static void AddComponentByInstance(const UUID& entity, const std::shared_ptr<T>& component);
 
+
 		template<class T>
 		static void RemoveComponent(const UUID& entity);
 
@@ -36,6 +38,9 @@ namespace Fracture
 
 		template <class T>
 		static std::shared_ptr<T> GetComponent(const UUID& entity);
+
+		template<class T>
+		static std::shared_ptr<T> GetInstanceComponent(UUID scene, const UUID& entity);
 
 		template <class T>
 		static std::vector<std::shared_ptr<T>>GetAllComponents();
@@ -57,6 +62,9 @@ namespace Fracture
 
 		static void LoadScene(const std::string& scene);
 		static UUID& LoadSceneFromFile(const std::string& path);
+		static void InstanceSceneFromFile(ScenePrefab prefab);
+
+
 		static std::map<UUID,int> LoadSceneByID(const UUID& scene);
 		static void UnloadScene(const std::string& scene);
 		static void UnloadSceneByID(const UUID& scene);
@@ -73,8 +81,29 @@ namespace Fracture
 		static std::unordered_map<UUID, std::shared_ptr<Scene>> mScenes;	
 		static std::unordered_map<UUID, std::vector<UUID>> mScript_Entities;
 
-		static void Instantiate(UUID prefab,glm::vec3 position);
+		static UUID Instantiate(UUID prefab,glm::vec3 position);
+
+		template<class T, typename... Args>
+		static void InstanceComponent(UUID prefab, UUID new_entity, UUID original_entity, Args&&... params);
+
+		static void  InstanceComponents(UUID prefab, UUID new_entity, UUID original_entity, UUID parent_entity);
+
+		static void AddComponentInstance(std::shared_ptr<TagComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<HierachyComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<TransformComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<MeshComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<PointlightComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<SpotlightComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<SunlightComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<ColliderComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<RigidbodyComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<AudioSourceComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity);
+
 		//static void InstantiateAsChildOf(UUID prefab,UUID parent,glm::vec3 position);
+
+
 
 	private:
 
@@ -151,6 +180,19 @@ namespace Fracture
 	}
 
 	template<class T>
+	inline std::shared_ptr<T> SceneManager::GetInstanceComponent(UUID scene, const UUID& entity)
+	{
+		if (mScenes[scene])
+		{
+			if (mScenes[scene]->ComponentReg[typeid(T)][entity])
+			{
+				return std::dynamic_pointer_cast<T>(mScenes[scene]->ComponentReg[typeid(T)][entity]);
+			}
+		}
+		return nullptr;
+	}
+
+	template<class T>
 	inline std::vector<std::shared_ptr<T>> SceneManager::GetAllComponents()
 	{
 		std::vector<std::shared_ptr<T>> components;
@@ -171,6 +213,19 @@ namespace Fracture
 	{
 		return (mCurrentScene->ComponentReg[typeid(T)].find(id) != mCurrentScene->ComponentReg[typeid(T)].end());
 	}
+
+	template<class T, typename ...Args>
+	inline void SceneManager::InstanceComponent(UUID prefab, UUID new_entity, UUID original_entity, Args && ...params)
+	{
+		if (mScenes[prefab]->ComponentReg[typeid(T)][original_entity])
+		{
+			auto component = std::dynamic_pointer_cast<T>(mScenes[prefab]->ComponentReg[typeid(T)][original_entity]);
+			AddComponentInstance(component,new_entity);
+			//AddComponentByInstance<T>(new_entity, std::make_shared<T>(*component.get(), new_entity));		
+		}
+	}
+
+	
 
 }
 

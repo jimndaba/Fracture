@@ -191,6 +191,19 @@ void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID en
 	}
 }
 
+void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID entity_id, glm::vec3 Position, glm::quat Rotation)
+{
+	if (BeginStruct("Transform"))
+	{
+		auto transform = std::make_shared<TransformComponent>(entity_id);
+		transform->Position = Position;
+		transform->Scale = VEC3("Scale");
+		transform->Rotation = Rotation;
+		SceneManager::AddComponentByInstance<TransformComponent>(entity_id, transform);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Hierachy"))
@@ -214,13 +227,30 @@ void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID ent
 	}
 }
 
+void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID entity_id, Fracture::UUID new_parent)
+{
+	if (BeginStruct("Hierachy"))
+	{
+		auto comp = std::make_shared<HierachyComponent>(entity_id);			
+		{
+			const auto& parent = SceneManager::GetComponent<HierachyComponent>(new_parent);
+			//parent->Children.push_back(entity_id);
+			parent->Prefabs.push_back(entity_id);
+			comp->HasParent = true;
+			comp->Parent = new_parent;
+		}
+		SceneManager::AddComponentByInstance<HierachyComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Mesh"))
 	{
 		auto comp = std::make_shared<MeshComponent>(entity_id);
 		comp->Mesh = ID("MeshID");
-		comp->Materials = UINT32_VECTOR("MaterialID");
+		comp->Materials = UINT32_VECTOR("Materials");
 		comp->meshType = (MeshComponent::MeshType)INT("MeshType");
 				
 		MeshesToLoad[comp->Mesh] += 1;
@@ -390,12 +420,21 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 		Property("ID", scene->ID);
 		Property("ActiveCamera", scene->ActiveCameraID);
 		Property("RootID", scene->RootID);
+		Property("Name", scene->Name);
 
 		BeginStruct("Root");
 		{			
 			WriteEntityComponentOfType<TagComponent>(scene->RootID);
 			WriteEntityComponentOfType<TransformComponent>(scene->RootID);
 			WriteEntityComponentOfType<HierachyComponent>(scene->RootID);
+			WriteEntityComponentOfType<MeshComponent>(scene->RootID);
+			WriteEntityComponentOfType<RigidbodyComponent>(scene->RootID);
+			WriteEntityComponentOfType<PointlightComponent>(scene->RootID);
+			WriteEntityComponentOfType<SpotlightComponent>(scene->RootID);
+			WriteEntityComponentOfType<SunlightComponent>(scene->RootID);
+			WriteEntityComponentOfType<ShadowCasterComponent>(scene->RootID);
+			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);
+			WriteEntityComponentOfType<ScriptComponent>(scene->RootID);
 			EndStruct();
 		}
 
@@ -441,6 +480,35 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			EndStruct();
 		}
 		EndCollection();
+
+
+		BeginCollection("Prefabs");
+		for (const auto& prefab : scene->mPrefabs)
+		{
+			BeginStruct("Prefab");
+			{
+				Property("Prefab_ID", prefab.SceneID);				
+				Property("Scene_ID", prefab.SceneID);				
+				Property("Parent_ID", prefab.ParentID);	
+				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab.PrefabID);
+				if (transform)
+				{
+					Property("Position", transform->Position);
+					glm::vec3 angle = glm::eulerAngles(transform->Rotation);
+					angle = glm::degrees(angle);
+					Property("Rotation", angle);
+				}
+				else
+				{
+					Property("Position", prefab.Position);
+					glm::vec3 angle = glm::eulerAngles(prefab.Rotation);
+					angle = glm::degrees(angle);
+					Property("Rotation", angle);
+				}
+			}
+			EndStruct();
+		}
+		EndCollection();
 	}
 	EndStruct();
 }
@@ -453,6 +521,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 		new_Scene->ID = ID("ID");
 		new_Scene->RootID = ID("RootID");
 		new_Scene->ActiveCameraID = ID("ActiveCamera");
+		new_Scene->Name = STRING("Name");
 
 		SceneManager::SetScene(new_Scene);
 		if (BeginStruct("Root"))
@@ -460,9 +529,15 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadTagComponentIfExists(new_Scene->RootID);
 			ReadTransformComponentIfExists(new_Scene->RootID);
 			ReadHierachyComponentIfExists(new_Scene->RootID);
+			ReadMeshComponentIfExists(new_Scene->RootID);
+			ReadSpotlightComponentIfExists(new_Scene->RootID);
+			ReadPointlightComponentIfExists(new_Scene->RootID);
+			ReadSunlightComponentIfExists(new_Scene->RootID);
+			ReadRigidbodyComponentIfExists(new_Scene->RootID);
+			ReadColliderComponentIfExists(new_Scene->RootID);
+			ReadScriptComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
-
 
 		if (BeginCollection("Entities"))
 		{
@@ -513,8 +588,225 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 
 			EndCollection();
 		}
+
+		if (BeginCollection("Prefabs"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Prefab"))
+				{
+					ScenePrefab prefab;
+					prefab.PrefabID = ID("Prefab_ID");
+					prefab.SceneID = ID("Scene_ID");
+					prefab.ParentID = ID("Parent_ID");					
+					prefab.Position = VEC3("Position");
+					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
+					new_Scene->mPrefabs.push_back(prefab);
+				}
+				NextInCollection();
+			}
+			EndCollection();
+		}
+
+
 		EndStruct();
 
 		return new_Scene;
+	}
+}
+
+std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad()
+{
+	if (BeginStruct("Scene"))
+	{
+		auto new_Scene = SceneManager::CreateNewScene(ID("RootID"));
+		new_Scene->ID = ID("ID");
+		new_Scene->RootID = ID("RootID");
+		new_Scene->ActiveCameraID = ID("ActiveCamera");
+		new_Scene->Name = STRING("Name");
+
+		SceneManager::SetScene(new_Scene);
+		if (BeginStruct("Root"))
+		{
+			ReadTagComponentIfExists(new_Scene->RootID);
+			ReadTransformComponentIfExists(new_Scene->RootID);
+			ReadHierachyComponentIfExists(new_Scene->RootID);
+			ReadMeshComponentIfExists(new_Scene->RootID);
+			ReadSpotlightComponentIfExists(new_Scene->RootID);
+			ReadPointlightComponentIfExists(new_Scene->RootID);
+			ReadSunlightComponentIfExists(new_Scene->RootID);
+			ReadRigidbodyComponentIfExists(new_Scene->RootID);
+			ReadColliderComponentIfExists(new_Scene->RootID);
+			ReadScriptComponentIfExists(new_Scene->RootID);
+			EndStruct();
+		}
+
+		if (BeginCollection("Entities"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Entity"))
+				{
+					auto entity_id = ID("Entity_ID");
+					SceneManager::AddEntity(entity_id);
+
+					if (BeginCollection("Components"))
+					{
+						while (CurrentCollectionIndex() < GetCollectionSize())
+						{
+							ReadTagComponentIfExists(entity_id);
+							ReadTransformComponentIfExists(entity_id);
+							ReadHierachyComponentIfExists(entity_id);
+							ReadMeshComponentIfExists(entity_id);
+							ReadSpotlightComponentIfExists(entity_id);
+							ReadPointlightComponentIfExists(entity_id);
+							ReadSunlightComponentIfExists(entity_id);
+							ReadRigidbodyComponentIfExists(entity_id);
+							ReadColliderComponentIfExists(entity_id);
+							ReadScriptComponentIfExists(entity_id);
+							NextInCollection();
+						}
+						EndCollection();
+					}
+
+					if (BeginCollection("Scripts"))
+					{
+						while (CurrentCollectionIndex() < GetCollectionSize())
+						{
+							if (BeginStruct("LuaScript"))
+							{
+								auto script_id = ID("ScriptID");
+								SceneManager::AttachScript(entity_id, script_id);
+								EndStruct();
+							}
+							NextInCollection();
+						}
+						EndCollection();
+					}
+					EndStruct();
+				}
+				NextInCollection();
+			}
+
+			EndCollection();
+		}
+
+		if (BeginCollection("Prefabs"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Prefab"))
+				{
+					ScenePrefab prefab;
+					prefab.PrefabID = ID("Prefab_ID");
+					prefab.SceneID = ID("Scene_ID");
+					prefab.ParentID = ID("Parent_ID");
+					prefab.Position = VEC3("Position");
+					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
+					SceneManager::Instantiate(prefab.SceneID, prefab.Position);
+				}
+				NextInCollection();
+			}
+			EndCollection();
+		}
+
+
+		EndStruct();
+
+		return new_Scene;
+	}
+
+}
+
+void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
+{
+	if (BeginStruct("Scene"))
+	{
+	
+		if (BeginStruct("Root"))
+		{
+			ReadTagComponentIfExists(prefab.PrefabID);
+			ReadTransformComponentIfExists(prefab.PrefabID,prefab.Position,prefab.Rotation);
+			ReadHierachyComponentIfExists(prefab.PrefabID,SceneManager::CurrentScene()->RootID);
+			ReadMeshComponentIfExists(prefab.PrefabID);
+			ReadSpotlightComponentIfExists(prefab.PrefabID);
+			ReadPointlightComponentIfExists(prefab.PrefabID);
+			ReadSunlightComponentIfExists(prefab.PrefabID);
+			ReadRigidbodyComponentIfExists(prefab.PrefabID);
+			ReadColliderComponentIfExists(prefab.PrefabID);
+			ReadScriptComponentIfExists(prefab.PrefabID);
+			EndStruct();
+		}
+
+		if (BeginCollection("Entities"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Entity"))
+				{					
+					auto entity = UUID();
+					if (BeginCollection("Components"))
+					{
+						while (CurrentCollectionIndex() < GetCollectionSize())
+						{
+							ReadTagComponentIfExists(entity);
+							ReadTransformComponentIfExists(entity);
+							ReadHierachyComponentIfExists(entity, prefab.PrefabID);
+							ReadMeshComponentIfExists(entity);
+							ReadSpotlightComponentIfExists(entity);
+							ReadPointlightComponentIfExists(entity);
+							ReadSunlightComponentIfExists(entity);
+							ReadRigidbodyComponentIfExists(entity);
+							ReadColliderComponentIfExists(entity);
+							ReadScriptComponentIfExists(entity);
+							NextInCollection();
+						}
+						EndCollection();
+					}
+					if (BeginCollection("Scripts"))
+					{
+						while (CurrentCollectionIndex() < GetCollectionSize())
+						{
+							if (BeginStruct("LuaScript"))
+							{
+								auto script_id = ID("ScriptID");
+								SceneManager::AttachScript(prefab.PrefabID, script_id);
+								EndStruct();
+							}
+							NextInCollection();
+						}
+						EndCollection();
+					}
+
+					EndStruct();
+				}
+				NextInCollection();
+			}
+
+			EndCollection();
+		}
+		
+		/*
+		if (BeginCollection("Prefabs"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Prefab"))
+				{
+					ScenePrefab prefab;
+					prefab.SceneID = ID("Prefab_ID");
+					prefab.SceneID = ID("Scene_ID");
+					prefab.ParentID = ID("Parent_ID");
+					prefab.Position = VEC3("Position");
+					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
+					new_Scene->mPrefabs.push_back(prefab);
+				}
+				NextInCollection();
+			}
+			EndCollection();
+		}
+		*/
+
+		EndStruct();
 	}
 }

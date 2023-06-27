@@ -65,7 +65,7 @@ namespace Fracture
 		RGBA = GL_RGBA,
 		RGBA8 = GL_RGBA8,
 		RGBA16 = GL_RGBA16,
-		RGBA16F = GL_RGB16F,
+		RGBA16F = GL_RGBA16F,
 		RGBA32F = GL_RGBA32F,
 		RGBA32UI = GL_RGBA32UI,
 		RGBA32I = GL_RGBA32I,
@@ -131,7 +131,7 @@ namespace Fracture
 		std::string Path;		
 		TextureTarget TextureTarget = TextureTarget::Texture2D;
 		AttachmentTarget AttachmentTrgt = AttachmentTarget::Color;
-		InternalFormat internalFormat = InternalFormat::RGB16;
+		InternalFormat internalFormat = InternalFormat::RGB8;
 		TextureFormat format = TextureFormat::RGB;
 		TextureFormatType formatType = TextureFormatType::UByte;
 		TextureMagFilter magFilter = TextureMagFilter::Linear;

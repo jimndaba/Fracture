@@ -149,6 +149,9 @@ namespace Fracture
 		void SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a);
 
 		void BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao);
+		void BindVertexArrayVertexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t index, uint32_t stride, uint32_t buffer, uint32_t offset = 0);
+		void BindVertexArrayIndexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t buffer);
+		void BindVertexArraySetDivisor(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t AttributeIndex, uint32_t divisor);
 		
 		void DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z);
 		void Barrier(Fracture::RenderContext* cntxt);

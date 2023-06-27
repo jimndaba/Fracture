@@ -4,11 +4,11 @@
 
 
 #include "physx/PxPhysicsAPI.h"
+#include "PhysicsEvents.h"
 
 namespace Fracture
 {
 	class PhysicsScene;
-
 	struct FilterGroup
 	{
 		enum Enum
@@ -36,9 +36,14 @@ namespace Fracture
 		void CreateScene();
 		void DestroyScene();
 
-		void AddActors(const UUID& mEntity);
-		void RemoveActors(const UUID& mEntity);
+		void AddActor(UUID mEntity);
+		void AddActors();
+
+		bool HasActor(UUID entity);
+		void RemoveActors();
 		void OnDebugDraw();
+
+		void OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt);
 
 		physx::PxPhysics& GetPhysicsSDK();
 		physx::PxCpuDispatcher* GetCPUDispatcher();

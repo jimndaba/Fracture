@@ -11,6 +11,7 @@
 #include "LuaPhysicsBindings.h"
 
 #include "Physics/PhysicsEvents.h"
+#include "World/WorldEvents.h"
 
 sol::state* Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
@@ -104,7 +105,16 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("Destroy", sol::overload([](sol::this_state s, Entity entity) {
 		return SceneManager::RemoveEntity(entity.ID);
 		}));
+
+	//lua.set_function("Instantiate", sol::overload([](sol::this_state s, UUID prefab) {
+	//	return SceneManager::Instantiate(prefab, glm::vec3(0));
+	//	}));
+
+	lua.set_function("Instantiate", sol::overload([](sol::this_state s, UUID prefab,glm::vec3 position) {
+		return ScriptManager::Instantiate(prefab, position);
+		}));
 }
+
 
 void Fracture::ScriptManager::BindInput(sol::state& L)
 {
@@ -287,9 +297,9 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->Load(*lua);
-			script->BindFunctions(*lua);
-			script->BindProperties(*lua);
+			//script->Load(*lua);
+			//script->BindFunctions(*lua);
+			//script->BindProperties(*lua);
 			script->OnStart(*lua, component->GetID());
 		}
 	}	
@@ -335,6 +345,11 @@ void Fracture::ScriptManager::onUpdate(float dt)
 
 void Fracture::ScriptManager::Shutdown()
 {
+}
+
+void Fracture::ScriptManager::Instantiate(UUID Entity, glm::vec3 position)
+{
+	Eventbus::Publish<InstanceScenePrefabEvent>(Entity, position);
 }
 
 void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt)

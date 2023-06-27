@@ -18,6 +18,7 @@ namespace Fracture
 	{
 		static std::string GlobalColour;
 		static std::string GlobalSSAO;
+		static std::string GlobalSSR;
 		static std::string GlobalDebug;
 		static std::string GlobalDirectShadows;
 		static std::string GlobalFinalOut;
@@ -129,10 +130,12 @@ namespace Fracture
 		void SetBufferData(const Buffer& buffer, const void* data);
 		void SetBufferIndexRange(Buffer* buffer, uint32_t index, uint32_t offset);
 		void UpdateBufferData(Buffer* buffer, uint32_t offset, uint32_t size, const void* data);
+	
 
 		void CreateVertexArray(uint32_t& vao, const VertexArrayCreationInfo& info);
-		void VertexArray_BindVertexBuffer(const uint32_t& vao, const uint32_t& bindingIndex, const uint32_t& stride, const uint32_t& VBO);
+		void VertexArray_BindVertexBuffer(const uint32_t& vao, const uint32_t& bindingIndex, const uint32_t& stride, const uint32_t& VBO ,const uint32_t offset = 0);
 		void VertexArray_BindIndexBuffers(const uint32_t& vao, const uint32_t& IBO);
+		void VertexArray_SetDivisor(const uint32_t& vao, const uint32_t& attributeindex,const uint32_t divisor);
 		void VertexArray_BindAttributes(const uint32_t& vao, const VertexArrayCreationInfo& info);
 
 		void CreateTexture(std::shared_ptr<Texture>& texture, const TextureCreationInfo& info);
@@ -142,7 +145,7 @@ namespace Fracture
 
 		std::shared_ptr<Fracture::Shader> CreateShader(const ShaderDescription& desc);
 		void AttachShaderToProgram(const unsigned int& shader, const unsigned int& program);
-
+		void RecompileShader(Fracture::Shader* shader);
 
 		std::shared_ptr<RenderTarget> CreateRenderTarget(const RenderTargetCreationInfo info);
 		void CreateGlobalRenderTarget(const std::string& Name, const RenderTargetCreationInfo& info);

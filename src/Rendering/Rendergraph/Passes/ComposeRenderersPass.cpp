@@ -35,6 +35,7 @@ void Fracture::ComposeRenderersPass::Execute()
 	const auto& postprocessed_color = GraphicsDevice::Instance()->PostProcessStack()->GetOutputImage();
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 	const auto& global_Debug = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
+	const auto& global_SSR = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSR);
 
 	bool post_processing = false;
 
@@ -55,6 +56,9 @@ void Fracture::ComposeRenderersPass::Execute()
 	
 	if(global_Debug)
 		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aDebug", global_Debug->ColorAttachments[0]->Handle, 1);
+
+	if (global_SSR)
+		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aSSR", global_SSR->ColorAttachments[0]->Handle, 2);
 
 	DrawArray cmd =
 	{

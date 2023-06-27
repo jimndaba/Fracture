@@ -51,8 +51,8 @@ void Fracture::DebugRenderer::OnInit()
 
         GraphicsDevice::Instance()->CreateGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug, info);
     }
-
-    mContext = std::make_unique<RenderContext>();
+    RenderContextFlags flags;
+    mContext = std::make_unique<RenderContext>(flags);
 }
 
 

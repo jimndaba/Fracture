@@ -31,6 +31,8 @@ namespace Fracture
 		void onUpdate(float dt);
 		void Shutdown();
 
+		static void Instantiate(UUID Entity,glm::vec3 position);
+
 		void OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt);
 
 		static void RegisterScript(const LuaScriptRegistry& reg);

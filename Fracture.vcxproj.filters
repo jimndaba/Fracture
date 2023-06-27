@@ -381,6 +381,9 @@
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ToneMappingPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\World\WorldEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -702,6 +705,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ToneMappingPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World\WorldEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\SSRPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

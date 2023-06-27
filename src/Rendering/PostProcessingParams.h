@@ -48,13 +48,18 @@ namespace Fracture
 		float ToneMapping_Contrast = 1.0f;
 		float ToneMapping_Brightness = 0.0f;
 		int ToneMapping_ToneMapMode = 0;
-		glm::vec3 pad;
+
+		//SSR
+		bool SSR_Enabled = 1;
+		glm::vec2 SSR_Resolution = { 1920,1080 };
+		float SSR_Step = 0.1f;
+		float SSR_MinRayStep = 0.1f;
+		float SSR_MaxSteps = 30.0f;
+		int SSR_NumBinarySearchSteps = 5;
+		int SSR_ReflectionSpecularFalloffExponent = 3;
+		float SSR_Strength = 0.1f;
+		glm::vec2 pad;
 	};
-
-
-
-
-
 }
 
 #endif

@@ -6,6 +6,7 @@
 
 namespace Fracture
 {
+	struct SceneManager;
 	struct CollisionContext
 	{
 		Fracture::UUID entity;
@@ -18,6 +19,17 @@ namespace Fracture
 		OnCollisionEvent(CollisionContext c);
 
 		CollisionContext Collision;
+
+
+		const char* Name() { return "OnCollision"; };
+	};
+
+	struct OnAddActorEvent : public Event
+	{
+		OnAddActorEvent(SceneManager* sm,UUID entity);
+
+		SceneManager* manager;
+		UUID id;
 
 
 		const char* Name() { return "OnCollision"; };

@@ -3,6 +3,9 @@
 #include "Serialisation/SceneSerialiser.h"
 #include "Scripting/ScriptManager.h"
 #include "Scripting/LuaScript.h"
+#include "World/TransformSystem.h"
+#include "EventSystem/Eventbus.h"
+#include "Physics/PhysicsEvents.h"
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::mCurrentScene;
 std::map<Fracture::UUID, Fracture::SceneRegistry> Fracture::SceneManager::mSceneRegister;
@@ -185,6 +188,7 @@ Fracture::UUID& Fracture::SceneManager::LoadSceneFromFile(const std::string& pat
 {   
     SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
     loader.Open(path);
+
     auto scene = loader.ReadScene();
     mScenes[scene->ID] = scene;
 
@@ -201,6 +205,22 @@ Fracture::UUID& Fracture::SceneManager::LoadSceneFromFile(const std::string& pat
     return scene->ID;
 }
 
+void Fracture::SceneManager::InstanceSceneFromFile(ScenePrefab prefab)
+{
+    auto it = mSceneRegister.find(prefab.SceneID);
+    if (it != mSceneRegister.end())
+    {
+        SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+        loader.Open(mSceneRegister[prefab.SceneID].Path);
+        loader.ReadScenePrefab(prefab);
+
+        for (const auto& r : loader.MeshesToLoad)
+            Eventbus::Publish<AsyncLoadMeshEvent>(r.first);
+
+
+    }
+}
+
 std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& scene_ID)
 {    
     auto it = mSceneRegister.find(scene_ID);
@@ -215,7 +235,14 @@ std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& s
             scene->ID = scene_ID;
             mScenes[scene_ID] = scene;
             mCurrentScene = mScenes[scene_ID];
+
+            for (const auto& prefab : mCurrentScene->mPrefabs)
+            {
+                Instantiate(prefab.SceneID,prefab.Position);
+            }
         }
+
+
         return loader.MeshesToLoad; 
     }
     return std::map<Fracture::UUID, int>();
@@ -233,8 +260,7 @@ void Fracture::SceneManager::UnloadScene(const std::string& name)
 
 void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
 {
-    auto it = mSceneRegister.find(scene_ID);
-    if (it != mSceneRegister.end())
+   
     {
         mScenes[scene_ID]->mScriptReg.clear();
         mScenes[scene_ID]->ComponentReg.clear();
@@ -246,11 +272,11 @@ void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
 
 void Fracture::SceneManager::SetScene(const std::shared_ptr<Scene>& scene)
 {
-    if (mCurrentScene)
-    {
-        UnloadSceneByID(mCurrentScene->ID);
-        mCurrentScene.reset();
-    }
+    //if (mCurrentScene)
+   // {
+   // /    UnloadSceneByID(mCurrentScene->ID);
+   //     mCurrentScene.reset();
+   // }
 
     mCurrentScene = scene;
 }
@@ -302,12 +328,177 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
     return false;
 }
 
-void Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position)
+Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position)
 {
+    ScenePrefab mPrefab;
+    mPrefab.PrefabID = UUID();
+    mPrefab.ParentID = (uint32_t)0;
+    mPrefab.SceneID = prefab;
+    mPrefab.Position = position;
+    mPrefab.Rotation = glm::quat();
+    InstanceSceneFromFile(mPrefab);
+    return mPrefab.PrefabID;
+    /*
+    if (mScenes.find(prefab) != mScenes.end())
+    {
+       auto entity = UUID();
+       InstanceComponent<TagComponent>(prefab ,entity,mScenes[prefab]->RootID);
+       InstanceComponent<TransformComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<HierachyComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<MeshComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<ColliderComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<RigidbodyComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<PointlightComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<SpotlightComponent>(prefab, entity,mScenes[prefab]->RootID);
+       InstanceComponent<SunlightComponent>(prefab, entity,mScenes[prefab]->RootID);
+
+       
+        const auto& new_hierachy = GetComponent<HierachyComponent>(entity);
+        new_hierachy->HasParent = true;
+        new_hierachy->Parent = CurrentScene()->RootID;
+
+        
+        const auto& hierachy = GetInstanceComponent<HierachyComponent>(prefab, mScenes[prefab]->RootID);
+        for (const auto& child : hierachy->Children)
+        {
+            UUID childentity = UUID();            
+            new_hierachy->Children.push_back(childentity);
+            InstanceComponents(prefab,childentity, child, entity);            
+        }
+        
+       
+        const auto& currnet_hierachy = GetComponent<HierachyComponent>(CurrentScene()->RootID);
+        currnet_hierachy->Prefabs.push_back(entity);
+
+        auto iter = std::find_if(mCurrentScene->mPrefabs.begin(), mCurrentScene->mPrefabs.end(),
+            [&](ScenePrefab& ts) {return ts == mPrefab; });        
+        if (iter == mCurrentScene->mPrefabs.end())
+        {
+            mCurrentScene->mPrefabs.push_back(mPrefab);
+        }       
+
+        const auto& new_transform = GetComponent<TransformComponent>(entity);
+        new_transform->Rotation = mPrefab.Rotation;
+        new_transform->Position = mPrefab.Position;  
+    }
+    else
+    {
+        auto it = mSceneRegister.find(prefab);
+        if (it != mSceneRegister.end())
+        {
+            auto current_scene = CurrentScene()->ID;
+
+            SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+            loader.Open(mSceneRegister[prefab].Path);
+            auto scene = loader.ReadSceneWithoutLoad();
+
+            if (scene)
+            {
+                scene->ID = mSceneRegister[prefab].ID;
+                mScenes[mSceneRegister[prefab].ID] = scene;
+            }
+            for (const auto& r : loader.MeshesToLoad)
+                Eventbus::Publish<AsyncLoadMeshEvent>(r.first);
+
+            SetScene(mScenes[current_scene]);
+            Instantiate(prefab, position);
+        }
+
+        //
+    } 
+    */
+}
+
+void Fracture::SceneManager::InstanceComponents(UUID prefab, UUID new_entity, UUID original_entity, UUID parent_entity)
+{
+    InstanceComponent<TagComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<TransformComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<HierachyComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<MeshComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<ColliderComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<RigidbodyComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<PointlightComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<SpotlightComponent>(prefab, new_entity, original_entity);
+    InstanceComponent<SunlightComponent>(prefab, new_entity, original_entity);
+ 
+
+    /*
+    const auto& new_hierachy = GetComponent<HierachyComponent>(new_entity);
+    if (new_hierachy)
+    {
+        new_hierachy->HasParent = true;
+        new_hierachy->Parent = parent_entity;
+    }
+
+    const auto& hierachy = GetInstanceComponent<HierachyComponent>(prefab,original_entity);
+    for (const auto& child : hierachy->Children)
+    {
+        UUID childentity = UUID();       
+        new_hierachy->Children.push_back(childentity);
+        InstanceComponents(prefab, childentity, child,new_entity);
+    }
+    */
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<TagComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<TagComponent>(new_entity,component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<HierachyComponent>& component, UUID new_entity)
+{
+    AddComponent<HierachyComponent>(new_entity);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<TransformComponent>& component, UUID new_entity)
+{
+    AddComponent<TransformComponent>(new_entity);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<MeshComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<MeshComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<PointlightComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<PointlightComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<SpotlightComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<SpotlightComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<SunlightComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<SunlightComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<ColliderComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<ColliderComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<RigidbodyComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<RigidbodyComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<AudioSourceComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<AudioSourceComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<ScriptComponent>(new_entity, component);
+}
 
 
-
-
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<CameraComponent>(new_entity, component);
 }
 
 

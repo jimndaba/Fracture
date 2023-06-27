@@ -10,6 +10,7 @@ Fracture::GlobalPostProcessParams Fracture::GraphicsDevice::RenderSettings;
 
 std::string Fracture::GlobalRenderTargets::GlobalColour = "Global_ColorBuffer";
 std::string Fracture::GlobalRenderTargets::GlobalSSAO = "Global_SSAO";
+std::string Fracture::GlobalRenderTargets::GlobalSSR = "Global_SSR";
 std::string Fracture::GlobalRenderTargets::GlobalDebug = "Global_Debug";
 std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows";
 std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";;
@@ -203,14 +204,19 @@ void Fracture::GraphicsDevice::CreateVertexArray(uint32_t& vao, const VertexArra
     glCreateVertexArrays(1, &vao);
 }
 
-void Fracture::GraphicsDevice::VertexArray_BindVertexBuffer(const uint32_t& vao, const uint32_t& bindingIndex, const uint32_t& stride, const uint32_t& VBO)
+void Fracture::GraphicsDevice::VertexArray_BindVertexBuffer(const uint32_t& vao, const uint32_t& bindingIndex, const uint32_t& stride, const uint32_t& VBO, const uint32_t offset)
 {
-    glVertexArrayVertexBuffer(vao, bindingIndex, VBO, 0, stride); glCheckError();
+    glVertexArrayVertexBuffer(vao, bindingIndex, VBO, offset, stride); glCheckError();
 }
 
 void Fracture::GraphicsDevice::VertexArray_BindIndexBuffers(const uint32_t& vao, const uint32_t& IBO)
 {
     glVertexArrayElementBuffer(vao, IBO); glCheckError();
+}
+
+void Fracture::GraphicsDevice::VertexArray_SetDivisor(const uint32_t& vao, const uint32_t& attributeindex, const uint32_t divisor)
+{
+  glVertexArrayBindingDivisor(vao, attributeindex,divisor); glCheckError();
 }
 
 void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, const VertexArrayCreationInfo& info)
@@ -231,16 +237,18 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
             case ShaderDataType::Mat3:
             case ShaderDataType::Mat4:
             {
+                           
                 for (uint32_t i = 0; i < count; i++)
-                {
-
-                    glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, ((sizeof(float) * count) * i)); glCheckError();
+                {               
                     glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
+                    glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, ((sizeof(float) * i) * count)); glCheckError();
+                   
                     if (attribute.Instanced)
                         glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
 
                     attribIndex++;
+                    //bindingIndex++;
                 }
                 bindingIndex += count;
                 break;
@@ -568,6 +576,117 @@ void Fracture::GraphicsDevice::AttachShaderToProgram(const unsigned int& shader,
       FRACTURE_ERROR("Cannot Attach program or program");
     }
 
+}
+
+void Fracture::GraphicsDevice::RecompileShader(Fracture::Shader* shader)
+{
+    const auto& desc = shader->Description;
+    if (shader->Handle)
+    {
+        bool loaded = true;
+        std::vector<unsigned int> mShaders;
+
+        if (!desc.VertexPath.empty())
+        {
+            auto handle = CompileShader(desc.Name,desc.VertexPath ,ShaderType::Vertex);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (!desc.FragmentPath.empty())
+        {
+            auto handle = CompileShader(desc.Name, desc.FragmentPath, ShaderType::Fragement);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (!desc.ComputePath.empty())
+        {
+            auto handle = CompileShader(desc.Name, desc.ComputePath, ShaderType::Compute);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (!desc.GeometryPath.empty())
+        {
+            auto handle = CompileShader(desc.Name, desc.GeometryPath, ShaderType::Geometry);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (!desc.TesselationControlPath.empty())
+        {
+            auto handle = CompileShader(desc.Name, desc.TesselationControlPath, ShaderType::TessalationControl);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (!desc.TesselationEvaluationPath.empty())
+        {
+            auto handle = CompileShader(desc.Name, desc.TesselationEvaluationPath, ShaderType::TessalationEvaluation);
+            if (handle)
+            {
+                mShaders.push_back(handle);
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+
+        if (loaded)
+        {
+            unsigned int reloaded_program = glCreateProgram();
+            glCheckError();
+
+            for (const auto& mshader : mShaders)
+            {
+                AttachShaderToProgram(mshader, reloaded_program);
+            }
+
+            glLinkProgram(reloaded_program);   glCheckError();
+
+            glDeleteProgram(shader->Handle);   glCheckError();
+            shader->Handle = reloaded_program;
+            FRACTURE_INFO("Succesfully Reloaded Shader: {}", desc.Name);
+        }
+        else
+        {
+            FRACTURE_ERROR("Failed to Recompile shader");
+        }
+    }
+ 
 }
 
 std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTarget(const RenderTargetCreationInfo info)

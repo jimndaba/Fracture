@@ -273,13 +273,13 @@ void Fracture::AssetManager::OnLoad()
 					{ ShaderDataType::Float3,"aPos",0,true },
 					{ ShaderDataType::Float3,"aNormal" ,0,true},
 					{ ShaderDataType::Float2,"aUV" ,0,true},
-					{ ShaderDataType::Mat4, "instanceMatrix",1 },
-					{ ShaderDataType::Int4,"aEntityID",1 }
+					{ ShaderDataType::Int4,"aEntityID",1 },
+					{ ShaderDataType::Mat4, "instanceMatrix",1 }					
 				};
 
 			
 				
-				GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
+				//GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
 				
 				{
 					BufferDescription desc;
@@ -290,29 +290,29 @@ void Fracture::AssetManager::OnLoad()
 					desc.Name = "Verticies";
 					mesh->VBO_Buffer = std::make_shared<Buffer>();
 					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
 				}					
 				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::vec4) * 1024;
-					desc.usage = BufferUsage::Static;
-					desc.Name = "EntityIDBuffer";
-					desc.data = nullptr;
-					mesh->EntityID_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
+					//BufferDescription desc;
+					//desc.bufferType = BufferType::ArrayBuffer;
+					//desc.size = sizeof(glm::vec4) * 1024;
+					//desc.usage = BufferUsage::Static;
+					//desc.Name = "EntityIDBuffer";
+					//desc.data = nullptr;
+					//mesh->EntityID_Buffer = std::make_shared<Buffer>();
+					//GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
 				}
 				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::mat4) * 1024;
-					desc.usage = BufferUsage::Static;
-					desc.Name = "MatrixBuffer";
-					desc.data = nullptr;
-					mesh->Matrix_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mesh->Matrix_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 3, sizeof(glm::mat4), mesh->Matrix_Buffer->RenderID);
+					//BufferDescription desc;
+					//desc.bufferType = BufferType::ArrayBuffer;
+					//desc.size = sizeof(glm::mat4) * 1024;
+					//desc.usage = BufferUsage::Static;
+					//desc.Name = "MatrixBuffer";
+					//desc.data = nullptr;
+					//mesh->Matrix_Buffer = std::make_shared<Buffer>();
+					//GraphicsDevice::Instance()->CreateBuffer(mesh->Matrix_Buffer.get(), desc);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 3, sizeof(glm::mat4), mesh->Matrix_Buffer->RenderID);
 				}
 				{
 					BufferDescription desc;
@@ -323,11 +323,11 @@ void Fracture::AssetManager::OnLoad()
 					desc.Name = "IndexBuffer";
 					mesh->EBO_Buffer = std::make_shared<Buffer>();
 					GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
+					///GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
 				}
 					
 
-				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+				//GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
 			}
 
 			mesh->ID = mf.first;
@@ -364,13 +364,14 @@ void Fracture::AssetManager::OnLoad()
 					{ ShaderDataType::Float3,"aPos",0,true },
 					{ ShaderDataType::Float3,"aNormal" ,0,true},
 					{ ShaderDataType::Float2,"aUV" ,0,true},
+					{ ShaderDataType::Int4,"aEntityID",1 },
 					{ ShaderDataType::Mat4, "instanceMatrix",1 },
-					{ ShaderDataType::Int4,"aEntityID",1 }
+					
 				};
 
 
 
-				GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
+				//GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
 
 				{
 					BufferDescription desc;
@@ -381,29 +382,29 @@ void Fracture::AssetManager::OnLoad()
 					desc.Name = "Verticies";
 					mesh->VBO_Buffer = std::make_shared<Buffer>();
 					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
 				}
 				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::vec4) * 1024;
-					desc.usage = BufferUsage::Static;
-					desc.Name = "EntityIDBuffer";
-					desc.data = nullptr;
-					mesh->EntityID_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
+					//BufferDescription desc;
+					//desc.bufferType = BufferType::ArrayBuffer;
+					//desc.size = sizeof(glm::vec4) * 1024;
+					//desc.usage = BufferUsage::Static;
+					//desc.Name = "EntityIDBuffer";
+					//desc.data = nullptr;
+					//mesh->EntityID_Buffer = std::make_shared<Buffer>();
+					//GraphicsDevice::Instance()->CreateBuffer(mesh->EntityID_Buffer.get(), desc);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 7, sizeof(glm::vec4), mesh->EntityID_Buffer->RenderID);
 				}
 				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::mat4) * 1024;
-					desc.usage = BufferUsage::Static;
-					desc.Name = "MatrixBuffer";
-					desc.data = nullptr;
-					mesh->Matrix_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mesh->Matrix_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 3, sizeof(glm::mat4), mesh->Matrix_Buffer->RenderID);
+					//BufferDescription desc;
+					//desc.bufferType = BufferType::ArrayBuffer;
+					//desc.size = sizeof(glm::mat4) * 1024;
+					//desc.usage = BufferUsage::Static;
+					//desc.Name = "MatrixBuffer";
+					//desc.data = nullptr;
+					//mesh->Matrix_Buffer = std::make_shared<Buffer>();
+					//GraphicsDevice::Instance()->CreateBuffer(mesh->Matrix_Buffer.get(), desc);
+					//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 3, sizeof(glm::mat4), mesh->Matrix_Buffer->RenderID);
 				}
 				{
 					BufferDescription desc;
@@ -414,11 +415,11 @@ void Fracture::AssetManager::OnLoad()
 					desc.Name = "IndexBuffer";
 					mesh->EBO_Buffer = std::make_shared<Buffer>();
 					GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
+					//GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
 				}
 
 
-				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+				//GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
 			}
 
 			mesh->ID = mf.first.Mesh;

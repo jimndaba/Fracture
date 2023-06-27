@@ -112,6 +112,7 @@ namespace Fracture
 		bool HasParent = false;
 		UUID Parent;
 		std::vector<UUID> Children;
+		std::vector<UUID> Prefabs;
 
 		UUID GetID() { return entity; }
 	};

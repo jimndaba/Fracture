@@ -8,6 +8,7 @@
 namespace Fracture
 {
 	struct Scene;
+	struct ScenePrefab;
 	struct TagComponent;
 	struct TransformComponent;
 	struct HierachyComponent;
@@ -42,7 +43,9 @@ namespace Fracture
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
+		void ReadTransformComponentIfExists(Fracture::UUID entity_id,glm::vec3 Position, glm::quat Rotation);
 		void ReadHierachyComponentIfExists(Fracture::UUID entity_id);
+		void ReadHierachyComponentIfExists(Fracture::UUID entity_id, Fracture::UUID new_parent);
 		void ReadMeshComponentIfExists(Fracture::UUID entity_id);
 		void ReadSpotlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadPointlightComponentIfExists(Fracture::UUID entity_id);
@@ -55,6 +58,8 @@ namespace Fracture
 
 		void WriteScene(Scene* scene);
 		std::shared_ptr<Scene> ReadScene();
+		std::shared_ptr<Scene> ReadSceneWithoutLoad();
+		void ReadScenePrefab(ScenePrefab prefab_id);
 
 		std::map<Fracture::UUID,int> MeshesToLoad;
 

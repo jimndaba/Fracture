@@ -11,6 +11,19 @@ namespace Fracture
 {
 	typedef std::unordered_map<UUID, std::shared_ptr<IComponent>> ComponentSet;
 
+	struct ScenePrefab
+	{
+		UUID PrefabID;
+		UUID SceneID;
+		UUID ParentID;
+		glm::vec3 Position;
+		glm::quat Rotation;
+
+		inline bool operator == (const ScenePrefab& other) const {
+			return SceneID == other.SceneID;
+		}
+	};
+
 	struct Scene
 	{
 		UUID ID;
@@ -18,9 +31,11 @@ namespace Fracture
 		UUID ActiveCameraID;		
 		std::vector<std::shared_ptr<Entity>> Entities;
 		std::unordered_map<std::type_index, ComponentSet> ComponentReg;
-		std::unordered_map<UUID, std::vector<std::shared_ptr<ScriptComponent>>> mScriptReg;
-		std::unordered_map<UUID, Scene> mPrefabs;
+		std::unordered_map<Fracture::UUID, std::vector<std::shared_ptr<ScriptComponent>>> mScriptReg;
+		std::vector<Fracture::ScenePrefab> mPrefabs;
 		std::string Name = "Untitled";
+
+		
 	};
 }
 

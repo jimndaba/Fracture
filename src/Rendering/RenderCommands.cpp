@@ -210,6 +210,34 @@ void Fracture::RenderCommands::BindVertexArrayObject(Fracture::RenderContext* cn
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::BindVertexArrayVertexBuffer(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t index, uint32_t stride, uint32_t buffer, uint32_t offset)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [vao,index,stride,buffer,offset]() {
+		glVertexArrayVertexBuffer(vao, index, buffer, offset, stride);
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::BindVertexArrayIndexBuffer(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t buffer)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [vao, buffer]() {
+		glVertexArrayElementBuffer(vao, buffer);
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::BindVertexArraySetDivisor(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t AttributeIndex, uint32_t divisor)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [vao, AttributeIndex,divisor]() {
+		glVertexArrayBindingDivisor(vao,AttributeIndex ,divisor);	
+		mErroCallback("Set Divisor");
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z)
 {
 	Fracture::Command cmd;

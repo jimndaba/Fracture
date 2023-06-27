@@ -124,8 +124,8 @@ void Fracture::LuaScript::DoScript(sol::state& state)
 void Fracture::LuaScript::Load(sol::state& state)
 {
     state.script_file(Description.Path);
-    BindFunctions(state);
-    BindProperties(state);
+    //BindFunctions(state);
+    //BindProperties(state);
 }
 
 void Fracture::LuaScript::Reload(sol::state& state)
@@ -253,36 +253,48 @@ void Fracture::LuaScript::OnPropertyUpdate(sol::state& state, const Fracture::Sc
 {
     switch (prop.Type)
     {
+    case PROPERTY_TYPE::UUID:
+    {
+        state[Description.Name]["Properties"][prop.Name] = prop.ID;
+        FRACTURE_TRACE("Updated ID: {}", prop.ID);
+        break;
+    }
     case PROPERTY_TYPE::STRING:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.String;
+        break;
     }
-    break;
+  
     case PROPERTY_TYPE::BOOL:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.Bool;
+        break;
     }
-    break;
+
     case PROPERTY_TYPE::FLOAT:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.Float;
+        break;
     }
-    break;
+    
     case PROPERTY_TYPE::VEC2:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.Vec2;
+        break;
     }
-    break;
+
     case PROPERTY_TYPE::VEC3:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.Vec3;
+        break;
     }
-    break;
+
     case PROPERTY_TYPE::VEC4:
     {
         state[Description.Name]["Properties"][prop.Name] = prop.Vec4;
+        break;
     }
-    break;
+   
     }
 }
 
