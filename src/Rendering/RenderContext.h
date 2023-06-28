@@ -72,7 +72,7 @@ namespace Fracture
 		void BeginState(const SortKey& key);
 		void EndState();
 
-		void Begin();
+		void BeginScene();
 
 		void Push(Fracture::Command& cmd);
 

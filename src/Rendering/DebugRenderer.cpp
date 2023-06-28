@@ -64,7 +64,6 @@ void Fracture::DebugRenderer::OnRender()
 
 
     mContext->BeginState(SortKey());
-    mContext->Begin();
 
     const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
     if (target)

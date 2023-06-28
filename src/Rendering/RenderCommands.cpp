@@ -238,6 +238,17 @@ void Fracture::RenderCommands::BindVertexArraySetDivisor(Fracture::RenderContext
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::ClearBufferData(Fracture::RenderContext* cntxt, uint32_t buffer)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [buffer]() {
+		GLubyte val = 0;
+		glClearNamedBufferData(buffer, GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE, &val);
+		mErroCallback("Clear Buffer");
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z)
 {
 	Fracture::Command cmd;
@@ -258,6 +269,51 @@ void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
 		//TODO glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	};
 	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [fb, attachment_index,attachment_target,texture,level]() {
+		//glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0 + attachment_index, texture, level);
+		glNamedFramebufferTextureLayer(fb, GL_COLOR_ATTACHMENT0 + attachment_index,texture, 0,attachment_target);
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_index,
+		//	GL_TEXTURE_CUBE_MAP_POSITIVE_X + attachment_target, texture, level);
+		mErroCallback("Draw Elements");
+		
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [fb, attachment_index, texture, level]() {
+		glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0+attachment_index, texture, level);
+		mErroCallback("AttachTexture");
+
+	};
+	cntxt->Push(cmd);
+	
+}
+
+void Fracture::RenderCommands::FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers)
+{
+	unsigned int attachments[10];
+	for (int i = 0; i <NoBuffers; i++)
+	{
+		attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+	}
+	//glDrawBuffers(this->Description.NoColorAttachments, attachments);
+
+	Fracture::Command cmd;
+	cmd.fnc = [fb, attachments,NoBuffers]() {
+		glNamedFramebufferDrawBuffers(fb, NoBuffers, attachments);
+		mErroCallback("SetDrawBuffers");
+
+	};
+	cntxt->Push(cmd);
+	
 }
 
 void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt, const Fracture::DrawElementsArray& render_cmd)

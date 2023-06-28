@@ -23,7 +23,7 @@ void Fracture::RenderContext::EndState()
 	KeyStack.pop();
 }
 
-void Fracture::RenderContext::Begin()
+void Fracture::RenderContext::BeginScene()
 {
 	ResetBatches();
 
@@ -122,9 +122,6 @@ void Fracture::RenderContext::AddToBatch(Fracture::UUID materialID, Fracture::St
 			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
 			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
 			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
-
-			
-
 			
 			GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
 		}
@@ -148,19 +145,19 @@ void Fracture::RenderContext::AddToBatch(Fracture::UUID materialID, Fracture::St
 			desc.data = nullptr;
 			mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
 			GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
+			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
 			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, 16, mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 5, 16, mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-				((sizeof(float) * 1) * 4));
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 6, 16, mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-				((sizeof(float) * 2) * 4));
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 7, 16, mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-				((sizeof(float) * 3) * 4));
+			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 5, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 1) * 4));
+			//::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 6, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 2) * 4));
+			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 7, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
+			//	((sizeof(float) * 3) * 4));
 
 			GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 4, 1);
-			GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 5, 1);
-			GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 6, 1);
-			GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 7, 1);
+			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 5, 1);
+			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 6, 1);
+			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 7, 1);
 
 			
 		}

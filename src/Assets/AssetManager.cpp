@@ -365,12 +365,8 @@ void Fracture::AssetManager::OnLoad()
 					{ ShaderDataType::Float3,"aNormal" ,0,true},
 					{ ShaderDataType::Float2,"aUV" ,0,true},
 					{ ShaderDataType::Int4,"aEntityID",1 },
-					{ ShaderDataType::Mat4, "instanceMatrix",1 },
-					
+					{ ShaderDataType::Mat4, "instanceMatrix",1 },					
 				};
-
-
-
 				//GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
 
 				{
@@ -601,6 +597,11 @@ std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTextureByID(const F
 			auto it = mTextureRegister.find(id);
 			if (it != mTextureRegister.end())
 			{
+				if (mTextureRegister[id].Path.empty())
+				{
+					return nullptr;
+				}
+
 				mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
 				GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
 				mLoadedTextures.push_back(id);

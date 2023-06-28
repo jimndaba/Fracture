@@ -96,6 +96,7 @@ namespace Fracture
 	};
 
 	struct PostProcessPipeline;
+	struct SkyboxComponent;
 
 	class GraphicsDevice
 	{
@@ -110,6 +111,8 @@ namespace Fracture
 
 		const int MAX_LIGHTS = 1024;
 		std::vector<LightData> mLightData;
+		uint32_t cubeVAO;
+		uint32_t cubeVBO;
 
 	public:
 		GraphicsDevice();
@@ -130,6 +133,7 @@ namespace Fracture
 		void SetBufferData(const Buffer& buffer, const void* data);
 		void SetBufferIndexRange(Buffer* buffer, uint32_t index, uint32_t offset);
 		void UpdateBufferData(Buffer* buffer, uint32_t offset, uint32_t size, const void* data);
+		void ClearBufferData(Buffer* buffer);
 	
 
 		void CreateVertexArray(uint32_t& vao, const VertexArrayCreationInfo& info);
@@ -141,7 +145,11 @@ namespace Fracture
 		void CreateTexture(std::shared_ptr<Texture>& texture, const TextureCreationInfo& info);
 		void CreateGlobalTexture(const std::string& Name, const TextureCreationInfo& info);
 
+		void UpdateSkybox(RenderContext* Context, SkyboxComponent* component);
+		void RenderCaptureCube(RenderContext* Context);
+
 		RenderTarget* GetGlobalRenderTarget(const std::string& Name);
+		Texture* GetGlobalTexture(const std::string& Name);
 
 		std::shared_ptr<Fracture::Shader> CreateShader(const ShaderDescription& desc);
 		void AttachShaderToProgram(const unsigned int& shader, const unsigned int& program);

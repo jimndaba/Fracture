@@ -95,7 +95,6 @@ void Fracture::PostProcessPipeline::OnRender()
 
 	Fracture::SortKey key;
 	cntxt->BeginState(key);
-	cntxt->Begin();
 
 	for (const auto& target : mPingPongBuffer)
 	{

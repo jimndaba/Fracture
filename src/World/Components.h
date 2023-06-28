@@ -376,8 +376,8 @@ namespace Fracture
 			entity = new_entity;
 		}
 
-		bool HasScriptAttached;
-		bool HasStarted;
+		bool HasScriptAttached = false;
+		bool HasStarted = false;
 		UUID Script;
 		UUID entity;
 		UUID GetID() { return entity; }
@@ -410,6 +410,31 @@ namespace Fracture
 		bool Mute;
 		bool Looping;
 		bool Is3DSource;
+	};
+
+	struct SkyboxComponent : public IComponent
+	{
+		SkyboxComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {
+		
+			
+		}
+
+		SkyboxComponent(SkyboxComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			SkyTexture = other.SkyTexture;
+		}
+
+		UUID entity;
+		UUID GetID() { return entity; }
+
+		bool IsSkyTextureSet = false;
+		bool IsDirty = true;
+		UUID SkyTexture;		
+		glm::vec4 SkyColour = glm::vec4(0.3,0.5,0.8,1.0);
+		uint32_t VAO;
 	};
 }
 

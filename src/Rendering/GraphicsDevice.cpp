@@ -1,7 +1,8 @@
 #include "FracturePCH.h"
 #include "GraphicsDevice.h"
 #include "PostProcessPipeline.h"
-
+#include "Assets/AssetManager.h"
+#include "World/Components.h"
 #include "Common/Logger.h"
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
@@ -137,6 +138,7 @@ void Fracture::GraphicsDevice::UpdateGlobalRenderSettings()
 //Update Global Light Buffers
 void Fracture::GraphicsDevice::UpdateGlobalLightData(const std::vector<LightData>& data)
 {
+    GraphicsDevice::Instance()->ClearBufferData(mGLightBuffer.get());
     GraphicsDevice::Instance()->UpdateBufferData(mGLightBuffer.get(), 0, sizeof(LightData) * data.size(), data.data());
 }
 
@@ -197,6 +199,12 @@ void Fracture::GraphicsDevice::UpdateBufferData(Buffer* buffer, uint32_t offset,
         glNamedBufferSubData(buffer->RenderID, offset, size, data);  glCheckError();
     }
 
+}
+
+void Fracture::GraphicsDevice::ClearBufferData(Buffer* buffer)
+{
+    GLubyte val = 0;
+    glClearNamedBufferData(buffer->RenderID, GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE, &val);
 }
 
 void Fracture::GraphicsDevice::CreateVertexArray(uint32_t& vao, const VertexArrayCreationInfo& info)
@@ -375,7 +383,6 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     {
         if (info.TextureTarget == TextureTarget::TextureCubeMap)
         {
-            //glBindTexture(target, texture->RenderID);
             uint32_t levels = 1;
             if (info.GenMinMaps && info.MipLevels == 0)
             {
@@ -455,6 +462,132 @@ void Fracture::GraphicsDevice::CreateGlobalTexture(const std::string& Name, cons
     mGlobalResources[Name] = texture;
 }
 
+void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxComponent* component)
+{
+    glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    glm::mat4 captureViews[] =
+    {
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+       glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+    };
+
+
+    const auto& target = GetGlobalRenderTarget("Global_SkyCaptureBuffer");    
+    const auto& shader = AssetManager::Instance()->GetShader("equirectangularMap"); 
+  
+   
+    Fracture::RenderCommands::UseProgram(Context, shader->Handle);
+    Fracture::RenderCommands::SetViewport(Context, 512, 512, 0, 0);
+    Fracture::RenderCommands::SetScissor(Context, 512, 512, 0, 0);
+    Fracture::RenderCommands::SetRenderTarget(Context, target->Handle);
+    Fracture::RenderCommands::FrameBufferAttachTexture(Context, target->Handle, 0, GetGlobalTexture("Global_SkyMap")->Handle, 0);
+    Fracture::RenderCommands::FrameBufferSetDrawBuffers(Context, target->Handle, 1);
+
+    if (component->IsSkyTextureSet)
+    {
+        const auto& sky = AssetManager::Instance()->GetTextureByID(component->SkyTexture);
+        Fracture::RenderCommands::SetUniform(Context, shader.get(), "_SkyFlag", 1);
+        Fracture::RenderCommands::SetTexture(Context, shader.get(), "aSkyTexture", sky->Handle, 0);
+    }
+    else
+    {
+        Fracture::RenderCommands::SetUniform(Context, shader.get(), "_SkyFlag", 0);
+        Fracture::RenderCommands::SetUniform(Context, shader.get(), "pSkyColor", component->SkyColour);
+    }
+
+    Fracture::RenderCommands::SetUniform(Context, shader.get(), "projection_matrix", captureProjection);
+    for (unsigned int i = 0; i < 6; ++i)
+    {
+        Fracture::RenderCommands::SetUniform(Context, shader.get(), "view_matrix",captureViews[i]);        
+        Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0,i, GetGlobalTexture("Global_SkyMap")->Handle,0);
+        Fracture::RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
+        RenderCaptureCube(Context); // renders a 1x1 cube
+    }
+    Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
+
+
+}
+
+void Fracture::GraphicsDevice::RenderCaptureCube(RenderContext* Context)
+{
+    if (cubeVAO == 0)
+    {
+        float vertices[] = {
+            // back face
+            -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+             1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+             1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
+             1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+            -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+            -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
+            // front face
+            -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+             1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
+             1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+             1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+            -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
+            -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+            // left face
+            -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+            -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-left
+            -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+            -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+            -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+            -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+            // right face
+             1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+             1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+             1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
+             1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+             1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+             1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
+             // bottom face
+             -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+              1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
+              1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+              1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+             -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+             -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+             // top face
+             -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+              1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+              1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
+              1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+             -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+             -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
+        };
+        glGenVertexArrays(1, &cubeVAO);
+        glGenBuffers(1, &cubeVBO);
+        // fill buffer
+        glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        // link vertex attributes
+        glBindVertexArray(cubeVAO);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+    // render Cube
+    Fracture::RenderCommands::BindVertexArrayObject(Context, cubeVAO);
+    DrawArray cmd =
+    {
+        .mode = DrawMode::Triangles,
+        .first = 0,
+        .count = 36      
+    };
+    Fracture::RenderCommands::DrawArray(Context, cmd);    
+    Fracture::RenderCommands::BindVertexArrayObject(Context,uint32_t(0));
+}
+
 Fracture::RenderTarget* Fracture::GraphicsDevice::GetGlobalRenderTarget(const std::string& Name)
 {
     auto it = mGlobalResources.find(Name);
@@ -465,6 +598,18 @@ Fracture::RenderTarget* Fracture::GraphicsDevice::GetGlobalRenderTarget(const st
     }
 
     return static_cast<RenderTarget*>(mGlobalResources[Name].get());
+}
+
+Fracture::Texture* Fracture::GraphicsDevice::GetGlobalTexture(const std::string& Name)
+{
+    auto it = mGlobalResources.find(Name);
+    if (it == mGlobalResources.end())
+    {
+        FRACTURE_ERROR("Could not find Render Target {}", Name);
+        return nullptr;
+    }
+
+    return static_cast<Texture*>(mGlobalResources[Name].get());
 }
 
 std::shared_ptr<Fracture::Shader> Fracture::GraphicsDevice::CreateShader(const ShaderDescription& desc)
@@ -714,14 +859,13 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
             CreateTexture(target->DepthStencilAttachment, info.DepthStencilAttachments[0]);
             glNamedFramebufferTexture(target->Handle, GLenum(info.DepthStencilAttachments[0].AttachmentTrgt), target->DepthStencilAttachment->Handle, 0);  glCheckError();           
         }
-        else
+        else if(info.HasRenderBuffer)
         {
-            //glGenRenderbuffers(1, &target->RenderBufferHandle);
-           // glBindRenderbuffer(GL_RENDERBUFFER, target->RenderBufferHandle);
-            //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
-            //glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-            //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, target->RenderBufferHandle);
+           glGenRenderbuffers(1, &target->RenderBufferHandle);
+           glBindRenderbuffer(GL_RENDERBUFFER, target->RenderBufferHandle);
+           glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, info.Width, info.Height);
+           glBindRenderbuffer(GL_RENDERBUFFER, 0);
+           glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, target->RenderBufferHandle);
         }
 
         SetDrawBuffers(target);
@@ -740,6 +884,12 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
             }
             glNamedFramebufferDrawBuffer(target->Handle, GL_NONE);   glCheckError();
             glNamedFramebufferReadBuffer(target->Handle, GL_NONE);   glCheckError();
+        }
+        else if (info.HasRenderBuffer)
+        {
+            glCreateRenderbuffers(1, &target->RenderBufferHandle);
+            glNamedRenderbufferStorage(target->RenderBufferHandle, GL_DEPTH_COMPONENT24, info.Width, info.Height);
+            glNamedFramebufferRenderbuffer(target->Handle, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, target->RenderBufferHandle);
         }
     }
 

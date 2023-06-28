@@ -167,6 +167,14 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::AudioSourceComponen
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::SkyboxComponent* component)
+{
+	BeginStruct("Skybox");
+	Property("SkyTexture", component->SkyTexture);	
+	Property("IsSkyTextureSet", component->IsSkyTextureSet);
+	EndStruct();
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -413,6 +421,18 @@ void Fracture::SceneSerialiser::ReadAudioSourceComponentIfExists(Fracture::UUID 
 	}
 }
 
+void Fracture::SceneSerialiser::ReadSkyboxComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("SkyboxComponent"))
+	{
+		auto comp = std::make_shared<SkyboxComponent>(entity_id);
+		comp->SkyTexture = ID("SkyTexture");
+		comp->IsSkyTextureSet = BOOL("IsSkyTextureSet");		
+		SceneManager::AddComponentByInstance<SkyboxComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
@@ -435,6 +455,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<ShadowCasterComponent>(scene->RootID);
 			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);
 			WriteEntityComponentOfType<ScriptComponent>(scene->RootID);
+			WriteEntityComponentOfType<SkyboxComponent>(scene->RootID);
 			EndStruct();
 		}
 
@@ -458,6 +479,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<ShadowCasterComponent>(entity->ID);
 					WriteEntityComponentOfType<ColliderComponent>(entity->ID);
 					WriteEntityComponentOfType<ScriptComponent>(entity->ID);
+					WriteEntityComponentOfType<SkyboxComponent>(entity->ID);
 				}
 				EndCollection();
 
@@ -536,6 +558,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadRigidbodyComponentIfExists(new_Scene->RootID);
 			ReadColliderComponentIfExists(new_Scene->RootID);
 			ReadScriptComponentIfExists(new_Scene->RootID);
+			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -562,6 +585,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadRigidbodyComponentIfExists(entity_id);
 							ReadColliderComponentIfExists(entity_id);
 							ReadScriptComponentIfExists(entity_id);
+							ReadSkyboxComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -638,6 +662,8 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 			ReadRigidbodyComponentIfExists(new_Scene->RootID);
 			ReadColliderComponentIfExists(new_Scene->RootID);
 			ReadScriptComponentIfExists(new_Scene->RootID);
+			ReadAudioSourceComponentIfExists(new_Scene->RootID);
+			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -664,6 +690,8 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 							ReadRigidbodyComponentIfExists(entity_id);
 							ReadColliderComponentIfExists(entity_id);
 							ReadScriptComponentIfExists(entity_id);
+							ReadAudioSourceComponentIfExists(entity_id);
+							ReadSkyboxComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -735,6 +763,8 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			ReadRigidbodyComponentIfExists(prefab.PrefabID);
 			ReadColliderComponentIfExists(prefab.PrefabID);
 			ReadScriptComponentIfExists(prefab.PrefabID);
+			ReadAudioSourceComponentIfExists(prefab.PrefabID);
+			ReadSkyboxComponentIfExists(prefab.PrefabID);
 			EndStruct();
 		}
 
@@ -759,6 +789,8 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadRigidbodyComponentIfExists(entity);
 							ReadColliderComponentIfExists(entity);
 							ReadScriptComponentIfExists(entity);
+							ReadAudioSourceComponentIfExists(entity);
+							ReadSkyboxComponentIfExists(entity);
 							NextInCollection();
 						}
 						EndCollection();

@@ -152,9 +152,14 @@ namespace Fracture
 		void BindVertexArrayVertexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t index, uint32_t stride, uint32_t buffer, uint32_t offset = 0);
 		void BindVertexArrayIndexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t buffer);
 		void BindVertexArraySetDivisor(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t AttributeIndex, uint32_t divisor);
+		void ClearBufferData(Fracture::RenderContext* cntxt, uint32_t buffer);
 		
 		void DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z);
 		void Barrier(Fracture::RenderContext* cntxt);
+
+		void FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level);
+		void FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level);
+		void FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers);
 		
 		void DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& cmd);
 		void DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& cmd);

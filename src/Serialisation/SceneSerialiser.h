@@ -40,6 +40,7 @@ namespace Fracture
 		void SerialiseComponent(Fracture::ColliderComponent* component);
 		void SerialiseComponent(Fracture::ScriptComponent* component);
 		void SerialiseComponent(Fracture::AudioSourceComponent* component);
+		void SerialiseComponent(Fracture::SkyboxComponent* component);
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
@@ -55,6 +56,7 @@ namespace Fracture
 		void ReadScriptComponentIfExists(Fracture::UUID entity_id);
 		void ReadCameraComponentIfExists(Fracture::UUID entity_id);
 		void ReadAudioSourceComponentIfExists(Fracture::UUID entity_id);
+		void ReadSkyboxComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
 		std::shared_ptr<Scene> ReadScene();
