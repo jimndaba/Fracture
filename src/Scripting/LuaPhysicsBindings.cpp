@@ -2,9 +2,9 @@
 #include "LuaPhysicsBindings.h"
 #include "Physics/PhysicsEvents.h"
 
-void Fracture::BindPhysicsEvents(sol::state& lua)
+void Fracture::BindPhysicsEvents(sol::state* lua)
 {
-	lua.new_usertype<Fracture::CollisionContext>("contactInfo",
+	lua->new_usertype<Fracture::CollisionContext>("contactInfo",
 		// Constructor 
 		sol::constructors <
 		Fracture::CollisionContext()

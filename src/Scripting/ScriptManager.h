@@ -2,6 +2,7 @@
 #ifndef SCRIPTMANAGER_H
 #define SCRIPTMANAGER_H
 
+#define SOL_ALL_SAFETIES_ON 1
 #include "sol/sol.hpp"
 
 #include "World/SceneManager.h"
@@ -35,6 +36,7 @@ namespace Fracture
 
 		void OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt);
 
+		
 		static void RegisterScript(const LuaScriptRegistry& reg);
 
 		void Reload(LuaScript* mscript);
@@ -54,7 +56,7 @@ namespace Fracture
 
 
 
-		static sol::state* lua;
+		static sol::state lua;
 		template<class T>
 		static std::shared_ptr<T> GetComponentByType(const Fracture::UUID& id);
 		static Fracture::Entity* GetEntity(const std::string& name);

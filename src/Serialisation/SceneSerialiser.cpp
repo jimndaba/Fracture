@@ -3,6 +3,7 @@
 #include "Common/UUID.h"
 #include "World/Components.h"
 #include "World/SceneManager.h"
+#include "World/WorldEvents.h"
 
 Fracture::SceneSerialiser::SceneSerialiser(IOMode mode, SerialiseFormat format) :
 ISerialiser(mode, format)
@@ -169,7 +170,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::AudioSourceComponen
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::SkyboxComponent* component)
 {
-	BeginStruct("Skybox");
+	BeginStruct("SkyboxComponent");
 	Property("SkyTexture", component->SkyTexture);	
 	Property("IsSkyTextureSet", component->IsSkyTextureSet);
 	EndStruct();
@@ -241,8 +242,7 @@ void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID ent
 	{
 		auto comp = std::make_shared<HierachyComponent>(entity_id);			
 		{
-			const auto& parent = SceneManager::GetComponent<HierachyComponent>(new_parent);
-			//parent->Children.push_back(entity_id);
+			const auto& parent = SceneManager::GetComponent<HierachyComponent>(new_parent);		
 			parent->Prefabs.push_back(entity_id);
 			comp->HasParent = true;
 			comp->Parent = new_parent;
@@ -252,7 +252,7 @@ void Fracture::SceneSerialiser::ReadHierachyComponentIfExists(Fracture::UUID ent
 	}
 }
 
-void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_id)
+void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_id, bool isPrefab, Fracture::UUID prefab_id)
 {
 	if (BeginStruct("Mesh"))
 	{
@@ -260,9 +260,24 @@ void Fracture::SceneSerialiser::ReadMeshComponentIfExists(Fracture::UUID entity_
 		comp->Mesh = ID("MeshID");
 		comp->Materials = UINT32_VECTOR("Materials");
 		comp->meshType = (MeshComponent::MeshType)INT("MeshType");
-				
+		comp->IsPrefab = isPrefab;
+		comp->PrefabID = prefab_id;
 		MeshesToLoad[comp->Mesh] += 1;
 		SceneManager::AddComponentByInstance<MeshComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::InstanceMeshComponentIfExists(Fracture::UUID entity_id, Fracture::UUID prefab_id, Fracture::UUID scene_id)
+{
+	if (BeginStruct("Mesh"))
+	{
+		auto comp = std::make_shared<PrefabInstanceComponent>(entity_id,prefab_id,scene_id);
+		comp->Mesh = ID("MeshID");
+		comp->Materials = UINT32_VECTOR("Materials");
+		comp->meshType = (PrefabInstanceComponent::MeshType)INT("MeshType");
+		MeshesToLoad[comp->Mesh] += 1;
+		SceneManager::AddComponentByInstance<PrefabInstanceComponent>(entity_id, comp);
 		EndStruct();
 	}
 }
@@ -509,7 +524,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 		{
 			BeginStruct("Prefab");
 			{
-				Property("Prefab_ID", prefab.SceneID);				
+				Property("Prefab_ID", prefab.PrefabID);				
 				Property("Scene_ID", prefab.SceneID);				
 				Property("Parent_ID", prefab.ParentID);	
 				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab.PrefabID);
@@ -625,7 +640,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 					prefab.ParentID = ID("Parent_ID");					
 					prefab.Position = VEC3("Position");
 					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
-					new_Scene->mPrefabs.push_back(prefab);
+				    Eventbus::Publish<Fracture::InstanceScenePrefabEvent>(prefab);
 				}
 				NextInCollection();
 			}
@@ -755,8 +770,8 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 		{
 			ReadTagComponentIfExists(prefab.PrefabID);
 			ReadTransformComponentIfExists(prefab.PrefabID,prefab.Position,prefab.Rotation);
-			ReadHierachyComponentIfExists(prefab.PrefabID,SceneManager::CurrentScene()->RootID);
-			ReadMeshComponentIfExists(prefab.PrefabID);
+			ReadHierachyComponentIfExists(prefab.PrefabID,prefab.ParentID);
+			InstanceMeshComponentIfExists(prefab.PrefabID, prefab.PrefabID,prefab.SceneID);		
 			ReadSpotlightComponentIfExists(prefab.PrefabID);
 			ReadPointlightComponentIfExists(prefab.PrefabID);
 			ReadSunlightComponentIfExists(prefab.PrefabID);
@@ -782,7 +797,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadTagComponentIfExists(entity);
 							ReadTransformComponentIfExists(entity);
 							ReadHierachyComponentIfExists(entity, prefab.PrefabID);
-							ReadMeshComponentIfExists(entity);
+							InstanceMeshComponentIfExists(entity, prefab.PrefabID, prefab.SceneID);
 							ReadSpotlightComponentIfExists(entity);
 							ReadPointlightComponentIfExists(entity);
 							ReadSunlightComponentIfExists(entity);
@@ -818,26 +833,26 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			EndCollection();
 		}
 		
-		/*
+		
 		if (BeginCollection("Prefabs"))
 		{
 			while (CurrentCollectionIndex() < GetCollectionSize())
 			{
 				if (BeginStruct("Prefab"))
 				{
-					ScenePrefab prefab;
-					prefab.SceneID = ID("Prefab_ID");
-					prefab.SceneID = ID("Scene_ID");
-					prefab.ParentID = ID("Parent_ID");
-					prefab.Position = VEC3("Position");
-					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
-					new_Scene->mPrefabs.push_back(prefab);
+					ScenePrefab child_prefab;
+					child_prefab.PrefabID = UUID();
+					child_prefab.SceneID = ID("Scene_ID");
+					child_prefab.ParentID = prefab.PrefabID;
+					child_prefab.Position = VEC3("Position");
+					child_prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
+					SceneManager::InstanceSceneFromFile(child_prefab);
 				}
 				NextInCollection();
 			}
 			EndCollection();
 		}
-		*/
+		
 
 		EndStruct();
 	}

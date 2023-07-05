@@ -44,7 +44,22 @@ void Fracture::RenderContext::BeginScene()
 			{
 				const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(meshcomponent->Mesh);
 				const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
-				AddToBatch(material_id, mesh.get(),transform->WorldTransform, meshcomponent->GetID());
+				auto entity_id = meshcomponent->GetID();
+				AddToBatch(material_id, mesh.get(),transform->WorldTransform, entity_id);
+			}
+		}
+	}
+
+	const auto& prefabInstancecomponents = SceneManager::GetAllComponents<PrefabInstanceComponent>();
+	for (const auto& prefab : prefabInstancecomponents)
+	{
+		if (AssetManager::Instance()->IsMeshLoaded(prefab->Mesh))
+		{
+			for (const auto& material_id : prefab->Materials)
+			{
+				const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(prefab->Mesh);
+				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
+				AddToBatch(material_id, mesh.get(), transform->WorldTransform, prefab->GetParentPrefabID());
 			}
 		}
 	}
@@ -57,9 +72,10 @@ void Fracture::RenderContext::BeginScene()
 		for (auto& batch : batches.second)
 		{
 			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
-			Fracture::RenderCommands::MapDataTobuffer<glm::mat4>(this, batch.second->Matrix_Buffer->RenderID, batch.second->Transforms, batch.second->Transforms.size() * sizeof(glm::mat4));
-
-			Fracture::RenderCommands::MapDataTobuffer<glm::vec4>(this, batch.second->EntityID_Buffer->RenderID, batch.second->EntityIDs, batch.second->EntityIDs.size() * sizeof(glm::vec4));
+	
+			Fracture::RenderCommands::BufferSubData<glm::mat4>(this, batch.second->Matrix_Buffer->RenderID, batch.second->Transforms, batch.second->Transforms.size() * sizeof(glm::mat4),0);
+					
+			Fracture::RenderCommands::BufferSubData<glm::vec4>(this, batch.second->EntityID_Buffer->RenderID, batch.second->EntityIDs, batch.second->EntityIDs.size() * sizeof(glm::vec4), 0);
 		}
 	}
 }

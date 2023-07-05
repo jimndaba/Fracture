@@ -11,7 +11,7 @@ void Fracture::LuaScript::OnStart(sol::state& state,const Fracture::UUID& entity
 {
     if (m_onStart)
     {
-        auto self = state[m_name];
+        auto self = state[Description.Name];
         auto result = m_onStart->call(self,entity);
         if (!result.valid())
         {
@@ -27,7 +27,7 @@ void Fracture::LuaScript::OnExit(sol::state& state, const Fracture::UUID& entity
 {
     if (m_onExit)
     {
-        auto self = state[m_name];
+        auto self = state[Description.Name];
         sol::protected_function_result result = m_onExit->call(self, entity);
         if (!result.valid())
         {
@@ -44,7 +44,7 @@ void Fracture::LuaScript::OnUpdate(sol::state& state, float dt, const Fracture::
     if (m_onUpdate)
     {
         auto self = state[Description.Name];
-        sol::protected_function_result result = m_onUpdate->call(dt, entity);
+        sol::protected_function_result result = m_onUpdate->call(self, dt, entity);
         if (!result.valid())
         {
             sol::error err = result;
@@ -124,8 +124,8 @@ void Fracture::LuaScript::DoScript(sol::state& state)
 void Fracture::LuaScript::Load(sol::state& state)
 {
     state.script_file(Description.Path);
-    //BindFunctions(state);
-    //BindProperties(state);
+    BindFunctions(state);
+    BindProperties(state);
 }
 
 void Fracture::LuaScript::Reload(sol::state& state)

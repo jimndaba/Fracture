@@ -3,6 +3,9 @@
 #include "World/Components.h"
 #include "World/TransformSystem.h"
 #include "World/PhysicsSystem.h"
+#include "World/SceneManager.h"
+#include "EventSystem/Eventbus.h"
+#include "World/WorldEvents.h"
 
 void LuaBindComponents::BindTagComponent(sol::state& lua)
 {
@@ -124,3 +127,87 @@ void LuaBindComponents::BindCameraComponent(sol::state& lua)
 void LuaBindComponents::BindAnimatorComponent(sol::state& lua)
 {
 }
+
+
+glm::vec3 LuaBindComponents::GetPosition(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)
+		return transform->Position;
+	return glm::vec3();
+}
+
+glm::vec3 LuaBindComponents::GetScale(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)
+		return transform->Scale;
+	return glm::vec3();
+}
+
+glm::vec3 LuaBindComponents::GetRotation(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)
+		return glm::eulerAngles(transform->Rotation);
+	return glm::vec3();
+}
+
+void LuaBindComponents::SetPosition(Fracture::UUID entity, glm::vec3 Position)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+
+	transform->Position = Position;
+}
+
+void LuaBindComponents::SetRotation(Fracture::UUID entity, glm::vec3 value)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+
+	transform->Rotation = glm::quat(value);
+}
+
+void LuaBindComponents::SetScale(Fracture::UUID entity, glm::vec3 value)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+	transform->Scale = value;
+}
+
+void LuaBindComponents::Translate(Fracture::UUID entity, glm::vec3 value)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+
+	transform->Position += value;
+}
+
+void LuaBindComponents::Rotate(Fracture::UUID entity, glm::vec3 value)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+
+	transform->Rotation = glm::normalize(transform->Rotation * glm::quat(value));
+}
+
+void LuaBindComponents::LookAt(Fracture::UUID entity, glm::vec3 value, glm::vec3 up)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (!transform)
+		return;
+
+	Fracture::TransformSystem::LookAt(transform, value, up);
+}
+
+void LuaBindComponents::Instantiate(Fracture::UUID entity, glm::vec3 value)
+{
+	Fracture::Eventbus::Publish<Fracture::InstantiatePrefabEvent>(entity, value);
+}
+

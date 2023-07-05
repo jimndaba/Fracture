@@ -2,17 +2,25 @@
 
 #include "EventSystem/Event.h"
 
+#include "Scene.h"
 
 namespace Fracture
 {
 	struct InstanceScenePrefabEvent : public Fracture::Event
 	{
-		InstanceScenePrefabEvent(Fracture::UUID id, glm::vec3 pos = glm::vec3(0)) : Event(), SceneID(id),Position(pos) {};
+		InstanceScenePrefabEvent(ScenePrefab Prefab) : Event(), prefab(Prefab) {};
+
+		ScenePrefab prefab;
+		const char* Name() { return "InstanceScenePrefabEvent"; };
+	};
+
+	struct InstantiatePrefabEvent : public Fracture::Event
+	{
+		InstantiatePrefabEvent(Fracture::UUID id, glm::vec3 pos = glm::vec3(0)) : Event(), SceneID(id), Position(pos) {};
 
 		Fracture::UUID SceneID;
 		glm::vec3 Position;
 		const char* Name() { return "InstanceScenePrefabEvent"; };
 	};
-
 
 }

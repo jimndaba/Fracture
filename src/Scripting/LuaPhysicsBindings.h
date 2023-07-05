@@ -7,7 +7,7 @@
 namespace Fracture
 {
 
-	void BindPhysicsEvents(sol::state& lua);
+	void BindPhysicsEvents(sol::state* lua);
 
 
 

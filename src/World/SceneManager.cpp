@@ -75,6 +75,27 @@ void Fracture::SceneManager::RemoveEntity(const UUID& entity)
     }
 }
 
+void Fracture::SceneManager::RemovePrefab(const UUID& entity)
+{
+    if (!mCurrentScene)
+        return;
+
+    auto it = std::find_if(std::begin(mCurrentScene->mPrefabs), std::end(mCurrentScene->mPrefabs), [&](ScenePrefab p) { return p.PrefabID == entity; });
+
+    if (it != mCurrentScene->mPrefabs.end())
+    {
+        int index = std::distance(mCurrentScene->mPrefabs.begin(), it);
+
+        FRACTURE_TRACE("Destroying Prefab: {}", mCurrentScene->mPrefabs[index].PrefabID);
+
+
+        mCurrentScene->mPrefabs.erase(
+            std::remove(std::begin(mCurrentScene->mPrefabs),
+                std::end(mCurrentScene->mPrefabs), mCurrentScene->mPrefabs[index]),
+            std::end(mCurrentScene->mPrefabs));
+    }
+}
+
 void Fracture::SceneManager::AttachScript(const UUID& entity_id)
 {
     auto scriptcomp = std::make_shared<ScriptComponent>(entity_id);
@@ -235,11 +256,11 @@ std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& s
             scene->ID = scene_ID;
             mScenes[scene_ID] = scene;
             mCurrentScene = mScenes[scene_ID];
-
-            for (const auto& prefab : mCurrentScene->mPrefabs)
-            {
-                Instantiate(prefab.SceneID,prefab.Position);
-            }
+      
+            //for (const auto& prefab : mCurrentScene->mPrefabs)
+            //{
+            //    Instantiate(prefab);
+           // }
         }
 
 
@@ -254,17 +275,18 @@ void Fracture::SceneManager::UnloadScene(const std::string& name)
 
     if (!mScenes[scene_ID])
         return;
-  
+
     UnloadSceneByID(scene_ID);
 }
 
 void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
 {
-   
+
     {
         mScenes[scene_ID]->mScriptReg.clear();
         mScenes[scene_ID]->ComponentReg.clear();
         mScenes[scene_ID]->Entities.clear();
+        mScenes[scene_ID]->mPrefabs.clear();
         mScenes[scene_ID].reset();
         mScenes.erase(scene_ID);
     }
@@ -295,14 +317,13 @@ std::map<Fracture::UUID, int> Fracture::SceneManager::SetSceneByID(const UUID& s
         mCurrentScene.reset();
     }
 
-    auto it = mSceneRegister.find(scene_ID);    
+    auto it = mSceneRegister.find(scene_ID);
     if (it != mSceneRegister.end())
     {
-
         if (!mScenes[scene_ID])
         {
             return LoadSceneByID(scene_ID);
-        }       
+        }
     }
 
     FRACTURE_ERROR("Could not load Scene: {}", scene_ID);
@@ -313,8 +334,8 @@ void Fracture::SceneManager::RegisterScene(const SceneRegistry& reg)
 {
     if (!HasScenePath(reg.Path))
     {
-       mSceneRegister[reg.ID] = reg;
-       mSceneIDLookUp[reg.Name] = reg.ID;
+        mSceneRegister[reg.ID] = reg;
+        mSceneIDLookUp[reg.Name] = reg.ID;
     }
 }
 
@@ -330,83 +351,65 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
 
 Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position)
 {
+
     ScenePrefab mPrefab;
     mPrefab.PrefabID = UUID();
-    mPrefab.ParentID = (uint32_t)0;
+    mPrefab.ParentID = mCurrentScene->RootID;
     mPrefab.SceneID = prefab;
     mPrefab.Position = position;
     mPrefab.Rotation = glm::quat();
     InstanceSceneFromFile(mPrefab);
+    mCurrentScene->mPrefabs.push_back(mPrefab);
     return mPrefab.PrefabID;
-    /*
-    if (mScenes.find(prefab) != mScenes.end())
+}
+
+Fracture::UUID Fracture::SceneManager::InstantiateAsChildOf(UUID prefab, UUID parent, glm::vec3 position)
+{
+    ScenePrefab mPrefab;
+    mPrefab.PrefabID = UUID();
+    mPrefab.ParentID = parent;
+    mPrefab.SceneID = prefab;
+    mPrefab.Position = position;
+    mPrefab.Rotation = glm::quat();
+    InstanceSceneFromFile(mPrefab);
+    mCurrentScene->mPrefabs.push_back(mPrefab);
+    return mPrefab.PrefabID;
+}
+
+bool Fracture::SceneManager::IsPrefabScene(const UUID& id)
+{
+    if (mCurrentScene)
     {
-       auto entity = UUID();
-       InstanceComponent<TagComponent>(prefab ,entity,mScenes[prefab]->RootID);
-       InstanceComponent<TransformComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<HierachyComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<MeshComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<ColliderComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<RigidbodyComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<PointlightComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<SpotlightComponent>(prefab, entity,mScenes[prefab]->RootID);
-       InstanceComponent<SunlightComponent>(prefab, entity,mScenes[prefab]->RootID);
-
-       
-        const auto& new_hierachy = GetComponent<HierachyComponent>(entity);
-        new_hierachy->HasParent = true;
-        new_hierachy->Parent = CurrentScene()->RootID;
-
-        
-        const auto& hierachy = GetInstanceComponent<HierachyComponent>(prefab, mScenes[prefab]->RootID);
-        for (const auto& child : hierachy->Children)
-        {
-            UUID childentity = UUID();            
-            new_hierachy->Children.push_back(childentity);
-            InstanceComponents(prefab,childentity, child, entity);            
-        }
-        
-       
-        const auto& currnet_hierachy = GetComponent<HierachyComponent>(CurrentScene()->RootID);
-        currnet_hierachy->Prefabs.push_back(entity);
-
-        auto iter = std::find_if(mCurrentScene->mPrefabs.begin(), mCurrentScene->mPrefabs.end(),
-            [&](ScenePrefab& ts) {return ts == mPrefab; });        
-        if (iter == mCurrentScene->mPrefabs.end())
-        {
-            mCurrentScene->mPrefabs.push_back(mPrefab);
-        }       
-
-        const auto& new_transform = GetComponent<TransformComponent>(entity);
-        new_transform->Rotation = mPrefab.Rotation;
-        new_transform->Position = mPrefab.Position;  
+       auto it = std::find_if(mCurrentScene->mPrefabs.begin(), mCurrentScene->mPrefabs.end(),
+            [id](const ScenePrefab& m){ return m.PrefabID == id; });
+      
+       if (it != mCurrentScene->mPrefabs.end())
+           return true;    
     }
-    else
+
+    return false;
+}
+
+Fracture::ScenePrefab Fracture::SceneManager::GetScenePrefab(const UUID& id)
+{
+    if (mCurrentScene)
     {
-        auto it = mSceneRegister.find(prefab);
-        if (it != mSceneRegister.end())
-        {
-            auto current_scene = CurrentScene()->ID;
+        auto it = std::find_if(mCurrentScene->mPrefabs.begin(), mCurrentScene->mPrefabs.end(),
+            [id](const ScenePrefab& m) { return m.PrefabID == id; });
 
-            SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
-            loader.Open(mSceneRegister[prefab].Path);
-            auto scene = loader.ReadSceneWithoutLoad();
+        if (it != mCurrentScene->mPrefabs.end())
+            return (ScenePrefab)*it;
+    }
 
-            if (scene)
-            {
-                scene->ID = mSceneRegister[prefab].ID;
-                mScenes[mSceneRegister[prefab].ID] = scene;
-            }
-            for (const auto& r : loader.MeshesToLoad)
-                Eventbus::Publish<AsyncLoadMeshEvent>(r.first);
+    return ScenePrefab();
 
-            SetScene(mScenes[current_scene]);
-            Instantiate(prefab, position);
-        }
+}
 
-        //
-    } 
-    */
+Fracture::UUID Fracture::SceneManager::Instantiate(ScenePrefab prefab)
+{
+    InstanceSceneFromFile(prefab);
+    mCurrentScene->mPrefabs.push_back(prefab);
+    return prefab.PrefabID;
 }
 
 void Fracture::SceneManager::InstanceComponents(UUID prefab, UUID new_entity, UUID original_entity, UUID parent_entity)
@@ -494,7 +497,6 @@ void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<ScriptComponen
 {
     AddComponentByInstance<ScriptComponent>(new_entity, component);
 }
-
 
 void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity)
 {

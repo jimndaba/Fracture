@@ -8,7 +8,7 @@ namespace Fracture
 	{
 
 	public:
-		UUID(bool valid = true);
+		UUID();
 		UUID(uint32_t uuid, bool valid = true);
 		UUID(const UUID& other, bool valid = true);
 
@@ -33,6 +33,10 @@ namespace Fracture
 
 
 		bool IsValid() { return mValid; };
+
+		uint32_t GetValue() const {
+			return m_UUID;
+		}
 
 	private:
 		mutable uint32_t m_UUID;

@@ -85,7 +85,6 @@ namespace Fracture
 
 		LuaScriptRegistry Description;
 	private:
-		std::string m_name;
 		std::string m_filepath;
 		bool isStarted = false;
 

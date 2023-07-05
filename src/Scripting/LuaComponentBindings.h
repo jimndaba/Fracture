@@ -19,6 +19,21 @@ namespace LuaBindComponents
 	void BindCameraComponent(sol::state& lua);
 	void BindAnimatorComponent(sol::state& lua);
 
+	glm::vec3 GetPosition(Fracture::UUID entity);
+	glm::vec3 GetScale(Fracture::UUID entity);
+	glm::vec3 GetRotation(Fracture::UUID entity);
+
+	void SetPosition(Fracture::UUID entity, glm::vec3 value);
+	void SetRotation(Fracture::UUID entity, glm::vec3 value);
+	void SetScale(Fracture::UUID entity, glm::vec3 value);
+
+
+	void Translate(Fracture::UUID entity, glm::vec3 value);
+	void Rotate(Fracture::UUID entity, glm::vec3 value);
+	void LookAt(Fracture::UUID entity, glm::vec3 value, glm::vec3 up);
+
+	void Instantiate(Fracture::UUID entity, glm::vec3 value);
+
 
 }
 

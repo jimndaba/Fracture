@@ -490,8 +490,11 @@ void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxCompone
     if (component->IsSkyTextureSet)
     {
         const auto& sky = AssetManager::Instance()->GetTextureByID(component->SkyTexture);
-        Fracture::RenderCommands::SetUniform(Context, shader.get(), "_SkyFlag", 1);
-        Fracture::RenderCommands::SetTexture(Context, shader.get(), "aSkyTexture", sky->Handle, 0);
+        if (sky)
+        {
+            Fracture::RenderCommands::SetUniform(Context, shader.get(), "_SkyFlag", 1);
+            Fracture::RenderCommands::SetTexture(Context, shader.get(), "aSkyTexture", sky->Handle, 0);
+        }
     }
     else
     {

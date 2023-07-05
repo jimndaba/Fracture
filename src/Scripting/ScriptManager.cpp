@@ -13,7 +13,7 @@
 #include "Physics/PhysicsEvents.h"
 #include "World/WorldEvents.h"
 
-sol::state* Fracture::ScriptManager::lua;
+sol::state Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::LuaScript>> Fracture::ScriptManager::mScripts;
 
@@ -25,14 +25,10 @@ Fracture::ScriptManager::ScriptManager()
 void Fracture::ScriptManager::BindLog(sol::state& L)
 {
 	auto log = L.create_table("Debug");
-	log.set_function("log", [&](sol::this_state s, std::string message) {
+	log.set_function("log", sol::overload([&](sol::this_state s, std::string message) {
 		FRACTURE_INFO(message);
-		});
-
-	log.set_function("log", [&](sol::this_state s, Fracture::UUID id) {
-		FRACTURE_INFO(id);
-		});
-
+		}));
+	
 	log.set_function("trace", [&](sol::this_state s, std::string message) {
 		FRACTURE_TRACE(message);
 		});
@@ -52,66 +48,65 @@ void Fracture::ScriptManager::BindLog(sol::state& L)
 
 void Fracture::ScriptManager::BindCore(sol::state& lua)
 {
-	lua.new_usertype<Fracture::IComponent>("Component",
-		sol::meta_function::to_string, [](Fracture::IComponent& e) { return fmt::format("Component : {}", e.GetID()); }
-	);
-
 	lua.new_usertype<Fracture::UUID>("UUID",
 		// Constructor 
+	// Constructor 
 		sol::constructors <
-		UUID()>(),
+		Fracture::UUID()		
+		>(),
 
-		sol::meta_function::to_string, [](Fracture::UUID& e) { return fmt::format("UUID : {}", e); }
-	);	
-	
-	//Constructors
-	lua.set_function("UUID", []() {return UUID(); });
+		"GetValue", & UUID::GetValue,
+
+		sol::meta_function::to_string, [](Fracture::UUID& v) {return fmt::format("UUID({})", std::to_string((uint32_t) v)); }
+		
+		);
+
+
+	lua.set_function("UUID", []() {return Fracture::UUID(); });
 }
 
 void Fracture::ScriptManager::BindFunctions(sol::state& lua)
-{
-	//lua.set_function("GetEntity", [](sol::this_state s, std::string name)->Entity* {
-	//	return ScriptManager::GetEntity(name);
-	//	});
+{	
+	lua.set_function("SetPosition", LuaBindComponents::SetPosition);
+	lua.set_function("SetScale", LuaBindComponents::SetScale);
+	lua.set_function("SetRotation", LuaBindComponents::SetRotation);
+	lua.set_function("GetPosition", LuaBindComponents::GetPosition);
+	lua.set_function("GetScale", LuaBindComponents::GetScale);
+	lua.set_function("GetRotation", LuaBindComponents::GetRotation);
+	lua.set_function("Translate", LuaBindComponents::Translate);
+	lua.set_function("Rotate", LuaBindComponents::Rotate);
+	lua.set_function("LookAt", LuaBindComponents::LookAt);
+	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
 
-	lua.set_function("GetTagComponent", [](sol::this_state s, UUID id)->std::shared_ptr<TagComponent> {
+	/*
+	lua.set_function("GetTagComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<TagComponent> {
 		return ScriptManager::GetComponentByType<TagComponent>(id);
 		});
-	lua.set_function("GetTransformComponent", [](sol::this_state s, UUID id)->std::shared_ptr<TransformComponent> {
+	lua.set_function("GetTransformComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<TransformComponent> {
 		return ScriptManager::GetComponentByType<TransformComponent>(id);
 		});
-	lua.set_function("GetCameraComponent", [](sol::this_state s, UUID id)->std::shared_ptr<CameraComponent> {
+	lua.set_function("GetCameraComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<CameraComponent> {
 		return ScriptManager::GetComponentByType<CameraComponent>(id);
 		});
-	lua.set_function("GetRigidBodyComponent", [](sol::this_state s, UUID id)->std::shared_ptr<RigidbodyComponent> {
+	lua.set_function("GetRigidBodyComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<RigidbodyComponent> {
 		return ScriptManager::GetComponentByType<RigidbodyComponent>(id);
 		});
-	lua.set_function("GetColliderComponent", [](sol::this_state s, UUID id)->std::shared_ptr<ColliderComponent> {
+	lua.set_function("GetColliderComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<ColliderComponent> {
 		return ScriptManager::GetComponentByType<ColliderComponent>(id);
 		});
-	lua.set_function("GetSpolightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<SpotlightComponent> {
+	lua.set_function("GetSpolightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<SpotlightComponent> {
 		return ScriptManager::GetComponentByType<SpotlightComponent>(id);
 		});
-	lua.set_function("GetPointlightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<PointlightComponent> {
+	lua.set_function("GetPointlightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<PointlightComponent> {
 		return ScriptManager::GetComponentByType<PointlightComponent>(id);
 		});
-	lua.set_function("GetSunlightComponent", [](sol::this_state s, UUID id)->std::shared_ptr<SunlightComponent> {
+	lua.set_function("GetSunlightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<SunlightComponent> {
 		return ScriptManager::GetComponentByType<SunlightComponent>(id);
 		});
+	*/
 
-	lua.set_function("Destroy", sol::overload([](sol::this_state s, UUID id) {
+	lua.set_function("Destroy", sol::overload([&](sol::this_state s, UUID id) {
 		return SceneManager::RemoveEntity(id);
-		}));
-	lua.set_function("Destroy", sol::overload([](sol::this_state s, Entity entity) {
-		return SceneManager::RemoveEntity(entity.ID);
-		}));
-
-	//lua.set_function("Instantiate", sol::overload([](sol::this_state s, UUID prefab) {
-	//	return SceneManager::Instantiate(prefab, glm::vec3(0));
-	//	}));
-
-	lua.set_function("Instantiate", sol::overload([](sol::this_state s, UUID prefab,glm::vec3 position) {
-		return ScriptManager::Instantiate(prefab, position);
 		}));
 }
 
@@ -123,7 +118,7 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 		return Input::IsKeyDown(key);
 		});
 
-	input.set_function("GetMousePosition", []() -> bool {
+	input.set_function("GetMousePosition", [](){
 		return Input::GetMousePosition;
 		});
 
@@ -228,9 +223,9 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 
 void Fracture::ScriptManager::BindMaths(sol::state& L)
 {
-	LuaBindGLM::BindVec2(L);
-	LuaBindGLM::BindVec3(L);
-	LuaBindGLM::BindVec4(L);
+	LuaBindGLM::BindVec2(&L);
+	LuaBindGLM::BindVec3(&L);
+	LuaBindGLM::BindVec4(&L);
 }
 
 void Fracture::ScriptManager::BindApplication(sol::state& L)
@@ -240,8 +235,7 @@ void Fracture::ScriptManager::BindApplication(sol::state& L)
 
 void Fracture::ScriptManager::Init()
 {
-	lua = new(sol::state);
-	lua->open_libraries(
+	lua.open_libraries(
 		sol::lib::base,
 		sol::lib::package,
 		sol::lib::string,
@@ -253,27 +247,12 @@ void Fracture::ScriptManager::Init()
 		sol::lib::io
 	);
 
-	BindCore(*lua);
-	BindLog(*lua);
-	BindInput(*lua);
-	BindFunctions(*lua);
-	BindMaths(*lua);
-	BindPhysicsEvents(*lua);
-
-	//LuaBindEntity::BindEntity(*lua);
-	LuaBindComponents::BindTagComponent(*lua);
-	LuaBindComponents::BindAnimatorComponent(*lua);
-	LuaBindComponents::BindCameraComponent(*lua);
-	LuaBindComponents::BindColliderComponent(*lua);
-	LuaBindComponents::BindPointLightComponent(*lua);
-	LuaBindComponents::BindSpotLightComponent(*lua);
-	LuaBindComponents::BindSunLightComponent(*lua);
-	LuaBindComponents::BindHierachyComponent(*lua);
-	LuaBindComponents::BindMeshComponent(*lua);
-	LuaBindComponents::BindRigidbodyComponent(*lua);
-	LuaBindComponents::BindTagComponent(*lua);
-	LuaBindComponents::BindTransformComponent(*lua);
-
+	BindCore(lua);
+	BindLog(lua);
+	BindInput(lua);
+	BindFunctions(lua);
+	BindMaths(lua);
+	BindPhysicsEvents(&lua);
 
 	Fracture::Eventbus::Subscribe(this, &ScriptManager::OnCollision);
 
@@ -297,12 +276,30 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			//script->Load(*lua);
-			//script->BindFunctions(*lua);
-			//script->BindProperties(*lua);
-			script->OnStart(*lua, component->GetID());
+			if (component->HasStarted)
+			{				
+				script->Load(lua);				
+				script->OnStart(lua, component->GetID());
+				component->HasStarted = true;
+			}
 		}
 	}	
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnStart(lua, component->GetID());
+		}
+	}
 }
 
 void Fracture::ScriptManager::onExit()
@@ -319,7 +316,23 @@ void Fracture::ScriptManager::onExit()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnExit(*lua, component->GetID());
+			script->OnExit(lua, component->GetID());
+		}
+	}
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnExit(lua,component->GetID());
 		}
 	}
 }
@@ -338,7 +351,23 @@ void Fracture::ScriptManager::onUpdate(float dt)
 				continue;
 			
 			const auto& script = mScripts[component->Script];
-			script->OnUpdate(*lua, dt, component->GetID());
+			script->OnUpdate(lua, dt, component->GetID());
+		}
+	}
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnUpdate(lua, dt, component->GetID());
 		}
 	}
 }
@@ -349,7 +378,7 @@ void Fracture::ScriptManager::Shutdown()
 
 void Fracture::ScriptManager::Instantiate(UUID Entity, glm::vec3 position)
 {
-	Eventbus::Publish<InstanceScenePrefabEvent>(Entity, position);
+	Eventbus::Publish<InstantiatePrefabEvent>(Entity, position);
 }
 
 void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt)
@@ -366,7 +395,23 @@ void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnCollision(*lua, evnt->Collision);
+			script->OnCollision(lua, evnt->Collision);
+		}
+	}
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnCollision(lua, evnt->Collision);
 		}
 	}
 }
@@ -379,12 +424,12 @@ void Fracture::ScriptManager::RegisterScript(const LuaScriptRegistry& reg)
 void Fracture::ScriptManager::Reload(LuaScript* mscript)
 {
 	FRACTURE_INFO("Script {} Reloaded", mscript->Description.Name);
-	mscript->Reload(*lua);
+	mscript->Reload(lua);
 }
 
 void Fracture::ScriptManager::LoadScript(const std::shared_ptr<LuaScript>& mscript)
 {
-	mscript->Load(*lua);
+	mscript->Load(lua);
 }
 
 std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScript(const UUID& id)
@@ -460,7 +505,7 @@ void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
 
 sol::state* Fracture::ScriptManager::GetState()
 {
-	return lua;
+	return &lua;
 }
 
 Fracture::Entity* Fracture::ScriptManager::GetEntity(const std::string& name)
@@ -480,3 +525,4 @@ bool Fracture::ScriptManager::HasScript(const UUID& script)
 {
 	return mScriptRegister.find(script) != mScriptRegister.end();
 }
+

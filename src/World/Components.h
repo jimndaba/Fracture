@@ -79,6 +79,44 @@ namespace Fracture
 		}
 		
 		UUID entity;
+		UUID PrefabID;
+		enum class MeshType
+		{
+			Static,
+			Skinned
+		};
+
+		UUID Mesh;
+		bool IsPrefab = false;
+		std::vector<uint32_t> Materials;
+		MeshType meshType = MeshType::Static;
+
+
+		UUID GetID() { return entity; }
+	};
+
+	struct PrefabInstanceComponent : public IComponent
+	{
+		PrefabInstanceComponent() :IComponent() {};
+		PrefabInstanceComponent(UUID entity_id, UUID parentprefab_id, UUID Scene_id) :
+			IComponent(), Parent_PrefabID(parentprefab_id), EntityID(entity_id),SceneID(Scene_id)
+		{}
+
+		PrefabInstanceComponent(PrefabInstanceComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			EntityID = new_entity;
+			Parent_PrefabID = other.Parent_PrefabID;
+			Mesh = other.Mesh;
+			Materials = other.Materials;
+			meshType = other.meshType;
+			SceneID = other.SceneID;
+		}
+
+		UUID EntityID;
+		UUID Parent_PrefabID;
+		UUID SceneID;
+		
 		enum class MeshType
 		{
 			Static,
@@ -88,10 +126,10 @@ namespace Fracture
 		UUID Mesh;
 		std::vector<uint32_t> Materials;
 		MeshType meshType = MeshType::Static;
-
-
-		UUID GetID() { return entity; }
+		UUID GetID() { return  EntityID; }
+		UUID GetParentPrefabID() { return  Parent_PrefabID; }
 	};
+
 
 	struct HierachyComponent : public IComponent
 	{

@@ -1,9 +1,9 @@
 #include "FracturePCH.h"
 #include "LuaMathBindings.h"
 
-void LuaBindGLM::BindVec2(sol::state& lua)
+void LuaBindGLM::BindVec2(sol::state* lua)
 {
-	lua.new_usertype<glm::vec2>("vec2",
+	lua->new_usertype<glm::vec2>("vec2",
 		// Constructor 
 		sol::constructors <
 		glm::vec2(),
@@ -33,14 +33,14 @@ void LuaBindGLM::BindVec2(sol::state& lua)
 	);
 
 	//Constructors
-	lua.set_function("vec2", []() {return glm::vec2(); });
-	lua.set_function("vec2", sol::overload([](float value) {return glm::vec2(value); }));
-	lua.set_function("vec2", sol::overload([](float x, float y) {return glm::vec2(x, y); }));
+	//lua->set_function("vec2", []() {return glm::vec2(); });
+	//lua->set_function("vec2", sol::overload([](float value) {return glm::vec2(value); }));
+	//lua->set_function("vec2", sol::overload([](float x, float y) {return glm::vec2(x, y); }));
 }
 
-void LuaBindGLM::BindVec3(sol::state& lua)
+void LuaBindGLM::BindVec3(sol::state* lua)
 {
-	lua.new_usertype<glm::vec3>("vec3",
+	lua->new_usertype<glm::vec3>("vec3",
 
 		// Constructor 
 		sol::constructors <
@@ -73,14 +73,14 @@ void LuaBindGLM::BindVec3(sol::state& lua)
 	);
 
 	//Constructors
-	lua.set_function("vec3", []() {return glm::vec3(); });
-	lua.set_function("vec3", sol::overload([](float value) {return glm::vec3(value); }));
-	lua.set_function("vec3", sol::overload([](float x, float y, float z) {return glm::vec3(x, y, z); }));
+	//lua.set_function("vec3", []() {return glm::vec3(); });
+	//lua.set_function("vec3", sol::overload([](float value) {return glm::vec3(value); }));
+	//lua.set_function("vec3", sol::overload([](float x, float y, float z) {return glm::vec3(x, y, z); }));
 }
 
-void LuaBindGLM::BindVec4(sol::state& lua)
+void LuaBindGLM::BindVec4(sol::state* lua)
 {
-	lua.new_usertype<glm::vec4>("vec4",
+	lua->new_usertype<glm::vec4>("vec4",
 		// Constructor 
 		sol::constructors <
 		glm::vec4(),
@@ -112,16 +112,16 @@ void LuaBindGLM::BindVec4(sol::state& lua)
 	);
 
 	//Constructors
-	lua.set_function("vec4", []() {return glm::vec4(); });
-	lua.set_function("vec4", sol::overload([](float value) {return glm::vec4(value); }));
-	lua.set_function("vec4", sol::overload([](float x, float y, float z, float w) {return glm::vec4(x, y, z, w); }));
+	//lua.set_function("vec4", []() {return glm::vec4(); });
+	//lua.set_function("vec4", sol::overload([](float value) {return glm::vec4(value); }));
+	//lua.set_function("vec4", sol::overload([](float x, float y, float z, float w) {return glm::vec4(x, y, z, w); }));
 }
 
-void LuaBindGLM::BindQuat(sol::state& lua)
+void LuaBindGLM::BindQuat(sol::state* lua)
 {
 	glm::quat q; 
 	
-	lua.new_usertype<glm::quat>("quat",
+	lua->new_usertype<glm::quat>("quat",
 		// Constructor 
 		sol::constructors <
 		glm::quat(),
@@ -154,16 +154,16 @@ void LuaBindGLM::BindQuat(sol::state& lua)
 	);
 
 	//Constructors
-	lua.set_function("quat", []() {return glm::vec2(); });
-	lua.set_function("quat", sol::overload([](glm::vec3 value) {return glm::quat(value); }));
-	lua.set_function("quat", sol::overload([](float x, float y,float z,float w) {return glm::quat(x, y,z,w); }));
+	//lua.set_function("quat", []() {return glm::vec2(); });
+	//lua.set_function("quat", sol::overload([](glm::vec3 value) {return glm::quat(value); }));
+	//lua.set_function("quat", sol::overload([](float x, float y,float z,float w) {return glm::quat(x, y,z,w); }));
 }
 
-void LuaBindGLM::BindMat3(sol::state& lua)
+void LuaBindGLM::BindMat3(sol::state* lua)
 {
 }
 
-void LuaBindGLM::BindMat4(sol::state& lua)
+void LuaBindGLM::BindMat4(sol::state* lua)
 {
 }
 

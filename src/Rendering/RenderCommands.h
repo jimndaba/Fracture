@@ -171,6 +171,11 @@ namespace Fracture
 
 		template<class T>
 	    void MapDataTobuffer(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size,BufferAccess access = BufferAccess::WriteOnly);
+
+		template<class T>
+	    void BufferSubData(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size, uint32_t offset,BufferAccess access = BufferAccess::WriteOnly);
+
+
 		void UnMapbuffer(Fracture::RenderContext* cntxt,uint32_t buffer);
 
 		template<RenderTargetType E>
@@ -203,6 +208,16 @@ namespace Fracture
 			};
 			cntxt->Push(cmd);	
 			UnMapbuffer(cntxt, buffer);
+		}
+
+		template<class T>
+		void BufferSubData(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size, uint32_t offset, BufferAccess access)
+		{
+			Fracture::Command cmd;
+			cmd.fnc = [cntxt, buffer, data, size, access,offset]() {
+				glNamedBufferSubData(buffer, offset, size, data.data());
+			};
+			cntxt->Push(cmd);
 		}
 		
 		template<RenderTargetType E>

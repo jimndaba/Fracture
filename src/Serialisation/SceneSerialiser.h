@@ -22,6 +22,7 @@ namespace Fracture
 	struct ColliderComponent;
 	struct ScriptComponent;
 	struct AudioSourceComponent;
+	struct PrefabInstanceComponent;
 
 	struct SceneSerialiser : public ISerialiser
 	{
@@ -47,7 +48,8 @@ namespace Fracture
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id,glm::vec3 Position, glm::quat Rotation);
 		void ReadHierachyComponentIfExists(Fracture::UUID entity_id);
 		void ReadHierachyComponentIfExists(Fracture::UUID entity_id, Fracture::UUID new_parent);
-		void ReadMeshComponentIfExists(Fracture::UUID entity_id);
+		void ReadMeshComponentIfExists(Fracture::UUID entity_id, bool isPrefab = false, Fracture::UUID prefab_id = uint32_t(0));
+		void InstanceMeshComponentIfExists(Fracture::UUID entity_id, Fracture::UUID prefab_id = uint32_t(0), Fracture::UUID scene_id = uint32_t(0));
 		void ReadSpotlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadPointlightComponentIfExists(Fracture::UUID entity_id);
 		void ReadSunlightComponentIfExists(Fracture::UUID entity_id);

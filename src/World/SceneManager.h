@@ -22,6 +22,7 @@ namespace Fracture
 		static UUID AddEntity();
 		static void AddEntity(const UUID& entity);
 		static void RemoveEntity(const UUID& entity);
+		static void RemovePrefab(const UUID& entity);
 
 		template< class T, typename... Args >
 		static void AddComponent(const UUID& entity, Args&&... params);
@@ -47,6 +48,9 @@ namespace Fracture
 
 		template<class T>
 		static bool HasComponent(const UUID& id);
+
+		static bool IsPrefabScene(const UUID& id);
+		static ScenePrefab GetScenePrefab(const UUID& id);
 
 		static void AttachScript(const UUID& entity_id);
 		static void AttachScript(const UUID& entity_id,const UUID& script_id);
@@ -82,6 +86,8 @@ namespace Fracture
 		static std::unordered_map<UUID, std::vector<UUID>> mScript_Entities;
 
 		static UUID Instantiate(UUID prefab,glm::vec3 position);
+		static UUID InstantiateAsChildOf(UUID prefab,UUID parent, glm::vec3 position);
+		static UUID Instantiate(ScenePrefab prefab);
 
 		template<class T, typename... Args>
 		static void InstanceComponent(UUID prefab, UUID new_entity, UUID original_entity, Args&&... params);
@@ -100,10 +106,6 @@ namespace Fracture
 		static void AddComponentInstance(std::shared_ptr<AudioSourceComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity);
-
-		//static void InstantiateAsChildOf(UUID prefab,UUID parent,glm::vec3 position);
-
-
 
 	private:
 

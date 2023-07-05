@@ -165,6 +165,7 @@
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Rendering\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />

@@ -162,8 +162,11 @@ void Fracture::PhysicsManager::OnAddActor(const std::shared_ptr<OnAddActorEvent>
 	if (HasActor(evnt->id))
 		return;
 
-	TransformSystem::UpdatePrefabs(evnt->manager, evnt->id);
-	AddActor(evnt->id);
+	if (SceneManager::HasComponent<RigidbodyComponent>(evnt->id))
+	{
+		TransformSystem::UpdatePrefabs(evnt->manager, evnt->id);
+		AddActor(evnt->id);
+	}
 
 }
 
