@@ -85,7 +85,7 @@ namespace Fracture
 		static std::unordered_map<UUID, std::shared_ptr<Scene>> mScenes;	
 		static std::unordered_map<UUID, std::vector<UUID>> mScript_Entities;
 
-		static UUID Instantiate(UUID prefab,glm::vec3 position);
+		static UUID Instantiate(UUID prefab, glm::vec3 position, glm::vec3 scale = glm::vec3(1.0f), glm::quat rotation = glm::quat());
 		static UUID InstantiateAsChildOf(UUID prefab,UUID parent, glm::vec3 position);
 		static UUID Instantiate(ScenePrefab prefab);
 

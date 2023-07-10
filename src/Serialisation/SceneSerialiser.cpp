@@ -200,13 +200,13 @@ void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID en
 	}
 }
 
-void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID entity_id, glm::vec3 Position, glm::quat Rotation)
+void Fracture::SceneSerialiser::ReadTransformComponentIfExists(Fracture::UUID entity_id, glm::vec3 Position, glm::vec3 scale, glm::quat Rotation)
 {
 	if (BeginStruct("Transform"))
 	{
 		auto transform = std::make_shared<TransformComponent>(entity_id);
 		transform->Position = Position;
-		transform->Scale = VEC3("Scale");
+		transform->Scale = scale;
 		transform->Rotation = Rotation;
 		SceneManager::AddComponentByInstance<TransformComponent>(entity_id, transform);
 		EndStruct();
@@ -534,6 +534,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					glm::vec3 angle = glm::eulerAngles(transform->Rotation);
 					angle = glm::degrees(angle);
 					Property("Rotation", angle);
+					Property("Scale", transform->Scale);
 				}
 				else
 				{
@@ -541,6 +542,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					glm::vec3 angle = glm::eulerAngles(prefab.Rotation);
 					angle = glm::degrees(angle);
 					Property("Rotation", angle);
+					Property("Scale", prefab.Scale);
 				}
 			}
 			EndStruct();
@@ -639,6 +641,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 					prefab.SceneID = ID("Scene_ID");
 					prefab.ParentID = ID("Parent_ID");					
 					prefab.Position = VEC3("Position");
+					prefab.Scale = VEC3("Scale");
 					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
 				    Eventbus::Publish<Fracture::InstanceScenePrefabEvent>(prefab);
 				}
@@ -769,7 +772,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 		if (BeginStruct("Root"))
 		{
 			ReadTagComponentIfExists(prefab.PrefabID);
-			ReadTransformComponentIfExists(prefab.PrefabID,prefab.Position,prefab.Rotation);
+			ReadTransformComponentIfExists(prefab.PrefabID,prefab.Position,prefab.Scale,prefab.Rotation);
 			ReadHierachyComponentIfExists(prefab.PrefabID,prefab.ParentID);
 			InstanceMeshComponentIfExists(prefab.PrefabID, prefab.PrefabID,prefab.SceneID);		
 			ReadSpotlightComponentIfExists(prefab.PrefabID);
@@ -845,6 +848,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 					child_prefab.SceneID = ID("Scene_ID");
 					child_prefab.ParentID = prefab.PrefabID;
 					child_prefab.Position = VEC3("Position");
+					child_prefab.Scale = VEC3("Scale");
 					child_prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
 					SceneManager::InstanceSceneFromFile(child_prefab);
 				}

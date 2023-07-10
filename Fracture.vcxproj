@@ -121,6 +121,7 @@
     <ClInclude Include="src\FracturePCH.h" />
     <ClInclude Include="src\Input\Gamepad.h" />
     <ClInclude Include="src\Input\Input.h" />
+    <ClInclude Include="src\Input\InputEvents.h" />
     <ClInclude Include="src\Input\Keyboard.h" />
     <ClInclude Include="src\Input\Mouse.h" />
     <ClInclude Include="src\Physics\ContactListener.h" />

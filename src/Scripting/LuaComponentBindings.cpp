@@ -6,6 +6,7 @@
 #include "World/SceneManager.h"
 #include "EventSystem/Eventbus.h"
 #include "World/WorldEvents.h"
+#include "Physics/PhysicsManager.h"
 
 void LuaBindComponents::BindTagComponent(sol::state& lua)
 {
@@ -85,13 +86,7 @@ void LuaBindComponents::BindRigidbodyComponent(sol::state& lua)
 		"IsKinematic", sol::readonly_property(&Fracture::RigidbodyComponent::IsKinematic),
 		"IsDynamic", sol::readonly_property(&Fracture::RigidbodyComponent::IsDynamic),
 		"ID", sol::readonly_property(&Fracture::RigidbodyComponent::GetID),
-
-		//Methods
-		"AddForce", & Fracture::PhysicsSystem::AddForce,
-		"AddTorque", & Fracture::PhysicsSystem::AddTorque,
-		"SetLinearVelocity", & Fracture::PhysicsSystem::SetLinearVelocity,
-		"SetLinearDrag", & Fracture::PhysicsSystem::SetLinearDrag,
-
+	
 		//Metamethods
 		sol::meta_function::to_string, [](Fracture::RigidbodyComponent& e) { return fmt::format("RigidbodyComponent : {}", e.GetID()); }
 	);

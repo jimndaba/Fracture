@@ -77,44 +77,19 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("Rotate", LuaBindComponents::Rotate);
 	lua.set_function("LookAt", LuaBindComponents::LookAt);
 	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
-
+	
 	/*
-	lua.set_function("GetTagComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<TagComponent> {
-		return ScriptManager::GetComponentByType<TagComponent>(id);
-		});
-	lua.set_function("GetTransformComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<TransformComponent> {
-		return ScriptManager::GetComponentByType<TransformComponent>(id);
-		});
-	lua.set_function("GetCameraComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<CameraComponent> {
-		return ScriptManager::GetComponentByType<CameraComponent>(id);
-		});
-	lua.set_function("GetRigidBodyComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<RigidbodyComponent> {
-		return ScriptManager::GetComponentByType<RigidbodyComponent>(id);
-		});
-	lua.set_function("GetColliderComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<ColliderComponent> {
-		return ScriptManager::GetComponentByType<ColliderComponent>(id);
-		});
-	lua.set_function("GetSpolightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<SpotlightComponent> {
-		return ScriptManager::GetComponentByType<SpotlightComponent>(id);
-		});
-	lua.set_function("GetPointlightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<PointlightComponent> {
-		return ScriptManager::GetComponentByType<PointlightComponent>(id);
-		});
-	lua.set_function("GetSunlightComponent", [&](sol::this_state s, UUID id)->std::shared_ptr<SunlightComponent> {
-		return ScriptManager::GetComponentByType<SunlightComponent>(id);
-		});
-	*/
-
 	lua.set_function("Destroy", sol::overload([&](sol::this_state s, UUID id) {
 		return SceneManager::RemoveEntity(id);
 		}));
+	*/
 }
 
 
 void Fracture::ScriptManager::BindInput(sol::state& L)
 {
 	auto input = L.create_table("Input");
-	input.set_function("IsKeyPressed", [](Fracture::KeyCode key) -> bool {
+	input.set_function("IsKeyDown", [](Fracture::KeyCode key) -> bool {
 		return Input::IsKeyDown(key);
 		});
 
@@ -228,6 +203,24 @@ void Fracture::ScriptManager::BindMaths(sol::state& L)
 	LuaBindGLM::BindVec4(&L);
 }
 
+void Fracture::ScriptManager::BindPhysics(sol::state& L)
+{
+	lua.set_function("RotateRigidbody", LuaBindPhysics::RotateRigidBody);
+	lua.set_function("SetLinearVelocity", LuaBindPhysics::SetLinearVelocity);
+	lua.set_function("SetAngularVelocity", LuaBindPhysics::SetAngularVelocity);
+	lua.set_function("SetMaxLinearVelocity", LuaBindPhysics::SetMaxLinearVelocity);
+	lua.set_function("SetMaxAngularVelocity", LuaBindPhysics::SetMaxAngularVelocity);
+	lua.set_function("SetGravityDisabled", LuaBindPhysics::SetGravityDisabled);
+
+	lua.set_function("GetAngularVelocity", LuaBindPhysics::GetAngularVelocity);
+	lua.set_function("GetLinearVelocity", LuaBindPhysics::GetLinearVelocity);
+	lua.set_function("GetMaxAngularVelocity", LuaBindPhysics::GetMaxAngularVelocity);
+	lua.set_function("GetMaxLinearVelocity", LuaBindPhysics::GetMaxLinearVelocity);
+
+	lua.set_function("AddForce", LuaBindPhysics::AddForce);
+	lua.set_function("AddTorque", LuaBindPhysics::AddTorque);
+}
+
 void Fracture::ScriptManager::BindApplication(sol::state& L)
 {
 
@@ -252,7 +245,8 @@ void Fracture::ScriptManager::Init()
 	BindInput(lua);
 	BindFunctions(lua);
 	BindMaths(lua);
-	BindPhysicsEvents(&lua);
+	BindPhysics(lua);
+	LuaBindPhysics::BindPhysicsEvents(&lua);
 
 	Fracture::Eventbus::Subscribe(this, &ScriptManager::OnCollision);
 

@@ -21,6 +21,15 @@ namespace Fracture
 		};
 	};
 
+
+	enum class ForceMode : uint8_t
+	{
+		Force = 0,
+		Impulse,
+		VelocityChange,
+		Acceleration
+	};
+
 	class PhysicsManager 
 	{
 

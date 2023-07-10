@@ -45,7 +45,7 @@ namespace Fracture
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
-		void ReadTransformComponentIfExists(Fracture::UUID entity_id,glm::vec3 Position, glm::quat Rotation);
+		void ReadTransformComponentIfExists(Fracture::UUID entity_id,glm::vec3 Position, glm::vec3 scale,glm::quat Rotation);
 		void ReadHierachyComponentIfExists(Fracture::UUID entity_id);
 		void ReadHierachyComponentIfExists(Fracture::UUID entity_id, Fracture::UUID new_parent);
 		void ReadMeshComponentIfExists(Fracture::UUID entity_id, bool isPrefab = false, Fracture::UUID prefab_id = uint32_t(0));

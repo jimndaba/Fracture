@@ -349,7 +349,7 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
     return false;
 }
 
-Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position)
+Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position, glm::vec3 scale, glm::quat rotation)
 {
 
     ScenePrefab mPrefab;
@@ -357,7 +357,9 @@ Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 positi
     mPrefab.ParentID = mCurrentScene->RootID;
     mPrefab.SceneID = prefab;
     mPrefab.Position = position;
-    mPrefab.Rotation = glm::quat();
+    mPrefab.Rotation = rotation;
+    mPrefab.Scale = scale;
+
     InstanceSceneFromFile(mPrefab);
     mCurrentScene->mPrefabs.push_back(mPrefab);
     return mPrefab.PrefabID;

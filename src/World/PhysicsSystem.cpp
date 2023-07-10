@@ -9,29 +9,6 @@ Fracture::PhysicsSystem::PhysicsSystem()
 {
 }
 
-void Fracture::PhysicsSystem::AddForce(const std::shared_ptr<RigidbodyComponent>& component, const glm::vec3& force, ForceMode mode)
-{
-	if (!component->IsDynamic)
-	{
-		FRACTURE_WARN("Trying to add force to non-dynamic PhysicsActor.");
-		return;
-	}
-	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
-	actor->addForce(PhysicsHelpers::ToPhysXVector(force), (physx::PxForceMode::Enum)mode);
-}
-
-void Fracture::PhysicsSystem::AddTorque(const std::shared_ptr<RigidbodyComponent>& component, const glm::vec3& torque, ForceMode forceMode)
-{
-	if (!component->IsDynamic)
-	{
-		FRACTURE_WARN("Trying to add torque to non-dynamic PhysicsActor.");
-		return;
-	}
-
-	physx::PxRigidDynamic* actor = PhysicsManager::Instance()->GetRigidBody(component->GetID())->is<physx::PxRigidDynamic>();
-	actor->addTorque(PhysicsHelpers::ToPhysXVector(torque), (physx::PxForceMode::Enum)forceMode);
-}
-
 void Fracture::PhysicsSystem::SetLinearVelocity(const std::shared_ptr<RigidbodyComponent>& component, const glm::vec3& velocity)
 {
 	if (!component->IsDynamic)

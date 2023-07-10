@@ -24,6 +24,7 @@ namespace Fracture
 		void BindFunctions(sol::state& L);
 		void BindInput(sol::state& L);
 		void BindMaths(sol::state& L);
+		void BindPhysics(sol::state& L);
 		void BindApplication(sol::state& L);
 
 		void Init();
