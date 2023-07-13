@@ -142,6 +142,11 @@ bool Fracture::LuaScript::IsStarted() const
 
 }
 
+void Fracture::LuaScript::IsStarted(bool started)
+{
+    isStarted = started;
+}
+
 void Fracture::LuaScript::BindFunctions(sol::state& state)
 {
     auto self = state[Description.Name];

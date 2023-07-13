@@ -20,14 +20,25 @@ namespace Fracture
 			eFive = (1 << 4),
 		};
 	};
-
-
+		
 	enum class ForceMode : uint8_t
 	{
 		Force = 0,
 		Impulse,
 		VelocityChange,
 		Acceleration
+	};
+
+	struct PhysicsLayer
+	{
+		std::string Name;
+		std::unordered_map<Fracture::UUID, bool> InLayer;
+	};
+
+	struct PhysicsGroup
+	{
+		std::string Name;
+		std::unordered_map<Fracture::UUID, bool> InGroup;
 	};
 
 	class PhysicsManager 
@@ -48,6 +59,8 @@ namespace Fracture
 		void AddActor(UUID mEntity);
 		void AddActors();
 
+		void JointToParent(Fracture::UUID parent, Fracture::UUID child);
+
 		bool HasActor(UUID entity);
 		void RemoveActors();
 		void OnDebugDraw();
@@ -60,6 +73,9 @@ namespace Fracture
 		physx::PxRigidActor* GetRigidBody(const Fracture::UUID& entity);
 
 		static PhysicsManager* Instance();
+
+		std::vector<PhysicsLayer> mPhysicsLayers;
+		std::vector<PhysicsGroup> mPhysicsGroups;
 
 	private:
 		physx::PxPhysics* mPhysics;
@@ -74,6 +90,7 @@ namespace Fracture
 		std::unordered_map<UUID, physx::PxRigidActor*> mActors;
 		std::unordered_map<UUID, physx::PxShape*> mColliders;
 		std::unordered_map<UUID, physx::PxMaterial*> mMaterials;
+		//std::unordered_map<UUID, physx::PxArticulation*> mArticulations;
 		std::unique_ptr<PhysicsScene> mScene;
 		
 	};

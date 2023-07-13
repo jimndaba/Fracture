@@ -74,6 +74,7 @@ namespace Fracture
 		void Reload(sol::state& state);
 
 		bool IsStarted()const;
+		void IsStarted(bool started);
 
 		void BindFunctions(sol::state& state);
 		void BindProperties(sol::state& state);

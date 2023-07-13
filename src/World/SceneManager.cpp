@@ -378,6 +378,33 @@ Fracture::UUID Fracture::SceneManager::InstantiateAsChildOf(UUID prefab, UUID pa
     return mPrefab.PrefabID;
 }
 
+bool Fracture::SceneManager::IsTaggedWith(const UUID& id, const std::string& tag)
+{
+    const auto& component = GetComponent<TagComponent>(id);
+
+    auto it = std::find_if(component->Tags.begin(), component->Tags.end(),
+        [tag](const std::string& m) { return m == tag; });
+
+    if (it != component->Tags.end())
+        return true;
+
+    return false;
+}
+
+Fracture::UUID Fracture::SceneManager::GetEntityWithTag(const std::string& tag)
+{
+    const auto& tagcomponents = GetAllComponents<TagComponent>();
+    for (const auto& component : tagcomponents)
+    {
+        for (const auto& c_tag : component->Tags)
+        {
+            if (c_tag == tag)
+                return component->GetID();
+        }
+    }
+    return 0;
+}
+
 bool Fracture::SceneManager::IsPrefabScene(const UUID& id)
 {
     if (mCurrentScene)

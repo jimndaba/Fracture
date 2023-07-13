@@ -49,6 +49,9 @@ namespace Fracture
 		template<class T>
 		static bool HasComponent(const UUID& id);
 
+		static bool IsTaggedWith(const UUID& id,const std::string& tag);
+		static UUID GetEntityWithTag(const std::string& tag);
+
 		static bool IsPrefabScene(const UUID& id);
 		static ScenePrefab GetScenePrefab(const UUID& id);
 

@@ -10,13 +10,6 @@ using namespace physx;
 
 std::unique_ptr<Fracture::PhysicsManager> Fracture::PhysicsManager::mInstance;
 
-//std::unordered_map<Fracture::UUID, physx::PxRigidActor*> Fracture::PhysicsManager::mActors;
-//std::unordered_map<Fracture::UUID, physx::PxShape*> Fracture::PhysicsManager::mColliders;
-//std::unordered_map<Fracture::UUID, physx::PxMaterial*> Fracture::PhysicsManager::mMaterials;
-//physx::PxPhysics* Fracture::PhysicsManager::mPhysics;
-//physx::PxCpuDispatcher* Fracture::PhysicsManager::mDispacther;
-//std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsManager::mScene;
-
 static PxDefaultErrorCallback errorCallback;
 static PxDefaultAllocator allocatorCallback;
 
@@ -69,6 +62,7 @@ void Fracture::PhysicsManager::Init()
 	mInstance->mDispacther = physx::PxDefaultCpuDispatcherCreate(2);
 	Eventbus::Subscribe(this, &Fracture::PhysicsManager::OnAddActor);
 	
+
 }
 
 void Fracture::PhysicsManager::FixedUpdate(const float& dt)
@@ -87,6 +81,7 @@ void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 		transform->Rotation = PhysicsHelpers::FromPhysXQuat(actorPose.q);
 		transform->IsDirty = true;
 	}
+
 
 }
 
@@ -191,6 +186,39 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 			//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, rigidbody->DetectionType == CollisionDetectionType::ContinuousSpeculative);
+
+			physx::PxRigidDynamicLockFlags flags; 			
+			if (rigidbody->AngularConstraints[0])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_X;
+			}
+
+			if (rigidbody->AngularConstraints[1])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y;
+			}
+
+			if (rigidbody->AngularConstraints[2])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+			}
+
+			if (rigidbody->LinearConstraints[0])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_X;
+			}
+
+			if (rigidbody->LinearConstraints[1])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_Y;
+			}
+
+			if (rigidbody->LinearConstraints[2])
+			{
+				flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
+			}
+			actor->setRigidDynamicLockFlags(flags);
+
 			PxRigidBodyExt::updateMassAndInertia(*actor, 10.0f);
 
 
@@ -265,6 +293,7 @@ void Fracture::PhysicsManager::AddActors()
 		{
 			auto mEntity = rigidbody->GetID();
 			const auto& transform = SceneManager::GetComponent<TransformComponent>(mEntity);
+			
 
 			if (!rigidbody->IsDynamic)
 			{
@@ -280,11 +309,44 @@ void Fracture::PhysicsManager::AddActors()
 				//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, rigidbody->DetectionType == CollisionDetectionType::ContinuousSpeculative);
+
+				if(rigidbody->IsKinematic)
+					actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC,true);
+
 				PxRigidBodyExt::updateMassAndInertia(*actor, 10.0f);
 
+				physx::PxRigidDynamicLockFlags flags;
+				if (rigidbody->AngularConstraints[0])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_X;
+				}
 
+				if (rigidbody->AngularConstraints[1])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y;
+				}
+
+				if (rigidbody->AngularConstraints[2])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+				}
+
+				if (rigidbody->LinearConstraints[0])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_X;
+				}
+
+				if (rigidbody->LinearConstraints[1])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_Y;
+				}
+
+				if (rigidbody->LinearConstraints[2])
+				{
+					flags |= PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
+				}
+				actor->setRigidDynamicLockFlags(flags);				
 			}
-
 
 			if (SceneManager::HasComponent<ColliderComponent>(mEntity))
 			{
@@ -316,6 +378,7 @@ void Fracture::PhysicsManager::AddActors()
 						filterData.word0 = FilterGroup::eOne; // word0 = own ID
 						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
 						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+					
 						break;
 					}
 					case ColliderType::Capsule:
@@ -344,6 +407,13 @@ void Fracture::PhysicsManager::AddActors()
 			mInstance->mScene->AddActor(*mInstance->mActors[mEntity]);
 		}	
 	}
+}
+
+void Fracture::PhysicsManager::JointToParent(Fracture::UUID parent, Fracture::UUID child)
+{
+	PxRevoluteJointCreate(GetPhysicsSDK()
+		, mActors[parent],mActors[parent]->getGlobalPose(),
+		mActors[child], mActors[child]->getGlobalPose());
 }
 
 bool Fracture::PhysicsManager::HasActor(UUID entity)

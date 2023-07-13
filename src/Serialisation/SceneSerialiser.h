@@ -24,6 +24,14 @@ namespace Fracture
 	struct AudioSourceComponent;
 	struct PrefabInstanceComponent;
 
+	struct PrefabCreationInfo
+	{
+		std::vector<Fracture::UUID> Entities;
+		std::vector<Fracture::UUID> Prefabs;
+		std::string Name;
+		UUID SceneID;
+	};
+
 	struct SceneSerialiser : public ISerialiser
 	{
 		SceneSerialiser(IOMode mode, SerialiseFormat format);
@@ -61,10 +69,13 @@ namespace Fracture
 		void ReadSkyboxComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
+		void EntitiesToPrefab(PrefabCreationInfo info);
+		void WriteEntityToPrefab(Fracture::UUID& parent,Fracture::UUID& entity);
+
 		std::shared_ptr<Scene> ReadScene();
 		std::shared_ptr<Scene> ReadSceneWithoutLoad();
 		void ReadScenePrefab(ScenePrefab prefab_id);
-
+		
 		std::map<Fracture::UUID,int> MeshesToLoad;
 
 		template <class T>

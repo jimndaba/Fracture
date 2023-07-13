@@ -322,8 +322,6 @@ void Fracture::Input::BindInput(const std::string& action,const std::shared_ptr<
 
 void Fracture::Input::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	FRACTURE_TRACE("mouse scroll x:{} y:{}", xoffset, yoffset);
-
 	m_scroll.x = (float)xoffset;
 	m_scroll.y = (float)yoffset;
 }

@@ -43,12 +43,15 @@ Fracture::PhysicsScene::PhysicsScene(physx::PxPhysics* mPhysics, physx::PxCpuDis
 {
     physx::PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
 	sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
-	sceneDesc.gravity = physx::PxVec3(0.0f,-9.81,0.0f);	
+	//sceneDesc.gravity = physx::PxVec3(0.0f,-9.81,0.0f);	
+	sceneDesc.gravity = physx::PxVec3(0.0f,0,0.0f);	
 	sceneDesc.cpuDispatcher = dispatcher;
 	sceneDesc.filterShader = FilterShader;
 
 	sceneDesc.simulationEventCallback = &s_ContactListener;
 	sceneDesc.frictionType = physx::PxFrictionType::eONE_DIRECTIONAL;	
+
+	
 
 	if (sceneDesc.isValid())
 	{

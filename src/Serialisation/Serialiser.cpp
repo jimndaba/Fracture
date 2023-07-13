@@ -301,6 +301,20 @@ void Fracture::ISerialiser::PropertyI(const std::string& name, const std::vector
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const std::vector<std::string>& values)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = values;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(values);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const std::vector<glm::vec2>& value)
 {
 
@@ -823,21 +837,24 @@ std::vector<glm::vec2> Fracture::ISerialiser::VEC2_VECTOR(const std::string& nam
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
+	}	
+	return std::vector<glm::vec2>();
+}
+
+std::vector<std::string> Fracture::ISerialiser::STRINGS_VECTOR(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto j = mStructStack.top();
 		if (exists(j, name))
 			return j[name];
 	}
-	*/
-	return std::vector<glm::vec2>();
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	return std::vector<std::string>();
 }
 
 std::vector<glm::vec3> Fracture::ISerialiser::VEC3_VECTOR(const std::string& name)
@@ -853,19 +870,6 @@ std::vector<glm::vec3> Fracture::ISerialiser::VEC3_VECTOR(const std::string& nam
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
 	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		if (exists(j, name))
-			return j[name];
-	}
-	*/
 	return std::vector<glm::vec3>();
 }
 

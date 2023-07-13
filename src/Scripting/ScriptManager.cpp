@@ -63,6 +63,9 @@ void Fracture::ScriptManager::BindCore(sol::state& lua)
 
 
 	lua.set_function("UUID", []() {return Fracture::UUID(); });
+
+	lua.set_function("IsTaggedWith", SceneManager::IsTaggedWith);
+	lua.set_function("GetEntityWithTag", SceneManager::GetEntityWithTag);
 }
 
 void Fracture::ScriptManager::BindFunctions(sol::state& lua)
@@ -270,12 +273,8 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			if (component->HasStarted)
-			{				
-				script->Load(lua);				
-				script->OnStart(lua, component->GetID());
-				component->HasStarted = true;
-			}
+			script->OnStart(lua, component->GetID());
+			component->HasStarted = true;
 		}
 	}	
 
@@ -307,7 +306,9 @@ void Fracture::ScriptManager::onExit()
 				continue;
 
 			if (!component->HasScriptAttached)
+			{
 				continue;
+			}
 
 			const auto& script = mScripts[component->Script];
 			script->OnExit(lua, component->GetID());
@@ -327,6 +328,7 @@ void Fracture::ScriptManager::onExit()
 
 			const auto& script = mScripts[component->Script];
 			script->OnExit(lua,component->GetID());
+			component->HasStarted - false;
 		}
 	}
 }
@@ -419,11 +421,13 @@ void Fracture::ScriptManager::Reload(LuaScript* mscript)
 {
 	FRACTURE_INFO("Script {} Reloaded", mscript->Description.Name);
 	mscript->Reload(lua);
+	mscript->IsStarted(false);
 }
 
 void Fracture::ScriptManager::LoadScript(const std::shared_ptr<LuaScript>& mscript)
 {
 	mscript->Load(lua);
+	mscript->IsStarted(false);
 }
 
 std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScript(const UUID& id)

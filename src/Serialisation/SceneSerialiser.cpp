@@ -15,6 +15,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::TagComponent* compo
 	BeginStruct("Tag");
 	Property("Name", component->Name);
 	Property("IsActive", component->IsActive);
+	Property("Tags", component->Tags);
 	EndStruct();
 }
 
@@ -70,6 +71,13 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CameraComponent* co
 	Property("Roll", component->Roll);
 	Property("Yaw", component->Yaw);
 	Property("Position", component->Position);
+
+	Property("TargetFoV", component->TargetFoV);
+	Property("TargetPitch", component->TargetPitch);
+	Property("TargetRoll", component->TargetRoll);
+	Property("TargetYaw", component->TargetYaw);
+	Property("TargetPosition", component->TargetPosition);
+
 	Property("Sensitivity", component->Sensitivity);
 	Property("Speed", component->Speed);
 	Property("Up", component->Up);
@@ -182,6 +190,7 @@ void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_i
 	{
 		auto tag = std::make_shared<TagComponent>(entity_id, STRING("Name"));
 		tag->IsActive = BOOL("IsActive");
+		tag->Tags = STRINGS_VECTOR("Tags");
 		SceneManager::AddComponentByInstance<TagComponent>(entity_id, tag);
 		EndStruct();
 	}
@@ -385,20 +394,20 @@ void Fracture::SceneSerialiser::ReadCameraComponentIfExists(Fracture::UUID entit
 		camera->IsActiveCamera = BOOL("IsActiveCamera");
 
 		camera->Position = VEC3("Position");
-		camera->TargetPosition = camera->Position;
+		camera->TargetPosition = VEC3("TargetPosition");
 
 		camera->Pitch = FLOAT("Pitch");
-		camera->TargetPitch = camera->TargetPitch;
+		camera->TargetPitch = FLOAT("TargetPitch");
 
 		camera->Yaw = FLOAT("Yaw");
-		camera->TargetYaw = camera->Yaw;
+		camera->TargetYaw = FLOAT("TargetYaw");
 
 		camera->Roll = FLOAT("Roll");
-		camera->TargetRoll = camera->Roll;
+		camera->TargetRoll = FLOAT("TargetRoll");
 		
 
-		camera->FoV = FLOAT("FOV");
-		camera->TargetFoV = camera->FoV;
+		camera->FoV = FLOAT("FoV");
+		camera->TargetFoV = FLOAT("TargetFoV");
 
 		camera->Up = VEC3("Up");
 		camera->Right = VEC3("Right");
@@ -408,7 +417,7 @@ void Fracture::SceneSerialiser::ReadCameraComponentIfExists(Fracture::UUID entit
 		camera->EnableDepthOfField = BOOL("EnableDepthOfField");
 		camera->Damping = FLOAT("Damping");
 		camera->Far = FLOAT("Far");
-		camera->Near = FLOAT("Neaer");
+		camera->Near = FLOAT("Near");
 		camera->FocalLength = FLOAT("FocalLength");
 		camera->FocalRange = FLOAT("FocalRange");
 	
@@ -464,6 +473,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<HierachyComponent>(scene->RootID);
 			WriteEntityComponentOfType<MeshComponent>(scene->RootID);
 			WriteEntityComponentOfType<RigidbodyComponent>(scene->RootID);
+			WriteEntityComponentOfType<CameraComponent>(scene->RootID);
 			WriteEntityComponentOfType<PointlightComponent>(scene->RootID);
 			WriteEntityComponentOfType<SpotlightComponent>(scene->RootID);
 			WriteEntityComponentOfType<SunlightComponent>(scene->RootID);
@@ -471,7 +481,25 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);
 			WriteEntityComponentOfType<ScriptComponent>(scene->RootID);
 			WriteEntityComponentOfType<SkyboxComponent>(scene->RootID);
+
+			BeginCollection("Scripts");
+			{
+				for (const auto& script : SceneManager::mScript_Entities)
+				{
+					auto it = std::find_if(std::begin(script.second), std::end(script.second), [&](Fracture::UUID p) { return p == scene->RootID; });
+
+					if (it != script.second.end())
+					{
+						BeginStruct("LuaScript");
+						Property("ScriptID", script.first);
+						EndStruct();
+					}
+				}
+			}
+			EndCollection();
+
 			EndStruct();
+
 		}
 
 		BeginCollection("Entities");
@@ -487,6 +515,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<TransformComponent>(entity->ID);
 					WriteEntityComponentOfType<HierachyComponent>(entity->ID);
 					WriteEntityComponentOfType<MeshComponent>(entity->ID);
+					WriteEntityComponentOfType<CameraComponent>(entity->ID);
 					WriteEntityComponentOfType<RigidbodyComponent>(entity->ID);
 					WriteEntityComponentOfType<PointlightComponent>(entity->ID);
 					WriteEntityComponentOfType<SpotlightComponent>(entity->ID);
@@ -552,6 +581,174 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::EntitiesToPrefab(PrefabCreationInfo info)
+{
+	BeginStruct("Scene");
+	{
+		Property("ID", info.SceneID);
+		Property("ActiveCamera", 0);
+		Property("RootID", UUID());
+		Property("Name", info.Name);
+
+		auto root_id = UUID();
+		BeginStruct("Root");
+		{
+			{
+			auto tag = TagComponent(root_id, info.Name);
+			SerialiseComponent(&tag);
+			}		
+			{
+				auto new_component = TransformComponent(root_id);
+				SerialiseComponent(&new_component);
+			}
+			{
+				auto new_component = HierachyComponent(root_id);
+				SerialiseComponent(&new_component);
+			}		
+			EndStruct();
+		}
+
+		BeginCollection("Entities");
+		for (int i = 0; i < info.Entities.size();i++)
+		{
+			WriteEntityToPrefab(root_id, info.Entities[i]);
+		}
+		EndCollection();
+
+		BeginCollection("Prefabs");
+		for (int i = 0 ; i < info.Prefabs.size() ;i++)
+		{
+			BeginStruct("Prefab");
+			{
+				/*
+				Property("Prefab_ID", prefab.PrefabID);
+				Property("Scene_ID", prefab.SceneID);
+				Property("Parent_ID", prefab.ParentID);
+				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab.PrefabID);
+				if (transform)
+				{
+					Property("Position", transform->Position);
+					glm::vec3 angle = glm::eulerAngles(transform->Rotation);
+					angle = glm::degrees(angle);
+					Property("Rotation", angle);
+					Property("Scale", transform->Scale);
+				}
+				else
+				{
+					Property("Position", prefab.Position);
+					glm::vec3 angle = glm::eulerAngles(prefab.Rotation);
+					angle = glm::degrees(angle);
+					Property("Rotation", angle);
+					Property("Scale", prefab.Scale);
+				}
+				*/
+			}
+			EndStruct();
+		}
+		EndCollection();
+	}
+	EndStruct();
+}
+
+void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Fracture::UUID& entity)
+{
+	if (SceneManager::HasComponent<HierachyComponent>(entity))
+	{
+		auto& hierachy = *SceneManager::GetComponent<HierachyComponent>(entity);
+		auto entityid = UUID();
+
+		BeginStruct("Entity");
+		{
+			Property("Entity_ID", entityid);
+			BeginCollection("Components");
+			{
+				if (SceneManager::HasComponent<TagComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<TagComponent>(entity);
+					auto new_component = TagComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<TransformComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<TransformComponent>(entity);
+					auto new_component = TransformComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				{
+					auto new_component = HierachyComponent(hierachy, entityid);
+					new_component.HasParent = true;
+					new_component.Parent = parent;
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<MeshComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<MeshComponent>(entity);
+					auto new_component = MeshComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<RigidbodyComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<RigidbodyComponent>(entity);
+					auto new_component = RigidbodyComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<ColliderComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<ColliderComponent>(entity);
+					auto new_component = ColliderComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<CameraComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<CameraComponent>(entity);
+					auto new_component = CameraComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<SpotlightComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<SpotlightComponent>(entity);
+					auto new_component = SpotlightComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<SunlightComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<SunlightComponent>(entity);
+					auto new_component = SunlightComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<ShadowCasterComponent>(entity))
+				{
+				}
+				if (SceneManager::HasComponent<ColliderComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<ColliderComponent>(entity);
+					auto new_component = ColliderComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<ScriptComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<ScriptComponent>(entity);
+					auto new_component = ScriptComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				if (SceneManager::HasComponent<SkyboxComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<SkyboxComponent>(entity);
+					auto new_component = SkyboxComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
+				EndCollection();
+			}
+		}
+		EndStruct();
+
+		for (auto& child : hierachy.Children)
+		{
+			WriteEntityToPrefab(entityid, child);
+		}
+	}
+}
+
 std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 {
 	if (BeginStruct("Scene"))
@@ -574,8 +771,25 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadSunlightComponentIfExists(new_Scene->RootID);
 			ReadRigidbodyComponentIfExists(new_Scene->RootID);
 			ReadColliderComponentIfExists(new_Scene->RootID);
+			ReadCameraComponentIfExists(new_Scene->RootID);
 			ReadScriptComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
+
+			if (BeginCollection("Scripts"))
+			{
+				while (CurrentCollectionIndex() < GetCollectionSize())
+				{
+					if (BeginStruct("LuaScript"))
+					{
+						auto script_id = ID("ScriptID");
+						SceneManager::AttachScript(new_Scene->RootID, script_id);
+						EndStruct();
+					}
+					NextInCollection();
+				}
+				EndCollection();
+			}
+
 			EndStruct();
 		}
 
@@ -598,6 +812,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadMeshComponentIfExists(entity_id);
 							ReadSpotlightComponentIfExists(entity_id);
 							ReadPointlightComponentIfExists(entity_id);
+							ReadCameraComponentIfExists(entity_id);
 							ReadSunlightComponentIfExists(entity_id);
 							ReadRigidbodyComponentIfExists(entity_id);
 							ReadColliderComponentIfExists(entity_id);
@@ -777,12 +992,30 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			InstanceMeshComponentIfExists(prefab.PrefabID, prefab.PrefabID,prefab.SceneID);		
 			ReadSpotlightComponentIfExists(prefab.PrefabID);
 			ReadPointlightComponentIfExists(prefab.PrefabID);
+			ReadCameraComponentIfExists(prefab.PrefabID);
 			ReadSunlightComponentIfExists(prefab.PrefabID);
 			ReadRigidbodyComponentIfExists(prefab.PrefabID);
 			ReadColliderComponentIfExists(prefab.PrefabID);
 			ReadScriptComponentIfExists(prefab.PrefabID);
 			ReadAudioSourceComponentIfExists(prefab.PrefabID);
 			ReadSkyboxComponentIfExists(prefab.PrefabID);
+
+			if (BeginCollection("Scripts"))
+			{
+				while (CurrentCollectionIndex() < GetCollectionSize())
+				{
+					if (BeginStruct("LuaScript"))
+					{
+						auto script_id = ID("ScriptID");
+						SceneManager::AttachScript(prefab.PrefabID, script_id);
+						EndStruct();
+					}
+					NextInCollection();
+				}
+				EndCollection();
+			}
+
+
 			EndStruct();
 		}
 
@@ -803,6 +1036,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							InstanceMeshComponentIfExists(entity, prefab.PrefabID, prefab.SceneID);
 							ReadSpotlightComponentIfExists(entity);
 							ReadPointlightComponentIfExists(entity);
+							ReadCameraComponentIfExists(entity);
 							ReadSunlightComponentIfExists(entity);
 							ReadRigidbodyComponentIfExists(entity);
 							ReadColliderComponentIfExists(entity);

@@ -61,13 +61,13 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		case 3:
 		{
 			info.format = TextureFormat::RGB;
-			info.internalFormat = InternalFormat::RGB8;
+			info.internalFormat = InternalFormat::RGB16F;
 			break;
 		}
 		case 4:
 		{
 			info.format = TextureFormat::RGBA;
-			info.internalFormat = InternalFormat::RGBA16;
+			info.internalFormat = InternalFormat::RGBA16F;
 			break;
 		}
 	}

@@ -58,7 +58,11 @@ namespace Fracture
 		int SSR_NumBinarySearchSteps = 5;
 		int SSR_ReflectionSpecularFalloffExponent = 3;
 		float SSR_Strength = 0.1f;
-		glm::vec2 pad;
+		
+
+		//SSR
+		bool ChromaticAb_Enabled = true;
+		float ChromaticAb_Amount = 0.1f;
 	};
 }
 
