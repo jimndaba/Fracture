@@ -303,7 +303,6 @@ void Fracture::PhysicsManager::AddActors()
 						filterData.word0 = FilterGroup::eOne; // word0 = own ID
 						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
 						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
-
 						break;
 					}
 					case ColliderType::Box:
