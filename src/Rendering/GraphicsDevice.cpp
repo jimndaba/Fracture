@@ -4,6 +4,7 @@
 #include "Assets/AssetManager.h"
 #include "World/Components.h"
 #include "Common/Logger.h"
+#include "World/SceneManager.h"
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
@@ -462,6 +463,44 @@ void Fracture::GraphicsDevice::CreateGlobalTexture(const std::string& Name, cons
     mGlobalResources[Name] = texture;
 }
 
+Fracture::UUID Fracture::GraphicsDevice::CreateIrradianceMap(const TextureCreationInfo& info)
+{
+    auto texture = std::make_shared<Texture>(info);
+    UUID texture_ID = info.ID;
+    CreateTexture(texture, info);
+    mIrradianceMaps[info.ID] = texture;
+    
+    return texture_ID;
+}
+
+uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
+{
+    const auto& lightProbe = SceneManager::GetComponent<LightProbeComponent>(id);
+    if (!lightProbe)
+        return 0;
+
+    if (mIrradianceMaps.find(lightProbe->IrradianceMap) != mIrradianceMaps.end())
+    {
+        return mIrradianceMaps[lightProbe->IrradianceMap]->Handle;
+    }
+
+    Fracture::TextureCreationInfo desc;
+    desc.Width = lightProbe->LightProbeResolution;
+    desc.Height = lightProbe->LightProbeResolution;
+    desc.TextureTarget = TextureTarget::TextureCubeMap;
+    desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+    desc.format = Fracture::TextureFormat::RGB;
+    desc.internalFormat = Fracture::InternalFormat::RGB16F;
+    desc.formatType = Fracture::TextureFormatType::Float;
+    desc.minFilter = TextureMinFilter::Linear;
+    desc.magFilter = TextureMagFilter::Linear;
+    desc.Wrap = TextureWrap::ClampToEdge;
+    desc.Name = "LightProbeTexture";
+    lightProbe->IrradianceMap = CreateIrradianceMap(desc);
+    return mIrradianceMaps[lightProbe->IrradianceMap]->Handle;
+}
+
+
 void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxComponent* component)
 {
     glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
@@ -484,8 +523,10 @@ void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxCompone
     Fracture::RenderCommands::SetViewport(Context, 512, 512, 0, 0);
     Fracture::RenderCommands::SetScissor(Context, 512, 512, 0, 0);
     Fracture::RenderCommands::SetRenderTarget(Context, target->Handle);
+    Fracture::RenderCommands::SetRenderBuffer(Context, target->RenderBufferHandle);
     Fracture::RenderCommands::FrameBufferAttachTexture(Context, target->Handle, 0, GetGlobalTexture("Global_SkyMap")->Handle, 0);
     Fracture::RenderCommands::FrameBufferSetDrawBuffers(Context, target->Handle, 1);
+    Fracture::RenderCommands::RenderBufferTextureStorage(Context, target->RenderBufferHandle, InternalFormat::DepthComponent24,512,512);
 
     if (component->IsSkyTextureSet)
     {

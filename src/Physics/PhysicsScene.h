@@ -6,16 +6,16 @@
 
 namespace Fracture
 {
-
+	struct PhsyicsSettings;
 	class PhysicsScene
 	{
 
 	public:
-		PhysicsScene(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
+		PhysicsScene(Fracture::PhsyicsSettings& settings, physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
 
 		void FixedUpdate(float ts);
 
-		static std::unique_ptr<PhysicsScene> Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
+		static std::unique_ptr<PhysicsScene> Create(Fracture::PhsyicsSettings& settings, physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher);
 		void Destroy();
 
 		void OnDebugDraw();

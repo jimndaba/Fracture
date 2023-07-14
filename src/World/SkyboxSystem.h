@@ -3,7 +3,7 @@
 
 namespace Fracture
 {
-
+	
 	struct SkyboxSystem
 	{
 

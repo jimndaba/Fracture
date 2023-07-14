@@ -153,6 +153,8 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ColliderComponent* 
 	Property("Height",component->Height);
 	Property("Offset",component->Offset);
 	Property("IsTrigger",component->IsTrigger);
+	Property("CollisionLayer",(int)component->CollisionLayer);
+	Property("CollisionGroup",(int)component->CollisionGroup);
 	EndStruct();
 }
 
@@ -369,6 +371,8 @@ void Fracture::SceneSerialiser::ReadColliderComponentIfExists(Fracture::UUID ent
 		comp->Height = FLOAT("Height");
 		comp->Offset = VEC3("Offset");
 		comp->IsTrigger = BOOL("IsTrigger");
+		comp->CollisionLayer = ID("CollisionLayer");
+		comp->CollisionGroup = ID("CollisionGroup");
 		SceneManager::AddComponentByInstance<ColliderComponent>(entity_id, comp);
 		EndStruct();
 	}

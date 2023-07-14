@@ -19,6 +19,7 @@ namespace Fracture
 		Metalness,
 		Emmission,
 		AO,
+		GlobalIrradiance,
 		TotalSlots
 	};
 
@@ -27,6 +28,12 @@ namespace Fracture
 		Object,
 		Screen,
 		World
+	};
+
+	enum class MaterialShadingModel
+	{
+		BlinnPhong,
+		PBR
 	};
 
 	struct Material
@@ -77,6 +84,8 @@ namespace Fracture
 
 		CullMode cullmode = CullMode::Back;
 		UVSpace TextureSpace = UVSpace::Object;
+		MaterialShadingModel ShadingModel = MaterialShadingModel::PBR;
+
 		float TextureTiling = 1.0f;
 
 		bool CastsShadows = true;

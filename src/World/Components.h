@@ -130,7 +130,6 @@ namespace Fracture
 		UUID GetParentPrefabID() { return  Parent_PrefabID; }
 	};
 
-
 	struct HierachyComponent : public IComponent
 	{
 		HierachyComponent(const UUID& id) :
@@ -299,6 +298,47 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
+	struct LightProbeComponent : public IComponent
+	{
+		enum class LightProbeType
+		{
+			Global,
+			Local,
+		};
+
+		enum class LightProbeVolume
+		{
+			Sphere,
+			Box,
+		};
+
+
+		LightProbeComponent(const UUID& id) :IComponent(), entity(id) {}
+		LightProbeComponent(SunlightComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			Strength = other.Strength;
+			Diffuse = other.Diffuse;
+		}
+
+		bool IsBaked = false;
+		UUID entity;
+		UUID IrradianceMap;
+
+		float Strength = 1.0f;
+		glm::vec3 Diffuse = glm::vec3(1.0f);
+		bool IsInterior = false;
+
+		int LightProbeResolution = 32;
+		std::vector<glm::vec4> ProbePositions;
+		//BOX: XYW, SPHERE:RADIUS X 
+		std::vector<glm::vec4> ProbeVolumeDimensions;
+
+		LightProbeType ProbeType = LightProbeType::Global;		
+		UUID GetID() { return entity; }
+	};
+
 	struct ShadowCasterComponent : public IComponent
 	{
 		UUID entity;
@@ -384,15 +424,19 @@ namespace Fracture
 			Height = other.Height;
 			Offset = other.Offset;
 			IsTrigger = other.IsTrigger;
+			CollisionLayer = other.CollisionLayer;
+			CollisionGroup = other.CollisionGroup;
 		}
 
-		UUID entity;
+		UUID entity;		
 		UUID GetID() { return entity; }
 
 		ColliderType Shape = ColliderType::Sphere;
 		glm::vec3 Size = glm::vec3(1.0f);
 		float Radius = 1.0f;
 		float Height = 1.0f;
+		int CollisionLayer = 0;
+		int CollisionGroup = 0;
 		glm::vec3 Offset = glm::vec3(0);
 		bool IsTrigger = false;
 	};

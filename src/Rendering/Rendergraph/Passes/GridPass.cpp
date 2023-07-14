@@ -22,6 +22,8 @@ void Fracture::GridPass::Execute()
 		return;
 
 	RenderCommands::SetRenderTarget(Context, global_color);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::DepthFunction(Context,Fracture::DepthFunc::Less);
 	RenderCommands::Enable(Context, Fracture::GLCapability::SmoothLines);

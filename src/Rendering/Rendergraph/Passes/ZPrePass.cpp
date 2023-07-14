@@ -22,8 +22,8 @@ void Fracture::ZPrePass::Execute()
 
 
 	RenderCommands::SetRenderTarget(Context, global_color);
-	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::SetCullMode(Context, CullMode::None);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);

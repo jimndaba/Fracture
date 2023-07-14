@@ -107,6 +107,15 @@ void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, u
 	cntxt->Push(cmd);
 }
 
+void  Fracture::RenderCommands::SetRenderBuffer(Fracture::RenderContext* cntxt, uint32_t rb)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [rb]() {
+		glBindRenderbuffer(GL_RENDERBUFFER, rb);
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::ReleaseRenderTarget(Fracture::RenderContext* cntxt)
 {
 	Fracture::Command cmd;
@@ -314,6 +323,16 @@ void Fracture::RenderCommands::FrameBufferSetDrawBuffers(Fracture::RenderContext
 	};
 	cntxt->Push(cmd);
 	
+}
+
+void Fracture::RenderCommands::RenderBufferTextureStorage(Fracture::RenderContext* cntxt, uint32_t rb, InternalFormat internlforamt, int x, int y)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [rb, internlforamt,x,y]() {
+		glNamedRenderbufferStorage(rb,(GLenum)internlforamt,x,y);
+		mErroCallback("RenderBufferTextureStorage");
+	};
+	cntxt->Push(cmd);
 }
 
 void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt, const Fracture::DrawElementsArray& render_cmd)
@@ -578,7 +597,7 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 		SetUniform(cntxt, shader, "pAO",material->AOLevel);
 		SetUniform(cntxt, shader, "pMetalness",material->MetalicLevel);
 		SetUniform(cntxt, shader, "pRoughness",material->RoughnessLevel);
-		SetUniform(cntxt, shader, "EmissionStrength",material->EmmisionStrength);
+		SetUniform(cntxt, shader, "pEmissionStrength",material->EmmisionStrength);
 		SetUniform(cntxt, shader, "SpecularLevel",material->SpecularLevel);
 		SetUniform(cntxt, shader, "SpecularIntensity",material->SpecularIntensity);
 

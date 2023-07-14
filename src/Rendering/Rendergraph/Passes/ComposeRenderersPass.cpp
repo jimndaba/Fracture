@@ -44,6 +44,8 @@ void Fracture::ComposeRenderersPass::Execute()
 
 
 	RenderCommands::SetRenderTarget(Context, final_color);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
 	RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
 

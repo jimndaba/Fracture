@@ -139,6 +139,7 @@ namespace Fracture
 		void SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x, float y);
 		void SetRenderTarget(Fracture::RenderContext* cntxt, RenderTarget* rt);
 		void SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt);
+		void SetRenderBuffer(Fracture::RenderContext* cntxt, uint32_t rb);
 		void ReleaseRenderTarget(Fracture::RenderContext* cntxt);
 		void SetCullMode(Fracture::RenderContext* cntxt, CullMode mode);
 
@@ -160,6 +161,7 @@ namespace Fracture
 		void FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level);
 		void FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level);
 		void FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers);
+		void RenderBufferTextureStorage(Fracture::RenderContext* cntxt, uint32_t rb, InternalFormat internal, int x, int y);
 		
 		void DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& cmd);
 		void DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& cmd);

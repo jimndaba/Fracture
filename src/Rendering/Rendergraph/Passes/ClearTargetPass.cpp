@@ -25,8 +25,8 @@ void Fracture::ClearTargetPass::Execute()
 
 
 	RenderCommands::SetRenderTarget(Context, global_color);
-	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::ClearColor(Context, Properties.ClearColor);	
 	RenderCommands::ClearTarget(Context,Properties.BufferTarget);
 

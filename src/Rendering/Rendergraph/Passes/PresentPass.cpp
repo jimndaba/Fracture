@@ -21,8 +21,8 @@ void Fracture::PresentPass::Execute()
 	Fracture::RenderCommands::ReleaseRenderTarget(Context);
 
 	RenderCommands::SetCullMode(Context, CullMode::None);
-	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::ClearColor(Context, Colour::CornflourBlue);
 	RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
 

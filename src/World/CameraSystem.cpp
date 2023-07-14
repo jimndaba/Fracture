@@ -16,6 +16,7 @@ void Fracture::CameraSystem::Update(float dt, Fracture::CameraComponent& compone
     UpdateCameraVectors(component);
 
 
+
     switch (component.ProjectionMode)
     {
         case CameraComponent::ProjectionType::Perspective:

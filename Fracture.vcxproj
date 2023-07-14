@@ -167,7 +167,7 @@
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
-    <ClInclude Include="src\Rendering\SkyboxSystem.h" />
+    <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
@@ -184,6 +184,7 @@
     <ClInclude Include="src\World\CameraSystem.h" />
     <ClInclude Include="src\World\Components.h" />
     <ClInclude Include="src\World\Entity.h" />
+    <ClInclude Include="src\World\LightProbeSystem.h" />
     <ClInclude Include="src\World\PhysicsSystem.h" />
     <ClInclude Include="src\World\Scene.h" />
     <ClInclude Include="src\World\Scenegraph.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="src\World\CameraSystem.cpp" />
     <ClCompile Include="src\World\Components.cpp" />
     <ClCompile Include="src\World\Entity.cpp" />
+    <ClCompile Include="src\World\LightProbeSystem.cpp" />
     <ClCompile Include="src\World\PhysicsSystem.cpp" />
     <ClCompile Include="src\World\Scene.cpp" />
     <ClCompile Include="src\World\Scenegraph.cpp" />

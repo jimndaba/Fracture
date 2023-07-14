@@ -4,6 +4,7 @@
 #include "Assets/AssetManager.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Material.h"
+#include "World/LightProbeSystem.h"
 
 Fracture::ForwardPass::ForwardPass(const std::string& name, RenderContext* context, const ForwardPassDef& info):IPass(name,context),definition(info)
 {
@@ -26,8 +27,8 @@ void Fracture::ForwardPass::Execute()
 
 
 	RenderCommands::SetRenderTarget(Context, global_color);
-	RenderCommands::SetViewport(Context, 1920, 1080, 0, 0);
-	RenderCommands::SetScissor(Context, 1920, 1080, 0, 0);
+	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
@@ -36,6 +37,8 @@ void Fracture::ForwardPass::Execute()
 	
 
 	//Issue out Batch Commands.
+
+	
 
 	if (!Context->mBatches.empty())
 	{
@@ -68,6 +71,15 @@ void Fracture::ForwardPass::Execute()
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::DirectShadows);
 			}
 
+			const auto& global_probes = SceneManager::GetAllComponents<LightProbeComponent>();
+			if (!global_probes.empty() && global_probes[0]->IsBaked)
+			{				
+				const auto& sky = GraphicsDevice::Instance()->GetIrradianceMap(global_probes[0]->GetID());
+				Fracture::RenderCommands::SetTexture(Context, shader.get(), "irradianceMap", sky, (int)TEXTURESLOT::GlobalIrradiance);
+				
+			}
+
+
 			//Set Shader
 			for (auto batch : batches.second)
 			{
@@ -96,12 +108,16 @@ void Fracture::ForwardPass::Execute()
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);		
 		RenderCommands::DepthFunction(Context,DepthFunc::LEqual);
 		RenderCommands::Disable(Context,Fracture::GLCapability::FaceCulling);
+
+	
 		if (skybox->IsSkyTextureSet)
 		{
 			const auto& sky = GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap");
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "skyMap", sky->Handle, 0);
+			GraphicsDevice::Instance()->RenderCaptureCube(Context);
+
 		}
-		GraphicsDevice::Instance()->RenderCaptureCube(Context);		
+	
 	}
 	
 	RenderCommands::ReleaseRenderTarget(Context);

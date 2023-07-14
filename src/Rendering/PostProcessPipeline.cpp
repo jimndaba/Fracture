@@ -101,8 +101,8 @@ void Fracture::PostProcessPipeline::OnRender()
 		RenderCommands::SetRenderTarget(cntxt, target->Handle);
 		RenderCommands::ClearTarget(cntxt, (uint32_t)Fracture::ClearFlags::Color);
 		RenderCommands::ClearColor(cntxt,Fracture::Colour::Red);
-		RenderCommands::SetViewport(cntxt, 1920, 1080, 0, 0);
-		RenderCommands::SetScissor(cntxt, 1920, 1080, 0, 0);
+		RenderCommands::SetViewport(cntxt, cntxt->ContextViewport.Width, cntxt->ContextViewport.Height, 0, 0);
+		RenderCommands::SetScissor(cntxt, cntxt->ContextViewport.Width, cntxt->ContextViewport.Height, 0, 0);
 	}
 
 	RenderCommands::SetRenderTarget(cntxt,(uint32_t)0);

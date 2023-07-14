@@ -39,12 +39,13 @@ physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes0, p
 
 }
 
-Fracture::PhysicsScene::PhysicsScene(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
+Fracture::PhysicsScene::PhysicsScene(Fracture::PhsyicsSettings& settings, physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
 {
     physx::PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
-	sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
-	//sceneDesc.gravity = physx::PxVec3(0.0f,-9.81,0.0f);	
-	sceneDesc.gravity = physx::PxVec3(0.0f,0,0.0f);	
+	if(settings.EnableCCD)
+		sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
+
+	sceneDesc.gravity = PhysicsHelpers::ToPhysXVector(settings.Gravity);
 	sceneDesc.cpuDispatcher = dispatcher;
 	sceneDesc.filterShader = FilterShader;
 
@@ -81,9 +82,9 @@ void Fracture::PhysicsScene::FixedUpdate(float ts)
 	bool advanced = Advance(ts);		
 }
 
-std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsScene::Create(physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
+std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsScene::Create(Fracture::PhsyicsSettings& settings, physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
 {
-	return std::make_unique<Fracture::PhysicsScene>(mPhysics,dispatcher);
+	return std::make_unique<Fracture::PhysicsScene>(settings,mPhysics,dispatcher);
 }
 
 void Fracture::PhysicsScene::Destroy()

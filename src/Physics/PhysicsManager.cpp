@@ -59,6 +59,45 @@ void Fracture::PhysicsManager::Init()
 	}
 	FRACTURE_INFO("Physics Engine Init");
 
+	int Default_layer = 0;
+	mPhysicsLayers[Default_layer] = std::make_shared<PhysicsLayer>();
+	mPhysicsLayers[Default_layer]->LayerID = Default_layer;
+	mPhysicsLayers[Default_layer]->Name = "Default";
+	mPhysicsLayers[Default_layer]->Changable = false;
+	mPhysicsLayers[Default_layer]->AlwaysTrue = true;
+	mLayerOrder.push_back(Default_layer);
+
+	int layer_id = 1;
+	for (int i = 1; i < 32; i++)
+	{
+		auto layer = std::make_shared<PhysicsLayer>();
+		layer->LayerID = layer_id;
+		mPhysicsLayers[layer->LayerID] = layer;
+		mLayerOrder.push_back(layer->LayerID);
+		layer_id += 1;
+	}
+	
+
+	{
+		auto group_all = std::make_shared<PhysicsGroup>();
+		group_all->GroupID = 1;
+		group_all->InLayer[Default_layer] = true;
+		group_all->Name = "All";
+		group_all->Changable = false;
+		group_all->AlwaysTrue = true;
+		mPhysicsGroups[group_all->GroupID] = group_all;
+		mGroupOrder.push_back(group_all->GroupID);
+	}
+	{
+		auto group_None = std::make_shared<PhysicsGroup>();
+		group_None->GroupID = 0;
+		group_None->InLayer[Default_layer] = false;
+		group_None->Name = "None";
+		group_None->Changable = false;
+		group_None->AlwaysFalse = true;
+		mPhysicsGroups[group_None->GroupID] = group_None;
+		mGroupOrder.push_back(group_None->GroupID);
+	}
 	mInstance->mDispacther = physx::PxDefaultCpuDispatcherCreate(2);
 	Eventbus::Subscribe(this, &Fracture::PhysicsManager::OnAddActor);
 	
@@ -126,7 +165,7 @@ Fracture::PhysicsScene* Fracture::PhysicsManager::GetScene()
 
 void Fracture::PhysicsManager::CreateScene()
 {
-	mInstance->mScene = PhysicsScene::Create(mInstance->mPhysics, mInstance->mDispacther);
+	mInstance->mScene = PhysicsScene::Create(Settings ,mInstance->mPhysics, mInstance->mDispacther);
 }
 
 void Fracture::PhysicsManager::DestroyScene()

@@ -71,7 +71,7 @@ void Fracture::DebugRenderer::OnRender()
 
         
         RenderCommands::SetRenderTarget(mContext.get(),target);
-        RenderCommands::SetViewport(mContext.get(),1920, 1080,0,0);
+        RenderCommands::SetViewport(mContext.get(), mContext->ContextViewport.Width, mContext->ContextViewport.Height,0,0);
         RenderCommands::ClearColor(mContext.get(), glm::vec4(0, 0, 0, 0));
         RenderCommands::ClearTarget(mContext.get(), ClearFlags::Color);
       

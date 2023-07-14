@@ -104,6 +104,8 @@ namespace Fracture
 
 		std::map<std::string, std::shared_ptr<IGraphicsResource>> mGlobalResources;
 
+		std::unordered_map<UUID, std::shared_ptr<Texture>> mIrradianceMaps;
+
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
@@ -144,6 +146,8 @@ namespace Fracture
 
 		void CreateTexture(std::shared_ptr<Texture>& texture, const TextureCreationInfo& info);
 		void CreateGlobalTexture(const std::string& Name, const TextureCreationInfo& info);
+		UUID CreateIrradianceMap(const TextureCreationInfo& info);
+		uint32_t GetIrradianceMap(UUID entity_id);
 
 		void UpdateSkybox(RenderContext* Context, SkyboxComponent* component);
 		void RenderCaptureCube(RenderContext* Context);

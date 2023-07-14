@@ -53,13 +53,15 @@ namespace Fracture
 
 		const uint32_t MaxLines = 10000;
 
+		std::unique_ptr<RenderContext> mContext;
+
 	private:
 		static std::vector<Line> mLines;
 		static std::vector<glm::vec4> mLinesColors;
 		static std::map<uint32_t, BillboardData> mBillboardDrawCalls;
 
 		std::shared_ptr<Buffer> mlineBufferSSBO;
-		std::unique_ptr<RenderContext> mContext;
+	
 		uint32_t LineVAO;
 		static int g_numCircleVertices;
 	};

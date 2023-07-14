@@ -31,14 +31,29 @@ namespace Fracture
 
 	struct PhysicsLayer
 	{
-		std::string Name;
-		std::unordered_map<Fracture::UUID, bool> InLayer;
+		PhysicsLayer() {};
+		std::string Name = "";
+		int LayerID;
+		bool Changable = true;
+		bool AlwaysFalse = false;
+		bool AlwaysTrue = false;
 	};
 
 	struct PhysicsGroup
 	{
+		PhysicsGroup(Fracture::UUID id = UUID()) :GroupID(id) {}
+		int GroupID;
 		std::string Name;
-		std::unordered_map<Fracture::UUID, bool> InGroup;
+		std::unordered_map<UUID, bool> InLayer;
+		bool Changable = true;
+		bool AlwaysFalse = false;
+		bool AlwaysTrue = false;
+	};
+
+	struct PhsyicsSettings
+	{
+		glm::vec3 Gravity = glm::vec3(0.0f, -9.81, 0.0f);
+		bool EnableCCD = true;
 	};
 
 	class PhysicsManager 
@@ -74,8 +89,15 @@ namespace Fracture
 
 		static PhysicsManager* Instance();
 
-		std::vector<PhysicsLayer> mPhysicsLayers;
-		std::vector<PhysicsGroup> mPhysicsGroups;
+		std::map<int,std::shared_ptr<PhysicsLayer>> mPhysicsLayers;
+		std::vector<int> mLayerOrder;
+
+		std::map<int,std::shared_ptr<PhysicsGroup>> mPhysicsGroups;
+		std::vector<int> mGroupOrder;
+		std::vector<int> mAvialableGroupOrder;
+		int NextGroupID = 2;
+
+		PhsyicsSettings Settings;
 
 	private:
 		physx::PxPhysics* mPhysics;
@@ -90,7 +112,6 @@ namespace Fracture
 		std::unordered_map<UUID, physx::PxRigidActor*> mActors;
 		std::unordered_map<UUID, physx::PxShape*> mColliders;
 		std::unordered_map<UUID, physx::PxMaterial*> mMaterials;
-		//std::unordered_map<UUID, physx::PxArticulation*> mArticulations;
 		std::unique_ptr<PhysicsScene> mScene;
 		
 	};
