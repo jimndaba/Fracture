@@ -9,6 +9,8 @@
 namespace Fracture
 {
 	class PhysicsScene;
+	struct DestroyEntityEvent;
+
 	struct FilterGroup
 	{
 		enum Enum
@@ -78,9 +80,11 @@ namespace Fracture
 
 		bool HasActor(UUID entity);
 		void RemoveActors();
+		void RemoveActor(UUID entity);
 		void OnDebugDraw();
 
 		void OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt);
+		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
 
 		physx::PxPhysics& GetPhysicsSDK();
 		physx::PxCpuDispatcher* GetCPUDispatcher();
@@ -108,6 +112,7 @@ namespace Fracture
 
 		static std::unique_ptr<PhysicsManager> mInstance;
 
+		std::vector<UUID> mEntitiesToDelete;
 
 		std::unordered_map<UUID, physx::PxRigidActor*> mActors;
 		std::unordered_map<UUID, physx::PxShape*> mColliders;

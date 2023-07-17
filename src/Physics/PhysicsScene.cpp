@@ -42,6 +42,7 @@ physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes0, p
 Fracture::PhysicsScene::PhysicsScene(Fracture::PhsyicsSettings& settings, physx::PxPhysics* mPhysics, physx::PxCpuDispatcher* dispatcher)
 {
     physx::PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
+	
 	if(settings.EnableCCD)
 		sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
 
@@ -51,7 +52,7 @@ Fracture::PhysicsScene::PhysicsScene(Fracture::PhsyicsSettings& settings, physx:
 
 	sceneDesc.simulationEventCallback = &s_ContactListener;
 	sceneDesc.frictionType = physx::PxFrictionType::eONE_DIRECTIONAL;	
-
+	FRACTURE_INFO("Physics gravity {},{},{}", settings.Gravity.x, settings.Gravity.y, settings.Gravity.z);
 	
 
 	if (sceneDesc.isValid())

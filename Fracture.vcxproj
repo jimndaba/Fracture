@@ -119,6 +119,7 @@
     <ClInclude Include="src\Common\FractureApp.h" />
     <ClInclude Include="src\Common\Logger.h" />
     <ClInclude Include="src\FracturePCH.h" />
+    <ClInclude Include="src\Game\FractureGame.h" />
     <ClInclude Include="src\Input\Gamepad.h" />
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\InputEvents.h" />
@@ -249,6 +250,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Game\FractureGame.cpp" />
     <ClCompile Include="src\Input\Input.cpp" />
     <ClCompile Include="src\Physics\ContactListener.cpp" />
     <ClCompile Include="src\Physics\PhysicsEvents.cpp" />

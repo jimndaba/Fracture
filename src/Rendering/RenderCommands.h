@@ -158,8 +158,10 @@ namespace Fracture
 		void DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z);
 		void Barrier(Fracture::RenderContext* cntxt);
 
-		void FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level);
+		void FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level);
+
 		void FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level);
+		
 		void FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers);
 		void RenderBufferTextureStorage(Fracture::RenderContext* cntxt, uint32_t rb, InternalFormat internal, int x, int y);
 		

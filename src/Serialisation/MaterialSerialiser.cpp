@@ -22,7 +22,6 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("HasNormal", material->HasNormalTexture);
 		Property("HasRoughness", material->HasRoughnessTexture);
 		Property("HasSpecular", material->HasSpecularTexture);
-		Property("HasEmmision", material->HasEmissionTexture);
 		Property("HasAO", material->HasAOTexture);
 
 		Property("AlbedoTexture", material->AlbedoTexture);
@@ -73,10 +72,11 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 
 		material->HasAlbedoTexture = BOOL("HasAlbedo");
 		material->HasEmissionTexture = BOOL("HasEmission");
-		material->HasMetalTexture = BOOL("HasMetal");
+		material->HasMetalTexture = BOOL("HasMetalness");
 		material->HasNormalTexture = BOOL("HasNormal");
 		material->HasRoughnessTexture = BOOL("HasRoughness");
 		material->HasSpecularTexture = BOOL("HasSpecular");
+		material->HasAOTexture = BOOL("HasAO");
 		material->IsTranslucent = BOOL("IsTranslucent");
 		material->CastsShadows = BOOL("CastsShadows");
 

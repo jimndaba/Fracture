@@ -29,9 +29,12 @@ void Fracture::ContactListener::onContact(const physx::PxContactPairHeader& pair
 			auto actor_other = reinterpret_cast<Fracture::RigidbodyComponent*>(pairHeader.actors[1]->userData);		
 
 			CollisionContext cntxt;
-			cntxt.entity = actor_a->GetID();
-			cntxt.other = actor_other->GetID();
-			Eventbus::Publish<OnCollisionEvent>(cntxt);
+			if (actor_a->GetID() && actor_other->GetID())
+			{
+				cntxt.entity = actor_a->GetID();
+				cntxt.other = actor_other->GetID();
+				Eventbus::Publish<OnCollisionEvent>(cntxt);
+			}
 			break;
 		}
 	}

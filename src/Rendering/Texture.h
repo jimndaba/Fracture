@@ -141,7 +141,7 @@ namespace Fracture
 		int Height = 1;
 		int NoChannels = 1;
 		int Depth = 1;
-		uint32_t MipLevels = 1;
+		uint32_t MipLevels = 1 ;
 		int TextureArrayLevels = 1;
 		bool GenMinMaps = false;
 		std::vector<uint8_t> data;

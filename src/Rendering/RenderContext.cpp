@@ -115,6 +115,7 @@ void Fracture::RenderContext::Render()
 	}
 
 	Commands.clear();
+	ActiveTextureUnits = 0;
 }
 
 void Fracture::RenderContext::AddToBatch(Fracture::UUID materialID, Fracture::StaticMesh* mesh,glm::mat4 transform, UUID Entity)

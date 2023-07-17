@@ -7,6 +7,7 @@
 #include "EventSystem/Eventbus.h"
 #include "World/WorldEvents.h"
 #include "Physics/PhysicsManager.h"
+#include "World/Components.h"
 
 void LuaBindComponents::BindTagComponent(sol::state& lua)
 {

@@ -75,7 +75,13 @@ void Fracture::ForwardPass::Execute()
 			if (!global_probes.empty() && global_probes[0]->IsBaked)
 			{				
 				const auto& sky = GraphicsDevice::Instance()->GetIrradianceMap(global_probes[0]->GetID());
-				Fracture::RenderCommands::SetTexture(Context, shader.get(), "irradianceMap", sky, (int)TEXTURESLOT::GlobalIrradiance);
+				Fracture::RenderCommands::SetTexture(Context, shader.get(), "irradianceMap", sky, (int)TEXTURESLOT::Irradiance);
+
+				const auto& prefilter = GraphicsDevice::Instance()->GetSpecularBRDFMap(global_probes[0]->GetID());
+				Fracture::RenderCommands::SetTexture(Context, shader.get(), "prefilterMap", prefilter, (int)TEXTURESLOT::Prefilter);
+
+				const auto& brdflut = GraphicsDevice::Instance()->GetBRDFLUTMap(global_probes[0]->GetID());
+				Fracture::RenderCommands::SetTexture(Context, shader.get(), "brdfLUT", brdflut, (int)TEXTURESLOT::BRDF);
 				
 			}
 
@@ -94,30 +100,29 @@ void Fracture::ForwardPass::Execute()
 					cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
 					cmd.count = sub.IndexCount;
 					Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
-				}
-				Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+				}			
 			}
-
-			Fracture::RenderCommands::UseProgram(Context, 0);
+			Fracture::RenderCommands::ResetTextureUnits(Context,shader.get());			
 		}
 	}
 
 	for (const auto& skybox : SceneManager::GetAllComponents<SkyboxComponent>())
 	{
+		if (!skybox->IsReady)
+			continue;
+
 		const auto& shader = AssetManager::Instance()->GetShader("Skybox");
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);		
 		RenderCommands::DepthFunction(Context,DepthFunc::LEqual);
 		RenderCommands::Disable(Context,Fracture::GLCapability::FaceCulling);
 
-	
 		if (skybox->IsSkyTextureSet)
 		{
 			const auto& sky = GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap");
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "skyMap", sky->Handle, 0);
-			GraphicsDevice::Instance()->RenderCaptureCube(Context);
-
 		}
-	
+
+		GraphicsDevice::Instance()->RenderCaptureCube(Context);	
 	}
 	
 	RenderCommands::ReleaseRenderTarget(Context);

@@ -396,6 +396,9 @@
     <ClInclude Include="src\World\LightProbeSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\FractureGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -729,6 +732,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\World\LightProbeSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\FractureGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

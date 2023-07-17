@@ -50,6 +50,7 @@ namespace Fracture
 		void SerialiseComponent(Fracture::ScriptComponent* component);
 		void SerialiseComponent(Fracture::AudioSourceComponent* component);
 		void SerialiseComponent(Fracture::SkyboxComponent* component);
+		void SerialiseComponent(Fracture::LightProbeComponent* component);
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
@@ -67,6 +68,7 @@ namespace Fracture
 		void ReadCameraComponentIfExists(Fracture::UUID entity_id);
 		void ReadAudioSourceComponentIfExists(Fracture::UUID entity_id);
 		void ReadSkyboxComponentIfExists(Fracture::UUID entity_id);
+		void ReadLightProbeComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
 		void EntitiesToPrefab(PrefabCreationInfo info);

@@ -32,8 +32,7 @@ namespace LuaBindComponents
 	void Rotate(Fracture::UUID entity, glm::vec3 value);
 	void LookAt(Fracture::UUID entity, glm::vec3 value, glm::vec3 up);
 
-	void Instantiate(Fracture::UUID entity, glm::vec3 value);
-
+	void Instantiate(Fracture::UUID entity, glm::vec3 value);	
 
 }
 

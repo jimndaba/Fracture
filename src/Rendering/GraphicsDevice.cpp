@@ -81,6 +81,7 @@ void Fracture::GraphicsDevice::Startup()
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glEnable(GL_SCISSOR_TEST);
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     }
 
     {
@@ -118,6 +119,9 @@ void Fracture::GraphicsDevice::Startup()
         CreateBuffer(mPostProcessingBuffer.get(), desc);
         SetBufferIndexRange(mPostProcessingBuffer.get(),(int)ShaderUniformIndex::GlobalRenderSettings, 0);
     }
+
+    VertexArrayCreationInfo info;
+    GraphicsDevice::Instance()->CreateVertexArray(QuadVAO, info);
 
     mPostProcessPipeline = std::make_shared<PostProcessPipeline>();
     mPostProcessPipeline->Init();
@@ -188,7 +192,7 @@ void Fracture::GraphicsDevice::SetBufferIndexRange(Buffer* buffer, uint32_t inde
 
 void Fracture::GraphicsDevice::UpdateBufferData(Buffer* buffer, uint32_t offset, uint32_t size, const void* data)
 {
-    glCheckError();
+    
     GLint m_size;
     glGetBufferParameteriv((GLenum)buffer->Description.bufferType, GL_BUFFER_SIZE, &m_size); glCheckError();
     if (m_size != size)
@@ -473,6 +477,25 @@ Fracture::UUID Fracture::GraphicsDevice::CreateIrradianceMap(const TextureCreati
     return texture_ID;
 }
 
+Fracture::UUID Fracture::GraphicsDevice::CreateBRDFMap(const TextureCreationInfo& info)
+{
+    auto texture = std::make_shared<Texture>(info);
+    UUID texture_ID = info.ID;
+    CreateTexture(texture, info);
+    mBRDFMaps[info.ID] = texture;
+
+    return texture_ID;
+}
+
+Fracture::UUID Fracture::GraphicsDevice::CreateBRDFLUT(const TextureCreationInfo& info)
+{
+    BRDFLUT = std::make_shared<Texture>(info);
+    UUID texture_ID = info.ID;
+    CreateTexture(BRDFLUT, info);
+    IsBRDFCreated = true;
+    return texture_ID;
+}
+
 uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
 {
     const auto& lightProbe = SceneManager::GetComponent<LightProbeComponent>(id);
@@ -498,6 +521,68 @@ uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
     desc.Name = "LightProbeTexture";
     lightProbe->IrradianceMap = CreateIrradianceMap(desc);
     return mIrradianceMaps[lightProbe->IrradianceMap]->Handle;
+}
+
+uint32_t Fracture::GraphicsDevice::GetSpecularBRDFMap(UUID entity_id)
+{
+    const auto& lightProbe = SceneManager::GetComponent<LightProbeComponent>(entity_id);
+    if (!lightProbe)
+        return 0;
+
+    if (mBRDFMaps.find(lightProbe->PreFilterBRDFMap) != mBRDFMaps.end())
+    {
+        return mBRDFMaps[lightProbe->PreFilterBRDFMap]->Handle;
+    }
+
+    Fracture::TextureCreationInfo desc;
+    desc.Width = lightProbe->BRDFResolution;
+    desc.Height = lightProbe->BRDFResolution;
+    desc.TextureTarget = TextureTarget::TextureCubeMap;
+    desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+    desc.format = Fracture::TextureFormat::RGB;
+    desc.internalFormat = Fracture::InternalFormat::RGB16F;
+    desc.formatType = Fracture::TextureFormatType::Float;
+    desc.minFilter = TextureMinFilter::LinearMipMapLinear;
+    desc.magFilter = TextureMagFilter::Linear;
+    desc.Wrap = TextureWrap::ClampToEdge;
+    desc.Name = "BRDFTexture";
+    desc.GenMinMaps = true;
+    desc.MipLevels = 0;
+    lightProbe->PreFilterBRDFMap = CreateBRDFMap(desc);
+    return mBRDFMaps[lightProbe->PreFilterBRDFMap]->Handle;
+}
+
+uint32_t Fracture::GraphicsDevice::GetBRDFLUTMap(UUID entity_id)
+{    
+    const auto& lightProbe = SceneManager::GetComponent<LightProbeComponent>(entity_id);
+    if (!lightProbe)
+        return 0;
+
+    if (IsBRDFCreated)
+    {
+        return BRDFLUT->Handle;
+    }
+
+    Fracture::TextureCreationInfo desc;
+    desc.Width = lightProbe->BRDFLUTResolution;
+    desc.Height = lightProbe->BRDFLUTResolution;
+    desc.TextureTarget = TextureTarget::Texture2D;
+    desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+    desc.format = Fracture::TextureFormat::RG;
+    desc.internalFormat = Fracture::InternalFormat::RG16;
+    desc.formatType = Fracture::TextureFormatType::Float;
+    desc.minFilter = TextureMinFilter::Linear;
+    desc.magFilter = TextureMagFilter::Linear;
+    desc.Wrap = TextureWrap::ClampToEdge;
+    desc.Name = "BRDFTexture";
+    desc.GenMinMaps = true;
+    CreateBRDFLUT(desc);
+    return BRDFLUT->Handle;
+}
+
+uint32_t Fracture::GraphicsDevice::GetQUADVAO()
+{
+    return QuadVAO;
 }
 
 
@@ -552,8 +637,8 @@ void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxCompone
         RenderCaptureCube(Context); // renders a 1x1 cube
     }
     Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
-
-
+    component->IsReady = true;
+    component->IsDirty = false;
 }
 
 void Fracture::GraphicsDevice::RenderCaptureCube(RenderContext* Context)
@@ -629,7 +714,7 @@ void Fracture::GraphicsDevice::RenderCaptureCube(RenderContext* Context)
         .count = 36      
     };
     Fracture::RenderCommands::DrawArray(Context, cmd);    
-    Fracture::RenderCommands::BindVertexArrayObject(Context,uint32_t(0));
+    //Fracture::RenderCommands::BindVertexArrayObject(Context,uint32_t(0));
 }
 
 Fracture::RenderTarget* Fracture::GraphicsDevice::GetGlobalRenderTarget(const std::string& Name)

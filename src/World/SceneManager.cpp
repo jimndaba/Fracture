@@ -6,6 +6,7 @@
 #include "World/TransformSystem.h"
 #include "EventSystem/Eventbus.h"
 #include "Physics/PhysicsEvents.h"
+#include "WorldEvents.h"
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::mCurrentScene;
 std::map<Fracture::UUID, Fracture::SceneRegistry> Fracture::SceneManager::mSceneRegister;
@@ -18,6 +19,7 @@ std::unordered_map<Fracture::UUID, std::vector<Fracture::UUID>> Fracture::SceneM
 Fracture::SceneManager::SceneManager()
 {
     mCurrentScene = nullptr;
+    Eventbus::Subscribe(this, &Fracture::SceneManager::OnDestroyEntity);
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::CreateNewScene(const UUID& root)
@@ -381,13 +383,14 @@ Fracture::UUID Fracture::SceneManager::InstantiateAsChildOf(UUID prefab, UUID pa
 bool Fracture::SceneManager::IsTaggedWith(const UUID& id, const std::string& tag)
 {
     const auto& component = GetComponent<TagComponent>(id);
+    if (component)
+    {
+        auto it = std::find_if(component->Tags.begin(), component->Tags.end(),
+            [tag](const std::string& m) { return m == tag; });
 
-    auto it = std::find_if(component->Tags.begin(), component->Tags.end(),
-        [tag](const std::string& m) { return m == tag; });
-
-    if (it != component->Tags.end())
-        return true;
-
+        if (it != component->Tags.end())
+            return true;
+    }
     return false;
 }
 
@@ -472,6 +475,11 @@ void Fracture::SceneManager::InstanceComponents(UUID prefab, UUID new_entity, UU
     */
 }
 
+void Fracture::SceneManager::Destroy(UUID entity)
+{
+    Eventbus::Publish<DestroyEntityEvent>(entity);
+}
+
 void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<TagComponent>& component, UUID new_entity)
 {
     AddComponentByInstance<TagComponent>(new_entity,component);
@@ -530,6 +538,41 @@ void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<ScriptComponen
 void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity)
 {
     AddComponentByInstance<CameraComponent>(new_entity, component);
+}
+
+void Fracture::SceneManager::OnDestroyEntity(const std::shared_ptr<Fracture::DestroyEntityEvent>& evnt)
+{
+
+
+    const auto& hierachy = Fracture::SceneManager::GetComponent<Fracture::HierachyComponent>(evnt->ID);
+    for (const auto& child : hierachy->Prefabs)
+    {
+        Destroy(child);
+    }
+
+    RemoveComponentIfExists<Fracture::TagComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::HierachyComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::TransformComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::MeshComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::PointlightComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::SpotlightComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::SunlightComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::RigidbodyComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::ColliderComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::ScriptComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::AudioSourceComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::PrefabInstanceComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::LightProbeComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::CameraComponent>(evnt->ID);
+
+    if (Fracture::SceneManager::IsPrefabScene(evnt->ID))
+    {
+        Fracture::SceneManager::RemovePrefab(evnt->ID);
+    }
+    else
+    {
+        Fracture::SceneManager::RemoveEntity(evnt->ID);
+    }
 }
 
 

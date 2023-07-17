@@ -19,7 +19,9 @@ namespace Fracture
 		Metalness,
 		Emmission,
 		AO,
-		GlobalIrradiance,
+		Irradiance,
+		Prefilter,
+		BRDF,
 		TotalSlots
 	};
 

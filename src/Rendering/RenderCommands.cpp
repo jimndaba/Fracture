@@ -280,19 +280,17 @@ void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
 	cntxt->Push(cmd);
 }
 
-void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level)
+void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level)
 {
 	Fracture::Command cmd;
-	cmd.fnc = [fb, attachment_index,attachment_target,texture,level]() {
-		//glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0 + attachment_index, texture, level);
-		glNamedFramebufferTextureLayer(fb, GL_COLOR_ATTACHMENT0 + attachment_index,texture, 0,attachment_target);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_index,
-		//	GL_TEXTURE_CUBE_MAP_POSITIVE_X + attachment_target, texture, level);
-		mErroCallback("Draw Elements");
+	cmd.fnc = [fb, attachment_index, attachment_layer,texture,level]() {
+		glNamedFramebufferTextureLayer(fb, GL_COLOR_ATTACHMENT0 + attachment_index,texture,level, attachment_layer);
+		mErroCallback("FrameBufferTextureTarget");
 		
 	};
 	cntxt->Push(cmd);
 }
+
 
 void Fracture::RenderCommands::FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level)
 {
@@ -305,6 +303,7 @@ void Fracture::RenderCommands::FrameBufferAttachTexture(Fracture::RenderContext*
 	cntxt->Push(cmd);
 	
 }
+
 
 void Fracture::RenderCommands::FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers)
 {

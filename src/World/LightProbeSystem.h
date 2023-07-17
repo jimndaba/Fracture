@@ -13,6 +13,12 @@ namespace Fracture
 	{
 		LightProbeSystem();
 		void Bake(RenderContext* Context ,UUID component);
+
+	private:
+		void DoIrradiance(RenderContext* Context, UUID component);
+		void DoPrefitler(RenderContext* Context, UUID component);
+		void DoBRDF(RenderContext* Context, UUID component);
+
 	};
 
 

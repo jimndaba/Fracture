@@ -8,7 +8,7 @@
 namespace Fracture
 {
 	class LuaScript;
-
+	struct DestroyEntityEvent;
 
 	class SceneManager
 	{
@@ -97,6 +97,11 @@ namespace Fracture
 
 		static void  InstanceComponents(UUID prefab, UUID new_entity, UUID original_entity, UUID parent_entity);
 
+		static void Destroy(UUID entity);
+
+		template<class T>
+		static void RemoveComponentIfExists(Fracture::UUID entity);
+
 		static void AddComponentInstance(std::shared_ptr<TagComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<HierachyComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<TransformComponent>& component, UUID new_entity);
@@ -109,6 +114,9 @@ namespace Fracture
 		static void AddComponentInstance(std::shared_ptr<AudioSourceComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity);
+
+
+		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
 
 	private:
 
@@ -227,6 +235,15 @@ namespace Fracture
 			auto component = std::dynamic_pointer_cast<T>(mScenes[prefab]->ComponentReg[typeid(T)][original_entity]);
 			AddComponentInstance(component,new_entity);
 			//AddComponentByInstance<T>(new_entity, std::make_shared<T>(*component.get(), new_entity));		
+		}
+	}
+
+	template<class T>
+	inline void SceneManager::RemoveComponentIfExists(Fracture::UUID entity)
+	{
+		if (HasComponent<T>(entity))
+		{
+			RemoveComponent<T>(entity);
 		}
 	}
 

@@ -591,33 +591,29 @@ std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTexture(const std::
 
 std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTextureByID(const Fracture::UUID& id)
 {
+	if (!IsTextureLoaded(id))
 	{
-		if (!IsTextureLoaded(id))
+		auto it = mTextureRegister.find(id);
+		if (it != mTextureRegister.end())
 		{
-			auto it = mTextureRegister.find(id);
-			if (it != mTextureRegister.end())
+			if (mTextureRegister[id].Path.empty())
 			{
-				if (mTextureRegister[id].Path.empty())
-				{
-					return nullptr;
-				}
+				return nullptr;
+			}
 
-				mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
-				GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
-				mLoadedTextures.push_back(id);
-				FRACTURE_TRACE("Loaded Texture: {}", mTextureRegister[id].Path);
-			}
-			else
-			{
-				FRACTURE_ERROR("Texture: {} , Is not Registered", id);
-			}
+			mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
+			GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
+			mLoadedTextures.push_back(id);
+			FRACTURE_TRACE("Loaded Texture: {}", mTextureRegister[id].Path);
 		}
 		else
 		{
-			return mTextures[id];
+			FRACTURE_ERROR("Texture: {} , Is not Registered", id);
 		}
-
-			
+	}
+	else if(IsTextureLoaded(id))
+	{
+		return mTextures[id];
 	}
 	FRACTURE_ERROR("Could not find texture: {}", id);
 	return nullptr;

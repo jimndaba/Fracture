@@ -105,6 +105,9 @@ namespace Fracture
 		std::map<std::string, std::shared_ptr<IGraphicsResource>> mGlobalResources;
 
 		std::unordered_map<UUID, std::shared_ptr<Texture>> mIrradianceMaps;
+		std::unordered_map<UUID, std::shared_ptr<Texture>> mBRDFMaps;
+		std::shared_ptr<Texture> BRDFLUT;
+		bool IsBRDFCreated = false;
 
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGLightBuffer;
@@ -114,6 +117,7 @@ namespace Fracture
 		const int MAX_LIGHTS = 1024;
 		std::vector<LightData> mLightData;
 		uint32_t cubeVAO;
+		uint32_t QuadVAO;
 		uint32_t cubeVBO;
 
 	public:
@@ -147,7 +151,12 @@ namespace Fracture
 		void CreateTexture(std::shared_ptr<Texture>& texture, const TextureCreationInfo& info);
 		void CreateGlobalTexture(const std::string& Name, const TextureCreationInfo& info);
 		UUID CreateIrradianceMap(const TextureCreationInfo& info);
+		UUID CreateBRDFMap(const TextureCreationInfo& info);
+		UUID CreateBRDFLUT(const TextureCreationInfo& info);
 		uint32_t GetIrradianceMap(UUID entity_id);
+		uint32_t GetSpecularBRDFMap(UUID entity_id);
+		uint32_t GetBRDFLUTMap(UUID entity_id);
+		uint32_t GetQUADVAO(); 
 
 		void UpdateSkybox(RenderContext* Context, SkyboxComponent* component);
 		void RenderCaptureCube(RenderContext* Context);

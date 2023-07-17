@@ -314,23 +314,25 @@ namespace Fracture
 
 
 		LightProbeComponent(const UUID& id) :IComponent(), entity(id) {}
-		LightProbeComponent(SunlightComponent& other, UUID new_entity) :
+		LightProbeComponent(LightProbeComponent& other, UUID new_entity) :
 			IComponent()
 		{
-			entity = new_entity;
-			Strength = other.Strength;
-			Diffuse = other.Diffuse;
+			//TO DO LIGHTPROBE COPY
 		}
 
 		bool IsBaked = false;
 		UUID entity;
 		UUID IrradianceMap;
+		UUID PreFilterBRDFMap;
+		UUID BRDFLUTMap;
 
 		float Strength = 1.0f;
 		glm::vec3 Diffuse = glm::vec3(1.0f);
 		bool IsInterior = false;
 
-		int LightProbeResolution = 32;
+		int LightProbeResolution = 16;
+		int BRDFResolution = 128;
+		int BRDFLUTResolution = 512;
 		std::vector<glm::vec4> ProbePositions;
 		//BOX: XYW, SPHERE:RADIUS X 
 		std::vector<glm::vec4> ProbeVolumeDimensions;
@@ -507,6 +509,7 @@ namespace Fracture
 		{
 			entity = new_entity;
 			SkyTexture = other.SkyTexture;
+			IsSkyTextureSet = other.IsSkyTextureSet;
 		}
 
 		UUID entity;
@@ -514,9 +517,9 @@ namespace Fracture
 
 		bool IsSkyTextureSet = false;
 		bool IsDirty = true;
+		bool IsReady = false;
 		UUID SkyTexture;		
 		glm::vec4 SkyColour = glm::vec4(0.3,0.5,0.8,1.0);
-		uint32_t VAO;
 	};
 }
 

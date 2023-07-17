@@ -80,6 +80,8 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("Rotate", LuaBindComponents::Rotate);
 	lua.set_function("LookAt", LuaBindComponents::LookAt);
 	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
+
+	lua.set_function("Destroy", SceneManager::Destroy);
 	
 	/*
 	lua.set_function("Destroy", sol::overload([&](sol::this_state s, UUID id) {

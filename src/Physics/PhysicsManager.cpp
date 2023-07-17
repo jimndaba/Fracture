@@ -6,6 +6,8 @@
 #include "PhysicsHelpers.h"
 #include "World/TransformSystem.h"
 #include "EventSystem/Eventbus.h"
+#include "World/WorldEvents.h"
+
 using namespace physx;
 
 std::unique_ptr<Fracture::PhysicsManager> Fracture::PhysicsManager::mInstance;
@@ -19,12 +21,13 @@ Fracture::PhysicsManager::PhysicsManager()
 
 Fracture::PhysicsManager::~PhysicsManager()
 {
-
+	if(mInstance)
+		mInstance.release();
 }
 
 void Fracture::PhysicsManager::Init()
 {
-	mInstance = std::make_unique<PhysicsManager>();
+	//mInstance = std::make_unique<PhysicsManager>();
 
 	
 
@@ -100,8 +103,9 @@ void Fracture::PhysicsManager::Init()
 	}
 	mInstance->mDispacther = physx::PxDefaultCpuDispatcherCreate(2);
 	Eventbus::Subscribe(this, &Fracture::PhysicsManager::OnAddActor);
+	Eventbus::Subscribe(this, &Fracture::PhysicsManager::OnDestroyEntity);
 	
-
+	
 }
 
 void Fracture::PhysicsManager::FixedUpdate(const float& dt)
@@ -121,7 +125,12 @@ void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 		transform->IsDirty = true;
 	}
 
-
+	
+	for (const auto& entity : mEntitiesToDelete)
+	{
+		RemoveActor(entity);
+	}
+	mEntitiesToDelete.clear();
 }
 
 
@@ -154,6 +163,7 @@ void Fracture::PhysicsManager::Shutdown()
 			mInstance->gFoundation->release();
 			mInstance->gFoundation = NULL;
 		}
+		mInstance.release();
 	}
 
 }
@@ -165,7 +175,7 @@ Fracture::PhysicsScene* Fracture::PhysicsManager::GetScene()
 
 void Fracture::PhysicsManager::CreateScene()
 {
-	mInstance->mScene = PhysicsScene::Create(Settings ,mInstance->mPhysics, mInstance->mDispacther);
+	mInstance->mScene = PhysicsScene::Create(mInstance->Settings ,mInstance->mPhysics, mInstance->mDispacther);
 }
 
 void Fracture::PhysicsManager::DestroyScene()
@@ -202,6 +212,11 @@ void Fracture::PhysicsManager::OnAddActor(const std::shared_ptr<OnAddActorEvent>
 		AddActor(evnt->id);
 	}
 
+}
+
+void Fracture::PhysicsManager::OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt)
+{
+	mEntitiesToDelete.push_back(evnt->ID);
 }
 
 void Fracture::PhysicsManager::AddActor(UUID mEntity)
@@ -315,6 +330,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 			}
 			mInstance->mActors[mEntity]->attachShape(*mInstance->mColliders[mEntity]);
 			mInstance->mColliders[mEntity]->release();
+			mInstance->mColliders.erase(mEntity);
 		}
 
 		//const auto& name = SceneManager::CurrenScene()->GetComponent<TagComponent>(ID)->Name;
@@ -470,6 +486,16 @@ void Fracture::PhysicsManager::RemoveActors()
 
 }
 
+void Fracture::PhysicsManager::RemoveActor(UUID entity)
+{
+	if (HasActor(entity))
+	{
+		mInstance->mScene->RemoveActor(*mInstance->mActors[entity]);
+		mInstance->mActors[entity]->release();
+		mInstance->mActors.erase(entity);
+	}
+}
+
 physx::PxPhysics& Fracture::PhysicsManager::GetPhysicsSDK()
 {
 	return *mInstance->mPhysics;
@@ -492,5 +518,9 @@ physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID
 
 Fracture::PhysicsManager* Fracture::PhysicsManager::Instance()
 {
+	if (!mInstance)
+	{
+		mInstance = std::make_unique<PhysicsManager>();
+	}
 	return mInstance.get();
 }

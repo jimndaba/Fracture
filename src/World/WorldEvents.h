@@ -23,4 +23,11 @@ namespace Fracture
 		const char* Name() { return "InstanceScenePrefabEvent"; };
 	};
 
+	struct DestroyEntityEvent : public Fracture::Event
+	{
+		DestroyEntityEvent(Fracture::UUID id) : Event(), ID(id){}
+		Fracture::UUID ID;
+		const char* Name() { return "DestroyEntityEvent"; };
+	};
+
 }

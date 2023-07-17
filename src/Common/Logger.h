@@ -9,6 +9,38 @@
 
 namespace Fracture
 {	
+    // Custom sink for spdlog that captures logs
+    class ImGuiSink : public spdlog::sinks::base_sink<std::mutex>
+    {
+    public:
+        void sink_it_(const spdlog::details::log_msg& msg) override
+        {
+            spdlog::memory_buf_t formatted;
+            spdlog::sinks::base_sink<std::mutex>::formatter_->format(msg, formatted);
+            message_ = fmt::to_string(formatted);
+
+            // Add the log message to the buffer
+            buffer_.push_back(message_);
+
+            // Limit the buffer size to a certain number of messages
+            constexpr int maxBufferSize = 100;
+            while (buffer_.size() > maxBufferSize)
+            {
+                buffer_.pop_front();
+            }
+        }
+        
+        virtual void flush_(){ };
+
+        const std::deque<std::string>& GetBuffer() const { return buffer_; }
+        const std::string& GetCurrentMessage() const { return message_; }
+
+    private:
+        std::deque<std::string> buffer_;
+        std::string message_;
+    };
+
+
 	class Logger
 	{
 

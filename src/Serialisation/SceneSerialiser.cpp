@@ -186,6 +186,18 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::SkyboxComponent* co
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::LightProbeComponent* component)
+{
+	BeginStruct("LightProbeComponent");
+	Property("PREFILTER Resolution", component->BRDFResolution);
+	Property("BRDFLUT Resolution", component->BRDFLUTResolution);
+	Property("IRRADIANCE Resolution", component->LightProbeResolution);
+	Property("IsInterior", component->IsInterior);
+	Property("ProbePositions", component->ProbePositions);
+	Property("Type",(int)component->ProbeType);
+	EndStruct();
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -455,8 +467,25 @@ void Fracture::SceneSerialiser::ReadSkyboxComponentIfExists(Fracture::UUID entit
 	{
 		auto comp = std::make_shared<SkyboxComponent>(entity_id);
 		comp->SkyTexture = ID("SkyTexture");
-		comp->IsSkyTextureSet = BOOL("IsSkyTextureSet");		
+		comp->IsSkyTextureSet = BOOL("IsSkyTextureSet");
+		comp->IsDirty = true;
 		SceneManager::AddComponentByInstance<SkyboxComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
+void Fracture::SceneSerialiser::ReadLightProbeComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("LightProbeComponent"))
+	{
+		auto comp = std::make_shared<LightProbeComponent>(entity_id);
+		comp->IsInterior = BOOL("IsInterior");
+		comp->ProbeType = (LightProbeComponent::LightProbeType)INT("Type");
+		comp->ProbePositions = VEC4_VECTOR("ProbePositions");
+		comp->BRDFLUTResolution = INT("BRDFLUT Resolution");
+		comp->BRDFResolution = INT("PREFILTER Resolution");
+		comp->LightProbeResolution = INT("IRRADIANCE Resolution");		
+		SceneManager::AddComponentByInstance<LightProbeComponent>(entity_id, comp);
 		EndStruct();
 	}
 }
@@ -485,6 +514,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);
 			WriteEntityComponentOfType<ScriptComponent>(scene->RootID);
 			WriteEntityComponentOfType<SkyboxComponent>(scene->RootID);
+			WriteEntityComponentOfType<LightProbeComponent>(scene->RootID);
 
 			BeginCollection("Scripts");
 			{
@@ -528,6 +558,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<ColliderComponent>(entity->ID);
 					WriteEntityComponentOfType<ScriptComponent>(entity->ID);
 					WriteEntityComponentOfType<SkyboxComponent>(entity->ID);
+					WriteEntityComponentOfType<LightProbeComponent>(entity->ID);
 				}
 				EndCollection();
 
@@ -741,6 +772,12 @@ void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Frac
 					auto new_component = SkyboxComponent(component, entityid);
 					SerialiseComponent(&new_component);
 				}
+				if (SceneManager::HasComponent<LightProbeComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<LightProbeComponent>(entity);
+					auto new_component = LightProbeComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
 				EndCollection();
 			}
 		}
@@ -778,6 +815,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadCameraComponentIfExists(new_Scene->RootID);
 			ReadScriptComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
+			ReadLightProbeComponentIfExists(new_Scene->RootID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -822,6 +860,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadColliderComponentIfExists(entity_id);
 							ReadScriptComponentIfExists(entity_id);
 							ReadSkyboxComponentIfExists(entity_id);
+							ReadLightProbeComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -901,6 +940,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 			ReadScriptComponentIfExists(new_Scene->RootID);
 			ReadAudioSourceComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
+			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -929,6 +969,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 							ReadScriptComponentIfExists(entity_id);
 							ReadAudioSourceComponentIfExists(entity_id);
 							ReadSkyboxComponentIfExists(entity_id);
+							ReadLightProbeComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1003,6 +1044,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			ReadScriptComponentIfExists(prefab.PrefabID);
 			ReadAudioSourceComponentIfExists(prefab.PrefabID);
 			ReadSkyboxComponentIfExists(prefab.PrefabID);
+			ReadLightProbeComponentIfExists(prefab.PrefabID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1047,6 +1089,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadScriptComponentIfExists(entity);
 							ReadAudioSourceComponentIfExists(entity);
 							ReadSkyboxComponentIfExists(entity);
+							ReadLightProbeComponentIfExists(entity);
 							NextInCollection();
 						}
 						EndCollection();
