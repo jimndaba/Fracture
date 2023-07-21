@@ -33,7 +33,7 @@ void Fracture::ForwardPass::Execute()
 	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
 
-	RenderCommands::ClearImage(Context, global_color->ColorAttachments[1]->Handle, 0, &clearValue);
+	//RenderCommands::ClearImage(Context, global_color->ColorAttachments[1]->Handle, 0, &clearValue);
 	
 
 	//Issue out Batch Commands.
@@ -57,15 +57,24 @@ void Fracture::ForwardPass::Execute()
 			const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
 
 
-			Fracture::RenderCommands::UseProgram(Context, shader->Handle);
+			Fracture::RenderCommands::UseProgram(Context, shader->Handle);		
 			Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
+
 			RenderCommands::SetCullMode(Context, material->cullmode);
+			
+			if (material->IsTranslucent)
+			{
+				RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
+				RenderCommands::BlendFunction(Context, Fracture::BlendFunc::OneMinusSrcAlpha, Fracture::BlendFunc::SrcAlpha);
+			}
 
 			if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
 			{
 				const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "aGlobalAO", global_SSAO->ColorAttachments[0]->Handle, (int)TEXTURESLOT::GlobalAO);
 			}
+
+		
 			{
 				const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::DirectShadows);
@@ -73,7 +82,7 @@ void Fracture::ForwardPass::Execute()
 
 			const auto& global_probes = SceneManager::GetAllComponents<LightProbeComponent>();
 			if (!global_probes.empty() && global_probes[0]->IsBaked)
-			{				
+			{
 				const auto& sky = GraphicsDevice::Instance()->GetIrradianceMap(global_probes[0]->GetID());
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "irradianceMap", sky, (int)TEXTURESLOT::Irradiance);
 
@@ -82,29 +91,47 @@ void Fracture::ForwardPass::Execute()
 
 				const auto& brdflut = GraphicsDevice::Instance()->GetBRDFLUTMap(global_probes[0]->GetID());
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "brdfLUT", brdflut, (int)TEXTURESLOT::BRDF);
-				
+
 			}
 
-
-			//Set Shader
-			for (auto batch : batches.second)
+			
+			if (batches.second.size())
 			{
-				const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
-				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
-
-				for (const auto& sub : mesh->SubMeshes)
+				//Set Shader
+				for (auto batch : batches.second)
 				{
-					DrawElementsInstancedBaseVertex cmd;
-					cmd.basevertex = sub.BaseVertex;
-					cmd.instancecount = batch.second->Transforms.size();
-					cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
-					cmd.count = sub.IndexCount;
-					Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+					const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
+
+					Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
+					
+					std::vector<std::shared_ptr<MeshDrawCall>> drawcalls;
+					if (material->IsTranslucent)
+						drawcalls = batch.second->TransparentDrawCalls;
+					else
+						drawcalls = batch.second->OpaqueDrawCalls;
+
+					if (drawcalls.size())
+					{
+						DrawElementsInstancedBaseVertex cmd;
+						cmd.basevertex = drawcalls[0]->basevertex;
+						cmd.instancecount = batch.second->Transforms.size();
+						cmd.indices = drawcalls[0]->SizeOfindices;
+						cmd.count = drawcalls[0]->IndexCount;
+						Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+					}
+					Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 				}			
+							
 			}
+
+			if (material->IsTranslucent)
+				RenderCommands::Disable(Context, Fracture::GLCapability::Blending);		
+
 			Fracture::RenderCommands::ResetTextureUnits(Context,shader.get());			
 		}
+	
 	}
+
 
 	for (const auto& skybox : SceneManager::GetAllComponents<SkyboxComponent>())
 	{
@@ -124,7 +151,7 @@ void Fracture::ForwardPass::Execute()
 
 		GraphicsDevice::Instance()->RenderCaptureCube(Context);	
 	}
-	
+
 	RenderCommands::ReleaseRenderTarget(Context);
 }
 

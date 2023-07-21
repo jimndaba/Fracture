@@ -22,6 +22,7 @@ namespace Fracture
 		static std::string GlobalDebug;
 		static std::string GlobalDirectShadows;
 		static std::string GlobalFinalOut;
+		static std::string GlobalOutline;
 	};
 
 	enum class ShaderUniformIndex

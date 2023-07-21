@@ -100,7 +100,7 @@ void Fracture::ShadowCasterPass::Execute()
 
         RenderCommands::SetCullMode(Context, CullMode::Back);
         RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
-
+        RenderCommands::SetColorMask(Context, 0, 0, 0, 1);
         if (Context->mBatches.empty())
         {
             RenderCommands::ReleaseRenderTarget(Context);
@@ -128,20 +128,23 @@ void Fracture::ShadowCasterPass::Execute()
             //Set Shader
             for (auto batch : batches.second)
             {
-                const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
-                Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);               
+                const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
 
-                for (const auto& sub : mesh->SubMeshes)
+                Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
+
+                if (batch.second->OpaqueDrawCalls.size())
                 {
                     DrawElementsInstancedBaseVertex cmd;
-                    cmd.basevertex = sub.BaseVertex;
+                    cmd.basevertex = batch.second->OpaqueDrawCalls[0]->basevertex;
                     cmd.instancecount = batch.second->Transforms.size();
-                    cmd.indices = (void*)(sizeof(unsigned int) * sub.BaseIndex);
-                    cmd.count = sub.IndexCount;
+                    cmd.indices = batch.second->OpaqueDrawCalls[0]->SizeOfindices;
+                    cmd.count = batch.second->OpaqueDrawCalls[0]->IndexCount;
                     Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
                 }
                 Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
             }
+
+
         }
 
         Fracture::RenderCommands::UseProgram(Context, 0);

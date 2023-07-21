@@ -9,13 +9,17 @@
 glm::vec2 Fracture::Input::m_scroll;
 std::map<std::string, Fracture::KeyCode> Fracture::Input::mKeyMapping;
 std::unordered_map<std::string, Fracture::InputBinding> Fracture::Input::InputBindings;
+Fracture::AppWindow* Fracture::Input::mWindow;
 
-Fracture::Input::Input()
+
+
+Fracture::Input::Input(AppWindow* window)
 {
-	glfwSetScrollCallback(IFractureApp::mWindow->Context, Fracture::Input::scroll_callback);
-	glfwSetCursorPosCallback(IFractureApp::mWindow->Context, cursor_position_callback);
-	glfwSetMouseButtonCallback(IFractureApp::mWindow->Context, mouse_button_callback);
-	glfwSetKeyCallback(IFractureApp::mWindow->Context, key_callback);
+	mWindow = window;
+	glfwSetScrollCallback(window->Context, Fracture::Input::scroll_callback);
+	glfwSetCursorPosCallback(window->Context, cursor_position_callback);
+	glfwSetMouseButtonCallback(window->Context, mouse_button_callback);
+	glfwSetKeyCallback(window->Context, key_callback);
 	glfwSetJoystickCallback(Joystick_callback);
 	
 	{
@@ -71,6 +75,11 @@ Fracture::Input::Input()
 
 }
 
+void Fracture::Input::SetCurrentContext(AppWindow* window)
+{
+	mWindow = window;
+}
+
 void Fracture::Input::Update()
 {
 	/*
@@ -86,7 +95,7 @@ bool Fracture::Input::IsKeyDown(KeyCode key)
 {
 	//return mKeyboardDevice->IsKeyPressed(key);
 
-	int state = glfwGetKey(IFractureApp::mWindow->Context, static_cast<int32_t>(key));
+	int state = glfwGetKey(mWindow->Context, static_cast<int32_t>(key));
 	if (state == GLFW_PRESS || state == GLFW_REPEAT)
 		return true;
 	else
@@ -100,7 +109,7 @@ bool Fracture::Input::IsKeyUp(KeyCode key)
 
 bool Fracture::Input::KeyPressed(KeyCode key)
 {
-	int state = glfwGetKey(IFractureApp::mWindow->Context, static_cast<int32_t>(key));
+	int state = glfwGetKey(mWindow->Context, static_cast<int32_t>(key));
 	if (state == GLFW_PRESS && state != GLFW_REPEAT)
 		return true;
 	else
@@ -109,7 +118,7 @@ bool Fracture::Input::KeyPressed(KeyCode key)
 
 bool Fracture::Input::KeyReleased(KeyCode key)
 {
-	int state = glfwGetKey(IFractureApp::mWindow->Context, static_cast<int32_t>(key));
+	int state = glfwGetKey(mWindow->Context, static_cast<int32_t>(key));
 	if (state == GLFW_RELEASE )
 		return true;
 	else
@@ -118,7 +127,7 @@ bool Fracture::Input::KeyReleased(KeyCode key)
 
 bool Fracture::Input::IsMouseDown(MouseCode btn)
 {
-	int state = glfwGetMouseButton(IFractureApp::mWindow->Context, static_cast<int32_t>(btn));
+	int state = glfwGetMouseButton(mWindow->Context, static_cast<int32_t>(btn));
 	if (state == GLFW_PRESS)
 	{
 		return true;
@@ -133,7 +142,7 @@ bool Fracture::Input::IsMouseUp(MouseCode btn)
 
 bool Fracture::Input::MousePressed(MouseCode btn)
 {
-	int32_t state = glfwGetMouseButton(IFractureApp::mWindow->Context, static_cast<int32_t>(btn));
+	int32_t state = glfwGetMouseButton(mWindow->Context, static_cast<int32_t>(btn));
 	if (state == GLFW_PRESS && state != GLFW_REPEAT)
 	{
 		return true;
@@ -203,10 +212,10 @@ void Fracture::Input::OnSaveBingdingsEvent(const std::shared_ptr<SaveBidingsEven
 glm::vec2 Fracture::Input::GetMousePosition()
 {
 	glm::vec2 pos = glm::vec2(0.0f, 0.0f);
-	if (glfwGetWindowAttrib(IFractureApp::mWindow->Context, GLFW_HOVERED))
+	if (glfwGetWindowAttrib(mWindow->Context, GLFW_HOVERED))
 	{
 		double m_x, m_y;
-		glfwGetCursorPos(IFractureApp::mWindow->Context, &m_x, &m_y);
+		glfwGetCursorPos(mWindow->Context, &m_x, &m_y);
 		pos.x = (float)m_x;
 		pos.y = (float)m_y;
 	}

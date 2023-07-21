@@ -13,6 +13,8 @@
 
 namespace Fracture
 {
+	class AppWindow;
+
 	struct InputSource
 	{
 		enum class SourceType : uint8_t
@@ -72,7 +74,9 @@ namespace Fracture
 	
 
 	public:
-		Input();
+		Input(AppWindow* window);
+
+		void SetCurrentContext(AppWindow* window);
 
 		void Update();
 
@@ -116,7 +120,7 @@ namespace Fracture
 		void BindInput(const std::string& action);
 		void BindInput(const std::string& action,const std::shared_ptr<InputSource>& source, InputBinding::Type bindingType = InputBinding::Type::Button);
 
-
+		static AppWindow* mWindow;
 
 
 	};

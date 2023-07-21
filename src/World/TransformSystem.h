@@ -2,8 +2,6 @@
 #ifndef TRANSFORMSYSTEM_H
 #define TRANSFORMSYSTEM_H
 
-#include "SceneManager.h"
-
 namespace Fracture
 {
 	struct TransformComponent;
@@ -11,9 +9,9 @@ namespace Fracture
 	{
 		TransformSystem();
 
-		static void Update(Fracture::SceneManager* manager, Fracture::UUID root);
-		static void UpdatePrefabs(Fracture::SceneManager* manager, Fracture::UUID root);
-		static void UpdatePrefab(Fracture::SceneManager* manager, Fracture::UUID root);
+		static void Update(Fracture::UUID root);
+		static void UpdatePrefabs(Fracture::UUID root);
+		static void UpdatePrefab(Fracture::UUID root);
 
 		static void Translate(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value);		
 		static void LookAt(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value, const glm::vec3& up);

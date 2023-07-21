@@ -1,15 +1,16 @@
 #include "FracturePCH.h"
 #include "TransformSystem.h"
 #include "Components.h"
+#include "SceneManager.h"
 
 Fracture::TransformSystem::TransformSystem()
 {
 }
 
-void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture::UUID root)
+void Fracture::TransformSystem::Update(Fracture::UUID root)
 {
-	const auto& entity = manager->GetComponent<HierachyComponent>(root);
-	const auto& entity_transform = manager->GetComponent<TransformComponent>(root);
+	const auto& entity = SceneManager::GetComponent<HierachyComponent>(root);
+	const auto& entity_transform = SceneManager::GetComponent<TransformComponent>(root);
 
 	if (!entity_transform || !entity) return; 
 
@@ -25,7 +26,7 @@ void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture
 
 	if (entity->HasParent)
 	{
-		const auto& parent_transform = manager->GetComponent<TransformComponent>(entity->Parent);
+		const auto& parent_transform = SceneManager::GetComponent<TransformComponent>(entity->Parent);
 		entity_transform->WorldTransform = parent_transform->WorldTransform * entity_transform->LocalTransform;
 	}
 	else
@@ -34,15 +35,15 @@ void Fracture::TransformSystem::Update(Fracture::SceneManager* manager, Fracture
 	}
 
 	for (auto child : entity->Children)
-		Update(manager, child);
+		Update(child);
 
 }
 
-void  Fracture::TransformSystem::UpdatePrefabs(Fracture::SceneManager* manager, Fracture::UUID root)
+void  Fracture::TransformSystem::UpdatePrefabs(Fracture::UUID root)
 {
-	const auto& world_transform = manager->GetComponent<TransformComponent>(manager->CurrentScene()->RootID);
-	const auto& entity_transform = manager->GetComponent<TransformComponent>(root);
-	const auto& entity = manager->GetComponent<HierachyComponent>(root);
+	const auto& world_transform = SceneManager::GetComponent<TransformComponent>(SceneManager::CurrentScene()->RootID);
+	const auto& entity_transform = SceneManager::GetComponent<TransformComponent>(root);
+	const auto& entity = SceneManager::GetComponent<HierachyComponent>(root);
 
 	if (!entity_transform || !entity) return;
 
@@ -56,18 +57,18 @@ void  Fracture::TransformSystem::UpdatePrefabs(Fracture::SceneManager* manager, 
 		entity_transform->LocalTransform = m_translation * m_rotation * m_scale;
 	}
 
-	const auto& parent_transform = manager->GetComponent<TransformComponent>(manager->CurrentScene()->RootID);
+	const auto& parent_transform = SceneManager::GetComponent<TransformComponent>(SceneManager::CurrentScene()->RootID);
 	entity_transform->WorldTransform = parent_transform->WorldTransform * entity_transform->LocalTransform;
 
 
 	for (auto child : entity->Prefabs)
-		UpdatePrefab(manager, child);
+		UpdatePrefab(child);
 }
 
-void Fracture::TransformSystem::UpdatePrefab(Fracture::SceneManager* manager, Fracture::UUID root)
+void Fracture::TransformSystem::UpdatePrefab(Fracture::UUID root)
 {
-	const auto& entity = manager->GetComponent<HierachyComponent>(root);
-	const auto& entity_transform = manager->GetComponent<TransformComponent>(root);
+	const auto& entity = SceneManager::GetComponent<HierachyComponent>(root);
+	const auto& entity_transform = SceneManager::GetComponent<TransformComponent>(root);
 
 	if (!entity_transform || !entity) return;
 
@@ -83,7 +84,7 @@ void Fracture::TransformSystem::UpdatePrefab(Fracture::SceneManager* manager, Fr
 
 	if (entity->HasParent)
 	{
-		const auto& parent_transform = manager->GetComponent<TransformComponent>(entity->Parent);
+		const auto& parent_transform = SceneManager::GetComponent<TransformComponent>(entity->Parent);
 		entity_transform->WorldTransform = parent_transform->WorldTransform * entity_transform->LocalTransform;
 	}
 	else
@@ -92,7 +93,7 @@ void Fracture::TransformSystem::UpdatePrefab(Fracture::SceneManager* manager, Fr
 	}
 
 	for (auto child : entity->Prefabs)
-		UpdatePrefab(manager, child);
+		UpdatePrefab(child);
 
 }
 

@@ -17,7 +17,8 @@ namespace Fracture
 		bool IsResizable = true;
 		bool IsFullscreen = false;
 		bool IsMaximised = true;
-		bool IsBordered = true;
+		bool IsBordered = true;	
+		GLFWwindow* mSharedContext = nullptr;
 	};
 
 	class AppWindow
@@ -30,7 +31,7 @@ namespace Fracture
 		void SwapBuffers();
 		void PollEvents(bool waitforInput = false);
 		bool ShouldWindowClose();	
-
+		void MakeCurrentContext();
 		void SetWindowTitle(const std::string& title);
 		
 		WindowCreationInfo Info = WindowCreationInfo{};

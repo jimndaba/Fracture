@@ -166,6 +166,7 @@
     <ClInclude Include="src\Rendering\Rendergraph\Rendergraph.h" />
     <ClInclude Include="src\Rendering\Rendergraph\RenderGraphBuilder.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
+    <ClInclude Include="src\Rendering\SceneRenderer.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\IPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\LightCullingPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\OutlinePass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\PresentPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ShadowCasterPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\SSAOPass.cpp" />
@@ -288,6 +290,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Rendergraph.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\RenderGraphBuilder.cpp" />
     <ClCompile Include="src\Rendering\RenderTarget.cpp" />
+    <ClCompile Include="src\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\Rendering\Scissor.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />

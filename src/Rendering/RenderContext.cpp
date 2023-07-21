@@ -25,43 +25,20 @@ void Fracture::RenderContext::EndState()
 
 void Fracture::RenderContext::BeginScene()
 {
-	ResetBatches();
-
-	for (auto bactcheslist : mBatches)
-	{
-		for (auto batch : bactcheslist.second)
-		{
-			batch.second->clear();
-		}
-	}
+	ResetBatches();	
 
 	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
 	for (const auto& meshcomponent : components)
 	{
-		if (AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
-		{
-			for (const auto& material_id : meshcomponent->Materials)
-			{
-				const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(meshcomponent->Mesh);
-				const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
-				auto entity_id = meshcomponent->GetID();
-				AddToBatch(material_id, mesh.get(),transform->WorldTransform, entity_id);
-			}
-		}
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
+		AddToBatch(meshcomponent.get(), transform->WorldTransform, meshcomponent->GetID());
 	}
 
 	const auto& prefabInstancecomponents = SceneManager::GetAllComponents<PrefabInstanceComponent>();
 	for (const auto& prefab : prefabInstancecomponents)
 	{
-		if (AssetManager::Instance()->IsMeshLoaded(prefab->Mesh))
-		{
-			for (const auto& material_id : prefab->Materials)
-			{
-				const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(prefab->Mesh);
-				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
-				AddToBatch(material_id, mesh.get(), transform->WorldTransform, prefab->GetParentPrefabID());
-			}
-		}
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
+		AddToBatch(prefab.get(), transform->WorldTransform, prefab->GetID());
 	}
 
 	for (auto batches : mBatches)
@@ -71,7 +48,7 @@ void Fracture::RenderContext::BeginScene()
 
 		for (auto& batch : batches.second)
 		{
-			const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
+			//const auto& mesh = AssetManager::Instance()->GetStaticByIDMesh(batch.first);
 	
 			Fracture::RenderCommands::BufferSubData<glm::mat4>(this, batch.second->Matrix_Buffer->RenderID, batch.second->Transforms, batch.second->Transforms.size() * sizeof(glm::mat4),0);
 					
@@ -118,91 +95,212 @@ void Fracture::RenderContext::Render()
 	ActiveTextureUnits = 0;
 }
 
-void Fracture::RenderContext::AddToBatch(Fracture::UUID materialID, Fracture::StaticMesh* mesh,glm::mat4 transform, UUID Entity)
+void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 transform, UUID entity)
 {
-	if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
+	if (!AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
+		return;
+
+	const auto& mesh = AssetManager::GetStaticByIDMesh(meshcomponent->Mesh);
+
+	for (const auto& submesh : mesh->SubMeshes)
 	{
-		mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
-		VertexArrayCreationInfo info;
-		info.Layout =
+		auto materialID = meshcomponent->Materials[submesh.MaterialIndex];
+		if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
 		{
-			{ ShaderDataType::Float3,"aPos",0,true },
-			{ ShaderDataType::Float3,"aNormal" ,0,true},
-			{ ShaderDataType::Float2,"aUV" ,0,true},
-			{ ShaderDataType::Int4,"aEntityID",1 },
-			{ ShaderDataType::Mat4,"instanceMatrix",1}
-		};
-		GraphicsDevice::Instance()->CreateVertexArray(mBatches[materialID][mesh->ID]->VAO, info);
-		GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
-		
-		{
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
-			
-			GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
-		}
-		{
-			BufferDescription desc;
-			desc.bufferType = BufferType::ArrayBuffer;
-			desc.size = sizeof(glm::vec4) * 1024;
-			desc.usage = BufferUsage::Dynamic;
-			desc.Name = "EntityIDBuffer";
-			desc.data = nullptr;
-			mBatches[materialID][mesh->ID]->EntityID_Buffer = std::make_shared<Buffer>();
-			GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->EntityID_Buffer.get(), desc);
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 3, sizeof(glm::vec4), mBatches[materialID][mesh->ID]->EntityID_Buffer->RenderID);
-		}
-		{
-			BufferDescription desc;
-			desc.bufferType = BufferType::ArrayBuffer;
-			desc.size = sizeof(glm::mat4) * 1024;
-			desc.usage = BufferUsage::Dynamic;
-			desc.Name = "MatrixBuffer";
-			desc.data = nullptr;
-			mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
-			GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
-			GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 5, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-			//	((sizeof(float) * 1) * 4));
-			//::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 6, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-			//	((sizeof(float) * 2) * 4));
-			//GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 7, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID,
-			//	((sizeof(float) * 3) * 4));
+			mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
+			VertexArrayCreationInfo info;
+			info.Layout =
+			{
+				{ ShaderDataType::Float3,"aPos",0,true },
+				{ ShaderDataType::Float3,"aNormal" ,0,true},
+				{ ShaderDataType::Float2,"aUV" ,0,true},
+				{ ShaderDataType::Int4,"aEntityID",1 },
+				{ ShaderDataType::Mat4,"instanceMatrix",1}
+			};
+			GraphicsDevice::Instance()->CreateVertexArray(mBatches[materialID][mesh->ID]->VAO, info);
+			GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
 
-			GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 4, 1);
-			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 5, 1);
-			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 6, 1);
-			//GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 7, 1);
+			{
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
+				GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
+			}
+			{
+				BufferDescription desc;
+				desc.bufferType = BufferType::ArrayBuffer;
+				desc.size = sizeof(glm::vec4) * 1024;
+				desc.usage = BufferUsage::Stream;
+				desc.Name = "EntityIDBuffer";
+				desc.data = nullptr;
+				mBatches[materialID][mesh->ID]->EntityID_Buffer = std::make_shared<Buffer>();
+				GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->EntityID_Buffer.get(), desc);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 3, sizeof(glm::vec4), mBatches[materialID][mesh->ID]->EntityID_Buffer->RenderID);
 
-			
+				GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 3, 1);
+			}
+			{
+				BufferDescription desc;
+				desc.bufferType = BufferType::ArrayBuffer;
+				desc.size = sizeof(glm::mat4) * 1024;
+				desc.usage = BufferUsage::Stream;
+				desc.Name = "MatrixBuffer";
+				desc.data = nullptr;
+				mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
+				GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
+
+				GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 4, 1);
+
+			}
 		}
 
-	
+		glm::vec4 color(0);
+		uint32_t id = entity;
+		uint8_t r = (id >> 24) & 0xFF; // Red component
+		uint8_t g = (id >> 16) & 0xFF; // Green component
+		uint8_t b = (id >> 8) & 0xFF;  // Blue component
+		uint8_t a = id & 0xFF;         // Alpha component
+		color.r = (float)r / 255.0f;
+		color.g = (float)g / 255.0f;
+		color.b = (float)b / 255.0f;
+		color.a = (float)a / 255.0f;
+
+		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
+		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
+
+
+		const auto& material = AssetManager::GetMaterialByID(materialID);
+
+		auto drawcall = std::make_shared<MeshDrawCall>();
+		drawcall->basevertex = submesh.BaseVertex;
+		drawcall->IndexCount = submesh.IndexCount;
+		drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+
+
+		if (material->IsTranslucent)
+			mBatches[materialID][mesh->ID]->TransparentDrawCalls.push_back(drawcall);
+		else
+			mBatches[materialID][mesh->ID]->OpaqueDrawCalls.push_back(drawcall);
+
+		if (material->CastsShadows)
+			mBatches[materialID][mesh->ID]->ShadowDrawCalls.push_back(drawcall);
+	}	
+}
+
+void Fracture::RenderContext::AddToBatch(PrefabInstanceComponent* meshcomponent, glm::mat4 transform, UUID entity)
+{
+	if (!AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
+		return;
+
+	const auto& mesh = AssetManager::GetStaticByIDMesh(meshcomponent->Mesh);
+
+	for (const auto& submesh : mesh->SubMeshes)
+	{
+		auto materialID = meshcomponent->Materials[submesh.MaterialIndex];
+		if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
+		{
+			mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
+			VertexArrayCreationInfo info;
+			info.Layout =
+			{
+				{ ShaderDataType::Float3,"aPos",0,true },
+				{ ShaderDataType::Float3,"aNormal" ,0,true},
+				{ ShaderDataType::Float2,"aUV" ,0,true},
+				{ ShaderDataType::Int4,"aEntityID",1 },
+				{ ShaderDataType::Mat4,"instanceMatrix",1}
+			};
+			GraphicsDevice::Instance()->CreateVertexArray(mBatches[materialID][mesh->ID]->VAO, info);
+			GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
+
+			{
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
+				GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
+			}
+			{
+				BufferDescription desc;
+				desc.bufferType = BufferType::ArrayBuffer;
+				desc.size = sizeof(glm::vec4) * 1024;
+				desc.usage = BufferUsage::Stream;
+				desc.Name = "EntityIDBuffer";
+				desc.data = nullptr;
+				mBatches[materialID][mesh->ID]->EntityID_Buffer = std::make_shared<Buffer>();
+				GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->EntityID_Buffer.get(), desc);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 3, sizeof(glm::vec4), mBatches[materialID][mesh->ID]->EntityID_Buffer->RenderID);
+
+				GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 3, 1);
+			}
+			{
+				BufferDescription desc;
+				desc.bufferType = BufferType::ArrayBuffer;
+				desc.size = sizeof(glm::mat4) * 1024;
+				desc.usage = BufferUsage::Stream;
+				desc.Name = "MatrixBuffer";
+				desc.data = nullptr;
+				mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
+				GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
+				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
+
+				GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 4, 1);
+
+			}
+		}
+
+
+
+		glm::vec4 color(0);
+		uint32_t id = entity;
+		uint8_t r = (id >> 24) & 0xFF; // Red component
+		uint8_t g = (id >> 16) & 0xFF; // Green component
+		uint8_t b = (id >> 8) & 0xFF;  // Blue component
+		uint8_t a = id & 0xFF;         // Alpha component
+		color.r = (float)r / 255.0f;
+		color.g = (float)g / 255.0f;
+		color.b = (float)b / 255.0f;
+		color.a = (float)a / 255.0f;
+
+		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
+		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
+
+
+		const auto& material = AssetManager::GetMaterialByID(materialID);
+
+		auto drawcall = std::make_shared<MeshDrawCall>();
+		drawcall->basevertex = submesh.BaseVertex;
+		drawcall->IndexCount = submesh.IndexCount;
+		drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+
+
+		if (material->IsTranslucent)
+			mBatches[materialID][mesh->ID]->TransparentDrawCalls.push_back(drawcall);
+		else
+			mBatches[materialID][mesh->ID]->OpaqueDrawCalls.push_back(drawcall);
+
+		if (material->CastsShadows)
+			mBatches[materialID][mesh->ID]->ShadowDrawCalls.push_back(drawcall);
 	}
-
-	mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
-	glm::vec4 color(0);
-	uint32_t id = Entity;
-
-	uint8_t r = (id >> 24) & 0xFF; // Red component
-	uint8_t g = (id >> 16) & 0xFF; // Green component
-	uint8_t b = (id >> 8) & 0xFF;  // Blue component
-	uint8_t a = id & 0xFF;         // Alpha component
-
-
-	color.r = (float)r / 255.0f;
-	color.g = (float)g / 255.0f;
-	color.b = (float)b / 255.0f;
-	color.a = (float)a / 255.0f;
-
-	mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
 }
 
 void Fracture::RenderContext::ResetBatches()
 {
-	
+	for (auto bactcheslist : mBatches)
+	{
+		for (auto batch : bactcheslist.second)
+		{
+			batch.second->clear();
+		}
+	}
 }
 
+void Fracture::RenderContext::WriteToStencilBuffer(Fracture::UUID entity)
+{
+	mStentilTestPass[entity] = true;
+}
+
+bool Fracture::RenderContext::IsWrittenOnStencil(Fracture::UUID entity)
+{
+	return mStentilTestPass[entity];
+}
 

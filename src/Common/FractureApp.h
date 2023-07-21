@@ -7,6 +7,7 @@
 
 namespace Fracture
 {
+	class SceneRenderer;
 
 	class IFractureApp
 	{
@@ -14,16 +15,16 @@ namespace Fracture
 		IFractureApp();
 		~IFractureApp();
 
-		virtual bool Startup() = 0;
+		virtual bool Startup(AppWindow* window = nullptr) = 0;
 		virtual void Update() = 0;
-		virtual void OnFrameStart() = 0;
+		virtual void OnFrameStart(SceneRenderer* renderer) = 0;
 		virtual void Shutdown() = 0;
 
-		static bool ShouldWindowClose();
+		bool ShouldWindowClose(Fracture::AppWindow* window);
 
-		static bool CreateAppWindow(const WindowCreationInfo* info);
+		static std::unique_ptr<AppWindow> CreateAppWindow(const WindowCreationInfo* info);
 
-		static std::unique_ptr<AppWindow> mWindow;
+		
 	};
 
 

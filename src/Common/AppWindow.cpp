@@ -20,7 +20,6 @@ void Fracture::AppWindow::Init()
 void Fracture::AppWindow::SwapBuffers()
 {
 	glfwSwapBuffers(Context);
-
 }
 
 void Fracture::AppWindow::PollEvents(bool waitforInput)
@@ -34,6 +33,12 @@ void Fracture::AppWindow::PollEvents(bool waitforInput)
 bool Fracture::AppWindow::ShouldWindowClose()
 {
  return glfwWindowShouldClose(Context);
+}
+
+void Fracture::AppWindow::MakeCurrentContext()
+{
+	glfwMakeContextCurrent(Context);
+	glfwSwapInterval(1);
 }
 
 void Fracture::AppWindow::SetWindowTitle(const std::string& title)

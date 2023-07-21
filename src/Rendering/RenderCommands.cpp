@@ -183,6 +183,15 @@ void Fracture::RenderCommands::DepthMask(Fracture::RenderContext* cntxt, bool ma
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::StencilMask(Fracture::RenderContext* cntxt, uint32_t mask)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [mask]() {
+		glStencilMask(mask);
+	};
+	cntxt->Push(cmd);
+}
+
 void Fracture::RenderCommands::BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor)
 {
 	Fracture::Command cmd;
@@ -197,6 +206,15 @@ void Fracture::RenderCommands::StencilFunction(Fracture::RenderContext* cntxt, S
 	Fracture::Command cmd;
 	cmd.fnc = [fnc, ref,mask]() {
 		glStencilFunc((GLenum)fnc,ref,mask);
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::StencilOperation(Fracture::RenderContext* cntxt, StencilOp_TestResult sfail, StencilOp_TestResult dfail, StencilOp_TestResult sdpass)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [sfail,dfail, sdpass]() {
+		glStencilOp((GLenum)sfail, (GLenum)dfail, (GLenum)sdpass);
 	};
 	cntxt->Push(cmd);
 }

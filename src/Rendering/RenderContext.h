@@ -11,7 +11,10 @@
 namespace Fracture
 {
 	struct StaticMesh;
+	struct SubMesh;
 	struct Buffer;
+	struct MeshComponent;
+	struct PrefabInstanceComponent;
 
 	enum class DepthSortOrder
 	{
@@ -19,11 +22,26 @@ namespace Fracture
 		Back_To_Front
 	};
 
+	struct MeshDrawCall
+	{
+		UUID EntityID;
+		int basevertex = 0;	
+		void* SizeOfindices = 0;
+		int IndexCount = 0;
+		int InstanceCount = 0;
+		bool DrawToStencil;
+	};
+
 	struct RenderBatch
 	{
 		std::vector<glm::mat4> Transforms;
-		std::vector<glm::vec4> EntityIDs;;
-
+		std::vector<glm::vec4> EntityIDs;
+		std::vector<std::shared_ptr<MeshDrawCall>> OpaqueDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> OutlineDrawCalls;
+		std::vector<SubMesh> Submeshes;
+		
 		uint32_t VAO;
 		std::shared_ptr<Buffer> EntityID_Buffer;
 		std::shared_ptr<Buffer> Matrix_Buffer;
@@ -32,6 +50,10 @@ namespace Fracture
 		{
 			Transforms.clear();
 			EntityIDs.clear();
+			OpaqueDrawCalls.clear();
+			ShadowDrawCalls.clear();
+			TransparentDrawCalls.clear();
+			OutlineDrawCalls.clear();
 		}
 	};
 
@@ -80,12 +102,17 @@ namespace Fracture
 
 		void Render();
 
-		void AddToBatch(Fracture::UUID,StaticMesh* mesh, glm::mat4 transform,UUID Entity);
+		void AddToBatch(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
+		void AddToBatch(PrefabInstanceComponent* mesh,glm::mat4 transform,UUID Entity);
 		void ResetBatches();
+		void WriteToStencilBuffer(Fracture::UUID entity);
+
+		bool IsWrittenOnStencil(Fracture::UUID entity);
 
 		std::vector<Fracture::Command> Commands;
 		std::stack<SortKey> KeyStack;
-		std::map <Fracture::UUID,std::map<Fracture::UUID, std::shared_ptr<RenderBatch>>> mBatches;
+		std::map<Fracture::UUID,std::map<Fracture::UUID, std::shared_ptr<RenderBatch>>> mBatches;
+		std::map<Fracture::UUID, bool> mStentilTestPass;
 	
 		uint32_t CurrentProgram;
 		int ActiveTextureUnits = 0;

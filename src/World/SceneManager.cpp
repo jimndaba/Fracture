@@ -283,7 +283,6 @@ void Fracture::SceneManager::UnloadScene(const std::string& name)
 
 void Fracture::SceneManager::UnloadSceneByID(const UUID& scene_ID)
 {
-
     {
         mScenes[scene_ID]->mScriptReg.clear();
         mScenes[scene_ID]->ComponentReg.clear();
@@ -325,6 +324,11 @@ std::map<Fracture::UUID, int> Fracture::SceneManager::SetSceneByID(const UUID& s
         if (!mScenes[scene_ID])
         {
             return LoadSceneByID(scene_ID);
+        }
+        else
+        {
+            mCurrentScene = mScenes[scene_ID];
+            return std::map<UUID, int>();
         }
     }
 

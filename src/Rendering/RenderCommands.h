@@ -145,8 +145,10 @@ namespace Fracture
 
 		void DepthFunction(Fracture::RenderContext* cntxt, DepthFunc fnc);
 		void DepthMask(Fracture::RenderContext* cntxt,bool mask);
+		void StencilMask(Fracture::RenderContext* cntxt, uint32_t mask);
 		void BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor);
 		void StencilFunction(Fracture::RenderContext* cntxt, StencilFunc fnc, int ref, uint32_t mask);
+		void StencilOperation(Fracture::RenderContext* cntxt, StencilOp_TestResult sfail, StencilOp_TestResult dfail, StencilOp_TestResult sdpass);
 		void SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a);
 
 		void BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao);

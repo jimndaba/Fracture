@@ -15,7 +15,8 @@ std::string Fracture::GlobalRenderTargets::GlobalSSAO = "Global_SSAO";
 std::string Fracture::GlobalRenderTargets::GlobalSSR = "Global_SSR";
 std::string Fracture::GlobalRenderTargets::GlobalDebug = "Global_Debug";
 std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows";
-std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";;
+std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";
+std::string Fracture::GlobalRenderTargets::GlobalOutline = "Global_Outline";
 
 std::string ShaderTypeToString(Fracture::ShaderType tpe)
 {
@@ -79,6 +80,7 @@ void Fracture::GraphicsDevice::Startup()
         FRACTURE_INFO("Version: {}", (const char*)glGetString(GL_VERSION));
 
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
         glEnable(GL_CULL_FACE);
         glEnable(GL_SCISSOR_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -349,14 +351,15 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     unsigned int MinFilter = GLenum(info.minFilter);
     unsigned int MagFilter = GLenum(info.magFilter);
     unsigned int wrap = GLenum(info.Wrap);
-
+    unsigned int levels = 1;
    
     glGenTextures(1, &texture->Handle);   glCheckError();
     glBindTexture(target, texture->Handle); glCheckError();
+    //glCreateTextures(target,1 ,&texture->Handle); glCheckError();
 
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_S, wrap);   glCheckError();
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_T, wrap);   glCheckError();
-    if (info.TextureTarget == TextureTarget::TextureCubeMap)
+    if (info.TextureTarget == TextureTarget::TextureCubeMap )
         glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_R, wrap);   glCheckError();
 
     glTextureParameteri(texture->Handle, GL_TEXTURE_MIN_FILTER, MinFilter);   glCheckError();
@@ -388,7 +391,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     {
         if (info.TextureTarget == TextureTarget::TextureCubeMap)
         {
-            uint32_t levels = 1;
+            //uint32_t levels = 1;
             if (info.GenMinMaps && info.MipLevels == 0)
             {
                 levels = info.CaclMipLevels();
@@ -402,11 +405,13 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
 
 
             for (unsigned int i = 0; i < 6; ++i)
-            {
-                //note that we store each face with 16 bit floating point values
-                glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL);
+            {             
+             
+                glTextureSubImage3D(texture->Handle,0, 0, 0,i, info.Width, info.Height, 1, textureformat, formatType, NULL);
                 glCheckError();
 
+                //glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL);
+                //glCheckError();
             }
         }
         else
@@ -448,7 +453,10 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
 
     if (info.GenMinMaps)
     {
-        glGenerateTextureMipmap(texture->Handle);
+       /// glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, levels);
+        //glCheckError();
+
+        glGenerateMipmap(target);
         glCheckError();
     }
 

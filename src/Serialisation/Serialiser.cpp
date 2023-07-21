@@ -258,6 +258,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const std::vector<
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const std::vector<int>& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 
 void Fracture::ISerialiser::Property(const std::string& name, const std::vector<unsigned char>& value)
 {
@@ -775,6 +789,22 @@ std::vector<unsigned int> Fracture::ISerialiser::UINT_VECTOR(const std::string& 
 		return j.at(mCollectionIndex.top())[name];
 	}
 	return std::vector<unsigned int>();
+}
+
+std::vector<int> Fracture::ISerialiser::INT_VECTOR(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	return std::vector<int>();
 }
 
 std::vector<uint32_t> Fracture::ISerialiser::UINT32_VECTOR(const std::string& name)

@@ -399,6 +399,9 @@
     <ClInclude Include="src\Game\FractureGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\SceneRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -735,6 +738,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\FractureGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\SceneRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\OutlinePass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

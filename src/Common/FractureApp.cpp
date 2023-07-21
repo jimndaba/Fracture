@@ -3,7 +3,7 @@
 #include "Common/AppWindow.h"
 #include "glad/glad.h"
 
-std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::mWindow = nullptr;
+//std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::mWindow = nullptr;
 
 Fracture::IFractureApp::IFractureApp()
 {
@@ -13,18 +13,21 @@ Fracture::IFractureApp::~IFractureApp()
 {
 }
 
-bool Fracture::IFractureApp::ShouldWindowClose()
+bool Fracture::IFractureApp::ShouldWindowClose(Fracture::AppWindow* window)
 {
-    return mWindow->ShouldWindowClose();
+    return window->ShouldWindowClose();
 }
 
-bool Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
+std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
 {
     /* Initialize the library */
-    if (!glfwInit())
-        return false;
+    if (!info->mSharedContext)
+    {
+        if (!glfwInit())
+            return nullptr;
+    }
 
-    mWindow = std::make_unique<AppWindow>(*info);
+    auto mWindow = std::make_unique<AppWindow>(*info);
 
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -49,28 +52,37 @@ bool Fracture::IFractureApp::CreateAppWindow(const WindowCreationInfo* info)
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
         glfwWindowHint(GLFW_DECORATED, info->IsBordered);
-
-        mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, glfwGetPrimaryMonitor(), NULL);
+        if(info->mSharedContext)
+            mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, glfwGetPrimaryMonitor(), info->mSharedContext);
+        else
+        {
+            mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, glfwGetPrimaryMonitor(), NULL);
+            gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+            glfwSwapInterval(1);
+        }
     }
     else
     {
-        mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, NULL, NULL);
+        
+        if (info->mSharedContext)
+            mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, NULL, info->mSharedContext);
+        else
+        {
+
+            mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, NULL, NULL);
+            gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+            glfwSwapInterval(1);
+        }
     }
 
 
     if (!mWindow->Context)
     {
         glfwTerminate();
-        return false;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(mWindow->Context);  
-
-    glfwSwapInterval(1);
-
+        return nullptr;
+    }    
     mWindow->Init();
    
-    return true;
+    return std::move(mWindow);
 }
 
