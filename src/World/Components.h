@@ -341,6 +341,24 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
+	struct ReflectionProbeComponent : public IComponent
+	{
+		ReflectionProbeComponent(const UUID& id) :IComponent(), entity(id) {}
+		ReflectionProbeComponent(ReflectionProbeComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			//TO DO LIGHTPROBE COPY
+		}
+
+		bool IsBaked = false;
+		UUID entity;
+		UUID ReflectionMap;		
+
+		float Strength = 1.0f;
+		int Resolution = 16;	
+		float BoundingSphereRadius = 10.0f;
+	};
+
 	struct ShadowCasterComponent : public IComponent
 	{
 		UUID entity;
@@ -348,9 +366,7 @@ namespace Fracture
 		int ShadowResolution = 1024;
 	};
 
-
 	enum class CollisionDetectionType { Discrete, Continuous, ContinuousSpeculative };
-
 
 	struct RigidbodyComponent : public IComponent
 	{

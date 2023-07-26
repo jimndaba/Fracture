@@ -25,20 +25,22 @@ void Fracture::ForwardPass::Execute()
 
 	int clearValue = 1;
 
+	//for (const auto& probe : SceneManager::GetAllComponents<LightProbeComponent>())
+	//{
+	//	if (probe->ProbeType == LightProbeComponent::LightProbeType::Local)
+	//	{
+	//		LightProbeSystem s;
+	//		s.Bake(Context, probe->GetID());
+	//	}
+	//}
+	
 
 	RenderCommands::SetRenderTarget(Context, global_color);
 	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
-	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
-
-	//RenderCommands::ClearImage(Context, global_color->ColorAttachments[1]->Handle, 0, &clearValue);
-	
-
-	//Issue out Batch Commands.
-
-	
+	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);	
 
 	if (!Context->mBatches.empty())
 	{
@@ -65,7 +67,7 @@ void Fracture::ForwardPass::Execute()
 			if (material->IsTranslucent)
 			{
 				RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
-				RenderCommands::BlendFunction(Context, Fracture::BlendFunc::OneMinusSrcAlpha, Fracture::BlendFunc::SrcAlpha);
+				RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
 			}
 
 			if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
@@ -92,9 +94,18 @@ void Fracture::ForwardPass::Execute()
 				const auto& brdflut = GraphicsDevice::Instance()->GetBRDFLUTMap(global_probes[0]->GetID());
 				Fracture::RenderCommands::SetTexture(Context, shader.get(), "brdfLUT", brdflut, (int)TEXTURESLOT::BRDF);
 
-			}
+				
 
-			
+			}
+			if (material->IsReflective)
+			{
+				
+				
+			}
+			const auto& probes = GraphicsDevice::Instance()->GetLightProbeIrradiance();
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aReflections", probes, (int)TEXTURESLOT::Reflections);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "_ReflectionFlag", material->IsReflective);
+
 			if (batches.second.size())
 			{
 				//Set Shader

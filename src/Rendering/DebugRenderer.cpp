@@ -2,6 +2,7 @@
 #include "DebugRenderer.h"
 #include "GraphicsDevice.h"
 #include "Assets/AssetManager.h"
+#include "World/SceneManager.h"
 #include "RenderCommands.h"
 #include "AABB.h"
 
@@ -66,6 +67,7 @@ void Fracture::DebugRenderer::OnRender()
     mContext->BeginState(SortKey());
 
     const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
+  
     if (target)
     {
 
@@ -97,7 +99,25 @@ void Fracture::DebugRenderer::OnRender()
 
         if (mBillboardDrawCalls.size() > 0)
         {
+            const auto& shader = AssetManager::GetShader("Billboard");
+            RenderCommands::UseProgram(mContext.get(), shader->Handle);
+            RenderCommands::Disable(mContext.get(), GLCapability::FaceCulling);
+            RenderCommands::SetUniform(mContext.get(),shader.get(),"CameraRight", SceneManager::ActiveCamera()->Right);
+            RenderCommands::SetUniform(mContext.get(),shader.get(),"CameraUp", SceneManager::ActiveCamera()->Up);
+                
+            for (auto& command : mBillboardDrawCalls)
+            { 
+                RenderCommands::SetTexture(mContext.get(), shader.get(), "IconTexture", command.second.Image, 0);
 
+                for (int i = 0; i < command.second.Positions.size(); i++)
+                {                 
+                    RenderCommands::SetUniform(mContext.get(), shader.get(), "Color", command.second.Colors[i]);
+                    RenderCommands::SetUniform(mContext.get(), shader.get(), "BillboardPos", command.second.Positions[i]);
+                    RenderCommands::SetUniform(mContext.get(), shader.get(), "BillboardSize", glm::vec2(1.0f));
+                    RenderBillboardQuad(mContext.get());                   
+                }
+            }
+            RenderCommands::UseProgram(mContext.get(), 0);
         }
 
 
@@ -293,6 +313,50 @@ void Fracture::DebugRenderer::DrawCone(const glm::vec3& pos, const glm::quat& ro
 
 
 
+}
+
+
+void Fracture::DebugRenderer::RenderBillboardQuad(RenderContext* Context)
+{
+    if (QuadVAO == 0)
+    {
+        float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+            // positions   // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+
+
+        glGenVertexArrays(1, &QuadVAO);
+        glGenBuffers(1, &QuadVBO);
+        // fill buffer
+        glBindBuffer(GL_ARRAY_BUFFER, QuadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+        // link vertex attributes
+        glBindVertexArray(QuadVAO);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        glEnableVertexAttribArray(2);       
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    // render Cube
+    Fracture::RenderCommands::BindVertexArrayObject(Context, QuadVAO);
+    DrawArray cmd =
+    {
+        .mode = DrawMode::Triangles,
+        .first = 0,
+        .count = 6
+    };
+    Fracture::RenderCommands::DrawArray(Context, cmd);
 }
 /*
 void DrawContext::DrawCone(Transform const& transform, Radians coneAngle, float length, Float4 const& color, float thickness, DepthTestState depthTestState, Seconds TTL)

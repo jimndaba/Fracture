@@ -69,6 +69,42 @@ void Fracture::RenderCommands::ClearColor(Fracture::RenderContext* cntxt, const 
 		glClearColor(color.R, color.G, color.B, color.A);
 	};
 	cntxt->Push(cmd);
+
+
+}
+
+void Fracture::RenderCommands::CheckFrameBuffer(Fracture::RenderContext* cntxt,uint32_t fb)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [fb]() {
+
+		auto fboState = glCheckNamedFramebufferStatus(fb, GL_FRAMEBUFFER);
+		if (fboState != GL_FRAMEBUFFER_COMPLETE)
+		{
+			if (fboState == GL_FRAMEBUFFER_UNDEFINED)
+			{
+				FRACTURE_ERROR("GL_FRAMEBUFFER_UNDEFINED");
+			}
+			if (fboState == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+			{
+				FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+			}
+			if (fboState == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+			{
+				FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT ");
+			}
+			if (fboState == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+			{
+				FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+			}
+			if (fboState == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS)
+			{
+				FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS");
+			}
+			
+		}
+	};
+	cntxt->Push(cmd);
 }
 
 void Fracture::RenderCommands::SetViewport(Fracture::RenderContext* cntxt, float width, float height,float x, float y)
@@ -303,7 +339,8 @@ void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext*
 	Fracture::Command cmd;
 	cmd.fnc = [fb, attachment_index, attachment_layer,texture,level]() {
 		glNamedFramebufferTextureLayer(fb, GL_COLOR_ATTACHMENT0 + attachment_index,texture,level, attachment_layer);
-		mErroCallback("FrameBufferTextureTarget");
+		//glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_index, (GLuint)texture, level, attachment_layer);
+		mErroCallback("glNamedFramebufferTextureLayer");
 		
 	};
 	cntxt->Push(cmd);
@@ -314,12 +351,22 @@ void Fracture::RenderCommands::FrameBufferAttachTexture(Fracture::RenderContext*
 {
 	Fracture::Command cmd;
 	cmd.fnc = [fb, attachment_index, texture, level]() {
-		glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0+attachment_index, texture, level);
+		glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0 + attachment_index, texture, level);
+		mErroCallback("glNamedFramebufferTexture");
+	};
+	cntxt->Push(cmd);
+	
+}
+
+void Fracture::RenderCommands::FrameBufferAttachTexture3D(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t face, uint32_t texture, uint32_t level, uint32_t layer)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [fb, attachment_index, texture, level,layer,face]() {
+		glFramebufferTexture3D(fb, GL_COLOR_ATTACHMENT0 + attachment_index, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, texture, level,layer);
 		mErroCallback("AttachTexture");
 
 	};
 	cntxt->Push(cmd);
-	
 }
 
 

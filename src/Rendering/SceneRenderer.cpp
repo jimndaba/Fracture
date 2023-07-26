@@ -103,6 +103,29 @@ void Fracture::SceneRenderer::Init()
 			Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_IrradianceBuffer", sky_info);
 		}
 		{
+			Fracture::RenderTargetCreationInfo sky_info;
+			sky_info.Width = 32;
+			sky_info.Height = 32;
+			Fracture::TextureCreationInfo desc;
+			desc.Width = 32;
+			desc.Height = 32;
+			desc.TextureTarget = TextureTarget::TextureCubeMapArray;
+			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+			desc.format = Fracture::TextureFormat::RGB;
+			desc.internalFormat = Fracture::InternalFormat::RGB16F;
+			desc.formatType = Fracture::TextureFormatType::Float;
+			desc.minFilter = TextureMinFilter::Linear;
+			desc.magFilter = TextureMagFilter::Linear;
+			desc.Wrap = TextureWrap::ClampToEdge;
+			desc.Name = "LightProbeTexture";
+			desc.TextureArrayLevels = 100 * 6;
+			desc.MipLevels = 0;
+			desc.GenMinMaps = false;
+			sky_info.ColorAttachments.push_back(desc);
+			sky_info.HasRenderBuffer = true;
+			Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget(GlobalRenderTargets::GlobalIrradiance, sky_info);
+		}
+		{
 			Fracture::TextureCreationInfo desc;
 			desc.Width = 512;
 			desc.Height = 512;
@@ -277,8 +300,8 @@ void Fracture::SceneRenderer::Begin()
 				auto& parent = SceneManager::GetComponent<HierachyComponent>(light->GetID())->Parent;
 				auto& parent_transform = SceneManager::GetComponent<TransformComponent>(parent)->WorldTransform;
 
-				glm::vec4 position = parent_transform * glm::vec4(transform->Position, 1.0);
-				glm::vec4 angle = parent_transform * glm::vec4(glm::normalize(glm::eulerAngles(transform->Rotation)), 1.0);
+				glm::vec4 position = parent_transform * glm::vec4(transform->Position, 1.0);			
+				glm::vec3 angle = glm::normalize(glm::vec3(transform->Rotation.x, transform->Rotation.y, transform->Rotation.z));
 
 				D.DirectionXYZ_StrengthW = glm::vec4(angle.x, angle.y, angle.z, light->Strength);
 				D.PositionXYZ_RadiusW = position;
@@ -287,6 +310,27 @@ void Fracture::SceneRenderer::Begin()
 				D.enabled = 1;
 				D.type = 3;
 				lightdata.push_back(D);
+			}
+		}
+		{
+			int probelightIndex = 0;
+			const auto& lights = SceneManager::GetAllComponents<LightProbeComponent>();			
+			for (const auto& light : lights)
+			{
+				if (light->IsBaked && light->ProbeType == LightProbeComponent::LightProbeType::Local)
+				{
+					const auto& transform = SceneManager::GetComponent<TransformComponent>(light->GetID());
+					for (int probe = 0; probe < light->ProbePositions.size(); probe++)
+					{
+						LightData D;
+						D.PositionXYZ_RadiusW = light->ProbePositions[probe];
+						D.enabled = 1;
+						D.type = 4;
+						D.ProbeID = probelightIndex;
+						lightdata.push_back(D);
+						probelightIndex++;
+					}
+				}
 			}
 		}
 

@@ -132,7 +132,7 @@ void Fracture::ShadowCasterPass::Execute()
 
                 Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
 
-                if (batch.second->OpaqueDrawCalls.size())
+                if (batch.second->ShadowDrawCalls.size())
                 {
                     DrawElementsInstancedBaseVertex cmd;
                     cmd.basevertex = batch.second->OpaqueDrawCalls[0]->basevertex;

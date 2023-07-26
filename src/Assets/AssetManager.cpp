@@ -528,6 +528,7 @@ std::shared_ptr<Fracture::Shader> Fracture::AssetManager::GetShader(const std::s
 				mShaders[it->first] = GraphicsDevice::Instance()->CreateShader(desc);
 				mShaders[it->first]->IsLoaded = true;
 				mShaders[it->first]->ID = it->first;
+				FRACTURE_TRACE("Created Shader : {}", Name);
 			}
 			return mShaders[it->first];
 		}

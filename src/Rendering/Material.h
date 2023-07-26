@@ -22,6 +22,7 @@ namespace Fracture
 		Irradiance,
 		Prefilter,
 		BRDF,
+		Reflections,
 		TotalSlots
 	};
 
@@ -92,6 +93,7 @@ namespace Fracture
 
 		bool CastsShadows = true;
 		bool IsTranslucent = false;
+		bool IsReflective = false;
 		bool IsDirty = false;
 
 		Fracture::UUID ID;

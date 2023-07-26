@@ -63,7 +63,11 @@ namespace Fracture
 		std::shared_ptr<Buffer> mlineBufferSSBO;
 	
 		uint32_t LineVAO;
+		uint32_t QuadVAO;
+		uint32_t QuadVBO;
 		static int g_numCircleVertices;
+
+		void RenderBillboardQuad(RenderContext* Context);
 	};
 
 

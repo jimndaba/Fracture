@@ -129,6 +129,7 @@
     <ClInclude Include="src\Physics\PhysicsEvents.h" />
     <ClInclude Include="src\Physics\PhysicsHelpers.h" />
     <ClInclude Include="src\Physics\PhysicsManager.h" />
+    <ClInclude Include="src\Physics\PhysicsMaterial.h" />
     <ClInclude Include="src\Physics\PhysicsScene.h" />
     <ClInclude Include="src\Physics\Ray.h" />
     <ClInclude Include="src\Rendering\AABB.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
     <ClCompile Include="src\Physics\PhysicsHelpers.cpp" />
     <ClCompile Include="src\Physics\PhysicsManager.cpp" />
+    <ClCompile Include="src\Physics\PhysicsMaterial.cpp" />
     <ClCompile Include="src\Physics\PhysicsScene.cpp" />
     <ClCompile Include="src\Physics\Ray.cpp" />
     <ClCompile Include="src\Rendering\AABB.cpp" />

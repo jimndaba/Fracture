@@ -68,14 +68,16 @@ void Fracture::PhysicsManager::Init()
 	mPhysicsLayers[Default_layer]->Name = "Default";
 	mPhysicsLayers[Default_layer]->Changable = false;
 	mPhysicsLayers[Default_layer]->AlwaysTrue = true;
+	mPhysicsLayers[Default_layer]->Handle = (1 << 0);
 	mLayerOrder.push_back(Default_layer);
 
 	int layer_id = 1;
-	for (int i = 1; i < 32; i++)
+	for (uint32_t i = 1; i < 32; i++)
 	{
 		auto layer = std::make_shared<PhysicsLayer>();
 		layer->LayerID = layer_id;
 		mPhysicsLayers[layer->LayerID] = layer;
+		mPhysicsLayers[layer->LayerID]->Handle = (1 << i);
 		mLayerOrder.push_back(layer->LayerID);
 		layer_id += 1;
 	}
@@ -201,6 +203,38 @@ void Fracture::PhysicsManager::OnDebugDraw()
 	}
 }
 
+void Fracture::PhysicsManager::AddPhysicsGroup(int GroupID)
+{
+	mInstance->mPhysicsGroups[GroupID] = std::make_shared<Fracture::PhysicsGroup>(GroupID);
+	mInstance->mGroupOrder.push_back(GroupID);
+}
+
+void Fracture::PhysicsManager::SetupFiltering(UUID entity)
+{
+	if (SceneManager::HasComponent<ColliderComponent>(entity))
+	{
+		PxFilterData filterData;
+		const auto& collider = SceneManager::GetComponent<ColliderComponent>(entity);
+		if (collider)
+		{
+			//Which Layer this belongs to;
+			filterData.word0 = (physx::PxU32)(1 << mPhysicsLayers[collider->CollisionLayer]->LayerID);	
+			
+			physx::PxU32 mask = 0;
+			for (auto s : mPhysicsGroups[collider->CollisionGroup]->InLayer)
+			{
+				if(s.second)
+					mask |= (1 << mPhysicsLayers[s.first]->LayerID);
+			}
+			filterData.word1 = mask;			
+		}
+
+		mInstance->mColliders[entity]->setSimulationFilterData(filterData);
+	}
+
+
+}
+
 void Fracture::PhysicsManager::OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt)
 {
 	if (HasActor(evnt->id))
@@ -240,6 +274,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 			//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, rigidbody->DetectionType == CollisionDetectionType::ContinuousSpeculative);
+		
 
 			physx::PxRigidDynamicLockFlags flags; 			
 			if (rigidbody->AngularConstraints[0])
@@ -292,10 +327,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 					mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 					mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 					mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-					PxFilterData filterData;
-					filterData.word0 = FilterGroup::eOne; // word0 = own ID
-					filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-					mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+					SetupFiltering(mEntity);
 
 					break;
 				}
@@ -305,11 +337,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 					mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 					mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 					mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-
-					PxFilterData filterData;
-					filterData.word0 = FilterGroup::eOne; // word0 = own ID
-					filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-					mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+					SetupFiltering(mEntity);
 					break;
 				}
 				case ColliderType::Capsule:
@@ -318,10 +346,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 					mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 					mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 					mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-					PxFilterData filterData;
-					filterData.word0 = FilterGroup::eOne; // word0 = own ID
-					filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-					mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+					SetupFiltering(mEntity);
 
 					break;
 				}
@@ -416,10 +441,7 @@ void Fracture::PhysicsManager::AddActors()
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-						PxFilterData filterData;
-						filterData.word0 = FilterGroup::eOne; // word0 = own ID
-						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
+						SetupFiltering(mEntity);
 						break;
 					}
 					case ColliderType::Box:
@@ -428,12 +450,7 @@ void Fracture::PhysicsManager::AddActors()
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-
-						PxFilterData filterData;
-						filterData.word0 = FilterGroup::eOne; // word0 = own ID
-						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
-					
+						SetupFiltering(mEntity);					
 						break;
 					}
 					case ColliderType::Capsule:
@@ -442,11 +459,7 @@ void Fracture::PhysicsManager::AddActors()
 						mInstance->mMaterials[mEntity] = PhysicsManager::GetPhysicsSDK().createMaterial(0.6, rigidbody->Friction, rigidbody->Bouncyness);
 						mInstance->mColliders[mEntity] = physx::PxRigidActorExt::createExclusiveShape(*mInstance->mActors[mEntity], geometry, *mInstance->mMaterials[mEntity]);
 						mInstance->mColliders[mEntity]->setLocalPose(PhysicsHelpers::ToPhysXTransform(collider->Offset, glm::vec3(0.0f)));
-						PxFilterData filterData;
-						filterData.word0 = FilterGroup::eOne; // word0 = own ID
-						filterData.word1 = FilterGroup::eOne;	// word1 = ID mask to filter pairs that trigger a contact callback
-						mInstance->mColliders[mEntity]->setSimulationFilterData(filterData);
-
+						SetupFiltering(mEntity);
 						break;
 					}
 					}

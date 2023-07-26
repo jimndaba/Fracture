@@ -38,7 +38,7 @@ void Fracture::RenderContext::BeginScene()
 	for (const auto& prefab : prefabInstancecomponents)
 	{
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
-		AddToBatch(prefab.get(), transform->WorldTransform, prefab->GetID());
+		AddToBatch(prefab.get(), transform->WorldTransform, prefab->Parent_PrefabID);
 	}
 
 	for (auto batches : mBatches)
@@ -85,10 +85,13 @@ void Fracture::RenderContext::Sort(DepthSortOrder order)
 
 void Fracture::RenderContext::Render()
 {
+	currentIndex = 0;
 	for (const auto& cmd : Commands)
 	{
-		cmd.fnc();
+		if(cmd.fnc)
+			cmd.fnc();
 		GraphicsDevice::Instance()->CHECKGLERRRORS();
+		currentIndex++;
 	}
 
 	Commands.clear();

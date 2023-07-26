@@ -17,6 +17,7 @@ std::string Fracture::GlobalRenderTargets::GlobalDebug = "Global_Debug";
 std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows";
 std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";
 std::string Fracture::GlobalRenderTargets::GlobalOutline = "Global_Outline";
+std::string Fracture::GlobalRenderTargets::GlobalIrradiance = "Global_Irradiance";
 
 std::string ShaderTypeToString(Fracture::ShaderType tpe)
 {
@@ -127,6 +128,8 @@ void Fracture::GraphicsDevice::Startup()
 
     mPostProcessPipeline = std::make_shared<PostProcessPipeline>();
     mPostProcessPipeline->Init();
+
+    CreateLightprobeMap(32);
 
 }
 
@@ -355,11 +358,11 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
    
     glGenTextures(1, &texture->Handle);   glCheckError();
     glBindTexture(target, texture->Handle); glCheckError();
-    //glCreateTextures(target,1 ,&texture->Handle); glCheckError();
+   
 
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_S, wrap);   glCheckError();
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_T, wrap);   glCheckError();
-    if (info.TextureTarget == TextureTarget::TextureCubeMap )
+    if (info.TextureTarget == TextureTarget::TextureCubeMap || info.TextureTarget == TextureTarget::TextureCubeMapArray)
         glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_R, wrap);   glCheckError();
 
     glTextureParameteri(texture->Handle, GL_TEXTURE_MIN_FILTER, MinFilter);   glCheckError();
@@ -372,26 +375,96 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, borderColor);
         glCheckError();
     }
+    
     if (info.TextureTarget == TextureTarget::Texture2DArray || info.TextureTarget == TextureTarget::Texture3D)
     {
+        //uint32_t levels = 1;
+        if (info.GenMinMaps && info.MipLevels == 0)
+        {
+            levels = info.CaclMipLevels();
+        }
+        else
+        {
+            levels = info.MipLevels;
+        }
 
+       
         if (info.data.size())
         {
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());
             glCheckError();
         }
         else
         {
-            glTexImage3D(target, 0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL); 
-            glCheckError();
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glTexImage3D(target,0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL);      glCheckError();            
         }
 
     }
-    else
-    {
-        if (info.TextureTarget == TextureTarget::TextureCubeMap)
+
+    if (info.TextureTarget == TextureTarget::TextureCubeMapArray)
+    {        //uint32_t levels = 1;
+        if (info.GenMinMaps && info.MipLevels == 0)
         {
-            //uint32_t levels = 1;
+            levels = info.CaclMipLevels();
+        }
+        else
+        {
+            levels = info.MipLevels;
+        }
+
+        if (info.data.size())
+        {
+            //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());
+            glCheckError();
+        }
+        else
+        {
+          
+            //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            //glTexImage3D(target, 0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL);      glCheckError();
+            glTexStorage3D(target, 1, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels); glCheckError();
+            //glTextureStorage3D(texture->Handle,1, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels); glCheckError();
+
+            for (int ai = 0; ai < texture->Description.TextureArrayLevels; ai++)
+            {
+                for (int fi = 0; fi < 6; fi++)
+                {
+                    glTexSubImage3D(target, 0, 0, 0, ai, info.Width, info.Height, 1,textureformat,formatType,NULL);
+                }
+            }
+            glCheckError();
+        }
+    }
+
+    if (info.TextureTarget == TextureTarget::TextureCubeMap)
+    {
+        //uint32_t levels = 1;
+        if (info.GenMinMaps && info.MipLevels == 0)
+        {
+            levels = info.CaclMipLevels();
+        }
+        else
+        {
+            levels = info.MipLevels;
+        }
+
+        glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
+        //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        for (unsigned int i = 0; i < 6; ++i)
+        {
+            glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();
+
+        }
+    }
+
+    if (info.TextureTarget == TextureTarget::Texture2D)
+    {
+        if (info.data.size() || info.texture_data != nullptr)
+        {
+            uint32_t levels = 1;
             if (info.GenMinMaps && info.MipLevels == 0)
             {
                 levels = info.CaclMipLevels();
@@ -400,56 +473,29 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             {
                 levels = info.MipLevels;
             }
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            if (!info.data.empty())
+                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.data.data()); glCheckError();
 
-            glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
-
-
-            for (unsigned int i = 0; i < 6; ++i)
-            {             
-             
-                glTextureSubImage3D(texture->Handle,0, 0, 0,i, info.Width, info.Height, 1, textureformat, formatType, NULL);
-                glCheckError();
-
-                //glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL);
-                //glCheckError();
-            }
+            if (info.texture_data)
+                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.texture_data); glCheckError();
         }
         else
         {
-            if (info.data.size() || info.texture_data != nullptr)
-            {               
-                uint32_t levels = 1;
-                if (info.GenMinMaps && info.MipLevels == 0)
-                {
-                    levels = info.CaclMipLevels();
-                }
-                else
-                {
-                    levels = info.MipLevels;
-                }
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                if(!info.data.empty())
-                    glTexImage2D(target, 0,internalFormat, info.Width, info.Height,0,textureformat,formatType,info.data.data()); glCheckError();
-
-                if(info.texture_data)
-                    glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.texture_data); glCheckError();
+            uint32_t levels = 1;
+            if (info.GenMinMaps && info.MipLevels == 0)
+            {
+                levels = info.CaclMipLevels();
             }
             else
-            {                
-                uint32_t levels = 1;
-                if (info.GenMinMaps && info.MipLevels == 0)
-                {
-                    levels = info.CaclMipLevels();
-                }
-                else
-                {
-                    levels = info.MipLevels;
-                }       
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, NULL); glCheckError();
+            {
+                levels = info.MipLevels;
             }
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, NULL); glCheckError();
         }
     }
+
 
     if (info.GenMinMaps)
     {
@@ -460,10 +506,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         glCheckError();
     }
 
-    if (info.data.size())
-    {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      
-    }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glBindTexture(target, 0);
        
 }
@@ -504,6 +547,48 @@ Fracture::UUID Fracture::GraphicsDevice::CreateBRDFLUT(const TextureCreationInfo
     return texture_ID;
 }
 
+void Fracture::GraphicsDevice::CreateLightprobeMap(int Resolution)
+{
+    {
+        Fracture::TextureCreationInfo desc;
+        desc.Width = Resolution;
+        desc.Height = Resolution;
+        desc.TextureTarget = TextureTarget::TextureCubeMapArray;
+        desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+        desc.format = Fracture::TextureFormat::RGB;
+        desc.internalFormat = Fracture::InternalFormat::RGB16F;
+        desc.formatType = Fracture::TextureFormatType::Float;
+        desc.minFilter = TextureMinFilter::Linear;
+        desc.magFilter = TextureMagFilter::Linear;
+        desc.Wrap = TextureWrap::ClampToEdge;
+        desc.Name = "LightProbeTexture";
+        desc.TextureArrayLevels = MAX_LIGHTPROBES * 6;
+        desc.MipLevels = 0;
+        desc.GenMinMaps = false;
+        mLightProbeArray = std::make_shared<Texture>(desc);
+        CreateTexture(mLightProbeArray, desc);
+    }
+    {
+        Fracture::TextureCreationInfo desc;
+        desc.Width = Resolution;
+        desc.Height = Resolution;
+        desc.TextureTarget = TextureTarget::TextureCubeMapArray;
+        desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+        desc.format = Fracture::TextureFormat::RGB;
+        desc.internalFormat = Fracture::InternalFormat::RGB16F;
+        desc.formatType = Fracture::TextureFormatType::Float;
+        desc.minFilter = TextureMinFilter::Linear;
+        desc.magFilter = TextureMagFilter::Linear;
+        desc.Wrap = TextureWrap::ClampToEdge;
+        desc.Name = "LightProbeIrradinaceTexture";
+        desc.TextureArrayLevels = MAX_LIGHTPROBES * 6;
+        desc.MipLevels = 0;
+        desc.GenMinMaps = false;
+        mLightProbeIrradianceArray = std::make_shared<Texture>(desc);
+        CreateTexture(mLightProbeIrradianceArray, desc);
+    }
+}
+
 uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
 {
     const auto& lightProbe = SceneManager::GetComponent<LightProbeComponent>(id);
@@ -523,7 +608,7 @@ uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
     desc.format = Fracture::TextureFormat::RGB;
     desc.internalFormat = Fracture::InternalFormat::RGB16F;
     desc.formatType = Fracture::TextureFormatType::Float;
-    desc.minFilter = TextureMinFilter::Linear;
+    desc.minFilter = TextureMinFilter::LinearMipMapLinear;
     desc.magFilter = TextureMagFilter::Linear;
     desc.Wrap = TextureWrap::ClampToEdge;
     desc.Name = "LightProbeTexture";
@@ -591,6 +676,20 @@ uint32_t Fracture::GraphicsDevice::GetBRDFLUTMap(UUID entity_id)
 uint32_t Fracture::GraphicsDevice::GetQUADVAO()
 {
     return QuadVAO;
+}
+
+uint32_t Fracture::GraphicsDevice::GetLightProbeMap()
+{
+    if (mLightProbeArray)
+        return mLightProbeArray->Handle;
+    return 0;
+}
+
+uint32_t Fracture::GraphicsDevice::GetLightProbeIrradiance()
+{
+    if (mLightProbeIrradianceArray)
+        return mLightProbeIrradianceArray->Handle;
+    return 0;
 }
 
 
@@ -1035,7 +1134,26 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
     auto fboState = glCheckNamedFramebufferStatus(target->Handle, GL_FRAMEBUFFER);
     if (fboState != GL_FRAMEBUFFER_COMPLETE)
     {
-        FRACTURE_ERROR("Framebuffer incomplete: {}", fboState);
+        if (fboState == GL_FRAMEBUFFER_UNDEFINED)
+        {
+            FRACTURE_ERROR("GL_FRAMEBUFFER_UNDEFINED");
+        }
+        if (fboState == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+        {
+            FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+        }
+        if (fboState == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+        {
+            FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT ");
+        }
+        if (fboState == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+        {
+            FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+        }
+        if (fboState == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS)
+        {
+            FRACTURE_ERROR("GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS");
+        }
     }
 
     return target;
@@ -1105,7 +1223,7 @@ unsigned int Fracture::GraphicsDevice::CompileShader(const std::string& name, co
     }
     catch (std::ifstream::failure e)
     {
-        FRACTURE_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
+        FRACTURE_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: {}", path);
     }
     const char* vShaderCode = shadercode.c_str();
 

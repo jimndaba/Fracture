@@ -116,6 +116,7 @@ namespace Fracture
 	
 		uint32_t CurrentProgram;
 		int ActiveTextureUnits = 0;
+		int currentIndex = 0;
 		Viewport ContextViewport;
 		Scissor ContextScissor;
 		bool CullFaceEnabled = true;

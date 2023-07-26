@@ -23,6 +23,7 @@ namespace Fracture
 		static std::string GlobalDirectShadows;
 		static std::string GlobalFinalOut;
 		static std::string GlobalOutline;
+		static std::string GlobalIrradiance;
 	};
 
 	enum class ShaderUniformIndex
@@ -91,9 +92,12 @@ namespace Fracture
 		glm::vec4 ComprX_Y_Z_InnerW = glm::vec4(0);
 		glm::vec4 CnstX_LnrY_QuadZ_OuterW = glm::vec4(0);
 		glm::vec4 Diffuse = glm::vec4(0);
-		int enabled = 0;//0_ OFF, 1 _ ON
-		int type = 0; // 0 _ invalid ,1 _ Direc, 2 _ Point , 3 _ Spot
-		glm::vec2 _pad;
+		//0_ OFF, 1 _ ON
+		int enabled = 0;
+		// 0 _ invalid ,1 _ Direc, 2 _ Point , 3 _ Spot , 4 _LocalProbe
+		int type = 0; 
+		int ProbeID = -1;
+		int _pad;
 	};
 
 	struct PostProcessPipeline;
@@ -114,6 +118,8 @@ namespace Fracture
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
 		std::shared_ptr<PostProcessPipeline> mPostProcessPipeline;
+		std::shared_ptr<Texture> mLightProbeArray;
+		std::shared_ptr<Texture> mLightProbeIrradianceArray;
 
 		const int MAX_LIGHTS = 1024;
 		std::vector<LightData> mLightData;
@@ -154,10 +160,13 @@ namespace Fracture
 		UUID CreateIrradianceMap(const TextureCreationInfo& info);
 		UUID CreateBRDFMap(const TextureCreationInfo& info);
 		UUID CreateBRDFLUT(const TextureCreationInfo& info);
+		void CreateLightprobeMap(int Resolution);
 		uint32_t GetIrradianceMap(UUID entity_id);
 		uint32_t GetSpecularBRDFMap(UUID entity_id);
 		uint32_t GetBRDFLUTMap(UUID entity_id);
 		uint32_t GetQUADVAO(); 
+		uint32_t GetLightProbeMap(); 
+		uint32_t GetLightProbeIrradiance(); 
 
 		void UpdateSkybox(RenderContext* Context, SkyboxComponent* component);
 		void RenderCaptureCube(RenderContext* Context);
@@ -183,6 +192,8 @@ namespace Fracture
 		
 		int Viewport_Width = 1920;
 		int Viewport_Height = 1080;
+		const int MAX_POINTLIGHTS = 30;
+		const int MAX_LIGHTPROBES = 30;
 
 		unsigned int CompileShader(const std::string& name, const std::string& path, ShaderType shadertype);
 		void checkCompileErrors(const std::string& name, unsigned int shader, const std::string& type);

@@ -39,6 +39,7 @@ namespace Fracture
 		bool Changable = true;
 		bool AlwaysFalse = false;
 		bool AlwaysTrue = false;
+		uint32_t Handle = 0;
 	};
 
 	struct PhysicsGroup
@@ -46,7 +47,7 @@ namespace Fracture
 		PhysicsGroup(Fracture::UUID id = UUID()) :GroupID(id) {}
 		int GroupID;
 		std::string Name;
-		std::unordered_map<UUID, bool> InLayer;
+		std::unordered_map<int, bool> InLayer;
 		bool Changable = true;
 		bool AlwaysFalse = false;
 		bool AlwaysTrue = false;
@@ -82,6 +83,9 @@ namespace Fracture
 		void RemoveActors();
 		void RemoveActor(UUID entity);
 		void OnDebugDraw();
+
+		void AddPhysicsGroup(int GroupID);
+		void SetupFiltering(UUID entity);
 
 		void OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt);
 		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
