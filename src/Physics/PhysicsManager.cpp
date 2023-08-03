@@ -271,6 +271,7 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 
 			const auto& actor = mInstance->mActors[mEntity]->is<physx::PxRigidDynamic>();
 			actor->setMass(rigidbody->Mass);
+		
 			//actor->setSolverIterationCounts(settings.SolverIterations,settings.SolverVelocityIterations);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, rigidbody->DetectionType == CollisionDetectionType::Continuous);
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, rigidbody->DetectionType == CollisionDetectionType::ContinuousSpeculative);

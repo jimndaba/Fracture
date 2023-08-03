@@ -18,6 +18,7 @@ std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows
 std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";
 std::string Fracture::GlobalRenderTargets::GlobalOutline = "Global_Outline";
 std::string Fracture::GlobalRenderTargets::GlobalIrradiance = "Global_Irradiance";
+std::string Fracture::GlobalRenderTargets::GlobalGrabs = "Global_GrabBuffers";
 
 std::string ShaderTypeToString(Fracture::ShaderType tpe)
 {
@@ -135,7 +136,7 @@ void Fracture::GraphicsDevice::Startup()
 
 
 //Update Global Frame Buffers
-void Fracture::GraphicsDevice::UpdateGlobalFrameData(const GlobalFrameData& data)
+void Fracture::GraphicsDevice::UpdateGlobalFrameData(GlobalFrameData data)
 {   
     GraphicsDevice::Instance()->UpdateBufferData(mGFrameData.get(), 0, sizeof(GlobalFrameData), &data);
 }

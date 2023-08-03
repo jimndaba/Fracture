@@ -107,7 +107,7 @@ namespace Fracture
 		VertexBufferLayout m_layout;
 	};
 
-	class Buffer
+	struct Buffer
 	{
 	public:
 		Buffer();

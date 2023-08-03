@@ -110,6 +110,7 @@ void Fracture::SceneManager::AttachScript(const UUID& entity_id, const UUID& scr
     auto scriptcomp = std::make_shared<ScriptComponent>(entity_id);
     scriptcomp->HasScriptAttached = true;
     scriptcomp->Script = script_id;  
+    scriptcomp->HasStarted = false;
     mCurrentScene->mScriptReg[entity_id].push_back(std::move(scriptcomp));
    
     mScript_Entities[script_id].push_back(entity_id);
@@ -194,7 +195,7 @@ void Fracture::SceneManager::SetActiveCamera(const Fracture::UUID& camera_id)
     if (HasComponent<CameraComponent>(camera_id))
     {
         mCurrentScene->ActiveCameraID = camera_id;
-        mActiveCamera = GetComponent<CameraComponent>(mCurrentScene->ActiveCameraID);
+        //mActiveCamera = GetComponent<CameraComponent>(mCurrentScene->ActiveCameraID);
     }
 }
 
@@ -242,6 +243,15 @@ void Fracture::SceneManager::InstanceSceneFromFile(ScenePrefab prefab)
 
 
     }
+}
+
+std::shared_ptr<Fracture::Scene> Fracture::SceneManager::DirectLoadScene(const std::string& path)
+{
+    SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+    loader.Open(path);
+    return loader.ReadScene();
+    //for (const auto& r : loader.MeshesToLoad)
+    //    Eventbus::Publish<AsyncLoadMeshEvent>(r.first);
 }
 
 std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& scene_ID)

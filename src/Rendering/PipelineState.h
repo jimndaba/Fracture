@@ -44,6 +44,13 @@ namespace Fracture
 		Always = GL_ALWAYS
 	};
 
+	enum class BlendEq
+	{
+		Func_ADD = GL_FUNC_ADD,
+		Func_Subtract = GL_FUNC_SUBTRACT,
+		Func_Rev_Subtract = GL_FUNC_REVERSE_SUBTRACT
+	};
+
 	enum class BlendFunc
 	{
 		Zero = GL_ZERO,

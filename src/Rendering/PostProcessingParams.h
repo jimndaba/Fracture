@@ -60,9 +60,16 @@ namespace Fracture
 		float SSR_Strength = 0.1f;
 		
 
-		//SSR
+		//Chromattic
 		bool ChromaticAb_Enabled = true;
 		float ChromaticAb_Amount = 0.1f;
+
+		//Blooom
+		bool BloomEnabled = true;
+		float BloomStrength = 1.0f;
+		float BloomThreshold = 1.0f;
+		float BloomRadius = 0.005f;
+		float BloomDirtMaskIntensity = 0.0f;
 	};
 }
 

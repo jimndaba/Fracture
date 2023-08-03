@@ -135,8 +135,8 @@ namespace Fracture
 		void Disable(Fracture::RenderContext* cntxt, GLCapability abiltiy);
 		void ClearTarget(Fracture::RenderContext* cntxt, uint32_t flags);
 		void ClearColor(Fracture::RenderContext* cntxt, const Fracture::Colour& color);
-		void SetViewport(Fracture::RenderContext* cntxt, float width, float height, float x, float y);
-		void SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x, float y);
+		void SetViewport(Fracture::RenderContext* cntxt, float width, float height, float x = 0, float y = 0 );
+		void SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x = 0, float y = 0);
 		void SetRenderTarget(Fracture::RenderContext* cntxt, RenderTarget* rt);
 		void SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt);
 		void SetRenderBuffer(Fracture::RenderContext* cntxt, uint32_t rb);
@@ -147,6 +147,7 @@ namespace Fracture
 		void DepthMask(Fracture::RenderContext* cntxt,bool mask);
 		void StencilMask(Fracture::RenderContext* cntxt, uint32_t mask);
 		void BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor);
+		void BlendEquation(Fracture::RenderContext* cntxt, BlendEq eq);
 		void StencilFunction(Fracture::RenderContext* cntxt, StencilFunc fnc, int ref, uint32_t mask);
 		void StencilOperation(Fracture::RenderContext* cntxt, StencilOp_TestResult sfail, StencilOp_TestResult dfail, StencilOp_TestResult sdpass);
 		void SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a);
@@ -166,6 +167,10 @@ namespace Fracture
 		void FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers);
 		void RenderBufferTextureStorage(Fracture::RenderContext* cntxt, uint32_t rb, InternalFormat internal, int x, int y);
 		void CheckFrameBuffer(Fracture::RenderContext* cntxt, uint32_t fb);
+
+		void BlitFramebuffer(Fracture::RenderContext* cntxt,const std::string& From, const std::string& to);
+		void BlitDepthFramebuffer(Fracture::RenderContext* cntxt,const std::string& From, const std::string& to);
+		void BlitFramebuffer(Fracture::RenderContext* cntxt, uint32_t fb_from, uint32_t fb_to);
 		
 		void DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& cmd);
 		void DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& cmd);

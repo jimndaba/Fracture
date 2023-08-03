@@ -24,6 +24,7 @@ namespace Fracture
 		static std::string GlobalFinalOut;
 		static std::string GlobalOutline;
 		static std::string GlobalIrradiance;
+		static std::string GlobalGrabs;
 	};
 
 	enum class ShaderUniformIndex
@@ -51,7 +52,8 @@ namespace Fracture
 		Color,
 		Picking,
 		Normal,
-		Position
+		Position,
+		Emissive
 	};
 
 
@@ -83,6 +85,7 @@ namespace Fracture
 		glm::mat4 Camera_InvView;
 		glm::vec4 Camera_Position;
 		glm::vec4 Near_Far_Width_Height;
+		glm::vec4 DeltaTimeX_PAD3;		
 	};
 
 	struct LightData
@@ -134,7 +137,7 @@ namespace Fracture
 
 
 		void Startup();
-		void UpdateGlobalFrameData(const GlobalFrameData& data);
+		void UpdateGlobalFrameData(GlobalFrameData data);
 		void UpdateGlobalRenderSettings();
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void Shutdown();

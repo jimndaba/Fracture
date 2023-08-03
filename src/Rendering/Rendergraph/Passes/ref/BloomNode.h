@@ -38,13 +38,14 @@ namespace Fracture
 		BloomParams Properties;
 
 	private:
-		std::unique_ptr<RenderTarget> mBloomFBO;
+	
 		std::unique_ptr<Shader> shader;
 		std::unique_ptr<Shader> bloomfinal;
 		std::unique_ptr<Shader> upsampleShader;
 		std::unique_ptr<Shader> downsampleShader;
 		std::unique_ptr<Shader> brightpassShader;
 		std::unique_ptr<Texture> mDirtMask;
+		std::unique_ptr<RenderTarget> mBloomFBO;
 		std::vector<std::shared_ptr<BloomMipMap>>  BloomMipMaps;
 
 	};

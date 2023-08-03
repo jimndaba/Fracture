@@ -4,6 +4,8 @@
 #include "World/Components.h"
 #include "World/SceneManager.h"
 #include "World/WorldEvents.h"
+#include "Scripting/ScriptManager.h"
+#include "Scripting/LuaScript.h"
 
 Fracture::SceneSerialiser::SceneSerialiser(IOMode mode, SerialiseFormat format) :
 ISerialiser(mode, format)
@@ -526,6 +528,68 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					{
 						BeginStruct("LuaScript");
 						Property("ScriptID", script.first);
+
+						BeginCollection("Properties");
+						{
+							for (const auto& prop : ScriptManager::mScripts[script.first]->GetProperties())
+							{
+								BeginStruct("Property");
+								switch (prop.second->Type)
+								{
+								case PROPERTY_TYPE::UUID:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", (uint32_t)prop.second->ID);
+									break;
+								}
+								case PROPERTY_TYPE::BOOL:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->Bool);
+									break;
+								}
+								case PROPERTY_TYPE::COLOR3:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->Color3);
+									break;
+								}
+								case PROPERTY_TYPE::COLOR4:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->Color4);
+									break;
+								}
+								case PROPERTY_TYPE::FLOAT:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->Float);
+									break;
+								}
+								case PROPERTY_TYPE::INT:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->Int);
+									break;
+								}
+								case PROPERTY_TYPE::STRING:
+								{
+									Property("Name", prop.second->Name);
+									Property("Type", (int)prop.second->Type);
+									Property("Value", prop.second->String);
+									break;
+								}
+								}
+								EndStruct();
+							}
+						}
+						EndCollection();
 						EndStruct();
 					}
 				}
@@ -572,6 +636,68 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 						{
 							BeginStruct("LuaScript");
 							Property("ScriptID", script.first);
+
+							BeginCollection("Properties");
+							{
+								for (const auto& prop : ScriptManager::mScripts[script.first]->GetProperties())
+								{
+									BeginStruct("Property");
+									switch (prop.second->Type)
+									{
+									case PROPERTY_TYPE::UUID:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", (uint32_t)prop.second->ID);
+										break;
+									}
+									case PROPERTY_TYPE::BOOL:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->Bool);
+										break;
+									}
+									case PROPERTY_TYPE::COLOR3:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->Color3);
+										break;
+									}
+									case PROPERTY_TYPE::COLOR4:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->Color4);
+										break;
+									}
+									case PROPERTY_TYPE::FLOAT:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->Float);
+										break;
+									}
+									case PROPERTY_TYPE::INT:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->Int);
+										break;
+									}
+									case PROPERTY_TYPE::STRING:
+									{
+										Property("Name", prop.second->Name);
+										Property("Type", (int)prop.second->Type);
+										Property("Value", prop.second->String);
+										break;
+									}
+									}
+									EndStruct();
+								}
+							}
+							EndCollection();
 							EndStruct();
 						}
 					}
@@ -825,6 +951,89 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 					{
 						auto script_id = ID("ScriptID");
 						SceneManager::AttachScript(new_Scene->RootID, script_id);
+
+						auto luascript = ScriptManager::GetLuaScript(script_id);
+
+						
+						if (BeginCollection("Properties"))
+						{
+							auto properties = luascript->GetProperties();
+							while (CurrentCollectionIndex() < GetCollectionSize())
+							{
+								if (BeginStruct("Property"))
+								{
+									switch ((PROPERTY_TYPE)INT("Type"))
+									{
+										case PROPERTY_TYPE::UUID:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::UUID;
+											prop->ID = ID("Value");
+											properties[prop->Name] = prop;									
+											break;
+										}
+										case PROPERTY_TYPE::BOOL:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::BOOL;
+											prop->Bool = BOOL("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+										case PROPERTY_TYPE::COLOR3:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::COLOR3;
+											prop->Color3 = VEC3("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+										case PROPERTY_TYPE::COLOR4:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::COLOR4;
+											prop->Color4 = VEC4("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+										case PROPERTY_TYPE::FLOAT:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::FLOAT;
+											prop->Float = FLOAT("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+										case PROPERTY_TYPE::INT:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::INT;
+											prop->Int = INT("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+										case PROPERTY_TYPE::STRING:
+										{
+											auto prop = std::make_shared<ScriptProperty>();
+											prop->Name = STRING("Name");
+											prop->Type = PROPERTY_TYPE::STRING;
+											prop->String = STRING("Value");
+											properties[prop->Name] = prop;
+											break;
+										}
+									}
+									EndStruct();
+								}
+								NextInCollection();
+							}
+							EndCollection();
+						}						
 						EndStruct();
 					}
 					NextInCollection();
@@ -874,6 +1083,87 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							{
 								auto script_id = ID("ScriptID");
 								SceneManager::AttachScript(entity_id, script_id);
+								auto luascript = ScriptManager::GetLuaScript(script_id);
+
+								if (BeginCollection("Properties"))
+								{
+									//auto properties = luascript->GetProperties();
+									while (CurrentCollectionIndex() < GetCollectionSize())
+									{
+										if (BeginStruct("Property"))
+										{
+											switch ((PROPERTY_TYPE)INT("Type"))
+											{
+											case PROPERTY_TYPE::UUID:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::UUID;
+												prop->ID = ID("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::BOOL:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::BOOL;
+												prop->Bool = BOOL("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::COLOR3:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::COLOR3;
+												prop->Color3 = VEC3("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::COLOR4:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::COLOR4;
+												prop->Color4 = VEC4("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::FLOAT:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::FLOAT;
+												prop->Float = FLOAT("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::INT:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::INT;
+												prop->Int = INT("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::STRING:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::STRING;
+												prop->String = STRING("Value");
+												luascript->m_Properties[prop->Name] = prop;
+												break;
+											}
+											}
+											EndStruct();
+										}
+										NextInCollection();
+									}
+									EndCollection();
+								}
 								EndStruct();
 							}
 							NextInCollection();
@@ -913,6 +1203,8 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 
 		return new_Scene;
 	}
+
+	return nullptr;
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad()
@@ -1054,6 +1346,88 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 					{
 						auto script_id = ID("ScriptID");
 						SceneManager::AttachScript(prefab.PrefabID, script_id);
+						auto luascript = ScriptManager::GetLuaScript(script_id);
+
+
+						if (BeginCollection("Properties"))
+						{
+							auto properties = luascript->GetProperties();
+							while (CurrentCollectionIndex() < GetCollectionSize())
+							{
+								if (BeginStruct("Property"))
+								{
+									switch ((PROPERTY_TYPE)INT("Type"))
+									{
+									case PROPERTY_TYPE::UUID:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::UUID;
+										prop->ID = ID("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::BOOL:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::BOOL;
+										prop->Bool = BOOL("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::COLOR3:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::COLOR3;
+										prop->Color3 = VEC3("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::COLOR4:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::COLOR4;
+										prop->Color4 = VEC4("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::FLOAT:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::FLOAT;
+										prop->Float = FLOAT("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::INT:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::INT;
+										prop->Int = INT("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::STRING:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = STRING("Name");
+										prop->Type = PROPERTY_TYPE::STRING;
+										prop->String = STRING("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									}
+									EndStruct();
+								}
+								NextInCollection();
+							}
+							EndCollection();
+						}
 						EndStruct();
 					}
 					NextInCollection();
@@ -1102,6 +1476,89 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							{
 								auto script_id = ID("ScriptID");
 								SceneManager::AttachScript(prefab.PrefabID, script_id);
+								auto luascript = ScriptManager::GetLuaScript(script_id);
+
+
+								if (BeginCollection("Properties"))
+								{
+									auto properties = luascript->GetProperties();
+									while (CurrentCollectionIndex() < GetCollectionSize())
+									{
+										if (BeginStruct("Property"))
+										{
+											switch ((PROPERTY_TYPE)INT("Type"))
+											{
+											case PROPERTY_TYPE::UUID:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::UUID;
+												prop->ID = ID("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::BOOL:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::BOOL;
+												prop->Bool = BOOL("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::COLOR3:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::COLOR3;
+												prop->Color3 = VEC3("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::COLOR4:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::COLOR4;
+												prop->Color4 = VEC4("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::FLOAT:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::FLOAT;
+												prop->Float = FLOAT("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::INT:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::INT;
+												prop->Int = INT("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											case PROPERTY_TYPE::STRING:
+											{
+												auto prop = std::make_shared<ScriptProperty>();
+												prop->Name = STRING("Name");
+												prop->Type = PROPERTY_TYPE::STRING;
+												prop->String = STRING("Value");
+												properties[prop->Name] = prop;
+												break;
+											}
+											}
+											EndStruct();
+										}
+										NextInCollection();
+									}
+									EndCollection();
+								}
+
 								EndStruct();
 							}
 							NextInCollection();

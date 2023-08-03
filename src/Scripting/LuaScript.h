@@ -23,6 +23,7 @@ namespace Fracture
 		VEC4,
 		COLOR3,
 		COLOR4,
+		ARRAY
 	};
 
 	struct ScriptProperty
@@ -41,6 +42,7 @@ namespace Fracture
 			glm::vec3 Color3;
 			glm::vec4 Color4;
 			Fracture::UUID ID;
+			std::vector<UUID> Array;
 		};
 
 		ScriptProperty() {};
@@ -82,9 +84,11 @@ namespace Fracture
 		void OnPropertyUpdate(sol::state& state, const Fracture::ScriptProperty& prop);
 
 		
-		std::vector<std::shared_ptr<Fracture::ScriptProperty>> GetProperties();
+	std::unordered_map <std::string ,std::shared_ptr<Fracture::ScriptProperty>> GetProperties();
 
 		LuaScriptRegistry Description;
+		std::unordered_map <std::string, std::shared_ptr<Fracture::ScriptProperty>> m_Properties;
+
 	private:
 		std::string m_filepath;
 		bool isStarted = false;
@@ -97,7 +101,7 @@ namespace Fracture
 		std::shared_ptr<sol::protected_function> m_onCollision;
 		std::shared_ptr<sol::protected_function> m_onTrigger;
 
-		std::vector<std::shared_ptr<Fracture::ScriptProperty>> m_Properties;
+	
 
 	};
 

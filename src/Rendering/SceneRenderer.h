@@ -23,7 +23,7 @@ namespace Fracture
 
 		void Init();
 
-		void Begin();
+		void Begin(float dt);
 
 		void QueueLightProbesToBake(UUID id);
 
@@ -44,6 +44,7 @@ namespace Fracture
 		std::queue<Fracture::UUID> mLightProbesToRender;
 
 		bool DrawGrid = false;
+		Fracture::GlobalFrameData data;
 	};
 
 

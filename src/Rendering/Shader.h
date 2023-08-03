@@ -29,9 +29,17 @@ namespace Fracture
 		SAMPLECUBE,
 		SAMPLER1DARRAY,
 		SAMPLER2DARRAY,
-		SAMPLERCUBEARRAT,
-		NONE
+		SAMPLERCUBEARRAY,
+		GLOBALDEPTH,
+		GLOBALGRAB,
+		GLOBALNORMAL,
+		GLOBALPOSITION,
+		GLOBALDELTATIME,
+		NONE,
+		TotalTypes
 	};
+
+	std::string UniformToString(UniformType t);
 
 	struct Uniform
 	{
@@ -47,7 +55,7 @@ namespace Fracture
 			glm::vec4 COLOR4;
 			glm::mat2 MAT2;
 			glm::mat3 MAT3;
-			glm::mat4 MAT4;
+			glm::mat4 MAT4;			
 			//std::string TextureName;
 			//uint32_t TextureID;
 		};
@@ -70,7 +78,6 @@ namespace Fracture
 		std::string TextureName = "";
 		Fracture::UUID TextureID;
 		Data data = {};
-
 	};
 
 	struct ShaderUniform

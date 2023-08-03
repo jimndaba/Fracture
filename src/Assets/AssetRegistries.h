@@ -54,6 +54,7 @@ namespace Fracture
 	struct MaterialRegistry
 	{
 		UUID ID;
+		UUID ShaderID;
 		std::string Name;
 		std::string Path;
 	};

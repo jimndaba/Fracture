@@ -57,30 +57,73 @@ void Fracture::ZPrePass::Execute()
 		}
 
 		const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
+
+		if (!material->DepthWrite)
+			continue;
+
+
 		Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
 
-		for (auto batch: batches.second)
+		if (batches.second.size())
 		{
-			const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
-
-			Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);	
-
-			std::vector<std::shared_ptr<MeshDrawCall>> drawcalls;
-			if (material->IsTranslucent)
-				drawcalls = batch.second->TransparentDrawCalls;
-			else
-				drawcalls = batch.second->OpaqueDrawCalls;
-
-			if (drawcalls.size())
+			//Set Shader
+			for (auto batch : batches.second)
 			{
-				DrawElementsInstancedBaseVertex cmd;
-				cmd.basevertex = drawcalls[0]->basevertex;
-				cmd.instancecount = batch.second->Transforms.size();
-				cmd.indices = drawcalls[0]->SizeOfindices;
-				cmd.count = drawcalls[0]->IndexCount;
-				Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
+
+				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
+
+				std::vector<std::shared_ptr<MeshDrawCall>> drawcalls = batch.second->OpaqueDrawCalls;
+				if (drawcalls.size())
+				{
+					DrawElementsInstancedBaseVertex cmd;
+					cmd.basevertex = drawcalls[0]->basevertex;
+					cmd.instancecount = batch.second->Transforms.size();
+					cmd.indices = drawcalls[0]->SizeOfindices;
+					cmd.count = drawcalls[0]->IndexCount;
+					Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+				}
+
+				Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 			}
+
 		}
+
+		/*
+		if (material->IsTranslucent)
+		{
+			RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
+			RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
+		}
+
+		if (batches.second.size())
+		{
+			//Set Shader
+			for (auto batch : batches.second)
+			{
+				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
+
+				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
+
+				std::vector<std::shared_ptr<MeshDrawCall>> drawcalls = batch.second->TransparentDrawCalls;
+				if (drawcalls.size())
+				{
+					DrawElementsInstancedBaseVertex cmd;
+					cmd.basevertex = drawcalls[0]->basevertex;
+					cmd.instancecount = batch.second->Transforms.size();
+					cmd.indices = drawcalls[0]->SizeOfindices;
+					cmd.count = drawcalls[0]->IndexCount;
+					Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+				}
+
+				Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+			}
+
+		}
+
+		if (material->IsTranslucent)
+			RenderCommands::Disable(Context, Fracture::GLCapability::Blending);		
+		*/
 	}
 
 	RenderCommands::ReleaseRenderTarget(Context);

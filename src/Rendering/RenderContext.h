@@ -121,7 +121,7 @@ namespace Fracture
 		Scissor ContextScissor;
 		bool CullFaceEnabled = true;
 		RenderContextFlags Flags;
-
+		float deltaTime;
 	
 	};
 }

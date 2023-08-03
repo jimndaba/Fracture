@@ -107,6 +107,30 @@ void Fracture::RenderCommands::CheckFrameBuffer(Fracture::RenderContext* cntxt,u
 	cntxt->Push(cmd);
 }
 
+void Fracture::RenderCommands::BlitFramebuffer(Fracture::RenderContext* cntxt, const std::string& From, const std::string& to)
+{
+	const auto& from_fb = GraphicsDevice::Instance()->GetGlobalRenderTarget(From);
+	const auto& to_fb = GraphicsDevice::Instance()->GetGlobalRenderTarget(to);
+
+	Fracture::Command cmd;
+	cmd.fnc = [from_fb,to_fb]() {
+		glBlitNamedFramebuffer(from_fb->Handle, to_fb->Handle, 0, 0, 1920,1080, 0, 0, 1920, 1080,
+			GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+		glBlitNamedFramebuffer(from_fb->Handle, to_fb->Handle, 0, 0, 1920, 1080, 0, 0, 1920, 1080,
+			GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	};
+	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::BlitDepthFramebuffer(Fracture::RenderContext* cntxt, const std::string& From, const std::string& to)
+{
+}
+
+void Fracture::RenderCommands::BlitFramebuffer(Fracture::RenderContext* cntxt, uint32_t fb_from, uint32_t fb_to)
+{	
+}
+
 void Fracture::RenderCommands::SetViewport(Fracture::RenderContext* cntxt, float width, float height,float x, float y)
 {
 	Fracture::Command cmd;
@@ -235,6 +259,16 @@ void Fracture::RenderCommands::BlendFunction(Fracture::RenderContext* cntxt, Ble
 		glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
 	};
 	cntxt->Push(cmd);
+}
+
+void Fracture::RenderCommands::BlendEquation(Fracture::RenderContext* cntxt, BlendEq eq)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [eq]() {
+		glBlendEquation((GLenum)eq);
+	};
+	cntxt->Push(cmd);
+	
 }
 
 void Fracture::RenderCommands::StencilFunction(Fracture::RenderContext* cntxt, StencilFunc fnc,int ref,uint32_t mask)
@@ -789,6 +823,31 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 					const auto& texture = AssetManager::GetTextureByID(uniform.TextureID);
 					if (texture)
 						SetTexture(cntxt, shader, uniform.Name, texture->Handle, material->TextureUnits[uniform.Name]);
+					break;
+				}
+				case UniformType::GLOBALDEPTH:
+				{
+					material->GlobalDepth(cntxt, shader, 0);
+					break;
+				}
+				case UniformType::GLOBALGRAB:
+				{
+					material->GlobalGrab(cntxt, shader, 0);
+					break;
+				}
+				case UniformType::GLOBALNORMAL:
+				{
+					material->GlobalNormal(cntxt, shader, 0);
+					break;
+				}
+				case UniformType::GLOBALPOSITION:
+				{
+					material->GlobalPosition(cntxt, shader, 0);
+					break;
+				}
+				case UniformType::GLOBALDELTATIME:
+				{
+					material->GlobalDeltaTime(cntxt, shader, cntxt->deltaTime);
 					break;
 				}
 			}

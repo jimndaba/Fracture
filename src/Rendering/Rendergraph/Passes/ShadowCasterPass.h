@@ -38,7 +38,7 @@ namespace Fracture
 
 
 		std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4& proj, const glm::mat4& view);
-		glm::mat4 getLightSpaceMatrix(const float fov, const float Cnear, const float Cfar, const glm::mat4 view);
+		glm::mat4 getLightSpaceMatrix(const float fov, const float Cnear, const float Cfar, const glm::mat4 view, glm::vec3 cam_pos, glm::vec3 cam_forward);
 		std::vector<glm::mat4> getLightSpaceMatrices(CameraComponent* camera);
 	};
 

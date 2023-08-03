@@ -31,6 +31,7 @@ namespace Fracture
 		void onStart();
 		void onExit();
 		void onUpdate(float dt);
+		void onFixedUpdate();
 		void Shutdown();
 
 		static void Instantiate(UUID Entity,glm::vec3 position);
@@ -43,6 +44,7 @@ namespace Fracture
 		void Reload(LuaScript* mscript);
 		static void LoadScript(const std::shared_ptr<LuaScript>& mscript);
 		static std::shared_ptr<LuaScript> GetInstanceOfScript(const UUID& id);
+		static std::shared_ptr<LuaScript> GetLuaScript(const UUID& id);
 
 		static void CreateNewScript(const LuaScriptRegistry& reg);
 
@@ -57,7 +59,7 @@ namespace Fracture
 
 
 
-		static sol::state lua;
+		static std::unique_ptr<sol::state> lua;
 		template<class T>
 		static std::shared_ptr<T> GetComponentByType(const Fracture::UUID& id);
 		static Fracture::Entity* GetEntity(const std::string& name);

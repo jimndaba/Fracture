@@ -16,7 +16,7 @@ Fracture::ShadowCasterPass::ShadowCasterPass(const std::string& name, RenderCont
 void Fracture::ShadowCasterPass::Setup()
 {
     auto farPlane = SceneManager::ActiveCamera()->Far;
-	shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
+	shadowCascadeLevels = { (farPlane / 85.0f), (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 15.0f) };
     GraphicsDevice::Instance()->RenderSettings.ShadowCascadeCont = shadowCascadeLevels.size();
     
     Fracture::RenderTargetCreationInfo info;
@@ -177,7 +177,7 @@ std::vector<glm::vec4>  Fracture::ShadowCasterPass::getFrustumCornersWorldSpace(
     return frustumCorners;
 }
 
-glm::mat4  Fracture::ShadowCasterPass::getLightSpaceMatrix(const float fov, const float Cnear, const float Cfar, const glm::mat4 view)
+glm::mat4  Fracture::ShadowCasterPass::getLightSpaceMatrix(const float fov, const float Cnear, const float Cfar, const glm::mat4 view,glm::vec3 cam_pos, glm::vec3 cam_forward)
 {
     const auto& Lights = SceneManager::GetAllComponents<SunlightComponent>();
 
@@ -193,11 +193,13 @@ glm::mat4  Fracture::ShadowCasterPass::getLightSpaceMatrix(const float fov, cons
         glm::radians(fov), (float)1920 / (float)1080, Cnear,
         Cfar);
     const auto corners = getFrustumCornersWorldSpace(proj, view);
-
+    
     glm::vec3 center = glm::vec3(0, 0, 0);
+
     for (const auto& v : corners)
     {
         center += glm::vec3(v);
+      
     }
     center /= corners.size();
 
@@ -206,7 +208,7 @@ glm::mat4  Fracture::ShadowCasterPass::getLightSpaceMatrix(const float fov, cons
     glm::vec3 lightdir = glm::normalize(-glm::eulerAngles(transform->Rotation));
     
     glm::vec3 eye = glm::vec3(lightdir.x, lightdir.y, lightdir.z);
-    const auto lightView = glm::lookAt(center + eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
+    const auto lightView = glm::lookAt( center + eye,  center, glm::vec3(0.0f, 1.0f, 0.0f));
 
     float minX = std::numeric_limits<float>::max();
     float maxX = std::numeric_limits<float>::min();
@@ -257,15 +259,15 @@ std::vector<glm::mat4>  Fracture::ShadowCasterPass::getLightSpaceMatrices(Camera
     {
         if (i == 0)
         {
-            ret.push_back(getLightSpaceMatrix(camera->FoV, camera->Near, shadowCascadeLevels[i], camera->ViewMatrix));
+            ret.push_back(getLightSpaceMatrix(camera->FoV, camera->Near, shadowCascadeLevels[i], camera->ViewMatrix,camera->Position,camera->Front));
         }
         else if (i < shadowCascadeLevels.size())
         {
-            ret.push_back(getLightSpaceMatrix(camera->FoV, shadowCascadeLevels[i - 1], shadowCascadeLevels[i], camera->ViewMatrix));
+            ret.push_back(getLightSpaceMatrix(camera->FoV, shadowCascadeLevels[i - 1], shadowCascadeLevels[i], camera->ViewMatrix,camera->Position, camera->Front));
         }
         else
         {
-            ret.push_back(getLightSpaceMatrix(camera->FoV, shadowCascadeLevels[i - 1], camera->Far, camera->ViewMatrix));
+            ret.push_back(getLightSpaceMatrix(camera->FoV, shadowCascadeLevels[i - 1], camera->Far, camera->ViewMatrix, camera->Position, camera->Front));
         }
     }
     return ret;

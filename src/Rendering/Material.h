@@ -8,6 +8,8 @@
 
 namespace Fracture
 {
+	struct RenderContext;
+
 	enum class TEXTURESLOT
 	{
 		GlobalAO,
@@ -23,6 +25,10 @@ namespace Fracture
 		Prefilter,
 		BRDF,
 		Reflections,
+		GlobalGrab,
+		GlobalDepth,
+		GlobalPosition,
+		GlobalNormal,
 		TotalSlots
 	};
 
@@ -74,14 +80,22 @@ namespace Fracture
 		Fracture::UUID AOTexture;
 		Fracture::UUID EmmissionTexture;
 
+
+		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit)> GlobalDepth;
+		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit)> GlobalGrab;
+		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit)> GlobalNormal;
+		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit)> GlobalPosition;
+		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, float dt)> GlobalDeltaTime;
+
+
 		glm::vec4 AlbedoColour = glm::vec4(1.0);
 		glm::vec4 SpecularColour = glm::vec4(1.0);
 		glm::vec4 EmissionColour = glm::vec4(0.0);;
-		float RoughnessLevel = 0.0f;
+		float RoughnessLevel = 0.5f;
 		float SpecularLevel = 128.0f;
 		float SpecularIntensity = 1.0f;
 		float AOLevel = 1.0f;
-		float MetalicLevel = 0.0f;
+		float MetalicLevel = 0.1f;
 		float EmmisionStrength = 0.0f;
 
 
@@ -94,6 +108,7 @@ namespace Fracture
 		bool CastsShadows = true;
 		bool IsTranslucent = false;
 		bool IsReflective = false;
+		bool DepthWrite = true;
 		bool IsDirty = false;
 
 		Fracture::UUID ID;

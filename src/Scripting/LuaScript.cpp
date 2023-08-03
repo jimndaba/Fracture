@@ -118,7 +118,7 @@ void Fracture::LuaScript::DoScript(sol::state& state)
 {
     state.script_file(Description.Path);
     BindFunctions(state);
-    BindProperties(state);
+    //BindProperties(state);
 }
 
 void Fracture::LuaScript::Load(sol::state& state)
@@ -199,7 +199,7 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
                 prop->Name = k;
                 prop->Type = PROPERTY_TYPE::BOOL;
                 prop->Bool = mvalue.as<bool>();
-                m_Properties.push_back(prop);
+                m_Properties[prop->Name] = prop;
                 break;
             }
       
@@ -209,7 +209,7 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
                 prop->Name = k;
                 prop->Type = PROPERTY_TYPE::STRING;
                 prop->String = mvalue.as<std::string>();
-                m_Properties.push_back(prop);
+                m_Properties[prop->Name] = prop;
                 break;
             }
             case sol::type::number:
@@ -218,7 +218,21 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
                 prop->Name = k;
                 prop->Type = PROPERTY_TYPE::FLOAT;
                 prop->Float = mvalue.as<float>();
-                m_Properties.push_back(prop);
+                m_Properties[prop->Name] = prop;
+                break;
+            }
+            case sol::type::table:
+            {
+                auto prop = std::make_shared<ScriptProperty>();
+                prop->Name = k;
+                prop->Type = PROPERTY_TYPE::ARRAY;
+                auto t = mvalue.as<sol::table>();
+                //prop->Array.resize(0);
+                for (auto& pair : t) {
+                    prop->Array.push_back(pair.second.as<Fracture::UUID>());
+                }
+                
+                m_Properties[prop->Name] = prop;
                 break;
             }
             case sol::type::userdata:
@@ -243,9 +257,9 @@ void Fracture::LuaScript::BindProperties(sol::state& state)
                 {
                     prop->Type = PROPERTY_TYPE::UUID;
                     prop->ID = mvalue.as<Fracture::UUID>();
-                }
+                }             
                 prop->Name = k;
-                m_Properties.push_back(prop);
+                m_Properties[prop->Name] = prop;
                 break;
             }
       
@@ -303,7 +317,7 @@ void Fracture::LuaScript::OnPropertyUpdate(sol::state& state, const Fracture::Sc
     }
 }
 
-std::vector<std::shared_ptr<Fracture::ScriptProperty>> Fracture::LuaScript::GetProperties()
+std::unordered_map<std::string,std::shared_ptr<Fracture::ScriptProperty>> Fracture::LuaScript::GetProperties()
 {
     return m_Properties;
 }

@@ -13,7 +13,7 @@
 #include "Physics/PhysicsEvents.h"
 #include "World/WorldEvents.h"
 
-sol::state Fracture::ScriptManager::lua;
+std::unique_ptr<sol::state> Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::LuaScript>> Fracture::ScriptManager::mScripts;
 
@@ -96,6 +96,10 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 	auto input = L.create_table("Input");
 	input.set_function("IsKeyDown", [](Fracture::KeyCode key) -> bool {
 		return Input::IsKeyDown(key);
+		});
+
+	input.set_function("IsKeyUp", [](Fracture::KeyCode key) -> bool {
+		return Input::IsKeyUp(key);
 		});
 
 	input.set_function("GetMousePosition", [](){
@@ -210,20 +214,20 @@ void Fracture::ScriptManager::BindMaths(sol::state& L)
 
 void Fracture::ScriptManager::BindPhysics(sol::state& L)
 {
-	lua.set_function("RotateRigidbody", LuaBindPhysics::RotateRigidBody);
-	lua.set_function("SetLinearVelocity", LuaBindPhysics::SetLinearVelocity);
-	lua.set_function("SetAngularVelocity", LuaBindPhysics::SetAngularVelocity);
-	lua.set_function("SetMaxLinearVelocity", LuaBindPhysics::SetMaxLinearVelocity);
-	lua.set_function("SetMaxAngularVelocity", LuaBindPhysics::SetMaxAngularVelocity);
-	lua.set_function("SetGravityDisabled", LuaBindPhysics::SetGravityDisabled);
+	L.set_function("RotateRigidbody", LuaBindPhysics::RotateRigidBody);
+	L.set_function("SetLinearVelocity", LuaBindPhysics::SetLinearVelocity);
+	L.set_function("SetAngularVelocity", LuaBindPhysics::SetAngularVelocity);
+	L.set_function("SetMaxLinearVelocity", LuaBindPhysics::SetMaxLinearVelocity);
+	L.set_function("SetMaxAngularVelocity", LuaBindPhysics::SetMaxAngularVelocity);
+	L.set_function("SetGravityDisabled", LuaBindPhysics::SetGravityDisabled);
 
-	lua.set_function("GetAngularVelocity", LuaBindPhysics::GetAngularVelocity);
-	lua.set_function("GetLinearVelocity", LuaBindPhysics::GetLinearVelocity);
-	lua.set_function("GetMaxAngularVelocity", LuaBindPhysics::GetMaxAngularVelocity);
-	lua.set_function("GetMaxLinearVelocity", LuaBindPhysics::GetMaxLinearVelocity);
+	L.set_function("GetAngularVelocity", LuaBindPhysics::GetAngularVelocity);
+	L.set_function("GetLinearVelocity", LuaBindPhysics::GetLinearVelocity);
+	L.set_function("GetMaxAngularVelocity", LuaBindPhysics::GetMaxAngularVelocity);
+	L.set_function("GetMaxLinearVelocity", LuaBindPhysics::GetMaxLinearVelocity);
 
-	lua.set_function("AddForce", LuaBindPhysics::AddForce);
-	lua.set_function("AddTorque", LuaBindPhysics::AddTorque);
+	L.set_function("AddForce", LuaBindPhysics::AddForce);
+	L.set_function("AddTorque", LuaBindPhysics::AddTorque);
 }
 
 void Fracture::ScriptManager::BindApplication(sol::state& L)
@@ -233,7 +237,9 @@ void Fracture::ScriptManager::BindApplication(sol::state& L)
 
 void Fracture::ScriptManager::Init()
 {
-	lua.open_libraries(
+	lua = std::make_unique<sol::state>();
+	
+	lua->open_libraries(
 		sol::lib::base,
 		sol::lib::package,
 		sol::lib::string,
@@ -244,14 +250,15 @@ void Fracture::ScriptManager::Init()
 		sol::lib::bit32,
 		sol::lib::io
 	);
+	//lua->clear_package_loaders();
 
-	BindCore(lua);
-	BindLog(lua);
-	BindInput(lua);
-	BindFunctions(lua);
-	BindMaths(lua);
-	BindPhysics(lua);
-	LuaBindPhysics::BindPhysicsEvents(&lua);
+	BindCore(*lua.get());
+	BindLog(*lua.get());
+	BindInput(*lua.get());
+	BindFunctions(*lua.get());
+	BindMaths(*lua.get());
+	BindPhysics(*lua.get());
+	LuaBindPhysics::BindPhysicsEvents(lua.get());
 
 	Fracture::Eventbus::Subscribe(this, &ScriptManager::OnCollision);
 
@@ -275,7 +282,7 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnStart(lua, component->GetID());
+			script->OnStart(*lua.get(), component->GetID());
 			component->HasStarted = true;
 		}
 	}	
@@ -292,7 +299,7 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnStart(lua, component->GetID());
+			script->OnStart(*lua.get(), component->GetID());
 		}
 	}
 }
@@ -313,7 +320,7 @@ void Fracture::ScriptManager::onExit()
 			}
 
 			const auto& script = mScripts[component->Script];
-			script->OnExit(lua, component->GetID());
+			script->OnExit(*lua.get(), component->GetID());
 		}
 	}
 
@@ -329,7 +336,7 @@ void Fracture::ScriptManager::onExit()
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnExit(lua,component->GetID());
+			script->OnExit(*lua.get(),component->GetID());
 			component->HasStarted - false;
 		}
 	}
@@ -349,7 +356,7 @@ void Fracture::ScriptManager::onUpdate(float dt)
 				continue;
 			
 			const auto& script = mScripts[component->Script];
-			script->OnUpdate(lua, dt, component->GetID());
+			script->OnUpdate(*lua.get(), dt, component->GetID());
 		}
 	}
 
@@ -365,13 +372,50 @@ void Fracture::ScriptManager::onUpdate(float dt)
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnUpdate(lua, dt, component->GetID());
+			script->OnUpdate(*lua.get(), dt, component->GetID());
+		}
+	}
+}
+
+void Fracture::ScriptManager::onFixedUpdate()
+{
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnFixedUpdate(*lua.get(),1/60.0f, component->GetID());
+		}
+	}
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnFixedUpdate(*lua.get(), 1 / 60.0f, component->GetID());
 		}
 	}
 }
 
 void Fracture::ScriptManager::Shutdown()
 {
+	mScripts.clear();
+	lua.reset();
 }
 
 void Fracture::ScriptManager::Instantiate(UUID Entity, glm::vec3 position)
@@ -393,7 +437,7 @@ void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnCollision(lua, evnt->Collision);
+			script->OnCollision(*lua.get(), evnt->Collision);
 		}
 	}
 
@@ -409,7 +453,7 @@ void Fracture::ScriptManager::OnCollision(const std::shared_ptr<OnCollisionEvent
 				continue;
 
 			const auto& script = mScripts[component->Script];
-			script->OnCollision(lua, evnt->Collision);
+			script->OnCollision(*lua.get(), evnt->Collision);
 		}
 	}
 }
@@ -422,13 +466,13 @@ void Fracture::ScriptManager::RegisterScript(const LuaScriptRegistry& reg)
 void Fracture::ScriptManager::Reload(LuaScript* mscript)
 {
 	FRACTURE_INFO("Script {} Reloaded", mscript->Description.Name);
-	mscript->Reload(lua);
+	mscript->Reload(*lua.get());
 	mscript->IsStarted(false);
 }
 
 void Fracture::ScriptManager::LoadScript(const std::shared_ptr<LuaScript>& mscript)
 {
-	mscript->Load(lua);
+	mscript->Load(*lua.get());
 	mscript->IsStarted(false);
 }
 
@@ -441,6 +485,26 @@ std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScrip
 	}
 
 	return std::make_shared<LuaScript>(mScriptRegister[id]);
+}
+
+std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetLuaScript(const UUID& id)
+{
+	if (mScriptRegister.find(id) == mScriptRegister.end())
+	{
+		FRACTURE_ERROR("Could not find Script");
+		return nullptr;
+	}
+	
+	if (mScripts.find(id) == mScripts.end())
+	{
+		mScripts[id] = std::make_shared<LuaScript>(mScriptRegister[id]);
+		return mScripts[id];
+	}
+	else if (mScripts.find(id) != mScripts.end())
+	{
+		return mScripts[id];
+	}
+	return std::shared_ptr<LuaScript>();
 }
 
 void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
@@ -505,7 +569,7 @@ void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
 
 sol::state* Fracture::ScriptManager::GetState()
 {
-	return &lua;
+	return lua.get();
 }
 
 Fracture::Entity* Fracture::ScriptManager::GetEntity(const std::string& name)

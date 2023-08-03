@@ -7,6 +7,7 @@
 #include "Rendering/Rendergraph/Passes/FXAAPass.h"
 #include "Rendering/Rendergraph/Passes/ToneMappingPass.h"
 #include "Rendering/Rendergraph/Passes/ChromaticAberration.h"
+#include "Rendering/Rendergraph/Passes/BloomPass.h"
 
 Fracture::PostProcessPipeline::PostProcessPipeline()
 {
@@ -72,6 +73,7 @@ void Fracture::PostProcessPipeline::OnSetupPipeline()
 	//HDR Post Processing
 	mPostProcessStack.push_back(std::make_shared<FXAAPass>());
 	mPostProcessStack.push_back(std::make_shared<ChromaticAberrationPass>());
+	mPostProcessStack.push_back(std::make_shared<BloomPass>());
 
 
 	// HDR to LDR

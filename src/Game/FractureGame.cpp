@@ -23,26 +23,10 @@ Fracture::FractureGame::FractureGame()
     
 }
 
-bool Fracture::FractureGame::Run(UUID entry_point, AppWindow* window,SceneRenderer* renderer)
+bool Fracture::FractureGame::Run(AppWindow* window,SceneRenderer* renderer)
 {
-    GameRunning = true;
-    
-    auto resources = SceneManager::SetSceneByID(entry_point);
-    
-    for (const auto& r : resources)
-        Dispatcher->Publish<AsyncLoadMeshEvent>(r.first);
-
-    for (const auto& s : SceneManager::mScript_Entities)
-    {
-        if (mScriptManager->mScripts.find(s.first) == mScriptManager->mScripts.end())
-        {
-            auto script = mScriptManager->GetInstanceOfScript(s.first);
-            script->DoScript(*mScriptManager->GetState());
-            script->BindProperties(*mScriptManager->GetState());
-            mScriptManager->mScripts[s.first] = script;
-        }
-    }
-
+    GameRunning = true;    
+   
     if (SceneManager::CurrentScene())
     {
         Fracture::TransformSystem tSystem{};
@@ -59,50 +43,15 @@ bool Fracture::FractureGame::Run(UUID entry_point, AppWindow* window,SceneRender
     PhysicsManager::Instance()->AddActors();
 
     //TODO On Start Scripts
-    mScriptManager->onStart();
-
-    const auto& mCamera = SceneManager::GetComponent<CameraComponent>(SceneManager::CurrentScene()->ActiveCameraID);
-    if (mCamera)
-    {
-        SceneManager::SetActiveCamera(mCamera);
-    }
    
-    //Update();
-
-    //OnFrameStart(renderer);
-
-    //Shutdown();
+    mScriptManager->onStart();
+    
     return GameRunning;
 }
 
 bool Fracture::FractureGame::Startup(AppWindow* window)
 {
     GameRunning = true;
-
-    /*
-    //logger = std::make_unique<Logger>();
-    if(!CreateGameWindow(window))
-    {
-        return false;
-    }
-
-    Dispatcher = std::make_unique<Fracture::Eventbus>();
-
-    InputManager = std::make_unique<Input>(mWindow.get());
-
-    mDebugRenderer = std::make_unique<DebugRenderer>();
-    mDebugRenderer->OnInit();
-
-    sceneManger = std::make_unique<Fracture::SceneManager>();
-
-    mScriptManager = std::make_unique<ScriptManager>();
-    mScriptManager->Init();
-
-    //mAudioManager = std::make_unique<AudioManager>();
-    //mAudioManager->OnInit();
-
-    //mAudioManager->OnLoadContent();
-    */
     return true;
 }
 
@@ -144,7 +93,6 @@ void Fracture::FractureGame::Update()
 
     mScriptManager->onUpdate(frameTime);
 
-    PhysicsManager::Instance()->FixedUpdate(1.0f / 60.0f);
 
     mAudioManager->OnUpdate(frameTime);
 
@@ -195,9 +143,20 @@ void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
     GraphicsDevice::Instance()->ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
 
-    renderer->Begin();
+    renderer->Begin(0.0f);
 
     renderer->End();
+}
+
+void Fracture::FractureGame::OnDebugDraw()
+{
+    PhysicsManager::Instance()->OnDebugDraw();
+}
+
+void Fracture::FractureGame::FixedUpdate(float dt)
+{
+    mScriptManager->onFixedUpdate();
+    PhysicsManager::Instance()->FixedUpdate(1.0f / 60.0f);
 }
 
 void Fracture::FractureGame::Shutdown()

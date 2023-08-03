@@ -254,7 +254,7 @@ void Fracture::AssetManager::OnLoad()
 	while (!mMeshesToLoad.empty())
 	{
 		auto reg = mMeshesToLoad.front();
-		mMeshFutures[reg.ID]  = std::async(std::launch::async, [reg]() { return MeshLoader::LoadStaticMesh(reg.Path); });		
+		mMeshFutures[reg.ID]  = std::async(std::launch::async, [reg]() { return std::move(MeshLoader::LoadStaticMesh(reg.Path)); });		
 		mMeshesToLoad.pop();
 	}
 

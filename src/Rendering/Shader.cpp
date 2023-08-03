@@ -66,3 +66,39 @@ GLint Fracture::Shader::getUniformLocation(const std::string& name)
     m_ShaderLocationCache[name] = location;
     return location;
 }
+
+std::string Fracture::UniformToString(UniformType t)
+{
+	const std::map<UniformType, std::string> MyEnumStrings {
+		{ UniformType::INT, "INT"},
+		{ UniformType::BOOL,"BOOL" },
+		{ UniformType::FLOAT,"FLOAT" },
+		{ UniformType::VEC2,"VEC2" },
+		{ UniformType::VEC3,"VEC3" },
+		{ UniformType::VEC4,"VEC4" },
+		{ UniformType::IVEC2,"IVEC2" },
+		{ UniformType::IVEC3,"IVEC3" },
+		{ UniformType::IVEC4,"IVEC4" },
+		{ UniformType::BVEC2,"BVEC2" },
+		{ UniformType::BVEC3,"BVEC3" },
+		{ UniformType::BVEC4,"BVEC4" },
+		{ UniformType::COLOR3,"COLOR3" },
+		{ UniformType::COLOR4,"COLOR4" },
+		{ UniformType::MAT2,"MAT2" },
+		{ UniformType::MAT3,"MAT3" },
+		{ UniformType::MAT4,"MAT4" },
+		{ UniformType::SAMPLE2D,"SAMPLE2D" },
+		{ UniformType::SAMPLECUBE,"SAMPLECUBE" },
+		{ UniformType::SAMPLER1DARRAY,"SAMPLER1DARRAY" },
+		{ UniformType::SAMPLER2DARRAY,"SAMPLER2DARRAY" },
+		{ UniformType::SAMPLERCUBEARRAY,"SAMPLERCUBEARRAT" },
+		{ UniformType::GLOBALDEPTH,"GLOBALDEPTH" },
+		{ UniformType::GLOBALGRAB,"GLOBALGRAB" },
+		{ UniformType::GLOBALNORMAL, "GLOBALNORMAL" },
+		{ UniformType::GLOBALPOSITION,"GLOBALPOSITION" },
+		{ UniformType::GLOBALDELTATIME,"GLOBALDELTATIME" },
+		{ UniformType::NONE,"NONE" }
+	};
+	auto   it = MyEnumStrings.find(t);
+	return it == MyEnumStrings.end() ? "Out of range" : it->second;
+}

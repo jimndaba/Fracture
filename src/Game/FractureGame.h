@@ -26,13 +26,15 @@ namespace Fracture
 	public:
 		FractureGame();
 
-		bool Run(UUID entry_point, AppWindow* window = nullptr, SceneRenderer* renderer = nullptr);
+		bool Run(AppWindow* window = nullptr, SceneRenderer* renderer = nullptr);
 		bool Startup(AppWindow* window = nullptr);
 
 		bool CreateGameWindow(AppWindow* window = nullptr);
 
 		void OnLoadContent();
 		void Update();
+		void FixedUpdate(float dt);
+		void OnDebugDraw();
 		void OnFrameStart(SceneRenderer* renderer);
 		void Shutdown();
 

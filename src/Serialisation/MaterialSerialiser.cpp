@@ -48,6 +48,7 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("TextureSpace", (int)material->TextureSpace);
 		Property("TextureTiling", material->TextureTiling);
 		Property("IsTranslucent", material->IsTranslucent);
+		Property("DepthWrite", material->DepthWrite);
 
 
 		BeginCollection("Uniforms");
@@ -79,6 +80,7 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		material->HasAOTexture = BOOL("HasAO");
 		material->IsTranslucent = BOOL("IsTranslucent");
 		material->CastsShadows = BOOL("CastsShadows");
+		material->DepthWrite = BOOL("DepthWrite");
 
 		material->AlbedoTexture = ID("AlbedoTexture");
 		material->SpecularTexture = ID("SpecularTexture");
@@ -94,10 +96,10 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 
 		material->SpecularLevel = FLOAT("SpecularLevel");
 		material->SpecularIntensity = FLOAT("SpecularIntensity");
-		material->SpecularIntensity = FLOAT("RoughnessLevel");
-		material->SpecularIntensity = FLOAT("MetallicLevel");
-		material->SpecularIntensity = FLOAT("EmissionStrength");
-		material->SpecularIntensity = FLOAT("AOLevel");
+		material->RoughnessLevel = FLOAT("RoughnessLevel");
+		material->MetalicLevel = FLOAT("MetallicLevel");
+		material->EmmisionStrength = FLOAT("EmissionStrength");
+		material->AOLevel = FLOAT("AOLevel");
 		
 		
 		material->cullmode = (CullMode)INT("CullMode");
@@ -163,12 +165,54 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 					}
 					case UniformType::SAMPLECUBE:
 					{
+						
 						material->SetTextureByID(STRING("Name"), UniformType::SAMPLECUBE ,ID("Value"));
+						break;
+					}
+					case UniformType::GLOBALDEPTH :
+					{
+						Uniform m;
+						m.type = mType;
+						m.Name = STRING("Name");
+						material->Uniforms.push_back(m);
+						break;
+					}
+					case UniformType::GLOBALGRAB:
+					{
+						Uniform m;
+						m.type = mType;
+						m.Name = STRING("Name");
+						material->Uniforms.push_back(m);
+						break;
+					}
+					case UniformType::GLOBALNORMAL:
+					{
+						Uniform m;
+						m.type = mType;
+						m.Name = STRING("Name");
+						material->Uniforms.push_back(m);
+						break;
+					}
+					case UniformType::GLOBALPOSITION :
+					{
+						Uniform m;
+						m.type = mType;
+						m.Name = STRING("Name");
+						material->Uniforms.push_back(m);
+						break;
+					}
+					case UniformType::GLOBALDELTATIME:
+					{
+						Uniform m;
+						m.type = mType;
+						m.Name = STRING("Name");
+						material->Uniforms.push_back(m);
 						break;
 					}
 					}
 					EndStruct();
 				}
+				
 				NextInCollection();
 			}
 			EndCollection();
@@ -255,6 +299,36 @@ void Fracture::MaterialSerialiser::writeUniforms(Fracture::Uniform uniform)
 			Property("Type", (int)uniform.type);
 			Property("Name", uniform.Name);
 			Property("Value", uniform.TextureID);
+			break;
+		}
+		case UniformType::GLOBALDEPTH:
+		{
+			Property("Type", (int)uniform.type);
+			Property("Name", uniform.Name);
+			break;
+		}
+		case UniformType::GLOBALGRAB:
+		{
+			Property("Type", (int)uniform.type);
+			Property("Name", uniform.Name);
+			break;
+		}
+		case UniformType::GLOBALNORMAL:
+		{
+			Property("Type", (int)uniform.type);
+			Property("Name", uniform.Name);
+			break;
+		}
+		case UniformType::GLOBALPOSITION:
+		{
+			Property("Type", (int)uniform.type);
+			Property("Name", uniform.Name);
+			break;
+		}
+		case UniformType::GLOBALDELTATIME:
+		{
+			Property("Type", (int)uniform.type);
+			Property("Name", uniform.Name);
 			break;
 		}
 	}

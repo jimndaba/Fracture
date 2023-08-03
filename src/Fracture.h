@@ -28,6 +28,10 @@
 #include "EventSystem/Eventbus.h"
 #include "Physics/PhysicsEvents.h"
 
+//Assets
+#include "Assets/AssetManager.h"
+#include "Assets/AssetRegistries.h"
+
 //Graphics
 #include "Rendering/GraphicsDevice.h"
 #include "Rendering/Command.h"

@@ -70,6 +70,7 @@ namespace Fracture
 		static void LoadScene(const std::string& scene);
 		static UUID& LoadSceneFromFile(const std::string& path);
 		static void InstanceSceneFromFile(ScenePrefab prefab);
+		static std::shared_ptr<Scene> DirectLoadScene(const std::string& path);
 
 
 		static std::map<UUID,int> LoadSceneByID(const UUID& scene);

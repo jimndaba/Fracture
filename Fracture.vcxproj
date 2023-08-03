@@ -148,6 +148,7 @@
     <ClInclude Include="src\Rendering\PostProcessPipeline.h" />
     <ClInclude Include="src\Rendering\RenderCommands.h" />
     <ClInclude Include="src\Rendering\RenderContext.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\BloomPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ChromaticAberration.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\FXAAPass.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="src\Rendering\PostProcessPipeline.cpp" />
     <ClCompile Include="src\Rendering\RenderCommands.cpp" />
     <ClCompile Include="src\Rendering\RenderContext.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\BloomPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ChromaticAberration.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.cpp" />

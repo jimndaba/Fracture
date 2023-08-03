@@ -88,6 +88,7 @@ void Fracture::SceneRenderer::Init()
 			info.DepthStencilAttachments.push_back(desc);
 		}
 		Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_ColorBuffer", info);
+		Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_GrabBuffers", info);
 		{
 			Fracture::RenderTargetCreationInfo sky_info;
 			sky_info.Width = 512;
@@ -223,19 +224,19 @@ void Fracture::SceneRenderer::Init()
 	presentPass->Setup();
 }
 
-void Fracture::SceneRenderer::Begin()
+void Fracture::SceneRenderer::Begin(float dt)
 {
 	if (SceneManager::CurrentScene())
 	{
-		auto current_Camera = SceneManager::ActiveCamera();
-		Fracture::GlobalFrameData data;
-		data.Camera_Position = glm::vec4(current_Camera->Position, 0.0f);
+		auto current_Camera = SceneManager::ActiveCamera();		
+		data.Camera_Position = glm::vec4(current_Camera->Position.x, current_Camera->Position.y, current_Camera->Position.z, 0);
 		data.Camera_Projection = current_Camera->ProjectMatrix;
 		data.Camera_View = current_Camera->ViewMatrix;
 		data.Camera_InvProjection = glm::inverse(current_Camera->ProjectMatrix);
 		data.Camera_InvView = glm::inverse(current_Camera->ViewMatrix);
 		data.Near_Far_Width_Height = { current_Camera->Near,current_Camera->Far,1920,1080 };
-		Fracture::GraphicsDevice::Instance()->UpdateGlobalFrameData(data);
+		data.DeltaTimeX_PAD3.x = dt;
+		
 
 		std::vector<LightData> lightdata;
 		bool hasSunLights = false;
@@ -340,10 +341,11 @@ void Fracture::SceneRenderer::Begin()
 				mLightProbesToRender.push(probe->GetID());
 		}
 
+		Fracture::GraphicsDevice::Instance()->UpdateGlobalFrameData(data);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalLightData(lightdata);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalRenderSettings();
 
-
+		mContext->deltaTime += dt;
 	}
 }
 
@@ -416,6 +418,8 @@ void Fracture::SceneRenderer::End()
 
 	GraphicsDevice::Instance()->PostProcessStack()->OnRender();
 	GraphicsDevice::Instance()->PostProcessStack()->Submit();
+
+	
 
 	Fracture::SortKey nkey;
 	mFinalContext->BeginState(nkey);

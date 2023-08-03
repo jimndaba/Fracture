@@ -104,7 +104,11 @@ bool Fracture::Input::IsKeyDown(KeyCode key)
 
 bool Fracture::Input::IsKeyUp(KeyCode key)
 {
-	return false;
+	int state = glfwGetKey(mWindow->Context, static_cast<int32_t>(key));
+	if (state == GLFW_RELEASE )
+		return true;
+	else
+		return false;
 }
 
 bool Fracture::Input::KeyPressed(KeyCode key)

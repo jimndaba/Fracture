@@ -155,7 +155,7 @@ void LuaBindComponents::SetPosition(Fracture::UUID entity, glm::vec3 Position)
 	if (!transform)
 		return;
 
-	transform->Position = Position;
+	transform->Position += Position;
 }
 
 void LuaBindComponents::SetRotation(Fracture::UUID entity, glm::vec3 value)
@@ -164,7 +164,7 @@ void LuaBindComponents::SetRotation(Fracture::UUID entity, glm::vec3 value)
 	if (!transform)
 		return;
 
-	transform->Rotation = glm::quat(value);
+	transform->Rotation *= glm::quat(value);
 }
 
 void LuaBindComponents::SetScale(Fracture::UUID entity, glm::vec3 value)

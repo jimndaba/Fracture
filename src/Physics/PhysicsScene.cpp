@@ -48,7 +48,7 @@ Fracture::PhysicsScene::PhysicsScene(Fracture::PhsyicsSettings& settings, physx:
 	if(settings.EnableCCD)
 		sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
 
-	sceneDesc.gravity = PhysicsHelpers::ToPhysXVector(settings.Gravity);
+	sceneDesc.gravity = physx::PxVec3(settings.Gravity.x, settings.Gravity.y, settings.Gravity.z);// PhysicsHelpers::ToPhysXVector(settings.Gravity);
 	sceneDesc.cpuDispatcher = dispatcher;
 	sceneDesc.filterShader = FilterShader;
 

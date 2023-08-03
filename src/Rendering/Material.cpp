@@ -1,17 +1,40 @@
 #include "FracturePCH.h"
 #include "Material.h"
 #include "GraphicsDevice.h"
+#include "RenderCommands.h"
 
 
 Fracture::Material::Material()
 {
-
+	GlobalDepth = [](Fracture::RenderContext* cntxt, Fracture::Shader* shader,int unit) 
+	{
+		const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalGrabs);
+		Fracture::RenderCommands::SetTexture(cntxt, shader, "InDepth", global_color->DepthStencilAttachment->Handle,(int)TEXTURESLOT::GlobalDepth);
+	};
+	GlobalGrab = [](Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit) 
+	{
+		const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalGrabs);
+		Fracture::RenderCommands::SetTexture(cntxt, shader, "InGrab", global_color->ColorAttachments[(int)GlobalColorAttachments::Color]->Handle, (int)TEXTURESLOT::GlobalGrab);
+	};
+	GlobalNormal = [](Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit) 
+	{
+		const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalGrabs);
+		Fracture::RenderCommands::SetTexture(cntxt, shader, "InNormal", global_color->ColorAttachments[(int)GlobalColorAttachments::Normal]->Handle, (int)TEXTURESLOT::GlobalNormal);
+	};
+	GlobalPosition = [](Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit) 
+	{
+		const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalGrabs);
+		Fracture::RenderCommands::SetTexture(cntxt, shader, "InPosition", global_color->ColorAttachments[(int)GlobalColorAttachments::Position]->Handle, (int)TEXTURESLOT::GlobalPosition);
+	};
+	GlobalDeltaTime = [](Fracture::RenderContext* cntxt, Fracture::Shader* shader, float dt)
+	{	
+		Fracture::RenderCommands::SetUniform(cntxt, shader, "DeltaTime",dt);
+	};
 }
 
 void Fracture::Material::SetUniform(const std::string name, const int& value)
 {
 	Uniform uniform;
-
 	uniform.type = UniformType::INT;
 	uniform.Name = name;
 	uniform.data.INT = value;
@@ -88,7 +111,6 @@ void Fracture::Material::SetTexture(const std::string name, const UniformType& m
 void Fracture::Material::SetTextureByID(const std::string name, const UniformType& mtype, const Fracture::UUID& texture_id)
 {
 	TextureUnits[name] = UnitCount++;
-
 	Uniform uniform;
 	uniform.type = mtype;
 	uniform.Name = name;
