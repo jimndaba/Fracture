@@ -16,6 +16,7 @@ namespace Fracture
 
 	struct Texture;
 	struct Material;
+	struct AnimationClip;
 
 	struct AsyncLoadMeshEvent : public Event
 	{
@@ -80,6 +81,8 @@ namespace Fracture
 		static void AsyncLoadTextureByID(const UUID& id);
 		static void AsyncLoadMaterial(const std::string& Name);
 		static void AsyncLoadMaterialByID(const UUID& id);
+		static void AsyncLoadAnimation(const std::string& Name);
+		static void AsyncLoadAnimationByID(const UUID& id);
 
 		static bool IsMeshLoaded(const std::string& Name);
 		static bool IsMeshLoaded(const UUID& Name);
@@ -87,6 +90,8 @@ namespace Fracture
 		static bool IsTextureLoaded(const std::string& Name);
 		static bool IsMaterialLoaded(const UUID& Name);
 		static bool IsMaterialLoaded(const std::string& Name);
+		static bool IsAnimationLoaded(const UUID& Name);
+		static bool IsAnimationLoaded(const std::string& Name);
 
 		static UUID GetMeshID(const std::string& Name);
 		static std::shared_ptr<Fracture::StaticMesh> GetStaticMesh(const std::string& Name);
@@ -107,6 +112,10 @@ namespace Fracture
 		static void RegisterMaterial(const MaterialRegistry& reg);
 		static std::shared_ptr<Material> GetMaterial(const std::string& Name);
 		static std::shared_ptr<Material> GetMaterialByID(const Fracture::UUID& id);
+
+		static void RegisterAnimation(const AnimationClipRegistry& reg);
+		static std::shared_ptr<AnimationClip> GetAnimation(const std::string& Name);
+		static std::shared_ptr<AnimationClip> GetAnimationByID(const Fracture::UUID& id);
 
 
 		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
@@ -131,6 +140,10 @@ namespace Fracture
 		static std::map<std::string, UUID> mMaterialIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<Material>> mMaterials;
 
+		static std::map<UUID, AnimationClipRegistry> mAnimationRegister;
+		static std::map<std::string, UUID> mAnimationIDLookUp;
+		static std::unordered_map<UUID, std::shared_ptr<AnimationClip>> mAnimations;
+
 		static int CountUseCountMesh(UUID mesh);
 
 
@@ -152,6 +165,11 @@ namespace Fracture
 		static std::vector<UUID> mLoadedMaterials;
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Material>>> mMaterialFutures;
 		static std::queue<MaterialRegistry> mMaterialToLoad;
+
+
+		static std::vector<UUID> mLoadedAnimations;
+		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::AnimationClip>>> mAnimationFutures;
+		static std::queue<AnimationClipRegistry> mAnimationsToLoad;
 
 		static std::unique_ptr<AssetManager> mInstance;
 

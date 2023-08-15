@@ -104,6 +104,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation\AnimationClip.h" />
+    <ClInclude Include="src\Animation\AnimationSystem.h" />
+    <ClInclude Include="src\Assets\AnimationClipLoader.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
     <ClInclude Include="src\Assets\AssetRegistries.h" />
     <ClInclude Include="src\Assets\ImagerLoader.h" />
@@ -112,6 +115,7 @@
     <ClInclude Include="src\Audio\AudioManager.h" />
     <ClInclude Include="src\Common\AppWindow.h" />
     <ClInclude Include="src\Common\Frustum.h" />
+    <ClInclude Include="src\Common\Helpers.h" />
     <ClInclude Include="src\Common\Math.h" />
     <ClInclude Include="src\EventSystem\Event.h" />
     <ClInclude Include="src\EventSystem\Eventbus.h" />
@@ -171,6 +175,7 @@
     <ClInclude Include="src\Rendering\SceneRenderer.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
@@ -237,6 +242,9 @@
     <ClInclude Include="vendor\soloud\src\audiosource\wav\stb_vorbis.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation\AnimationClip.cpp" />
+    <ClCompile Include="src\Animation\AnimationSystem.cpp" />
+    <ClCompile Include="src\Assets\AnimationClipLoader.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
     <ClCompile Include="src\Assets\ImagerLoader.cpp" />
     <ClCompile Include="src\Assets\MaterialLoader.cpp" />
@@ -245,6 +253,7 @@
     <ClCompile Include="src\Common\AppWindow.cpp" />
     <ClCompile Include="src\Common\FractureApp.cpp" />
     <ClCompile Include="src\Common\Frustum.cpp" />
+    <ClCompile Include="src\Common\Helpers.cpp" />
     <ClCompile Include="src\Common\Logger.cpp" />
     <ClCompile Include="src\Common\Math.cpp" />
     <ClCompile Include="src\Common\UUID.cpp" />
@@ -307,6 +316,7 @@
     <ClCompile Include="src\Scripting\LuaPhysicsBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaScript.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\AnimationSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\Serialiser.cpp" />

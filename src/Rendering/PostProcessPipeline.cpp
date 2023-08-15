@@ -162,3 +162,8 @@ uint32_t Fracture::PostProcessPipeline::GetOutputImage()
 	return mPingPongBuffer[!(int)m_pingpong_read]->ColorAttachments[0]->Handle;
 }
 
+std::shared_ptr<Fracture::RenderTarget> Fracture::PostProcessPipeline::GetOutputRenderTarget()
+{
+	return mPingPongBuffer[!(int)m_pingpong_read];
+}
+

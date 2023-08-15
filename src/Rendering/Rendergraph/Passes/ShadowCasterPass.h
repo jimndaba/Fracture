@@ -34,6 +34,7 @@ namespace Fracture
 		std::shared_ptr<Buffer> mMatrixBuffer;
 		std::shared_ptr<Buffer> mSplaneDistances;		
 		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<Shader> mShaderSkinned;
 		//Create properties to adjust cascade levels
 
 

@@ -12,6 +12,7 @@
 #include "Rendering/SceneRenderer.h"
 #include "World/TransformSystem.h"
 #include "World/CameraSystem.h"
+#include "Animation/AnimationSystem.h"
 
 int _GamefpsCount = 0;
 static float GamelastTime = 0.0f;
@@ -94,7 +95,7 @@ void Fracture::FractureGame::Update()
     mScriptManager->onUpdate(frameTime);
 
 
-    mAudioManager->OnUpdate(frameTime);
+  
 
      
     //Systems Update
@@ -114,7 +115,9 @@ void Fracture::FractureGame::Update()
     for (const auto& camera : SceneManager::GetAllComponents<CameraComponent>())
     {
         mCameraSystem.Update(frameTime, *camera.get());
-    }        
+    }      
+
+    AnimationSystem::Instance()->Update(frameTime);
 
         //On DebugDraw
         //OnDebugDraw();        
@@ -133,7 +136,7 @@ void Fracture::FractureGame::Update()
             FrameCount = 0;
         }
         */
-
+    mAudioManager->OnUpdate(frameTime);
     
 }
 

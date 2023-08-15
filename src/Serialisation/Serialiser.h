@@ -23,6 +23,10 @@ namespace nlohmann
 	{
 		j = json{ {"x", vec.x}, {"y", vec.y},{"z", vec.z},{"w", vec.w} };
 	}
+	inline void  to_json(json& j, const glm::quat& vec)
+	{
+		j = json{ {"x", vec.x}, {"y", vec.y},{"z", vec.z},{"w", vec.w}};
+	}
 	inline void  to_json(json& j, const Fracture::SubMesh& sub)
 	{
 		j = json{
@@ -86,6 +90,15 @@ namespace nlohmann
 			{"Path", reg.Path}
 		};
 	}
+	inline void  to_json(json& j, const Fracture::AnimationClipRegistry& reg)
+	{
+		j = json{
+			{"ID", (uint32_t)reg.ID},
+			{"Name", reg.Name},
+			{"Path", reg.Path}
+		};
+	}
+
 
 	
 
@@ -143,6 +156,13 @@ namespace nlohmann
 		j.at("Path").get_to(reg.Path);
 		reg.ID = id;
 	}
+	inline void from_json(const json& j, Fracture::AnimationClipRegistry& reg) {
+		uint32_t id;
+		j.at("ID").get_to(id);
+		j.at("Name").get_to(reg.Name);
+		j.at("Path").get_to(reg.Path);
+		reg.ID = id;
+	}
 	inline void from_json(const json& j, glm::vec2& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
@@ -153,6 +173,12 @@ namespace nlohmann
 		j.at("z").get_to(vec.z);
 	}
 	inline void from_json(const json& j, glm::vec4& vec) {
+		j.at("x").get_to(vec.x);
+		j.at("y").get_to(vec.y);
+		j.at("z").get_to(vec.z);
+		j.at("w").get_to(vec.w);
+	}
+	inline void from_json(const json& j, glm::quat& vec) {
 		j.at("x").get_to(vec.x);
 		j.at("y").get_to(vec.y);
 		j.at("z").get_to(vec.z);
@@ -197,9 +223,11 @@ namespace Fracture
 		void Property(const std::string& name, const Fracture::TextureRegistry& value);
 		void Property(const std::string& name, const Fracture::MaterialRegistry& value);
 		void Property(const std::string& name, const Fracture::LuaScriptRegistry& value);
+		void Property(const std::string& name, const Fracture::AnimationClipRegistry& value);
 		void Property(const std::string& name, const glm::vec2& value);
 		void Property(const std::string& name, const glm::vec3& value);
 		void Property(const std::string& name, const glm::vec4& value);
+		void Property(const std::string& name, const glm::quat& value);
 		void Property(const std::string& name, const std::vector<unsigned int>& value);
 		void Property(const std::string& name, const std::vector<int>& value);
 		void PropertyI(const std::string& name, const std::vector<uint32_t>& value);
@@ -242,8 +270,10 @@ namespace Fracture
 		glm::vec2 VEC2(const std::string& name);
 		glm::vec3 VEC3(const std::string& name);
 		glm::vec4 VEC4(const std::string& name);
+		glm::quat QUAT(const std::string& name);
 		ShaderRegistry SHADERREG(const std::string& name);
 		SceneRegistry SCENEREG(const std::string& name);
+		AnimationClipRegistry ANIMATIONREG(const std::string& name);
 
 
 		json GetOutput();

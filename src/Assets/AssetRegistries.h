@@ -38,6 +38,8 @@ namespace Fracture
 		uint32_t IndexDataSize;
 		uint32_t VertexDataSize;
 		uint32_t MeshTriangleSize;
+		uint32_t BoneCount;
+		uint32_t BoneSize;
 	};
 
 	struct TextureFileHeader
@@ -100,6 +102,12 @@ namespace Fracture
 		std::string Path;
 	};
 
+	struct AnimationClipRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
 
 }
 

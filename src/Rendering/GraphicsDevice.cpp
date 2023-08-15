@@ -5,6 +5,7 @@
 #include "World/Components.h"
 #include "Common/Logger.h"
 #include "World/SceneManager.h"
+#include "Assets/ImagerLoader.h"
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
@@ -1263,4 +1264,18 @@ void Fracture::GraphicsDevice::checkCompileErrors(const std::string& name, unsig
             FRACTURE_ERROR("ERROR::PROGRAM_LINKING_ERROR {} of type: {} , {} ", name, type, infoLog);
         }
     }
+}
+
+void Fracture::GraphicsDevice::SaveScreenShot(uint32_t fb, uint32_t attachment_index, int width, int height,const std::string& path)
+{   
+    GLsizei nrChannels = 3;
+    GLsizei stride = nrChannels * width;
+    stride += (stride % 4) ? (4 - stride % 4) : 0;
+    GLsizei bufferSize = stride * height;
+    std::vector<char> buffer(bufferSize);
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glNamedFramebufferReadBuffer( fb, GL_COLOR_ATTACHMENT0 + attachment_index);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+    ImageLoader::SaveImage(path, width, height, nrChannels, buffer, stride);
+
 }

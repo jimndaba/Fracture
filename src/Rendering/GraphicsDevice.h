@@ -191,6 +191,8 @@ namespace Fracture
 
 		static GlobalPostProcessParams RenderSettings;
 
+		static void SaveScreenShot(uint32_t fb,uint32_t attachment_index, int width, int height, const std::string& path);
+
 		PostProcessPipeline* PostProcessStack();
 		
 		int Viewport_Width = 1920;

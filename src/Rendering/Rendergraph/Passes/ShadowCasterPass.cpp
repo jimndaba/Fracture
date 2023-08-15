@@ -4,6 +4,8 @@
 #include "Assets/AssetManager.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/GraphicsDevice.h"
+#include "Rendering/Material.h"
+#include "Animation/AnimationSystem.h"
 
 Fracture::ShadowCasterPass::ShadowCasterPass(const std::string& name, RenderContext* context, const ShadowCasterPassDef& info):
 	IPass(name,context),
@@ -67,6 +69,7 @@ void Fracture::ShadowCasterPass::Setup()
 
     {
         mShader = AssetManager::Instance()->GetShader("CascadeShadows");
+        mShaderSkinned = AssetManager::Instance()->GetShader("CascadeShadowsSkinned");
     }
 }
 
@@ -101,7 +104,7 @@ void Fracture::ShadowCasterPass::Execute()
         RenderCommands::SetCullMode(Context, CullMode::Back);
         RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
         RenderCommands::SetColorMask(Context, 0, 0, 0, 1);
-        if (Context->mBatches.empty())
+        if (Context->mBatches.empty() && Context->ShadowDrawCalls.empty())
         {
             RenderCommands::ReleaseRenderTarget(Context);
             RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
@@ -114,7 +117,7 @@ void Fracture::ShadowCasterPass::Execute()
             if (batches.second.empty())
                 continue;
 
-            Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
+           
 
             if (!AssetManager::Instance()->IsMaterialLoaded(batches.first))
             {
@@ -123,6 +126,12 @@ void Fracture::ShadowCasterPass::Execute()
             }
 
             const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
+           
+            if(material->IsSkinned)
+                Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
+            else
+                Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
+            
             Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
 
             //Set Shader
@@ -145,6 +154,52 @@ void Fracture::ShadowCasterPass::Execute()
             }
 
 
+        }
+
+        for (auto& drawCall : Context->ShadowDrawCalls)
+        {
+            if (!AssetManager::Instance()->IsMaterialLoaded(drawCall->MaterialID))
+            {
+                AssetManager::Instance()->AsyncLoadMaterialByID(drawCall->MaterialID);
+                continue;
+            }
+
+            const auto& material = AssetManager::Instance()->GetMaterialByID(drawCall->MaterialID);
+
+            if (!material->DepthWrite)
+                continue;
+
+            if (material->IsSkinned)
+            {
+                Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
+                Fracture::RenderCommands::BindMaterial(Context, mShaderSkinned.get(), material.get());
+                Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "Model_matrix", drawCall->model);
+
+                if (AnimationSystem::Instance()->HasGlobalPose(drawCall->EntityID))
+                {
+                    const auto& poses = AnimationSystem::Instance()->mGlobalPoses[drawCall->EntityID];
+                    for (int i = 0; i < poses.GlobalPoses.size(); i++)
+                    {
+                        Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "GlobalPose[" + std::to_string(i) + "]", poses.GlobalPoses[i]);
+                    }
+                }
+            }
+            else
+            {
+                Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
+                Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
+                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Model_matrix", drawCall->model);
+            }
+
+            Fracture::RenderCommands::BindVertexArrayObject(Context, drawCall->MeshHandle);
+
+            DrawElementsInstancedBaseVertex cmd;
+            cmd.basevertex = drawCall->basevertex;
+            cmd.instancecount = 1;
+            cmd.indices = drawCall->SizeOfindices;
+            cmd.count = drawCall->IndexCount;
+            Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+            Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
         }
 
         Fracture::RenderCommands::UseProgram(Context, 0);

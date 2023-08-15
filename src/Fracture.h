@@ -18,8 +18,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-
-
 //Core
 #include "Common/Logger.h"
 #include "Common/UUID.h"

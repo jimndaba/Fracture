@@ -16,10 +16,9 @@ namespace Fracture
 	struct SkinnedVertex
 	{
 		glm::vec3 Position;
-		glm::vec2 Uvs;
 		glm::vec3 Normal;
-		glm::vec3 Tangent;
-		glm::vec3 Bitangent;
+		glm::vec2 Uvs;
+	
 
 		int IDs[4] = { -1,-1,-1,-1 };
 		float Weights[4] = { 0.0f,0.0f, 0.0f, 0.0f };

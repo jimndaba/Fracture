@@ -65,9 +65,11 @@ namespace Fracture
 			IComponent(),entity(id),Mesh(mesh)
 		{}
 
-		MeshComponent(UUID id, UUID mesh, std::vector<uint32_t> materials ) :
+		MeshComponent(UUID id, UUID mesh, std::vector<uint32_t> materials,bool isSkinned = false ) :
 			IComponent(), entity(id), Mesh(mesh), Materials(materials)
-		{}
+		{
+			meshType = isSkinned ? MeshType::Skinned : MeshType::Static;
+		}
 
 		MeshComponent(MeshComponent& other, UUID new_entity):
 			IComponent()
@@ -321,6 +323,7 @@ namespace Fracture
 		}
 
 		bool IsBaked = false;
+		bool AutoBaked = false;
 		UUID entity;
 		UUID IrradianceMap;
 		UUID PreFilterBRDFMap;
@@ -536,6 +539,33 @@ namespace Fracture
 		bool IsReady = false;
 		UUID SkyTexture;		
 		glm::vec4 SkyColour = glm::vec4(0.3,0.5,0.8,1.0);
+	};
+
+	struct AnimationComponent : public IComponent
+	{
+		AnimationComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {
+
+
+		}
+
+		AnimationComponent(AnimationComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			CurrentAnimation = other.CurrentAnimation;
+			Animations = other.Animations;			
+		}
+
+		UUID entity;
+		UUID GetID() { return entity; }
+		
+		UUID CurrentAnimation;
+		bool HasAnimationSet = false;
+		bool Play = false;
+		float AnimationTime = 0.0f;
+		std::vector<Fracture::UUID> Animations;
+		
 	};
 }
 

@@ -195,6 +195,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::LightProbeComponent
 	Property("BRDFLUT Resolution", component->BRDFLUTResolution);
 	Property("IRRADIANCE Resolution", component->LightProbeResolution);
 	Property("IsInterior", component->IsInterior);
+	Property("AutoBake", component->AutoBaked);
 	Property("ProbePositions", component->ProbePositions);
 	Property("Type",(int)component->ProbeType);
 	EndStruct();
@@ -482,6 +483,7 @@ void Fracture::SceneSerialiser::ReadLightProbeComponentIfExists(Fracture::UUID e
 	{
 		auto comp = std::make_shared<LightProbeComponent>(entity_id);
 		comp->IsInterior = BOOL("IsInterior");
+		comp->AutoBaked = BOOL("AutoBake");
 		comp->ProbeType = (LightProbeComponent::LightProbeType)INT("Type");
 		comp->ProbePositions = VEC4_VECTOR("ProbePositions");
 		comp->BRDFLUTResolution = INT("BRDFLUT Resolution");

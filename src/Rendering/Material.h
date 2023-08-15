@@ -109,6 +109,7 @@ namespace Fracture
 		bool IsTranslucent = false;
 		bool IsReflective = false;
 		bool DepthWrite = true;
+		bool IsSkinned = false;
 		bool IsDirty = false;
 
 		Fracture::UUID ID;

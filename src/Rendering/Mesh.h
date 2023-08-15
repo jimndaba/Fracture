@@ -6,6 +6,7 @@
 #include "nlohmann/json.hpp"
 #include "Buffer.h"
 #include "IGraphicsResource.h"
+#include "Animation/AnimationClip.h"
 #include "AABB.h"
 
 namespace Fracture
@@ -37,6 +38,17 @@ namespace Fracture
 		}
 	};
 
+	struct Bone
+	{
+		int ID = 0;
+		int ParentID = 0;
+		std::string Name = std::string{};	
+		glm::mat4 BindTransformation = glm::mat4(1.0f);
+		glm::mat4 LocalTransformation = glm::mat4(1.0f);
+		glm::mat4 GlobalTransformation = glm::mat4(1.0f);
+		glm::mat4 InverseBindTransform = glm::mat4(1.0f);	
+	};
+
 	struct StaticMesh : public IGraphicsResource
 	{
 		StaticMesh(const UUID& id = UUID());
@@ -47,39 +59,23 @@ namespace Fracture
 		std::vector<SubMesh> SubMeshes;
 		std::vector<unsigned int> Indices;
 		std::vector<Vertex> mVerticies;
+		std::vector<SkinnedVertex> mSkinnedVerticies;
 		std::vector<uint32_t> mMaterials;
 		std::vector<MeshTriangle> mTriangleCache;
+		std::vector<Bone> mBones;	
+		std::vector<int> mBoneOrder;
 		
-		uint32_t VAO;
-		std::shared_ptr<Buffer> EntityID_Buffer;
-		std::shared_ptr<Buffer> Matrix_Buffer;
+		uint32_t VAO;	
 		std::shared_ptr<Buffer> VBO_Buffer;
 		std::shared_ptr<Buffer> EBO_Buffer;
 
-	private:
-		// pure virtual implementation
-		void bind() {};
-	};
-
-
-	struct SkinnedMesh : public IGraphicsResource
-	{
-		SkinnedMesh();
-		std::vector<SubMesh> SubMeshes;
-		std::vector<SkinnedVertex> Verticies;
-		std::vector<unsigned int> Indices;
-		std::vector<MeshTriangle> TriangleCache;
-
-		uint32_t VAO;
+		glm::mat4 SkeletonInverseTransform;
+		glm::mat4 SkeletonSceneTransform;
 
 	private:
 		// pure virtual implementation
 		void bind() {};
 	};
-
-
-
-
 
 
 }

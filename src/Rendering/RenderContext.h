@@ -25,11 +25,15 @@ namespace Fracture
 	struct MeshDrawCall
 	{
 		UUID EntityID;
+		UUID MaterialID;
+		uint32_t MeshHandle;
 		int basevertex = 0;	
 		void* SizeOfindices = 0;
 		int IndexCount = 0;
 		int InstanceCount = 0;
 		bool DrawToStencil;
+		glm::vec4 IDColor;
+		glm::mat4 model;
 	};
 
 	struct RenderBatch
@@ -103,6 +107,9 @@ namespace Fracture
 		void Render();
 
 		void AddToBatch(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
+		void AddDrawCall(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
+
+
 		void AddToBatch(PrefabInstanceComponent* mesh,glm::mat4 transform,UUID Entity);
 		void ResetBatches();
 		void WriteToStencilBuffer(Fracture::UUID entity);
@@ -113,6 +120,13 @@ namespace Fracture
 		std::stack<SortKey> KeyStack;
 		std::map<Fracture::UUID,std::map<Fracture::UUID, std::shared_ptr<RenderBatch>>> mBatches;
 		std::map<Fracture::UUID, bool> mStentilTestPass;
+		
+		std::vector<std::shared_ptr<MeshDrawCall>> OpaqueDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
+		std::vector<std::shared_ptr<MeshDrawCall>> OutlineDrawCalls;
+
+
 	
 		uint32_t CurrentProgram;
 		int ActiveTextureUnits = 0;

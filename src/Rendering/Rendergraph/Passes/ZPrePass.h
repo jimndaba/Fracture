@@ -22,6 +22,7 @@ namespace Fracture
 		ZPrePassDef Properties;
 
 		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<Shader> mShaderSkinned;
 	};
 
 

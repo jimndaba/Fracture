@@ -77,6 +77,7 @@ void Fracture::BloomPass::Render(PostProcessInfo info)
 	const  auto& mipChain = BloomMipMaps;
 	if (!GraphicsDevice::Instance()->RenderSettings.BloomEnabled)
 		return;
+	RenderCommands::Disable(info.cntxt, Fracture::GLCapability::Blending);
 
 	//Bright Pass
 	{
@@ -188,5 +189,4 @@ void Fracture::BloomPass::Render(PostProcessInfo info)
 		RenderCommands::BindVertexArrayObject(info.cntxt, info.VAO);
 		RenderCommands::DrawArray(info.cntxt, cmd);
 	}
-
 }

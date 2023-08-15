@@ -3,6 +3,7 @@
 #include "Rendering/Mesh.h"
 #include "Serialisation/Serialiser.h"
 #include "Rendering/GraphicsDevice.h"
+#include "Animation/AnimationClip.h"
 
 #include "ImagerLoader.h"
 
@@ -37,10 +38,19 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 	std::shared_ptr<Fracture::StaticMesh> mesh = std::make_shared<Fracture::StaticMesh>(header.ID);
 	
 	mesh->SubMeshes.resize(header.SubMeshCount);
-	mesh->mVerticies.resize(header.VertexCount);
+	
+
+	if (header.BoneCount)
+		mesh->mSkinnedVerticies.resize(header.VertexCount);
+	else
+		mesh->mVerticies.resize(header.VertexCount);
+
+	mesh->mBones.resize(header.BoneCount);
+	mesh->mBoneOrder.resize(header.BoneCount);
 	mesh->Indices.resize(header.IndexCount);
 	mesh->mMaterials.resize(header.MaterialCount);
-	mesh->mTriangleCache.resize(header.MeshTriangleSize);
+	mesh->mTriangleCache.resize(header.MeshTriangleSize);	
+
 
 	if (fread(mesh->SubMeshes.data(), sizeof(SubMesh), header.SubMeshCount, f) != header.SubMeshCount)
 	{
@@ -54,10 +64,22 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 		//return nullptr;
 	}
 
-	if (fread(mesh->mVerticies.data(), sizeof(Fracture::Vertex),header.VertexCount, f) != header.VertexCount)
+
+	if (header.BoneCount == 0)
 	{
-		FRACTURE_ERROR("Unable to read vertex data");
-		//return nullptr;
+		if (fread(mesh->mVerticies.data(), sizeof(Fracture::Vertex), header.VertexCount, f) != header.VertexCount)
+		{
+			FRACTURE_ERROR("Unable to read vertex data");
+			//return nullptr;
+		}
+	}
+	else
+	{
+		if (fread(mesh->mSkinnedVerticies.data(), sizeof(Fracture::SkinnedVertex), header.VertexCount, f) != header.VertexCount)
+		{
+			FRACTURE_ERROR("Unable to read skinned vertex data");
+			//return nullptr;
+		}
 	}
 
 	if (fread(mesh->mTriangleCache.data(), sizeof(MeshTriangle), header.MeshTriangleCount, f) != header.MeshTriangleCount)
@@ -72,13 +94,26 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 		//return nullptr;
 	}
 
-	
+	if (fread(mesh->mBones.data(), sizeof(Fracture::Bone), header.BoneCount, f) != header.BoneCount)
+	{
+		FRACTURE_ERROR("Unable to read bone data");
+		//return nullptr;
+	}	
+
+	if (fread(mesh->mBoneOrder.data(), sizeof(int), header.BoneCount, f) != header.BoneCount)
+	{
+		FRACTURE_ERROR("Unable to read bone data");
+		//return nullptr;
+	}
+		
 	
 
 	for (const auto& submesh : mesh->SubMeshes)
 	{
 		mesh->BoundingBox = mesh->BoundingBox.Merge(submesh.BoundingBox);
 	}
+
+
 
 
 	fclose(f);

@@ -197,6 +197,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::Lu
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::AnimationClipRegistry& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec2& value)
 {
 
@@ -230,6 +244,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const glm::vec3& v
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec4& value)
 {
 
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
+void Fracture::ISerialiser::Property(const std::string& name, const glm::quat& value)
+{
 	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto& j = mStructStack.top();
@@ -404,7 +432,11 @@ void Fracture::ISerialiser::Save(const std::string& path)
 	{
 	case SerialiseFormat::Json:
 	{
-		m_OutputStream.open(path);
+		m_OutputStream.open(path, std::ios::out);
+		if (!m_OutputStream.is_open())
+		{
+			FRACTURE_ERROR("Failed to create file: {}", path);
+		}
 		m_OutputStream << Output;
 		m_OutputStream.close();
 		break;
@@ -412,6 +444,10 @@ void Fracture::ISerialiser::Save(const std::string& path)
 	case SerialiseFormat::Binary:
 	{
 		m_OutputStream.open(path, std::ios::out | std::ios::binary);
+		if (!m_OutputStream.is_open())
+		{
+			FRACTURE_ERROR("Failed to create file: {}", path);
+		}
 		// serialize it to BSON
 		std::vector<std::uint8_t> v = json::to_bson(Output);
 		m_OutputStream.write((const char*)v.data(), v.size() * sizeof(v[0]));
@@ -1061,21 +1097,24 @@ glm::vec4 Fracture::ISerialiser::VEC4(const std::string& name)
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
+	}	
+	return glm::vec4();
+}
+
+glm::quat Fracture::ISerialiser::QUAT(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
 	{
 		auto j = mStructStack.top();
 		if (exists(j, name))
 			return j[name];
 	}
-	*/
-	return glm::vec4();
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	return glm::quat();
 }
 
 Fracture::ShaderRegistry Fracture::ISerialiser::SHADERREG(const std::string& name)
@@ -1134,6 +1173,22 @@ Fracture::SceneRegistry Fracture::ISerialiser::SCENEREG(const std::string& name)
 	}
 	*/
 	return SceneRegistry();
+}
+
+Fracture::AnimationClipRegistry Fracture::ISerialiser::ANIMATIONREG(const std::string& name)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		if (exists(j, name))
+			return j[name];
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto j = mCollectionStack.top();
+		return j.at(mCollectionIndex.top())[name];
+	}
+	return AnimationClipRegistry();
 }
 
 nlohmann::json Fracture::ISerialiser::GetOutput()

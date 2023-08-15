@@ -21,6 +21,8 @@ namespace Fracture
 		uint32_t GetRenderTargetToWrite();
 		uint32_t GetRenderTargetToReadFrom();
 		uint32_t GetOutputImage();
+		std::shared_ptr<RenderTarget> GetOutputRenderTarget();
+
 
 		//Will Have Post Processing Passes.
 		//Will also have PingPong Buffers

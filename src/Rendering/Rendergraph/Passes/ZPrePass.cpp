@@ -4,6 +4,7 @@
 #include "World/SceneManager.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Material.h"
+#include "Animation/AnimationSystem.h"
 
 Fracture::ZPrePass::ZPrePass(const std::string& name, RenderContext* context, const ZPrePassDef& info) :IPass(name, context),Properties(info)
 {
@@ -12,6 +13,7 @@ Fracture::ZPrePass::ZPrePass(const std::string& name, RenderContext* context, co
 void Fracture::ZPrePass::Setup()
 {
 	mShader = AssetManager::Instance()->GetShader("ZPrePass");
+	mShaderSkinned = AssetManager::Instance()->GetShader("ZPrePassSkinned");
 }
 
 void Fracture::ZPrePass::Execute()
@@ -33,7 +35,7 @@ void Fracture::ZPrePass::Execute()
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);		
 	//RenderCommands::SetColorMask(Context, 0, 0, 0, 1);
 
-	if (Context->mBatches.empty())
+	if (Context->mBatches.empty() && Context->OpaqueDrawCalls.empty() && Context->TransparentDrawCalls.empty())
 	{
 		RenderCommands::ReleaseRenderTarget(Context);
 		RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
@@ -41,9 +43,6 @@ void Fracture::ZPrePass::Execute()
 		RenderCommands::Disable(Context, Fracture::GLCapability::StencilTest);
 		return;
 	}
-
-
-	Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
 
 	for (auto& batches : Context->mBatches)
 	{
@@ -60,6 +59,11 @@ void Fracture::ZPrePass::Execute()
 
 		if (!material->DepthWrite)
 			continue;
+		
+		if (material->IsSkinned)
+			Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
+		else
+			Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
 
 
 		Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
@@ -87,47 +91,56 @@ void Fracture::ZPrePass::Execute()
 				Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 			}
 
+		}	
+	}
+
+	for (auto& drawCall : Context->OpaqueDrawCalls)
+	{
+		if (!AssetManager::Instance()->IsMaterialLoaded(drawCall->MaterialID))
+		{
+			AssetManager::Instance()->AsyncLoadMaterialByID(drawCall->MaterialID);
+			continue;
 		}
 
-		/*
-		if (material->IsTranslucent)
-		{
-			RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
-			RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
-		}
+		const auto& material = AssetManager::Instance()->GetMaterialByID(drawCall->MaterialID);
 
-		if (batches.second.size())
+		if (!material->DepthWrite)
+			continue;
+
+		if (material->IsSkinned)
 		{
-			//Set Shader
-			for (auto batch : batches.second)
+			Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
+			Fracture::RenderCommands::BindMaterial(Context, mShaderSkinned.get(), material.get());
+			Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "Model_matrix", drawCall->model);
+
+			if(AnimationSystem::Instance()->HasGlobalPose(drawCall->EntityID))
 			{
-				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
-
-				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
-
-				std::vector<std::shared_ptr<MeshDrawCall>> drawcalls = batch.second->TransparentDrawCalls;
-				if (drawcalls.size())
+				const auto& poses = AnimationSystem::Instance()->mGlobalPoses[drawCall->EntityID];
+				for (int i = 0; i < poses.GlobalPoses.size(); i++)
 				{
-					DrawElementsInstancedBaseVertex cmd;
-					cmd.basevertex = drawcalls[0]->basevertex;
-					cmd.instancecount = batch.second->Transforms.size();
-					cmd.indices = drawcalls[0]->SizeOfindices;
-					cmd.count = drawcalls[0]->IndexCount;
-					Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+					Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "GlobalPose[" + std::to_string(i) + "]", poses.GlobalPoses[i]);
 				}
-
-				Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 			}
-
+		}
+		else
+		{
+			Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
+			Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
+			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Model_matrix", drawCall->model);
 		}
 
-		if (material->IsTranslucent)
-			RenderCommands::Disable(Context, Fracture::GLCapability::Blending);		
-		*/
+		Fracture::RenderCommands::BindVertexArrayObject(Context,drawCall->MeshHandle);
+
+		DrawElementsInstancedBaseVertex cmd;
+		cmd.basevertex = drawCall->basevertex;
+		cmd.instancecount = 1;
+		cmd.indices = drawCall->SizeOfindices;
+		cmd.count = drawCall->IndexCount;
+		Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+		Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 	}
 
 	RenderCommands::ReleaseRenderTarget(Context);
-	//RenderCommands::Disable(Context, Fracture::GLCapability::StencilTest);
 	RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
 
 }

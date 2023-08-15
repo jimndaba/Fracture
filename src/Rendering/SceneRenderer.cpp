@@ -373,6 +373,11 @@ void Fracture::SceneRenderer::End()
 		if (skybox->IsDirty)
 		{
 			Fracture::GraphicsDevice::Instance()->UpdateSkybox(mContext.get(), skybox.get());
+			for (const auto& probe : SceneManager::GetAllComponents<LightProbeComponent>())
+			{
+				if (probe->AutoBaked)
+					mLightProbesToRender.push(probe->GetID());
+			}
 		}
 	}
 
