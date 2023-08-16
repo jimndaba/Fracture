@@ -12,6 +12,7 @@ Fracture::SSAOPass::SSAOPass(const std::string& name, RenderContext* context):
 
 void Fracture::SSAOPass::Setup()
 {
+	OPTICK_EVENT();
 	{
 		VertexArrayCreationInfo info;
 		GraphicsDevice::Instance()->CreateVertexArray(Vao, info);

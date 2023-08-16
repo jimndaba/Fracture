@@ -486,7 +486,6 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
-
 	struct AudioSourceComponent : public IComponent
 	{
 		AudioSourceComponent(const Fracture::UUID& id) :
@@ -545,22 +544,20 @@ namespace Fracture
 	{
 		AnimationComponent(const Fracture::UUID& id) :
 			IComponent(), entity(id) {
-
-
 		}
 
 		AnimationComponent(AnimationComponent& other, UUID new_entity) :
 			IComponent()
 		{
 			entity = new_entity;
-			CurrentAnimation = other.CurrentAnimation;
+			CurrentGraph = other.CurrentGraph;
 			Animations = other.Animations;			
 		}
 
 		UUID entity;
 		UUID GetID() { return entity; }
 		
-		UUID CurrentAnimation;
+		UUID CurrentGraph;
 		bool HasAnimationSet = false;
 		bool Play = false;
 		float AnimationTime = 0.0f;

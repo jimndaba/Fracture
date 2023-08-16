@@ -4,6 +4,7 @@
 #include "World/SceneManager.h"
 #include "Assets/AssetManager.h"
 #include "Animation/AnimationClip.h"
+#include "AnimationState.h"
 #include "Rendering/Mesh.h"
 
 std::unique_ptr<Fracture::AnimationSystem> Fracture::AnimationSystem::mInstance;
@@ -18,78 +19,74 @@ void Fracture::AnimationSystem::Init()
 
 void Fracture::AnimationSystem::Update(float dt)
 {
+    OPTICK_EVENT();
     mGlobalPoses.clear();
 
+    //if(graph)
+    //    graph->EvaluateStateTransitions();
+
+    int cont = 0;
     const auto& components = SceneManager::GetAllComponents<AnimationComponent>();
     for (const auto& component : components)
     {
+        cont += 1;
         if (!component->HasAnimationSet)
             continue;
 
-        const auto& current_animation = AssetManager::GetAnimationByID(component->CurrentAnimation);
-        if (component && current_animation)
-        {
-            bool m_isPlaying = true;
-            float AnimationTime = 0;
-            
-            if (m_isPlaying)
-            {
-                AnimationTime = component->AnimationTime;
-                AnimationTime += current_animation->FramesPerSec * dt;
-                AnimationTime = fmod(AnimationTime, current_animation->Duration);
-                component->AnimationTime = AnimationTime;
-                current_animation->AnimationTime = AnimationTime;
-            }
+        auto state = mGraphs[component->CurrentGraph]->GetCurrentState();
 
-            UpdatePose(component->GetID(), current_animation.get(),component->Play);
+        if (state)
+        {
+            const auto& current_animation = AssetManager::GetAnimationByID(state->ClipID);
+            if (component && current_animation)
+            {
+                float AnimationTime = 0;
+                if (state->Enabled || state->Looping)
+                {
+                    AnimationTime = state->mTime;
+                    AnimationTime += current_animation->FramesPerSec * dt;
+                    AnimationTime = fmod(AnimationTime, current_animation->Duration);
+                    state->mTime = AnimationTime;
+                    //current_animation->AnimationTime = AnimationTime;
+                }
+
+                UpdatePose(component->GetID(), current_animation.get(), state->mTime);
+
+                if (state->mTime >= current_animation->Duration && !state->Looping)
+                    state->Enabled =false;
+            }
         }
+        
+        
     }
 }
 
-void Fracture::AnimationSystem::UpdatePose(Fracture::UUID entity, AnimationClip* clip, bool playing)
+void Fracture::AnimationSystem::UpdatePose(Fracture::UUID entity, AnimationClip* clip, float time)
 {
+    OPTICK_EVENT();
     const auto& mesh_component = SceneManager::GetComponent<MeshComponent>(entity);
     auto mesh = AssetManager::GetStaticByIDMesh(mesh_component->Mesh);
     
     mGlobalPoses[entity] = GlobalPose{};
     mGlobalPoses[entity].GlobalPoses.resize(mesh->mBones.size());
     mGlobalPoses[entity].LocalPoses.resize(mesh->mBones.size());
-    mGlobalPoses[entity].FinalPoses.resize(mesh->mBones.size());
        
-    if (playing)
+    for (int i = 0; i < mesh->mBones.size(); i++)
     {
-        for (int i = 0; i < mesh->mBones.size(); i++)
-        {
-            auto& bone =  mesh->mBones[mesh->mBoneOrder[i]];
-            glm::mat4 parent_transform = glm::mat4(1.0f);
+        auto& bone = mesh->mBones[mesh->mBoneOrder[i]];
+        glm::mat4 parent_transform = glm::mat4(1.0f);
 
-            if (i > 0) {
-                parent_transform = mGlobalPoses[entity].LocalPoses[bone.ParentID];
-            }
-
-            AnimationTrack track;
-            if (!GetBoneTrack(clip, bone.Name, track))
-                continue;
-                       
-            bone.LocalTransformation = BoneTransformation(track, clip->AnimationTime);
-            mGlobalPoses[entity].LocalPoses[bone.ID] = parent_transform *  bone.LocalTransformation;      
-            mGlobalPoses[entity].GlobalPoses[bone.ID] = mGlobalPoses[entity].LocalPoses[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
-        }      
-    }
-    else
-    {
-        for (int i = 0; i < mesh->mBones.size(); i++)
-        {
-            auto& bone = mesh->mBones[mesh->mBoneOrder[i]];
-            glm::mat4 parent_transform = glm::mat4(1.0f);
-
-            if (i > 0) {
-                parent_transform = mGlobalPoses[entity].LocalPoses[bone.ParentID];
-            }
-
-            mGlobalPoses[entity].LocalPoses[bone.ID] = bone.BindTransformation;
-            mGlobalPoses[entity].GlobalPoses[bone.ID] = mGlobalPoses[entity].LocalPoses[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
+        if (i > 0) {
+            parent_transform = mGlobalPoses[entity].LocalPoses[bone.ParentID];
         }
+
+        AnimationTrack track;
+        if (!GetBoneTrack(clip, bone.Name, track))
+            continue;
+
+        bone.LocalTransformation = BoneTransformation(track, time);
+        mGlobalPoses[entity].LocalPoses[bone.ID] = parent_transform * bone.LocalTransformation;
+        mGlobalPoses[entity].GlobalPoses[bone.ID] = mGlobalPoses[entity].LocalPoses[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
     }
 }
 

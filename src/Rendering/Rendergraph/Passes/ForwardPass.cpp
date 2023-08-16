@@ -19,6 +19,7 @@ void Fracture::ForwardPass::Setup()
 
 void Fracture::ForwardPass::Execute()
 {
+	OPTICK_EVENT();
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)
@@ -288,6 +289,7 @@ void Fracture::ForwardPass::Execute()
 
 	for (auto& drawCall : Context->TransparentDrawCalls)
 	{
+
 		if (!AssetManager::Instance()->IsMaterialLoaded(drawCall->MaterialID))
 		{
 			AssetManager::Instance()->AsyncLoadMaterialByID(drawCall->MaterialID);

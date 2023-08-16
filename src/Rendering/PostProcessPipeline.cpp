@@ -92,6 +92,7 @@ void Fracture::PostProcessPipeline::OnSetupPipeline()
 
 void Fracture::PostProcessPipeline::OnRender()
 {
+	OPTICK_EVENT();
 	auto input_texture = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSR)->ColorAttachments[0];
 	const auto& cntxt = Context.get();
 

@@ -25,6 +25,7 @@ void Fracture::RenderContext::EndState()
 
 void Fracture::RenderContext::BeginScene()
 {
+	OPTICK_EVENT();
 	ResetBatches();	
 	OpaqueDrawCalls.clear();
 	TransparentDrawCalls.clear();
@@ -94,6 +95,7 @@ void Fracture::RenderContext::Sort(DepthSortOrder order)
 
 void Fracture::RenderContext::Render()
 {
+	OPTICK_EVENT();
 	currentIndex = 0;
 	for (const auto& cmd : Commands)
 	{
@@ -109,6 +111,7 @@ void Fracture::RenderContext::Render()
 
 void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 transform, UUID entity)
 {
+	OPTICK_EVENT();
 	if (!AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
 		return;
 
@@ -260,6 +263,7 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 
 void Fracture::RenderContext::AddDrawCall(MeshComponent* meshcomp, glm::mat4 transform, UUID entity)
 {
+	OPTICK_EVENT();
 	if (!AssetManager::Instance()->IsMeshLoaded(meshcomp->Mesh))
 		return;
 

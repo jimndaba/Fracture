@@ -74,6 +74,7 @@ void Fracture::BloomPass::Setup()
 
 void Fracture::BloomPass::Render(PostProcessInfo info)
 {
+	OPTICK_EVENT();
 	const  auto& mipChain = BloomMipMaps;
 	if (!GraphicsDevice::Instance()->RenderSettings.BloomEnabled)
 		return;

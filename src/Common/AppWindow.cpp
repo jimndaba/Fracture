@@ -19,6 +19,7 @@ void Fracture::AppWindow::Init()
 
 void Fracture::AppWindow::SwapBuffers()
 {
+	OPTICK_EVENT();
 	glfwSwapBuffers(Context);
 }
 

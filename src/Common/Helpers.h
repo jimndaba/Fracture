@@ -19,6 +19,7 @@ namespace Fracture
 		std::string RemoveExtension(const std::string& filename);
 
 		std::string RemoveIllegalCharFromString(const std::string& filename);
+
 		std::string ReplaceIllegalCharFromString(const std::string& filename, const std::string& with);
 	}
 }

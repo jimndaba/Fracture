@@ -18,6 +18,7 @@ void Fracture::ZPrePass::Setup()
 
 void Fracture::ZPrePass::Execute()
 {
+	OPTICK_EVENT();
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 
 	if (!global_color)

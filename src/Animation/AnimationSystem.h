@@ -3,6 +3,7 @@
 #define ANIMATIONSYSTEM_H
 
 #include "Rendering/Mesh.h"
+#include "AnimationGraph.h"
 
 namespace Fracture
 {
@@ -13,7 +14,6 @@ namespace Fracture
 	{
 		std::vector<glm::mat4> LocalPoses;
 		std::vector<glm::mat4> GlobalPoses;
-		std::vector<glm::mat4> FinalPoses;
 	};
 
 	struct Skeleton
@@ -32,7 +32,7 @@ namespace Fracture
 
 		void Update(float dt);
 
-		void UpdatePose(Fracture::UUID entity, AnimationClip* clip, bool playing);
+		void UpdatePose(Fracture::UUID entity, AnimationClip* clip, float time);
 
 		bool GetBoneTrack(AnimationClip* clip, const std::string& name, AnimationTrack& outTrack);
 
@@ -54,7 +54,7 @@ namespace Fracture
 		std::unordered_map<UUID, Skeleton> mSkeletons;
 		bool HasGlobalPose(UUID entity);
 		static AnimationSystem* Instance();
-
+		std::map<Fracture::UUID, std::shared_ptr<AnimationGraph>> mGraphs;
 	};
 
 

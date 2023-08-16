@@ -197,6 +197,7 @@ void Fracture::PhysicsManager::DestroyScene()
 
 void Fracture::PhysicsManager::OnDebugDraw()
 {
+	OPTICK_EVENT();
 	if (mInstance->mScene)
 	{
 		mInstance->mScene->OnDebugDraw();

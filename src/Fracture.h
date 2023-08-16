@@ -18,6 +18,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <optik/optick.h>
+
+
 //Core
 #include "Common/Logger.h"
 #include "Common/UUID.h"

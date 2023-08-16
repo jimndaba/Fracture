@@ -21,10 +21,16 @@ namespace Fracture
 		//}
 
 		inline UUID operator = (const UUID& other) { m_UUID = other.m_UUID; return *this; }
+		inline UUID operator = (const int& other) { m_UUID = other; return *this; }
 		inline UUID operator = (const UUID& other) const { m_UUID = other.m_UUID;  return *this; }
-		inline bool operator == (const UUID& other) const {
-			return m_UUID == other.m_UUID;
-		}
+
+		inline bool operator < (const UUID& other) { return m_UUID < other.m_UUID;}
+		inline bool operator > (const UUID& other) { return m_UUID > other.m_UUID;}
+
+		inline bool operator < (const int& other) { return m_UUID < other; }
+		inline bool operator > (const int& other) { return m_UUID > other; }
+
+		inline bool operator == (const UUID& other) const {return m_UUID == other.m_UUID;}
 
 
 		inline bool operator < (const UUID& other) const {

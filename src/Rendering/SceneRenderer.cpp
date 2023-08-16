@@ -226,6 +226,7 @@ void Fracture::SceneRenderer::Init()
 
 void Fracture::SceneRenderer::Begin(float dt)
 {
+	OPTICK_EVENT();
 	if (SceneManager::CurrentScene())
 	{
 		auto current_Camera = SceneManager::ActiveCamera();		
@@ -351,11 +352,13 @@ void Fracture::SceneRenderer::Begin(float dt)
 
 void Fracture::SceneRenderer::QueueLightProbesToBake(UUID id)
 {
+	OPTICK_EVENT();
 	mLightProbesToRender.push(id);
 }
 
 void Fracture::SceneRenderer::End()
 {
+	OPTICK_EVENT();
 	Fracture::SortKey key;
 	mContext->BeginState(key);
 	mContext->BeginScene();

@@ -13,6 +13,7 @@ void Fracture::FXAAPass::Setup()
 
 void Fracture::FXAAPass::Render(PostProcessInfo info)
 {
+	OPTICK_EVENT();
 	RenderCommands::SetRenderTarget(info.cntxt, info.write_to);
 	RenderCommands::UseProgram(info.cntxt, shader->Handle);
 	RenderCommands::SetTexture(info.cntxt, shader.get(),"InColor", info.input_texture, 0);

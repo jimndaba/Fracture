@@ -74,7 +74,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\;E:\Development\Fracture\vendor\soloud\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib;common.lib;ex-common.lib;OpenAL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib;common.lib;ex-common.lib;OpenAL32.lib;OptickCore.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -100,11 +100,13 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\rel\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib;OptickCore.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation\AnimationClip.h" />
+    <ClInclude Include="src\Animation\AnimationGraph.h" />
+    <ClInclude Include="src\Animation\AnimationState.h" />
     <ClInclude Include="src\Animation\AnimationSystem.h" />
     <ClInclude Include="src\Assets\AnimationClipLoader.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="src\Rendering\SceneRenderer.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
@@ -243,6 +246,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation\AnimationClip.cpp" />
+    <ClCompile Include="src\Animation\AnimationGraph.cpp" />
+    <ClCompile Include="src\Animation\AnimationState.cpp" />
     <ClCompile Include="src\Animation\AnimationSystem.cpp" />
     <ClCompile Include="src\Assets\AnimationClipLoader.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
@@ -316,6 +321,7 @@
     <ClCompile Include="src\Scripting\LuaPhysicsBindings.cpp" />
     <ClCompile Include="src\Scripting\LuaScript.cpp" />
     <ClCompile Include="src\Scripting\ScriptManager.cpp" />
+    <ClCompile Include="src\Serialisation\AnimationGraphSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\AnimationSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerialiser.cpp" />

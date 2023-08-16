@@ -109,6 +109,13 @@ namespace Fracture
 		std::string Path;
 	};
 
+	struct AnimationGraphRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
+
 }
 
 #endif

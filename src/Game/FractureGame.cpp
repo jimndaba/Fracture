@@ -142,6 +142,7 @@ void Fracture::FractureGame::Update()
 
 void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
 {
+    OPTICK_EVENT();
     GraphicsDevice::Instance()->ClearBuffers((uint32_t)ClearBufferBit::Color);
     GraphicsDevice::Instance()->ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
@@ -158,6 +159,7 @@ void Fracture::FractureGame::OnDebugDraw()
 
 void Fracture::FractureGame::FixedUpdate(float dt)
 {
+    OPTICK_EVENT();
     mScriptManager->onFixedUpdate();
     PhysicsManager::Instance()->FixedUpdate(1.0f / 60.0f);
 }

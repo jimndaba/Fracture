@@ -76,6 +76,7 @@ void Fracture::ShadowCasterPass::Setup()
 
 void Fracture::ShadowCasterPass::Execute()
 {
+    OPTICK_EVENT();
     {
         auto lightMatrices = getLightSpaceMatrices(SceneManager::ActiveCamera().get());
         GraphicsDevice::Instance()->UpdateBufferData(mMatrixBuffer.get(), 0, sizeof(glm::mat4x4) * 16, &lightMatrices[0]);
