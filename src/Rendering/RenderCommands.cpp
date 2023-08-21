@@ -40,7 +40,8 @@ void Fracture::RenderCommands::Enable(Fracture::RenderContext* cntxt, GLCapabili
 	cmd.fnc = [ability]() {
 		glEnable((GLenum)ability);
 	};
-	cntxt->Push(cmd); 
+	cmd.fnc();
+	////cntxt->Push(cmd);  
 }
 
 void Fracture::RenderCommands::Disable(Fracture::RenderContext* cntxt, GLCapability ability)
@@ -49,7 +50,8 @@ void Fracture::RenderCommands::Disable(Fracture::RenderContext* cntxt, GLCapabil
 	cmd.fnc = [ability]() {
 		glDisable((GLenum)ability);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	////cntxt->Push(cmd);  
 	
 }
 
@@ -59,7 +61,8 @@ void Fracture::RenderCommands::ClearTarget(Fracture::RenderContext* cntxt, uint3
 	cmd.fnc = [flags]() {
 		glClear(flags);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::ClearColor(Fracture::RenderContext* cntxt, const Fracture::Colour& color)
@@ -68,7 +71,8 @@ void Fracture::RenderCommands::ClearColor(Fracture::RenderContext* cntxt, const 
 	cmd.fnc = [color]() {
 		glClearColor(color.R, color.G, color.B, color.A);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 
 
 }
@@ -104,7 +108,8 @@ void Fracture::RenderCommands::CheckFrameBuffer(Fracture::RenderContext* cntxt,u
 			
 		}
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BlitFramebuffer(Fracture::RenderContext* cntxt, const std::string& From, const std::string& to)
@@ -120,7 +125,8 @@ void Fracture::RenderCommands::BlitFramebuffer(Fracture::RenderContext* cntxt, c
 		glBlitNamedFramebuffer(from_fb->Handle, to_fb->Handle, 0, 0, 1920, 1080, 0, 0, 1920, 1080,
 			GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BlitDepthFramebuffer(Fracture::RenderContext* cntxt, const std::string& From, const std::string& to)
@@ -137,7 +143,8 @@ void Fracture::RenderCommands::SetViewport(Fracture::RenderContext* cntxt, float
 	cmd.fnc = [width,height,x,y]() {
 		glViewport(x, y, width, height);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x, float y)
@@ -146,7 +153,8 @@ void Fracture::RenderCommands::SetScissor(Fracture::RenderContext* cntxt, float 
 	cmd.fnc = [x,y,width,height]() {
 		glScissor(x, y, width, height);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, Fracture::RenderTarget* rt)
@@ -155,7 +163,8 @@ void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, F
 	cmd.fnc = [rt]() {
 		glBindFramebuffer(GL_FRAMEBUFFER,rt->Handle);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt)
@@ -164,7 +173,8 @@ void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, u
 	cmd.fnc = [rt]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, rt);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void  Fracture::RenderCommands::SetRenderBuffer(Fracture::RenderContext* cntxt, uint32_t rb)
@@ -173,7 +183,8 @@ void  Fracture::RenderCommands::SetRenderBuffer(Fracture::RenderContext* cntxt, 
 	cmd.fnc = [rb]() {
 		glBindRenderbuffer(GL_RENDERBUFFER, rb);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::ReleaseRenderTarget(Fracture::RenderContext* cntxt)
@@ -182,7 +193,8 @@ void Fracture::RenderCommands::ReleaseRenderTarget(Fracture::RenderContext* cntx
 	cmd.fnc = []() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetCullMode(Fracture::RenderContext* cntxt, CullMode mode)
@@ -196,7 +208,8 @@ void Fracture::RenderCommands::SetCullMode(Fracture::RenderContext* cntxt, CullM
 			glDisable(GL_CULL_FACE);
 		};
 		cmd.DEBUG = "Set Cull Mode Disabled";
-		cntxt->Push(cmd);
+		cmd.fnc();
+		//cntxt->Push(cmd); 
 	}
 	else
 	{
@@ -211,7 +224,8 @@ void Fracture::RenderCommands::SetCullMode(Fracture::RenderContext* cntxt, CullM
 			cmd.fnc = [mode]() {
 				glEnable(GL_CULL_FACE);
 			};
-			cntxt->Push(cmd);
+			cmd.fnc();
+			//cntxt->Push(cmd); 
 		}
 
 		Fracture::Command cmd;
@@ -219,7 +233,8 @@ void Fracture::RenderCommands::SetCullMode(Fracture::RenderContext* cntxt, CullM
 			glCullFace((GLenum)mode);
 		};
 		cmd.DEBUG = "Set Cull Mode";
-		cntxt->Push(cmd);
+		cmd.fnc();
+		//cntxt->Push(cmd); 
 	}
 	
 
@@ -231,7 +246,8 @@ void Fracture::RenderCommands::DepthFunction(Fracture::RenderContext* cntxt, Dep
 	cmd.fnc = [fnc]() {
 		glDepthFunc((GLenum)fnc);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DepthMask(Fracture::RenderContext* cntxt, bool mask)
@@ -240,7 +256,7 @@ void Fracture::RenderCommands::DepthMask(Fracture::RenderContext* cntxt, bool ma
 	cmd.fnc = [mask]() {
 		glDepthMask(mask);
 	};
-	cntxt->Push(cmd);
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::StencilMask(Fracture::RenderContext* cntxt, uint32_t mask)
@@ -249,7 +265,8 @@ void Fracture::RenderCommands::StencilMask(Fracture::RenderContext* cntxt, uint3
 	cmd.fnc = [mask]() {
 		glStencilMask(mask);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BlendFunction(Fracture::RenderContext* cntxt, BlendFunc sfactor, BlendFunc dfactor)
@@ -258,7 +275,8 @@ void Fracture::RenderCommands::BlendFunction(Fracture::RenderContext* cntxt, Ble
 	cmd.fnc = [sfactor, dfactor]() {
 		glBlendFunc((GLenum)sfactor, (GLenum)dfactor);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BlendEquation(Fracture::RenderContext* cntxt, BlendEq eq)
@@ -267,7 +285,8 @@ void Fracture::RenderCommands::BlendEquation(Fracture::RenderContext* cntxt, Ble
 	cmd.fnc = [eq]() {
 		glBlendEquation((GLenum)eq);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	
 }
 
@@ -277,7 +296,8 @@ void Fracture::RenderCommands::StencilFunction(Fracture::RenderContext* cntxt, S
 	cmd.fnc = [fnc, ref,mask]() {
 		glStencilFunc((GLenum)fnc,ref,mask);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::StencilOperation(Fracture::RenderContext* cntxt, StencilOp_TestResult sfail, StencilOp_TestResult dfail, StencilOp_TestResult sdpass)
@@ -286,7 +306,8 @@ void Fracture::RenderCommands::StencilOperation(Fracture::RenderContext* cntxt, 
 	cmd.fnc = [sfail,dfail, sdpass]() {
 		glStencilOp((GLenum)sfail, (GLenum)dfail, (GLenum)sdpass);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetColorMask(Fracture::RenderContext* cntxt, bool r, bool g, bool b, bool a)
@@ -295,7 +316,8 @@ void Fracture::RenderCommands::SetColorMask(Fracture::RenderContext* cntxt, bool
 	cmd.fnc = [r,g,b,a]() {
 		glColorMask(r,g,b,a);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao)
@@ -304,7 +326,8 @@ void Fracture::RenderCommands::BindVertexArrayObject(Fracture::RenderContext* cn
 	cmd.fnc = [vao]() {
 		glBindVertexArray(vao);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BindVertexArrayVertexBuffer(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t index, uint32_t stride, uint32_t buffer, uint32_t offset)
@@ -313,7 +336,8 @@ void Fracture::RenderCommands::BindVertexArrayVertexBuffer(Fracture::RenderConte
 	cmd.fnc = [vao,index,stride,buffer,offset]() {
 		glVertexArrayVertexBuffer(vao, index, buffer, offset, stride);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BindVertexArrayIndexBuffer(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t buffer)
@@ -322,7 +346,8 @@ void Fracture::RenderCommands::BindVertexArrayIndexBuffer(Fracture::RenderContex
 	cmd.fnc = [vao, buffer]() {
 		glVertexArrayElementBuffer(vao, buffer);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::BindVertexArraySetDivisor(Fracture::RenderContext* cntxt, uint32_t vao, uint32_t AttributeIndex, uint32_t divisor)
@@ -332,7 +357,8 @@ void Fracture::RenderCommands::BindVertexArraySetDivisor(Fracture::RenderContext
 		glVertexArrayBindingDivisor(vao,AttributeIndex ,divisor);	
 		mErroCallback("Set Divisor");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::ClearBufferData(Fracture::RenderContext* cntxt, uint32_t buffer)
@@ -343,7 +369,8 @@ void Fracture::RenderCommands::ClearBufferData(Fracture::RenderContext* cntxt, u
 		glClearNamedBufferData(buffer, GL_R8UI, GL_RED_INTEGER, GL_UNSIGNED_BYTE, &val);
 		mErroCallback("Clear Buffer");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z)
@@ -356,7 +383,8 @@ void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cn
 		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 		mErroCallback("Memory Barrier");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
@@ -365,7 +393,8 @@ void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
 	cmd.fnc = []() {
 		//TODO glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level)
@@ -377,7 +406,8 @@ void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext*
 		mErroCallback("glNamedFramebufferTextureLayer");
 		
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 
@@ -388,7 +418,8 @@ void Fracture::RenderCommands::FrameBufferAttachTexture(Fracture::RenderContext*
 		glNamedFramebufferTexture(fb, GL_COLOR_ATTACHMENT0 + attachment_index, texture, level);
 		mErroCallback("glNamedFramebufferTexture");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	
 }
 
@@ -400,7 +431,8 @@ void Fracture::RenderCommands::FrameBufferAttachTexture3D(Fracture::RenderContex
 		mErroCallback("AttachTexture");
 
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 
@@ -419,7 +451,8 @@ void Fracture::RenderCommands::FrameBufferSetDrawBuffers(Fracture::RenderContext
 		mErroCallback("SetDrawBuffers");
 
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	
 }
 
@@ -430,7 +463,8 @@ void Fracture::RenderCommands::RenderBufferTextureStorage(Fracture::RenderContex
 		glNamedRenderbufferStorage(rb,(GLenum)internlforamt,x,y);
 		mErroCallback("RenderBufferTextureStorage");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt, const Fracture::DrawElementsArray& render_cmd)
@@ -441,7 +475,8 @@ void Fracture::RenderCommands::DrawElementsArray(Fracture::RenderContext* cntxt,
 		mErroCallback("Draw Elements");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DrawArray(Fracture::RenderContext* cntxt, const Fracture::DrawArray& render_cmd)
@@ -452,7 +487,8 @@ void Fracture::RenderCommands::DrawArray(Fracture::RenderContext* cntxt, const F
 		mErroCallback("Draw Arrays");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& render_cmd)
@@ -467,7 +503,8 @@ void Fracture::RenderCommands::DrawElementsArrayInstanced(Fracture::RenderContex
 		mErroCallback("Draw ELements Instanced");
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DrawElementsBaseVertex(Fracture::RenderContext* cntxt, const Fracture::DrawElementsBaseVertex& render_cmd)
@@ -484,7 +521,8 @@ void Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Fracture::RenderC
 
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& render_cmd)
@@ -498,7 +536,8 @@ void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderC
 
 		GraphicsDevice::DRAWCALL_COUNT++;
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::UnMapbuffer(Fracture::RenderContext* cntxt, uint32_t buffer)
@@ -509,7 +548,8 @@ void Fracture::RenderCommands::UnMapbuffer(Fracture::RenderContext* cntxt, uint3
 
 		mErroCallback("UnMap");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	
 }
 
@@ -520,7 +560,8 @@ void Fracture::RenderCommands::ClearImage(Fracture::RenderContext* cntxt, uint32
 		glClearTexImage(image, level, GL_RGBA, GL_UNSIGNED_BYTE,clearValue);
 		mErroCallback("ClearImage");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32_t program)
@@ -534,7 +575,8 @@ void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32
 
 		mErroCallback("UseProgram");
 	};
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 
@@ -553,7 +595,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback("SetUnfirom: " + name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);	
+	cmd.fnc();
+	//cntxt->Push(cmd); 	
 }
 
 void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string name, const float& value)
@@ -567,7 +610,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 
 	
 }
@@ -582,7 +626,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 
 }
 
@@ -597,7 +642,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string name, const glm::vec3& value)
@@ -610,7 +656,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	
 }
 
@@ -623,7 +670,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string name, const glm::mat3& value)
@@ -636,7 +684,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string name, const glm::mat4& value)
@@ -649,7 +698,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 
 }
 
@@ -665,7 +715,8 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string& name, const uint32_t& RenderID, unsigned int unit)
@@ -679,7 +730,8 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	//cntxt->Push(cmd); 
+	cmd.fnc();
 	cntxt->ActiveTextureUnits++;
 
 }
@@ -868,7 +920,8 @@ void Fracture::RenderCommands::ResetTextureUnits(Fracture::RenderContext* cntxt,
 	}
 	
 	cmd.Key.ShaderIndex = shader->Handle;
-	cntxt->Push(cmd);
+	cmd.fnc();
+	//cntxt->Push(cmd); 
 	cntxt->ActiveTextureUnits = 0;
 }
 

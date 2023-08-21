@@ -61,6 +61,7 @@ namespace Fracture
 		std::vector<Vertex> mVerticies;
 		std::vector<SkinnedVertex> mSkinnedVerticies;
 		std::vector<uint32_t> mMaterials;
+		std::vector<uint32_t> mAnimations;
 		std::vector<MeshTriangle> mTriangleCache;
 		std::vector<Bone> mBones;	
 		std::vector<int> mBoneOrder;

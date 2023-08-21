@@ -143,10 +143,10 @@ void Fracture::ForwardPass::Execute()
 		{
 			if (AnimationSystem::Instance()->HasGlobalPose(drawCall->EntityID))
 			{
-				const auto& poses = AnimationSystem::Instance()->mGlobalPoses[drawCall->EntityID];
-				for (int i = 0; i < poses.GlobalPoses.size(); i++)
+				const auto& poses = AnimationSystem::Instance()->mGraphs[drawCall->EntityID]->mGlobalTansforms;
+				for (int i = 0; i < poses.size(); i++)
 				{
-					Fracture::RenderCommands::SetUniform(Context, shader.get(), "GlobalPose[" + std::to_string(i) + "]", poses.GlobalPoses[i]);
+					Fracture::RenderCommands::SetUniform(Context, shader.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
 				}
 			}
 		}

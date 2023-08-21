@@ -211,6 +211,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::An
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::AnimationGraphRegistry& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec2& value)
 {
 
@@ -498,7 +512,7 @@ bool Fracture::ISerialiser::Open(const std::string& path)
 		m_InputStream = std::ifstream(path, std::ios::in | std::ios::binary);
 		if (!m_InputStream.good())
 		{
-			FRACTURE_WARN("Can't read Scene file : {}", path);
+			FRACTURE_WARN("Can't read file : {}", path);
 			return false;
 		}
 

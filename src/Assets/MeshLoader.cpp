@@ -50,6 +50,7 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 	mesh->Indices.resize(header.IndexCount);
 	mesh->mMaterials.resize(header.MaterialCount);
 	mesh->mTriangleCache.resize(header.MeshTriangleSize);	
+	mesh->mAnimations.resize(header.AnimationCount);	
 
 
 	if (fread(mesh->SubMeshes.data(), sizeof(SubMesh), header.SubMeshCount, f) != header.SubMeshCount)
@@ -105,7 +106,12 @@ std::shared_ptr<Fracture::StaticMesh> Fracture::MeshLoader::LoadStaticMesh(const
 		FRACTURE_ERROR("Unable to read bone data");
 		//return nullptr;
 	}
-		
+
+	if (fread(mesh->mAnimations.data(), sizeof(uint32_t), header.AnimationCount, f) != header.AnimationCount)
+	{
+		FRACTURE_ERROR("Unable to read Animation ID data");
+		//return nullptr;
+	}
 	
 
 	for (const auto& submesh : mesh->SubMeshes)

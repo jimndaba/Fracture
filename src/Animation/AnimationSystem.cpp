@@ -15,54 +15,26 @@ Fracture::AnimationSystem::AnimationSystem()
 
 void Fracture::AnimationSystem::Init()
 {
+    mPool = std::make_unique<PoseBufferPool>(8);
+    mPool->Init();
 }
 
 void Fracture::AnimationSystem::Update(float dt)
 {
-    OPTICK_EVENT();
-    mGlobalPoses.clear();
-
-    //if(graph)
-    //    graph->EvaluateStateTransitions();
-
-    int cont = 0;
-    const auto& components = SceneManager::GetAllComponents<AnimationComponent>();
-    for (const auto& component : components)
+    OPTICK_EVENT(); 
+    if (IsPlaying)
     {
-        cont += 1;
-        if (!component->HasAnimationSet)
-            continue;
-
-        auto state = mGraphs[component->CurrentGraph]->GetCurrentState();
-
-        if (state)
+        for (const auto& graph : mGraphs)
         {
-            const auto& current_animation = AssetManager::GetAnimationByID(state->ClipID);
-            if (component && current_animation)
-            {
-                float AnimationTime = 0;
-                if (state->Enabled || state->Looping)
-                {
-                    AnimationTime = state->mTime;
-                    AnimationTime += current_animation->FramesPerSec * dt;
-                    AnimationTime = fmod(AnimationTime, current_animation->Duration);
-                    state->mTime = AnimationTime;
-                    //current_animation->AnimationTime = AnimationTime;
-                }
-
-                UpdatePose(component->GetID(), current_animation.get(), state->mTime);
-
-                if (state->mTime >= current_animation->Duration && !state->Looping)
-                    state->Enabled =false;
-            }
+            mPool->ReleaseAllBuffers();
+            graph.second->OnUpdate(dt);
         }
-        
-        
     }
 }
 
 void Fracture::AnimationSystem::UpdatePose(Fracture::UUID entity, AnimationClip* clip, float time)
 {
+    /*
     OPTICK_EVENT();
     const auto& mesh_component = SceneManager::GetComponent<MeshComponent>(entity);
     auto mesh = AssetManager::GetStaticByIDMesh(mesh_component->Mesh);
@@ -88,6 +60,32 @@ void Fracture::AnimationSystem::UpdatePose(Fracture::UUID entity, AnimationClip*
         mGlobalPoses[entity].LocalPoses[bone.ID] = parent_transform * bone.LocalTransformation;
         mGlobalPoses[entity].GlobalPoses[bone.ID] = mGlobalPoses[entity].LocalPoses[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
     }
+    */
+}
+
+void Fracture::AnimationSystem::Blend(Fracture::UUID in_graph, BlendFunctionType func, BlendSpaceType space, std::vector<PoseSample> inPose1, std::vector<PoseSample> inPose2, float factor)
+{
+    const auto& graph = mGraphs[in_graph];
+
+   
+    auto buffer1 = inPose1;
+    auto buffer2 = inPose2;
+
+    auto& new_buffer = mPool->GetPoseBuffer(0)->Pose; //graph->GetPoseBufferAndSwap();
+    mPool->ReleasePoseBuffer(1);
+
+    new_buffer.clear();
+    new_buffer.resize(inPose1.size());
+    for (int i = 0; i < inPose1.size(); i++)
+    {
+
+        new_buffer[i] = mBlender.AdditiveBlend1D(buffer1[i], buffer2[i], factor);
+       
+
+    }
+    int lastBuffer = mPool->GetLastBufferInUse();
+    if(lastBuffer > 0)
+        mPool->MovePoseAndClearBuffer(lastBuffer, 1);
 }
 
 bool Fracture::AnimationSystem::GetBoneTrack(AnimationClip* clip, const std::string& name, AnimationTrack& outTrack)
@@ -106,7 +104,12 @@ bool Fracture::AnimationSystem::GetBoneTrack(AnimationClip* clip, const std::str
 
 bool Fracture::AnimationSystem::HasGlobalPose(UUID entity)
 {
-    return mGlobalPoses.find(entity) != mGlobalPoses.end();
+    return mGraphs.find(entity) != mGraphs.end();
+}
+
+bool Fracture::AnimationSystem::EntityHasGraph(UUID entity)
+{
+    return mGraphs.find(entity) != mGraphs.end();
 }
 
 Fracture::AnimationSystem* Fracture::AnimationSystem::Instance()
@@ -115,7 +118,6 @@ Fracture::AnimationSystem* Fracture::AnimationSystem::Instance()
         mInstance = std::make_unique<AnimationSystem>();
     return mInstance.get();
 }
-
 
 glm::mat4 Fracture::AnimationSystem::CalcInterpolatedScaling(AnimationTrack& outTrack, const float& animationTime)
 {
@@ -170,12 +172,85 @@ glm::mat4 Fracture::AnimationSystem::CalcInterpolatedPosition(AnimationTrack& ou
     return  glm::translate(glm::mat4(1.0f), final);
 }
 
+glm::vec3 Fracture::AnimationSystem::SampleScaling(AnimationTrack& outTrack, const float& animationTime)
+{
+    if (outTrack.Scales.size() == 1) {
+        return outTrack.Scales[0].Scale;
+    }
+    uint32_t PositionIndex = FindNextScale(animationTime, outTrack);
+    uint32_t NextPositionIndex = (PositionIndex + 1);
+    assert(NextPositionIndex < channel.m_ScaleKeys.size());
+
+    float Factor = GetScaleFactor((float)outTrack.Scales[PositionIndex].Time, (float)outTrack.Scales[NextPositionIndex].Time, animationTime);
+    Factor = glm::clamp(Factor, 0.0f, 1.0f);
+    const glm::vec3& StartPosition = outTrack.Scales[PositionIndex].Scale;
+    const glm::vec3& EndPosition = outTrack.Scales[NextPositionIndex].Scale;
+    glm::vec3 final = glm::mix(StartPosition, EndPosition, Factor);
+
+    return final;
+}
+
+glm::quat Fracture::AnimationSystem::SampleRotation(AnimationTrack& outTrack, const float& animationTime)
+{
+    if (outTrack.mNumRotationKeys == 1) {
+        auto rotation = glm::normalize(outTrack.Rotations[0].Rotation);
+        return rotation;
+    }
+
+    uint32_t RotationIndex = FindNextRotation(animationTime, outTrack);
+    uint32_t NextRotationIndex = (RotationIndex + 1);
+    assert(NextRotationIndex < channel.mNumRotationKeys);
+    float Factor = GetScaleFactor(outTrack.Rotations[RotationIndex].Time, outTrack.Rotations[NextRotationIndex].Time, animationTime);
+    glm::quat StartRotationQ = outTrack.Rotations[RotationIndex].Rotation;
+    glm::quat EndRotationQ = outTrack.Rotations[NextRotationIndex].Rotation;
+    glm::quat final = glm::slerp(StartRotationQ, EndRotationQ, Factor);
+    final = glm::normalize(final);
+    return final;
+}
+
+glm::vec3 Fracture::AnimationSystem::SamplePosition(AnimationTrack& outTrack, const float& animationTime)
+{
+    if (outTrack.mNumPositionKeys == 1) {
+        return outTrack.Positions[0].Position;
+    }
+
+    uint32_t PositionIndex = FindNextPosition(animationTime, outTrack);
+    uint32_t NextPositionIndex = (PositionIndex + 1);
+
+    assert(NextPositionIndex < outTrack.mNumPositionKeys);
+    float Factor = GetScaleFactor((float)outTrack.Positions[PositionIndex].Time, (float)outTrack.Positions[NextPositionIndex].Time, animationTime);
+    const glm::vec3& StartPosition = outTrack.Positions[PositionIndex].Position;
+    const glm::vec3& EndPosition = outTrack.Positions[NextPositionIndex].Position;
+    glm::vec3 final = glm::mix(StartPosition, EndPosition, Factor);
+    return  final;
+}
+
 glm::mat4 Fracture::AnimationSystem::BoneTransformation(AnimationTrack& outTrack,float time)
 {    
     glm::mat4 m_translation = CalcInterpolatedPosition(outTrack, time);
     glm::mat4 m_rotation = CalcInterpolatedRotation(outTrack, time);
     glm::mat4 m_scale = CalcInterpolatedScaling(outTrack, time);
     return m_translation * m_rotation * m_scale;
+}
+
+void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vector<PoseSample>& outSample, AnimationClip& clip, float time)
+{
+    outSample.clear();
+    outSample.resize(mesh->mBones.size());
+    for (int i = 0; i < mesh->mBones.size(); i++)
+    {
+        auto& bone = mesh->mBones[mesh->mBoneOrder[i]];       
+
+        AnimationTrack track;
+        if (!GetBoneTrack(&clip, bone.Name, track))
+            continue;
+
+        PoseSample sample;
+        sample.Position = SamplePosition(track, time);
+        sample.Scale = SampleScaling(track, time);
+        sample.Rotation = SampleRotation(track, time);
+        outSample[i]= sample;
+    }
 }
 
 float Fracture::AnimationSystem::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
@@ -216,5 +291,21 @@ uint32_t Fracture::AnimationSystem::FindNextPosition(const float& time, Animatio
         }
     }
     assert(0);
+}
+
+void Fracture::AnimationSystem::ReloadGraphForAllEntities(UUID graph)
+{
+    if (mEntityToGraphTracker.find(graph) != mEntityToGraphTracker.end())
+    {
+        for (const auto& entiy : mEntityToGraphTracker[graph])
+        {
+            if (mGraphs.find(entiy) != mGraphs.end())
+            {
+                mGraphs.erase(entiy);
+                mGraphs[entiy] = AssetManager::GetAnimationGraphByID(graph);
+            }
+        }
+
+    }
 }
 

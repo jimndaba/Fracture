@@ -104,10 +104,22 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation\AnimationBlender.h" />
     <ClInclude Include="src\Animation\AnimationClip.h" />
     <ClInclude Include="src\Animation\AnimationGraph.h" />
+    <ClInclude Include="src\Animation\AnimationPose.h" />
+    <ClInclude Include="src\Animation\AnimationPosePool.h" />
     <ClInclude Include="src\Animation\AnimationState.h" />
     <ClInclude Include="src\Animation\AnimationSystem.h" />
+    <ClInclude Include="src\Animation\AnimationTasks.h" />
+    <ClInclude Include="src\Animation\GraphNodes\BlendNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\BooleanNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\IAnimationNode.h" />
+    <ClInclude Include="src\Animation\GraphNodes\FloatNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\PoseNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\SelectorNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\SourceNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\ValueNodes.h" />
     <ClInclude Include="src\Assets\AnimationClipLoader.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
     <ClInclude Include="src\Assets\AssetRegistries.h" />
@@ -245,10 +257,22 @@
     <ClInclude Include="vendor\soloud\src\audiosource\wav\stb_vorbis.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation\AnimationBlender.cpp" />
     <ClCompile Include="src\Animation\AnimationClip.cpp" />
     <ClCompile Include="src\Animation\AnimationGraph.cpp" />
+    <ClCompile Include="src\Animation\AnimationPose.cpp" />
+    <ClCompile Include="src\Animation\AnimationPosePool.cpp" />
     <ClCompile Include="src\Animation\AnimationState.cpp" />
     <ClCompile Include="src\Animation\AnimationSystem.cpp" />
+    <ClCompile Include="src\Animation\AnimationTasks.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\BlendNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\BooleanNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\IAnimationNode.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\FloatNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\PoseNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\SelectorNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\SourceNodes.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\ValueNodes.cpp" />
     <ClCompile Include="src\Assets\AnimationClipLoader.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
     <ClCompile Include="src\Assets\ImagerLoader.cpp" />

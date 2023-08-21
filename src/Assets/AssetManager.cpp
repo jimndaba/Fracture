@@ -15,6 +15,7 @@
 #include "Animation/AnimationClip.h"
 #include "World/SceneManager.h"
 #include "Scripting/ScriptManager.h"
+#include "Serialisation/AnimationGraphSerialiser.h"
 
 std::map<Fracture::UUID, Fracture::MeshRegistry> Fracture::AssetManager::mMeshRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMeshIDLookUp;
@@ -55,6 +56,9 @@ std::queue<Fracture::AnimationClipRegistry> Fracture::AssetManager::mAnimationsT
 std::map<Fracture::UUID, Fracture::AnimationClipRegistry> Fracture::AssetManager::mAnimationRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mAnimationIDLookUp;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::AnimationClip>> Fracture::AssetManager::mAnimations;
+
+std::map<Fracture::UUID, Fracture::AnimationGraphRegistry> Fracture::AssetManager::mAnimationGraphRegister;
+std::map<std::string, Fracture::UUID> Fracture::AssetManager::mAnimationGraphIDLookUp;
 
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::mInstance;
@@ -197,6 +201,22 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 			reg_serialiser.EndCollection();
 		}
 
+		if (reg_serialiser.BeginCollection("AnimationGraph Registry"))
+		{
+			FRACTURE_TRACE("Loading Animation Graph Assets");
+			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
+			{
+
+				AnimationGraphRegistry reg;
+				reg.ID = reg_serialiser.ID("ID");
+				reg.Name = reg_serialiser.STRING("Name");
+				reg.Path = reg_serialiser.STRING("Path");
+				RegisterAnimationGraph(reg);
+				reg_serialiser.NextInCollection();
+			}
+			reg_serialiser.EndCollection();
+		}
+
 		reg_serialiser.EndStruct();
 	}
 
@@ -252,6 +272,13 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 	for (const auto& reg : mAnimationRegister)
 	{
 		reg_serialiser.Property("Animation", reg.second);
+	}
+	reg_serialiser.EndCollection();
+
+	reg_serialiser.BeginCollection("AnimationGraph Registry");
+	for (const auto& reg : mAnimationGraphRegister)
+	{
+		reg_serialiser.Property("AnimationGraph", reg.second);
 	}
 	reg_serialiser.EndCollection();
 
@@ -782,6 +809,46 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::GetAnimationByI
 		}
 	}
 	FRACTURE_ERROR("Could not find Animation: {}", id);
+	return nullptr;
+}
+
+void Fracture::AssetManager::RegisterAnimationGraph(const AnimationGraphRegistry& reg)
+{
+	mAnimationGraphRegister[reg.ID] = reg;
+	mAnimationGraphIDLookUp[reg.Name] = reg.ID;
+	IsRegisterDirty = true;
+	FRACTURE_TRACE("Registering Animation Graph: {} ", reg.Path);
+}
+
+std::shared_ptr<Fracture::AnimationGraph> Fracture::AssetManager::GetAnimationGraph(const std::string& Name)
+{
+	auto it = mAnimationGraphRegister.find(mAnimationGraphIDLookUp[Name]);
+	if (it != mAnimationGraphRegister.end())
+	{
+		auto reader = AnimationGraphSerialiser(Fracture::ISerialiser::IOMode::Open, ISerialiser::SerialiseFormat::Json);
+		reader.Open(mAnimationGraphRegister[mAnimationGraphIDLookUp[Name]].Path);
+		auto graph = reader.ReadGraph();
+
+		if (graph)
+			return graph;
+	}
+	FRACTURE_ERROR("Could not read Animationgrpah: {}", Name);
+	return nullptr;
+}
+
+std::shared_ptr<Fracture::AnimationGraph> Fracture::AssetManager::GetAnimationGraphByID(const Fracture::UUID& id)
+{
+	auto it = mAnimationGraphRegister.find(id);
+	if (it != mAnimationGraphRegister.end())
+	{
+		auto reader = AnimationGraphSerialiser(Fracture::ISerialiser::IOMode::Open, ISerialiser::SerialiseFormat::Json);
+		reader.Open(mAnimationGraphRegister[id].Path);
+		auto graph = reader.ReadGraph();
+
+		if (graph)
+			return graph;
+	}
+	FRACTURE_ERROR("Could not read Animationgrpah: {}", id);
 	return nullptr;
 }
 

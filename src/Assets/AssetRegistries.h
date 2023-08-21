@@ -40,6 +40,7 @@ namespace Fracture
 		uint32_t MeshTriangleSize;
 		uint32_t BoneCount;
 		uint32_t BoneSize;
+		uint32_t AnimationCount;
 	};
 
 	struct TextureFileHeader

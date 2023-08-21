@@ -551,17 +551,15 @@ namespace Fracture
 		{
 			entity = new_entity;
 			CurrentGraph = other.CurrentGraph;
-			Animations = other.Animations;			
+			Mesh = other.Mesh;			
 		}
 
 		UUID entity;
 		UUID GetID() { return entity; }
 		
-		UUID CurrentGraph;
-		bool HasAnimationSet = false;
-		bool Play = false;
-		float AnimationTime = 0.0f;
-		std::vector<Fracture::UUID> Animations;
+		UUID CurrentGraph = -1;
+		UUID Mesh = -1;
+		bool IsGraphSet = false;
 		
 	};
 }

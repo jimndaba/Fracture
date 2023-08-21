@@ -17,6 +17,7 @@ namespace Fracture
 	struct Texture;
 	struct Material;
 	struct AnimationClip;
+	struct AnimationGraph;
 
 	struct AsyncLoadMeshEvent : public Event
 	{
@@ -117,6 +118,10 @@ namespace Fracture
 		static std::shared_ptr<AnimationClip> GetAnimation(const std::string& Name);
 		static std::shared_ptr<AnimationClip> GetAnimationByID(const Fracture::UUID& id);
 
+		static void RegisterAnimationGraph(const AnimationGraphRegistry& reg);
+		static std::shared_ptr<AnimationGraph> GetAnimationGraph(const std::string& Name);
+		static std::shared_ptr<AnimationGraph> GetAnimationGraphByID(const Fracture::UUID& id);
+
 
 		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
 		void OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadTextureEvent>& evnt);
@@ -143,6 +148,9 @@ namespace Fracture
 		static std::map<UUID, AnimationClipRegistry> mAnimationRegister;
 		static std::map<std::string, UUID> mAnimationIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<AnimationClip>> mAnimations;
+
+		static std::map<Fracture::UUID, Fracture::AnimationGraphRegistry> mAnimationGraphRegister;
+		static std::map<std::string, Fracture::UUID> mAnimationGraphIDLookUp;
 
 		static int CountUseCountMesh(UUID mesh);
 
@@ -171,9 +179,8 @@ namespace Fracture
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::AnimationClip>>> mAnimationFutures;
 		static std::queue<AnimationClipRegistry> mAnimationsToLoad;
 
+
 		static std::unique_ptr<AssetManager> mInstance;
-
-
 	};
 
 }
