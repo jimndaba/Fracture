@@ -44,8 +44,8 @@ void Fracture::Blend1DNode::Process(AnimationContext& context)
 {	
 	
 	std::shared_ptr<BlendTask> task = std::make_shared<BlendTask>();
-	task->Pose1 = context._graph->GetNode(InputPins[0].NodeID)->PoseNodeID;
-	task->Pose2 = context._graph->GetNode(InputPins[1].NodeID)->PoseNodeID;
+	task->Pose1 = InputPins[0].NodeID;
+	task->Pose2 = InputPins[1].NodeID;
 
 	if (InputPins[2].IsValueSet)
 	{

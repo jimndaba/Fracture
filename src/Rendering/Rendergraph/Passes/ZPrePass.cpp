@@ -114,12 +114,20 @@ void Fracture::ZPrePass::Execute()
 			Fracture::RenderCommands::BindMaterial(Context, mShaderSkinned.get(), material.get());
 			Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "Model_matrix", drawCall->model);
 
-			if(AnimationSystem::Instance()->HasGlobalPose(drawCall->EntityID))
+			if(AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawCall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
-				const auto& poses = AnimationSystem::Instance()->mGraphs[drawCall->EntityID]->mGlobalTansforms;
-				for (int i = 0; i < poses.size(); i++)
+				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawCall->EntityID];
+				if (!poses.empty())
 				{
-					Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
+					Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "IsAnimated", true);
+					for (int i = 0; i < poses.size(); i++)
+					{
+						Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
+					}
+				}
+				else
+				{
+					Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "IsAnimated", false);
 				}
 			}
 		}
@@ -128,6 +136,7 @@ void Fracture::ZPrePass::Execute()
 			Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
 			Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
 			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Model_matrix", drawCall->model);
+			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "IsAnimated", false);
 		}
 
 		Fracture::RenderCommands::BindVertexArrayObject(Context,drawCall->MeshHandle);

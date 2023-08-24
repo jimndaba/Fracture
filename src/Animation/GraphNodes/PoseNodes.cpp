@@ -2,6 +2,7 @@
 #include "PoseNodes.h"
 #include "Animation/AnimationGraph.h"
 #include "Animation/AnimationTasks.h"
+#include "AnimationClipNode.h"
 
 Fracture::ReferencePoseNode::ReferencePoseNode() : IPoseNode()
 {
@@ -18,15 +19,7 @@ Fracture::ReferencePoseNode::ReferencePoseNode() : IPoseNode()
 }
 
 void Fracture::ReferencePoseNode::Process(AnimationContext& context)
-{
-	if (AnimationSet)
-	{
-		std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
-		task->Time = 0;
-		task->ClipID = AnimationClipID;
-		task->NodeID = NodeID;
-		context._graph->PushTask(task);
-	}
+{	
 }
 
 Fracture::AnimationPoseNode::AnimationPoseNode() : IPoseNode()
@@ -40,20 +33,27 @@ Fracture::AnimationPoseNode::AnimationPoseNode() : IPoseNode()
 			.PinType = PinValueType::Pose
 			}
 	};
+	InputPins =
+	{
+		Pin{
+			.PinID = Fracture::UUID(),
+			.Name = "AnimationClip",
+			.PinType = PinValueType::Pose,
+			}		
+	};
 }
 
 void Fracture::AnimationPoseNode::Process(AnimationContext& context)
 {
-	float AnimationTime = 0.0f;
-	if (AnimationSet)
-	{
-		PoseNodeID = this->NodeID;
-
+	const auto& node = (IPoseNode*)context._graph->GetNode(InputPins[0].NodeID);
+	if (node)
+	{		
+		HasAnimation = true;
+		CurrentAnimation = node->Result.AnimationClip;
 		std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
-		task->Time = Time += context.Time;
-		task->ClipID = AnimationClipID;
-		task->NodeID = NodeID;	
+		task->Time = Time;
+		task->ClipID = node->Result.AnimationClip;
+		task->NodeID = NodeID;
 		context._graph->PushTask(task);
-	
 	}
 }

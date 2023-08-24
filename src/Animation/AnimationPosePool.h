@@ -23,6 +23,7 @@ namespace Fracture
 		std::vector<std::unique_ptr<PoseBuffer>> mBufferPool;
 		std::list<int> mAvailableBuffers;
 		std::list<int> mInUseBuffers;
+		
 	public:
 		PoseBufferPool(int poolsize);
 
@@ -39,6 +40,12 @@ namespace Fracture
 		int GetLastBufferInUse();
 		
 		void MakeUnavailable(int t, std::queue<int>& q);
+
+		int BuffersCount = 0;
+
+		inline int GetNoActiveBuffers() {
+			return BuffersCount;
+		};
 	};
 
 

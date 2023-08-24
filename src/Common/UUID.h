@@ -45,7 +45,7 @@ namespace Fracture
 		}
 
 	private:
-		mutable uint32_t m_UUID;
+		mutable uint32_t m_UUID = 0;
 		bool mValid = false;
 
 	};

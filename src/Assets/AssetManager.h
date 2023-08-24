@@ -7,6 +7,7 @@
 #include <queue>
 #include "AssetRegistries.h"
 #include "EventSystem/Eventbus.h"
+#include "taskflow/taskflow.hpp"
 
 namespace Fracture
 {
@@ -179,6 +180,7 @@ namespace Fracture
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::AnimationClip>>> mAnimationFutures;
 		static std::queue<AnimationClipRegistry> mAnimationsToLoad;
 
+		static tf::Taskflow taskflow;
 
 		static std::unique_ptr<AssetManager> mInstance;
 	};

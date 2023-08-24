@@ -27,7 +27,7 @@ void Fracture::AnimationSystem::Update(float dt)
         for (const auto& graph : mGraphs)
         {
             mPool->ReleaseAllBuffers();
-            graph.second->OnUpdate(dt);
+            graph.second->OnUpdate(dt,graph.first);
         }
     }
 }
@@ -126,7 +126,7 @@ glm::mat4 Fracture::AnimationSystem::CalcInterpolatedScaling(AnimationTrack& out
     }
     uint32_t PositionIndex = FindNextScale(animationTime, outTrack);
     uint32_t NextPositionIndex = (PositionIndex + 1);
-    assert(NextPositionIndex < channel.m_ScaleKeys.size());
+    assert(NextPositionIndex < outTrack.Scales.size());
 
     float Factor = GetScaleFactor((float)outTrack.Scales[PositionIndex].Time, (float)outTrack.Scales[NextPositionIndex].Time, animationTime);
     Factor = glm::clamp(Factor, 0.0f, 1.0f);
@@ -146,7 +146,7 @@ glm::mat4 Fracture::AnimationSystem::CalcInterpolatedRotation(AnimationTrack& ou
 
     uint32_t RotationIndex = FindNextRotation(animationTime, outTrack);
     uint32_t NextRotationIndex = (RotationIndex + 1);
-    assert(NextRotationIndex < channel.mNumRotationKeys);
+    assert(NextRotationIndex < outTrack.mNumRotationKeys);
     float Factor = GetScaleFactor(outTrack.Rotations[RotationIndex].Time, outTrack.Rotations[NextRotationIndex].Time, animationTime);
     glm::quat StartRotationQ = outTrack.Rotations[RotationIndex].Rotation;
     glm::quat EndRotationQ = outTrack.Rotations[NextRotationIndex].Rotation;
@@ -179,7 +179,7 @@ glm::vec3 Fracture::AnimationSystem::SampleScaling(AnimationTrack& outTrack, con
     }
     uint32_t PositionIndex = FindNextScale(animationTime, outTrack);
     uint32_t NextPositionIndex = (PositionIndex + 1);
-    assert(NextPositionIndex < channel.m_ScaleKeys.size());
+    assert(NextPositionIndex < outTrack.Scales.size());
 
     float Factor = GetScaleFactor((float)outTrack.Scales[PositionIndex].Time, (float)outTrack.Scales[NextPositionIndex].Time, animationTime);
     Factor = glm::clamp(Factor, 0.0f, 1.0f);
@@ -199,7 +199,7 @@ glm::quat Fracture::AnimationSystem::SampleRotation(AnimationTrack& outTrack, co
 
     uint32_t RotationIndex = FindNextRotation(animationTime, outTrack);
     uint32_t NextRotationIndex = (RotationIndex + 1);
-    assert(NextRotationIndex < channel.mNumRotationKeys);
+    assert(NextRotationIndex < outTrack.mNumRotationKeys);
     float Factor = GetScaleFactor(outTrack.Rotations[RotationIndex].Time, outTrack.Rotations[NextRotationIndex].Time, animationTime);
     glm::quat StartRotationQ = outTrack.Rotations[RotationIndex].Rotation;
     glm::quat EndRotationQ = outTrack.Rotations[NextRotationIndex].Rotation;
@@ -233,8 +233,14 @@ glm::mat4 Fracture::AnimationSystem::BoneTransformation(AnimationTrack& outTrack
     return m_translation * m_rotation * m_scale;
 }
 
-void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vector<PoseSample>& outSample, AnimationClip& clip, float time)
+void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vector<PoseSample>& outSample, Fracture::UUID& clipID, float& time, float dt)
 {
+    const auto& clip = AssetManager::GetAnimationByID(clipID);
+    float AnimationTime = time;
+    AnimationTime += clip->FramesPerSec * dt;
+    AnimationTime = fmod(AnimationTime, clip->Duration);
+    time = AnimationTime;
+
     outSample.clear();
     outSample.resize(mesh->mBones.size());
     for (int i = 0; i < mesh->mBones.size(); i++)
@@ -242,13 +248,13 @@ void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vect
         auto& bone = mesh->mBones[mesh->mBoneOrder[i]];       
 
         AnimationTrack track;
-        if (!GetBoneTrack(&clip, bone.Name, track))
+        if (!GetBoneTrack(clip.get(), bone.Name, track))
             continue;
 
         PoseSample sample;
-        sample.Position = SamplePosition(track, time);
-        sample.Scale = SampleScaling(track, time);
-        sample.Rotation = SampleRotation(track, time);
+        sample.Position = SamplePosition(track, AnimationTime);
+        sample.Scale = SampleScaling(track, AnimationTime);
+        sample.Rotation = SampleRotation(track, AnimationTime);
         outSample[i]= sample;
     }
 }

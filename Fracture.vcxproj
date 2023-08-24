@@ -112,6 +112,8 @@
     <ClInclude Include="src\Animation\AnimationState.h" />
     <ClInclude Include="src\Animation\AnimationSystem.h" />
     <ClInclude Include="src\Animation\AnimationTasks.h" />
+    <ClInclude Include="src\Animation\GraphNodes\AnimationClipNode.h" />
+    <ClInclude Include="src\Animation\GraphNodes\AnimationStateNode.h" />
     <ClInclude Include="src\Animation\GraphNodes\BlendNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\BooleanNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\IAnimationNode.h" />
@@ -119,6 +121,7 @@
     <ClInclude Include="src\Animation\GraphNodes\PoseNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\SelectorNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\SourceNodes.h" />
+    <ClInclude Include="src\Animation\GraphNodes\AnimationStateMachineNode.h" />
     <ClInclude Include="src\Animation\GraphNodes\ValueNodes.h" />
     <ClInclude Include="src\Assets\AnimationClipLoader.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
@@ -265,6 +268,7 @@
     <ClCompile Include="src\Animation\AnimationState.cpp" />
     <ClCompile Include="src\Animation\AnimationSystem.cpp" />
     <ClCompile Include="src\Animation\AnimationTasks.cpp" />
+    <ClCompile Include="src\Animation\GraphNodes\AnimationClipNode.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\BlendNodes.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\BooleanNodes.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\IAnimationNode.cpp" />

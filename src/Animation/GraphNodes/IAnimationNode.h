@@ -37,6 +37,7 @@ namespace Fracture
 		std::string Name;
 		PinValueType PinType;
 		bool IsValueSet = false;
+		void* Value;
 
 		Fracture::UUID NodeID;
 		Fracture::UUID Resource;
@@ -44,13 +45,21 @@ namespace Fracture
 
 	struct NodeLink
 	{
+		enum class LinkConnectionType
+		{
+			NodeLink,
+			TransitionLink
+		};
 		Fracture::UUID ID;
-		Fracture::UUID FromID;
-		Fracture::UUID ToID;
+
+		Fracture::UUID FromPinID;
+		Fracture::UUID ToPinID;
 
 		Fracture::UUID NodeFrom;
 		Fracture::UUID NodeTo;
-		Fracture::UUID Resource;
+
+		LinkConnectionType LinkType = LinkConnectionType::NodeLink;
+
 		inline NodeLink operator = (const int& other) { ID = other; return *this; }
 	};
 
@@ -82,11 +91,13 @@ namespace Fracture
 
 	struct IAnimationNode
 	{
-		union NodeResult
+		struct NodeResult
 		{
 			bool BOOL;
 			int INT;
 			float FLOAT;	
+			Fracture::UUID AnimationClip;
+			Fracture::UUID PoseNodeID;
 		};
 
 		IAnimationNode();
@@ -95,8 +106,6 @@ namespace Fracture
 		Fracture::UUID NodeID;
 		NodeValueType ValueType;
 		NodeResult Result;
-
-		Fracture::UUID PoseNodeID;
 
 		std::vector<Pin> InputPins;
 		std::vector<Pin> OutPins;
@@ -111,9 +120,6 @@ namespace Fracture
 
 		virtual void Process(AnimationContext& context) = 0;
 		virtual void LinkResources() {};
-
-
-
 	};
 
 	struct IOperationNode : IAnimationNode
@@ -125,15 +131,13 @@ namespace Fracture
 	struct IPoseNode : IAnimationNode
 	{
 		IPoseNode();
-		void Process(AnimationContext& context) {};
-
-		Fracture::UUID AnimationClipID;
-		bool AnimationSet = false;
+		void Process(AnimationContext& context) {};	
+		Fracture::UUID CurrentAnimation;
+		bool HasAnimation = false;
 		bool Looping = false;
 		bool Enabled = false;
-		float Time;
-		float Duration;
-
+		float Time = 0.0f;
+		float Duration = 0.0f;
 	};
 }
 

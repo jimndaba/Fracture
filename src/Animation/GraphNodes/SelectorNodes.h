@@ -4,6 +4,7 @@
 
 #include "IAnimationNode.h"
 #include "FloatNodes.h"
+#include "AnimationClipNode.h"
 
 namespace Fracture
 {	
@@ -19,10 +20,11 @@ namespace Fracture
 		void Process(AnimationContext& context);	
 	};
 
-	struct PoseSelectorNode : ISelectorNode
+	struct PoseSelectorNode :IPoseNode
 	{
 		PoseSelectorNode();
 		void Process(AnimationContext& context);
+		bool Value = false;
 	};
 
 }

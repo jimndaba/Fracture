@@ -20,6 +20,7 @@ namespace Fracture
 		Fracture::UUID ClipID;
 		Fracture::UUID NodeID;
 		float Time;
+		float dt;
 		float fps;
 	};
 

@@ -33,7 +33,7 @@ namespace Fracture
 
 		glm::mat4 BoneTransformation(AnimationTrack& outTrack, float time);
 
-		void SampleAnimation(const StaticMesh* mesh, std::vector<PoseSample>& outSample, AnimationClip& clip, float time);
+		void SampleAnimation(const StaticMesh* mesh, std::vector<PoseSample>& outSample, Fracture::UUID& clipID, float& time, float dt);
 
 		float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 
@@ -58,8 +58,13 @@ namespace Fracture
 
 		AnimationBlender mBlender;
 		std::unique_ptr<PoseBufferPool> mPool;
+
 		std::map<Fracture::UUID, std::vector<Fracture::UUID>> mEntityToGraphTracker;
+
+
+
 		std::map<Fracture::UUID, std::shared_ptr<AnimationGraph>> mGraphs;
+		std::map<Fracture::UUID, std::vector<glm::mat4>>  mGlobalPoseMatrices;
 	};
 
 

@@ -28,21 +28,15 @@ Fracture::AndNode::AndNode() : IBoolNode()
 		}
 	};
 
-	
+	Name = "And Node";
 
 }
 
 void Fracture::AndNode::Process(AnimationContext& context)
 {
-	Result.BOOL = true;
-	for (const auto& node_id : mConditionsNodes)
-	{
-		auto node = std::static_pointer_cast<IBoolNode>(context._graph->GetNode(node_id));
-		if (!node->Result.BOOL)
-		{
-			Result.BOOL = false;
-		}		
-	}
+	const auto& lh = context._graph->GetNode(InputPins[0].NodeID);
+	const auto& rh = context._graph->GetNode(InputPins[1].NodeID);	
+	Result.BOOL = lh->Result.BOOL && rh->Result.BOOL;
 }
 
 Fracture::OrNode::OrNode() : IBoolNode()
@@ -69,19 +63,15 @@ Fracture::OrNode::OrNode() : IBoolNode()
 		.PinType = PinValueType::Bool,
 		}
 	};
+
+	Name = "Or Node";
 }
 
 void Fracture::OrNode::Process(AnimationContext& context)
 {
-	Result.BOOL = false;
-	for (const auto& node_id : mConditionsNodes)
-	{
-		auto node = std::static_pointer_cast<IBoolNode>(context._graph->GetNode(node_id));
-		if (node->Result.BOOL)
-		{
-			Result.BOOL = true;
-		}
-	}
+	const auto& lh = context._graph->GetNode(InputPins[0].NodeID);
+	const auto& rh = context._graph->GetNode(InputPins[1].NodeID);
+	Result.BOOL = lh->Result.BOOL || rh->Result.BOOL;
 }
 
 Fracture::NotNode::NotNode() : IBoolNode()
@@ -99,16 +89,18 @@ Fracture::NotNode::NotNode() : IBoolNode()
 	{
 		Pin{
 		.PinID = Fracture::UUID(),
-		.Name = "In",
+		.Name = "Bool",
 		.PinType = PinValueType::Bool,
 		}
 	};
+
+	Name = "Not Node";
 }
 
 void Fracture::NotNode::Process(AnimationContext& context)
 {
-	auto node = std::static_pointer_cast<IBoolNode>(context._graph->GetNode(mConditionNode));
-	Result.BOOL = !node->Result.BOOL;
+	const auto& lh = context._graph->GetNode(InputPins[0].NodeID);
+	Result.BOOL = !lh->Result.BOOL;
 }
 
 Fracture::IBoolNode::IBoolNode():IAnimationNode()

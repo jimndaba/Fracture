@@ -27,7 +27,7 @@ namespace Fracture
 		std::map<Fracture::UUID,std::shared_ptr<AnimationParameter>> Parameters;
 		std::map<Fracture::UUID,std::vector<std::shared_ptr<AnimationCondition>>> Conditions;
 
-		std::vector<std::shared_ptr<IAnimationNode>> GraphNodes;
+		std::vector<std::unique_ptr<IAnimationNode>> GraphNodes;
 		std::vector<NodeLink> Links;
 
 		AnimationState* GetCurrentState();
@@ -44,7 +44,7 @@ namespace Fracture
 
 		void ExecuteTaskList();
 
-		void OnUpdate(float time);
+		void OnUpdate(float time, Fracture::UUID entityid);
 
 		void CalculateFinalGlobalTransforms();
 
@@ -54,7 +54,7 @@ namespace Fracture
 
 		void SetPoseBuffer(std::vector<PoseSample> new_buffer);
 
-		const std::shared_ptr<IAnimationNode>& GetNode(UUID node_id);
+		IAnimationNode* GetNode(UUID node_id);
 
 		bool EntityandMeshSet = true;
 		int GlobalIndex = 0;
@@ -66,7 +66,7 @@ namespace Fracture
 
 	private:
 		std::unordered_map<UUID, std::vector<UUID>> adjList;
-		std::vector<std::shared_ptr<IAnimationNode>> m_ExecutionOrder;
+		std::vector<IAnimationNode*> m_ExecutionOrder;
 		std::unique_ptr<AnimationContext> mContext;
 		void DepthFirstSearch();
 

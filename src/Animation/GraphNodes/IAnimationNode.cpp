@@ -1,7 +1,7 @@
 #include "FracturePCH.h"
 #include "IAnimationNode.h"
 
-Fracture::IAnimationNode::IAnimationNode()
+Fracture::IAnimationNode::IAnimationNode() :Result(),NodeID()
 {
 }
 

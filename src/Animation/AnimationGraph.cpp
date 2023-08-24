@@ -155,19 +155,6 @@ Fracture::AnimationState* Fracture::AnimationGraph::GetCurrentState()
 	return States[Current_StateID].get();
 }
 
-void Fracture::AnimationGraph::TopologicalSort()
-{
-	adjList.clear();
-	m_ExecutionOrder.clear();
-
-	for (const auto& link : Links)
-	{
-		adjList[link.NodeFrom].push_back(link.NodeTo);
-	}
-
-	DepthFirstSearch();
-	IsDirty = false;
-}
 
 void Fracture::AnimationGraph::Process(AnimationContext& context)
 {
@@ -192,7 +179,7 @@ void Fracture::AnimationGraph::ExecuteTaskList()
 	}
 }
 
-void Fracture::AnimationGraph::OnUpdate(float time)
+void Fracture::AnimationGraph::OnUpdate(float time,Fracture::UUID entityid)
 {
 	while (!mAnimationTasks.empty())
 		mAnimationTasks.pop();
@@ -210,6 +197,8 @@ void Fracture::AnimationGraph::OnUpdate(float time)
 		ExecuteTaskList();
 
 		CalculateFinalGlobalTransforms();
+
+		mSystem->mGlobalPoseMatrices[entityid] = mGlobalTansforms;
 	}
 }
 
@@ -263,15 +252,41 @@ void Fracture::AnimationGraph::SetPoseBuffer(std::vector<PoseSample> new_buffer)
 	GlobalIndex = 0;
 }
 
-const std::shared_ptr<Fracture::IAnimationNode>& Fracture::AnimationGraph::GetNode(UUID node_id)
+Fracture::IAnimationNode* Fracture::AnimationGraph::GetNode(UUID node_id)
 {
-	auto it = std::find_if(std::begin(GraphNodes), std::end(GraphNodes), [&](std::shared_ptr<IAnimationNode> p) { return p->NodeID == node_id; });
+	auto it = std::find_if(std::begin(GraphNodes), std::end(GraphNodes), [node_id](const std::unique_ptr<IAnimationNode>& p) { return p->NodeID == node_id; });
 	if (it != GraphNodes.end())
 	{
 		int index = std::distance(GraphNodes.begin(), it);
-		return GraphNodes[index];
+		return GraphNodes[index].get();
 	}
 	return nullptr;
+}
+
+
+void Fracture::AnimationGraph::TopologicalSort()
+{
+	adjList.clear();
+	m_ExecutionOrder.clear();
+
+	for (const auto& node : GraphNodes)
+	{
+		node->LinkCount  = 0;
+	}
+
+
+	for (const auto& link : Links)
+	{
+		adjList[link.NodeFrom].push_back(link.NodeTo);
+
+		const auto& node = GetNode(link.NodeTo);
+		node->LinkCount += 1;
+	}
+
+
+
+	DepthFirstSearch();
+	IsDirty = false;
 }
 
 void Fracture::AnimationGraph::DepthFirstSearch()
@@ -282,13 +297,13 @@ void Fracture::AnimationGraph::DepthFirstSearch()
 	}
 
 
-	std::queue<std::shared_ptr<IAnimationNode>> mstack;
+	std::queue<IAnimationNode*> mstack;
 
 	for (const auto& node : GraphNodes)
 	{
 		if (node->LinkCount == 0)
 		{
-			mstack.push(node);
+			mstack.push(node.get());
 		}
 	}
 
@@ -308,7 +323,7 @@ void Fracture::AnimationGraph::DepthFirstSearch()
 			if (!adjNode)
 				continue;
 
-			adjNode->LinkCount--;
+			adjNode->LinkCount -= 1;
 			if (adjNode->LinkCount == 0)
 			{
 				mstack.push(adjNode);

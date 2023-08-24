@@ -141,13 +141,25 @@ void Fracture::ForwardPass::Execute()
 
 		if (material->IsSkinned)
 		{
-			if (AnimationSystem::Instance()->HasGlobalPose(drawCall->EntityID))
+			if (AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawCall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
-				const auto& poses = AnimationSystem::Instance()->mGraphs[drawCall->EntityID]->mGlobalTansforms;
-				for (int i = 0; i < poses.size(); i++)
+				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawCall->EntityID];
+				if (!poses.empty())
 				{
-					Fracture::RenderCommands::SetUniform(Context, shader.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
+					Fracture::RenderCommands::SetUniform(Context, shader.get(), "IsAnimated", true);
+					for (int i = 0; i < poses.size(); i++)
+					{
+						Fracture::RenderCommands::SetUniform(Context, shader.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
+					}
 				}
+				else
+				{
+					Fracture::RenderCommands::SetUniform(Context, shader.get(), "IsAnimated", false);
+				}
+			}
+			else
+			{
+				Fracture::RenderCommands::SetUniform(Context, shader.get(), "IsAnimated", false);
 			}
 		}
 

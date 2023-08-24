@@ -21,8 +21,21 @@ namespace Fracture
 	{
 		FloatValueNode();
 		void Process(AnimationContext& context);
-		float Value;
-		
+		float Value = 0.0f;	
+	};
+
+	struct BoolValueNode : IValueNode
+	{
+		BoolValueNode();
+		void Process(AnimationContext& context);
+		bool Value = false;
+	};
+
+	struct IntValueNode : IValueNode
+	{
+		IntValueNode();
+		void Process(AnimationContext& context);
+		int Value = 0;
 	};
 
 

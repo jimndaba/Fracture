@@ -25,6 +25,7 @@ Fracture::PoseBuffer* Fracture::PoseBufferPool::GetPoseBuffer()
 	if (mBufferPool[mBufferIndex])
 	{
 		mInUseBuffers.push_front(mBufferIndex);
+		BuffersCount += 1;
 		mAvailableBuffers.pop_front();
 		return mBufferPool[mBufferIndex].get();
 	}
@@ -48,16 +49,20 @@ void Fracture::PoseBufferPool::ReleasePoseBuffer()
 	mBufferPool[mBufferIndex]->Pose.clear();
 	mAvailableBuffers.push_front(mBufferIndex);
 	mInUseBuffers.pop_front();
+	BuffersCount -= 1;
 }
 
 void Fracture::PoseBufferPool::ReleaseAllBuffers()
 {
+	BuffersCount = 0;
 	while (!mInUseBuffers.empty())
 	{
+		
 		int index = mInUseBuffers.front();
 		mBufferPool[index]->Pose.clear();
 		mAvailableBuffers.push_front(index);
 		mInUseBuffers.pop_front();
+		
 	}
 }
 
@@ -66,6 +71,7 @@ void Fracture::PoseBufferPool::ReleasePoseBuffer(int index)
 	mBufferPool[index]->Pose.clear();
 	mAvailableBuffers.push_front(index);
 	mInUseBuffers.remove(index);
+	BuffersCount -= 1;
 }
 
 int Fracture::PoseBufferPool::MovePoseAndClearBuffer(int buffer, int iIndex)
@@ -87,6 +93,7 @@ int Fracture::PoseBufferPool::MovePoseAndClearBuffer(int buffer, int iIndex)
 	
 	mAvailableBuffers.remove(buffer);
 	mInUseBuffers.push_front(nextAvailable);
+	BuffersCount -= 1;
 	ReleasePoseBuffer(buffer);
 	return nextAvailable;
 }

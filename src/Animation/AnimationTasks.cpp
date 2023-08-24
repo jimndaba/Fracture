@@ -10,22 +10,10 @@ Fracture::SampleTask::SampleTask():
 
 void Fracture::SampleTask::Execute(AnimationContext& context)
 {
-	const auto& clip = AssetManager::GetAnimationByID(ClipID);
 	const auto& mesh = AssetManager::GetStaticByIDMesh(context.MeshID);
-	float AnimationTime = 0;
-	if (clip)
-	{
-		auto& Pose = context._system->mPool->GetPoseBuffer()->Pose;
-
-		AnimationTime = Time;
-		AnimationTime += clip->FramesPerSec * context.Time;
-		AnimationTime = fmod(AnimationTime, clip->Duration);
-		
-		const auto& node = std::static_pointer_cast<AnimationPoseNode>(context._graph->GetNode(NodeID));
-		node->Time = AnimationTime;
-
-		context._system->SampleAnimation(mesh.get(), Pose, *clip.get(), AnimationTime);
-	}
+	auto& Pose = context._system->mPool->GetPoseBuffer()->Pose;
+	const auto& node = (AnimationPoseNode*)(context._graph->GetNode(NodeID));
+	context._system->SampleAnimation(mesh.get(), Pose, ClipID, node->Time,context.Time);
 }
 
 Fracture::BlendTask::BlendTask() :
