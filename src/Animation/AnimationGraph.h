@@ -21,14 +21,13 @@ namespace Fracture
 		Fracture::UUID ID;
 		Fracture::UUID Current_StateID = -1;
 		bool IsDirty = true;
-
-		std::map<Fracture::UUID, std::shared_ptr<AnimationState>> States;
-		std::map<Fracture::UUID,std::shared_ptr<StateTransition>> Transitions;
-		std::map<Fracture::UUID,std::shared_ptr<AnimationParameter>> Parameters;
-		std::map<Fracture::UUID,std::vector<std::shared_ptr<AnimationCondition>>> Conditions;
-
+		
 		std::vector<std::unique_ptr<IAnimationNode>> GraphNodes;
 		std::vector<NodeLink> Links;
+
+		std::map<Fracture::UUID, std::shared_ptr<AnimationParameter>> Parameters;
+
+		
 
 		AnimationState* GetCurrentState();
 

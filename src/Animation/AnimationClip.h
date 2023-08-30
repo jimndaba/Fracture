@@ -20,7 +20,6 @@ namespace Fracture
 		std::vector<AnimationPose> Positions;		
 		std::vector<AnimationPose> Scales;		
 		std::vector<AnimationPose> Rotations;		
-
 		uint32_t mNumPositionKeys = 0;
 		uint32_t mNumScaleKeys = 0;
 		uint32_t mNumRotationKeys = 0;

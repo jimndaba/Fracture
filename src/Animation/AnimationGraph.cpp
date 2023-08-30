@@ -18,133 +18,12 @@ Fracture::AnimationGraph::AnimationGraph(AnimationSystem* sys):
 
 void Fracture::AnimationGraph::EvaluateStateTransitions()
 {	
-	if (Current_StateID < 0)
-		return;
-
-	auto current_state = States[Current_StateID];
-
-	for (const auto& transition : Transitions)
-	{
-		//BeginTransition();
-		if (Conditions.find(transition.first) == Conditions.end())
-		{
-			if (!current_state->HasClip || !current_state->Enabled)
-			{
-				if (transition.second->FromState == current_state->ID)
-				{
-					Current_StateID = transition.second->ToState;
-					States[Current_StateID]->Enabled = true;
-					States[Current_StateID]->mTime = 0;
-
-				}			
-			}
-			else
-			{
-				if (!current_state->Enabled)
-				{
-					Current_StateID = transition.second->ToState;
-					States[Current_StateID]->Enabled = true;
-					States[Current_StateID]->mTime = 0;
-				}
-			}
-		}
-		else
-		{
-			if (transition.second->FromState == current_state->ID)
-			{
-				bool should_transition = true;
-				for (auto condition : Conditions[transition.first])
-				{		
-					switch (condition->OperationType)
-					{
-						case AnimationCondition::ConditionOperation::Equals:
-						{
-							switch (condition->ValueType)
-							{
-								case AnimationCondition::ConditionValueType::Bool:
-								{
-									should_transition = should_transition && condition->Comparison_Value.BOOLEAN == Parameters[condition->ParameterID]->Value.BOOLEAN;
-									break;
-								}
-								case AnimationCondition::ConditionValueType::Float:
-								{
-									should_transition = should_transition && condition->Comparison_Value.FLOAT == Parameters[condition->ParameterID]->Value.FLOAT;
-									break;
-								}
-								case AnimationCondition::ConditionValueType::Int:
-								{
-									should_transition = should_transition && condition->Comparison_Value.INTERGER == Parameters[condition->ParameterID]->Value.INTERGER;
-									break;
-								}
-								case AnimationCondition::ConditionValueType::Trigger:
-								{
-									should_transition = should_transition && condition->Comparison_Value.TRIGGER == Parameters[condition->ParameterID]->Value.TRIGGER;
-									if (Parameters[condition->ParameterID]->Value.TRIGGER)
-										Parameters[condition->ParameterID]->Value.TRIGGER = false;
-									break;
-								}
-							}							
-							break;
-						}
-						case AnimationCondition::ConditionOperation::GreaterThan:
-						{
-							switch (condition->ValueType)
-							{
-								case AnimationCondition::ConditionValueType::Float:
-								{
-									should_transition = should_transition && condition->Comparison_Value.FLOAT > Parameters[condition->ParameterID]->Value.FLOAT;
-									break;
-								}
-								case AnimationCondition::ConditionValueType::Int:
-								{
-									should_transition = should_transition && condition->Comparison_Value.INTERGER > Parameters[condition->ParameterID]->Value.INTERGER;
-									break;
-								}
-							}
-							break;
-						}
-						case AnimationCondition::ConditionOperation::LessThan:
-						{
-							switch (condition->ValueType)
-							{
-							case AnimationCondition::ConditionValueType::Float:
-							{
-								should_transition = should_transition && condition->Comparison_Value.FLOAT < Parameters[condition->ParameterID]->Value.FLOAT;
-								break;
-							}
-							case AnimationCondition::ConditionValueType::Int:
-							{
-								should_transition = should_transition && condition->Comparison_Value.INTERGER < Parameters[condition->ParameterID]->Value.INTERGER;
-								break;
-							}
-							}
-							break;
-						}
-					}
-				}
-				if (should_transition)
-				{
-					if (transition.second->FromState == current_state->ID)
-					{
-						Current_StateID = transition.second->ToState;
-						States[Current_StateID]->Enabled = true;
-						States[Current_StateID]->mTime = 0;
-					}
-				}
-			}
-		}
-	}
-	
-
-	
-	
 
 }
 
 void Fracture::AnimationGraph::SetCurrentState(Fracture::UUID state_id)
 {
-	Current_StateID = state_id;
-	States[Current_StateID]->Enabled = true;
+	Current_StateID = state_id;	
 }
 
 Fracture::AnimationState* Fracture::AnimationGraph::GetCurrentState()
@@ -152,9 +31,8 @@ Fracture::AnimationState* Fracture::AnimationGraph::GetCurrentState()
 	if (Current_StateID < 0)
 		return nullptr;
 
-	return States[Current_StateID].get();
+	return nullptr;
 }
-
 
 void Fracture::AnimationGraph::Process(AnimationContext& context)
 {
@@ -260,9 +138,12 @@ Fracture::IAnimationNode* Fracture::AnimationGraph::GetNode(UUID node_id)
 		int index = std::distance(GraphNodes.begin(), it);
 		return GraphNodes[index].get();
 	}
+	else
+	{
+		FRACTURE_ERROR("Could not find node: {} ", node_id);
+	}
 	return nullptr;
 }
-
 
 void Fracture::AnimationGraph::TopologicalSort()
 {

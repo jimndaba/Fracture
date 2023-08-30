@@ -477,6 +477,9 @@
     <ClInclude Include="src\Animation\GraphNodes\AnimationClipNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Animation\GraphNodes\AnimationTransitionNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -888,6 +891,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Animation\GraphNodes\AnimationClipNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\GraphNodes\AnimationStateNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\GraphNodes\AnimationStateMachineNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\GraphNodes\AnimationTransitionNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

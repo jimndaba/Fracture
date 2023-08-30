@@ -262,7 +262,7 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
                 {               
                     glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
                     glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, ((sizeof(float) * i) * count)); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, attribute.Normalised ? GL_TRUE : GL_FALSE, ((sizeof(float) * i) * count)); glCheckError();
                    
                     if (attribute.Instanced)
                         glVertexArrayBindingDivisor(vao, attribIndex, attribute.divisor);	glCheckError();
@@ -314,10 +314,10 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
             case ShaderDataType::Float4Instanced:
             {
                 if (attribute.Interleaved)
-                {
+                {                    
                     glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
                     glVertexArrayAttribBinding(vao, attribIndex, 0); glCheckError();
-                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, attribute.Offset); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, attribute.Normalised ? GL_TRUE : GL_FALSE, attribute.Offset); glCheckError();
 
                     if (attribute.Instanced)
                     {
@@ -329,7 +329,7 @@ void Fracture::GraphicsDevice::VertexArray_BindAttributes(const uint32_t& vao, c
                 {
                     glEnableVertexArrayAttrib(vao, attribIndex);		glCheckError();
                     glVertexArrayAttribBinding(vao, attribIndex, bindingIndex); glCheckError();
-                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, GL_FALSE, 0); glCheckError();
+                    glVertexArrayAttribFormat(vao, attribIndex, count, shadertype, attribute.Normalised ? GL_TRUE : GL_FALSE, 0); glCheckError();
 
                     if (attribute.Instanced)
                     {

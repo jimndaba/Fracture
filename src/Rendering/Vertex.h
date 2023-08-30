@@ -8,9 +8,9 @@ namespace Fracture
 	struct Vertex
 	{
 		Vertex();
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec2 Uvs;		
+		glm::vec3 Position = glm::vec3(0);
+		glm::vec3 Normal = glm::vec3(0);
+		glm::vec2 Uvs = glm::vec2(0);
 	};
 
 	struct SkinnedVertex
@@ -20,7 +20,7 @@ namespace Fracture
 		glm::vec2 Uvs;
 	
 
-		int IDs[4] = { -1,-1,-1,-1 };
+		int IDs[4] = { - 1,-1,-1,-1};
 		float Weights[4] = { 0.0f,0.0f, 0.0f, 0.0f };
 
 		void AddBoneData(int BoneID, float Weight)

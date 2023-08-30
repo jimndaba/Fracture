@@ -26,6 +26,8 @@ namespace Fracture {
 			//return glm::transpose(glm::make_mat4(&from.a1));
 		}
 
+	
+
 		static inline glm::vec3 ConvertToDegress(const glm::vec3& radians)
 		{
 			return glm::degrees(radians);

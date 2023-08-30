@@ -35,6 +35,7 @@ void Fracture::ComposeRenderersPass::Execute()
 	const auto& postprocessed_color = GraphicsDevice::Instance()->PostProcessStack()->GetOutputImage();
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 	const auto& global_Debug = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
+	const auto& global_Outline = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalOutline);
 	const auto& global_SSR = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSR);
 
 	bool post_processing = false;
@@ -46,8 +47,12 @@ void Fracture::ComposeRenderersPass::Execute()
 	RenderCommands::SetRenderTarget(Context, final_color);
 	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+
 	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
 	RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
+
+	RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
+	RenderCommands::Disable(Context, Fracture::GLCapability::StencilTest);
 
 	Fracture::RenderCommands::UseProgram(Context, AssetManager::GetShader("Compose")->Handle);
 	
@@ -61,6 +66,9 @@ void Fracture::ComposeRenderersPass::Execute()
 
 	if (global_SSR)
 		Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aSSR", global_SSR->ColorAttachments[0]->Handle, 2);
+
+	Fracture::RenderCommands::SetTexture(Context, AssetManager::GetShader("Compose").get(), "aOutline", global_Outline->ColorAttachments[0]->Handle, 3);
+
 
 	DrawArray cmd =
 	{

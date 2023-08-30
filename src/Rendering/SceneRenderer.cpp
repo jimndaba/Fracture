@@ -22,73 +22,122 @@ void Fracture::SceneRenderer::Init()
 {
 	
 	{
-		Fracture::RenderTargetCreationInfo info;
 		{
-			Fracture::TextureCreationInfo desc;
-			desc.Width = 1920;
-			desc.Height = 1080;
-			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGBA;
-			desc.internalFormat = Fracture::InternalFormat::RGBA16F;
-			desc.formatType = Fracture::TextureFormatType::Float;
-			desc.minFilter = TextureMinFilter::Linear;
-			desc.magFilter = TextureMagFilter::Linear;
-			desc.Name = "GlobalColorBuffer";
-			info.ColorAttachments.push_back(desc);
-		}
-		{
-			Fracture::TextureCreationInfo desc;
-			desc.Width = 1920;
-			desc.Height = 1080;
-			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGBA;
-			desc.internalFormat = Fracture::InternalFormat::RGBA8;
-			desc.formatType = Fracture::TextureFormatType::UByte;
-			desc.minFilter = TextureMinFilter::Near;
-			desc.magFilter = TextureMagFilter::Near;
-			desc.Name = "PickingBuffer";
-			info.ColorAttachments.push_back(desc);
-		}
-		{
-			Fracture::TextureCreationInfo desc;
-			desc.Width = 1920;
-			desc.Height = 1080;
-			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGBA;
-			desc.internalFormat = Fracture::InternalFormat::RGBA32F;
-			desc.formatType = Fracture::TextureFormatType::Float;
-			desc.minFilter = TextureMinFilter::Near;
-			desc.magFilter = TextureMagFilter::Near;
-			desc.Name = "Normals";
-			info.ColorAttachments.push_back(desc);
-		}
-		{
-			Fracture::TextureCreationInfo desc;
-			desc.Width = 1920;
-			desc.Height = 1080;
-			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGBA;
-			desc.internalFormat = Fracture::InternalFormat::RGBA32F;
-			desc.formatType = Fracture::TextureFormatType::Float;
-			desc.minFilter = TextureMinFilter::Near;
-			desc.magFilter = TextureMagFilter::Near;
-			desc.Name = "Positions";
-			info.ColorAttachments.push_back(desc);
-		}
-		{
+			Fracture::RenderTargetCreationInfo info;
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
+				desc.formatType = Fracture::TextureFormatType::Float;
+				desc.minFilter = TextureMinFilter::Linear;
+				desc.magFilter = TextureMagFilter::Linear;
+				desc.Name = "GlobalColorBuffer";
+				info.ColorAttachments.push_back(desc);
+			}
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA8;
+				desc.formatType = Fracture::TextureFormatType::UByte;
+				desc.minFilter = TextureMinFilter::Near;
+				desc.magFilter = TextureMagFilter::Near;
+				desc.Name = "PickingBuffer";
+				info.ColorAttachments.push_back(desc);
+			}
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA32F;
+				desc.formatType = Fracture::TextureFormatType::Float;
+				desc.minFilter = TextureMinFilter::Near;
+				desc.magFilter = TextureMagFilter::Near;
+				desc.Name = "Normals";
+				info.ColorAttachments.push_back(desc);
+			}
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA32F;
+				desc.formatType = Fracture::TextureFormatType::Float;
+				desc.minFilter = TextureMinFilter::Near;
+				desc.magFilter = TextureMagFilter::Near;
+				desc.Name = "Positions";
+				info.ColorAttachments.push_back(desc);
+			}
+			{
 
-			Fracture::TextureCreationInfo desc;
-			desc.Width = 1920;
-			desc.Height = 1080;
-			desc.AttachmentTrgt = Fracture::AttachmentTarget::DepthStencil;
-			desc.formatType = Fracture::TextureFormatType::Float32U248;
-			desc.format = Fracture::TextureFormat::DepthStencil;
-			desc.internalFormat = Fracture::InternalFormat::Depth32Stencil8;
-			desc.Name = "GlobalDepthBuffer";
-			info.DepthStencilAttachments.push_back(desc);
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::DepthStencil;
+				desc.formatType = Fracture::TextureFormatType::Float32U248;
+				desc.format = Fracture::TextureFormat::DepthStencil;
+				desc.internalFormat = Fracture::InternalFormat::Depth32Stencil8;
+				desc.Name = "GlobalDepthBuffer";
+				info.DepthStencilAttachments.push_back(desc);
+
+			}
+			Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_ColorBuffer", info);
 		}
-		Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_ColorBuffer", info);
-		Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_GrabBuffers", info);
+		{
+			Fracture::RenderTargetCreationInfo info;
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
+				desc.formatType = Fracture::TextureFormatType::Float;
+				desc.minFilter = TextureMinFilter::Linear;
+				desc.magFilter = TextureMagFilter::Linear;
+				desc.Name = "GlobalGrabBuffer";
+				info.ColorAttachments.push_back(desc);
+			}
+			Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_GrabBuffers", info);
+		}
+		{
+			Fracture::RenderTargetCreationInfo info;
+			{
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
+				desc.format = Fracture::TextureFormat::RGBA;
+				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
+				desc.formatType = Fracture::TextureFormatType::Float;
+				desc.minFilter = TextureMinFilter::Linear;
+				desc.magFilter = TextureMagFilter::Linear;
+				desc.Name = "Global_Outline";
+				info.ColorAttachments.push_back(desc);
+			}
+			{
+
+				Fracture::TextureCreationInfo desc;
+				desc.Width = 1920;
+				desc.Height = 1080;
+				desc.AttachmentTrgt = Fracture::AttachmentTarget::DepthStencil;
+				desc.formatType = Fracture::TextureFormatType::Float32U248;
+				desc.format = Fracture::TextureFormat::DepthStencil;
+				desc.internalFormat = Fracture::InternalFormat::Depth32Stencil8;
+				desc.Name = "GlobalDepthBuffer";
+				info.DepthStencilAttachments.push_back(desc);
+
+			}
+			Fracture::GraphicsDevice::Instance()->CreateGlobalRenderTarget("Global_Outline", info);
+		}
 		{
 			Fracture::RenderTargetCreationInfo sky_info;
 			sky_info.Width = 512;
@@ -206,6 +255,10 @@ void Fracture::SceneRenderer::Init()
 
 	ssrPass = std::make_shared<Fracture::SSRPass>("SSR Pass", mContext.get());
 	ssrPass->Setup();
+
+	Fracture::OutlinePassDef outdef;
+	Outline_pass = std::make_shared<Fracture::OutlinePass>("outline pas", mContext.get(), outdef);
+	Outline_pass->Setup();
 
 	Fracture::LightCullPassDef lightculldef;
 	lightcullPass = std::make_shared<Fracture::LightCullPass>("LightCullingPass", mContext.get(), lightculldef);
@@ -394,8 +447,11 @@ void Fracture::SceneRenderer::End()
 	{
 		cleartarget.Execute();
 
+		if (Outline_pass)
+			Outline_pass->Execute();
+
 		if (zPrePass)
-			zPrePass->Execute();
+			zPrePass->Execute();		
 
 		if (ssaoPass)
 			ssaoPass->Execute();
@@ -409,10 +465,10 @@ void Fracture::SceneRenderer::End()
 		if (f_pass)
 			f_pass->Execute();
 
-
 		if (gridpass && DrawGrid)
 			gridpass->Execute();
 
+		
 		if (ssrPass)
 			ssrPass->Execute();
 
@@ -440,4 +496,5 @@ void Fracture::SceneRenderer::End()
 
 	mFinalContext->EndState();
 	mFinalContext->Render();
+	mContext->EndScene();
 }

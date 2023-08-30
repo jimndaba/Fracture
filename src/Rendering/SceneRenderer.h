@@ -11,6 +11,7 @@
 #include "Rendering/Rendergraph/Passes/SSRPass.h"
 #include "Rendering/Rendergraph/Passes/PresentPass.h"
 #include "Rendering/Rendergraph/Passes/GridPass.h"
+#include "Rendering/Rendergraph/Passes/OutlinePass.h"
 
 namespace Fracture
 {
@@ -25,6 +26,8 @@ namespace Fracture
 
 		void Begin(float dt);
 
+
+
 		void QueueLightProbesToBake(UUID id);
 
 
@@ -38,6 +41,7 @@ namespace Fracture
 		std::shared_ptr<Fracture::GridPass> gridpass;
 		std::shared_ptr<Fracture::ShadowCasterPass> shadaowPass;
 		std::shared_ptr<Fracture::ForwardPass> f_pass;
+		std::shared_ptr<Fracture::OutlinePass> Outline_pass;
 		std::shared_ptr<Fracture::LightCullPass> lightcullPass;
 		std::shared_ptr<Fracture::ComposeRenderersPass> ComposePass;
 		std::shared_ptr<Fracture::PresentPass> presentPass;

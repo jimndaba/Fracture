@@ -65,9 +65,9 @@ namespace Fracture
 
 	struct PoseSample
 	{
-		glm::vec3 Position;
-		glm::vec3 Scale;
-		glm::quat Rotation;
+		glm::vec3 Position = glm::vec3(0);
+		glm::vec3 Scale = glm::vec3(0);
+		glm::quat Rotation = glm::quat();
 	};
 
 	struct AnimationContext

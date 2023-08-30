@@ -29,8 +29,9 @@ namespace Fracture
 
 	struct VertexArrayAttribute
 	{
-		VertexArrayAttribute(ShaderDataType shadertype, const std::string& name, int Divisor = 0, bool interleaved = false) :
+		VertexArrayAttribute(ShaderDataType shadertype, const std::string& name, int Divisor = 0, bool interleaved = false, bool normalised = false) :
 			Name(name), Type(shadertype), Offset(0), Size(ShaderDataTypeSize(shadertype)), divisor(Divisor),Interleaved(interleaved)
+			,Normalised(normalised)
 		{
 			if (Divisor > 0)
 				Instanced = true;
@@ -46,6 +47,7 @@ namespace Fracture
 		mutable uint32_t Offset;
 		bool Instanced = false;
 		bool Interleaved = false;
+		bool Normalised = false;
 		int divisor = 0;
 
 

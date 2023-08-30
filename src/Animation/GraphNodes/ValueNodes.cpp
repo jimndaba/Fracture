@@ -24,8 +24,7 @@ void Fracture::FloatValueNode::Process(AnimationContext& context)
 {	
 	if (context._graph->Parameters.find(ParameterID) != context._graph->Parameters.end())
 	{
-		Result.FLOAT = context._graph->Parameters[ParameterID]->Value.FLOAT;
-		Value = context._graph->Parameters[ParameterID]->Value.FLOAT;
+		Result.FLOAT = context._graph->Parameters[ParameterID]->Value.FLOAT;		
 	}
 	else
 	{
@@ -35,7 +34,7 @@ void Fracture::FloatValueNode::Process(AnimationContext& context)
 
 Fracture::BoolValueNode::BoolValueNode() : IValueNode()
 {
-	OutPins =
+	InputPins =
 	{
 		Pin{
 			.PinID = Fracture::UUID(),
@@ -47,16 +46,8 @@ Fracture::BoolValueNode::BoolValueNode() : IValueNode()
 
 void Fracture::BoolValueNode::Process(AnimationContext& context)
 {
-	if (context._graph->Parameters.find(this->ParameterID) != context._graph->Parameters.end())
-	{
-		this->Result.BOOL = context._graph->Parameters[this->ParameterID]->Value.BOOLEAN;
-		Value = context._graph->Parameters[this->ParameterID]->Value.BOOLEAN;
-	}
-	else
-	{
-		FRACTURE_ERROR("Float Value node found");
-	}
-
+	if(context._graph->GetNode(InputPins[0].NodeID))
+		Result.BOOL = context._graph->GetNode(InputPins[0].NodeID)->Result.BOOL;
 }
 
 Fracture::IntValueNode::IntValueNode() : IValueNode()
@@ -73,13 +64,36 @@ Fracture::IntValueNode::IntValueNode() : IValueNode()
 
 void Fracture::IntValueNode::Process(AnimationContext& context)
 {
-	if (context._graph->Parameters.find(this->ParameterID) != context._graph->Parameters.end())
+	if (context._graph->Parameters.find(ParameterID) != context._graph->Parameters.end())
 	{
-		this->Result.INT = context._graph->Parameters[this->ParameterID]->Value.INTERGER;
-		Value = context._graph->Parameters[this->ParameterID]->Value.INTERGER;
+		Result.INT = context._graph->Parameters[ParameterID]->Value.INTERGER;
 	}
 	else
 	{
 		FRACTURE_ERROR("Int Value node found");
+	}
+}
+
+Fracture::BoolParameterNode::BoolParameterNode()
+{
+	OutPins =
+	{
+		Pin{
+			.PinID = Fracture::UUID(),
+			.Name = "bool",
+			.PinType = PinValueType::Bool,
+			}
+	};
+}
+
+void Fracture::BoolParameterNode::Process(AnimationContext& context)
+{
+	if (context._graph->Parameters.find(ParameterID) != context._graph->Parameters.end())
+	{
+		Result.BOOL = context._graph->Parameters[ParameterID]->Value.BOOLEAN;
+	}
+	else
+	{
+		FRACTURE_ERROR("Bool Value node found");
 	}
 }

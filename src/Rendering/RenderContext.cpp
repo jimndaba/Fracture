@@ -30,7 +30,7 @@ void Fracture::RenderContext::BeginScene()
 	OpaqueDrawCalls.clear();
 	TransparentDrawCalls.clear();
 	ShadowDrawCalls.clear();
-	OutlineDrawCalls.clear();
+
 
 	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
 	for (const auto& meshcomponent : components)
@@ -65,6 +65,11 @@ void Fracture::RenderContext::BeginScene()
 			Fracture::RenderCommands::BufferSubData<glm::vec4>(this, batch.second->EntityID_Buffer->RenderID, batch.second->EntityIDs, batch.second->EntityIDs.size() * sizeof(glm::vec4), 0);
 		}
 	}
+}
+
+void Fracture::RenderContext::EndScene()
+{
+	OutlineDrawCalls.clear();
 }
 
 void Fracture::RenderContext::Push(Fracture::Command& cmd)
@@ -305,6 +310,34 @@ void Fracture::RenderContext::AddDrawCall(MeshComponent* meshcomp, glm::mat4 tra
 
 		if (material->CastsShadows)
 			ShadowDrawCalls.push_back(drawcall);
+	}
+}
+
+void Fracture::RenderContext::DrawOutlines(UUID entity)
+{
+	if (SceneManager::HasComponent<MeshComponent>(entity))
+	{
+		const auto& meshcomp = SceneManager::GetComponent<MeshComponent>(entity);
+		const auto& mesh = AssetManager::GetStaticByIDMesh(meshcomp->Mesh);
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(entity)->WorldTransform;
+
+		for (const auto& submesh : mesh->SubMeshes)
+		{
+			auto materialID = meshcomp->Materials[submesh.MaterialIndex];
+			const auto& material = AssetManager::GetMaterialByID(materialID);
+
+			auto drawcall = std::make_shared<MeshDrawCall>();
+
+			drawcall->EntityID = entity;
+			drawcall->model = transform;
+			drawcall->MaterialID = materialID;
+			drawcall->MeshHandle = mesh->VAO;
+			drawcall->basevertex = submesh.BaseVertex;
+			drawcall->IndexCount = submesh.IndexCount;
+			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+
+			OutlineDrawCalls.push_back(drawcall);
+		}
 	}
 }
 
