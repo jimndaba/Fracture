@@ -10,7 +10,7 @@ void Fracture::ToneMappingPass::Setup()
 	shader = AssetManager::Instance()->GetShader("ToneMapping");
 }
 
-void Fracture::ToneMappingPass::Render(PostProcessInfo info)
+bool Fracture::ToneMappingPass::Render(PostProcessInfo info)
 {
 	OPTICK_EVENT();
 	RenderCommands::SetRenderTarget(info.cntxt, info.write_to);
@@ -26,4 +26,5 @@ void Fracture::ToneMappingPass::Render(PostProcessInfo info)
 
 	RenderCommands::BindVertexArrayObject(info.cntxt, info.VAO);
 	RenderCommands::DrawArray(info.cntxt, cmd);
+	return true;
 }

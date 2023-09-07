@@ -11,7 +11,7 @@ void Fracture::FXAAPass::Setup()
 	shader = AssetManager::Instance()->GetShader("FXAA");
 }
 
-void Fracture::FXAAPass::Render(PostProcessInfo info)
+bool Fracture::FXAAPass::Render(PostProcessInfo info)
 {
 	OPTICK_EVENT();
 	RenderCommands::SetRenderTarget(info.cntxt, info.write_to);
@@ -27,4 +27,5 @@ void Fracture::FXAAPass::Render(PostProcessInfo info)
 
 	RenderCommands::BindVertexArrayObject(info.cntxt, info.VAO);
 	RenderCommands::DrawArray(info.cntxt, cmd);
+	return true;
 }

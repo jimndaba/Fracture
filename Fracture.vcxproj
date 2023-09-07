@@ -74,7 +74,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\debug\;$(ProjectDir)vendor\libs\;E:\Development\Fracture\vendor\soloud\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib;common.lib;ex-common.lib;OpenAL32.lib;OptickCore.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXCharacterKinematic_static_64.lib;lua54.lib;common.lib;ex-common.lib;OpenAL32.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -100,7 +100,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)vendor\libs\rel\;$(ProjectDir)vendor\libs\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;lua54.lib;OptickCore.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_mt.lib;assimp-vc143-mt.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXCharacterKinematic_static_64.lib;lua54.lib;OptickCore.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -195,6 +195,7 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
+    <ClInclude Include="src\World\PrefabFactor.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="src\World\Entity.cpp" />
     <ClCompile Include="src\World\LightProbeSystem.cpp" />
     <ClCompile Include="src\World\PhysicsSystem.cpp" />
+    <ClCompile Include="src\World\PrefabFactor.cpp" />
     <ClCompile Include="src\World\Scene.cpp" />
     <ClCompile Include="src\World\Scenegraph.cpp" />
     <ClCompile Include="src\World\SceneManager.cpp" />

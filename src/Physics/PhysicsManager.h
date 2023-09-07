@@ -75,17 +75,20 @@ namespace Fracture
 		void DestroyScene();
 
 		void AddActor(UUID mEntity);
+		void AddCharacterController(UUID mEntity);
 		void AddActors();
 
 		void JointToParent(Fracture::UUID parent, Fracture::UUID child);
 
 		bool HasActor(UUID entity);
+		bool HasController(UUID entity);
 		void RemoveActors();
 		void RemoveActor(UUID entity);
 		void OnDebugDraw();
 
 		void AddPhysicsGroup(int GroupID);
 		void SetupFiltering(UUID entity);
+		void SetupCharacterControllerFiltering(UUID entity);
 
 		void OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt);
 		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
@@ -94,6 +97,7 @@ namespace Fracture
 		physx::PxCpuDispatcher* GetCPUDispatcher();
 
 		physx::PxRigidActor* GetRigidBody(const Fracture::UUID& entity);
+		physx::PxController* GetCharacterController(const Fracture::UUID& entity);
 
 		static PhysicsManager* Instance();
 
@@ -108,11 +112,12 @@ namespace Fracture
 		PhsyicsSettings Settings;
 
 	private:
-		physx::PxPhysics* mPhysics;
-		physx::PxCpuDispatcher* mDispacther;		
+		physx::PxPhysics* mPhysics = NULL;
+		physx::PxCpuDispatcher* mDispacther = NULL;
 		physx::PxFoundation* gFoundation = NULL;
 		physx::PxPvd* mPvd = NULL;
-		physx::PxCooking* mCooking;
+		physx::PxCooking* mCooking = NULL;
+		physx::PxControllerManager* mCCmanager = NULL;
 
 		static std::unique_ptr<PhysicsManager> mInstance;
 
@@ -121,6 +126,7 @@ namespace Fracture
 		std::unordered_map<UUID, physx::PxRigidActor*> mActors;
 		std::unordered_map<UUID, physx::PxShape*> mColliders;
 		std::unordered_map<UUID, physx::PxMaterial*> mMaterials;
+		std::unordered_map<UUID, physx::PxController*> mControllers;
 		std::unique_ptr<PhysicsScene> mScene;
 		
 	};

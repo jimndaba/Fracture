@@ -26,7 +26,7 @@ namespace Fracture
 		BloomPass();
 
 		void Setup();
-		void Render(PostProcessInfo info);
+		bool Render(PostProcessInfo info);
 
 		BloomPassDef Properties;
 

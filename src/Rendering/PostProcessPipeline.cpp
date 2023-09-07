@@ -118,13 +118,13 @@ void Fracture::PostProcessPipeline::OnRender()
 		.input_texture = input_texture->Handle,
 		.VAO = Vao
 	};
-	mPostProcessStack[0]->Render(info);
-	SwapBuffers();
-
+	if (mPostProcessStack[0]->Render(info))
+	{
+		SwapBuffers();
+	}
 	//Do Rest of the stack
 	for (int i = 1; i < mPostProcessStack.size(); i++)
-	{
-		
+	{		
 		PostProcessInfo minfo =
 		{
 			.cntxt = cntxt,
@@ -132,8 +132,10 @@ void Fracture::PostProcessPipeline::OnRender()
 			.input_texture = GetRenderTargetToReadFrom(),
 			.VAO = Vao
 		};
-		mPostProcessStack[i]->Render(minfo);	
-		SwapBuffers();
+		if (mPostProcessStack[i]->Render(minfo))
+		{
+			SwapBuffers();
+		}
 	}
 
 	cntxt->EndState();

@@ -127,6 +127,18 @@ void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 		transform->IsDirty = true;
 	}
 
+	const auto& ccs = SceneManager::GetAllComponents<CharacterControllerComponent>();
+	for (const auto& cc : ccs)
+	{
+		if (!HasController(cc->GetID()))
+			continue;
+
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(cc->GetID());
+		auto pos = mInstance->mControllers[cc->GetID()]->getPosition();
+		transform->Position = glm::vec3(pos.x,pos.y,pos.z);	
+		transform->IsDirty = true;
+	}
+
 	
 	for (const auto& entity : mEntitiesToDelete)
 	{
@@ -178,12 +190,19 @@ Fracture::PhysicsScene* Fracture::PhysicsManager::GetScene()
 void Fracture::PhysicsManager::CreateScene()
 {
 	mInstance->mScene = PhysicsScene::Create(mInstance->Settings ,mInstance->mPhysics, mInstance->mDispacther);
+	mCCmanager = PxCreateControllerManager(*mInstance->mScene->GetPhysxScene());
+	if (mCCmanager)
+	{
+		FRACTURE_INFO("CCmanager Created!");
+	}
 }
 
 void Fracture::PhysicsManager::DestroyScene()
 {
 	if (mInstance->mScene)
 	{
+		mCCmanager->release();
+		mInstance->mControllers.clear();
 		mInstance->mActors.clear();
 		mInstance->mColliders.clear();
 		mInstance->mMaterials.clear();
@@ -234,6 +253,30 @@ void Fracture::PhysicsManager::SetupFiltering(UUID entity)
 	}
 
 
+}
+
+void Fracture::PhysicsManager::SetupCharacterControllerFiltering(UUID entity)
+{
+	if (SceneManager::HasComponent<CharacterControllerComponent>(entity))
+	{
+		PxFilterData filterData;
+		const auto& cc = SceneManager::GetComponent<CharacterControllerComponent>(entity);
+		if (cc)
+		{
+			//Which Layer this belongs to;
+			filterData.word0 = (physx::PxU32)(1 << mPhysicsLayers[cc->CollisionLayer]->LayerID);
+
+			physx::PxU32 mask = 0;
+			for (auto s : mPhysicsGroups[cc->CollisionGroup]->InLayer)
+			{
+				if (s.second)
+					mask |= (1 << mPhysicsLayers[s.first]->LayerID);
+			}
+			filterData.word1 = mask;
+		}
+
+		//mInstance->mControllers[entity]->setSimulationFilterData(filterData);
+	}
 }
 
 void Fracture::PhysicsManager::OnAddActor(const std::shared_ptr<OnAddActorEvent>& evnt)
@@ -367,6 +410,60 @@ void Fracture::PhysicsManager::AddActor(UUID mEntity)
 	}
 }
 
+void Fracture::PhysicsManager::AddCharacterController(UUID mEntity)
+{
+	if (mInstance->mScene)
+	{
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(mEntity);
+		const auto& controller = SceneManager::GetComponent<CharacterControllerComponent>(mEntity);
+	
+		switch (controller->Shape)
+		{
+			case CCColliderType::Box:
+			{
+				PxBoxControllerDesc desc;
+				desc.nonWalkableMode = physx::PxControllerNonWalkableMode::ePREVENT_CLIMBING;
+				desc.halfSideExtent = controller->Size.x * 0.5f;
+				desc.halfHeight = controller->Size.y * 0.5f;
+				desc.halfForwardExtent = controller->Size.z * 0.5f;
+				desc.slopeLimit = glm::radians(controller->MaxSlopeAngle);
+				desc.stepOffset = controller->StepHeight;
+				//desc.contactOffset = cr->contact_offset;
+				desc.upDirection = PxVec3(0.0, 1.0, 0.0);
+				desc.material = mPhysics->createMaterial(0.5f, 0.5f, 0.5f);
+				desc.position = PxExtendedVec3(transform->Position.x, transform->Position.y, transform->Position.z);		
+				desc.userData = controller.get();
+
+				mControllers[mEntity] = mCCmanager->createController(desc);
+
+				
+			}
+			break;
+
+			case CCColliderType::Capsule:
+			{
+				PxCapsuleControllerDesc desc;
+				desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
+				desc.nonWalkableMode = physx::PxControllerNonWalkableMode::ePREVENT_CLIMBING;
+				desc.radius = controller->Radius;
+				desc.height = controller->Height;
+				desc.slopeLimit = controller->MaxSlopeAngle;
+				desc.stepOffset = controller->StepHeight;
+				//desc.contactOffset = cr->contact_offset;
+				desc.upDirection = PxVec3(0.0, 1.0, 0.0);
+				desc.material = mPhysics->createMaterial(0.5f, 0.5f, 0.5f);
+				desc.position = PxExtendedVec3(transform->Position.x, transform->Position.y, transform->Position.z);
+				desc.userData = controller.get();
+
+				mControllers[mEntity] = mCCmanager->createController(desc);			
+			}
+			break;
+		}
+
+	}
+
+}
+
 void Fracture::PhysicsManager::AddActors()
 {
 	if (mInstance->mScene)
@@ -491,6 +588,11 @@ bool Fracture::PhysicsManager::HasActor(UUID entity)
 	return (mInstance->mActors.find(entity) != mInstance->mActors.end());	
 }
 
+bool Fracture::PhysicsManager::HasController(UUID entity)
+{
+	return (mInstance->mControllers.find(entity) != mInstance->mControllers.end());
+}
+
 void Fracture::PhysicsManager::RemoveActors()
 {
 	for (const auto& actor : SceneManager::GetAllComponents<RigidbodyComponent>())
@@ -529,6 +631,14 @@ physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID
 		return nullptr;
 
 	return mInstance->mActors[entity];
+}
+
+physx::PxController* Fracture::PhysicsManager::GetCharacterController(const Fracture::UUID& entity)
+{
+	if (mInstance->mControllers.find(entity) == mInstance->mControllers.end())
+		return nullptr;
+
+	return mInstance->mControllers[entity];
 }
 
 Fracture::PhysicsManager* Fracture::PhysicsManager::Instance()

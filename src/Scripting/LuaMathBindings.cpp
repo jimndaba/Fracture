@@ -20,6 +20,8 @@ void LuaBindGLM::BindVec2(sol::state* lua)
 		"Normalize", [](glm::vec2& v) { v = glm::normalize(v); return v; },
 		"Distance", [](glm::vec2& v1, glm::vec2& v2) { return glm::distance(v1, v2); },
 
+
+
 		//Metamethods
 		sol::meta_function::to_string, [](glm::vec2& v) {return fmt::format("vec2({}, {})", v.x, v.y); },
 		sol::meta_function::index, [](glm::vec2& v, const int index) { if (index < 0 or index > 2) return 0.0f; return v[index]; },
@@ -51,7 +53,42 @@ void LuaBindGLM::BindVec3(sol::state* lua)
 		"x", &glm::vec3::x,
 		"y", &glm::vec3::y,
 		"z", &glm::vec3::z,
-		sol::meta_function::multiplication, mult_overloads
+
+		"Length", &glm::vec3::length,
+		"Normalize", [](glm::vec3& v) { v = glm::normalize(v); return v; },
+		"Distance", [](glm::vec3& v1, glm::vec3& v2) { return glm::distance(v1, v2); },
+		"Dot", [](glm::vec3& v1, glm::vec3& v2) { return glm::dot(v1, v2); },
+		"Cross", [](glm::vec3& v1, glm::vec3& v2){return glm::cross(v1,v2);},
+
+		"Forward", [](glm::vec3& rotation) {		
+
+			glm::mat4 rotationMatrix(1.0f);
+
+			// Rotate around the X-axis
+			rotationMatrix = glm::rotate(rotationMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+			// Rotate around the Y-axis
+			rotationMatrix = glm::rotate(rotationMatrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			// Rotate around the Z-axis
+			rotationMatrix = glm::rotate(rotationMatrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			// The forward vector in local space is the negative Z-axis
+			glm::vec3 localForward = glm::vec3(0.0f, 0.0f, -1.0f);
+
+			// Multiply the local forward vector by the rotation matrix to transform it
+			glm::vec3 rotatedForward = glm::vec3(rotationMatrix * glm::vec4(localForward, 0.0f));
+
+
+			return  glm::normalize(rotatedForward);
+		},
+
+		sol::meta_function::equal_to, [](glm::vec3& v1, glm::vec3& v2) { return glm::operator==<float, glm::packed_highp>(v1, v2);  },
+		sol::meta_function::subtraction, [](glm::vec3& v1, glm::vec3& v2) { return glm::operator-<float, glm::packed_highp>(v1, v2);  },
+		sol::meta_function::addition, [](glm::vec3& v1, glm::vec3& v2) { return glm::operator+<float, glm::packed_highp>(v1, v2);  },
+		//sol::meta_function::division, [](glm::quat& v1, glm::quat& v2) { return glm::operator/<float, glm::packed_highp>(v1, v2);  },
+		sol::meta_function::multiplication, [](glm::vec3& v1, glm::vec3& v2) { return glm::operator*<float, glm::packed_highp>(v1, v2);  },
+		sol::meta_function::multiplication, [](glm::vec3& v1, float v2) { return glm::operator*<float, glm::packed_highp>(v1, v2);  }
 		);
 
 }
@@ -70,7 +107,7 @@ void LuaBindGLM::BindVec4(sol::state* lua)
 		"x", &glm::vec4::x,
 		"y", &glm::vec4::y,
 		"z", &glm::vec4::z,
-		"w", &glm::vec4::w	
+		"w", &glm::vec4::w
 	);
 }
 

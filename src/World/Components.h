@@ -100,8 +100,8 @@ namespace Fracture
 	struct PrefabInstanceComponent : public IComponent
 	{
 		PrefabInstanceComponent() :IComponent() {};
-		PrefabInstanceComponent(UUID entity_id, UUID parentprefab_id, UUID Scene_id) :
-			IComponent(), Parent_PrefabID(parentprefab_id), EntityID(entity_id),SceneID(Scene_id)
+		PrefabInstanceComponent(UUID entity_id, UUID parentprefab_id) :
+			IComponent(), Parent_PrefabID(parentprefab_id), EntityID(entity_id)
 		{}
 
 		PrefabInstanceComponent(PrefabInstanceComponent& other, UUID new_entity) :
@@ -112,12 +112,12 @@ namespace Fracture
 			Mesh = other.Mesh;
 			Materials = other.Materials;
 			meshType = other.meshType;
-			SceneID = other.SceneID;
+	
 		}
 
 		UUID EntityID;
 		UUID Parent_PrefabID;
-		UUID SceneID;
+	
 		
 		enum class MeshType
 		{
@@ -195,6 +195,9 @@ namespace Fracture
 		float Damping = 5.0f;
 		float Sensitivity = 0.1f;
 		float Speed = 30.0f;
+		float RotationSpeed = 5.0f;
+		float ZoomSpeed = 3.0f;
+
 		glm::vec3 Position = glm::vec3(0, 5, 15.0f);
 		glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -356,6 +359,7 @@ namespace Fracture
 		bool IsBaked = false;
 		UUID entity;
 		UUID ReflectionMap;		
+		UUID GetID() { return entity; }
 
 		float Strength = 1.0f;
 		int Resolution = 16;	
@@ -430,6 +434,12 @@ namespace Fracture
 		TriangleMesh
 	};
 
+	enum class CCColliderType
+	{		
+		Box,		
+		Capsule		
+	};
+
 	struct ColliderComponent : public IComponent
 	{
 		ColliderComponent(const Fracture::UUID& id) :
@@ -460,6 +470,50 @@ namespace Fracture
 		int CollisionGroup = 0;
 		glm::vec3 Offset = glm::vec3(0);
 		bool IsTrigger = false;
+	};
+
+	struct CharacterControllerComponent : public IComponent
+	{
+		CharacterControllerComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {}
+
+		CharacterControllerComponent(CharacterControllerComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			Shape = other.Shape;
+			Size = other.Size;
+			Radius = other.Radius;
+			Height = other.Height;
+			Offset = other.Offset;
+
+			MaxSlopeAngle = other.MaxSlopeAngle;
+			StepHeight = other.StepHeight;
+			MinMovementDist = other.MinMovementDist;
+			MaxSpeed = other.MaxSpeed;
+		
+			CollisionLayer = other.CollisionLayer;
+			CollisionGroup = other.CollisionGroup;
+		}
+
+		UUID entity;
+		UUID GetID() { return entity; }
+
+		CCColliderType Shape = CCColliderType::Box;
+		
+		glm::vec3 Size = glm::vec3(1.0f);
+		glm::vec3 Offset = glm::vec3(0);
+		float Radius = 1.0f;
+		float Height = 1.0f;
+
+		float MaxSlopeAngle = 30.0;
+		float StepHeight  = 0.1f;
+		float MinMovementDist = 0.01f;
+		float MaxSpeed = 100.0f;
+
+		int CollisionLayer = 0;
+		int CollisionGroup = 0;
+			
 	};
 
 	struct ScriptComponent : public IComponent

@@ -94,10 +94,16 @@ void Fracture::FractureGame::Update()
 
     mScriptManager->onUpdate(frameTime);
 
+    
 
-  
+    mScriptManager->onLateUpdate(frameTime);
 
-     
+    Fracture::CameraSystem mCameraSystem{};
+    for (const auto& camera : SceneManager::GetAllComponents<CameraComponent>())
+    {
+        mCameraSystem.Update(frameTime, *camera.get());
+    }
+
     //Systems Update
     if (SceneManager::CurrentScene())
     {
@@ -111,31 +117,12 @@ void Fracture::FractureGame::Update()
         }
     }
 
-    Fracture::CameraSystem mCameraSystem{};
-    for (const auto& camera : SceneManager::GetAllComponents<CameraComponent>())
-    {
-        mCameraSystem.Update(frameTime, *camera.get());
-    }      
+
+
+ 
 
     AnimationSystem::Instance()->Update(frameTime);
 
-        //On DebugDraw
-        //OnDebugDraw();        
-
-       
-
-        /*
-        _fpsCount++;
-        FrameCount++;
-
-        if (frameTime > 1.0)
-        {
-            lastTime = newTime;
-            FramesPerSec = _fpsCount;
-            _fpsCount = 0;
-            FrameCount = 0;
-        }
-        */
     mAudioManager->OnUpdate(frameTime);
     
 }
@@ -144,7 +131,7 @@ void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
 {
     OPTICK_EVENT();
     GraphicsDevice::Instance()->ClearBuffers((uint32_t)ClearBufferBit::Color);
-    GraphicsDevice::Instance()->ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    GraphicsDevice::Instance()->ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
 
     renderer->Begin(0.0f);

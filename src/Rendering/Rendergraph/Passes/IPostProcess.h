@@ -19,7 +19,7 @@ namespace Fracture
 	struct IPostProcess
 	{
 		virtual void Setup() = 0;
-		virtual void Render(PostProcessInfo info) = 0;
+		virtual bool Render(PostProcessInfo info) = 0;
 	};
 
 

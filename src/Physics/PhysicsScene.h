@@ -22,6 +22,8 @@ namespace Fracture
 
 		void AddActor(physx::PxRigidActor& actor);
 		void RemoveActor(physx::PxRigidActor& actor);
+				
+		physx::PxScene* GetPhysxScene();
 
 	private:
 		bool Advance(float ts);
@@ -30,7 +32,7 @@ namespace Fracture
 
 
 	private:
-		physx::PxScene* mScene;
+		physx::PxScene* mScene;	
 		float mAccumulator = 0.0f;	
 		float m_SubStepSize = 1.0f / 60.0f;
 		float m_Accumulator = 0.0f;

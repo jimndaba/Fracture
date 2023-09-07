@@ -11,7 +11,7 @@ namespace Fracture
 	struct ToneMappingPass : public IPostProcess
 	{
 		void Setup();
-		void Render(PostProcessInfo info);
+		bool Render(PostProcessInfo info);
 		std::shared_ptr<Shader> shader;
 	};
 

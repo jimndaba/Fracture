@@ -111,6 +111,7 @@ namespace Fracture
 		void AddDrawCall(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
 
 		void DrawOutlines(UUID Entity);
+		void DrawPrefabOutlines(UUID Entity);
 
 		void AddToBatch(PrefabInstanceComponent* mesh,glm::mat4 transform,UUID Entity);
 		void ResetBatches();

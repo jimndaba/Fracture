@@ -31,6 +31,7 @@ namespace Fracture
 		void onStart();
 		void onExit();
 		void onUpdate(float dt);
+		void onLateUpdate(float dt);
 		void onFixedUpdate();
 		void Shutdown();
 
@@ -43,6 +44,7 @@ namespace Fracture
 
 		void Reload(LuaScript* mscript);
 		static void LoadScript(const std::shared_ptr<LuaScript>& mscript);
+		static void LoadScript(Fracture::UUID script_id);
 		static std::shared_ptr<LuaScript> GetInstanceOfScript(const UUID& id);
 		static std::shared_ptr<LuaScript> GetLuaScript(const UUID& id);
 

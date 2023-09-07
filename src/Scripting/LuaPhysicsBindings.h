@@ -17,6 +17,8 @@ namespace LuaBindPhysics
 
 	void RotateRigidBody(Fracture::UUID entity, glm::vec3 value);
 
+	void Move(Fracture::UUID entity, glm::vec3 value);
+
 	void SetGravityDisabled(Fracture::UUID entity, bool value);
 
 	float GetMaxLinearVelocity(Fracture::UUID entity);

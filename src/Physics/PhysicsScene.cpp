@@ -73,11 +73,16 @@ Fracture::PhysicsScene::PhysicsScene(Fracture::PhsyicsSettings& settings, physx:
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
 		FRACTURE_INFO("Physics Scene Created!");
+
+		
+	
 	}
 	else
 	{
 		FRACTURE_ERROR("Scene Description invalid!");
 	}
+
+
 }
 
 void Fracture::PhysicsScene::FixedUpdate(float ts)
@@ -92,6 +97,7 @@ std::unique_ptr<Fracture::PhysicsScene> Fracture::PhysicsScene::Create(Fracture:
 
 void Fracture::PhysicsScene::Destroy()
 {
+	
 	mScene->release();
 	mScene = nullptr;
 }
@@ -117,6 +123,11 @@ void Fracture::PhysicsScene::AddActor(physx::PxRigidActor& actor)
 void Fracture::PhysicsScene::RemoveActor(physx::PxRigidActor& actor)
 {	
 	mScene->removeActor(actor);
+}
+
+physx::PxScene* Fracture::PhysicsScene::GetPhysxScene()
+{
+	return mScene;
 }
 
 bool Fracture::PhysicsScene::Advance(float ts)

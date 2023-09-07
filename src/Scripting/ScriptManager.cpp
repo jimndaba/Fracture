@@ -13,6 +13,8 @@
 #include "Physics/PhysicsEvents.h"
 #include "World/WorldEvents.h"
 
+#include "Rendering/DebugRenderer.h"
+
 std::unique_ptr<sol::state> Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::LuaScript>> Fracture::ScriptManager::mScripts;
@@ -25,6 +27,7 @@ Fracture::ScriptManager::ScriptManager()
 void Fracture::ScriptManager::BindLog(sol::state& L)
 {
 	auto log = L.create_table("Debug");
+	
 	log.set_function("log", sol::overload([&](sol::this_state s, std::string message) {
 		FRACTURE_INFO(message);
 		}));
@@ -43,6 +46,22 @@ void Fracture::ScriptManager::BindLog(sol::state& L)
 
 	log.set_function("critical", [&](sol::this_state s, std::string message) {
 		FRACTURE_CRITICAL(message);
+		});
+
+	log.set_function("DrawLine", [&](sol::this_state s,glm::vec3 start, glm::vec3 end) {
+			DebugRenderer::DrawLine(start,end);
+		});
+
+	log.set_function("DrawCircle", [&](sol::this_state s, glm::vec3 center, glm::vec3 rotation, float radius) {
+		DebugRenderer::DrawCircle(center, radius,rotation);
+		});
+
+	log.set_function("DrawSphere", [&](sol::this_state s, glm::vec3 center, float radius) {
+		DebugRenderer::DrawSphere(center,radius);
+		});
+
+	log.set_function("DrawAABB", [&](sol::this_state s, glm::vec3 min, glm::vec3 max) {
+		DebugRenderer::DrawAABB(min, max);
 		});
 }
 
@@ -82,6 +101,10 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
 
 	lua.set_function("Destroy", SceneManager::Destroy);
+
+	lua.set_function("Vec3Lerp", LuaBindComponents::Vec3Lerp);
+	lua.set_function("Vec2Lerp", LuaBindComponents::Vec2Lerp);
+	lua.set_function("Vec4Lerp", LuaBindComponents::Vec4Lerp);
 	
 	/*
 	lua.set_function("Destroy", sol::overload([&](sol::this_state s, UUID id) {
@@ -215,6 +238,7 @@ void Fracture::ScriptManager::BindMaths(sol::state& L)
 void Fracture::ScriptManager::BindPhysics(sol::state& L)
 {
 	L.set_function("RotateRigidbody", LuaBindPhysics::RotateRigidBody);
+	L.set_function("Move", LuaBindPhysics::Move);
 	L.set_function("SetLinearVelocity", LuaBindPhysics::SetLinearVelocity);
 	L.set_function("SetAngularVelocity", LuaBindPhysics::SetAngularVelocity);
 	L.set_function("SetMaxLinearVelocity", LuaBindPhysics::SetMaxLinearVelocity);
@@ -377,6 +401,41 @@ void Fracture::ScriptManager::onUpdate(float dt)
 	}
 }
 
+void Fracture::ScriptManager::onLateUpdate(float dt)
+{
+	for (const auto& entity : SceneManager::CurrentScene()->Entities)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity->ID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnLateUpate(*lua.get(), dt, component->GetID());
+		}
+	}
+
+	for (const auto& entity : SceneManager::CurrentScene()->mPrefabs)
+	{
+		const auto& s = SceneManager::GetAllEntityScripts(entity.PrefabID);
+		for (const auto& component : s)
+		{
+			if (!component->HasScriptAttached)
+				continue;
+
+			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			const auto& script = mScripts[component->Script];
+			script->OnLateUpate(*lua.get(), dt, component->GetID());
+		}
+	}
+}
+
 void Fracture::ScriptManager::onFixedUpdate()
 {
 	for (const auto& entity : SceneManager::CurrentScene()->Entities)
@@ -474,6 +533,20 @@ void Fracture::ScriptManager::LoadScript(const std::shared_ptr<LuaScript>& mscri
 {
 	mscript->Load(*lua.get());
 	mscript->IsStarted(false);
+}
+
+void Fracture::ScriptManager::LoadScript(Fracture::UUID script_id)
+{
+	if (mScriptRegister.find(script_id) == mScriptRegister.end())
+	{
+		FRACTURE_ERROR("Could not find Script");
+		return;
+	}
+
+	if (mScripts.find(script_id) == mScripts.end())
+	{
+		mScripts[script_id] = std::make_shared<LuaScript>(mScriptRegister[script_id]);
+	}
 }
 
 std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScript(const UUID& id)

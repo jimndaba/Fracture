@@ -155,7 +155,7 @@ void LuaBindComponents::SetPosition(Fracture::UUID entity, glm::vec3 Position)
 	if (!transform)
 		return;
 
-	transform->Position += Position;
+	transform->Position = Position;
 }
 
 void LuaBindComponents::SetRotation(Fracture::UUID entity, glm::vec3 value)
@@ -205,5 +205,20 @@ void LuaBindComponents::LookAt(Fracture::UUID entity, glm::vec3 value, glm::vec3
 void LuaBindComponents::Instantiate(Fracture::UUID entity, glm::vec3 value)
 {
 	Fracture::Eventbus::Publish<Fracture::InstantiatePrefabEvent>(entity, value);
+}
+
+glm::vec3 LuaBindComponents::Vec3Lerp(glm::vec3 from, glm::vec3 to, float t)
+{
+	return glm::lerp(from, to, t);
+}
+
+glm::vec2 LuaBindComponents::Vec2Lerp(glm::vec2 from, glm::vec2 to, float t)
+{
+	return glm::lerp(from, to, t);
+}
+
+glm::vec4 LuaBindComponents::Vec4Lerp(glm::vec4 from, glm::vec4 to, float t)
+{
+	return glm::lerp(from, to, t);
 }
 

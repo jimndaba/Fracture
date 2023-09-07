@@ -291,6 +291,7 @@ namespace Fracture
 		SceneRegistry SCENEREG(const std::string& name);
 		AnimationClipRegistry ANIMATIONREG(const std::string& name);
 
+		bool HasKey(const std::string& key);
 
 		json GetOutput();
 

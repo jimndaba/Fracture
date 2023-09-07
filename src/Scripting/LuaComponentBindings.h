@@ -34,6 +34,10 @@ namespace LuaBindComponents
 
 	void Instantiate(Fracture::UUID entity, glm::vec3 value);	
 
+	glm::vec3 Vec3Lerp(glm::vec3 from, glm::vec3 to, float t);
+	glm::vec2 Vec2Lerp(glm::vec2 from, glm::vec2 to, float t);
+	glm::vec4 Vec4Lerp(glm::vec4 from, glm::vec4 to, float t);
+
 }
 
 #endif

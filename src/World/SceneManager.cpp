@@ -7,6 +7,7 @@
 #include "EventSystem/Eventbus.h"
 #include "Physics/PhysicsEvents.h"
 #include "WorldEvents.h"
+#include "PrefabFactor.h"
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::mCurrentScene;
 std::map<Fracture::UUID, Fracture::SceneRegistry> Fracture::SceneManager::mSceneRegister;
@@ -14,11 +15,12 @@ std::map<std::string, Fracture::UUID> Fracture::SceneManager::mSceneIDLookUp;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::Scene>> Fracture::SceneManager::mScenes;
 std::shared_ptr<Fracture::CameraComponent> Fracture::SceneManager::mActiveCamera;
 std::unordered_map<Fracture::UUID, std::vector<Fracture::UUID>> Fracture::SceneManager::mScript_Entities;
-
+std::unique_ptr<Fracture::PrefabFactory> Fracture::SceneManager::mPrefabFactor;
 
 Fracture::SceneManager::SceneManager()
 {
     mCurrentScene = nullptr;
+    mPrefabFactor = std::make_unique<PrefabFactory>();
     Eventbus::Subscribe(this, &Fracture::SceneManager::OnDestroyEntity);
 }
 
@@ -231,22 +233,26 @@ Fracture::UUID& Fracture::SceneManager::LoadSceneFromFile(const std::string& pat
 
 void Fracture::SceneManager::InstanceSceneFromFile(ScenePrefab prefab)
 {
-    auto it = mSceneRegister.find(prefab.SceneID);
-    if (it != mSceneRegister.end())
+    if (!mPrefabFactor->IsTemplateAvailable(prefab.SceneID))
     {
-        SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
-        loader.Open(mSceneRegister[prefab.SceneID].Path);
-        loader.ReadScenePrefab(prefab);
-
-        for (const auto& r : loader.MeshesToLoad)
-            Eventbus::Publish<AsyncLoadMeshEvent>(r.first);
-
-
+        auto it = mSceneRegister.find(prefab.SceneID);
+        if (it != mSceneRegister.end())
+        {
+            mPrefabFactor->LoadPrefabTemplate(mSceneRegister[prefab.SceneID].Path);
+            for (const auto& r : mPrefabFactor->MeshesToLoad)
+                Eventbus::Publish<AsyncLoadMeshEvent>(r);
+        }       
     }
+
+
+    mPrefabFactor->Instance(prefab, prefab.Position, prefab.Scale, glm::eulerAngles(prefab.Rotation),true);
 }
 
 std::shared_ptr<Fracture::Scene> Fracture::SceneManager::DirectLoadScene(const std::string& path)
 {
+    mPrefabFactor->mPrefabTemplates.clear();
+    mPrefabFactor->mPrefabTracker.clear();
+
     SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
     loader.Open(path);
     return loader.ReadScene();
@@ -259,6 +265,9 @@ std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& s
     auto it = mSceneRegister.find(scene_ID);
     if (it != mSceneRegister.end())
     {
+        mPrefabFactor->mPrefabTemplates.clear();
+        mPrefabFactor->mPrefabTracker.clear();
+
         SceneSerialiser loader(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
         loader.Open(mSceneRegister[scene_ID].Path);
         auto scene = loader.ReadScene();
@@ -268,11 +277,6 @@ std::map<Fracture::UUID,int> Fracture::SceneManager::LoadSceneByID(const UUID& s
             scene->ID = scene_ID;
             mScenes[scene_ID] = scene;
             mCurrentScene = mScenes[scene_ID];
-      
-            //for (const auto& prefab : mCurrentScene->mPrefabs)
-            //{
-            //    Instantiate(prefab);
-           // }
         }
 
 
@@ -367,7 +371,6 @@ bool Fracture::SceneManager::HasScenePath(const std::string& path)
 
 Fracture::UUID Fracture::SceneManager::Instantiate(UUID prefab, glm::vec3 position, glm::vec3 scale, glm::quat rotation)
 {
-
     ScenePrefab mPrefab;
     mPrefab.PrefabID = UUID();
     mPrefab.ParentID = mCurrentScene->RootID;
@@ -469,24 +472,6 @@ void Fracture::SceneManager::InstanceComponents(UUID prefab, UUID new_entity, UU
     InstanceComponent<PointlightComponent>(prefab, new_entity, original_entity);
     InstanceComponent<SpotlightComponent>(prefab, new_entity, original_entity);
     InstanceComponent<SunlightComponent>(prefab, new_entity, original_entity);
- 
-
-    /*
-    const auto& new_hierachy = GetComponent<HierachyComponent>(new_entity);
-    if (new_hierachy)
-    {
-        new_hierachy->HasParent = true;
-        new_hierachy->Parent = parent_entity;
-    }
-
-    const auto& hierachy = GetInstanceComponent<HierachyComponent>(prefab,original_entity);
-    for (const auto& child : hierachy->Children)
-    {
-        UUID childentity = UUID();       
-        new_hierachy->Children.push_back(childentity);
-        InstanceComponents(prefab, childentity, child,new_entity);
-    }
-    */
 }
 
 void Fracture::SceneManager::Destroy(UUID entity)

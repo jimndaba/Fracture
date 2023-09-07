@@ -307,7 +307,7 @@ void Fracture::SceneSerialiser::InstanceMeshComponentIfExists(Fracture::UUID ent
 {
 	if (BeginStruct("Mesh"))
 	{
-		auto comp = std::make_shared<PrefabInstanceComponent>(entity_id,prefab_id,scene_id);
+		auto comp = std::make_shared<PrefabInstanceComponent>(entity_id,prefab_id);
 		comp->Mesh = ID("MeshID");
 		comp->Materials = UINT32_VECTOR("Materials");
 		comp->meshType = (PrefabInstanceComponent::MeshType)INT("MeshType");
@@ -984,7 +984,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 					{
 						auto script_id = ID("ScriptID");
 						SceneManager::AttachScript(new_Scene->RootID, script_id);
-
+						
 						auto luascript = ScriptManager::GetLuaScript(script_id);
 
 						
@@ -1226,12 +1226,12 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 					prefab.Scale = VEC3("Scale");
 					prefab.Rotation = glm::quat(glm::radians(VEC3("Rotation")));
 				    Eventbus::Publish<Fracture::InstanceScenePrefabEvent>(prefab);
+					EndStruct();
 				}
 				NextInCollection();
 			}
 			EndCollection();
 		}
-
 
 		EndStruct();
 
@@ -1469,7 +1469,6 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 				}
 				EndCollection();
 			}
-
 
 			EndStruct();
 		}

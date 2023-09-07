@@ -107,8 +107,21 @@ void Fracture::TransformSystem::LookAt(const std::shared_ptr<TransformComponent>
 {
 	if ((value - transform->Position) == glm::vec3(0, 0, 0)) return;
 
-	glm::mat4 lookMat = glm::lookAt(transform->Position, value, up);
-	transform->Rotation = conjugate(glm::toQuat(lookMat));
+	glm::vec3  direction = value - transform->Position;
+	float      directionLength = glm::length(direction);
+
+	// Normalize direction
+	direction /= directionLength;
+
+	// Is the normal up (nearly) parallel to direction?
+	if (glm::abs(glm::dot(direction, up)) > .9999f) {
+		// Use alternative up
+		transform->Rotation = glm::quatLookAt(direction, up);
+	}
+	else {
+		transform->Rotation = glm::quatLookAt(direction, up);
+	}
+
 	transform->IsDirty = true;
 }
 

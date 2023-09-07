@@ -5,15 +5,15 @@
 #include "Scene.h"
 #include "Assets/AssetRegistries.h"
 
+
 namespace Fracture
 {
 	class LuaScript;
 	struct DestroyEntityEvent;
+	class PrefabFactory;
 
 	class SceneManager
 	{
-
-
 	public:
 		SceneManager();
 
@@ -119,10 +119,13 @@ namespace Fracture
 
 		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
 
+		static std::unique_ptr<PrefabFactory> mPrefabFactor;
+
 	private:
 
 		static std::shared_ptr<Scene> mCurrentScene;
 		static std::shared_ptr<CameraComponent> mActiveCamera;
+
 	};
 
 

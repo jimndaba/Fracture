@@ -34,10 +34,10 @@
   @{
 */
 
-#include "PxPhysXConfig.h"
+#include "physx/PxPhysXConfig.h"
 #include "foundation/PxFlags.h"
 #include "foundation/PxErrorCallback.h"
-#include "common/PxRenderBuffer.h"
+#include "physx/common/PxRenderBuffer.h"
 
 #if !PX_DOXYGEN
 namespace physx

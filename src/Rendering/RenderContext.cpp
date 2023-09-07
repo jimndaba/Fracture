@@ -341,6 +341,40 @@ void Fracture::RenderContext::DrawOutlines(UUID entity)
 	}
 }
 
+void Fracture::RenderContext::DrawPrefabOutlines(UUID entity)
+{
+	const auto& prefabInstancecomponents = SceneManager::GetAllComponents<PrefabInstanceComponent>();
+	for (const auto& prefab : prefabInstancecomponents)
+	{
+		if (prefab->Parent_PrefabID == entity)
+		{
+			
+			const auto& mesh = AssetManager::GetStaticByIDMesh(prefab->Mesh);
+			const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->EntityID)->WorldTransform;
+
+			for (const auto& submesh : mesh->SubMeshes)
+			{
+				auto materialID = prefab->Materials[submesh.MaterialIndex];
+				const auto& material = AssetManager::GetMaterialByID(materialID);
+
+				auto drawcall = std::make_shared<MeshDrawCall>();
+
+				drawcall->EntityID = entity;
+				drawcall->model = transform;
+				drawcall->MaterialID = materialID;
+				drawcall->MeshHandle = mesh->VAO;
+				drawcall->basevertex = submesh.BaseVertex;
+				drawcall->IndexCount = submesh.IndexCount;
+				drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+
+				OutlineDrawCalls.push_back(drawcall);
+			}
+			
+		}
+	}
+	
+}
+
 void Fracture::RenderContext::AddToBatch(PrefabInstanceComponent* meshcomponent, glm::mat4 transform, UUID entity)
 {
 	if (!AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))

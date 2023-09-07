@@ -71,13 +71,15 @@ void Fracture::BloomPass::Setup()
 		bloomfinal = AssetManager::GetShader("BloomFinal");
 	}
 }
-
-void Fracture::BloomPass::Render(PostProcessInfo info)
+bool Fracture::BloomPass::Render(PostProcessInfo info)
 {
 	OPTICK_EVENT();
-	const  auto& mipChain = BloomMipMaps;
+	
 	if (!GraphicsDevice::Instance()->RenderSettings.BloomEnabled)
-		return;
+		return false;
+
+	const  auto& mipChain = BloomMipMaps;
+
 	RenderCommands::Disable(info.cntxt, Fracture::GLCapability::Blending);
 
 	//Bright Pass
@@ -190,4 +192,6 @@ void Fracture::BloomPass::Render(PostProcessInfo info)
 		RenderCommands::BindVertexArrayObject(info.cntxt, info.VAO);
 		RenderCommands::DrawArray(info.cntxt, cmd);
 	}
+
+	return true;
 }

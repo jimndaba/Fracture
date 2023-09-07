@@ -90,7 +90,7 @@ void LuaBindPhysics::SetAngularVelocity(Fracture::UUID entity, glm::vec3 velocit
 			FRACTURE_WARN("Trying to set angular velocity of non-dynamic PhysicsActor.");
 			return;
 		}
-
+		
 		physx::PxRigidDynamic* actor = Fracture::PhysicsManager::Instance()->GetRigidBody(entity)->is<physx::PxRigidDynamic>();
 		actor->setAngularVelocity(Fracture::PhysicsHelpers::ToPhysXVector(velocity));
 	}
@@ -106,6 +106,17 @@ void LuaBindPhysics::RotateRigidBody(Fracture::UUID entity, glm::vec3 value)
 			* physx::PxQuat(glm::radians(value.y), { 0.0f, 1.0f, 0.0f })
 			* physx::PxQuat(glm::radians(value.z), { 0.0f, 0.0f, 1.0f }));
 		Fracture::PhysicsManager::Instance()->GetRigidBody(entity)->setGlobalPose(transform);
+	}
+}
+
+void LuaBindPhysics::Move(Fracture::UUID entity, glm::vec3 value)
+{
+	const auto& component = Fracture::SceneManager::GetComponent<Fracture::CharacterControllerComponent>(entity);
+	const auto& cc = Fracture::PhysicsManager::Instance()->GetCharacterController(entity);
+	if (cc && component)
+	{	
+		physx::PxControllerFilters filters;
+		cc->move(physx::PxVec3(value.x, value.y, value.z), component->MinMovementDist, 1.f / 60.f, filters);
 	}
 }
 

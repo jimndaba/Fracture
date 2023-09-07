@@ -1205,6 +1205,15 @@ Fracture::AnimationClipRegistry Fracture::ISerialiser::ANIMATIONREG(const std::s
 	return AnimationClipRegistry();
 }
 
+bool Fracture::ISerialiser::HasKey(const std::string& key)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto j = mStructStack.top();
+		return exists(j, key);	
+	}
+}
+
 nlohmann::json Fracture::ISerialiser::GetOutput()
 {
 	return Output;
