@@ -115,9 +115,26 @@ void LuaBindPhysics::Move(Fracture::UUID entity, glm::vec3 value)
 	const auto& cc = Fracture::PhysicsManager::Instance()->GetCharacterController(entity);
 	if (cc && component)
 	{	
+		component->IsGrounded = false;
 		physx::PxControllerFilters filters;
-		cc->move(physx::PxVec3(value.x, value.y, value.z), component->MinMovementDist, 1.f / 60.f, filters);
+		physx::PxControllerCollisionFlags collisionFlags = cc->move(physx::PxVec3(value.x, value.y, value.z), component->MinMovementDist, 1.f / 60.f, filters);
+
+		if (collisionFlags == physx::PxControllerCollisionFlag::eCOLLISION_DOWN)
+		{
+			component->IsGrounded = true;
+		}
 	}
+}
+
+bool LuaBindPhysics::IsControllerGrounded(Fracture::UUID entity)
+{
+	const auto& component = Fracture::SceneManager::GetComponent<Fracture::CharacterControllerComponent>(entity);
+	if (component)
+	{
+		return component->IsGrounded;
+	}
+
+	return false;
 }
 
 void LuaBindPhysics::SetGravityDisabled(Fracture::UUID entity, bool value)

@@ -576,6 +576,14 @@ void Fracture::PhysicsManager::AddActors()
 	}
 }
 
+void Fracture::PhysicsManager::AddCharacterControllers()
+{
+	for (const auto& actor : SceneManager::GetAllComponents<CharacterControllerComponent>())
+	{
+		AddCharacterController(actor->GetID());
+	}
+}
+
 void Fracture::PhysicsManager::JointToParent(Fracture::UUID parent, Fracture::UUID child)
 {
 	PxRevoluteJointCreate(GetPhysicsSDK()
@@ -622,8 +630,6 @@ physx::PxCpuDispatcher* Fracture::PhysicsManager::GetCPUDispatcher()
 {
 	return mInstance->mDispacther;
 }
-
-
 
 physx::PxRigidActor* Fracture::PhysicsManager::GetRigidBody(const Fracture::UUID& entity)
 {

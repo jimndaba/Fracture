@@ -494,6 +494,7 @@ namespace Fracture
 		
 			CollisionLayer = other.CollisionLayer;
 			CollisionGroup = other.CollisionGroup;
+	
 		}
 
 		UUID entity;
@@ -513,6 +514,7 @@ namespace Fracture
 
 		int CollisionLayer = 0;
 		int CollisionGroup = 0;
+		bool IsGrounded = false;
 			
 	};
 

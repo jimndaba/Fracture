@@ -77,6 +77,7 @@ namespace Fracture
 		void AddActor(UUID mEntity);
 		void AddCharacterController(UUID mEntity);
 		void AddActors();
+		void AddCharacterControllers();
 
 		void JointToParent(Fracture::UUID parent, Fracture::UUID child);
 

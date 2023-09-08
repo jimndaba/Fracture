@@ -210,6 +210,24 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::AnimationComponent*
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CharacterControllerComponent* component)
+{
+	BeginStruct("CharacterControllerComponent");
+	Property("CollisionGroup", component->CollisionGroup);
+	Property("CollisionLayer", component->CollisionLayer);
+	Property("Height", component->Height);
+	Property("Radius", component->Radius);
+	Property("Size", component->Size);
+	Property("Shape", (int)component->Shape);
+	Property("ContactOffset", component->Offset);
+	Property("MaxSlope", component->MaxSlopeAngle);
+	Property("MaxSpeed", component->MaxSpeed);
+	Property("StepHeight", component->StepHeight);
+	Property("MinDist", component->MinMovementDist);
+	EndStruct();
+
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -516,6 +534,27 @@ void Fracture::SceneSerialiser::ReadAnimationComponentIfExists(Fracture::UUID en
 	}
 }
 
+void Fracture::SceneSerialiser::ReadCharacterControllerComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("CharacterControllerComponent"))
+	{
+		auto comp = std::make_shared<CharacterControllerComponent>(entity_id);
+		comp->CollisionGroup = INT("CollisionGroup");
+		comp->CollisionLayer = INT("CollisionLayer");
+		comp->Height = FLOAT("Height");
+		comp->Radius = FLOAT("Radius");
+		comp->StepHeight = FLOAT("StepHeight");
+		comp->MaxSlopeAngle = FLOAT("MaxSlope");
+		comp->MaxSpeed = FLOAT("MaxSpeed");
+		comp->MinMovementDist = FLOAT("MinDist");
+		comp->Size = VEC3("Size");
+		comp->Offset = VEC3("ContactOffset");
+		comp->Shape = (Fracture::CCColliderType)INT("Shape");
+		SceneManager::AddComponentByInstance<CharacterControllerComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
@@ -542,6 +581,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<SkyboxComponent>(scene->RootID);
 			WriteEntityComponentOfType<LightProbeComponent>(scene->RootID);
 			WriteEntityComponentOfType<AnimationComponent>(scene->RootID);
+			WriteEntityComponentOfType<CharacterControllerComponent>(scene->RootID);
 
 			BeginCollection("Scripts");
 			{
@@ -649,6 +689,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<SkyboxComponent>(entity->ID);
 					WriteEntityComponentOfType<LightProbeComponent>(entity->ID);
 					WriteEntityComponentOfType<AnimationComponent>(entity->ID);
+					WriteEntityComponentOfType<CharacterControllerComponent>(entity->ID);
 				}
 				EndCollection();
 
@@ -807,28 +848,7 @@ void Fracture::SceneSerialiser::EntitiesToPrefab(PrefabCreationInfo info)
 		{
 			BeginStruct("Prefab");
 			{
-				/*
-				Property("Prefab_ID", prefab.PrefabID);
-				Property("Scene_ID", prefab.SceneID);
-				Property("Parent_ID", prefab.ParentID);
-				const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab.PrefabID);
-				if (transform)
-				{
-					Property("Position", transform->Position);
-					glm::vec3 angle = glm::eulerAngles(transform->Rotation);
-					angle = glm::degrees(angle);
-					Property("Rotation", angle);
-					Property("Scale", transform->Scale);
-				}
-				else
-				{
-					Property("Position", prefab.Position);
-					glm::vec3 angle = glm::eulerAngles(prefab.Rotation);
-					angle = glm::degrees(angle);
-					Property("Rotation", angle);
-					Property("Scale", prefab.Scale);
-				}
-				*/
+		
 			}
 			EndStruct();
 		}
@@ -936,6 +956,12 @@ void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Frac
 					auto new_component = AnimationComponent(component, entityid);
 					SerialiseComponent(&new_component);
 				}
+				if (SceneManager::HasComponent<CharacterControllerComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<CharacterControllerComponent>(entity);
+					auto new_component = CharacterControllerComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
 				EndCollection();
 			}
 		}
@@ -975,6 +1001,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			ReadAnimationComponentIfExists(new_Scene->RootID);
+			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1104,6 +1131,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadSkyboxComponentIfExists(entity_id);
 							ReadLightProbeComponentIfExists(entity_id);
 							ReadAnimationComponentIfExists(entity_id);
+							ReadCharacterControllerComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1267,6 +1295,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 			ReadAudioSourceComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
+			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -1296,6 +1325,8 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 							ReadAudioSourceComponentIfExists(entity_id);
 							ReadSkyboxComponentIfExists(entity_id);
 							ReadLightProbeComponentIfExists(entity_id);
+							ReadAnimationComponentIfExists(entity_id);
+							ReadCharacterControllerComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1372,6 +1403,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			ReadSkyboxComponentIfExists(prefab.PrefabID);
 			ReadLightProbeComponentIfExists(prefab.PrefabID);
 			ReadAnimationComponentIfExists(prefab.PrefabID);
+			ReadCharacterControllerComponentIfExists(prefab.PrefabID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1499,6 +1531,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadSkyboxComponentIfExists(entity);
 							ReadLightProbeComponentIfExists(entity);
 							ReadAnimationComponentIfExists(entity);
+							ReadCharacterControllerComponentIfExists(entity);
 							NextInCollection();
 						}
 						EndCollection();

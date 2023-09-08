@@ -42,6 +42,7 @@ bool Fracture::FractureGame::Run(AppWindow* window,SceneRenderer* renderer)
 
     PhysicsManager::Instance()->CreateScene();
     PhysicsManager::Instance()->AddActors();
+    PhysicsManager::Instance()->AddCharacterControllers();
 
     //TODO On Start Scripts
    

@@ -244,6 +244,7 @@ void Fracture::ScriptManager::BindPhysics(sol::state& L)
 	L.set_function("SetMaxLinearVelocity", LuaBindPhysics::SetMaxLinearVelocity);
 	L.set_function("SetMaxAngularVelocity", LuaBindPhysics::SetMaxAngularVelocity);
 	L.set_function("SetGravityDisabled", LuaBindPhysics::SetGravityDisabled);
+	L.set_function("IsControllerGrounded", LuaBindPhysics::IsControllerGrounded);
 
 	L.set_function("GetAngularVelocity", LuaBindPhysics::GetAngularVelocity);
 	L.set_function("GetLinearVelocity", LuaBindPhysics::GetLinearVelocity);
