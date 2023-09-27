@@ -117,9 +117,6 @@ void Fracture::FractureGame::Update()
             tSystem.UpdatePrefabs(prefab);
         }
     }
-
-
-
  
 
     AnimationSystem::Instance()->Update(frameTime);
@@ -132,11 +129,10 @@ void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
 {
     OPTICK_EVENT();
     GraphicsDevice::Instance()->ClearBuffers((uint32_t)ClearBufferBit::Color);
-    GraphicsDevice::Instance()->ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    Fracture::GraphicsDevice::Instance()->ClearColor(0.1f, 0.6f, 0.9f, 1.0f);
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
 
     renderer->Begin(0.0f);
-
     renderer->End();
 }
 

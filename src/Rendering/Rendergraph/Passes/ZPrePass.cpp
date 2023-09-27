@@ -31,10 +31,8 @@ void Fracture::ZPrePass::Execute()
 	RenderCommands::SetCullMode(Context, CullMode::Back);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
-	//RenderCommands::Enable(Context, Fracture::GLCapability::StencilTest);
-
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Less);		
-	//RenderCommands::SetColorMask(Context, 0, 0, 0, 1);
+
 
 	if (Context->mBatches.empty() && Context->OpaqueDrawCalls.empty() && Context->TransparentDrawCalls.empty())
 	{

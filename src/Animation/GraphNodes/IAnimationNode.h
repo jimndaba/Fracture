@@ -50,8 +50,8 @@ namespace Fracture
 			NodeLink,
 			TransitionLink
 		};
-		Fracture::UUID ID;
 
+		Fracture::UUID ID;
 		Fracture::UUID FromPinID;
 		Fracture::UUID ToPinID;
 
@@ -78,7 +78,6 @@ namespace Fracture
 		float Time;
 		AnimationGraph* _graph;
 		AnimationSystem* _system;
-		//Pose??
 	};
 
 	enum class NodeValueType
@@ -119,7 +118,6 @@ namespace Fracture
 		inline void SetValueType(NodeValueType mType) { ValueType = mType; };
 
 		virtual void Process(AnimationContext& context) = 0;
-		virtual void LinkResources() {};
 	};
 
 	struct IOperationNode : IAnimationNode

@@ -33,7 +33,7 @@ namespace Fracture
 		//Cascade Shadows
 		int ShadowCascadeCont;
 		float ShadowBias = 0.01f;
-		int Shadow_Resolution = 2048;
+		int Shadow_Resolution = 1024;
 
 		//FXAA
 		bool FXAA_Enabled = 1;

@@ -106,6 +106,10 @@ void Fracture::PostProcessPipeline::OnRender()
 		RenderCommands::ClearColor(cntxt,Fracture::Colour::Red);
 		RenderCommands::SetViewport(cntxt, cntxt->ContextViewport.Width, cntxt->ContextViewport.Height, 0, 0);
 		RenderCommands::SetScissor(cntxt, cntxt->ContextViewport.Width, cntxt->ContextViewport.Height, 0, 0);
+
+		RenderCommands::Disable(cntxt, GLCapability::DepthTest);
+		RenderCommands::Disable(cntxt, GLCapability::SmoothLines);
+		RenderCommands::Disable(cntxt, GLCapability::Blending);
 	}
 
 	RenderCommands::SetRenderTarget(cntxt,(uint32_t)0);

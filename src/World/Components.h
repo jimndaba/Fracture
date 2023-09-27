@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "physx/PxPhysicsAPI.h"
+#include "Scripting/LuaScript.h"
 namespace Fracture
 {
 	struct IComponent
@@ -539,6 +540,9 @@ namespace Fracture
 		bool HasStarted = false;
 		UUID Script;
 		UUID entity;
+
+		std::map<std::string,std::shared_ptr<ScriptProperty>> mProperties;
+
 		UUID GetID() { return entity; }
 	};
 
@@ -610,6 +614,7 @@ namespace Fracture
 			Mesh = other.Mesh;			
 		}
 
+
 		UUID entity;
 		UUID GetID() { return entity; }
 		
@@ -617,6 +622,27 @@ namespace Fracture
 		UUID Mesh = -1;
 		bool IsGraphSet = false;
 		
+	};
+
+	struct ParticleSystemComponent : public IComponent
+	{
+		ParticleSystemComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {
+		}
+
+		ParticleSystemComponent(ParticleSystemComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			particleFXID = other.particleFXID;
+			IsFXAttached = other.IsFXAttached;
+		}
+
+		bool IsFXAttached = false;
+		UUID entity;
+		UUID particleFXID;
+
+		UUID GetID() { return entity; }
 	};
 }
 

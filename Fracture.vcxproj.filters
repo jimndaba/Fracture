@@ -435,9 +435,6 @@
     <ClInclude Include="src\Animation\GraphNodes\IAnimationNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Animation\GraphNodes\SourceNodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Animation\GraphNodes\BooleanNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -481,6 +478,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\World\PrefabFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\EmitterModifiers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -860,9 +872,6 @@
     <ClCompile Include="src\Animation\GraphNodes\IAnimationNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Animation\GraphNodes\SourceNodes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Animation\GraphNodes\BooleanNodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -906,6 +915,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\World\PrefabFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particles\Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particles\ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particles\EmitterModifiers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serialisation\ParticleFXSerialiser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -296,12 +296,12 @@ void Fracture::DebugRenderer::DrawCone(const glm::vec3& pos, const glm::quat& ro
     float twicePi = 2.0f * 3.14159265359f;
     
 
-    glm::vec3 topVertex = pos + (rotation * glm::vec3(0, length, 0));
+    glm::vec3 topVertex = pos;// +(rotation * glm::vec3(0, length, 0));
 
     for (std::size_t i = 0; i <= detail; ++i)
     {
         float r = twicePi * (i / (float)detail);
-        glm::vec3 vertex(radius * cos(r), 0.0f, radius * sin(r));
+        glm::vec3 vertex(radius * cos(r), radius * sin(r), -length);
         vertices.push_back(pos + (rotation * vertex));
     }
 
@@ -336,7 +336,7 @@ void Fracture::DebugRenderer::RenderBillboardQuad(RenderContext* Context)
         glGenBuffers(1, &QuadVBO);
         // fill buffer
         glBindBuffer(GL_ARRAY_BUFFER, QuadVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STREAM_DRAW);
         // link vertex attributes
         glBindVertexArray(QuadVAO);
         glEnableVertexAttribArray(0);

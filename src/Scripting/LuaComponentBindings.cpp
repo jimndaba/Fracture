@@ -202,9 +202,9 @@ void LuaBindComponents::LookAt(Fracture::UUID entity, glm::vec3 value, glm::vec3
 	Fracture::TransformSystem::LookAt(transform, value, up);
 }
 
-void LuaBindComponents::Instantiate(Fracture::UUID entity, glm::vec3 value)
+void LuaBindComponents::Instantiate(Fracture::UUID entity, glm::vec3 position, glm::vec3 rotation)
 {
-	Fracture::Eventbus::Publish<Fracture::InstantiatePrefabEvent>(entity, value);
+	Fracture::Eventbus::Publish<Fracture::InstantiatePrefabEvent>(entity, position,rotation);
 }
 
 glm::vec3 LuaBindComponents::Vec3Lerp(glm::vec3 from, glm::vec3 to, float t)

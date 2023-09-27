@@ -275,14 +275,22 @@ void Fracture::SceneRenderer::Init()
 	PresentPassDef presentInfo;
 	presentPass = std::make_shared<Fracture::PresentPass>("Present",mFinalContext.get(), presentInfo);
 	presentPass->Setup();
+
+
+	particleSystem = std::make_unique<Fracture::ParticleSystem>();
+	particleSystem->Init();
 }
 
 void Fracture::SceneRenderer::Begin(float dt)
 {
+
 	OPTICK_EVENT();
 	if (SceneManager::CurrentScene())
 	{
-		auto current_Camera = SceneManager::ActiveCamera();		
+		particleSystem->Update(dt);
+
+		const auto& current_Camera = SceneManager::ActiveCamera();	
+		//const auto& tranform = SceneManager::GetComponent<CameraComponent>(current_Camera->GetID());
 		data.Camera_Position = glm::vec4(current_Camera->Position.x, current_Camera->Position.y, current_Camera->Position.z, 0);
 		data.Camera_Projection = current_Camera->ProjectMatrix;
 		data.Camera_View = current_Camera->ViewMatrix;
@@ -401,6 +409,9 @@ void Fracture::SceneRenderer::Begin(float dt)
 
 		mContext->deltaTime += dt;
 	}
+
+
+
 }
 
 void Fracture::SceneRenderer::QueueLightProbesToBake(UUID id)
@@ -468,18 +479,19 @@ void Fracture::SceneRenderer::End()
 		if (gridpass && DrawGrid)
 			gridpass->Execute();
 
-		
+		particleSystem->Render(mContext.get());
+
 		if (ssrPass)
 			ssrPass->Execute();
 
+
+		
 	
 	}
 
 	mContext->EndState();
-	//mContext->Sort(Fracture::DepthSortOrder::Front_To_Back);
+
 	mContext->Render();
-
-
 	GraphicsDevice::Instance()->PostProcessStack()->OnRender();
 	GraphicsDevice::Instance()->PostProcessStack()->Submit();
 
@@ -497,4 +509,14 @@ void Fracture::SceneRenderer::End()
 	mFinalContext->EndState();
 	mFinalContext->Render();
 	mContext->EndScene();
+}
+
+void Fracture::SceneRenderer::OnSave()
+{
+	particleSystem->OnSave();
+}
+
+void Fracture::SceneRenderer::OnLoad()
+{
+	particleSystem->OnLoad();
 }

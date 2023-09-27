@@ -89,8 +89,6 @@ bool Fracture::BloomPass::Render(PostProcessInfo info)
 		
 
 		Fracture::RenderCommands::FrameBufferAttachTexture(info.cntxt, mBloomFBO->Handle, 0, mPrefilteredTexture->Handle, 0);
-
-		Fracture::RenderCommands::SetUniform(info.cntxt, BloomPrefilterShader.get(), "Threshold", GraphicsDevice::Instance()->RenderSettings.BloomThreshold);
 		Fracture::RenderCommands::SetTexture(info.cntxt, BloomPrefilterShader.get(), "srcTexture", info.input_texture, 0);
 		
 		DrawArray cmd =

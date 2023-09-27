@@ -47,7 +47,7 @@ namespace Fracture
 
 		ScriptProperty() {};
 
-		ScriptProperty(const ScriptProperty& other) {
+		ScriptProperty(ScriptProperty& other) {
 		}
 
 		inline bool operator == (const ScriptProperty& other) const {

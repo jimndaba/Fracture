@@ -13,6 +13,8 @@
 #include "Rendering/Rendergraph/Passes/GridPass.h"
 #include "Rendering/Rendergraph/Passes/OutlinePass.h"
 
+#include "Particles/ParticleSystem.h"
+
 namespace Fracture
 {
 
@@ -26,7 +28,8 @@ namespace Fracture
 
 		void Begin(float dt);
 
-
+		void OnSave();
+		void OnLoad();
 
 		void QueueLightProbesToBake(UUID id);
 
@@ -45,7 +48,10 @@ namespace Fracture
 		std::shared_ptr<Fracture::LightCullPass> lightcullPass;
 		std::shared_ptr<Fracture::ComposeRenderersPass> ComposePass;
 		std::shared_ptr<Fracture::PresentPass> presentPass;
+
 		std::queue<Fracture::UUID> mLightProbesToRender;
+
+		std::unique_ptr<ParticleSystem> particleSystem;
 
 		bool DrawGrid = false;
 		Fracture::GlobalFrameData data;

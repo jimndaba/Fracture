@@ -44,6 +44,11 @@ namespace Fracture
 			return m_UUID;
 		}
 
+		void SetValue(uint32_t value)
+		{
+			m_UUID = value;
+		}
+
 	private:
 		mutable uint32_t m_UUID = 0;
 		bool mValid = false;

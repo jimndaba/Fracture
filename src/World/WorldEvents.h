@@ -16,10 +16,11 @@ namespace Fracture
 
 	struct InstantiatePrefabEvent : public Fracture::Event
 	{
-		InstantiatePrefabEvent(Fracture::UUID id, glm::vec3 pos = glm::vec3(0)) : Event(), SceneID(id), Position(pos) {};
+		InstantiatePrefabEvent(Fracture::UUID id, glm::vec3 pos = glm::vec3(0), glm::vec3 rot = glm::vec3(0)) : Event(), SceneID(id), Position(pos), Rotation(rot) {};
 
 		Fracture::UUID SceneID;
 		glm::vec3 Position;
+		glm::vec3 Rotation;
 		const char* Name() { return "InstanceScenePrefabEvent"; };
 	};
 

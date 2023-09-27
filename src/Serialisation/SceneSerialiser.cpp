@@ -228,6 +228,14 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CharacterController
 
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ParticleSystemComponent* component)
+{
+	BeginStruct("ParticleSystemComponent");
+	Property("IsFxAttached", component->IsFXAttached);
+	Property("FxID", component->particleFXID);	
+	EndStruct();
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -427,6 +435,66 @@ void Fracture::SceneSerialiser::ReadScriptComponentIfExists(Fracture::UUID entit
 		auto comp = std::make_shared<ScriptComponent>(entity_id);
 		comp->Script = ID("Script");		
 		comp->HasStarted = BOOL("HasScript");		
+
+		if (BeginCollection("Properties"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				if (BeginStruct("Property"))
+				{
+					auto prop = std::make_shared<ScriptProperty>();
+
+					prop->Type = (PROPERTY_TYPE)INT("Type");
+					prop->Name = STRING("Name");
+
+					switch (prop->Type)
+					{
+					case PROPERTY_TYPE::BOOL:
+					{
+						prop->Bool = BOOL("Value");
+						break;
+					}
+					case PROPERTY_TYPE::UUID:
+					{
+						prop->ID = ID("Value");
+						break;
+					}
+					case PROPERTY_TYPE::FLOAT:
+					{
+						prop->Float = FLOAT("Value");
+						break;
+					}
+					case PROPERTY_TYPE::INT:
+					{
+						prop->Int = INT("Value");
+						break;
+					}
+					case PROPERTY_TYPE::VEC2:
+					{
+						prop->Vec2 = VEC2("Value");
+						break;
+					}
+					case PROPERTY_TYPE::VEC3:
+					{
+						prop->Vec3 = VEC3("Value");
+						break;
+					}
+					case PROPERTY_TYPE::VEC4:
+					{
+						prop->Vec4 = VEC4("Value");
+						break;
+					}
+					}
+
+					comp->mProperties[STRING("Name")] = prop;
+
+					EndStruct();
+				}
+				NextInCollection();
+			}
+			EndCollection();
+		}
+		
 		SceneManager::AddComponentByInstance<ScriptComponent>(entity_id, comp);
 		EndStruct();
 	}
@@ -555,6 +623,18 @@ void Fracture::SceneSerialiser::ReadCharacterControllerComponentIfExists(Fractur
 	}
 }
 
+void Fracture::SceneSerialiser::ReadParticleSystemComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("ParticleSystemComponent"))
+	{
+		auto comp = std::make_shared<ParticleSystemComponent>(entity_id);
+		comp->IsFXAttached = BOOL("IsFxAttached");
+		comp->particleFXID = ID("FxID");
+		SceneManager::AddComponentByInstance<ParticleSystemComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
@@ -576,12 +656,12 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<SpotlightComponent>(scene->RootID);
 			WriteEntityComponentOfType<SunlightComponent>(scene->RootID);
 			WriteEntityComponentOfType<ShadowCasterComponent>(scene->RootID);
-			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);
-			WriteEntityComponentOfType<ScriptComponent>(scene->RootID);
+			WriteEntityComponentOfType<ColliderComponent>(scene->RootID);			
 			WriteEntityComponentOfType<SkyboxComponent>(scene->RootID);
 			WriteEntityComponentOfType<LightProbeComponent>(scene->RootID);
 			WriteEntityComponentOfType<AnimationComponent>(scene->RootID);
 			WriteEntityComponentOfType<CharacterControllerComponent>(scene->RootID);
+			WriteEntityComponentOfType<ParticleSystemComponent>(scene->RootID);
 
 			BeginCollection("Scripts");
 			{
@@ -684,12 +764,12 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<SpotlightComponent>(entity->ID);
 					WriteEntityComponentOfType<SunlightComponent>(entity->ID);
 					WriteEntityComponentOfType<ShadowCasterComponent>(entity->ID);
-					WriteEntityComponentOfType<ColliderComponent>(entity->ID);
-					WriteEntityComponentOfType<ScriptComponent>(entity->ID);
+					WriteEntityComponentOfType<ColliderComponent>(entity->ID);					
 					WriteEntityComponentOfType<SkyboxComponent>(entity->ID);
 					WriteEntityComponentOfType<LightProbeComponent>(entity->ID);
 					WriteEntityComponentOfType<AnimationComponent>(entity->ID);
 					WriteEntityComponentOfType<CharacterControllerComponent>(entity->ID);
+					WriteEntityComponentOfType<ParticleSystemComponent>(entity->ID);
 				}
 				EndCollection();
 
@@ -962,6 +1042,12 @@ void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Frac
 					auto new_component = CharacterControllerComponent(component, entityid);
 					SerialiseComponent(&new_component);
 				}
+				if (SceneManager::HasComponent<ParticleSystemComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<ParticleSystemComponent>(entity);
+					auto new_component = ParticleSystemComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
 				EndCollection();
 			}
 		}
@@ -997,11 +1083,12 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadRigidbodyComponentIfExists(new_Scene->RootID);
 			ReadColliderComponentIfExists(new_Scene->RootID);
 			ReadCameraComponentIfExists(new_Scene->RootID);
-			ReadScriptComponentIfExists(new_Scene->RootID);
+			//ReadScriptComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			ReadAnimationComponentIfExists(new_Scene->RootID);
 			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
+			ReadParticleSystemComponentIfExists(new_Scene->RootID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1127,11 +1214,12 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadSunlightComponentIfExists(entity_id);
 							ReadRigidbodyComponentIfExists(entity_id);
 							ReadColliderComponentIfExists(entity_id);
-							ReadScriptComponentIfExists(entity_id);
+							//ReadScriptComponentIfExists(entity_id);
 							ReadSkyboxComponentIfExists(entity_id);
 							ReadLightProbeComponentIfExists(entity_id);
 							ReadAnimationComponentIfExists(entity_id);
 							ReadCharacterControllerComponentIfExists(entity_id);
+							ReadParticleSystemComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1296,6 +1384,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
+			ReadParticleSystemComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -1326,7 +1415,8 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 							ReadSkyboxComponentIfExists(entity_id);
 							ReadLightProbeComponentIfExists(entity_id);
 							ReadAnimationComponentIfExists(entity_id);
-							ReadCharacterControllerComponentIfExists(entity_id);
+							ReadCharacterControllerComponentIfExists(entity_id); 
+							ReadParticleSystemComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1404,6 +1494,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			ReadLightProbeComponentIfExists(prefab.PrefabID);
 			ReadAnimationComponentIfExists(prefab.PrefabID);
 			ReadCharacterControllerComponentIfExists(prefab.PrefabID);
+			ReadParticleSystemComponentIfExists(prefab.PrefabID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1532,6 +1623,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadLightProbeComponentIfExists(entity);
 							ReadAnimationComponentIfExists(entity);
 							ReadCharacterControllerComponentIfExists(entity);
+							ReadParticleSystemComponentIfExists(entity);
 							NextInCollection();
 						}
 						EndCollection();

@@ -128,12 +128,27 @@ void Fracture::PrefabFactory::Instance(ScenePrefab prefab, glm::vec3 position, g
 				SceneManager::AddComponentByInstance(new_entity, component);
 			}
 
-			for (const auto& script : prefabTemp.scripts)
+			if (prefabTemp.HasCharacterControllerComponent)
 			{
-				SceneManager::AttachScript(new_entity, script);
+				auto component = std::make_shared<CharacterControllerComponent>(*prefabTemp.controller.get(), new_entity);
+				SceneManager::AddComponentByInstance(new_entity, component);
+			}
+
+			if (prefabTemp.HasParticleComponent)
+			{
+				auto component = std::make_shared<ParticleSystemComponent>(*prefabTemp.particles.get(), new_entity);
+				SceneManager::AddComponentByInstance(new_entity, component);
+			}
+
+			for (const auto& script_id : prefabTemp.scripts)
+			{
+				SceneManager::AttachScript(new_entity, script_id);
+				const auto& script = ScriptManager::GetLuaScript(script_id);
+				script->DoScript(*ScriptManager::GetState());
+				script->BindProperties(*ScriptManager::GetState());
+				ScriptManager::LoadScriptProperties(script.get());
 			}
 			
-
 			if (prefabTemp.HasReflectionProbeComponent)
 			{
 				auto component = std::make_shared<ReflectionProbeComponent>(*prefabTemp.reflectionprobe.get(), new_entity);
@@ -253,10 +268,25 @@ void Fracture::PrefabFactory::Instance(ScenePrefab prefab, glm::vec3 position, g
 				SceneManager::AddComponentByInstance(mEntity , component);
 			}
 
-
-			for (const auto& script : prefabTemp.scripts)
+			if (prefabTemp.HasCharacterControllerComponent)
 			{
-				SceneManager::AttachScript(mEntity, script);				
+				auto component = std::make_shared<CharacterControllerComponent>(*prefabTemp.controller.get(), mEntity);
+				SceneManager::AddComponentByInstance(mEntity, component);
+			}
+
+			if (prefabTemp.HasParticleComponent)
+			{
+				auto component = std::make_shared<ParticleSystemComponent>(*prefabTemp.particles.get(), mEntity);
+				SceneManager::AddComponentByInstance(mEntity, component);
+			}
+
+			for (const auto& script_id : prefabTemp.scripts)
+			{		
+				SceneManager::AttachScript(mEntity, script_id);
+				const auto& script = ScriptManager::GetLuaScript(script_id);
+				script->DoScript(*ScriptManager::GetState());
+				script->BindProperties(*ScriptManager::GetState());
+				ScriptManager::LoadScriptProperties(script.get());
 			}
 
 			if (prefabTemp.HasReflectionProbeComponent)
@@ -334,6 +364,8 @@ void Fracture::PrefabFactory::LoadPrefabTemplate(const std::string& path)
 			root.HasAudioSourceComponent = loader.HasKey("AudioSourceComponent");
 			root.HasSkyboxComponent = loader.HasKey("SkyboxComponent");
 			root.HasAnimationComponent = loader.HasKey("AnimationComponent");
+			root.HasCharacterControllerComponent = loader.HasKey("CharacterControllerComponent");
+			root.HasParticleComponent = loader.HasKey("ParticleSystemComponent");
 		
 			if (loader.BeginStruct("Tag"))
 			{
@@ -506,13 +538,37 @@ void Fracture::PrefabFactory::LoadPrefabTemplate(const std::string& path)
 				loader.EndStruct();
 			}
 			if (loader.BeginStruct("AnimationComponent"))
-		{
-			root.animation = std::make_shared<AnimationComponent>(entity_id);
-			root.animation->Mesh = loader.ID("Mesh");
-			root.animation->CurrentGraph = loader.ID("Graph");
-			root.animation->IsGraphSet = loader.BOOL("HasGraph");
-			loader.EndStruct();
-		}
+			{
+				root.animation = std::make_shared<AnimationComponent>(entity_id);
+				root.animation->Mesh = loader.ID("Mesh");
+				root.animation->CurrentGraph = loader.ID("Graph");
+				root.animation->IsGraphSet = loader.BOOL("HasGraph");
+				loader.EndStruct();
+			}
+			if (loader.BeginStruct("CharacterControllerComponent"))
+			{
+				root.controller = std::make_shared<CharacterControllerComponent>(entity_id);
+				root.controller->CollisionGroup = loader.INT("CollisionGroup");
+				root.controller->CollisionLayer = loader.INT("CollisionLayer");
+				root.controller->Height = loader.FLOAT("Height");
+				root.controller->Radius = loader.FLOAT("Radius");
+				root.controller->MaxSlopeAngle = loader.FLOAT("MaxSlope");
+				root.controller->MaxSpeed = loader.FLOAT("MaxSpeed");
+				root.controller->MinMovementDist = loader.FLOAT("MinDist");
+				root.controller->Offset = loader.VEC3("ContactOffset");
+				root.controller->Size = loader.VEC3("Size");
+				root.controller->StepHeight = loader.FLOAT("StepHeight");
+				root.controller->Shape = (CCColliderType)loader.INT("Shape");
+				loader.EndStruct();
+			}
+			if (loader.BeginStruct("ParticleSystemComponent"))
+			{
+				root.particles = std::make_shared<ParticleSystemComponent>(entity_id);
+				root.particles->IsFXAttached = loader.INT("IsFxAttached");
+				root.particles->particleFXID  = loader.INT("FxID");				
+				loader.EndStruct();
+			}
+
 
 			if (loader.BeginCollection("Scripts"))
 			{
@@ -522,8 +578,89 @@ void Fracture::PrefabFactory::LoadPrefabTemplate(const std::string& path)
 					{
 						auto script_id = loader.ID("ScriptID");
 						root.scripts.push_back(script_id);
+
+						auto luascript = ScriptManager::GetLuaScript(script_id);
+						if (loader.BeginCollection("Properties"))
+						{
+							auto properties = luascript->GetProperties();
+							while (loader.CurrentCollectionIndex() < loader.GetCollectionSize())
+							{
+								if (loader.BeginStruct("Property"))
+								{
+									switch ((PROPERTY_TYPE)INT("Type"))
+									{
+									case PROPERTY_TYPE::UUID:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::UUID;
+										prop->ID = loader.ID("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::BOOL:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::BOOL;
+										prop->Bool = loader.BOOL("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::COLOR3:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::COLOR3;
+										prop->Color3 = loader.VEC3("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::COLOR4:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::COLOR4;
+										prop->Color4 = loader.VEC4("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::FLOAT:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::FLOAT;
+										prop->Float = loader.FLOAT("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::INT:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::INT;
+										prop->Int = loader.INT("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									case PROPERTY_TYPE::STRING:
+									{
+										auto prop = std::make_shared<ScriptProperty>();
+										prop->Name = loader.STRING("Name");
+										prop->Type = PROPERTY_TYPE::STRING;
+										prop->String = loader.STRING("Value");
+										properties[prop->Name] = prop;
+										break;
+									}
+									}
+									loader.EndStruct();
+								}
+								loader.NextInCollection();
+							}
+							loader.EndCollection();
+						}
 						loader.EndStruct();
-					}
+					}					
 					loader.NextInCollection();
 				}
 				loader.EndCollection();
@@ -751,7 +888,31 @@ void Fracture::PrefabFactory::LoadPrefabTemplate(const std::string& path)
 								entity.animation->IsGraphSet = loader.BOOL("HasGraph");
 								loader.EndStruct();
 							}
-
+							if (loader.BeginStruct("CharacterControllerComponent"))
+							{
+								entity.HasCharacterControllerComponent = true;
+								entity.controller = std::make_shared<CharacterControllerComponent>(entity_id);
+								entity.controller->CollisionGroup = loader.INT("CollisionGroup");
+								entity.controller->CollisionLayer = loader.INT("CollisionLayer");
+								entity.controller->Height = loader.FLOAT("Height");
+								entity.controller->Radius = loader.FLOAT("Radius");
+								entity.controller->MaxSlopeAngle = loader.FLOAT("MaxSlope");
+								entity.controller->MaxSpeed = loader.FLOAT("MaxSpeed");
+								entity.controller->MinMovementDist = loader.FLOAT("MinDist");
+								entity.controller->Offset = loader.VEC3("ContactOffset");
+								entity.controller->Size = loader.VEC3("Size");
+								entity.controller->StepHeight = loader.FLOAT("StepHeight");
+								entity.controller->Shape = (CCColliderType)loader.INT("Shape");
+								loader.EndStruct();
+							}
+							if (loader.BeginStruct("ParticleSystemComponent"))
+							{
+								entity.HasParticleComponent = true;
+								entity.particles = std::make_shared<ParticleSystemComponent>(entity_id);
+								entity.particles->IsFXAttached = loader.BOOL("IsFxAttached");
+								entity.particles->particleFXID = loader.ID("FxID");
+								loader.EndStruct();
+							}
 							loader.NextInCollection();
 						}
 						loader.EndCollection();

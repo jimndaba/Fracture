@@ -225,6 +225,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const Fracture::An
 	}
 }
 
+void Fracture::ISerialiser::Property(const std::string& name, const Fracture::ParticleFxRegistry& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
 void Fracture::ISerialiser::Property(const std::string& name, const glm::vec2& value)
 {
 
@@ -344,6 +358,20 @@ void Fracture::ISerialiser::Property(const std::string& name, const std::vector<
 }
 
 void Fracture::ISerialiser::PropertyI(const std::string& name, const std::vector<uint32_t>& value)
+{
+	if (mStructStack.size() > mCollectionStack.size())
+	{
+		auto& j = mStructStack.top();
+		j[name] = value;
+	}
+	else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+	{
+		auto& j = mCollectionStack.top();
+		j.push_back(value);
+	}
+}
+
+void Fracture::ISerialiser::Property(const std::string& name, const std::vector<Fracture::UUID>& value)
 {
 	if (mStructStack.size() > mCollectionStack.size())
 	{

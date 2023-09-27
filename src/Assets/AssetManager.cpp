@@ -16,6 +16,7 @@
 #include "World/SceneManager.h"
 #include "Scripting/ScriptManager.h"
 #include "Serialisation/AnimationGraphSerialiser.h"
+#include "Particles/ParticleSystem.h"
 
 std::map<Fracture::UUID, Fracture::MeshRegistry> Fracture::AssetManager::mMeshRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMeshIDLookUp;
@@ -218,6 +219,23 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 			reg_serialiser.EndCollection();
 		}
 
+		if (reg_serialiser.BeginCollection("ParticleFx Registry"))
+		{
+			FRACTURE_TRACE("Loading ParticleFX Graph Assets");
+			while (reg_serialiser.CurrentCollectionIndex() < reg_serialiser.GetCollectionSize())
+			{
+
+				ParticleFxRegistry reg;
+				reg.ID = reg_serialiser.ID("ID");
+				reg.Name = reg_serialiser.STRING("Name");
+				reg.Path = reg_serialiser.STRING("Path");
+				ParticleSystem::mParticleFxRegister[reg.ID] = reg;
+				reg_serialiser.NextInCollection();
+			}
+			reg_serialiser.EndCollection();
+		}
+
+
 		reg_serialiser.EndStruct();
 	}
 
@@ -225,6 +243,10 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 	FRACTURE_TRACE("Regiseted {} Shaders", mShaderRegister.size());
 	FRACTURE_TRACE("Regiseted {} Materials", mMaterialRegister.size());
 	FRACTURE_TRACE("Regiseted {} Textures", mTextureRegister.size());
+	FRACTURE_TRACE("Regiseted {} Scripts", ScriptManager::mScriptRegister.size());
+	FRACTURE_TRACE("Regiseted {} Animations", mAnimationRegister.size());
+	FRACTURE_TRACE("Regiseted {} Animation Graphs", mAnimationGraphRegister.size());
+	FRACTURE_TRACE("Regiseted {} ParticleFxs", ParticleSystem::mParticleFxRegister.size());
 }
 
 void Fracture::AssetManager::OnSave(const std::string& path)
@@ -296,6 +318,13 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 				s.Save(reg.second.Path);
 			}
 		}		
+	}
+	reg_serialiser.EndCollection();
+
+	reg_serialiser.BeginCollection("ParticleFx Registry");
+	for (const auto& reg : ParticleSystem::mParticleFxRegister)
+	{
+		reg_serialiser.Property("ParticleFx", reg.second);
 	}
 	reg_serialiser.EndCollection();
 

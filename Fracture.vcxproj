@@ -121,7 +121,6 @@
     <ClInclude Include="src\Animation\GraphNodes\FloatNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\PoseNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\SelectorNodes.h" />
-    <ClInclude Include="src\Animation\GraphNodes\SourceNodes.h" />
     <ClInclude Include="src\Animation\GraphNodes\AnimationStateMachineNode.h" />
     <ClInclude Include="src\Animation\GraphNodes\ValueNodes.h" />
     <ClInclude Include="src\Assets\AnimationClipLoader.h" />
@@ -135,6 +134,7 @@
     <ClInclude Include="src\Common\Frustum.h" />
     <ClInclude Include="src\Common\Helpers.h" />
     <ClInclude Include="src\Common\Math.h" />
+    <ClInclude Include="src\Common\Random.h" />
     <ClInclude Include="src\EventSystem\Event.h" />
     <ClInclude Include="src\EventSystem\Eventbus.h" />
     <ClInclude Include="src\Fracture.h" />
@@ -147,6 +147,9 @@
     <ClInclude Include="src\Input\InputEvents.h" />
     <ClInclude Include="src\Input\Keyboard.h" />
     <ClInclude Include="src\Input\Mouse.h" />
+    <ClInclude Include="src\Particles\EmitterModifiers.h" />
+    <ClInclude Include="src\Particles\Particle.h" />
+    <ClInclude Include="src\Particles\ParticleSystem.h" />
     <ClInclude Include="src\Physics\ContactListener.h" />
     <ClInclude Include="src\Physics\PhysicsEvents.h" />
     <ClInclude Include="src\Physics\PhysicsHelpers.h" />
@@ -195,6 +198,7 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
+    <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h" />
     <ClInclude Include="src\World\PrefabFactor.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
@@ -280,7 +284,6 @@
     <ClCompile Include="src\Animation\GraphNodes\FloatNodes.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\PoseNodes.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\SelectorNodes.cpp" />
-    <ClCompile Include="src\Animation\GraphNodes\SourceNodes.cpp" />
     <ClCompile Include="src\Animation\GraphNodes\ValueNodes.cpp" />
     <ClCompile Include="src\Assets\AnimationClipLoader.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
@@ -294,6 +297,7 @@
     <ClCompile Include="src\Common\Helpers.cpp" />
     <ClCompile Include="src\Common\Logger.cpp" />
     <ClCompile Include="src\Common\Math.cpp" />
+    <ClCompile Include="src\Common\Random.cpp" />
     <ClCompile Include="src\Common\UUID.cpp" />
     <ClCompile Include="src\EventSystem\Eventbus.cpp" />
     <ClCompile Include="src\FracturePCH.cpp">
@@ -302,6 +306,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\FractureGame.cpp" />
     <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Particles\EmitterModifiers.cpp" />
+    <ClCompile Include="src\Particles\Particle.cpp" />
+    <ClCompile Include="src\Particles\ParticleSystem.cpp" />
     <ClCompile Include="src\Physics\ContactListener.cpp" />
     <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
     <ClCompile Include="src\Physics\PhysicsHelpers.cpp" />
@@ -357,6 +364,7 @@
     <ClCompile Include="src\Serialisation\AnimationGraphSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\AnimationSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\MaterialSerialiser.cpp" />
+    <ClCompile Include="src\Serialisation\ParticleFXSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\Serialiser.cpp" />
     <ClCompile Include="src\World\CameraSystem.cpp" />

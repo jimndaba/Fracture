@@ -94,6 +94,7 @@ namespace Fracture
 		UUID ID;
 		std::string Name;
 		std::string Path;
+		std::string MetaPath;
 	};
 
 	struct AudioRegistry
@@ -111,6 +112,13 @@ namespace Fracture
 	};
 
 	struct AnimationGraphRegistry
+	{
+		UUID ID;
+		std::string Name;
+		std::string Path;
+	};
+
+	struct ParticleFxRegistry
 	{
 		UUID ID;
 		std::string Name;

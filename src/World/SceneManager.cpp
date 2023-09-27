@@ -113,8 +113,7 @@ void Fracture::SceneManager::AttachScript(const UUID& entity_id, const UUID& scr
     scriptcomp->HasScriptAttached = true;
     scriptcomp->Script = script_id;  
     scriptcomp->HasStarted = false;
-    mCurrentScene->mScriptReg[entity_id].push_back(std::move(scriptcomp));
-   
+    mCurrentScene->mScriptReg[entity_id].push_back(std::move(scriptcomp));   
     mScript_Entities[script_id].push_back(entity_id);
 }
 

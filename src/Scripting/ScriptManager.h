@@ -35,6 +35,8 @@ namespace Fracture
 		void onFixedUpdate();
 		void Shutdown();
 
+		void OnSave();
+
 		static void Instantiate(UUID Entity,glm::vec3 position);
 
 		void OnCollision(const std::shared_ptr<OnCollisionEvent>& evnt);
@@ -49,6 +51,9 @@ namespace Fracture
 		static std::shared_ptr<LuaScript> GetLuaScript(const UUID& id);
 
 		static void CreateNewScript(const LuaScriptRegistry& reg);
+		static void LoadScriptProperties(LuaScript* script);
+		static void SaveScriptProperties(const UUID& id);
+		static void LoadScriptProperties(const UUID& id);
 
 		static sol::state* GetState();
 

@@ -15,6 +15,10 @@
 
 #include "Rendering/DebugRenderer.h"
 
+#include "Particles/ParticleSystem.h"
+#include "Serialisation/Serialiser.h"
+#include "Common/Helpers.h"
+
 std::unique_ptr<sol::state> Fracture::ScriptManager::lua;
 std::map<Fracture::UUID, Fracture::LuaScriptRegistry> Fracture::ScriptManager::mScriptRegister;
 std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::LuaScript>> Fracture::ScriptManager::mScripts;
@@ -100,11 +104,15 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("LookAt", LuaBindComponents::LookAt);
 	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
 
+
 	lua.set_function("Destroy", SceneManager::Destroy);
 
 	lua.set_function("Vec3Lerp", LuaBindComponents::Vec3Lerp);
 	lua.set_function("Vec2Lerp", LuaBindComponents::Vec2Lerp);
 	lua.set_function("Vec4Lerp", LuaBindComponents::Vec4Lerp);
+
+	lua.set_function("EmitFx", ParticleSystem::EmittParticles);
+	lua.set_function("StopFx", ParticleSystem::EmittParticles);
 	
 	/*
 	lua.set_function("Destroy", sol::overload([&](sol::this_state s, UUID id) {
@@ -306,6 +314,9 @@ void Fracture::ScriptManager::onStart()
 			if (!component->HasScriptAttached)
 				continue;
 
+			if (component->HasStarted)
+				continue;
+
 			const auto& script = mScripts[component->Script];
 			script->OnStart(*lua.get(), component->GetID());
 			component->HasStarted = true;
@@ -321,6 +332,9 @@ void Fracture::ScriptManager::onStart()
 				continue;
 
 			if (mScripts.find(component->Script) == mScripts.end())
+				continue;
+
+			if (component->HasStarted)
 				continue;
 
 			const auto& script = mScripts[component->Script];
@@ -476,6 +490,14 @@ void Fracture::ScriptManager::Shutdown()
 {
 	mScripts.clear();
 	lua.reset();
+}
+
+void Fracture::ScriptManager::OnSave()
+{
+	for (const auto& script : mScripts)
+	{
+		SaveScriptProperties(script.first);
+	}
 }
 
 void Fracture::ScriptManager::Instantiate(UUID Entity, glm::vec3 position)
@@ -639,6 +661,224 @@ void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
 	script << "return " + reg.Name << std::endl;
 
 	script.close();
+}
+
+void Fracture::ScriptManager::LoadScriptProperties(LuaScript* script)
+{
+	if (script)
+	{
+		auto saver = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+		saver.Open(mScriptRegister[script->Description.ID].MetaPath);
+		if (saver.BeginStruct("Script"))
+		{
+			if (saver.BeginCollection("Properties"))
+			{
+				while (saver.CurrentCollectionIndex() < saver.GetCollectionSize())
+				{
+					if (saver.BeginStruct("Property"))
+					{
+						std::string prop_Name = saver.STRING("Name");
+						if (script->m_Properties.find(prop_Name) != script->m_Properties.end())
+						{
+							auto& prop = script->m_Properties[prop_Name];
+							
+							switch (prop->Type)
+							{
+							case PROPERTY_TYPE::BOOL:
+							{
+								prop->Bool = saver.BOOL("Value");
+								break;
+							}
+							case PROPERTY_TYPE::UUID:
+							{
+							    prop->ID = saver.ID("Value");
+								break;
+							}
+							case PROPERTY_TYPE::FLOAT:
+							{
+								prop->Float = saver.FLOAT("Value");
+								break;
+							}
+							case PROPERTY_TYPE::INT:
+							{
+								prop->Int = saver.INT("Value");
+								break;
+							}
+							case PROPERTY_TYPE::VEC2:
+							{
+								prop->Vec2 = saver.VEC2("Value");
+								break;
+							}
+							case PROPERTY_TYPE::VEC3:
+							{
+								prop->Vec3 = saver.VEC3("Value");
+								break;
+							}
+							case PROPERTY_TYPE::VEC4:
+							{
+								prop->Vec4 = saver.VEC4("Value");;
+								break;
+							}
+							}
+						}
+						saver.EndStruct();
+					}
+					saver.NextInCollection();
+				}
+				saver.EndCollection();
+
+			}
+			saver.EndStruct();
+		}
+	}
+
+}
+
+void Fracture::ScriptManager::SaveScriptProperties(const UUID& id)
+{
+	if (mScripts.find(id) != mScripts.end())
+	{
+		auto& script = mScripts[id];
+
+		auto saver = ISerialiser(Fracture::ISerialiser::IOMode::Save, Fracture::ISerialiser::SerialiseFormat::Json);	
+		saver.BeginStruct("Script");
+		saver.Property("Name", script->Description.Name);
+		saver.Property("ID", script->Description.ID);
+		saver.Property("Script Path", script->Description.Path);
+
+		saver.BeginCollection("Properties");
+		for (const auto& prop : script->m_Properties)
+		{
+			saver.BeginStruct("Property");
+			saver.Property("Name", prop.second->Name);
+			saver.Property("Type", (int)prop.second->Type);
+
+			switch (prop.second->Type)
+			{
+			case PROPERTY_TYPE::BOOL:
+			{
+				saver.Property("Value", prop.second->Bool);
+				break;
+			}
+			case PROPERTY_TYPE::UUID:
+			{
+				saver.Property("Value", prop.second->ID);
+				break;
+			}
+			case PROPERTY_TYPE::FLOAT:
+			{
+				saver.Property("Value", prop.second->Float);
+				break;
+			}
+			case PROPERTY_TYPE::INT:
+			{
+				saver.Property("Value", prop.second->Int);
+				break;
+			}
+			case PROPERTY_TYPE::VEC2:
+			{
+				saver.Property("Value", prop.second->Vec2);
+				break;
+			}
+			case PROPERTY_TYPE::VEC3:
+			{
+				saver.Property("Value", prop.second->Vec3);
+				break;
+			}
+			case PROPERTY_TYPE::VEC4:
+			{
+				saver.Property("Value", prop.second->Vec4);
+				break;
+			}
+			}
+
+			saver.EndStruct();
+		}
+		saver.EndCollection();
+		saver.EndStruct();
+
+		if (script->Description.MetaPath.empty())
+		{
+			auto new_path = Fracture::Helper::GetDirectoryFromPath(script->Description.Path);
+			script->Description.MetaPath = new_path  + script->Description.Name + ".ScriptInfo";
+			mScriptRegister[id].MetaPath = script->Description.MetaPath;
+		}
+		saver.Save(script->Description.MetaPath);
+	}
+}
+
+void Fracture::ScriptManager::LoadScriptProperties(const UUID& id)
+{
+	if (mScriptRegister.find(id) != mScriptRegister.end())
+	{
+		auto& script = mScripts[id];
+		if (script)
+		{
+			auto saver = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+			saver.Open(mScriptRegister[id].MetaPath);
+
+			if (saver.BeginStruct("Script"))
+			{
+				if (saver.BeginCollection("Properties"))
+				{
+					while (saver.CurrentCollectionIndex() < saver.GetCollectionSize())
+					{
+						if (saver.BeginStruct("Property"))
+						{
+							auto prop_Name = saver.STRING("Name");
+							if (script->m_Properties.find(prop_Name) != script->m_Properties.end())
+							{
+								auto& prop = script->m_Properties[prop_Name];
+								switch (prop->Type)
+								{
+								case PROPERTY_TYPE::BOOL:
+								{
+									saver.Property("Value", prop->Bool);
+									break;
+								}
+								case PROPERTY_TYPE::UUID:
+								{
+									saver.Property("Value", prop->ID);
+									break;
+								}
+								case PROPERTY_TYPE::FLOAT:
+								{
+									saver.Property("Value", prop->Float);
+									break;
+								}
+								case PROPERTY_TYPE::INT:
+								{
+									saver.Property("Value", prop->Int);
+									break;
+								}
+								case PROPERTY_TYPE::VEC2:
+								{
+									saver.Property("Value", prop->Vec2);
+									break;
+								}
+								case PROPERTY_TYPE::VEC3:
+								{
+									saver.Property("Value", prop->Vec3);
+									break;
+								}
+								case PROPERTY_TYPE::VEC4:
+								{
+									saver.Property("Value", prop->Vec4);
+									break;
+								}
+								}
+							}
+							saver.EndStruct();
+						}
+						saver.NextInCollection();
+					}
+					saver.EndCollection();
+
+				}
+				saver.EndStruct();
+			}
+		}		
+	}
 }
 
 sol::state* Fracture::ScriptManager::GetState()

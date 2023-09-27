@@ -51,6 +51,8 @@ namespace Fracture
 			HasAudioSourceComponent = other.HasAudioSourceComponent;
 			HasSkyboxComponent = other.HasSkyboxComponent;
 			HasAnimationComponent = other.HasAnimationComponent;
+			HasCharacterControllerComponent = other.HasCharacterControllerComponent;
+			HasParticleComponent = other.HasParticleComponent;
 
 			scripts = other.scripts;
 
@@ -101,6 +103,12 @@ namespace Fracture
 
 			if (other.tag)
 				tag = other.tag;
+
+			if (other.controller)
+				controller = other.controller;
+
+			if (other.particles)
+				particles = other.particles;
 		}
 
 		EntityPrefabTemplate operator = (const EntityPrefabTemplate& other)
@@ -125,6 +133,8 @@ namespace Fracture
 			HasAudioSourceComponent = other.HasAudioSourceComponent;
 			HasSkyboxComponent = other.HasSkyboxComponent;
 			HasAnimationComponent = other.HasAnimationComponent;
+			HasCharacterControllerComponent = other.HasCharacterControllerComponent;
+			HasParticleComponent = other.HasParticleComponent;
 
 			scripts = other.scripts;
 
@@ -175,6 +185,14 @@ namespace Fracture
 
 			if (other.tag)
 				tag = other.tag;
+
+
+			if (other.controller)
+				controller = other.controller;
+
+			if (other.particles)
+				particles = other.particles;
+
 			return *this;
 		}
 
@@ -200,6 +218,8 @@ namespace Fracture
 		bool HasAudioSourceComponent = false;
 		bool HasSkyboxComponent = false;
 		bool HasAnimationComponent = false;
+		bool HasCharacterControllerComponent = false;
+		bool HasParticleComponent = false;
 
 		std::shared_ptr<TagComponent> tag = nullptr;
 		std::shared_ptr<TransformComponent> transform = nullptr;
@@ -217,6 +237,8 @@ namespace Fracture
 		std::shared_ptr<AudioSourceComponent> audiosource = nullptr;
 		std::shared_ptr<SkyboxComponent> skybox = nullptr;
 		std::shared_ptr<AnimationComponent> animation = nullptr;
+		std::shared_ptr<CharacterControllerComponent> controller = nullptr;
+		std::shared_ptr<ParticleSystemComponent> particles = nullptr;
 
 		std::vector<Fracture::UUID> scripts;
 
