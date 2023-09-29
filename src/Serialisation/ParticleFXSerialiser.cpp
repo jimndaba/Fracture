@@ -81,6 +81,7 @@ void Fracture::ParticleFxSerialiser::SerialiseEmitter(ParticleEmitter& emitter)
 		Property("HasParticleTexture", emitter.HasParticleTexture);
 		Property("IsTextureAtlas", emitter.IsTextureAtlas);
 		Property("MaterialID", emitter.MaterialID);
+		Property("HasMaterial", emitter.HasMaterial);
 		Property("MeshID", emitter.MeshID);
 		Property("ParticlesPerSec", emitter.ParticlesPerSec);
 		Property("EmittionAngle", emitter.EmittionAngle);
@@ -184,6 +185,7 @@ void Fracture::ParticleFxSerialiser::ReadEmitter(ParticleFX* fx)
 		emitter.HasParticleTexture = BOOL("HasParticleTexture");
 		emitter.IsTextureAtlas = BOOL("IsTextureAtlas");
 		emitter.MaterialID = ID("MaterialID");
+		emitter.HasMaterial = BOOL("HasMaterial");
 		emitter.MeshID = ID("MeshID");
 		emitter.ParticlesPerSec = FLOAT("ParticlesPerSec");
 		emitter.EmittionAngle = FLOAT("EmittionAngle");

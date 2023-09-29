@@ -61,7 +61,6 @@ namespace Fracture
 		}
 	};
 
-
 	enum RenderContextFlags : uint8_t
 	{
 		RenderContextFlag_IsResizable = (uint8_t)1 << 0, //Same as 1

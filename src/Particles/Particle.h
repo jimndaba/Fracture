@@ -12,9 +12,10 @@ namespace Fracture
 		glm::vec3 Position = glm::vec3(0);
 		glm::vec3 Velocity = glm::vec3(0);
 		glm::vec3 Rotation = glm::vec3(0);
-		glm::vec4 Color;
-		float LifeSpan = 1.0f;
 		glm::vec3 Scale = glm::vec3(1.0f);
+
+		glm::vec4 Color;
+		float LifeSpan = 1.0f;		
 		float Weight = 1.0f;
 
 		float TimeAlive = 0;
@@ -54,6 +55,9 @@ namespace Fracture
 		Fracture::UUID MaterialID;
 		Fracture::UUID MeshID;
 
+		bool HasMaterial = false;
+		bool HasMesh = false;
+
 		EmitterTypeOption EmitterType = EmitterTypeOption::Billboard;
 		BlendingModeOption BlendMode = BlendingModeOption::Linear;
 		SubEmittStageOption EmmitStage = SubEmittStageOption::OnDie;
@@ -91,7 +95,7 @@ namespace Fracture
 		ParticleFX(){}
 		ParticleFX(ParticleFX& other)		
 		{
-			ID = UUID();
+			ID = other.ID;
 			Name = other.Name;
 			PlayMode = other.PlayMode;
 			FxState = other.FxState;

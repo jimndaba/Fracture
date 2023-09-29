@@ -46,6 +46,7 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("CastsShadows", material->CastsShadows);
 		Property("CullMode", (int)material->cullmode);
 		Property("TextureSpace", (int)material->TextureSpace);
+		Property("BlendMode", (int)material->BlendMode);
 		Property("TextureTiling", material->TextureTiling);
 		Property("IsTranslucent", material->IsTranslucent);
 		Property("IsSkinned", material->IsSkinned);
@@ -106,7 +107,9 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		
 		material->cullmode = (CullMode)INT("CullMode");
 		material->TextureSpace = (UVSpace)INT("TextureSpace");
+		material->BlendMode = (BlendingModeOption)INT("BlendMode");
 		material->TextureTiling = FLOAT("TextureTiling");
+
 
 		if (BeginCollection("Uniforms"))
 		{

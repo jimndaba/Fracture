@@ -493,6 +493,13 @@ void Fracture::RenderCommands::DrawArray(Fracture::RenderContext* cntxt, const F
 
 void Fracture::RenderCommands::DrawArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstanced& render_cmd)
 {
+	Fracture::Command cmd;
+	cmd.fnc = [render_cmd]() {
+		glDrawArraysInstanced((GLenum)render_cmd.mode, render_cmd.first, render_cmd.count,render_cmd.instance_count);
+		mErroCallback("Draw Arrays Instanced");
+		GraphicsDevice::DRAWCALL_COUNT++;
+	};
+	cmd.fnc();
 }
 
 void Fracture::RenderCommands::DrawElementsArrayInstanced(Fracture::RenderContext* cntxt, const Fracture::DrawElementsArraysInstanced& render_cmd)

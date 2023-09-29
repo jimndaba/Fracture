@@ -6,6 +6,7 @@
 #include "Rendering/Material.h"
 #include "Mesh.h"
 
+
 Fracture::RenderContext::RenderContext(RenderContextFlags flags):
 	Flags(flags)
 {
@@ -124,7 +125,8 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 
 	for (const auto& submesh : mesh->SubMeshes)
 	{
-		auto materialID = meshcomponent->Materials[submesh.MaterialIndex];
+		int material_index = (int)submesh.MaterialIndex;
+		auto materialID = meshcomponent->Materials[material_index];
 		if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
 		{
 			mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
@@ -197,6 +199,7 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 				GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
 
 				{
+	
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);

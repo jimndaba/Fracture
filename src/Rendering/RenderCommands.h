@@ -51,7 +51,12 @@ namespace Fracture
 	};
 
 	struct DrawArraysInstanced
-	{};
+	{
+		DrawMode mode;
+		uint32_t first;
+		uint32_t count;
+		uint32_t instance_count;
+	};
 
 	struct DrawElementsArray
 	{

@@ -45,6 +45,14 @@ namespace Fracture
 		PBR
 	};
 
+	enum class BlendingModeOption
+	{
+		Additive,
+		Linear,
+		Multiply
+	};
+
+
 	struct Material
 	{
 		Material();
@@ -101,6 +109,7 @@ namespace Fracture
 
 		CullMode cullmode = CullMode::Back;
 		UVSpace TextureSpace = UVSpace::Object;
+		BlendingModeOption BlendMode = BlendingModeOption::Linear;
 		MaterialShadingModel ShadingModel = MaterialShadingModel::PBR;
 
 		float TextureTiling = 1.0f;

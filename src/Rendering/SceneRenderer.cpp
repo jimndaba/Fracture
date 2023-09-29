@@ -407,9 +407,10 @@ void Fracture::SceneRenderer::Begin(float dt)
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalLightData(lightdata);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalRenderSettings();
 
+		
+
 		mContext->deltaTime += dt;
 	}
-
 
 
 }
@@ -426,6 +427,11 @@ void Fracture::SceneRenderer::End()
 	Fracture::SortKey key;
 	mContext->BeginState(key);
 	mContext->BeginScene();
+
+
+	particleSystem->BeginRender(mContext.get());
+
+
 
 	Fracture::ClearTargetPassDef passDef;
 	passDef.ClearColor = Fracture::Colour::Black;
