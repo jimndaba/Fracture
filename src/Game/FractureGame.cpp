@@ -84,18 +84,11 @@ void Fracture::FractureGame::OnLoadContent()
 
 void Fracture::FractureGame::Update()
 {
-   
-    //mWindow->PollEvents();
-
- 
     float newTime = glfwGetTime();
     float frameTime = newTime - currentGameTime;
     currentGameTime = newTime;    
-        
 
-    mScriptManager->onUpdate(frameTime);
-
-    
+    mScriptManager->onUpdate(frameTime);    
 
     mScriptManager->onLateUpdate(frameTime);
 

@@ -14,7 +14,7 @@ Fracture::ImageLoader::ImageLoader()
 {
 }
 
-std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std::string& path)
+std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std::string& path, int texture_type)
 {
 	FILE* f = fopen(path.c_str(), "rb");
 
@@ -36,18 +36,37 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 
 	TextureCreationInfo info;
 
-	std::vector<uint8_t> data;
-	data.resize(header.Count);
-	
-
-	if (fread(data.data(), sizeof(uint8_t), header.Count, f) != header.Count)
+	std::vector<unsigned char> u_data;
+	std::vector<float> f_data;
+	if (header.magicValue == 0 || texture_type == 0)
 	{
-		FRACTURE_ERROR("Could not read Pixel Data descriptors");
-		return nullptr;
+		u_data.resize(header.Count);
+		if (fread(u_data.data(), sizeof(unsigned char), header.Count, f) != header.Count)
+		{
+			FRACTURE_ERROR("Could not read Pixel Data descriptors");
+			return nullptr;
+		}
+		info.data = u_data;
+		info.Texture_Type = TextureCreationInfo::TextureType::Texture2D;
+		info.Wrap = TextureWrap::Repeat;
+	}
+	
+	if (header.magicValue == 1)
+	{
+		f_data.resize(header.Count);
+		fread(f_data.data(), sizeof(float), header.Count, f);
+		if (f_data.size() != header.Count)
+		{
+			FRACTURE_ERROR("Could not read Pixel Data descriptors");
+			return nullptr;
+		}
+		info.f_data = f_data;
+		info.Texture_Type = TextureCreationInfo::TextureType::HDR;
+		info.formatType = TextureFormatType::Float;
+		info.Wrap = TextureWrap::ClampToEdge;
 	}
 
-	fclose(f);
-	info.data = data;
+	fclose(f);	
 	info.Width = header.Width;
 	info.Height = header.Height;
 
@@ -56,7 +75,7 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		case 1:
 		{
 			info.format = TextureFormat::Red;
-			info.internalFormat = InternalFormat::R;
+			info.internalFormat = InternalFormat::R16;
 			break;
 		}
 		case 2:
@@ -79,7 +98,7 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		}
 	}
 
-	info.Wrap = TextureWrap::Repeat;
+	
 	
 	std::shared_ptr<Fracture::Texture> texture = std::make_shared<Fracture::Texture>(info);
     return texture;
@@ -107,9 +126,7 @@ Fracture::TextureRegistry Fracture::ImageImporter::LoadTexture(const std::string
 	stbi_set_flip_vertically_on_load(true);
 	int width;
 	int height;
-	int channels;
-	Fracture::TextureFormat format;
-	Fracture::InternalFormat Internal_format;
+	int channels;	
 	std::vector<uint8_t> mdata; //unsigned char* data
 
 	std::string file_name = path.substr(path.find_last_of("/\\") + 1);
@@ -136,6 +153,7 @@ Fracture::TextureRegistry Fracture::ImageImporter::LoadTexture(const std::string
 
 
 		Fracture::TextureFileHeader header;
+		header.magicValue = 0;
 		header.ID = Fracture::UUID();
 		header.Width = width;
 		header.Height = height;
@@ -144,7 +162,7 @@ Fracture::TextureRegistry Fracture::ImageImporter::LoadTexture(const std::string
 		header.DataSize = ((int64_t)width * (int64_t)height * channels);
 
 		fwrite(&header, sizeof(header), 1, f);
-		fwrite(&mdata[0], sizeof(uint8_t), mdata.size(), f);
+		fwrite(&mdata[0], sizeof(mdata[0]), mdata.size(), f);
 		fclose(f);
 
 		FRACTURE_INFO("Imported Texture: {}", path);
@@ -166,69 +184,46 @@ Fracture::TextureRegistry Fracture::ImageImporter::LoadTexture(const std::string
 
 Fracture::TextureRegistry Fracture::ImageImporter::LoadHDRTexture(const std::string& path, const std::string& out_path)
 {
-	stbi_set_flip_vertically_on_load(true);
-
+	
+	
 	int width;
 	int height;
-	int channels;
-	Fracture::TextureFormat format;
-	Fracture::InternalFormat Internal_format;
-	std::vector<float> mdata; //unsigned char* data
+	int channels;	
+	std::vector<float> mdata;
+
+	stbi_set_flip_vertically_on_load(true);
 	float* data = stbi_loadf(path.c_str(), &width, &height, &channels, 0);
 
 	mdata.assign(data, data + ((int64_t)width * (int64_t)height * channels));
 
 	if (data)
 	{
-		if (channels == 1)
-		{
-			format = Fracture::TextureFormat::Red;
-			Internal_format = Fracture::InternalFormat::R;
-		}
-		if (channels == 2)
-		{
-			format = Fracture::TextureFormat::RG;
-			Internal_format = Fracture::InternalFormat::RG16;
-		}
-		if (channels == 3)
-		{
-			format = Fracture::TextureFormat::RGB;
-			Internal_format = Fracture::InternalFormat::RGB16F;
-		}
-		if (channels == 4)
-		{
-			format = Fracture::TextureFormat::RGBA;
-			Internal_format = Fracture::InternalFormat::RGBA16F;
-		}
-
-		Fracture::ISerialiser loader = Fracture::ISerialiser(Fracture::ISerialiser::IOMode::Save, Fracture::ISerialiser::SerialiseFormat::Json);
-
-		loader.BeginStruct("Texture");
-		{
-			loader.Property("Type", (int)Fracture::TextureCreationInfo::TextureType::HDR);
-			loader.Property("Width", width);
-			loader.Property("Height", height);
-			loader.Property("Channels", channels);
-			loader.Property("Format", (int)format);
-			loader.Property("InternalFormat", (int)Internal_format);
-
-			loader.Property("Data", mdata);
-		}
-		loader.EndStruct();
-
 		std::string file_name = path.substr(path.find_last_of("/\\") + 1);
 		std::string::size_type const p(file_name.find_last_of('.'));
-		std::string file_without_extension = file_name.substr(0, p);
+		std::string file_without_extension = file_name.substr(0, p);	
 
+		std::string Output_path = out_path;
+		FILE* f = fopen(Output_path.c_str(), "wb");
+		Fracture::TextureFileHeader header;
+		header.magicValue = 1;
+		header.ID = Fracture::UUID();
+		header.Width = width;
+		header.Height = height;
+		header.Channels = channels;
+		header.Count = mdata.size();
+		header.DataSize = ((int64_t)width * (int64_t)height * channels);
+		fwrite(&header, sizeof(header), 1, f);
+		fwrite(&mdata[0], sizeof(mdata[0]), mdata.size(), f);
+		fclose(f);
 
-		loader.Save(out_path + file_without_extension + ".texture");
-
+		FRACTURE_INFO("Imported HDR Texture: {}", path);		
 		FreeData(data);
+
 
 		Fracture::TextureRegistry reg;
 		reg.ID = Fracture::UUID();
 		reg.Name = file_without_extension;
-		reg.Path = out_path + file_without_extension + ".texture";
+		reg.Path = Output_path;
 		return reg;
 	}
 }

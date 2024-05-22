@@ -135,6 +135,18 @@ void Fracture::ShadowCasterPass::Execute()
             
             Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
 
+            Fracture::RenderCommands::SetUniform(Context, mShader.get(), "TextureSpace", (int)material->TextureSpace);
+            Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Tiling", material->TextureTiling);
+            Fracture::RenderCommands::SetUniform(Context, mShader.get(), "IsAffectedByWind", material->IsAffectedByWind);
+
+            if (material->IsAffectedByWind)
+            {
+                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windStrength", material->windStrength);
+                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windSpeed", material->windSpeed);
+                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windFrequency", material->windFrequency);
+                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windDirection", material->windDirection);
+            }
+
             //Set Shader
             for (auto batch : batches.second)
             {

@@ -993,20 +993,7 @@ std::vector<glm::vec4> Fracture::ISerialiser::VEC4_VECTOR(const std::string& nam
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		if (exists(j, name))
-			return j[name];
-	}
-	*/
+	}	
 	return std::vector<glm::vec4>();
 }
 
@@ -1022,20 +1009,7 @@ std::vector<Fracture::SubMesh> Fracture::ISerialiser::SUBMESH_VECTOR(const std::
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		if (exists(j, name))
-			return j[name];
-	}
-	*/
+	}	
 	return std::vector<Fracture::SubMesh>();
 }
 
@@ -1051,19 +1025,7 @@ std::string Fracture::ISerialiser::STRING(const std::string& name)
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		if (exists(j, name))
-			
-			*/
+	}	
 	return "";
 }
 
@@ -1079,22 +1041,7 @@ glm::vec2 Fracture::ISerialiser::VEC2(const std::string& name)
 	{
 		auto j = mCollectionStack.top();
 		return j.at(mCollectionIndex.top())[name];
-	}
-	/*
-	if (!mCollectionStack.empty())
-	{
-		auto j = mCollectionStack.top();
-		return j.at(mCollectionIndex.top())[name];
-	}
-	else if (!mStructStack.empty() && mCollectionStack.empty())
-	{
-		auto j = mStructStack.top();
-		if (exists(j, name))
-		{
-			return j[name];
-		}
-	}
-	*/
+	}	
 	return glm::vec2();
 }
 

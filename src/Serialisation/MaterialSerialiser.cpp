@@ -50,6 +50,7 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("TextureTiling", material->TextureTiling);
 		Property("IsTranslucent", material->IsTranslucent);
 		Property("IsSkinned", material->IsSkinned);
+		Property("IsAffectedWind", material->IsAffectedByWind);
 		Property("DepthWrite", material->DepthWrite);
 
 
@@ -82,6 +83,7 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		material->HasAOTexture = BOOL("HasAO");
 		material->IsTranslucent = BOOL("IsTranslucent");
 		material->IsSkinned = BOOL("IsSkinned");
+		material->IsAffectedByWind = BOOL("IsAffectedWind");
 		material->CastsShadows = BOOL("CastsShadows");
 		material->DepthWrite = BOOL("DepthWrite");
 

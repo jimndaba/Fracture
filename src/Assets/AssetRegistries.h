@@ -43,6 +43,8 @@ namespace Fracture
 		uint32_t AnimationCount;
 	};
 
+
+	//Texture Types: 0 - Normal, 1 HDR
 	struct TextureFileHeader
 	{
 		uint32_t magicValue;

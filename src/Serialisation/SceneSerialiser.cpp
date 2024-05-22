@@ -61,6 +61,8 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::MeshComponent* comp
 
 void Fracture::SceneSerialiser::SerialiseComponent(Fracture::CameraComponent* component)
 {
+
+
 	BeginStruct("Camera");
 	Property("Damping", component->Damping);
 	Property("EnableDepthOfField", component->EnableDepthOfField);
@@ -505,6 +507,7 @@ void Fracture::SceneSerialiser::ReadCameraComponentIfExists(Fracture::UUID entit
 	if (BeginStruct("Camera"))
 	{
 		auto camera = std::make_shared<CameraComponent>(entity_id);
+	
 		camera->IsActiveCamera = BOOL("IsActiveCamera");
 
 		camera->Position = VEC3("Position");
@@ -568,6 +571,11 @@ void Fracture::SceneSerialiser::ReadSkyboxComponentIfExists(Fracture::UUID entit
 		comp->IsSkyTextureSet = BOOL("IsSkyTextureSet");
 		comp->IsDirty = true;
 		SceneManager::AddComponentByInstance<SkyboxComponent>(entity_id, comp);
+
+		const auto& txtr = Fracture::AssetManager::GetTextureByID(comp->SkyTexture);
+		if (txtr)
+			FRACTURE_INFO("SKy texture loaded");	
+
 		EndStruct();
 	}
 }

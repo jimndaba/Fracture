@@ -10,6 +10,7 @@
 #include "RenderTarget.h"
 #include "RenderCommands.h"
 #include "PostProcessingParams.h"
+#include "World/WindSystem.h"
 #include <map>
 
 namespace Fracture
@@ -33,7 +34,8 @@ namespace Fracture
 		GlobalRenderSettings,
 		SSAO_Kernel,
 		ShadowMatrix,
-		ShadowPlanes
+		ShadowPlanes,
+		GlobalWindData,
 	};
 
 	enum class ShaderStorageBufferIndex
@@ -118,6 +120,7 @@ namespace Fracture
 		bool IsBRDFCreated = false;
 
 		std::shared_ptr<Buffer> mGFrameData;
+		std::shared_ptr<Buffer> mGWindData;
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
 		std::shared_ptr<PostProcessPipeline> mPostProcessPipeline;
@@ -140,6 +143,7 @@ namespace Fracture
 		void UpdateGlobalFrameData(GlobalFrameData data);
 		void UpdateGlobalRenderSettings();
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
+		void UpdateGlobalWindData();
 		void Shutdown();
 
 		void ClearBuffers(uint32_t bufferbit);
@@ -191,6 +195,8 @@ namespace Fracture
 
 		static GlobalPostProcessParams RenderSettings;
 
+		static WindSystemData WindSettings;
+
 		static void SaveScreenShot(uint32_t fb,uint32_t attachment_index, int width, int height, const std::string& path);
 
 		PostProcessPipeline* PostProcessStack();
@@ -199,6 +205,7 @@ namespace Fracture
 		int Viewport_Height = 1080;
 		const int MAX_POINTLIGHTS = 30;
 		const int MAX_LIGHTPROBES = 30;
+		bool EnablePostProsessing = true;
 
 		unsigned int CompileShader(const std::string& name, const std::string& path, ShaderType shadertype);
 		void checkCompileErrors(const std::string& name, unsigned int shader, const std::string& type);

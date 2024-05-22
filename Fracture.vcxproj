@@ -223,6 +223,7 @@
     <ClInclude Include="src\World\Scenegraph.h" />
     <ClInclude Include="src\World\SceneManager.h" />
     <ClInclude Include="src\World\TransformSystem.h" />
+    <ClInclude Include="src\World\WindSystem.h" />
     <ClInclude Include="src\World\WorldEvents.h" />
     <ClInclude Include="vendor\nlohmann\json.hpp" />
     <ClInclude Include="vendor\soloud\soloud.h" />
@@ -377,6 +378,7 @@
     <ClCompile Include="src\World\Scenegraph.cpp" />
     <ClCompile Include="src\World\SceneManager.cpp" />
     <ClCompile Include="src\World\TransformSystem.cpp" />
+    <ClCompile Include="src\World\WindSystem.cpp" />
     <ClCompile Include="src\World\WorldEvent.cpp" />
     <ClCompile Include="vendor\glad\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

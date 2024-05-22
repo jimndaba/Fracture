@@ -34,6 +34,8 @@ void Fracture::LightProbeSystem::DoIrradiance(RenderContext* Context, UUID compo
     if (!lightProbe)
         return;
 
+    Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
+
  
     if (!lightProbe->IsInterior && lightProbe->ProbeType == LightProbeComponent::LightProbeType::Global)
     {
@@ -49,39 +51,36 @@ void Fracture::LightProbeSystem::DoIrradiance(RenderContext* Context, UUID compo
         };
 
 
-        const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_IrradianceBuffer");
+        const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget(GlobalRenderTargets::GlobalIrradiance);
         const auto& shader = AssetManager::Instance()->GetShader("irradianceShader");
 
         //* DRAW IRADDIANCE MAP
         Fracture::RenderCommands::UseProgram(Context, shader->Handle);
         Fracture::RenderCommands::Disable(Context, Fracture::GLCapability::FaceCulling);
+       
         Fracture::RenderCommands::SetRenderTarget(Context, target->Handle);
+        
         Fracture::RenderCommands::SetRenderBuffer(Context, target->RenderBufferHandle);
         Fracture::RenderCommands::RenderBufferTextureStorage(Context, target->RenderBufferHandle, InternalFormat::DepthComponent24, lightProbe->LightProbeResolution, lightProbe->LightProbeResolution);
-
-
+       
         Fracture::RenderCommands::SetViewport(Context, lightProbe->LightProbeResolution, lightProbe->LightProbeResolution, 0, 0);
         Fracture::RenderCommands::SetScissor(Context, lightProbe->LightProbeResolution, lightProbe->LightProbeResolution, 0, 0);
 
         Fracture::RenderCommands::SetTexture(Context, shader.get(), "aSkyMap", GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap")->Handle, 0);
         Fracture::RenderCommands::SetUniform(Context, shader.get(), "projection_matrix", captureProjection);
-        if (GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap") && lightProbe->ProbeType == LightProbeComponent::LightProbeType::Global)
+      
+        for (unsigned int i = 0; i < 6; ++i)
         {
-            for (unsigned int i = 0; i < 6; ++i)
-            {
-                Fracture::RenderCommands::SetUniform(Context, shader.get(), "view_matrix", captureViews[i]);
-                Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0, i, GraphicsDevice::Instance()->GetIrradianceMap(lightProbe->GetID()), 0);
-                Fracture::RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
-                GraphicsDevice::Instance()->RenderCaptureCube(Context); // renders a 1x1 cube          
-            }
-            lightProbe->IsBaked = true;
-            Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
-        }
-        else
-        {
-            FRACTURE_ERROR("No Skybox Texture Found");
+            Fracture::RenderCommands::SetUniform(Context, shader.get(), "view_matrix", captureViews[i]);
+          
+            Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0, i, GraphicsDevice::Instance()->GetIrradianceMap(lightProbe->GetID()), 0);
+
+            Fracture::RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
+            GraphicsDevice::Instance()->RenderCaptureCube(Context); // renders a 1x1 cube          
         }
 
+        lightProbe->IsBaked = true;
+        Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
         Fracture::RenderCommands::UseProgram(Context, 0);
     }
 
@@ -347,6 +346,8 @@ void Fracture::LightProbeSystem::DoPrefitler(RenderContext* Context, UUID compon
     if (!lightProbe)
         return;
 
+    Fracture::RenderCommands::SetRenderTarget(Context, (uint32_t)0);
+
     glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
     glm::mat4 captureViews[] =
     {
@@ -359,23 +360,18 @@ void Fracture::LightProbeSystem::DoPrefitler(RenderContext* Context, UUID compon
     };
 
 
-    const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_IrradianceBuffer");
+    const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget(GlobalRenderTargets::GlobalIrradiance);
 
     Fracture::RenderCommands::Disable(Context, Fracture::GLCapability::FaceCulling);
     Fracture::RenderCommands::SetRenderTarget(Context, target->Handle);
-    Fracture::RenderCommands::SetRenderBuffer(Context, target->RenderBufferHandle);
-    Fracture::RenderCommands::FrameBufferSetDrawBuffers(Context, target->Handle, 1);
+    Fracture::RenderCommands::SetRenderBuffer(Context, target->RenderBufferHandle);    
     Fracture::RenderCommands::RenderBufferTextureStorage(Context, target->RenderBufferHandle, InternalFormat::DepthComponent24, lightProbe->BRDFResolution, lightProbe->BRDFResolution);
     
-    Fracture::RenderCommands::SetViewport(Context, lightProbe->BRDFResolution, lightProbe->BRDFResolution, 0, 0);
-    Fracture::RenderCommands::SetScissor(Context, lightProbe->BRDFResolution, lightProbe->BRDFResolution, 0, 0);
-         
+    
     if (GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap") && lightProbe->ProbeType == LightProbeComponent::LightProbeType::Global)
     {
         const auto pre_shader = AssetManager::Instance()->GetShader("PrefilterBRDF");
-        Fracture::RenderCommands::UseProgram(Context, pre_shader->Handle);
-
-       
+        Fracture::RenderCommands::UseProgram(Context, pre_shader->Handle);       
         Fracture::RenderCommands::SetUniform(Context, pre_shader.get(), "projection_matrix", captureProjection);
         Fracture::RenderCommands::SetTexture(Context, pre_shader.get(), "aSkyMap", GraphicsDevice::Instance()->GetGlobalTexture("Global_SkyMap")->Handle, 0);
 
@@ -385,12 +381,20 @@ void Fracture::LightProbeSystem::DoPrefitler(RenderContext* Context, UUID compon
             unsigned int mipWidth = lightProbe->BRDFResolution * std::pow(0.5, mip);
             unsigned int mipHeight = lightProbe->BRDFResolution * std::pow(0.5, mip);
 
+            Fracture::RenderCommands::SetViewport(Context, mipWidth, mipHeight, 0, 0);
+            Fracture::RenderCommands::SetScissor(Context, mipWidth, mipHeight, 0, 0);
+
+
             float roughness = (float)mip / (float)(maxMipLevels - 1);
             Fracture::RenderCommands::SetUniform(Context, pre_shader.get(), "roughness", roughness);
             for (unsigned int i = 0; i < 6; ++i)
             {
                 Fracture::RenderCommands::SetUniform(Context, pre_shader.get(), "view_matrix", captureViews[i]);
+               
+                
                 Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0, i, GraphicsDevice::Instance()->GetSpecularBRDFMap(lightProbe->GetID()), mip);
+              
+
                 Fracture::RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
                 GraphicsDevice::Instance()->RenderCaptureCube(Context); // renders a 1x1 cube          
             }
@@ -410,7 +414,7 @@ void Fracture::LightProbeSystem::DoBRDF(RenderContext* Context, UUID component)
     if (!lightProbe)
         return;
 
-    const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_IrradianceBuffer");
+    const auto& target = GraphicsDevice::Instance()->GetGlobalRenderTarget("Global_SkyCaptureBuffer");
     Fracture::RenderCommands::Disable(Context, Fracture::GLCapability::FaceCulling); 
     Fracture::RenderCommands::SetRenderTarget(Context, target->Handle);
     Fracture::RenderCommands::SetRenderBuffer(Context, target->RenderBufferHandle);

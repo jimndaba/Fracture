@@ -107,6 +107,8 @@ namespace Fracture
 		float EmmisionStrength = 0.0f;
 
 
+
+
 		CullMode cullmode = CullMode::Back;
 		UVSpace TextureSpace = UVSpace::Object;
 		BlendingModeOption BlendMode = BlendingModeOption::Linear;
@@ -119,7 +121,14 @@ namespace Fracture
 		bool IsReflective = false;
 		bool DepthWrite = true;
 		bool IsSkinned = false;
+		bool IsAffectedByWind = false;
 		bool IsDirty = false;
+
+		float windStrength = 4.1;
+		float windSpeed = 10.0;
+		float windFrequency = 0.4;
+		glm::vec3 windDirection = glm::vec3(1.0, 0.0, 0.0); // Wind blowing in the x-direction
+
 
 		Fracture::UUID ID;
 		Fracture::UUID Shader;

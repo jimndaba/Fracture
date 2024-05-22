@@ -17,6 +17,7 @@
 #include "Scripting/ScriptManager.h"
 #include "Serialisation/AnimationGraphSerialiser.h"
 #include "Particles/ParticleSystem.h"
+#include "Common/Helpers.h"
 
 std::map<Fracture::UUID, Fracture::MeshRegistry> Fracture::AssetManager::mMeshRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mMeshIDLookUp;
@@ -690,7 +691,7 @@ std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTexture(const std::
 			}		
 		};
 	}
-	FRACTURE_ERROR("Could not find Shader: {}", Name);
+	FRACTURE_ERROR("Could not find Texture: {}", Name);
 	return nullptr;
 }
 
@@ -704,8 +705,7 @@ std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTextureByID(const F
 			if (mTextureRegister[id].Path.empty())
 			{
 				return nullptr;
-			}
-
+			}		
 			mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
 			GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
 			mLoadedTextures.push_back(id);

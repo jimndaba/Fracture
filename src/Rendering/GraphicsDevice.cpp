@@ -1,3 +1,4 @@
+﻿
 #include "FracturePCH.h"
 #include "GraphicsDevice.h"
 #include "PostProcessPipeline.h"
@@ -10,6 +11,7 @@
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
 Fracture::GlobalPostProcessParams Fracture::GraphicsDevice::RenderSettings;
+Fracture::WindSystemData Fracture::GraphicsDevice::WindSettings;
 
 std::string Fracture::GlobalRenderTargets::GlobalColour = "Global_ColorBuffer";
 std::string Fracture::GlobalRenderTargets::GlobalSSAO = "Global_SSAO";
@@ -124,6 +126,17 @@ void Fracture::GraphicsDevice::Startup()
         CreateBuffer(mPostProcessingBuffer.get(), desc);
         SetBufferIndexRange(mPostProcessingBuffer.get(),(int)ShaderUniformIndex::GlobalRenderSettings, 0);
     }
+    {
+        BufferDescription desc;
+        desc.Name = "Global Wind Data Buffer";
+        desc.bufferType = BufferType::UniformBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(WindSystemData);
+        desc.usage = BufferUsage::Stream;
+        mGWindData = std::make_shared<Buffer>();
+        CreateBuffer(mGWindData.get(), desc);
+        SetBufferIndexRange(mGWindData.get(), (int)ShaderUniformIndex::GlobalWindData, 0);
+    }
 
     VertexArrayCreationInfo info;
     GraphicsDevice::Instance()->CreateVertexArray(QuadVAO, info);
@@ -152,6 +165,11 @@ void Fracture::GraphicsDevice::UpdateGlobalLightData(const std::vector<LightData
 {
     GraphicsDevice::Instance()->ClearBufferData(mGLightBuffer.get());
     GraphicsDevice::Instance()->UpdateBufferData(mGLightBuffer.get(), 0, sizeof(LightData) * data.size(), data.data());
+}
+
+void Fracture::GraphicsDevice::UpdateGlobalWindData()
+{
+    GraphicsDevice::Instance()->UpdateBufferData(mGWindData.get(), 0, sizeof(WindSystemData), &WindSettings);
 }
 
 
@@ -360,7 +378,6 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
    
     glGenTextures(1, &texture->Handle);   glCheckError();
     glBindTexture(target, texture->Handle); glCheckError();
-   
 
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_S, wrap);   glCheckError();
     glTextureParameteri(texture->Handle, GL_TEXTURE_WRAP_T, wrap);   glCheckError();
@@ -377,7 +394,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, borderColor);
         glCheckError();
     }
-    
+        
     if (info.TextureTarget == TextureTarget::Texture2DArray || info.TextureTarget == TextureTarget::Texture3D)
     {
         //uint32_t levels = 1;
@@ -393,16 +410,20 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
        
         if (info.data.size())
         {
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+           // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());
             glCheckError();
         }
         else
         {
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+          //  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage3D(target,0, internalFormat, info.Width, info.Height, texture->Description.TextureArrayLevels, 0, textureformat, formatType, NULL);      glCheckError();            
         }
 
+        if (info.GenMinMaps)
+        {
+            glGenerateTextureMipmap(texture->Handle); glCheckError();
+        }
     }
 
     if (info.TextureTarget == TextureTarget::TextureCubeMapArray)
@@ -419,8 +440,8 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
         if (info.data.size())
         {
             //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());
-            glCheckError();
+            glTexImage3D(target, texture->Description.TextureArrayLevels, internalFormat, info.Width, info.Height, info.Depth, 0, textureformat, formatType, info.data.data());  glCheckError();
+          
         }
         else
         {
@@ -442,8 +463,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
     }
 
     if (info.TextureTarget == TextureTarget::TextureCubeMap)
-    {
-        //uint32_t levels = 1;
+    {      
         if (info.GenMinMaps && info.MipLevels == 0)
         {
             levels = info.CaclMipLevels();
@@ -453,18 +473,18 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             levels = info.MipLevels;
         }
 
-        glTextureStorage2D(texture->Handle, levels, internalFormat, info.Width, info.Height); glCheckError();
-        //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0); glCheckError();
+        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, info.MipLevels); glCheckError();
+        glTexStorage2D(GL_TEXTURE_CUBE_MAP, levels, internalFormat, info.Width, info.Height); glCheckError();
         for (unsigned int i = 0; i < 6; ++i)
         {
-            glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();
-
+            glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, info.Width, info.Height, textureformat, formatType, NULL); glCheckError();                   
         }
     }
 
     if (info.TextureTarget == TextureTarget::Texture2D)
     {
-        if (info.data.size() || info.texture_data != nullptr)
+        if (info.data.size() || info.f_data.size() || info.texture_data != nullptr)
         {
             uint32_t levels = 1;
             if (info.GenMinMaps && info.MipLevels == 0)
@@ -475,12 +495,19 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             {
                 levels = info.MipLevels;
             }
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            if (!info.data.empty())
-                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.data.data()); glCheckError();
-
-            if (info.texture_data)
+           //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            if (info.data.size() && info.Texture_Type != TextureCreationInfo::TextureType::HDR)
+            {
+                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, GL_UNSIGNED_BYTE, info.data.data()); glCheckError();
+            }
+            else if (info.f_data.size())
+            {
+                glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.f_data.data()); glCheckError();
+            }
+            else if (info.texture_data)
+            {
                 glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, info.texture_data); glCheckError();
+            }
         }
         else
         {
@@ -493,24 +520,18 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             {
                 levels = info.MipLevels;
             }
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, formatType, NULL); glCheckError();
         }
     }
-
-
     if (info.GenMinMaps)
     {
-       /// glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, levels);
-        //glCheckError();
-
-        glGenerateMipmap(target);
-        glCheckError();
+       glGenerateMipmap(target); glCheckError();
     }
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glBindTexture(target, 0);
        
+   
 }
 
 void Fracture::GraphicsDevice::CreateGlobalTexture(const std::string& Name, const TextureCreationInfo& info)
@@ -536,7 +557,6 @@ Fracture::UUID Fracture::GraphicsDevice::CreateBRDFMap(const TextureCreationInfo
     UUID texture_ID = info.ID;
     CreateTexture(texture, info);
     mBRDFMaps[info.ID] = texture;
-
     return texture_ID;
 }
 
@@ -568,7 +588,7 @@ void Fracture::GraphicsDevice::CreateLightprobeMap(int Resolution)
         desc.MipLevels = 0;
         desc.GenMinMaps = false;
         mLightProbeArray = std::make_shared<Texture>(desc);
-        CreateTexture(mLightProbeArray, desc);
+        //CreateTexture(mLightProbeArray, desc);
     }
     {
         Fracture::TextureCreationInfo desc;
@@ -587,7 +607,7 @@ void Fracture::GraphicsDevice::CreateLightprobeMap(int Resolution)
         desc.MipLevels = 0;
         desc.GenMinMaps = false;
         mLightProbeIrradianceArray = std::make_shared<Texture>(desc);
-        CreateTexture(mLightProbeIrradianceArray, desc);
+        //CreateTexture(mLightProbeIrradianceArray, desc);
     }
 }
 
@@ -610,10 +630,12 @@ uint32_t Fracture::GraphicsDevice::GetIrradianceMap(UUID id)
     desc.format = Fracture::TextureFormat::RGB;
     desc.internalFormat = Fracture::InternalFormat::RGB16F;
     desc.formatType = Fracture::TextureFormatType::Float;
-    desc.minFilter = TextureMinFilter::LinearMipMapLinear;
+    desc.minFilter = TextureMinFilter::Linear;
     desc.magFilter = TextureMagFilter::Linear;
     desc.Wrap = TextureWrap::ClampToEdge;
     desc.Name = "LightProbeTexture";
+    desc.MipLevels = 1;
+    desc.GenMinMaps = false;
     lightProbe->IrradianceMap = CreateIrradianceMap(desc);
     return mIrradianceMaps[lightProbe->IrradianceMap]->Handle;
 }
@@ -642,7 +664,7 @@ uint32_t Fracture::GraphicsDevice::GetSpecularBRDFMap(UUID entity_id)
     desc.Wrap = TextureWrap::ClampToEdge;
     desc.Name = "BRDFTexture";
     desc.GenMinMaps = true;
-    desc.MipLevels = 0;
+    desc.MipLevels = 5;
     lightProbe->PreFilterBRDFMap = CreateBRDFMap(desc);
     return mBRDFMaps[lightProbe->PreFilterBRDFMap]->Handle;
 }
@@ -670,7 +692,7 @@ uint32_t Fracture::GraphicsDevice::GetBRDFLUTMap(UUID entity_id)
     desc.magFilter = TextureMagFilter::Linear;
     desc.Wrap = TextureWrap::ClampToEdge;
     desc.Name = "BRDFTexture";
-    desc.GenMinMaps = true;
+    desc.GenMinMaps = false;
     CreateBRDFLUT(desc);
     return BRDFLUT->Handle;
 }
@@ -693,7 +715,6 @@ uint32_t Fracture::GraphicsDevice::GetLightProbeIrradiance()
         return mLightProbeIrradianceArray->Handle;
     return 0;
 }
-
 
 void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxComponent* component)
 {
@@ -741,7 +762,10 @@ void Fracture::GraphicsDevice::UpdateSkybox(RenderContext* Context,SkyboxCompone
     for (unsigned int i = 0; i < 6; ++i)
     {
         Fracture::RenderCommands::SetUniform(Context, shader.get(), "view_matrix",captureViews[i]);        
-        Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0,i, GetGlobalTexture("Global_SkyMap")->Handle,0);
+        //Fracture::RenderCommands::FrameBufferTextureTarget(Context, target->Handle, 0,i, GetGlobalTexture("Global_SkyMap")->Handle,0);
+
+        Fracture::RenderCommands::FramBufferTexture(Context, 0, i, GetGlobalTexture("Global_SkyMap")->Handle, 0);
+
         Fracture::RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
         RenderCaptureCube(Context); // renders a 1x1 cube
     }
@@ -843,7 +867,7 @@ Fracture::Texture* Fracture::GraphicsDevice::GetGlobalTexture(const std::string&
     auto it = mGlobalResources.find(Name);
     if (it == mGlobalResources.end())
     {
-        FRACTURE_ERROR("Could not find Render Target {}", Name);
+        FRACTURE_ERROR("Could not find Global Texture {}", Name);
         return nullptr;
     }
 

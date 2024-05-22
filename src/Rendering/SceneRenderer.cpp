@@ -297,7 +297,7 @@ void Fracture::SceneRenderer::Begin(float dt)
 		data.Camera_InvProjection = glm::inverse(current_Camera->ProjectMatrix);
 		data.Camera_InvView = glm::inverse(current_Camera->ViewMatrix);
 		data.Near_Far_Width_Height = { current_Camera->Near,current_Camera->Far,1920,1080 };
-		data.DeltaTimeX_PAD3.x = dt;
+		data.DeltaTimeX_PAD3.x += glfwGetTime();
 		
 
 		std::vector<LightData> lightdata;
@@ -406,9 +406,8 @@ void Fracture::SceneRenderer::Begin(float dt)
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalFrameData(data);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalLightData(lightdata);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalRenderSettings();
-
+		Fracture::GraphicsDevice::Instance()->UpdateGlobalWindData();
 		
-
 		mContext->deltaTime += dt;
 	}
 
@@ -445,7 +444,7 @@ void Fracture::SceneRenderer::End()
 	{
 		if (skybox->IsDirty)
 		{
-			Fracture::GraphicsDevice::Instance()->UpdateSkybox(mContext.get(), skybox.get());
+			Fracture::GraphicsDevice::Instance()->UpdateSkybox(mContext.get(), skybox.get());			
 			for (const auto& probe : SceneManager::GetAllComponents<LightProbeComponent>())
 			{
 				if (probe->AutoBaked)
@@ -482,25 +481,26 @@ void Fracture::SceneRenderer::End()
 		if (f_pass)
 			f_pass->Execute();
 
+		particleSystem->Render(mContext.get());
+
 		if (gridpass && DrawGrid)
 			gridpass->Execute();
 
-		particleSystem->Render(mContext.get());
 
 		if (ssrPass)
 			ssrPass->Execute();
-
-
-		
 	
 	}
 
 	mContext->EndState();
 
 	mContext->Render();
-	GraphicsDevice::Instance()->PostProcessStack()->OnRender();
-	GraphicsDevice::Instance()->PostProcessStack()->Submit();
 
+	if (GraphicsDevice::Instance()->EnablePostProsessing)
+	{
+		GraphicsDevice::Instance()->PostProcessStack()->OnRender();
+		GraphicsDevice::Instance()->PostProcessStack()->Submit();
+	}
 	
 
 	Fracture::SortKey nkey;

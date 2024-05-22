@@ -71,6 +71,7 @@ namespace Fracture
 		float BloomRadius = 0.005f;
 		float BloomDirtMaskIntensity = 0.0f;
 	};
+
 }
 
 #endif

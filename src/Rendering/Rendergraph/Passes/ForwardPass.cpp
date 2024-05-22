@@ -57,6 +57,15 @@ void Fracture::ForwardPass::Execute()
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
 		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
 
+		if (material->IsAffectedByWind)
+		{
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windStrength", material->windStrength);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windSpeed", material->windSpeed);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windFrequency", material->windFrequency);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windDirection", material->windDirection);
+		}
+
+
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
@@ -138,6 +147,13 @@ void Fracture::ForwardPass::Execute()
 
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "EntityID", drawCall->IDColor);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "Model_matrix", drawCall->model);
+		if (material->IsAffectedByWind)
+		{
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windStrength", material->windStrength);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windSpeed", material->windSpeed);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windFrequency", material->windFrequency);
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windDirection", material->windDirection);
+		}
 
 		if (material->IsSkinned)
 		{
@@ -261,16 +277,12 @@ void Fracture::ForwardPass::Execute()
 
 			const auto& brdflut = GraphicsDevice::Instance()->GetBRDFLUTMap(global_probes[0]->GetID());
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "brdfLUT", brdflut, (int)TEXTURESLOT::BRDF);
-
-
-
 		}		
 		const auto& probes = GraphicsDevice::Instance()->GetLightProbeIrradiance();
 		Fracture::RenderCommands::SetTexture(Context, shader.get(), "aReflections", probes, (int)TEXTURESLOT::Reflections);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "_ReflectionFlag", material->IsReflective);
 		RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
-		// Do Grabs		
-
+		
 
 		if (batches.second.size())
 		{

@@ -50,7 +50,7 @@ namespace Fracture
 		DepthComponent16 = GL_DEPTH_COMPONENT16,
 		DepthStencil = GL_DEPTH_STENCIL,
 		Depth = GL_DEPTH,
-		R = GL_R,
+		R = GL_RED,
 		R8 = GL_R8,
 		R16 = GL_R16,
 		R16F = GL_R16F,
@@ -77,7 +77,7 @@ namespace Fracture
 
 	enum class TextureFormat
 	{
-		Red = GL_R,
+		Red = GL_RED,
 		RG = GL_RG,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
@@ -105,7 +105,7 @@ namespace Fracture
 
 	enum class TextureFormatType
 	{
-		RedFloat = GL_R,
+		RedFloat = GL_RED,
 		UByte = GL_UNSIGNED_BYTE,
 		UShort = GL_UNSIGNED_SHORT,
 		Short = GL_SHORT,
@@ -127,14 +127,14 @@ namespace Fracture
 			CubeMap
 		};
 
-		TextureType Texture_Type;
+		TextureType Texture_Type = TextureType::Texture2D;
 		std::string Name;
 		std::string Path;		
 		TextureTarget TextureTarget = TextureTarget::Texture2D;
 		AttachmentTarget AttachmentTrgt = AttachmentTarget::Color;
 		InternalFormat internalFormat = InternalFormat::RGB8;
 		TextureFormat format = TextureFormat::RGB;
-		TextureFormatType formatType = TextureFormatType::UByte;
+		TextureFormatType formatType = TextureFormatType::Float;
 		TextureMagFilter magFilter = TextureMagFilter::Linear;
 		TextureMinFilter minFilter = TextureMinFilter::Linear;
 		TextureWrap Wrap = TextureWrap::ClampToEdge;
@@ -146,6 +146,7 @@ namespace Fracture
 		int TextureArrayLevels = 1;
 		bool GenMinMaps = false;
 		std::vector<uint8_t> data;
+		std::vector<float> f_data;
 		void* texture_data = nullptr;
 
 		uint32_t CaclMipLevels() const

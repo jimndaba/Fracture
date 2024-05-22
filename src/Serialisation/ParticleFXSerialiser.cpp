@@ -20,14 +20,7 @@ void Fracture::ParticleFxSerialiser::WriteParticleFX(Fracture::ParticleFX* fx)
 		BeginCollection("Emitters");
 		for (auto& emitter : fx->mEmitters)
 		{
-			SerialiseEmitter(emitter.second);
-
-			BeginCollection("SubEmitters");
-			for (auto& sub : emitter.second.mSubEmitters)
-			{
-				SerialiseEmitter(sub);
-			}
-			EndCollection();
+			SerialiseEmitter(emitter.second);			
 		}
 		EndCollection();
 
@@ -50,16 +43,7 @@ std::shared_ptr<Fracture::ParticleFX> Fracture::ParticleFxSerialiser::ReadPartic
 		{
 			while (CurrentCollectionIndex() < GetCollectionSize())
 			{
-				ReadEmitter(fx.get());
-				if (BeginCollection("SubEmitters"))
-				{
-					while (CurrentCollectionIndex() < GetCollectionSize())
-					{
-						ReadSubEmitter(&fx->mEmitters[CurrentCollectionIndex()]);
-						NextInCollection();
-					}
-					EndCollection();
-				}
+				ReadEmitter(fx.get());				
 				NextInCollection();
 			}
 			EndCollection();
@@ -102,6 +86,13 @@ void Fracture::ParticleFxSerialiser::SerialiseEmitter(ParticleEmitter& emitter)
 				WriteModifierOfType<ScaleModifier>(modifier);
 				WriteModifierOfType<GravityModifier>(modifier);
 			}
+		}
+		EndCollection();
+
+		BeginCollection("SubEmitters");
+		for (auto& sub : emitter.mSubEmitters)
+		{
+			SerialiseEmitter(sub);
 		}
 		EndCollection();
 	}
@@ -212,6 +203,17 @@ void Fracture::ParticleFxSerialiser::ReadEmitter(ParticleFX* fx)
 			}
 			EndCollection();
 		}
+
+		if (BeginCollection("SubEmitters"))
+		{
+			while (CurrentCollectionIndex() < GetCollectionSize())
+			{
+				ReadSubEmitter(&fx->mEmitters[CurrentCollectionIndex()]);
+				NextInCollection();
+			}
+			EndCollection();
+		}
+
 		fx->mEmitters[fx->mEmitters.size()] = emitter;
 		EndStruct();
 	}

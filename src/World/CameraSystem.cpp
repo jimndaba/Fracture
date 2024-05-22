@@ -24,11 +24,7 @@ void Fracture::CameraSystem::Update(float dt, Fracture::CameraComponent& compone
         component.Position = glm::lerp(component.Position, component.TargetPosition, dt * component.Damping);        
         component.Yaw = glm::lerp(component.Yaw, component.TargetYaw, dt * component.Damping * component.RotationSpeed);
         component.Pitch = glm::lerp(component.Pitch, component.TargetPitch, dt * component.Damping * component.RotationSpeed);
-        component.Roll = glm::lerp(component.Roll, component.TargetRoll, dt * component.Damping * component.RotationSpeed);
-
-        //transform->Rotation = glm::quat(glm::vec3(component.Yaw, component.Pitch, component.Roll));
-        //transform->Position = component.Position;
-        
+        component.Roll = glm::lerp(component.Roll, component.TargetRoll, dt * component.Damping * component.RotationSpeed);        
     }
     else
     {

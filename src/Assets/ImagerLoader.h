@@ -13,7 +13,7 @@ namespace Fracture
 	public:
 		ImageLoader();
 		
-		static std::shared_ptr<Texture> LoadTexture(const std::string& path);
+		static std::shared_ptr<Texture> LoadTexture(const std::string& path, int texture_type = 0);
 
 
 		static void SaveImage(std::string filepath, int width, int height, int nrChannels, std::vector<char> buffer, uint32_t stride);
