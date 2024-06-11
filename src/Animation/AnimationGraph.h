@@ -17,14 +17,13 @@ namespace Fracture
 	struct AnimationGraph
 	{
 		AnimationGraph(AnimationSystem* sys);
-		std::string Name;
+		std::string Name = "NewGraph";
 		Fracture::UUID ID;
 		Fracture::UUID Current_StateID = -1;
 		bool IsDirty = true;
 		
 		std::vector<std::unique_ptr<IAnimationNode>> GraphNodes;
 		std::vector<NodeLink> Links;
-
 		std::map<Fracture::UUID, std::shared_ptr<AnimationParameter>> Parameters;
 
 		

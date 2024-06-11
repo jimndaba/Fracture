@@ -33,7 +33,7 @@ namespace Fracture
 		void WriteLinks(const NodeLink& link);
 
 		template <class T>
-		void WriteNodeIfType(Fracture::IAnimationNode* node);
+		void WriteNodeIfType(Fracture::IAnimationNode* node, const std::string& name);
 			 
 		void WriteGraphNode(Fracture::AndNode* node);
 		void WriteGraphNode(Fracture::OrNode* node);
@@ -56,20 +56,66 @@ namespace Fracture
 	
 
 		std::shared_ptr<AnimationGraph> ReadGraph();
-		void ReadParameters(AnimationGraph* graph);
-	
+		void ReadParameters(AnimationGraph* graph);	
+		void ReadLinks(AnimationGraph* graph);
+		void ReadNodes(AnimationGraph* graph);
+
+		void ReadNodePinIDs(IAnimationNode* node);
+		void ReadAndNodeIfExists(AnimationGraph* graph);
+		void ReadOrNodeIfExists(AnimationGraph* graph);
+		void ReadNotNodeIfExists(AnimationGraph* graph);
+		void ReadReferencePoseNodeIfExists(AnimationGraph* graph);
+		void ReadAnimationPoseNodeIfExists(AnimationGraph* graph);
+		void ReadPoseSelectorNodeIfExists(AnimationGraph* graph);
+		void ReadBlend1DNodeIfExists(AnimationGraph* graph);
+		void ReadFloatEqualsNodeIfExists(AnimationGraph* graph);
+		void ReadFloatGreaterNodeIfExists(AnimationGraph* graph);
+		void ReadFloatLessThanNodeIfExists(AnimationGraph* graph);
+		void ReadFloatValueNodeIfExists(AnimationGraph* graph);
+		void ReadBoolValueNodeIfExists(AnimationGraph* graph);
+		void ReadIntValueNodeIfExists(AnimationGraph* graph);
+		void ReadFloatClampNodeIfExists(AnimationGraph* graph);
+		void ReadAnimationClipNodeIfExists(AnimationGraph* graph);
+		void ReadAnimationStateMachineNodeIfExists(AnimationGraph* graph);
+		void ReadAnimationStateNodeIfExists(AnimationGraph* graph);
+
 
 	};
 
 	template<class T>
-	inline void AnimationGraphSerialiser::WriteNodeIfType(Fracture::IAnimationNode* node)
+	inline void AnimationGraphSerialiser::WriteNodeIfType(Fracture::IAnimationNode* node , const std::string& name)
 	{
 		if (dynamic_cast<T*>(node))
 		{
+			BeginStruct(name);
+			Property("NodeID", node->NodeID);
+
+			BeginCollection("InputPins");
+			for (const auto& pin : node->InputPins)
+			{
+
+				BeginStruct("Pin");
+				Property("PinID", pin.PinID);
+				Property("NodeID", pin.NodeID);
+				EndStruct();
+			}
+			EndCollection();
+
+			BeginCollection("OutputPins");
+			for (const auto& pin : node->OutPins)
+			{
+
+				BeginStruct("Pin");
+				Property("PinID", pin.PinID);
+				Property("NodeID", pin.NodeID);
+				EndStruct();
+			}
+			EndCollection();
+
 			WriteGraphNode(dynamic_cast<T*>(node));
+			EndStruct();
 		}
 	}
-
 }
 
 #endif

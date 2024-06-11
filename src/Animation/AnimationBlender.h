@@ -6,9 +6,6 @@
 
 namespace Fracture
 {
-
-
-
 	struct AnimationBlender
 	{
 		AnimationBlender();
@@ -18,9 +15,5 @@ namespace Fracture
 		PoseSample AdditiveBlend1D(PoseSample in1, PoseSample in2, float factor);
 
 	};
-
-
-
-
 }
 #endif

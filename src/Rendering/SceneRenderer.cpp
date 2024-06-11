@@ -30,7 +30,7 @@ void Fracture::SceneRenderer::Init()
 				desc.Height = 1080;
 				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
 				desc.format = Fracture::TextureFormat::RGBA;
-				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
+				desc.internalFormat = Fracture::InternalFormat::RGBA32F;
 				desc.formatType = Fracture::TextureFormatType::Float;
 				desc.minFilter = TextureMinFilter::Linear;
 				desc.magFilter = TextureMagFilter::Linear;
@@ -56,7 +56,7 @@ void Fracture::SceneRenderer::Init()
 				desc.Height = 1080;
 				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
 				desc.format = Fracture::TextureFormat::RGBA;
-				desc.internalFormat = Fracture::InternalFormat::RGBA32F;
+				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
 				desc.formatType = Fracture::TextureFormatType::Float;
 				desc.minFilter = TextureMinFilter::Near;
 				desc.magFilter = TextureMagFilter::Near;
@@ -69,7 +69,7 @@ void Fracture::SceneRenderer::Init()
 				desc.Height = 1080;
 				desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
 				desc.format = Fracture::TextureFormat::RGBA;
-				desc.internalFormat = Fracture::InternalFormat::RGBA32F;
+				desc.internalFormat = Fracture::InternalFormat::RGBA16F;
 				desc.formatType = Fracture::TextureFormatType::Float;
 				desc.minFilter = TextureMinFilter::Near;
 				desc.magFilter = TextureMagFilter::Near;
@@ -298,6 +298,10 @@ void Fracture::SceneRenderer::Begin(float dt)
 		data.Camera_InvView = glm::inverse(current_Camera->ViewMatrix);
 		data.Near_Far_Width_Height = { current_Camera->Near,current_Camera->Far,1920,1080 };
 		data.DeltaTimeX_PAD3.x += glfwGetTime();
+
+		GraphicsDevice::Instance()->RenderSettings.DoFEnabled = current_Camera->EnableDepthOfField;
+		GraphicsDevice::Instance()->RenderSettings.FocalLength = current_Camera->FocalRange;
+		GraphicsDevice::Instance()->RenderSettings.FocalRandge = current_Camera->FocalLength;
 		
 
 		std::vector<LightData> lightdata;
@@ -313,13 +317,11 @@ void Fracture::SceneRenderer::Begin(float dt)
 			{
 				LightData D;
 				D.Diffuse = glm::vec4(light->Diffuse, 1.0);
-
-
-				//glm::vec3 angle = glm::normalize(glm::radians(glm::eulerAngles(SceneManager::GetComponent<TransformComponent>(light->GetID())->Rotation)));
-				auto& rotation = SceneManager::GetComponent<TransformComponent>(light->GetID())->Rotation;
-				glm::vec3 angle = glm::normalize(glm::vec3(rotation.x, rotation.y, rotation.z));
-
-				D.DirectionXYZ_StrengthW = glm::vec4(angle, light->Strength);
+				const auto& transform = SceneManager::GetComponent<TransformComponent>(light->GetID());		
+				glm::vec3 defaultDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+				glm::vec3 direction = glm::normalize(glm::rotate(transform->Rotation, defaultDirection));
+				
+				D.DirectionXYZ_StrengthW = glm::vec4(direction, light->Strength);
 				D.enabled = 1;
 				D.type = 1;
 				lightdata.push_back(D);
@@ -363,10 +365,11 @@ void Fracture::SceneRenderer::Begin(float dt)
 				auto& parent = SceneManager::GetComponent<HierachyComponent>(light->GetID())->Parent;
 				auto& parent_transform = SceneManager::GetComponent<TransformComponent>(parent)->WorldTransform;
 
-				glm::vec4 position = parent_transform * glm::vec4(transform->Position, 1.0);			
-				glm::vec3 angle = glm::normalize(glm::vec3(transform->Rotation.x, transform->Rotation.y, transform->Rotation.z));
+				glm::vec4 position = parent_transform * glm::vec4(transform->Position, 1.0);	
+				glm::vec3 defaultDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+				glm::vec3 spotlightDirection = glm::normalize(glm::rotate(transform->Rotation, defaultDirection));
 
-				D.DirectionXYZ_StrengthW = glm::vec4(angle.x, angle.y, angle.z, light->Strength);
+				D.DirectionXYZ_StrengthW = glm::vec4(spotlightDirection, light->Strength);
 				D.PositionXYZ_RadiusW = position;
 				D.ComprX_Y_Z_InnerW = glm::vec4(0, 0, 0, glm::cos(glm::radians(light->InnerCutoff)));
 				D.CnstX_LnrY_QuadZ_OuterW = glm::vec4(light->Constant, light->Linear, light->Quadratic, glm::cos(glm::radians(light->OutCutoff)));
@@ -410,8 +413,6 @@ void Fracture::SceneRenderer::Begin(float dt)
 		
 		mContext->deltaTime += dt;
 	}
-
-
 }
 
 void Fracture::SceneRenderer::QueueLightProbesToBake(UUID id)
@@ -430,15 +431,11 @@ void Fracture::SceneRenderer::End()
 
 	particleSystem->BeginRender(mContext.get());
 
-
-
 	Fracture::ClearTargetPassDef passDef;
 	passDef.ClearColor = Fracture::Colour::Black;
 	passDef.BufferTarget = ((uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth | (uint32_t)Fracture::ClearFlags::Stencil);
+
 	Fracture::ClearTargetPass cleartarget("ClearTarget", mContext.get(), passDef);
-	cleartarget.Setup();
-
-
 
 	for (const auto& skybox : SceneManager::GetAllComponents<SkyboxComponent>())
 	{

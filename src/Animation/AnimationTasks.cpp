@@ -3,6 +3,7 @@
 #include "AnimationSystem.h"
 #include "Assets/AssetManager.h"
 #include "Animation/GraphNodes/PoseNodes.h"
+#include "World/SceneManager.h"
 Fracture::SampleTask::SampleTask():
 	IAnimationTask()
 {
@@ -13,7 +14,19 @@ void Fracture::SampleTask::Execute(AnimationContext& context)
 	const auto& mesh = AssetManager::GetStaticByIDMesh(context.MeshID);
 	auto& Pose = context._system->mPool->GetPoseBuffer()->Pose;
 	const auto& node = (AnimationPoseNode*)(context._graph->GetNode(NodeID));
-	context._system->SampleAnimation(mesh.get(), Pose, ClipID, node->Time,context.Time);
+	const auto& anim_component = SceneManager::GetComponent<AnimationComponent>(context.EntityID);
+	const auto& clip = AssetManager::GetAnimationByID(node->Result.AnimationClip);
+	if (!node)
+		return;
+
+	anim_component->AnimationTracks[node->Result.AnimationClip].Duration = clip->Duration;
+	anim_component->AnimationTracks[node->Result.AnimationClip].FrameTime += clip->FramesPerSec * context.Time;
+	anim_component->AnimationTracks[node->Result.AnimationClip].FrameTime = fmod(anim_component->AnimationTracks[node->Result.AnimationClip].FrameTime, clip->Duration);
+
+	float AnimationTime = anim_component->AnimationTracks[node->Result.AnimationClip].FrameTime;
+	
+
+	context._system->SampleAnimation(mesh.get(), Pose, node->Result.AnimationClip, AnimationTime,context.Time);
 }
 
 Fracture::BlendTask::BlendTask() :
@@ -30,5 +43,5 @@ void Fracture::BlendTask::Execute(AnimationContext& context)
 	{
 		return;
 	}
-	context._system->Blend(context.EntityID, BlendFunction, BlendSpace,in_pose1,in_pose2,factor);
+	context._system->Blend(context.GraphID, BlendFunction, BlendSpace,in_pose1,in_pose2,factor);
 }

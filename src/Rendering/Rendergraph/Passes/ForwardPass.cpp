@@ -6,6 +6,7 @@
 #include "Rendering/Material.h"
 #include "World/LightProbeSystem.h"
 #include "Animation/AnimationSystem.h"
+#include "Rendering/DebugRenderer.h"
 
 Fracture::ForwardPass::ForwardPass(const std::string& name, RenderContext* context, const ForwardPassDef& info):IPass(name,context),definition(info)
 {
@@ -32,7 +33,7 @@ void Fracture::ForwardPass::Execute()
 	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
-
+	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
 
 	for (auto& batches : Context->mBatches)
 	{
@@ -56,16 +57,7 @@ void Fracture::ForwardPass::Execute()
 
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
 		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
-
-		if (material->IsAffectedByWind)
-		{
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windStrength", material->windStrength);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windSpeed", material->windSpeed);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windFrequency", material->windFrequency);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windDirection", material->windDirection);
-		}
-
-
+		
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
@@ -76,6 +68,39 @@ void Fracture::ForwardPass::Execute()
 		{
 			const auto& global_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aShadowMap", global_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::DirectShadows);
+
+			const auto& spot_Shadows = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSpotShadows);
+			Fracture::RenderCommands::SetTexture(Context, shader.get(), "aSpotMap", spot_Shadows->DepthStencilAttachment->Handle, (int)TEXTURESLOT::GlobalSpots);
+
+
+			std::vector<glm::mat4> mSpotMatricies;
+			mSpotMatricies.resize(10);
+			const auto& lightlist = SceneManager::GetAllComponents<SpotlightComponent>();
+			for (int i = 0; i < lightlist.size(); i++)
+			{
+				if (i > mSpotMatricies.size())
+					continue;
+
+				const auto& transform = SceneManager::GetComponent<TransformComponent>(lightlist[i]->GetID());
+
+				float outerConeAngleRadians = glm::radians(lightlist[i]->OutCutoff);
+				// Calculate the full field of view
+				float fov = 2.0f * outerConeAngleRadians;
+
+				glm::mat4 projection = glm::perspective(fov, 1.0f, 0.1f, 100.0f);
+
+
+				glm::vec3 defaultDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+				glm::vec3 spotlightDirection = glm::normalize(glm::rotate(transform->Rotation, defaultDirection));
+
+				glm::mat4 view = glm::lookAt(transform->Position, transform->Position + spotlightDirection, glm::vec3(0, 1, 0));
+				mSpotMatricies[i] = projection * view;
+			}
+
+			for (int i = 0; i < mSpotMatricies.size(); i++)
+			{
+				Fracture::RenderCommands::SetUniform(Context, shader.get(), "SpotMatrices[" + std::to_string(i) + "]", mSpotMatricies[i]);
+			}
 		}
 
 		const auto& global_probes = SceneManager::GetAllComponents<LightProbeComponent>();
@@ -101,7 +126,6 @@ void Fracture::ForwardPass::Execute()
 		const auto& probes = GraphicsDevice::Instance()->GetLightProbeIrradiance();
 		Fracture::RenderCommands::SetTexture(Context, shader.get(), "aReflections", probes, (int)TEXTURESLOT::Reflections);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "_ReflectionFlag", material->IsReflective);
-		RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
 
 		if (batches.second.size())
 		{
@@ -116,6 +140,7 @@ void Fracture::ForwardPass::Execute()
 				if (drawcalls.size())
 				{
 					DrawElementsInstancedBaseVertex cmd;
+					cmd.mode = drawcalls[0]->DrawCallPrimitive;
 					cmd.basevertex = drawcalls[0]->basevertex;
 					cmd.instancecount = batch.second->Transforms.size();
 					cmd.indices = drawcalls[0]->SizeOfindices;
@@ -139,6 +164,11 @@ void Fracture::ForwardPass::Execute()
 		}
 
 		const auto& material = AssetManager::Instance()->GetMaterialByID(drawCall->MaterialID);
+		if (material->IsTranslucent)
+		{
+			continue;
+		}
+
 		const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
 
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
@@ -147,26 +177,16 @@ void Fracture::ForwardPass::Execute()
 
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "EntityID", drawCall->IDColor);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "Model_matrix", drawCall->model);
-		if (material->IsAffectedByWind)
-		{
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windStrength", material->windStrength);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windSpeed", material->windSpeed);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windFrequency", material->windFrequency);
-			Fracture::RenderCommands::SetUniform(Context, shader.get(), "windDirection", material->windDirection);
-		}
-
+	
 		if (material->IsSkinned)
 		{
 			if (AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawCall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
 				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawCall->EntityID];
-				if (!poses.empty())
+				if (!poses.empty() && AnimationSystem::Instance()->IsPlaying)
 				{
 					Fracture::RenderCommands::SetUniform(Context, shader.get(), "IsAnimated", true);
-					for (int i = 0; i < poses.size(); i++)
-					{
-						Fracture::RenderCommands::SetUniform(Context, shader.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
-					}
+					GraphicsDevice::Instance()->UpdateAnimationData(poses);
 				}
 				else
 				{
@@ -208,27 +228,28 @@ void Fracture::ForwardPass::Execute()
 		const auto& probes = GraphicsDevice::Instance()->GetLightProbeIrradiance();
 		Fracture::RenderCommands::SetTexture(Context, shader.get(), "aReflections", probes, (int)TEXTURESLOT::Reflections);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "_ReflectionFlag", material->IsReflective);
-		RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
-
 
 		Fracture::RenderCommands::BindVertexArrayObject(Context, drawCall->MeshHandle);
-
 		DrawElementsInstancedBaseVertex cmd;
+		cmd.mode = drawCall->DrawCallPrimitive;
 		cmd.basevertex = drawCall->basevertex;
 		cmd.instancecount = 1;
 		cmd.indices = drawCall->SizeOfindices;
 		cmd.count = drawCall->IndexCount;
 		Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
-		Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
 	}
 
 
 	Fracture::RenderCommands::BlitFramebuffer(Context, Fracture::GlobalRenderTargets::GlobalColour, Fracture::GlobalRenderTargets::GlobalGrabs);
+	
+	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::LEqual);
 
+	Fracture::DebugRenderer::OnRenderSceneBillboards(Context);
 
+	
 	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
 	RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
-	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::LEqual);
+
 
 	for (auto& batches : Context->mBatches)
 	{
@@ -321,6 +342,11 @@ void Fracture::ForwardPass::Execute()
 		}
 
 		const auto& material = AssetManager::Instance()->GetMaterialByID(drawCall->MaterialID);
+		if (!material->IsTranslucent)
+		{
+			continue;
+		}
+
 		const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
 
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);

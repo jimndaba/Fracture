@@ -111,7 +111,7 @@ void Fracture::FractureGame::Update()
         }
     }
  
-
+    Framedelta = frameTime;
     AnimationSystem::Instance()->Update(frameTime);
 
     mAudioManager->OnUpdate(frameTime);
@@ -125,7 +125,7 @@ void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
     Fracture::GraphicsDevice::Instance()->ClearColor(0.1f, 0.6f, 0.9f, 1.0f);
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
 
-    renderer->Begin(0.0f);
+    renderer->Begin(Framedelta);
     renderer->End();
 }
 

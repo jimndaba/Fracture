@@ -16,6 +16,7 @@ namespace Fracture
 
 	struct AnimationTrack
 	{
+		int BoneID;
 		std::string Name = std::string{};
 		std::vector<AnimationPose> Positions;		
 		std::vector<AnimationPose> Scales;		

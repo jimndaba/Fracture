@@ -70,6 +70,13 @@ namespace Fracture
 		float BloomThreshold = 1.0f;
 		float BloomRadius = 0.005f;
 		float BloomDirtMaskIntensity = 0.0f;
+
+		//Depth Of Field;
+		bool DoFEnabled = true;
+		float FocalLength = 100.0f;
+		float FocalRandge = 10.0f;
+		float BokehRadius = 8.0f;
+
 	};
 
 }

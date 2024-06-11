@@ -39,7 +39,7 @@ bool Fracture::AppWindow::ShouldWindowClose()
 void Fracture::AppWindow::MakeCurrentContext()
 {
 	glfwMakeContextCurrent(Context);
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 }
 
 void Fracture::AppWindow::SetWindowTitle(const std::string& title)

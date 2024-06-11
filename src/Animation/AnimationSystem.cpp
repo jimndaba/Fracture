@@ -22,12 +22,21 @@ void Fracture::AnimationSystem::Init()
 void Fracture::AnimationSystem::Update(float dt)
 {
     OPTICK_EVENT(); 
-    if (IsPlaying)
-    {
-        for (const auto& graph : mGraphs)
-        {
+    mGlobalPoseMatrices.clear();
+    const auto& components = SceneManager::GetAllComponents<AnimationComponent>();
+  
+
+    for (const auto& component : components)
+    {           
+        //component->AnimationTracks.clear();
+
+        if (mGraphs.find(component->CurrentGraph) != mGraphs.end())
+        {   
             mPool->ReleaseAllBuffers();
-            graph.second->OnUpdate(dt,graph.first);
+            mGraphs[component->CurrentGraph]->GetContext()->MeshID = component->Mesh;
+            mGraphs[component->CurrentGraph]->GetContext()->EntityID = component->entity;
+            mGraphs[component->CurrentGraph]->GetContext()->IsPlaying = IsPlaying;
+            mGraphs[component->CurrentGraph]->OnUpdate(dt, component->GetID());
         }
     }
 }
@@ -78,22 +87,33 @@ void Fracture::AnimationSystem::Blend(Fracture::UUID in_graph, BlendFunctionType
     new_buffer.resize(inPose1.size());
     for (int i = 0; i < inPose1.size(); i++)
     {
-
         new_buffer[i] = mBlender.AdditiveBlend1D(buffer1[i], buffer2[i], factor);
-       
-
     }
     int lastBuffer = mPool->GetLastBufferInUse();
     if(lastBuffer > 0)
         mPool->MovePoseAndClearBuffer(lastBuffer, 1);
 }
 
-bool Fracture::AnimationSystem::GetBoneTrack(AnimationClip* clip, const std::string& name, AnimationTrack& outTrack)
+bool Fracture::AnimationSystem::GetBoneTrack(AnimationClip* clip, std::string name, AnimationTrack& outTrack)
 {
     for (uint32_t i = 0; i < clip->AnimationTracks.size(); i++)
     {
         auto& anim = clip->AnimationTracks[i];
         if (anim.Name == name)
+        {
+            outTrack = clip->AnimationTracks[i];
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Fracture::AnimationSystem::GetBoneTrack(AnimationClip* clip, int bone_id, AnimationTrack& outTrack)
+{
+    for (uint32_t i = 0; i < clip->AnimationTracks.size(); i++)
+    {
+        auto& anim = clip->AnimationTracks[i];
+        if (anim.BoneID == bone_id)
         {
             outTrack = clip->AnimationTracks[i];
             return true;
@@ -109,7 +129,15 @@ bool Fracture::AnimationSystem::HasGlobalPose(UUID entity)
 
 bool Fracture::AnimationSystem::EntityHasGraph(UUID entity)
 {
-    return mGraphs.find(entity) != mGraphs.end();
+    for (const auto& graph : mEntityToGraphTracker)
+    {
+        for (auto id : graph.second)
+        {
+            if (id == entity)
+                return true;
+        }
+    }
+    return false;
 }
 
 Fracture::AnimationSystem* Fracture::AnimationSystem::Instance()
@@ -233,14 +261,10 @@ glm::mat4 Fracture::AnimationSystem::BoneTransformation(AnimationTrack& outTrack
     return m_translation * m_rotation * m_scale;
 }
 
-void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vector<PoseSample>& outSample, Fracture::UUID& clipID, float& time, float dt)
+void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vector<PoseSample>& outSample, Fracture::UUID clipID, float& time, float dt)
 {
     const auto& clip = AssetManager::GetAnimationByID(clipID);
     float AnimationTime = time;
-    AnimationTime += clip->FramesPerSec * dt;
-    AnimationTime = fmod(AnimationTime, clip->Duration);
-    time = AnimationTime;
-
     outSample.clear();
     outSample.resize(mesh->mBones.size());
     for (int i = 0; i < mesh->mBones.size(); i++)
@@ -248,13 +272,14 @@ void Fracture::AnimationSystem::SampleAnimation(const StaticMesh* mesh,std::vect
         auto& bone = mesh->mBones[mesh->mBoneOrder[i]];       
 
         AnimationTrack track;
-        if (!GetBoneTrack(clip.get(), bone.Name, track))
+        if (!GetBoneTrack(clip.get(), bone.ID, track))
             continue;
 
         PoseSample sample;
         sample.Position = SamplePosition(track, AnimationTime);
         sample.Scale = SampleScaling(track, AnimationTime);
         sample.Rotation = SampleRotation(track, AnimationTime);
+        sample.frametime = AnimationTime / clip->Duration;
         outSample[i]= sample;
     }
 }

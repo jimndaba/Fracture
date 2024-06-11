@@ -16,6 +16,7 @@ namespace Fracture
 	struct Scene;
 
 	struct Texture;
+	struct Terrain;
 	struct Material;
 	struct AnimationClip;
 	struct AnimationGraph;
@@ -88,12 +89,18 @@ namespace Fracture
 
 		static bool IsMeshLoaded(const std::string& Name);
 		static bool IsMeshLoaded(const UUID& Name);
+
 		static bool IsTextureLoaded(const UUID& Name);
 		static bool IsTextureLoaded(const std::string& Name);
+
 		static bool IsMaterialLoaded(const UUID& Name);
 		static bool IsMaterialLoaded(const std::string& Name);
+
 		static bool IsAnimationLoaded(const UUID& Name);
 		static bool IsAnimationLoaded(const std::string& Name);
+
+		static bool IsTerrainLoaded(const UUID& Name);
+		static bool IsTerrainLoaded(const std::string& Name);
 
 		static UUID GetMeshID(const std::string& Name);
 		static std::shared_ptr<Fracture::StaticMesh> GetStaticMesh(const std::string& Name);
@@ -102,6 +109,7 @@ namespace Fracture
 		static bool HasMeshPath(const std::string& path);
 		static bool HasTexturePath(const std::string& path);
 		static bool HasMaterialPath(const std::string& path);
+		static bool HasTerrainPath(const std::string& path);
 
 		static void RegisterShader(const ShaderRegistry& reg);		
 		static std::shared_ptr<Shader> GetShader(const std::string& Name);
@@ -123,6 +131,10 @@ namespace Fracture
 		static std::shared_ptr<AnimationGraph> GetAnimationGraph(const std::string& Name);
 		static std::shared_ptr<AnimationGraph> GetAnimationGraphByID(const Fracture::UUID& id);
 
+		static void RegisterTerrain(const TerrainRegistry& reg);
+		static std::shared_ptr<Terrain> GetTerrain(const std::string& Name);
+		static std::shared_ptr<Terrain> GetTerrainByID(const Fracture::UUID& id);
+
 
 		void OnAsyncLoadMesh(const std::shared_ptr<AsyncLoadMeshEvent>& evnt);
 		void OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadTextureEvent>& evnt);
@@ -141,6 +153,11 @@ namespace Fracture
 		static std::map<UUID, TextureRegistry> mTextureRegister;
 		static std::map<std::string, UUID> mTextureIDLookUp;
 		static std::unordered_map<UUID, std::shared_ptr<Texture>> mTextures;
+
+		static std::map<UUID, TerrainRegistry> mTerrainRegister;
+		static std::map<std::string, UUID> mTerrainIDLookUp;
+		static std::unordered_map<UUID, std::shared_ptr<Terrain>> mTerrains;
+		static std::vector<UUID> mLoadedTerrains;
 
 		static std::map<UUID, MaterialRegistry> mMaterialRegister;
 		static std::map<std::string, UUID> mMaterialIDLookUp;
@@ -174,6 +191,9 @@ namespace Fracture
 		static std::vector<UUID> mLoadedMaterials;
 		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Material>>> mMaterialFutures;
 		static std::queue<MaterialRegistry> mMaterialToLoad;
+
+		static std::unordered_map<UUID, std::future<std::shared_ptr<Fracture::Terrain>>> mTerrainFutures;
+		static std::queue<TerrainRegistry> mTerrainToLoad;
 
 
 		static std::vector<UUID> mLoadedAnimations;

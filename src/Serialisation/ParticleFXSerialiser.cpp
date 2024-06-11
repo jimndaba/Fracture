@@ -85,6 +85,10 @@ void Fracture::ParticleFxSerialiser::SerialiseEmitter(ParticleEmitter& emitter)
 				WriteModifierOfType<ColourGradientModifier>(modifier);
 				WriteModifierOfType<ScaleModifier>(modifier);
 				WriteModifierOfType<GravityModifier>(modifier);
+				WriteModifierOfType<AngularVeloctiyModifier>(modifier);
+				WriteModifierOfType<NoiseModifier>(modifier);
+				WriteModifierOfType<WindModifier>(modifier);
+				WriteModifierOfType<VortexModifier>(modifier);
 			}
 		}
 		EndCollection();
@@ -129,6 +133,48 @@ void Fracture::ParticleFxSerialiser::SerialiseModifier(ScaleModifier* modifier)
 	EndStruct();
 }
 
+void Fracture::ParticleFxSerialiser::SerialiseModifier(AngularVeloctiyModifier* modifier)
+{
+	BeginStruct("AngularVeloctiy");
+	{
+		Property("Min", modifier->MinVelocity);
+		Property("Max", modifier->MaxVelocity);
+	}
+	EndStruct();
+}
+
+void Fracture::ParticleFxSerialiser::SerialiseModifier(NoiseModifier* modifier)
+{
+	BeginStruct("Noise");
+	{
+		Property("Frequency", modifier->Frequency);
+		Property("Scale", modifier->NoiseScale);
+		Property("X", modifier->MultiplierX);
+		Property("Y", modifier->MultiplierY);
+		Property("Z", modifier->MultiplierZ);
+	}
+	EndStruct();
+}
+
+void Fracture::ParticleFxSerialiser::SerialiseModifier(WindModifier* modifier)
+{
+	BeginStruct("Wind");
+	{
+		Property("Influence", modifier->Influence);
+	}
+	EndStruct();
+}
+
+void Fracture::ParticleFxSerialiser::SerialiseModifier(VortexModifier* modifier)
+{
+	BeginStruct("Vortex");
+	{
+		Property("Center", modifier->center_target);
+		Property("Strength", modifier->VortexStrength);
+	}
+	EndStruct();
+}
+
 void Fracture::ParticleFxSerialiser::ReadGravityModifierIfExists(ParticleEmitter* em)
 {
 	if (BeginStruct("Gravity"))
@@ -159,6 +205,56 @@ void Fracture::ParticleFxSerialiser::ReadScaleModifierIfExists(ParticleEmitter* 
 		auto mod = std::make_shared<ScaleModifier>();
 		mod->StartScale = VEC3("Start");
 		mod->EndScale = VEC3("End");
+		em->mModifiers.push_back(mod);
+		EndStruct();
+	}
+}
+
+void Fracture::ParticleFxSerialiser::ReadAngualVelocityModifierIfExists(ParticleEmitter* em)
+{
+	if (BeginStruct("AngularVeloctiy"))
+	{
+		auto mod = std::make_shared<AngularVeloctiyModifier>();
+		mod->MinVelocity = FLOAT("Min");
+		mod->MaxVelocity  = FLOAT("Max");
+		em->mModifiers.push_back(mod);
+		EndStruct();
+	}
+}
+
+void Fracture::ParticleFxSerialiser::ReadNoiseModifierIfExists(ParticleEmitter* em)
+{
+	if (BeginStruct("Noise"))
+	{
+		auto mod = std::make_shared<NoiseModifier>();
+		mod->Frequency = FLOAT("Frequency");
+		mod->NoiseScale = FLOAT("Scale");
+		mod->MultiplierX = FLOAT("X");
+		mod->MultiplierY = FLOAT("Y");
+		mod->MultiplierZ = FLOAT("Z");
+		em->mModifiers.push_back(mod);
+		EndStruct();
+	}
+}
+
+void Fracture::ParticleFxSerialiser::ReadWindModifierIfExists(ParticleEmitter* em)
+{
+	if (BeginStruct("Wind"))
+	{
+		auto mod = std::make_shared<WindModifier>();
+		mod->Influence = FLOAT("Influence");
+		em->mModifiers.push_back(mod);
+		EndStruct();
+	}
+}
+
+void Fracture::ParticleFxSerialiser::ReadVortexModifierIfExists(ParticleEmitter* em)
+{
+	if (BeginStruct("Vortex"))
+	{
+		auto mod = std::make_shared<VortexModifier>();
+		mod->center_target = ID("Center");
+		mod->VortexStrength = FLOAT("Strength");
 		em->mModifiers.push_back(mod);
 		EndStruct();
 	}
@@ -199,6 +295,14 @@ void Fracture::ParticleFxSerialiser::ReadEmitter(ParticleFX* fx)
 					ReadColourGradientModifierIfExists(&emitter);
 				if (HasKey("Scale"))
 					ReadScaleModifierIfExists(&emitter);
+				if (HasKey("AngularVelocity"))
+					ReadAngualVelocityModifierIfExists(&emitter);
+				if (HasKey("Wind"))
+					ReadWindModifierIfExists(&emitter);
+				if (HasKey("Vortex"))
+					ReadVortexModifierIfExists(&emitter);
+				if (HasKey("Noise"))
+					ReadNoiseModifierIfExists(&emitter);
 				NextInCollection();
 			}
 			EndCollection();
@@ -252,6 +356,14 @@ void Fracture::ParticleFxSerialiser::ReadSubEmitter(ParticleEmitter* fx)
 					ReadColourGradientModifierIfExists(&emitter);
 				if (HasKey("Scale"))
 					ReadScaleModifierIfExists(&emitter);
+				if (HasKey("AngularVelocity"))
+					ReadAngualVelocityModifierIfExists(&emitter);
+				if (HasKey("Wind"))
+					ReadWindModifierIfExists(&emitter);
+				if (HasKey("Vortex"))
+					ReadVortexModifierIfExists(&emitter);
+				if (HasKey("Noise"))
+					ReadNoiseModifierIfExists(&emitter);
 
 				NextInCollection();
 			}

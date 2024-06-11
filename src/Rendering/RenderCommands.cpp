@@ -384,7 +384,6 @@ void Fracture::RenderCommands::DispatchComputeShader(Fracture::RenderContext* cn
 		mErroCallback("Memory Barrier");
 	};
 	cmd.fnc();
-	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::Barrier(Fracture::RenderContext* cntxt)
@@ -417,6 +416,20 @@ void Fracture::RenderCommands::FrameBufferTextureTarget(Fracture::RenderContext*
 		//glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_index, (GLuint)texture, level, attachment_layer);
 		mErroCallback("glNamedFramebufferTextureLayer");
 		
+	};
+	cmd.fnc();
+	//cntxt->Push(cmd); 
+}
+
+void Fracture::RenderCommands::FrameBufferDepthTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [fb, attachment_index, attachment_layer, texture, level]() {
+		glNamedFramebufferTextureLayer(fb, GL_DEPTH_ATTACHMENT, texture, level, attachment_layer);
+
+		//glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment_index, (GLuint)texture, level, attachment_layer);
+		mErroCallback("glNamedFramebufferTextureLayer");
+
 	};
 	cmd.fnc();
 	//cntxt->Push(cmd); 
@@ -929,6 +942,9 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 
 void Fracture::RenderCommands::ResetTextureUnits(Fracture::RenderContext* cntxt,Fracture::Shader* shader)
 {
+	if (cntxt->ActiveTextureUnits <= 0)
+		return;
+
 	Fracture::Command cmd;	
 	for (int i = 0; i < cntxt->ActiveTextureUnits; i++)
 	{

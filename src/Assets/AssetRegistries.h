@@ -64,6 +64,13 @@ namespace Fracture
 		std::string Path;
 	};
 
+	struct TerrainRegistry
+	{
+		UUID ID;		
+		std::string Name;
+		std::string Path;
+	};
+
 	struct TextureRegistry
 	{
 		UUID ID;

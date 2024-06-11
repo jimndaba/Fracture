@@ -14,7 +14,7 @@ Fracture::PoseSample Fracture::AnimationBlender::AdditiveBlend1D(PoseSample in1,
 {
 	PoseSample sample;
 	sample.Position = glm::mix(in1.Position,in2.Position, factor);
-	sample.Scale = glm::mix(in1.Scale,in2.Scale, factor);
+	sample.Scale = glm::mix(in1.Scale,in2.Scale,factor);
 	sample.Rotation = glm::slerp(in1.Rotation, in2.Rotation, factor);
 	return sample;
 }

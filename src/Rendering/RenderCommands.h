@@ -25,16 +25,8 @@ namespace Fracture
 		Stencil = GL_STENCIL_BUFFER_BIT
 	};
 
-	enum class DrawMode : uint32_t
-	{
-		Points = GL_POINTS,
-		Lines = GL_LINES,
-		LineLoops = GL_LINE_LOOP,
-		LineStrip = GL_LINE_STRIP,
-		Triangles = GL_TRIANGLES,
-		TriangleStrip = GL_TRIANGLE_STRIP,
-		TriangleFan = GL_TRIANGLE_FAN
-	};
+	
+	
 
 	enum BufferAccess
 	{
@@ -168,6 +160,9 @@ namespace Fracture
 
 		void FramBufferTexture(Fracture::RenderContext* cntxt, uint32_t attachment_index, uint32_t attachment_target, uint32_t texture, uint32_t level);
 		void FrameBufferTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level);
+
+		void FrameBufferDepthTextureTarget(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t attachment_layer, uint32_t texture, uint32_t level);
+
 		void FrameBufferAttachTexture(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t texture, uint32_t level);
 		void FrameBufferAttachTexture3D(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t attachment_index, uint32_t face, uint32_t texture, uint32_t level, uint32_t layer);		
 		void FrameBufferSetDrawBuffers(Fracture::RenderContext* cntxt, uint32_t fb, uint32_t NoBuffers);

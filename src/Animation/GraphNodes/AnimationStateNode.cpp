@@ -22,10 +22,10 @@ Fracture::AnimationStateNode::AnimationStateNode()
 void Fracture::AnimationStateNode::Process(AnimationContext& context)
 {
 	HasAnimation = true;
-	CurrentAnimation = Result.AnimationClip;
+	//CurrentAnimation = Result.AnimationClip;
 	std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
 	task->Time = Time;
-	task->ClipID = CurrentAnimation;
+	task->ClipID = Result.AnimationClip;
 	task->NodeID = NodeID;
 	context._graph->PushTask(task);
 }

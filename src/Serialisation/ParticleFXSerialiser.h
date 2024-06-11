@@ -10,6 +10,10 @@ namespace Fracture
 	struct GravityModifier;
 	struct ColourGradientModifier;
 	struct ScaleModifier;
+	struct AngularVeloctiyModifier;
+	struct WindModifier;
+	struct VortexModifier;
+	struct NoiseModifier;
 	struct ParticleEmitter;
 	struct EmitterModifier;
 
@@ -25,11 +29,20 @@ namespace Fracture
 		void SerialiseModifier(GravityModifier* modifier);
 		void SerialiseModifier(ColourGradientModifier* modifier);
 		void SerialiseModifier(ScaleModifier* modifier);
+		void SerialiseModifier(AngularVeloctiyModifier* modifier);
+		void SerialiseModifier(NoiseModifier* modifier);
+		void SerialiseModifier(WindModifier* modifier);
+		void SerialiseModifier(VortexModifier* modifier);
 
 
 		void ReadGravityModifierIfExists(ParticleEmitter* em);
 		void ReadColourGradientModifierIfExists(ParticleEmitter* em);
 		void ReadScaleModifierIfExists(ParticleEmitter* em);
+		void ReadAngualVelocityModifierIfExists(ParticleEmitter* em);
+		void ReadNoiseModifierIfExists(ParticleEmitter* em);
+		void ReadWindModifierIfExists(ParticleEmitter* em);
+		void ReadVortexModifierIfExists(ParticleEmitter* em);
+
 		void ReadEmitter(ParticleFX* fx);
 		void ReadSubEmitter(ParticleEmitter* fx);
 

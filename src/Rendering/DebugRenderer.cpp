@@ -9,7 +9,10 @@
 std::vector<Fracture::Line> Fracture::DebugRenderer::mLines;
 std::vector<glm::vec4> Fracture::DebugRenderer::mLinesColors;
 std::map<uint32_t, Fracture::BillboardData> Fracture::DebugRenderer::mBillboardDrawCalls;
+std::map<uint32_t, Fracture::BillboardData> Fracture::DebugRenderer::mEntitybillboardscalls;
 int Fracture::DebugRenderer::g_numCircleVertices = 50;
+uint32_t Fracture::DebugRenderer::QuadVAO;
+uint32_t Fracture::DebugRenderer::QuadVBO;
 
 Fracture::DebugRenderer::DebugRenderer()
 {
@@ -54,6 +57,11 @@ void Fracture::DebugRenderer::OnInit()
     }
     RenderContextFlags flags;
     mContext = std::make_unique<RenderContext>(flags);
+}
+
+void Fracture::DebugRenderer::OnBeginFrame()
+{
+    mEntitybillboardscalls.clear();
 }
 
 
@@ -108,7 +116,7 @@ void Fracture::DebugRenderer::OnRender()
             for (auto& command : mBillboardDrawCalls)
             { 
                 RenderCommands::SetTexture(mContext.get(), shader.get(), "IconTexture", command.second.Image, 0);
-
+                RenderCommands::SetUniform(mContext.get(), shader.get(), "b_PickingID", false);
                 for (int i = 0; i < command.second.Positions.size(); i++)
                 {                 
                     RenderCommands::SetUniform(mContext.get(), shader.get(), "Color", command.second.Colors[i]);
@@ -120,14 +128,55 @@ void Fracture::DebugRenderer::OnRender()
             RenderCommands::UseProgram(mContext.get(), 0);
         }
 
-
         mLines.clear();
         mBillboardDrawCalls.clear();
     }
+
     RenderCommands::ReleaseRenderTarget(mContext.get());
     mContext->EndState();
     mContext->Sort(Fracture::DepthSortOrder::Front_To_Back);
     mContext->Render();
+}
+
+void Fracture::DebugRenderer::OnRenderSceneBillboards(RenderContext* Context)
+{
+    if (mEntitybillboardscalls.size() > 0)
+    {
+        const auto& shader = AssetManager::GetShader("Billboard");
+        
+        RenderCommands::UseProgram(Context, shader->Handle);
+        RenderCommands::Disable(Context, GLCapability::FaceCulling);
+        RenderCommands::SetUniform(Context, shader.get(), "CameraRight", SceneManager::ActiveCamera()->Right);
+        RenderCommands::SetUniform(Context, shader.get(), "CameraUp", SceneManager::ActiveCamera()->Up);
+
+        for (auto& command : mEntitybillboardscalls)
+        {
+            RenderCommands::SetTexture(Context, shader.get(), "IconTexture", command.second.Image, 0);
+
+            for (int i = 0; i < command.second.Positions.size(); i++)
+            {
+                glm::vec4 color(0);
+                uint32_t id = command.second.IDs[i];
+                uint8_t r = (id >> 24) & 0xFF; // Red component
+                uint8_t g = (id >> 16) & 0xFF; // Green component
+                uint8_t b = (id >> 8) & 0xFF;  // Blue component
+                uint8_t a = id & 0xFF;         // Alpha component
+                color.r = (float)r / 255.0f;
+                color.g = (float)g / 255.0f;
+                color.b = (float)b / 255.0f;
+                color.a = (float)a / 255.0f;
+
+                RenderCommands::SetUniform(Context, shader.get(), "PickingID", color);
+                RenderCommands::SetUniform(Context, shader.get(), "b_PickingID", true);
+                RenderCommands::SetUniform(Context, shader.get(), "Color", command.second.Colors[i]);
+                RenderCommands::SetUniform(Context, shader.get(), "BillboardPos", command.second.Positions[i]);
+                RenderCommands::SetUniform(Context, shader.get(), "BillboardSize", glm::vec2(1.0f));
+                RenderBillboardQuad(Context);
+            }
+        }
+        RenderCommands::UseProgram(Context, 0);
+    }
+  
 }
 
 void Fracture::DebugRenderer::OnShutdown()
@@ -223,6 +272,25 @@ void Fracture::DebugRenderer::DrawBillboard(const uint32_t& texture, const glm::
         data.Positions.push_back(position);
         data.Colors.push_back(color);
         mBillboardDrawCalls[texture] = data;
+    }
+}
+
+void Fracture::DebugRenderer::DrawEntityBillboard(UUID entity, const uint32_t& texture, const glm::vec3& position, const glm::vec4& color)
+{
+    if (mEntitybillboardscalls.find(texture) != mEntitybillboardscalls.end())
+    {
+       mEntitybillboardscalls[texture].IDs.push_back(entity);
+       mEntitybillboardscalls[texture].Positions.push_back(glm::vec4(position, 1.0f));
+       mEntitybillboardscalls[texture].Colors.push_back(color);
+    }
+    else
+    {
+        BillboardData data;
+        data.Image = texture;
+        data.Positions.push_back(position);
+        data.Colors.push_back(color);
+        data.IDs.push_back(entity);
+        mEntitybillboardscalls[texture] = data;
     }
 }
 

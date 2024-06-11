@@ -38,7 +38,7 @@ std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::CreateAppWindow(co
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_SAMPLES, 0); // 4x antialiasing
+    glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
     glfwWindowHint(GLFW_MAXIMIZED, info->IsMaximised);
 
     glfwWindowHint(GLFW_RESIZABLE, info->IsResizable);
@@ -58,7 +58,7 @@ std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::CreateAppWindow(co
         {
             mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, glfwGetPrimaryMonitor(), NULL);
             gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-            glfwSwapInterval(1);
+            glfwSwapInterval(0);
         }
     }
     else
@@ -71,7 +71,7 @@ std::unique_ptr<Fracture::AppWindow>  Fracture::IFractureApp::CreateAppWindow(co
 
             mWindow->Context = glfwCreateWindow(info->Width, info->Height, info->Name, NULL, NULL);
             gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-            glfwSwapInterval(1);
+            glfwSwapInterval(0);
         }
     }
 

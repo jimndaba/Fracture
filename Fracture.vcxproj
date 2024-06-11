@@ -176,6 +176,7 @@
     <ClInclude Include="src\Rendering\Rendergraph\Passes\BloomPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ChromaticAberration.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.h" />
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\DoFPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\FXAAPass.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\IPostProcess.h" />
     <ClInclude Include="src\Rendering\Rendergraph\Passes\OutlinePass.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\Rendering\SceneRenderer.h" />
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Rendering\Terrain.h" />
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h" />
@@ -222,6 +224,7 @@
     <ClInclude Include="src\World\Scene.h" />
     <ClInclude Include="src\World\Scenegraph.h" />
     <ClInclude Include="src\World\SceneManager.h" />
+    <ClInclude Include="src\World\TerrainSystem.h" />
     <ClInclude Include="src\World\TransformSystem.h" />
     <ClInclude Include="src\World\WindSystem.h" />
     <ClInclude Include="src\World\WorldEvents.h" />
@@ -334,6 +337,7 @@
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ChromaticAberration.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ClearTargetPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ComposeRenderersPass.cpp" />
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\DoFPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\ForwardPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\FXAAPass.cpp" />
     <ClCompile Include="src\Rendering\Rendergraph\Passes\GridPass.cpp" />
@@ -352,6 +356,7 @@
     <ClCompile Include="src\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="src\Rendering\Scissor.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="src\Rendering\Terrain.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Rendering\Vertex.cpp" />
     <ClCompile Include="src\Rendering\VertexArray.cpp" />
@@ -377,6 +382,7 @@
     <ClCompile Include="src\World\Scene.cpp" />
     <ClCompile Include="src\World\Scenegraph.cpp" />
     <ClCompile Include="src\World\SceneManager.cpp" />
+    <ClCompile Include="src\World\TerrainSystem.cpp" />
     <ClCompile Include="src\World\TransformSystem.cpp" />
     <ClCompile Include="src\World\WindSystem.cpp" />
     <ClCompile Include="src\World\WorldEvent.cpp" />

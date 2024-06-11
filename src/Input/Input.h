@@ -14,20 +14,20 @@
 namespace Fracture
 {
 	class AppWindow;
+	
+	enum class SourceType : uint8_t
+	{
+		Keyboard,
+		Mouse,
+		Gamepad0,
+		Gamepad1,
+		Gamepad2,
+		Gamepad3,
+		Gamepad4,
+	};
 
 	struct InputSource
 	{
-		enum class SourceType : uint8_t
-		{
-			Keyboard,
-			Mouse,
-			Gamepad0,
-			Gamepad1,
-			Gamepad2,
-			Gamepad3,
-			Gamepad4,
-		};
-
 		enum class State
 		{
 			Up,
@@ -35,26 +35,28 @@ namespace Fracture
 			Pressed,
 			Released,
 		};
+		InputSource() {};
 
 		float Multiplier = 0.0f;
-		uint8_t scanCode;
-		uint8_t key;
+		uint8_t scanCode = 0;
+		uint8_t key = 0;
 		State InputState = State::Up;
-		bool IsRepeating;
-		SourceType Device;
+		bool IsRepeating = 0;
+		SourceType Device = SourceType::Keyboard;
 
 		float FLOAT = 0.0f;
 		glm::vec2 VEC2 = glm::vec2(0);
 	};
 
+	enum class BindingType
+	{
+		Button,
+		Axis
+	};
+
 	struct InputBinding
 	{
-		enum class Type
-		{
-			Button, 
-			Axis
-		};				
-		Type BindingType = Type::Button;
+		BindingType BindingType = BindingType::Button;
 		std::vector<std::shared_ptr<InputSource>> Sources;
 	};
 
@@ -71,6 +73,9 @@ namespace Fracture
 		static std::map<std::string, KeyCode> mKeyMapping;
 
 		int NoConnectedGamepads = 0;
+		static glm::vec2 current_mousePos;
+		static glm::vec2 last_mousePos;
+		static glm::vec2 mouse_delta;
 	
 
 	public:
@@ -96,6 +101,7 @@ namespace Fracture
 		static bool IsMouseScrolling();
 
 		void OnKeyboardEvent(const std::shared_ptr<KeyboardEvent>& evnt);
+		void OnMouseMoveEvent(const std::shared_ptr<MouseMoveEvent>& evnt);
 		void OnGamepadConnectedEvent(const std::shared_ptr<GamepadConnectEvent>& evnt);
 		void OnGamepadDisconnectedEvent(const std::shared_ptr<GamepadDisconnectedEvent>& evnt);
 
@@ -103,6 +109,7 @@ namespace Fracture
 
 		static glm::vec2 GetMousePosition();		
 		static glm::vec2 GetMouseScroll();
+		static glm::vec2 GetMouseDelta();
 
 		static void RegisterKeyMap(const std::string& Name, KeyCode key);
 		static void RemoveKeyMap(const std::string& Name);
@@ -110,7 +117,8 @@ namespace Fracture
 		static bool ButtonPressed(const std::string& Name);
 		static bool ButtonReleased(const std::string& Name);
 		static float GetAxis(const std::string& Name);
-
+		static glm::vec2 GetAxis2D(const std::string& Axis1, const std::string& Axis2);
+		
 
 		std::map<Fracture::UUID, std::shared_ptr<InputSource>> InputSources;
 		static std::unordered_map<std::string, InputBinding> InputBindings;
@@ -118,7 +126,7 @@ namespace Fracture
 		std::map<Fracture::UUID, std::string> InputSorucesNames;
 
 		void BindInput(const std::string& action);
-		void BindInput(const std::string& action,const std::shared_ptr<InputSource>& source, InputBinding::Type bindingType = InputBinding::Type::Button);
+		void BindInput(const std::string& action,const std::shared_ptr<InputSource>& source, BindingType bindingType = BindingType::Button);
 
 		static AppWindow* mWindow;
 

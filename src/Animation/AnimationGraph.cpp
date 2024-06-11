@@ -62,22 +62,22 @@ void Fracture::AnimationGraph::OnUpdate(float time,Fracture::UUID entityid)
 	while (!mAnimationTasks.empty())
 		mAnimationTasks.pop();
 
-	if (EntityandMeshSet)
+	mContext->EntityID = entityid;
+	mContext->Time = time;
+
+
+	if (IsDirty)
 	{
-		mContext->Time = time;
-		if (IsDirty)
-		{
-			TopologicalSort();
-		}
-
-		Process(*mContext.get());
-
-		ExecuteTaskList();
-
-		CalculateFinalGlobalTransforms();
-
-		mSystem->mGlobalPoseMatrices[entityid] = mGlobalTansforms;
+		TopologicalSort();
 	}
+
+	Process(*mContext.get());
+
+	ExecuteTaskList();
+
+	CalculateFinalGlobalTransforms();
+
+	mSystem->mGlobalPoseMatrices[entityid] = mGlobalTansforms;
 }
 
 void Fracture::AnimationGraph::CalculateFinalGlobalTransforms()
@@ -88,26 +88,44 @@ void Fracture::AnimationGraph::CalculateFinalGlobalTransforms()
 		return;
 	mGlobalTansforms.resize(mesh->mBones.size());
 	mLocalTansforms.resize(mesh->mBones.size());
-
-	for (int i = 0; i < mesh->mBones.size(); i++)
+	
+	if (mContext->IsPlaying)
 	{
-		auto& bone = mesh->mBones[mesh->mBoneOrder[i]];
-		glm::mat4 parent_transform = glm::mat4(1.0f);
-
-		if (i > 0) {
-			parent_transform = mLocalTansforms[bone.ParentID];
-		}
-
+		for (int i = 0; i < mesh->mBones.size(); i++)
 		{
+
 			glm::mat4 m_translation = glm::translate(glm::mat4(1.0f), sampledBuffer[i].Position);
 			glm::mat4 m_rotation = glm::toMat4(sampledBuffer[i].Rotation);
 			glm::mat4 m_scale = glm::scale(glm::mat4(1.0f), sampledBuffer[i].Scale);
-			bone.LocalTransformation = m_translation * m_rotation * m_scale;
-		}
 
-		mLocalTansforms[bone.ID] = parent_transform * bone.LocalTransformation;
-		mGlobalTansforms[bone.ID] = mLocalTansforms[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
+			auto& bone = mesh->mBones[mesh->mBoneOrder[i]];//
+			glm::mat4 parent_transform = glm::mat4(1.0f);
+			if (i != 0)
+			{
+				parent_transform = mLocalTansforms[bone.ParentID];
+			}
+
+			bone.LocalTransformation = m_translation * m_rotation * m_scale;
+			mLocalTansforms[bone.ID] = parent_transform * bone.LocalTransformation;
+			mGlobalTansforms[bone.ID] = bone.SceneRootTransform * mLocalTansforms[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
+		}
 	}
+	else
+	{
+		for (int i = 0; i < mesh->mBones.size(); i++)
+		{		
+			auto& bone = mesh->mBones[mesh->mBoneOrder[i]];//mesh->mBoneOrder[i]
+			glm::mat4 parent_transform = glm::mat4(1.0f);
+			if (i != 0)
+			{
+				parent_transform = mLocalTansforms[bone.ParentID];
+			}
+
+			mLocalTansforms[bone.ID] = parent_transform * bone.LocalTransformation;
+			mGlobalTansforms[bone.ID] = mLocalTansforms[bone.ID] * mesh->mBones[bone.ID].InverseBindTransform;
+		}		
+	}
+
 	mSystem->mPool->ReleasePoseBuffer(0);
 }
 
@@ -200,7 +218,7 @@ void Fracture::AnimationGraph::DepthFirstSearch()
 		for (const auto& nodeID : adjList[node->NodeID])
 		{
 			auto adjNode = GetNode(nodeID);
-			
+		
 			if (!adjNode)
 				continue;
 

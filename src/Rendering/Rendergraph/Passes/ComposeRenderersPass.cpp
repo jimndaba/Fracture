@@ -48,8 +48,8 @@ void Fracture::ComposeRenderersPass::Execute()
 	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 
-	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
-	RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
+	//RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
+	//RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
 
 	RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Disable(Context, Fracture::GLCapability::StencilTest);

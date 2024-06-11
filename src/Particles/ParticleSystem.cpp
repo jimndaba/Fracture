@@ -149,7 +149,7 @@ void Fracture::ParticleSystem::Update(float dt)
                     continue;
                 }
 
-                p.LifeSpan -= 0.016f;
+                p.LifeSpan -= dt;
                 if (p.LifeSpan <= 0.0f)
                 {
                     for (auto& sub : fx->mEmitters[emitter_i].mSubEmitters)
@@ -178,7 +178,7 @@ void Fracture::ParticleSystem::Update(float dt)
                     modifier->Modify(params);
                 }
 
-                p.Position += p.Velocity * 0.016f;
+                p.Position += p.Velocity * dt;
                 p.Scale *= transform->Scale;
                 p.DistanceToCamera = glm::length(SceneManager::ActiveCamera()->Position - p.Position);       
 
@@ -203,7 +203,7 @@ void Fracture::ParticleSystem::Update(float dt)
                 for (int i = 0; i < fx->mEmitters[emitter_i].mSubEmitters[e].Particles.size(); i++)
                 {
                     auto& p = fx->mEmitters[emitter_i].mSubEmitters[e].Particles[i];
-                    p.LifeSpan -= 0.016f;
+                    p.LifeSpan -= dt;
 
                     if (p.LifeSpan <= 0.0f)
                     {
@@ -229,7 +229,7 @@ void Fracture::ParticleSystem::Update(float dt)
                         modifier->Modify(params);
                     }
 
-                    p.Position += p.Velocity * 0.016f;
+                    p.Position += p.Velocity * dt;
                     p.Scale *= transform->Scale;
                     p.DistanceToCamera = glm::length(SceneManager::ActiveCamera()->Position - p.Position);
                 }
@@ -274,6 +274,7 @@ void Fracture::ParticleSystem::BeginRender(Fracture::RenderContext* context)
             ParticleInstanceData data;
             data.Colour = particle.Color;
             data.PositionScale = glm::vec4(particle.Position, particle.Scale.x);
+            data.Rotation.x = particle.Rotation.y;
             batch.second.InstanceData.push_back(data);
         }
     }
@@ -282,8 +283,7 @@ void Fracture::ParticleSystem::BeginRender(Fracture::RenderContext* context)
     {
         if (batch.second.mPartilces.empty())
             continue;
-        Fracture::RenderCommands::BufferSubData<ParticleInstanceData>(context, batch.second.Instance_Buffer->RenderID, batch.second.InstanceData, batch.second.InstanceData.size() * sizeof(ParticleInstanceData), 0);
-        //Fracture::RenderCommands::BufferSubData<glm::vec4>(context, batch.second.Color_Buffer->RenderID, batch.second.Colors, batch.second.Colors.size() * sizeof(glm::vec4), 0);
+        Fracture::RenderCommands::BufferSubData<ParticleInstanceData>(context, batch.second.Instance_Buffer->RenderID, batch.second.InstanceData, batch.second.InstanceData.size() * sizeof(ParticleInstanceData), 0);        
     }
 }
 
@@ -295,12 +295,13 @@ void Fracture::ParticleSystem::Render(Fracture::RenderContext* context)
     if (!global_color)
         return;
 
-    int clearValue = 1;
-
     RenderCommands::SetRenderTarget(context, global_color);
+
     RenderCommands::Enable(context, Fracture::GLCapability::DepthTest);    
-    RenderCommands::Disable(context, Fracture::GLCapability::FaceCulling);
     RenderCommands::Enable(context, Fracture::GLCapability::Blending);
+    RenderCommands::Disable(context, Fracture::GLCapability::FaceCulling);
+
+   
   
 
     for (const auto& batch : mRenderBatch)
@@ -687,7 +688,8 @@ void Fracture::ParticleSystem::AddToBatch(const ParticleEmitter& emitter)
             { ShaderDataType::Float3,"aNormal",0,true },
             { ShaderDataType::Float2,"aUV",0,true },
             { ShaderDataType::Float4, "ParticleColour",1 },
-            { ShaderDataType::Float4, "PositionScale",1 }
+            { ShaderDataType::Float4, "PositionScale",1 },
+            { ShaderDataType::Float4, "Rotation",1 }
         };
         GraphicsDevice::Instance()->CreateVertexArray(mRenderBatch[emitter.MaterialID].VAO, info);
         GraphicsDevice::Instance()->VertexArray_BindAttributes(mRenderBatch[emitter.MaterialID].VAO, info);
@@ -709,8 +711,11 @@ void Fracture::ParticleSystem::AddToBatch(const ParticleEmitter& emitter)
 
             GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mRenderBatch[emitter.MaterialID].VAO, 4, sizeof(ParticleInstanceData), mRenderBatch[emitter.MaterialID].Instance_Buffer->RenderID, sizeof(glm::vec4));
 
+            GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mRenderBatch[emitter.MaterialID].VAO, 5, sizeof(ParticleInstanceData), mRenderBatch[emitter.MaterialID].Instance_Buffer->RenderID, sizeof(glm::vec4)*2);
+
             GraphicsDevice::Instance()->VertexArray_SetDivisor(mRenderBatch[emitter.MaterialID].VAO, 3, 1);
             GraphicsDevice::Instance()->VertexArray_SetDivisor(mRenderBatch[emitter.MaterialID].VAO, 4, 1);
+            GraphicsDevice::Instance()->VertexArray_SetDivisor(mRenderBatch[emitter.MaterialID].VAO, 5, 1);
         }
     }
 

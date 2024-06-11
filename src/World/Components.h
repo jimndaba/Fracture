@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "physx/PxPhysicsAPI.h"
 #include "Scripting/LuaScript.h"
+#include "Common/Frustum.h"
 namespace Fracture
 {
 	struct IComponent
@@ -165,7 +166,9 @@ namespace Fracture
 			Orthographic
 		};
 
-		CameraComponent(const UUID& id) :entity(id) {}
+		CameraComponent(const UUID& id) :entity(id) {
+			CameraFustrum = Frustum::CreateFrustumFromCamera(this);
+		}
 
 		CameraComponent(CameraComponent& other, UUID new_entity):
 			IComponent()
@@ -187,8 +190,8 @@ namespace Fracture
 			FocalRange = other.FocalRange;
 			FoV = other.FoV;
 			EnableDepthOfField = other.EnableDepthOfField;
-
 			ProjectionMode = other.ProjectionMode;
+			CameraFustrum = Frustum::CreateFrustumFromCamera(this);
 		}
 
 		UUID entity;
@@ -196,6 +199,7 @@ namespace Fracture
 		float Damping = 5.0f;
 		float Sensitivity = 0.1f;
 		float Speed = 30.0f;
+		float SpeedModifier = 0.1f;
 		float RotationSpeed = 5.0f;
 		float ZoomSpeed = 3.0f;
 
@@ -213,6 +217,7 @@ namespace Fracture
 		float Height = 640;
 		float FocalLength = 100.0f;
 		float FocalRange = 4.0f;
+		float AspectRatio = 1.0f;
 
 		glm::vec3 TargetPosition = glm::vec3(0, 5, 15.0f);
 		float TargetYaw = 0.0f;
@@ -223,6 +228,7 @@ namespace Fracture
 		glm::mat4 ViewMatrix;
 		glm::mat4 ProjectMatrix;
 		ProjectionType ProjectionMode = ProjectionType::Perspective;
+		Frustum CameraFustrum;
 
 		bool FirstMove = true;
 		bool IsDirty = true;
@@ -600,6 +606,13 @@ namespace Fracture
 		glm::vec4 SkyColour = glm::vec4(0.3,0.5,0.8,1.0);
 	};
 
+
+	struct AnimationSyncTrack
+	{
+		float Duration;
+		float FrameTime = 0.0f;
+	};
+
 	struct AnimationComponent : public IComponent
 	{
 		AnimationComponent(const Fracture::UUID& id) :
@@ -611,7 +624,8 @@ namespace Fracture
 		{
 			entity = new_entity;
 			CurrentGraph = other.CurrentGraph;
-			Mesh = other.Mesh;			
+			Mesh = other.Mesh;		
+			IsGraphSet = other.IsGraphSet;
 		}
 
 
@@ -620,7 +634,9 @@ namespace Fracture
 		
 		UUID CurrentGraph = -1;
 		UUID Mesh = -1;
+		float FrameTime = 0.0f;
 		bool IsGraphSet = false;
+		std::unordered_map<UUID, AnimationSyncTrack> AnimationTracks;
 		
 	};
 
@@ -644,7 +660,42 @@ namespace Fracture
 
 		UUID GetID() { return entity; }
 	};
+
+	struct TerrainComponent : public IComponent
+	{
+		TerrainComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {
+		}
+
+		TerrainComponent(TerrainComponent& other, UUID new_entity) :
+			IComponent()
+		{
+			entity = new_entity;
+			TerrainID = other.TerrainID;
+			TerrianSizeX = other.TerrianSizeX;
+			TerrianSizeY = other.TerrianSizeX;
+			TerrianYScale = other.TerrianYScale;
+			TerrianYShift = other.TerrianYShift;
+			HasHeightMap = other.HasHeightMap;
+		}
+
+		UUID entity;
+		Fracture::UUID TerrainID;
+		Fracture::UUID MaterialID;
+		Fracture::UUID HeightMapID;
+		bool HasHeightMap = false;
+		bool HasMaterial = false;
+		bool IsGenerated = false;
+		bool Dirty = false;
+		
+		int TerrianSizeX = 256;
+		int TerrianSizeY = 256;
+		int TerrianYScale = 32;
+		int TerrianYShift = 0;
+		UUID GetID() { return entity; }
+	};
 }
+
 
 
 

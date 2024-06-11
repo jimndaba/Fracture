@@ -4,7 +4,9 @@
 #include "Assets/AssetManager.h"
 #include "World/SceneManager.h"
 #include "Rendering/Material.h"
+#include "World/CameraSystem.h"
 #include "Mesh.h"
+#include "Terrain.h";
 
 
 Fracture::RenderContext::RenderContext(RenderContextFlags flags):
@@ -33,10 +35,21 @@ void Fracture::RenderContext::BeginScene()
 	ShadowDrawCalls.clear();
 
 
+
+
+
+	const auto& terrains = SceneManager::GetAllComponents<TerrainComponent>();
+	for (const auto& terrain : terrains)
+	{
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(terrain->GetID());
+		AddDrawCall(terrain.get(), transform->WorldTransform, terrain->GetID());
+	}
+
 	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
 	for (const auto& meshcomponent : components)
 	{
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
+
 		if(meshcomponent->meshType == MeshComponent::MeshType::Static)
 			AddToBatch(meshcomponent.get(), transform->WorldTransform, meshcomponent->GetID());
 
@@ -125,12 +138,14 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 
 	for (const auto& submesh : mesh->SubMeshes)
 	{
+		CameraSystem cam_system;
+
 		int material_index = (int)submesh.MaterialIndex;
 		auto materialID = meshcomponent->Materials[material_index];
 		if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
 		{
 			mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
-			VertexArrayCreationInfo info;		
+			VertexArrayCreationInfo info;
 			if (mesh->mBones.size())
 			{
 				info.Layout =
@@ -199,7 +214,7 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 				GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
 
 				{
-	
+
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
 					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
@@ -234,38 +249,47 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 				}
 			}
 		}
-
-		glm::vec4 color(0);
-		uint32_t id = entity;
-		uint8_t r = (id >> 24) & 0xFF; // Red component
-		uint8_t g = (id >> 16) & 0xFF; // Green component
-		uint8_t b = (id >> 8) & 0xFF;  // Blue component
-		uint8_t a = id & 0xFF;         // Alpha component
-		color.r = (float)r / 255.0f;
-		color.g = (float)g / 255.0f;
-		color.b = (float)b / 255.0f;
-		color.a = (float)a / 255.0f;
-
-		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
-		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
-
-
+		
 		const auto& material = AssetManager::GetMaterialByID(materialID);
 
-		auto drawcall = std::make_shared<MeshDrawCall>();
-		drawcall->EntityID = entity;
-		drawcall->basevertex = submesh.BaseVertex;
-		drawcall->IndexCount = submesh.IndexCount;
-		drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+		if (cam_system.IsBoxInFrustum(*SceneManager::ActiveCamera(), submesh.BoundingBox.UpdatedAABB(transform)))
+		{
+			glm::vec4 color(0);
+			uint32_t id = entity;
+			uint8_t r = (id >> 24) & 0xFF; // Red component
+			uint8_t g = (id >> 16) & 0xFF; // Green component
+			uint8_t b = (id >> 8) & 0xFF;  // Blue component
+			uint8_t a = id & 0xFF;         // Alpha component
+			color.r = (float)r / 255.0f;
+			color.g = (float)g / 255.0f;
+			color.b = (float)b / 255.0f;
+			color.a = (float)a / 255.0f;
 
+			mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
+			mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
 
-		if (material->IsTranslucent)
-			mBatches[materialID][mesh->ID]->TransparentDrawCalls.push_back(drawcall);
-		else
-			mBatches[materialID][mesh->ID]->OpaqueDrawCalls.push_back(drawcall);
+			auto drawcall = std::make_shared<MeshDrawCall>();
+			drawcall->EntityID = entity;
+			drawcall->basevertex = submesh.BaseVertex;
+			drawcall->IndexCount = submesh.IndexCount;
+			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+
+			if (material->IsTranslucent)
+				mBatches[materialID][mesh->ID]->TransparentDrawCalls.push_back(drawcall);
+			else
+				mBatches[materialID][mesh->ID]->OpaqueDrawCalls.push_back(drawcall);		
+		}
 
 		if (material->CastsShadows)
+		{
+			auto drawcall = std::make_shared<MeshDrawCall>();
+			drawcall->EntityID = entity;
+			drawcall->basevertex = submesh.BaseVertex;
+			drawcall->IndexCount = submesh.IndexCount;
+			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+			drawcall->aabb = submesh.BoundingBox;
 			mBatches[materialID][mesh->ID]->ShadowDrawCalls.push_back(drawcall);
+		}
 	}	
 }
 
@@ -291,28 +315,84 @@ void Fracture::RenderContext::AddDrawCall(MeshComponent* meshcomp, glm::mat4 tra
 
 	for (const auto& submesh : mesh->SubMeshes)
 	{
-		auto materialID = meshcomp->Materials[submesh.MaterialIndex];
-		const auto& material = AssetManager::GetMaterialByID(materialID);
+		CameraSystem cam_system;
 
-		auto drawcall = std::make_shared<MeshDrawCall>();
+		if (cam_system.IsBoxInFrustum(*SceneManager::ActiveCamera(), submesh.BoundingBox.UpdatedAABB(transform)))
+		{
+			auto materialID = meshcomp->Materials[submesh.MaterialIndex];
+			const auto& material = AssetManager::GetMaterialByID(materialID);
 
-		drawcall->EntityID = entity;
-		drawcall->IDColor = color;
-		drawcall->model = transform;
-		drawcall->MaterialID = materialID;
-		drawcall->MeshHandle = mesh->VAO;
-		drawcall->basevertex = submesh.BaseVertex;
-		drawcall->IndexCount = submesh.IndexCount;
-		drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
+			auto drawcall = std::make_shared<MeshDrawCall>();
+
+			drawcall->EntityID = entity;
+			drawcall->IDColor = color;
+			drawcall->model = transform;
+			drawcall->MaterialID = materialID;
+			drawcall->MeshHandle = mesh->VAO;
+			drawcall->basevertex = submesh.BaseVertex;
+			drawcall->IndexCount = submesh.IndexCount;
+			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
 
 
-		if (material->IsTranslucent)
-			TransparentDrawCalls.push_back(drawcall);
-		else
-			OpaqueDrawCalls.push_back(drawcall);
+			if (material->IsTranslucent)
+				TransparentDrawCalls.push_back(drawcall);
+			else
+				OpaqueDrawCalls.push_back(drawcall);
 
-		if (material->CastsShadows)
-			ShadowDrawCalls.push_back(drawcall);
+			if (material->CastsShadows)
+				ShadowDrawCalls.push_back(drawcall);
+		}
+	}
+}
+
+void Fracture::RenderContext::AddDrawCall(TerrainComponent* component, glm::mat4 transform, UUID Entity)
+{
+	OPTICK_EVENT();
+	
+	glm::vec4 color(0);
+	uint32_t id = component->GetID();
+	uint8_t r = (id >> 24) & 0xFF; // Red component
+	uint8_t g = (id >> 16) & 0xFF; // Green component
+	uint8_t b = (id >> 8) & 0xFF;  // Blue component
+	uint8_t a = id & 0xFF;         // Alpha component
+	color.r = (float)r / 255.0f;
+	color.g = (float)g / 255.0f;
+	color.b = (float)b / 255.0f;
+	color.a = (float)a / 255.0f;
+
+
+	const auto& mesh = AssetManager::GetTerrainByID(component->TerrainID);
+	if (mesh)
+	{
+		const auto& material = AssetManager::GetMaterialByID(component->MaterialID);
+		if (!material)
+			return;
+
+		const unsigned int NUM_STRIPS = component->TerrianSizeY - 1;
+		const unsigned int NUM_VERTS_PER_STRIP = component->TerrianSizeX * 2;
+
+		for (unsigned int strip = 0; strip < NUM_STRIPS; ++strip)
+		{
+			auto drawcall = std::make_shared<TerrainDrawCall>();
+			drawcall->DrawCallPrimitive = DrawMode::TriangleStrip;
+			drawcall->EntityID = component->GetID();
+			drawcall->IDColor = color;
+			drawcall->model = transform;
+			drawcall->MaterialID = component->MaterialID;
+			drawcall->MeshHandle = mesh->VAO;
+			drawcall->basevertex = 0;
+			drawcall->IndexCount = NUM_VERTS_PER_STRIP;
+			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * strip);
+
+
+			if (material->IsTranslucent)
+				TransparentDrawCalls.push_back(drawcall);
+			else
+				OpaqueDrawCalls.push_back(drawcall);
+
+			if (material->CastsShadows)
+				ShadowDrawCalls.push_back(drawcall);
+		}
 	}
 }
 

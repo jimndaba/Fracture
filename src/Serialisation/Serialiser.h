@@ -283,6 +283,9 @@ namespace Fracture
 		void Property(const std::string& name, const std::vector<unsigned char>& value);
 		void Property(const std::string& name, const std::vector<float>& value);
 
+		template <class T>
+		void Property(const std::string& name, const std::vector<std::vector<T>>& value);
+
 
 		void Save(const std::string& path);
 		bool Open(const std::string& path);
@@ -319,6 +322,9 @@ namespace Fracture
 		SceneRegistry SCENEREG(const std::string& name);
 		AnimationClipRegistry ANIMATIONREG(const std::string& name);
 
+		template<class T>
+		std::vector<std::vector<T>> VECTOR_ARRAY(const std::string& name);
+
 		bool HasKey(const std::string& key);
 
 		json GetOutput();
@@ -345,7 +351,39 @@ namespace Fracture
 		}
 
 	};
+	template <class T>
+	void ISerialiser::Property(const std::string& name, const std::vector<std::vector<T>>& value)
+	{
+		if (mStructStack.size() > mCollectionStack.size())
+		{
+			auto j = mStructStack.top();
+			if (exists(j, name))
+				return j[name];
+		}
+		else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+		{
+			auto j = mCollectionStack.top();
+			return j.at(mCollectionIndex.top())[name];
+		}
+		return std::vector<std::vector<T>>();
+	}
 
+	template<class T>
+	inline std::vector<std::vector<T>> ISerialiser::VECTOR_ARRAY(const std::string& name)
+	{
+		if (mStructStack.size() > mCollectionStack.size())
+		{
+			auto j = mStructStack.top();
+			if (exists(j, name))
+				return j[name];
+		}
+		else if (!mCollectionStack.empty() && (mCollectionStack.size() <= mStructStack.size()))
+		{
+			auto j = mCollectionStack.top();
+			return j.at(mCollectionIndex.top())[name];
+		}
+		return std::vector<std::vector<T>>();
+	}
 
 
 }

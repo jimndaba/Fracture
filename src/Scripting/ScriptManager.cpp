@@ -137,6 +137,23 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 		return Input::GetMousePosition;
 		});
 
+
+	input.set_function("GetMouseDelta", []() {
+		return Input::GetMouseDelta;
+		});
+
+	input.set_function("IsButtonPressed", []() {
+		return Input::ButtonPressed;
+		});
+
+	input.set_function("IsButtonReleased", []() {
+		return Input::ButtonReleased;
+		});
+
+	input.set_function("GetAxis", []() {
+		return Input::GetAxis;
+		});
+
 	std::initializer_list<std::pair<sol::string_view, Fracture::KeyCode>> keyItems =
 	{
 		{"A", Fracture::KeyCode::A},
@@ -233,7 +250,7 @@ void Fracture::ScriptManager::BindInput(sol::state& L)
 		{"Add", Fracture::KeyCode::KPAdd},
 		{ "KP_EQUAL",    Fracture::KeyCode::KPEqual }
 	};
-	L.new_enum<Fracture::KeyCode, false>("key", keyItems);
+	L.new_enum<Fracture::KeyCode, false>("Keycode", keyItems);
 }
 
 void Fracture::ScriptManager::BindMaths(sol::state& L)

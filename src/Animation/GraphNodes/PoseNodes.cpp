@@ -3,6 +3,7 @@
 #include "Animation/AnimationGraph.h"
 #include "Animation/AnimationTasks.h"
 #include "AnimationClipNode.h"
+#include "World/SceneManager.h"
 
 Fracture::ReferencePoseNode::ReferencePoseNode() : IPoseNode()
 {
@@ -33,6 +34,7 @@ Fracture::AnimationPoseNode::AnimationPoseNode() : IPoseNode()
 			.PinType = PinValueType::Pose
 			}
 	};
+	
 	InputPins =
 	{
 		Pin{
@@ -49,11 +51,12 @@ void Fracture::AnimationPoseNode::Process(AnimationContext& context)
 	if (node)
 	{		
 		HasAnimation = true;
-		CurrentAnimation = node->Result.AnimationClip;
 		std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
-		task->Time = Time;
+		task->Time = SceneManager::GetComponent<AnimationComponent>(context.EntityID)->FrameTime;
 		task->ClipID = node->Result.AnimationClip;
-		task->NodeID = NodeID;
+		task->NodeID = InputPins[0].NodeID;
+		task->duration = node->Duration;
+		Result.AnimationClip = node->Result.AnimationClip;
 		context._graph->PushTask(task);
 	}
 }

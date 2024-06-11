@@ -8,6 +8,7 @@
 #include "Rendering/Rendergraph/Passes/ToneMappingPass.h"
 #include "Rendering/Rendergraph/Passes/ChromaticAberration.h"
 #include "Rendering/Rendergraph/Passes/BloomPass.h"
+#include "Rendering/Rendergraph/Passes/DoFPass.h"
 
 Fracture::PostProcessPipeline::PostProcessPipeline()
 {
@@ -22,9 +23,9 @@ void Fracture::PostProcessPipeline::Init()
 	info.AttachmentTrgt = AttachmentTarget::Color;
 	info.Width = 1920;
 	info.Height = 1080;
-	info.formatType = TextureFormatType::Float;
+	info.formatType = TextureFormatType::UInt;
 	info.format = TextureFormat::RGBA;
-	info.internalFormat = InternalFormat::RGBA16F;
+	info.internalFormat = InternalFormat::RGBA32F;
 	info.TextureTarget = TextureTarget::Texture2D;
 	info.magFilter = TextureMagFilter::Linear;
 	info.minFilter = TextureMinFilter::Linear;
@@ -52,6 +53,7 @@ void Fracture::PostProcessPipeline::Init()
 void Fracture::PostProcessPipeline::OnSetupPipeline()
 {
 
+	RenderCommands::Disable(Context.get(), Fracture::GLCapability::DepthTest);
 	/*
 	* https://gamedev.stackexchange.com/questions/147952/what-is-the-order-of-postprocessing-effects
 	Ambient occlusion
@@ -71,10 +73,12 @@ void Fracture::PostProcessPipeline::OnSetupPipeline()
 	*/
 
 	//HDR Post Processing
-	mPostProcessStack.push_back(std::make_shared<FXAAPass>());
+	mPostProcessStack.push_back(std::make_shared<FXAAPass>());	
+	
+	mPostProcessStack.push_back(std::make_shared<DoFPass>());
 	mPostProcessStack.push_back(std::make_shared<ChromaticAberrationPass>());
 	mPostProcessStack.push_back(std::make_shared<BloomPass>());
-
+	
 
 	// HDR to LDR
 	mPostProcessStack.push_back(std::make_shared<ToneMappingPass>());

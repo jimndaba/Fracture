@@ -1091,7 +1091,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadRigidbodyComponentIfExists(new_Scene->RootID);
 			ReadColliderComponentIfExists(new_Scene->RootID);
 			ReadCameraComponentIfExists(new_Scene->RootID);
-			//ReadScriptComponentIfExists(new_Scene->RootID);
+			ReadScriptComponentIfExists(new_Scene->RootID);
 			ReadSkyboxComponentIfExists(new_Scene->RootID);
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			ReadAnimationComponentIfExists(new_Scene->RootID);

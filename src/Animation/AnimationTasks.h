@@ -13,6 +13,7 @@ namespace Fracture
 		virtual void Execute(AnimationContext& context) = 0;
 	};
 
+
 	struct SampleTask : IAnimationTask
 	{
 		SampleTask();
@@ -22,9 +23,8 @@ namespace Fracture
 		float Time;
 		float dt;
 		float fps;
+		float duration;
 	};
-
-
 
 
 	struct BlendTask : IAnimationTask

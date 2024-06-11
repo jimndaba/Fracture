@@ -47,6 +47,7 @@ namespace Fracture
 		glm::mat4 LocalTransformation = glm::mat4(1.0f);
 		glm::mat4 GlobalTransformation = glm::mat4(1.0f);
 		glm::mat4 InverseBindTransform = glm::mat4(1.0f);	
+		glm::mat4 SceneRootTransform = glm::mat4(1.0f);	
 	};
 
 	struct StaticMesh : public IGraphicsResource

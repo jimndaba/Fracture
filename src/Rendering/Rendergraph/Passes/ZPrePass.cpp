@@ -71,14 +71,7 @@ void Fracture::ZPrePass::Execute()
 		Fracture::RenderCommands::SetUniform(Context, mShader.get(), "TextureSpace", (int)material->TextureSpace);
 		Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Tiling", material->TextureTiling);
 		Fracture::RenderCommands::SetUniform(Context, mShader.get(), "IsAffectedByWind", material->IsAffectedByWind);
-
-		if (material->IsAffectedByWind)
-		{
-			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windStrength", material->windStrength);
-			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windSpeed", material->windSpeed);
-			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windFrequency", material->windFrequency);
-			Fracture::RenderCommands::SetUniform(Context, mShader.get(), "windDirection", material->windDirection);
-		}
+		
 
 		if (batches.second.size())
 		{
@@ -93,6 +86,7 @@ void Fracture::ZPrePass::Execute()
 				if (drawcalls.size())
 				{
 					DrawElementsInstancedBaseVertex cmd;
+					cmd.mode = batch.second->OpaqueDrawCalls[0]->DrawCallPrimitive;
 					cmd.basevertex = drawcalls[0]->basevertex;
 					cmd.instancecount = batch.second->Transforms.size();
 					cmd.indices = drawcalls[0]->SizeOfindices;
@@ -128,13 +122,10 @@ void Fracture::ZPrePass::Execute()
 			if(AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawCall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
 				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawCall->EntityID];
-				if (!poses.empty())
+				if (!poses.empty() && AnimationSystem::Instance()->IsPlaying)
 				{
 					Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "IsAnimated", true);
-					for (int i = 0; i < poses.size(); i++)
-					{
-						Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "GlobalPose[" + std::to_string(i) + "]", poses[i]);
-					}
+					GraphicsDevice::Instance()->UpdateAnimationData(poses);
 				}
 				else
 				{
@@ -153,6 +144,7 @@ void Fracture::ZPrePass::Execute()
 		Fracture::RenderCommands::BindVertexArrayObject(Context,drawCall->MeshHandle);
 
 		DrawElementsInstancedBaseVertex cmd;
+		cmd.mode = drawCall->DrawCallPrimitive;
 		cmd.basevertex = drawCall->basevertex;
 		cmd.instancecount = 1;
 		cmd.indices = drawCall->SizeOfindices;

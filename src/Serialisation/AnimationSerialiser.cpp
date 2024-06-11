@@ -20,6 +20,7 @@ void Fracture::AnimationSerialiser::WriteAnimation(AnimationClip* clip)
 		for (const auto& track : clip->AnimationTracks)
 		{
 			BeginStruct("Track");
+			Property("BoneID", track.BoneID);
 			Property("Name", track.Name);
 			Property("NumPositionKeys", track.mNumPositionKeys);
 			Property("NumRotationKeys", track.mNumRotationKeys);
@@ -65,7 +66,6 @@ void Fracture::AnimationSerialiser::WriteAnimation(AnimationClip* clip)
 
 std::shared_ptr<Fracture::AnimationClip> Fracture::AnimationSerialiser::ReadAnimation()
 {
-
 	if (BeginStruct("Animation"))
 	{
 		auto clip = std::make_shared<AnimationClip>();
@@ -81,10 +81,11 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AnimationSerialiser::ReadAnim
 				if (BeginStruct("Track"))
 				{
 					AnimationTrack track{};
+					track.BoneID = INT("BoneID");
 					track.Name = STRING("Name");
-					track.mNumPositionKeys = int("NumPositionKeys");
-					track.mNumScaleKeys = int("NumScaleKeys");
-					track.mNumRotationKeys = int("NumRotationKeys"); 
+					track.mNumPositionKeys = INT("NumPositionKeys");
+					track.mNumScaleKeys = INT("NumScaleKeys");
+					track.mNumRotationKeys = INT("NumRotationKeys");
 
 					if (BeginCollection("Positions"))
 					{

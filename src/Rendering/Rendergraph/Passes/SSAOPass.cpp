@@ -119,6 +119,7 @@ void Fracture::SSAOPass::Setup()
 
 void Fracture::SSAOPass::Execute()
 {
+
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 	const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);
 
@@ -126,8 +127,7 @@ void Fracture::SSAOPass::Execute()
 		return;
 	{
 		Fracture::RenderCommands::SetRenderTarget(Context, mSSAOrt.get());
-
-		RenderCommands::SetCullMode(Context, CullMode::None);
+		RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
 		RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x, GraphicsDevice::RenderSettings.SSAO_Resolution.y, 0, 0);
 		RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x, GraphicsDevice::RenderSettings.SSAO_Resolution.y, 0, 0);
 		RenderCommands::ClearColor(Context, Colour::CornflourBlue);

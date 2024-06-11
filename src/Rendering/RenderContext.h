@@ -2,11 +2,10 @@
 #ifndef RENDERCONTEXT_H
 #define RENDERCONTEXT_H
 
-#include "Command.h"
-
-#include <stack>
-#include "Viewport.h";
+#include "Viewport.h"
 #include "Scissor.h"
+#include "Command.h"
+#include "AABB.h"
 
 namespace Fracture
 {
@@ -15,6 +14,7 @@ namespace Fracture
 	struct Buffer;
 	struct MeshComponent;
 	struct PrefabInstanceComponent;
+	struct TerrainComponent;
 
 	enum class DepthSortOrder
 	{
@@ -22,8 +22,20 @@ namespace Fracture
 		Back_To_Front
 	};
 
+	enum class DrawMode : uint32_t
+	{
+		Points = GL_POINTS,
+		Lines = GL_LINES,
+		LineLoops = GL_LINE_LOOP,
+		LineStrip = GL_LINE_STRIP,
+		Triangles = GL_TRIANGLES,
+		TriangleStrip = GL_TRIANGLE_STRIP,
+		TriangleFan = GL_TRIANGLE_FAN
+	};
+
 	struct MeshDrawCall
 	{
+		Fracture::DrawMode DrawCallPrimitive = DrawMode::Triangles;
 		UUID EntityID;
 		UUID MaterialID;
 		uint32_t MeshHandle;
@@ -34,6 +46,13 @@ namespace Fracture
 		bool DrawToStencil;
 		glm::vec4 IDColor;
 		glm::mat4 model;
+		AABB aabb;
+	};
+
+	struct TerrainDrawCall : MeshDrawCall
+	{
+		int NUM_STRIPS;
+		int NUM_VERTS_PER_STRIP;
 	};
 
 	struct RenderBatch
@@ -108,6 +127,7 @@ namespace Fracture
 
 		void AddToBatch(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
 		void AddDrawCall(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
+		void AddDrawCall(TerrainComponent* mesh,glm::mat4 transform,UUID Entity);
 
 		void DrawOutlines(UUID Entity);
 		void DrawPrefabOutlines(UUID Entity);

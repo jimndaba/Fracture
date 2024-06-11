@@ -37,6 +37,7 @@ void Fracture::SSRPass::Setup()
 
 void Fracture::SSRPass::Execute()
 {
+
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalColour);
 	const auto& global_ssr = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSR);
 

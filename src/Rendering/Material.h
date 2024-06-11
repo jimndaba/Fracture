@@ -29,6 +29,8 @@ namespace Fracture
 		GlobalDepth,
 		GlobalPosition,
 		GlobalNormal,
+		GlobalSpots,
+		GlobalPoint,
 		TotalSlots
 	};
 
@@ -123,12 +125,6 @@ namespace Fracture
 		bool IsSkinned = false;
 		bool IsAffectedByWind = false;
 		bool IsDirty = false;
-
-		float windStrength = 4.1;
-		float windSpeed = 10.0;
-		float windFrequency = 0.4;
-		glm::vec3 windDirection = glm::vec3(1.0, 0.0, 0.0); // Wind blowing in the x-direction
-
 
 		Fracture::UUID ID;
 		Fracture::UUID Shader;

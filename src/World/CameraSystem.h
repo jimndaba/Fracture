@@ -6,6 +6,8 @@
 namespace Fracture
 {
 	struct CameraComponent;
+	struct AABB;
+	struct Frustum;
 
 	struct CameraSystem
 	{
@@ -17,6 +19,13 @@ namespace Fracture
 		void UpdateCameraVectors(Fracture::CameraComponent& component);
 
 		void InputMouse(Fracture::CameraComponent& component,float xpos, float ypos, float dt, bool constrainPitch);
+		glm::vec3 GetVertexP(const glm::vec3& normal, const glm::vec3& min, const  glm::vec3& max);
+		glm::vec3 GetVertexN(const glm::vec3& normal, const glm::vec3& min, const glm::vec3& max);
+		bool IsPointInFrustum(Fracture::CameraComponent& component, const glm::vec3& point);
+		bool IsSphereInFrustum(Fracture::CameraComponent& component, const glm::vec3& center, const float	radius);
+		bool IsBoxInFrustum(Fracture::CameraComponent& component, const AABB& aabb);
+		bool IsBoxInFrustum(Fracture::Frustum& frustum, const glm::vec3& min, const glm::vec3& max);
+		bool IsBoxInFrustum(Fracture::CameraComponent& component, const glm::vec3& min, const glm::vec3& max);
 
 	private:
 		float lastX = 0;

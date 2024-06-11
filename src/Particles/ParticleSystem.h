@@ -14,6 +14,8 @@ namespace Fracture
 	{
 		glm::vec4 Colour = glm::vec4(1.0, 1.0, 1.0, 1.0);
 		glm::vec4 PositionScale = glm::vec4(0.0, 0.0, 0.0, 1.0);
+		glm::vec4 Rotation = glm::vec4(0.0, 0.0, 0.0, 1.0);
+
 	};
 
 	struct ParticleRenderBatch
@@ -41,7 +43,6 @@ namespace Fracture
 		glm::vec2 UV;
 	};
 	
-
 	struct ParticleBillboard
 	{
 		ParticleBillboard()

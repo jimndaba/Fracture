@@ -47,7 +47,7 @@ namespace Fracture
 		std::unique_ptr<ScriptManager> mScriptManager;
 		std::unique_ptr<AudioManager> mAudioManager;		
 		std::unique_ptr<AppWindow> mWindow;
-
+		float Framedelta = 0.0f;
 	};
 
 

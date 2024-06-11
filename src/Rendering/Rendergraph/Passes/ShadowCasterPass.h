@@ -13,7 +13,8 @@ namespace Fracture
 	{
 		int CascadeCont;
 		float Bias = 0.01f;
-		glm::vec3 pad;
+		int SpotResolution = 512;
+		int PointResolution = 256;
 	};
 
 
@@ -32,8 +33,11 @@ namespace Fracture
 		std::vector<float> shadowCascadeLevels;
 
 		std::shared_ptr<Buffer> mMatrixBuffer;
-		std::shared_ptr<Buffer> mSplaneDistances;		
+		std::shared_ptr<Buffer> mSplaneDistances;	
+
 		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<Shader> mSpotShader;
+		std::shared_ptr<Shader> mPointShader;
 		std::shared_ptr<Shader> mShaderSkinned;
 		//Create properties to adjust cascade levels
 

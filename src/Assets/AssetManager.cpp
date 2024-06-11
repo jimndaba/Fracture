@@ -62,6 +62,14 @@ std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::AnimationClip>> Fra
 std::map<Fracture::UUID, Fracture::AnimationGraphRegistry> Fracture::AssetManager::mAnimationGraphRegister;
 std::map<std::string, Fracture::UUID> Fracture::AssetManager::mAnimationGraphIDLookUp;
 
+std::map<Fracture::UUID, Fracture::TerrainRegistry> Fracture::AssetManager::mTerrainRegister;
+std::map<std::string, Fracture::UUID> Fracture::AssetManager::mTerrainIDLookUp;
+std::unordered_map<Fracture::UUID, std::shared_ptr<Fracture::Terrain>> Fracture::AssetManager::mTerrains;
+
+std::vector<Fracture::UUID> Fracture::AssetManager::mLoadedTerrains;
+std::unordered_map<Fracture::UUID, std::future<std::shared_ptr<Fracture::Terrain>>> Fracture::AssetManager::mTerrainFutures;
+std::queue<Fracture::TerrainRegistry> Fracture::AssetManager::mTerrainToLoad;
+
 
 std::unique_ptr<Fracture::AssetManager> Fracture::AssetManager::mInstance;
 
@@ -354,12 +362,27 @@ void Fracture::AssetManager::OnLoad()
 			bool IsSkinned = mesh->mBones.size();
 
 			VertexArrayCreationInfo info;
-			info.Layout =
+			if (IsSkinned)
 			{
-				{ ShaderDataType::Float3,"aPos",0,true },
-				{ ShaderDataType::Float3,"aNormal" ,0,true},
-				{ ShaderDataType::Float2,"aUV" ,0,true}
-			};
+				info.Layout =
+				{
+					{ ShaderDataType::Float3,"aPos",0,true },
+					{ ShaderDataType::Float3,"aNormal" ,0,true},
+					{ ShaderDataType::Float2,"aUV" ,0,true},
+					{ ShaderDataType::Int4,"aBoneIDs" ,0,true},
+					{ ShaderDataType::Float4,"aBoneWeights" ,0,true}
+				};
+			}
+			else
+			{
+				info.Layout =
+				{
+					{ ShaderDataType::Float3,"aPos",0,true },
+					{ ShaderDataType::Float3,"aNormal" ,0,true},
+					{ ShaderDataType::Float2,"aUV" ,0,true}
+				};
+			}
+			
 
 			GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
 
@@ -531,10 +554,6 @@ void Fracture::AssetManager::OnLoad()
 			{
 				mTextures[mf.first] = texture;
 				GraphicsDevice::Instance()->CreateTexture(mTextures[mf.first], mTextures[mf.first]->Description);
-				
-				//if(texture->Description.data.size())
-					//delete(texture->Description.data);
-				
 				mLoadedTextures.push_back(mf.first);
 				mTextureFutures.erase(mf.first);
 			}
@@ -566,7 +585,7 @@ void Fracture::AssetManager::OnLoad()
 
 	while (!mAnimationsToLoad.empty())
 	{
-		if (IsMaterialLoaded(mAnimationsToLoad.front().ID))
+		if (IsAnimationLoaded(mAnimationsToLoad.front().ID))
 		{
 			mAnimationsToLoad.pop();
 			continue;
@@ -819,8 +838,15 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::GetAnimationByI
 	if (!id)
 		return nullptr;
 	{
-		if (!IsAnimationLoaded(mAnimationRegister[id].ID))
+		auto itr = mAnimationRegister.find(id);
+		if (itr == mAnimationRegister.end())
 		{
+			FRACTURE_ERROR("Animation not registered: {}", id);
+			return nullptr;
+		}
+
+		if (!IsAnimationLoaded(mAnimationRegister[id].ID))
+		{		
 			const auto& path = mAnimationRegister[id].Path;
 			mAnimations[id] = AnimationClipLoader::LoadAnimationClip(path);
 			mLoadedAnimations.push_back(id);
@@ -831,6 +857,7 @@ std::shared_ptr<Fracture::AnimationClip> Fracture::AssetManager::GetAnimationByI
 		{
 			return mAnimations[id];
 		}
+		
 	}
 	FRACTURE_ERROR("Could not find Animation: {}", id);
 	return nullptr;
@@ -873,6 +900,69 @@ std::shared_ptr<Fracture::AnimationGraph> Fracture::AssetManager::GetAnimationGr
 			return graph;
 	}
 	FRACTURE_ERROR("Could not read Animationgrpah: {}", id);
+	return nullptr;
+}
+
+void Fracture::AssetManager::RegisterTerrain(const TerrainRegistry& reg)
+{
+	mTerrainRegister[reg.ID] = reg;
+	mTerrainIDLookUp[reg.Name] = reg.ID;
+	IsRegisterDirty = true;
+	FRACTURE_TRACE("Registering Terrain: {} ", reg.Path);
+}
+
+std::shared_ptr<Fracture::Terrain> Fracture::AssetManager::GetTerrain(const std::string& Name)
+{
+	{
+		if (!IsTerrainLoaded(Name))
+		{
+			auto it = mTerrainRegister.find(mTerrainIDLookUp[Name]);
+			if (it != mTerrainRegister.end())
+			{ }
+				//mTerrains[mTerrainIDLookUp[Name]] = AnimationClipLoader::LoadAnimationClip(mTerrainRegister[mTerrainIDLookUp[Name]].Path);
+		}
+
+
+		auto it = mTerrainIDLookUp.find(Name);
+		if (it != mTerrainIDLookUp.end())
+		{
+			auto check_Terrain = mTerrains.find(it->second);
+			if (check_Terrain != mTerrains.end())
+			{
+				return mTerrains[it->second];
+			}
+		};
+	}
+	FRACTURE_ERROR("Could not find Terrain: {}", Name);
+	return nullptr;
+}
+
+std::shared_ptr<Fracture::Terrain> Fracture::AssetManager::GetTerrainByID(const Fracture::UUID& id)
+{
+	if (!IsTerrainLoaded(id))
+	{
+		auto it = mTerrainRegister.find(id);
+		if (it != mTerrainRegister.end())
+		{
+			if (mTerrainRegister[id].Path.empty())
+			{
+				return nullptr;
+			}
+			
+			//????? TO DO TERRAIN LOADER.
+
+			FRACTURE_TRACE("Loaded Terrain: {}", mTerrainRegister[id].Path);
+		}
+		else
+		{
+			FRACTURE_ERROR("Terrain: {} , Is not Registered", id);
+		}
+	}
+	else if (IsTerrainLoaded(id))
+	{
+		return mTerrains[id];
+	}
+	FRACTURE_ERROR("Could not find Terrain: {}", id);
 	return nullptr;
 }
 
@@ -1024,6 +1114,16 @@ bool Fracture::AssetManager::IsAnimationLoaded(const std::string& Name)
 	return std::find(mLoadedAnimations.begin(), mLoadedAnimations.end(), mAnimationIDLookUp[Name]) != mLoadedAnimations.end();
 }
 
+bool Fracture::AssetManager::IsTerrainLoaded(const UUID& Name)
+{
+	return std::find(mLoadedTerrains.begin(), mLoadedTerrains.end(), Name) != mLoadedTerrains.end();
+}
+
+bool Fracture::AssetManager::IsTerrainLoaded(const std::string& Name)
+{
+	return std::find(mLoadedTerrains.begin(), mLoadedTerrains.end(), mTerrainIDLookUp[Name]) != mLoadedTerrains.end();
+}
+
 Fracture::UUID Fracture::AssetManager::GetMeshID(const std::string& Name)
 {
 	auto it = mMeshIDLookUp.find(Name);
@@ -1087,6 +1187,16 @@ bool Fracture::AssetManager::HasMaterialPath(const std::string& path)
 	return false;
 }
 
+bool Fracture::AssetManager::HasTerrainPath(const std::string& path)
+{
+	for (const auto& reg : mTerrainRegister)
+	{
+		if (reg.second.Path == path)
+			return true;
+	}
+	return false;
+}
+
 void Fracture::AssetManager::RegisterShader(const ShaderRegistry& reg)
 {
 	mShaderRegister[reg.ID] = reg;
@@ -1104,7 +1214,6 @@ int Fracture::AssetManager::CountUseCountMesh(UUID mesh)
 
 	return 0;
 }
-
 
 Fracture::AssetManager* Fracture::AssetManager::Instance()
 {

@@ -42,7 +42,7 @@ void Fracture::OutlinePass::Execute()
 
 	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
 	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
-	RenderCommands::SetCullMode(Context, CullMode::Back);
+	RenderCommands::SetCullMode(Context, CullMode::None);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Enable(Context, Fracture::GLCapability::StencilTest);
@@ -155,6 +155,7 @@ void Fracture::OutlinePass::Execute()
 		Fracture::RenderCommands::BindVertexArrayObject(Context, drawcall->MeshHandle);
 
 		DrawElementsInstancedBaseVertex cmd;
+		cmd.mode = drawcall->DrawCallPrimitive;
 		cmd.basevertex = drawcall->basevertex;
 		cmd.instancecount = 1;
 		cmd.indices = drawcall->SizeOfindices;

@@ -11,6 +11,8 @@
 #include "RenderCommands.h"
 #include "PostProcessingParams.h"
 #include "World/WindSystem.h"
+
+#include "RenderContext.h"
 #include <map>
 
 namespace Fracture
@@ -22,6 +24,8 @@ namespace Fracture
 		static std::string GlobalSSR;
 		static std::string GlobalDebug;
 		static std::string GlobalDirectShadows;
+		static std::string GlobalSpotShadows;
+		static std::string GlobalPointShadows;
 		static std::string GlobalFinalOut;
 		static std::string GlobalOutline;
 		static std::string GlobalIrradiance;
@@ -46,7 +50,8 @@ namespace Fracture
 		LightIndexSSBO,
 		LightGridSSBO,
 		GlobalIndexCountSSBO,
-		Debuglines
+		Debuglines,
+		AnimationData
 	};
 
 	enum class GlobalColorAttachments
@@ -122,12 +127,14 @@ namespace Fracture
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGWindData;
 		std::shared_ptr<Buffer> mGLightBuffer;
+		std::shared_ptr<Buffer> mAnimationData;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
 		std::shared_ptr<PostProcessPipeline> mPostProcessPipeline;
 		std::shared_ptr<Texture> mLightProbeArray;
 		std::shared_ptr<Texture> mLightProbeIrradianceArray;
 
 		const int MAX_LIGHTS = 1024;
+		const int MAX_BONES_PER_MESH = 120;
 		std::vector<LightData> mLightData;
 		uint32_t cubeVAO;
 		uint32_t QuadVAO;
@@ -143,6 +150,7 @@ namespace Fracture
 		void UpdateGlobalFrameData(GlobalFrameData data);
 		void UpdateGlobalRenderSettings();
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
+		void UpdateAnimationData(const std::vector<glm::mat4>& data);
 		void UpdateGlobalWindData();
 		void Shutdown();
 

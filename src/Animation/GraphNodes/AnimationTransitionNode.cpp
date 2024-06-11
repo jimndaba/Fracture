@@ -30,7 +30,7 @@ void Fracture::AnimationTransitionNode::Process(AnimationContext& context)
 		{	
 			std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
 			task->Time = Time;
-			task->ClipID = current_state->CurrentAnimation;
+			task->ClipID = current_state->Result.AnimationClip;
 			task->NodeID = CurrentState;
 			context._graph->PushTask(task);
 		}
@@ -41,14 +41,14 @@ void Fracture::AnimationTransitionNode::Process(AnimationContext& context)
 			{
 				std::shared_ptr<SampleTask> task_pose1 = std::make_shared<SampleTask>();
 				task_pose1->Time = Time;
-				task_pose1->ClipID = current_state->CurrentAnimation;
+				task_pose1->ClipID = current_state->Result.AnimationClip;
 				task_pose1->NodeID = CurrentState;
 				context._graph->PushTask(task_pose1);
 			}
 			{
 				std::shared_ptr<SampleTask> task_pose2 = std::make_shared<SampleTask>();
 				task_pose2->Time = Time;
-				task_pose2->ClipID = current_state->CurrentAnimation;
+				task_pose2->ClipID = current_state->Result.AnimationClip;
 				task_pose2->NodeID = TargetState;
 				context._graph->PushTask(task_pose2);
 			}
@@ -65,7 +65,7 @@ void Fracture::AnimationTransitionNode::Process(AnimationContext& context)
 		{
 			std::shared_ptr<SampleTask> task = std::make_shared<SampleTask>();
 			task->Time = Time;
-			task->ClipID = target_state->CurrentAnimation;
+			task->ClipID = target_state->Result.AnimationClip;
 			task->NodeID = TargetState;
 			context._graph->PushTask(task);
 		}

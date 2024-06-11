@@ -10,7 +10,9 @@ glm::vec2 Fracture::Input::m_scroll;
 std::map<std::string, Fracture::KeyCode> Fracture::Input::mKeyMapping;
 std::unordered_map<std::string, Fracture::InputBinding> Fracture::Input::InputBindings;
 Fracture::AppWindow* Fracture::Input::mWindow;
-
+glm::vec2 Fracture::Input::current_mousePos;
+glm::vec2 Fracture::Input::last_mousePos;
+glm::vec2 Fracture::Input::mouse_delta;
 
 
 Fracture::Input::Input(AppWindow* window)
@@ -24,7 +26,7 @@ Fracture::Input::Input(AppWindow* window)
 	
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::Space;
 		k->IsRepeating = 0;
 		k->Multiplier = 1;
@@ -32,7 +34,7 @@ Fracture::Input::Input(AppWindow* window)
 	}
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::B;
 		k->IsRepeating = 0;
 		k->Multiplier = 1;
@@ -40,35 +42,35 @@ Fracture::Input::Input(AppWindow* window)
 	}
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::A;
 		k->IsRepeating = 0;
 		k->Multiplier = -1;
-		BindInput("vertical", k, InputBinding::Type::Axis);
+		BindInput("vertical", k, BindingType::Axis);
 	}
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::D;
 		k->IsRepeating = 0;
 		k->Multiplier = 1;
-		BindInput("vertical", k,InputBinding::Type::Axis);
+		BindInput("vertical", k, BindingType::Axis);
 	}
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::Left;
 		k->IsRepeating = 0;
 		k->Multiplier = -1;
-		BindInput("vertical", k, InputBinding::Type::Axis);
+		BindInput("vertical", k, BindingType::Axis);
 	}
 	{
 		std::shared_ptr<InputSource> k = std::make_shared<InputSource>();
-		k->Device = InputSource::SourceType::Keyboard;
+		k->Device = SourceType::Keyboard;
 		k->key = (uint8_t)KeyCode::Right;
 		k->IsRepeating = 0;
 		k->Multiplier = 1;
-		BindInput("vertical", k, InputBinding::Type::Axis);
+		BindInput("vertical", k, BindingType::Axis);
 	}
 	Eventbus::Subscribe(this, &Fracture::Input::OnKeyboardEvent);
 
@@ -82,13 +84,7 @@ void Fracture::Input::SetCurrentContext(AppWindow* window)
 
 void Fracture::Input::Update()
 {
-	/*
-	for (const auto& gamepad : mGamePads)
-	{
-
-
-	}
-	*/
+	
 }
 
 bool Fracture::Input::IsKeyDown(KeyCode key)
@@ -170,7 +166,7 @@ void Fracture::Input::OnKeyboardEvent(const std::shared_ptr<KeyboardEvent>& evnt
 	{
 		for (auto source : binding.second.Sources)
 		{
-			if (source->Device == Fracture::InputSource::SourceType::Keyboard && source->key == evnt->key)
+			if (source->Device == Fracture::SourceType::Keyboard && source->key == evnt->key)
 			{
 				if(source->InputState == InputSource::State::Released)
 				{
@@ -194,6 +190,23 @@ void Fracture::Input::OnKeyboardEvent(const std::shared_ptr<KeyboardEvent>& evnt
 				}			
 			}
 			
+		}
+	}
+
+}
+
+void Fracture::Input::OnMouseMoveEvent(const std::shared_ptr<MouseMoveEvent>& evnt)
+{
+	for (auto binding : InputBindings)
+	{
+		for (auto source : binding.second.Sources)
+		{
+			if (source->Device == Fracture::SourceType::Mouse)
+			{
+				source->VEC2.x = evnt->XPos;
+				source->VEC2.y = evnt->YPos;
+			}
+
 		}
 	}
 
@@ -231,6 +244,11 @@ glm::vec2 Fracture::Input::GetMouseScroll()
 	return m_scroll;
 }
 
+glm::vec2 Fracture::Input::GetMouseDelta()
+{
+	return glm::normalize(mouse_delta);
+}
+
 void Fracture::Input::RegisterKeyMap(const std::string& Name, KeyCode key)
 {
 	mKeyMapping[Name] = key;
@@ -245,7 +263,7 @@ bool Fracture::Input::ButtonPressed(const std::string& Name)
 	if (InputBindings.find(Name) == InputBindings.end())
 		return false;
 	
-	if (InputBindings[Name].BindingType == Fracture::InputBinding::Type::Button)
+	if (InputBindings[Name].BindingType == BindingType::Button)
 	{
 		for (auto source : InputBindings[Name].Sources)
 		{			
@@ -253,12 +271,12 @@ bool Fracture::Input::ButtonPressed(const std::string& Name)
 			{
 				switch (InputBindings[Name].BindingType)
 				{
-					case InputBinding::Type::Button:
+					case BindingType::Button:
 					{
 						source->FLOAT = 1.0f;
 						break;
 					}
-					case InputBinding::Type::Axis:
+					case BindingType::Axis:
 					{
 						source->FLOAT = 1.0f * source->Multiplier;
 						break;
@@ -277,7 +295,7 @@ bool Fracture::Input::ButtonReleased(const std::string& Name)
 	if (InputBindings.find(Name) == InputBindings.end())
 		return false;
 
-	if (InputBindings[Name].BindingType == Fracture::InputBinding::Type::Button)
+	if (InputBindings[Name].BindingType == BindingType::Button)
 	{
 		for (auto source : InputBindings[Name].Sources)
 		{
@@ -285,12 +303,12 @@ bool Fracture::Input::ButtonReleased(const std::string& Name)
 			{
 				switch (InputBindings[Name].BindingType)
 				{
-				case InputBinding::Type::Button:
+				case BindingType::Button:
 				{
 					source->FLOAT = 0.0f;
 					break;
 				}
-				case InputBinding::Type::Axis:
+				case BindingType::Axis:
 				{
 					source->FLOAT = 0.0f;
 					break;
@@ -309,11 +327,16 @@ float Fracture::Input::GetAxis(const std::string& Name)
 	if (InputBindings.find(Name) == InputBindings.end())
 		return 0.0f;
 
-	if (InputBindings[Name].BindingType == Fracture::InputBinding::Type::Axis)
+	if (InputBindings[Name].BindingType == BindingType::Axis)
 	{
 		for (auto source : InputBindings[Name].Sources)
 		{			
-			if (source->Device == InputSource::SourceType::Keyboard && source->InputState == InputSource::State::Pressed)
+			if (source->Device == SourceType::Keyboard && source->InputState == InputSource::State::Pressed)
+			{
+				return source->FLOAT * source->Multiplier;
+			}
+
+			if (source->Device == SourceType::Mouse)
 			{
 				return source->FLOAT * source->Multiplier;
 			}
@@ -322,12 +345,56 @@ float Fracture::Input::GetAxis(const std::string& Name)
 	return 0.0f;
 }
 
+glm::vec2 Fracture::Input::GetAxis2D(const std::string& Axis1, const std::string& Axis2)
+{
+	glm::vec2 value = glm::vec2(0); 
+
+	if (InputBindings.find(Axis1) == InputBindings.end())
+	{
+		value.x = 0.0f;
+	}
+	if (InputBindings.find(Axis2) == InputBindings.end())
+	{
+		value.y = 0.0f;
+	}
+
+	if (InputBindings[Axis1].BindingType == BindingType::Axis)
+	{
+		for (auto source : InputBindings[Axis1].Sources)
+		{
+			if (source->Device == SourceType::Keyboard && source->InputState == InputSource::State::Pressed)
+			{
+				value.x = source->FLOAT * source->Multiplier;		
+			}
+
+			if (source->Device == SourceType::Mouse)
+			{
+				value.x = source->VEC2.x * source->Multiplier;
+			}
+		};
+		for (auto source : InputBindings[Axis2].Sources)
+		{
+			if (source->Device == SourceType::Keyboard && source->InputState == InputSource::State::Pressed)
+			{				
+				value.y = source->FLOAT * source->Multiplier;
+			}
+
+			if (source->Device == SourceType::Mouse)
+			{
+				value.y = source->VEC2.y * source->Multiplier;
+			}
+		};
+	}
+
+	return value;
+}
+
 void Fracture::Input::BindInput(const std::string& action)
 {
 	InputBindings[action] = InputBinding();
 }
 
-void Fracture::Input::BindInput(const std::string& action,const std::shared_ptr<InputSource>& source, InputBinding::Type bindingType)
+void Fracture::Input::BindInput(const std::string& action,const std::shared_ptr<InputSource>& source, BindingType bindingType)
 {
 	InputBindings[action].BindingType = bindingType;
 	InputBindings[action].Sources.push_back(source);
@@ -346,6 +413,9 @@ void Fracture::Input::key_callback(GLFWwindow* window, int key, int scancode, in
 
 void Fracture::Input::cursor_position_callback(GLFWwindow* window,double xpos, double ypos)
 {
+	last_mousePos = current_mousePos;
+	current_mousePos = glm::vec2(xpos, ypos);
+	mouse_delta = last_mousePos - current_mousePos;
 	Eventbus::Publish<MouseMoveEvent>(xpos,ypos);
 }
 

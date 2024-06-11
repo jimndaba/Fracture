@@ -498,6 +498,15 @@
     <ClInclude Include="src\World\WindSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\Rendergraph\Passes\DoFPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\World\TerrainSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -936,6 +945,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\World\WindSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Rendergraph\Passes\DoFPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World\TerrainSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

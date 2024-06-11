@@ -70,6 +70,7 @@ Fracture::FloatGreaterThanNode::FloatGreaterThanNode()
 void Fracture::FloatGreaterThanNode::Process(AnimationContext& context)
 {
 	const auto& lh = context._graph->GetNode(InputPins[0].NodeID);
+	
 	if (InputPins[1].IsValueSet)
 	{
 		RHfloat = context._graph->GetNode(InputPins[1].NodeID)->Result.FLOAT;

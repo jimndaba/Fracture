@@ -18,6 +18,8 @@ std::string Fracture::GlobalRenderTargets::GlobalSSAO = "Global_SSAO";
 std::string Fracture::GlobalRenderTargets::GlobalSSR = "Global_SSR";
 std::string Fracture::GlobalRenderTargets::GlobalDebug = "Global_Debug";
 std::string Fracture::GlobalRenderTargets::GlobalDirectShadows = "Global_Shadows";
+std::string Fracture::GlobalRenderTargets::GlobalSpotShadows = "Global_SpotShadows";
+std::string Fracture::GlobalRenderTargets::GlobalPointShadows = "Global_PointShadows";
 std::string Fracture::GlobalRenderTargets::GlobalFinalOut = "FinalOut";
 std::string Fracture::GlobalRenderTargets::GlobalOutline = "Global_Outline";
 std::string Fracture::GlobalRenderTargets::GlobalIrradiance = "Global_Irradiance";
@@ -117,6 +119,17 @@ void Fracture::GraphicsDevice::Startup()
     }
     {
         BufferDescription desc;
+        desc.Name = "Global Animation Data Buffer";
+        desc.bufferType = BufferType::ShaderStorageBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(glm::mat4) * MAX_BONES_PER_MESH;
+        desc.usage = BufferUsage::Stream;
+        mAnimationData = std::make_shared<Buffer>();
+        CreateBuffer(mAnimationData.get(), desc);
+        SetBufferIndexRange(mAnimationData.get(), (int)ShaderStorageBufferIndex::AnimationData, 0);
+    }
+    {
+        BufferDescription desc;
         desc.Name = "Global Render Settings";
         desc.bufferType = BufferType::UniformBuffer;
         desc.data = NULL;
@@ -136,7 +149,7 @@ void Fracture::GraphicsDevice::Startup()
         mGWindData = std::make_shared<Buffer>();
         CreateBuffer(mGWindData.get(), desc);
         SetBufferIndexRange(mGWindData.get(), (int)ShaderUniformIndex::GlobalWindData, 0);
-    }
+    } 
 
     VertexArrayCreationInfo info;
     GraphicsDevice::Instance()->CreateVertexArray(QuadVAO, info);
@@ -167,11 +180,16 @@ void Fracture::GraphicsDevice::UpdateGlobalLightData(const std::vector<LightData
     GraphicsDevice::Instance()->UpdateBufferData(mGLightBuffer.get(), 0, sizeof(LightData) * data.size(), data.data());
 }
 
+void Fracture::GraphicsDevice::UpdateAnimationData(const std::vector<glm::mat4>& data)
+{
+    GraphicsDevice::Instance()->ClearBufferData(mAnimationData.get());
+    GraphicsDevice::Instance()->UpdateBufferData(mAnimationData.get(), 0, sizeof(glm::mat4) * data.size(), data.data());
+}
+
 void Fracture::GraphicsDevice::UpdateGlobalWindData()
 {
     GraphicsDevice::Instance()->UpdateBufferData(mGWindData.get(), 0, sizeof(WindSystemData), &WindSettings);
 }
-
 
 void Fracture::GraphicsDevice::Shutdown()
 {

@@ -49,7 +49,9 @@ void Fracture::Blend1DNode::Process(AnimationContext& context)
 
 	if (InputPins[2].IsValueSet)
 	{
-		BlendFactor = context._graph->GetNode(InputPins[2].NodeID)->Result.FLOAT;
+		auto node = context._graph->GetNode(InputPins[2].NodeID);
+		if(node)
+			BlendFactor = node->Result.FLOAT;
 	}
 	
 	task->factor = BlendFactor;

@@ -68,6 +68,7 @@ namespace Fracture
 		glm::vec3 Position = glm::vec3(0);
 		glm::vec3 Scale = glm::vec3(0);
 		glm::quat Rotation = glm::quat();
+		float frametime = 0.0f;
 	};
 
 	struct AnimationContext
@@ -75,6 +76,7 @@ namespace Fracture
 		Fracture::UUID EntityID;
 		Fracture::UUID GraphID;
 		Fracture::UUID MeshID; //Currenty Bones are kept in mesh, should extract on load and create skeleton from it?
+		bool IsPlaying = false;
 		float Time;
 		AnimationGraph* _graph;
 		AnimationSystem* _system;
@@ -130,7 +132,7 @@ namespace Fracture
 	{
 		IPoseNode();
 		void Process(AnimationContext& context) {};	
-		Fracture::UUID CurrentAnimation;
+		//Fracture::UUID CurrentAnimation;
 		bool HasAnimation = false;
 		bool Looping = false;
 		bool Enabled = false;
