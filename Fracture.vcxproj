@@ -198,6 +198,7 @@
     <ClInclude Include="src\Rendering\Scissor.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Terrain.h" />
+    <ClInclude Include="src\Scripting\AnimationLUABindings.h" />
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h" />

@@ -10,6 +10,7 @@
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
+uint16_t Fracture::GraphicsDevice::RENDERBATCH_COUNT;
 Fracture::GlobalPostProcessParams Fracture::GraphicsDevice::RenderSettings;
 Fracture::WindSystemData Fracture::GraphicsDevice::WindSettings;
 
@@ -86,6 +87,10 @@ void Fracture::GraphicsDevice::Startup()
         FRACTURE_INFO("Renderer: {}", (const char*)glGetString(GL_RENDERER));
         FRACTURE_INFO("Version: {}", (const char*)glGetString(GL_VERSION));
 
+        int total_units;
+        glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &total_units);
+        FRACTURE_INFO("Total Max Sampler Units: {}", total_units);
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glEnable(GL_CULL_FACE);
@@ -141,6 +146,17 @@ void Fracture::GraphicsDevice::Startup()
     }
     {
         BufferDescription desc;
+        desc.Name = "Global GPU materials";
+        desc.bufferType = BufferType::UniformBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(GPUMaterial) * 120;
+        desc.usage = BufferUsage::Stream;
+        mGPUMaterialBuffer = std::make_shared<Buffer>();
+        CreateBuffer(mGPUMaterialBuffer.get(), desc);
+        SetBufferIndexRange(mGPUMaterialBuffer.get(), (int)ShaderUniformIndex::GlobalGPUMaterials, 0);
+    }
+    {
+        BufferDescription desc;
         desc.Name = "Global Wind Data Buffer";
         desc.bufferType = BufferType::UniformBuffer;
         desc.data = NULL;
@@ -184,6 +200,12 @@ void Fracture::GraphicsDevice::UpdateAnimationData(const std::vector<glm::mat4>&
 {
     GraphicsDevice::Instance()->ClearBufferData(mAnimationData.get());
     GraphicsDevice::Instance()->UpdateBufferData(mAnimationData.get(), 0, sizeof(glm::mat4) * data.size(), data.data());
+}
+
+void Fracture::GraphicsDevice::UpdateMaterialData(const std::vector<GPUMaterial>& data)
+{
+    GraphicsDevice::Instance()->ClearBufferData(mGPUMaterialBuffer.get());
+    GraphicsDevice::Instance()->UpdateBufferData(mGPUMaterialBuffer.get(), 0, sizeof(GPUMaterial) * data.size(), data.data());
 }
 
 void Fracture::GraphicsDevice::UpdateGlobalWindData()
@@ -983,6 +1005,15 @@ std::shared_ptr<Fracture::Shader> Fracture::GraphicsDevice::CreateShader(const S
         }
         glLinkProgram(shader->Handle); glCheckError();;
 
+        int m_success;
+        glGetProgramiv(shader->Handle, GL_LINK_STATUS, &m_success);
+
+        if (!m_success)
+        {
+            std::cerr << "WARNING: COULD NOT LINK PROGRAM: " << shader->Handle << std::endl;
+            //throw std::exception();
+        }
+
         return std::move(shader);
     }
 
@@ -993,8 +1024,7 @@ void Fracture::GraphicsDevice::AttachShaderToProgram(const unsigned int& shader,
 {
     if (program && shader)
     {
-        glAttachShader(program, shader);
-        glCheckError();
+        glAttachShader(program, shader);   glCheckError();     
     }
     else
     {

@@ -538,6 +538,11 @@ void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<CameraComponen
     AddComponentByInstance<CameraComponent>(new_entity, component);
 }
 
+void Fracture::SceneManager::AddComponentInstance(std::shared_ptr<AnimationComponent>& component, UUID new_entity)
+{
+    AddComponentByInstance<AnimationComponent>(new_entity, component);
+}
+
 void Fracture::SceneManager::OnDestroyEntity(const std::shared_ptr<Fracture::DestroyEntityEvent>& evnt)
 {
 
@@ -562,6 +567,7 @@ void Fracture::SceneManager::OnDestroyEntity(const std::shared_ptr<Fracture::Des
     RemoveComponentIfExists<Fracture::PrefabInstanceComponent>(evnt->ID);
     RemoveComponentIfExists<Fracture::LightProbeComponent>(evnt->ID);
     RemoveComponentIfExists<Fracture::CameraComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::AnimationComponent>(evnt->ID);
 
     if (Fracture::SceneManager::IsPrefabScene(evnt->ID))
     {

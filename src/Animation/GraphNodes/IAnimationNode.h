@@ -54,6 +54,8 @@ namespace Fracture
 		Fracture::UUID ID;
 		Fracture::UUID FromPinID;
 		Fracture::UUID ToPinID;
+		int FromPinNo = -1;
+		int ToPinNo = -1;
 
 		Fracture::UUID NodeFrom;
 		Fracture::UUID NodeTo;

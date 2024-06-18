@@ -13,6 +13,8 @@ Fracture::AppWindow* Fracture::Input::mWindow;
 glm::vec2 Fracture::Input::current_mousePos;
 glm::vec2 Fracture::Input::last_mousePos;
 glm::vec2 Fracture::Input::mouse_delta;
+bool Fracture::Input::firstMouse = true;
+float  Fracture::Input::last_mouse_X, Fracture::Input::last_mouse_Y;
 
 
 Fracture::Input::Input(AppWindow* window)
@@ -84,7 +86,7 @@ void Fracture::Input::SetCurrentContext(AppWindow* window)
 
 void Fracture::Input::Update()
 {
-	
+	mouse_delta = glm::vec2(0,0);
 }
 
 bool Fracture::Input::IsKeyDown(KeyCode key)
@@ -413,9 +415,19 @@ void Fracture::Input::key_callback(GLFWwindow* window, int key, int scancode, in
 
 void Fracture::Input::cursor_position_callback(GLFWwindow* window,double xpos, double ypos)
 {
-	last_mousePos = current_mousePos;
+	if (firstMouse) {
+		last_mouse_X = xpos;
+		last_mouse_Y = ypos;
+		firstMouse = false;
+	}
+
+	mouse_delta.x = xpos - last_mouse_X;
+	mouse_delta.y = last_mouse_Y - ypos;
+
+	last_mouse_X = current_mousePos.x;
+	last_mouse_Y = current_mousePos.y;
+
 	current_mousePos = glm::vec2(xpos, ypos);
-	mouse_delta = last_mousePos - current_mousePos;
 	Eventbus::Publish<MouseMoveEvent>(xpos,ypos);
 }
 

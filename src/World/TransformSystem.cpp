@@ -41,7 +41,6 @@ void Fracture::TransformSystem::Update(Fracture::UUID root)
 
 void  Fracture::TransformSystem::UpdatePrefabs(Fracture::UUID root)
 {
-	const auto& world_transform = SceneManager::GetComponent<TransformComponent>(SceneManager::CurrentScene()->RootID);
 	const auto& entity_transform = SceneManager::GetComponent<TransformComponent>(root);
 	const auto& entity = SceneManager::GetComponent<HierachyComponent>(root);
 

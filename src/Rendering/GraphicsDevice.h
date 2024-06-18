@@ -40,6 +40,7 @@ namespace Fracture
 		ShadowMatrix,
 		ShadowPlanes,
 		GlobalWindData,
+		GlobalGPUMaterials
 	};
 
 	enum class ShaderStorageBufferIndex
@@ -129,6 +130,7 @@ namespace Fracture
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mAnimationData;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
+		std::shared_ptr<Buffer> mGPUMaterialBuffer;
 		std::shared_ptr<PostProcessPipeline> mPostProcessPipeline;
 		std::shared_ptr<Texture> mLightProbeArray;
 		std::shared_ptr<Texture> mLightProbeIrradianceArray;
@@ -151,6 +153,7 @@ namespace Fracture
 		void UpdateGlobalRenderSettings();
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void UpdateAnimationData(const std::vector<glm::mat4>& data);
+		void UpdateMaterialData(const std::vector<GPUMaterial>& data);
 		void UpdateGlobalWindData();
 		void Shutdown();
 
@@ -200,6 +203,7 @@ namespace Fracture
 		void CHECKGLERRRORS();
 
 		static uint16_t DRAWCALL_COUNT;
+		static uint16_t RENDERBATCH_COUNT;
 
 		static GlobalPostProcessParams RenderSettings;
 

@@ -25,15 +25,14 @@ void Fracture::ForwardPass::Execute()
 
 	if (!global_color)
 		return;
-
-	int clearValue = 1;
 	
 	RenderCommands::SetRenderTarget(Context, global_color);
-	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
-	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetViewport(Context, GraphicsDevice::Instance()->Viewport_Width, GraphicsDevice::Instance()->Viewport_Height, 0, 0);
+	RenderCommands::SetScissor(Context, GraphicsDevice::Instance()->Viewport_Width, GraphicsDevice::Instance()->Viewport_Height, 0, 0);
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
-	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::Equal);
+	RenderCommands::Enable(Context, Fracture::GLCapability::FaceCulling);
+
 
 	for (auto& batches : Context->mBatches)
 	{
@@ -55,9 +54,13 @@ void Fracture::ForwardPass::Execute()
 		const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
 
 
-		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
-		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
-		
+		Fracture::RenderCommands::UseProgram(Context, shader->Handle);		
+
+		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());	
+
+		if(Context->MaterialIndexMap.find(batches.first)!= Context->MaterialIndexMap.end())
+			Fracture::RenderCommands::SetUniform(Context, shader.get(), "MaterialIndex", (int)Context->MaterialIndexMap[batches.first]);
+
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
@@ -114,29 +117,17 @@ void Fracture::ForwardPass::Execute()
 
 			const auto& brdflut = GraphicsDevice::Instance()->GetBRDFLUTMap(global_probes[0]->GetID());
 			Fracture::RenderCommands::SetTexture(Context, shader.get(), "brdfLUT", brdflut, (int)TEXTURESLOT::BRDF);
-
-
-
 		}
-		if (material->IsReflective)
-		{
-
-
-		}
-		const auto& probes = GraphicsDevice::Instance()->GetLightProbeIrradiance();
-		Fracture::RenderCommands::SetTexture(Context, shader.get(), "aReflections", probes, (int)TEXTURESLOT::Reflections);
-		Fracture::RenderCommands::SetUniform(Context, shader.get(), "_ReflectionFlag", material->IsReflective);
-
+		
 		if (batches.second.size())
 		{
 			//Set Shader
 			for (auto batch : batches.second)
 			{
-				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
-
+				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);				
 				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
-
 				std::vector<std::shared_ptr<MeshDrawCall>> drawcalls = batch.second->OpaqueDrawCalls;
+				
 				if (drawcalls.size())
 				{
 					DrawElementsInstancedBaseVertex cmd;
@@ -152,7 +143,7 @@ void Fracture::ForwardPass::Execute()
 			}
 
 		}
-		Fracture::RenderCommands::ResetTextureUnits(Context, shader.get());
+		//Fracture::RenderCommands::ResetTextureUnits(Context, shader.get());
 	}
 
 	for (auto& drawCall : Context->OpaqueDrawCalls)
@@ -177,6 +168,7 @@ void Fracture::ForwardPass::Execute()
 
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "EntityID", drawCall->IDColor);
 		Fracture::RenderCommands::SetUniform(Context, shader.get(), "Model_matrix", drawCall->model);
+		Fracture::RenderCommands::SetUniform(Context, shader.get(), "MaterialIndex", (int)drawCall->GPUMaterialIndex);
 	
 		if (material->IsSkinned)
 		{
@@ -243,13 +235,11 @@ void Fracture::ForwardPass::Execute()
 	Fracture::RenderCommands::BlitFramebuffer(Context, Fracture::GlobalRenderTargets::GlobalColour, Fracture::GlobalRenderTargets::GlobalGrabs);
 	
 	RenderCommands::DepthFunction(Context, Fracture::DepthFunc::LEqual);
-
 	Fracture::DebugRenderer::OnRenderSceneBillboards(Context);
 
 	
 	RenderCommands::Enable(Context, Fracture::GLCapability::Blending);
 	RenderCommands::BlendFunction(Context, Fracture::BlendFunc::SrcAlpha, Fracture::BlendFunc::OneMinusSrcAlpha);
-
 
 	for (auto& batches : Context->mBatches)
 	{
@@ -269,11 +259,8 @@ void Fracture::ForwardPass::Execute()
 		}
 
 		const auto& shader = AssetManager::Instance()->GetShaderByID(material->Shader);
-
-
-		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
+		Fracture::RenderCommands::UseProgram(Context, shader->Handle);		
 		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
-
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
@@ -311,7 +298,7 @@ void Fracture::ForwardPass::Execute()
 			for (auto batch : batches.second)
 			{
 				const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
-
+				Fracture::RenderCommands::SetUniform(Context, shader.get(), "MaterialIndex", (int)batch.second->GPUMaterialIndex);
 				Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
 
 				std::vector<std::shared_ptr<MeshDrawCall>> drawcalls = batch.second->TransparentDrawCalls;
@@ -352,7 +339,7 @@ void Fracture::ForwardPass::Execute()
 		Fracture::RenderCommands::UseProgram(Context, shader->Handle);
 
 		Fracture::RenderCommands::BindMaterial(Context, shader.get(), material.get());
-
+		Fracture::RenderCommands::SetUniform(Context, shader.get(), "MaterialIndex", (int)drawCall->GPUMaterialIndex);
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)

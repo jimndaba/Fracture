@@ -46,7 +46,7 @@ void Fracture::PrefabFactory::Instance(ScenePrefab prefab, glm::vec3 position, g
 				auto component = std::make_shared<TransformComponent>(*prefabTemp.transform.get(), new_entity);
 				component->Position = position;
 				component->Scale = scale;
-				component->Rotation = glm::quat(glm::radians(rotation));
+				component->Rotation = glm::quat(rotation);
 				SceneManager::AddComponentByInstance(new_entity, component);
 			}
 
@@ -319,7 +319,7 @@ void Fracture::PrefabFactory::Instance(ScenePrefab prefab, glm::vec3 position, g
 				mPrefabTracker[nested_prefab.SceneID] = false;
 			}
 			
-			Instance(nested_prefab, nested_prefab.Position, nested_prefab.Scale, glm::degrees(glm::eulerAngles(nested_prefab.Rotation)));
+			Instance(nested_prefab, nested_prefab.Position, nested_prefab.Scale, glm::eulerAngles(nested_prefab.Rotation));
 		
 		}
 	}

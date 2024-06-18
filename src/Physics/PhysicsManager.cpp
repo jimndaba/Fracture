@@ -135,7 +135,7 @@ void Fracture::PhysicsManager::FixedUpdate(const float& dt)
 
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(cc->GetID());
 		auto pos = mInstance->mControllers[cc->GetID()]->getPosition();
-		transform->Position = glm::vec3(pos.x,pos.y,pos.z);	
+		transform->Position = glm::vec3(pos.x,pos.y,pos.z) + cc->Offset;
 		transform->IsDirty = true;
 	}
 
@@ -426,6 +426,7 @@ void Fracture::PhysicsManager::AddCharacterController(UUID mEntity)
 				desc.halfSideExtent = controller->Size.x * 0.5f;
 				desc.halfHeight = controller->Size.y * 0.5f;
 				desc.halfForwardExtent = controller->Size.z * 0.5f;
+				
 				desc.slopeLimit = glm::radians(controller->MaxSlopeAngle);
 				desc.stepOffset = controller->StepHeight;
 				//desc.contactOffset = cr->contact_offset;
@@ -433,9 +434,10 @@ void Fracture::PhysicsManager::AddCharacterController(UUID mEntity)
 				desc.material = mPhysics->createMaterial(0.5f, 0.5f, 0.5f);
 				desc.position = PxExtendedVec3(transform->Position.x, transform->Position.y, transform->Position.z);		
 				desc.userData = controller.get();
+			
 
 				mControllers[mEntity] = mCCmanager->createController(desc);
-
+				
 				
 			}
 			break;
@@ -452,7 +454,7 @@ void Fracture::PhysicsManager::AddCharacterController(UUID mEntity)
 				//desc.contactOffset = cr->contact_offset;
 				desc.upDirection = PxVec3(0.0, 1.0, 0.0);
 				desc.material = mPhysics->createMaterial(0.5f, 0.5f, 0.5f);
-				desc.position = PxExtendedVec3(transform->Position.x, transform->Position.y, transform->Position.z);
+				desc.position = PxExtendedVec3(transform->Position.x, transform->Position.y , transform->Position.z);
 				desc.userData = controller.get();
 
 				mControllers[mEntity] = mCCmanager->createController(desc);			

@@ -36,21 +36,30 @@ std::function mErroCallback = [](std::string fnc) {
 
 void Fracture::RenderCommands::Enable(Fracture::RenderContext* cntxt, GLCapability ability)
 {	
+	if (cntxt->mContextState[ability])
+		return;
+
 	Command cmd;
 	cmd.fnc = [ability]() {
 		glEnable((GLenum)ability);
+		
 	};
 	cmd.fnc();
+	cntxt->mContextState[ability] = true;
 	////cntxt->Push(cmd);  
 }
 
 void Fracture::RenderCommands::Disable(Fracture::RenderContext* cntxt, GLCapability ability)
 {
+	if (!cntxt->mContextState[ability])
+		return;
+
 	Command cmd;
 	cmd.fnc = [ability]() {
 		glDisable((GLenum)ability);
 	};
 	cmd.fnc();
+	cntxt->mContextState[ability] = false;
 	////cntxt->Push(cmd);  
 	
 }
@@ -139,6 +148,12 @@ void Fracture::RenderCommands::BlitFramebuffer(Fracture::RenderContext* cntxt, u
 
 void Fracture::RenderCommands::SetViewport(Fracture::RenderContext* cntxt, float width, float height,float x, float y)
 {
+	if (cntxt->ContextViewport.Width == width && cntxt->ContextViewport.Height == height)
+		return;
+
+	cntxt->ContextViewport.Width = width;
+	cntxt->ContextViewport.Height = height;
+
 	Fracture::Command cmd;
 	cmd.fnc = [width,height,x,y]() {
 		glViewport(x, y, width, height);
@@ -149,6 +164,12 @@ void Fracture::RenderCommands::SetViewport(Fracture::RenderContext* cntxt, float
 
 void Fracture::RenderCommands::SetScissor(Fracture::RenderContext* cntxt, float width, float height, float x, float y)
 {
+	if (cntxt->ContextScissor.Width == width && cntxt->ContextScissor.Height == height)
+		return;
+
+	cntxt->ContextScissor.Width = width;
+	cntxt->ContextScissor.Height = height;
+
 	Fracture::Command cmd;
 	cmd.fnc = [x,y,width,height]() {
 		glScissor(x, y, width, height);
@@ -159,6 +180,10 @@ void Fracture::RenderCommands::SetScissor(Fracture::RenderContext* cntxt, float 
 
 void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, Fracture::RenderTarget* rt)
 {
+	if (cntxt->CurrentRenderTarget == rt->Handle)
+		return;
+	cntxt->CurrentRenderTarget = rt->Handle;
+
 	Fracture::Command cmd;
 	cmd.fnc = [rt]() {
 		glBindFramebuffer(GL_FRAMEBUFFER,rt->Handle);
@@ -169,6 +194,10 @@ void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, F
 
 void Fracture::RenderCommands::SetRenderTarget(Fracture::RenderContext* cntxt, uint32_t rt)
 {
+	if (cntxt->CurrentRenderTarget == rt)
+		return;
+	cntxt->CurrentRenderTarget = rt;
+
 	Fracture::Command cmd;
 	cmd.fnc = [rt]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, rt);
@@ -194,6 +223,7 @@ void Fracture::RenderCommands::ReleaseRenderTarget(Fracture::RenderContext* cntx
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	};
 	cmd.fnc();
+	cntxt->CurrentRenderTarget = 0;
 	//cntxt->Push(cmd); 
 }
 
@@ -322,6 +352,11 @@ void Fracture::RenderCommands::SetColorMask(Fracture::RenderContext* cntxt, bool
 
 void Fracture::RenderCommands::BindVertexArrayObject(Fracture::RenderContext* cntxt, uint32_t vao)
 {
+	if (cntxt->CurrentRenderVAO == vao)
+		return;
+
+	cntxt->CurrentRenderVAO = vao;
+
 	Fracture::Command cmd;
 	cmd.fnc = [vao]() {
 		glBindVertexArray(vao);
@@ -598,14 +633,16 @@ void Fracture::RenderCommands::ClearImage(Fracture::RenderContext* cntxt, uint32
 
 void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32_t program)
 {
+	if (cntxt->CurrentProgram == program)
+		return;
+	
+	cntxt->CurrentProgram = program;
+
 	Fracture::Command cmd;
 	cmd.Key.ShaderIndex = program;
 	cmd.fnc = [program,cntxt]() {
 		glUseProgram(program);
-		cntxt->CurrentProgram = program;
-	
-
-		mErroCallback("UseProgram");
+		mErroCallback("UseProgram: " + std::to_string(program));
 	};
 	cmd.fnc();
 	//cntxt->Push(cmd); 
@@ -755,9 +792,9 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 {
 	Fracture::Command cmd;
 	auto location = shader->getUniformLocation(name);
-	cmd.fnc = [location, unit, RenderID, name]() {
+	cmd.fnc = [location, unit, RenderID, name,shader] () {
 		glBindTextureUnit(unit, RenderID);
-		mErroCallback("Bind Unit");
+		mErroCallback("Shader Bind Unit: " + shader->Description.Name);
 		glUniform1i(location, unit);
 		mErroCallback(name);
 	};
@@ -772,6 +809,7 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 {
 	if (material)
 	{
+		/*
 		SetUniform(cntxt, shader, "TextureSpace",(int)material->TextureSpace);
 		SetUniform(cntxt, shader, "Tiling",material->TextureTiling);
 		SetUniform(cntxt, shader, "pDiffuse",material->AlbedoColour);
@@ -790,6 +828,7 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 		SetUniform(cntxt, shader, "_MetalnessFlag", material->HasMetalTexture);
 		SetUniform(cntxt, shader, "_AOFlag", material->HasAOTexture); 
 		SetUniform(cntxt, shader, "_EmissionFlag", material->HasEmissionTexture);
+		*/
 
 		if (material->HasAlbedoTexture)
 		{

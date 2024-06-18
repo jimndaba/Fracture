@@ -23,11 +23,9 @@ namespace Fracture
 		bool IsDirty = true;
 		
 		std::vector<std::unique_ptr<IAnimationNode>> GraphNodes;
-		std::vector<NodeLink> Links;
-		std::map<Fracture::UUID, std::shared_ptr<AnimationParameter>> Parameters;
-
+		std::vector<std::shared_ptr<NodeLink>> Links;
+		std::unordered_map<Fracture::UUID, std::shared_ptr<AnimationParameter>> Parameters;
 		
-
 		AnimationState* GetCurrentState();
 
 		void EvaluateStateTransitions();
@@ -46,12 +44,6 @@ namespace Fracture
 
 		void CalculateFinalGlobalTransforms();
 
-		std::vector<PoseSample>& GetPoseBufferAndSwap();
-
-		std::vector<PoseSample>& GetGlobalPoseBuffer(int index);
-
-		void SetPoseBuffer(std::vector<PoseSample> new_buffer);
-
 		IAnimationNode* GetNode(UUID node_id);
 
 		bool EntityandMeshSet = true;
@@ -62,22 +54,23 @@ namespace Fracture
 
 		inline AnimationContext* GetContext() { return mContext.get(); }
 
+		void SetFloat(const std::string& name, float value);
+		void SetInt(const std::string& name, int value);
+		void SetBool(const std::string& name, bool value);
+		void SetTrigger(const std::string& name, bool value);
+
 	private:
 		std::unordered_map<UUID, std::vector<UUID>> adjList;
 		std::vector<IAnimationNode*> m_ExecutionOrder;
 		std::unique_ptr<AnimationContext> mContext;
-		void DepthFirstSearch();
-
-		std::vector<std::vector<PoseSample>> mPoseBuffer;
-
 		std::queue<std::shared_ptr<IAnimationTask>> mAnimationTasks;
 
-
-		bool mSwapBuffers = false;
-
-
 		AnimationSystem* mSystem;
-
+		std::unordered_map<std::string,UUID> mParametreCache;
+		void DepthFirstSearch();	
+		bool mSwapBuffers = false;
+		UUID GetParameterID(const std::string& name);
+		
 	};
 
 

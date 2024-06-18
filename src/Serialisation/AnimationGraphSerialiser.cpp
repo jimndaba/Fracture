@@ -30,7 +30,7 @@ void Fracture::AnimationGraphSerialiser::WriteGraph(AnimationGraph* graph)
 		BeginCollection("Links");
 		for(const auto& link : graph->Links)
 		{
-			WriteLinks(link);
+			WriteLinks(*link.get());
 		}
 		EndCollection();
 
@@ -51,22 +51,22 @@ void Fracture::AnimationGraphSerialiser::WriteParameters(AnimationGraph* graph)
 		{
 			case Fracture::AnimationParameter::ParameterValueType::Bool:
 			{
-				Property("Value", (int)parameter.second->Value.BOOLEAN);
+				Property("Value", parameter.second->Value.BOOLEAN);
 				break;
 			}
 			case Fracture::AnimationParameter::ParameterValueType::Float:
 			{
-				Property("Value", (int)parameter.second->Value.FLOAT);
+				Property("Value", parameter.second->Value.FLOAT);
 				break;
 			}
 			case Fracture::AnimationParameter::ParameterValueType::Int:
 			{
-				Property("Value", (int)parameter.second->Value.INTERGER);
+				Property("Value", parameter.second->Value.INTERGER);
 				break;
 			}
 			case Fracture::AnimationParameter::ParameterValueType::Trigger:
 			{
-				Property("Value", (int)parameter.second->Value.INTERGER);
+				Property("Value", parameter.second->Value.TRIGGER);
 				break;
 			}
 		}
@@ -163,6 +163,7 @@ void Fracture::AnimationGraphSerialiser::WriteGraphNode(Fracture::FloatLessThanN
 
 void Fracture::AnimationGraphSerialiser::WriteGraphNode(Fracture::FloatValueNode* node)
 {
+	Property("Name", node->Name);
 	Property("ParameterID", node->ParameterID);
 }
 
@@ -294,7 +295,6 @@ void Fracture::AnimationGraphSerialiser::ReadParameters(AnimationGraph* graph)
 					}
 
 				}
-
 				graph->Parameters[ID("ID")] = parameter;
 				EndStruct();
 			}
@@ -312,12 +312,12 @@ void Fracture::AnimationGraphSerialiser::ReadLinks(AnimationGraph* graph)
 		{
 			if (BeginStruct("Link"))
 			{
-				auto link = NodeLink();
-				link.ID = ID("ID");
-				link.FromPinID = ID("FromPin");
-				link.ToPinID = ID("ToPin");
-				link.NodeFrom = ID("FromNode");
-				link.NodeTo = ID("ToNode");
+				auto link = std:: make_shared<NodeLink>();
+				link->ID = ID("ID");
+				link->FromPinID = ID("FromPin");
+				link->ToPinID = ID("ToPin");
+				link->NodeFrom = ID("FromNode");
+				link->NodeTo = ID("ToNode");
 				graph->Links.push_back(link);
 				EndStruct();
 			}
@@ -443,6 +443,7 @@ void Fracture::AnimationGraphSerialiser::ReadAnimationPoseNodeIfExists(Animation
 		auto node = std::make_unique<AnimationPoseNode>();		
 		ReadNodePinIDs(node.get());
 		node->Result.AnimationClip = ID("CurrentAnimationID");
+		AssetManager::Instance()->AsyncLoadAnimationByID(node->Result.AnimationClip);
 		graph->GraphNodes.push_back(std::move(node));
 		EndStruct();
 	}
@@ -516,6 +517,7 @@ void Fracture::AnimationGraphSerialiser::ReadFloatValueNodeIfExists(AnimationGra
 	{
 		auto node = std::make_unique<FloatValueNode>();		
 		ReadNodePinIDs(node.get());
+		node->Name = STRING("Name");
 		node->ParameterID = ID("ParameterID");
 		graph->GraphNodes.push_back(std::move(node));
 		EndStruct();

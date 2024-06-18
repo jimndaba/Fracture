@@ -8,6 +8,7 @@
 #include "World/WorldEvents.h"
 #include "Physics/PhysicsManager.h"
 #include "World/Components.h"
+#include "Animation/AnimationSystem.h"
 
 void LuaBindComponents::BindTagComponent(sol::state& lua)
 {
@@ -122,6 +123,22 @@ void LuaBindComponents::BindCameraComponent(sol::state& lua)
 
 void LuaBindComponents::BindAnimatorComponent(sol::state& lua)
 {
+	lua.new_usertype<Fracture::AnimationComponent>("AnimationComponent",
+		"AnimationComponent", sol::no_constructor,
+		sol::base_classes, sol::bases<Fracture::IComponent>(),
+		//Properties
+		"IsPlaying", &Fracture::AnimationComponent::IsPlaying,	
+		"ID", sol::readonly_property(&Fracture::AnimationComponent::GetID),
+
+		//Methods
+		"SetFloat", &Fracture::AnimationSystem::SetFloat,
+		"SetInt", &Fracture::AnimationSystem::SetInt,
+		"SetBool", &Fracture::AnimationSystem::Setbool,
+		"SetTrigger", &Fracture::AnimationSystem::SetTrigger,
+
+		//Metamethods
+		sol::meta_function::to_string, [](Fracture::AnimationComponent& e) { return fmt::format("AnimationComponent : {}", e.GetID()); }
+	);
 }
 
 
@@ -149,6 +166,30 @@ glm::vec3 LuaBindComponents::GetRotation(Fracture::UUID entity)
 	return glm::vec3();
 }
 
+glm::vec3 LuaBindComponents::GetRightVec(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)
+		return glm::vec3(transform->WorldTransform[0][0], transform->WorldTransform[0][1], transform->WorldTransform[0][2]);
+	return glm::vec3(1, 0,0);
+}
+
+glm::vec3 LuaBindComponents::GetUpVec(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)	
+		return glm::vec3(transform->WorldTransform[0][1], transform->WorldTransform[1][1], transform->WorldTransform[2][1]);
+	return glm::vec3(0, 1, 0);
+}
+
+glm::vec3 LuaBindComponents::GetForwardVec(Fracture::UUID entity)
+{
+	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
+	if (transform)
+		return glm::vec3(transform->WorldTransform[0][2], transform->WorldTransform[1][2], transform->WorldTransform[2][2]);
+	return glm::vec3(0, 0, 1);
+}
+
 void LuaBindComponents::SetPosition(Fracture::UUID entity, glm::vec3 Position)
 {
 	const auto& transform = Fracture::SceneManager::GetComponent<Fracture::TransformComponent>(entity);
@@ -164,7 +205,7 @@ void LuaBindComponents::SetRotation(Fracture::UUID entity, glm::vec3 value)
 	if (!transform)
 		return;
 
-	transform->Rotation *= glm::quat(value);
+	transform->Rotation = glm::quat(value);
 }
 
 void LuaBindComponents::SetScale(Fracture::UUID entity, glm::vec3 value)
@@ -173,6 +214,26 @@ void LuaBindComponents::SetScale(Fracture::UUID entity, glm::vec3 value)
 	if (!transform)
 		return;
 	transform->Scale = value;
+}
+
+void LuaBindComponents::SetAnimationFloat(Fracture::UUID entity, const std::string& name, float value)
+{
+	Fracture::AnimationSystem::SetFloat(entity, name, value);
+}
+
+void LuaBindComponents::SetAnimationInt(Fracture::UUID entity, const std::string& name, int value)
+{
+	Fracture::AnimationSystem::SetInt(entity, name, value);
+}
+
+void LuaBindComponents::SetAnimationBool(Fracture::UUID entity, const std::string& name, bool value)
+{
+	Fracture::AnimationSystem::Setbool(entity, name, value);
+}
+
+void LuaBindComponents::SetAnimationTrigger(Fracture::UUID entity, const std::string& name, bool value)
+{
+	Fracture::AnimationSystem::SetTrigger(entity, name, value);
 }
 
 void LuaBindComponents::Translate(Fracture::UUID entity, glm::vec3 value)
@@ -220,5 +281,10 @@ glm::vec2 LuaBindComponents::Vec2Lerp(glm::vec2 from, glm::vec2 to, float t)
 glm::vec4 LuaBindComponents::Vec4Lerp(glm::vec4 from, glm::vec4 to, float t)
 {
 	return glm::lerp(from, to, t);
+}
+
+float LuaBindComponents::DistanceVec3(glm::vec3 from, glm::vec3 to)
+{
+	return glm::distance(from,to);
 }
 

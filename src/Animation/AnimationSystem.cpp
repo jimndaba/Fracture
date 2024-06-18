@@ -28,15 +28,43 @@ void Fracture::AnimationSystem::Update(float dt)
 
     for (const auto& component : components)
     {           
-        //component->AnimationTracks.clear();
-
         if (mGraphs.find(component->CurrentGraph) != mGraphs.end())
         {   
             mPool->ReleaseAllBuffers();
             mGraphs[component->CurrentGraph]->GetContext()->MeshID = component->Mesh;
             mGraphs[component->CurrentGraph]->GetContext()->EntityID = component->entity;
-            mGraphs[component->CurrentGraph]->GetContext()->IsPlaying = IsPlaying;
+
+            for (const auto& uniform : component->Uniforms)
+            {
+                switch (uniform.UniformType)
+                {
+                    case AnimationUniform::AnimationUniformType::FLOAT:
+                    {
+                        mGraphs[component->CurrentGraph]->SetFloat(uniform.Name, uniform.Value.FLOAT);
+                        break;
+                    }
+                    case AnimationUniform::AnimationUniformType::BOOL:
+                    {
+                        mGraphs[component->CurrentGraph]->SetBool(uniform.Name, uniform.Value.BOOL);
+                        break;
+                    }
+                    case AnimationUniform::AnimationUniformType::INT:
+                    {
+                        mGraphs[component->CurrentGraph]->SetInt(uniform.Name, uniform.Value.INT);
+                        break;
+                    }
+                    case AnimationUniform::AnimationUniformType::TRIGGER:
+                    {
+                        mGraphs[component->CurrentGraph]->SetTrigger(uniform.Name, uniform.Value.TRIGGER);
+                        break;
+                    }
+                }              
+            }
+
+            mGraphs[component->CurrentGraph]->GetContext()->IsPlaying = component->IsPlaying;
             mGraphs[component->CurrentGraph]->OnUpdate(dt, component->GetID());
+
+            component->Uniforms.clear();
         }
     }
 }
@@ -145,6 +173,62 @@ Fracture::AnimationSystem* Fracture::AnimationSystem::Instance()
     if (!mInstance)
         mInstance = std::make_unique<AnimationSystem>();
     return mInstance.get();
+}
+
+void Fracture::AnimationSystem::SetFloat(Fracture::UUID entity, const std::string& name, float value)
+{
+    const auto& component = SceneManager::GetComponent<AnimationComponent>(entity);
+
+    if (!component)
+        return;
+
+    AnimationUniform uniform;
+    uniform.Name = name;
+    uniform.UniformType = AnimationUniform::AnimationUniformType::FLOAT;
+    uniform.Value.FLOAT = value;
+    component->Uniforms.push_back(uniform);
+}
+
+void Fracture::AnimationSystem::Setbool(Fracture::UUID entity, const std::string& name, bool value)
+{
+    const auto& component = SceneManager::GetComponent<AnimationComponent>(entity);
+
+    if (!component)
+        return;
+
+    AnimationUniform uniform;
+    uniform.Name = name;
+    uniform.UniformType = AnimationUniform::AnimationUniformType::BOOL;
+    uniform.Value.BOOL = value;
+    component->Uniforms.push_back(uniform);
+}
+
+void Fracture::AnimationSystem::SetInt(Fracture::UUID entity, const std::string& name, int value)
+{
+    const auto& component = SceneManager::GetComponent<AnimationComponent>(entity);
+
+    if (!component)
+        return;
+
+    AnimationUniform uniform;
+    uniform.Name = name;
+    uniform.UniformType = AnimationUniform::AnimationUniformType::INT;
+    uniform.Value.INT = value;
+    component->Uniforms.push_back(uniform);
+}
+
+void Fracture::AnimationSystem::SetTrigger(Fracture::UUID entity, const std::string& name, bool value)
+{
+    const auto& component = SceneManager::GetComponent<AnimationComponent>(entity);
+
+    if (!component)
+        return;
+
+    AnimationUniform uniform;
+    uniform.Name = name;
+    uniform.UniformType = AnimationUniform::AnimationUniformType::BOOL;
+    uniform.Value.BOOL = value;
+    component->Uniforms.push_back(uniform);
 }
 
 glm::mat4 Fracture::AnimationSystem::CalcInterpolatedScaling(AnimationTrack& outTrack, const float& animationTime)

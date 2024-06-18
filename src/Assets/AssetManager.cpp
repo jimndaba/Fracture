@@ -190,6 +190,7 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 				reg.ID = reg_serialiser.ID("ID");
 				reg.Name = reg_serialiser.STRING("Name");
 				reg.Path = reg_serialiser.STRING("Path");
+				reg.MetaPath = reg_serialiser.STRING("MetaPath");
 				ScriptManager::RegisterScript(reg);
 				reg_serialiser.NextInCollection();
 			}
@@ -354,7 +355,6 @@ void Fracture::AssetManager::OnLoad()
 		mMeshesToLoad.pop();
 	}
 
-
 	for (auto& mf : mMeshFutures)
 	{		
 		auto mesh = mf.second.get();
@@ -428,14 +428,10 @@ void Fracture::AssetManager::OnLoad()
 		}
 
 		mesh->ID = mf.first;
-		//mesh->mVerticies.clear();		
-		//mesh->SubMeshes.clear();
-
-
 		mLoadedMeshes.push_back(mesh->ID);
-		mMeshes[mf.first] = mesh;		
+		mMeshes[mf.first] = mesh;	
+		mMeshFutures.erase(mf.first);
 	}
-	mMeshFutures.clear();
 
 	while (!mMeshesToLoadandAttach.empty())
 	{
@@ -526,6 +522,7 @@ void Fracture::AssetManager::OnLoad()
 			//mesh->SubMeshes.clear();
 			mLoadedMeshes.push_back(mesh->ID);
 			mMeshes[mf.first.Mesh] = mesh;
+			mMeshAndAttachFutures.erase(mf.first);
 			if (mesh->mBones.size())
 				SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mesh->mMaterials, true);
 			else
@@ -534,7 +531,6 @@ void Fracture::AssetManager::OnLoad()
 			
 		}
 	}
-	mMeshAndAttachFutures.clear();
 
 	while (!mTexturesToLoad.empty())
 	{
@@ -590,22 +586,36 @@ void Fracture::AssetManager::OnLoad()
 			mAnimationsToLoad.pop();
 			continue;
 		}
+		
+		auto reg = mAnimationsToLoad.front();
 
-		auto  clip = AnimationClipLoader::LoadAnimationClip(mAnimationsToLoad.front().Path);
-		if (clip)
+		if (mAnimationFutures.find(reg.ID) != mAnimationFutures.end())
 		{
-			mAnimations[mAnimationsToLoad.front().ID] = clip;
-			mLoadedAnimations.push_back(mAnimationsToLoad.front().ID);
+			mAnimationsToLoad.pop();
+			continue;
 		}
-
-		else
-		{
-			FRACTURE_ERROR("Failed to load Material: {}", mAnimationsToLoad.front().Path);
-		}
-
+			
+		mAnimationFutures[reg.ID] = std::async(std::launch::async, [reg]() { return AnimationClipLoader::LoadAnimationClip(reg.Path); });
+		FRACTURE_TRACE("Async Loading Animaiton {}", reg.Name);
 		mAnimationsToLoad.pop();
 	}
 
+	for (auto& mf : mAnimationFutures)
+	{
+		if (mAnimationFutures.empty())
+			return;
+
+		if (mf.second._Is_ready())
+		{
+			auto animation = mf.second.get();
+			{
+				FRACTURE_TRACE("Animaiton Loaded{}", animation->Name);
+				mAnimations[mf.first] = animation;
+				mLoadedAnimations.push_back(mf.first);
+				mAnimationFutures.erase(mf.first);
+			}
+		}
+	}
 }
 
 void Fracture::AssetManager::RegisterMesh(const MeshRegistry& reg)

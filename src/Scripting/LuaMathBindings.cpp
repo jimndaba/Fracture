@@ -17,7 +17,7 @@ void LuaBindGLM::BindVec2(sol::state* lua)
 
 		//Methods
 		"Length", &glm::vec2::length,
-		"Normalize", [](glm::vec2& v) { v = glm::normalize(v); return v; },
+		"Normalize", [](glm::vec2& v) { return glm::normalize(v); },
 		"Distance", [](glm::vec2& v1, glm::vec2& v2) { return glm::distance(v1, v2); },
 
 
@@ -45,7 +45,8 @@ void LuaBindGLM::BindVec3(sol::state* lua)
 	auto mult_overloads = sol::overload(
 		[](const glm::vec3& v1, const glm::vec3& v2) -> glm::vec3 { return v1 * v2; },
 		[](const glm::vec3& v1, float f) -> glm::vec3 { return v1 * f; },
-		[](float f, const glm::vec3& v1) -> glm::vec3 { return f * v1; }
+		[](float f, const glm::vec3& v1) -> glm::vec3 { return f * v1; },
+		[](const glm::quat& q, const glm::vec3& v1) -> glm::vec3 { return q * v1; }
 	);
 
 	lua->new_usertype<glm::vec3>("vec3",
@@ -55,7 +56,7 @@ void LuaBindGLM::BindVec3(sol::state* lua)
 		"z", &glm::vec3::z,
 
 		"Length", &glm::vec3::length,
-		"Normalize", [](glm::vec3& v) { v = glm::normalize(v); return v; },
+		"Normalize", [](glm::vec3& v) { return glm::normalize(v);},
 		"Distance", [](glm::vec3& v1, glm::vec3& v2) { return glm::distance(v1, v2); },
 		"Dot", [](glm::vec3& v1, glm::vec3& v2) { return glm::dot(v1, v2); },
 		"Cross", [](glm::vec3& v1, glm::vec3& v2){return glm::cross(v1,v2);},
@@ -133,7 +134,23 @@ void LuaBindGLM::BindQuat(sol::state* lua)
 		"Length", &glm::quat::length,
 		"Normalize", [](glm::quat& v) { v = glm::normalize(v); return v; },
 		
+		"AxisAngle", [](float angle, glm::vec3& axis) {
+			// Normalize the axis vector
+			glm::vec3 normAxis = glm::normalize(axis);
+
+			// Calculate half-angle
+			float halfAngle = angle * 0.5f;
+
+			// Calculate sine and cosine of the half-angle
+			float s = std::sin(halfAngle);
+			float c = std::cos(halfAngle);
+
+			// Create the quaternion
+			glm::quat quat(c, normAxis.x * s, normAxis.y * s, normAxis.z * s);
+
+			return quat;
 		
+		},
 
 		//Metamethods
 		sol::meta_function::to_string, [](glm::quat& v) {return fmt::format("quat({}, {},{},{})", v.x, v.y, v.z, v.w); },

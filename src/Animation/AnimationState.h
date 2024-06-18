@@ -39,16 +39,12 @@ namespace Fracture
 			Count
 		};
 
-		
-
-
 		union ParameterValue
 		{
 			float FLOAT;
 			bool BOOLEAN;
 			int INTERGER;
 			bool TRIGGER;
-
 		};
 
 		std::string Name;

@@ -540,6 +540,7 @@ namespace Fracture
 			HasStarted = other.HasStarted;
 			Script = other.Script;
 			entity = new_entity;
+			mProperties = other.mProperties;
 		}
 
 		bool HasScriptAttached = false;
@@ -613,6 +614,30 @@ namespace Fracture
 		float FrameTime = 0.0f;
 	};
 
+	struct AnimationUniform
+	{
+		union AnimationUniformValue
+		{
+			float FLOAT;
+			bool BOOL;
+			int INT;
+			bool TRIGGER;
+		};
+
+
+		enum class AnimationUniformType
+		{
+			FLOAT,
+			BOOL,
+			INT,
+			TRIGGER
+		};
+
+		std::string Name;
+		AnimationUniformValue Value;
+		AnimationUniformType UniformType;
+	};
+
 	struct AnimationComponent : public IComponent
 	{
 		AnimationComponent(const Fracture::UUID& id) :
@@ -634,9 +659,13 @@ namespace Fracture
 		
 		UUID CurrentGraph = -1;
 		UUID Mesh = -1;
+
+		bool IsPlaying = true;
 		float FrameTime = 0.0f;
 		bool IsGraphSet = false;
 		std::unordered_map<UUID, AnimationSyncTrack> AnimationTracks;
+
+		std::vector<AnimationUniform> Uniforms;
 		
 	};
 

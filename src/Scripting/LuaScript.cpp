@@ -126,6 +126,8 @@ void Fracture::LuaScript::Load(sol::state& state)
     state.script_file(Description.Path);
     BindFunctions(state);
     BindProperties(state);
+
+
 }
 
 void Fracture::LuaScript::Reload(sol::state& state)

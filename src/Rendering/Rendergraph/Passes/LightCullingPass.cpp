@@ -100,12 +100,10 @@ void Fracture::LightCullPass::Execute()
     RenderCommands::UseProgram(Context, mClusterComputeShader->Handle);
     RenderCommands::DispatchComputeShader(Context, (float)Properties.gridSizeX, (float)Properties.gridSizeY, (float)Properties.gridSizeZ);
     dirty = false;
-    RenderCommands::UseProgram(Context, 0);
-
 
     RenderCommands::UseProgram(Context, mLightCullComputeShader->Handle);
     RenderCommands::DispatchComputeShader(Context, 1, 1, 6);
-    RenderCommands::UseProgram(Context, 0);
+
 
 
 

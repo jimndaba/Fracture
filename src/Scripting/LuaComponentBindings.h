@@ -22,10 +22,18 @@ namespace LuaBindComponents
 	glm::vec3 GetPosition(Fracture::UUID entity);
 	glm::vec3 GetScale(Fracture::UUID entity);
 	glm::vec3 GetRotation(Fracture::UUID entity);
+	glm::vec3 GetRightVec(Fracture::UUID entity);
+	glm::vec3 GetUpVec(Fracture::UUID entity);
+	glm::vec3 GetForwardVec(Fracture::UUID entity);
 
 	void SetPosition(Fracture::UUID entity, glm::vec3 value);
 	void SetRotation(Fracture::UUID entity, glm::vec3 value);
 	void SetScale(Fracture::UUID entity, glm::vec3 value);
+
+	void SetAnimationFloat(Fracture::UUID entity, const std::string& name, float value);
+	void SetAnimationInt(Fracture::UUID entity, const std::string& name, int value);
+	void SetAnimationBool(Fracture::UUID entity, const std::string& name, bool value);
+	void SetAnimationTrigger(Fracture::UUID entity, const std::string& name, bool value);
 
 
 	void Translate(Fracture::UUID entity, glm::vec3 value);
@@ -37,6 +45,7 @@ namespace LuaBindComponents
 	glm::vec3 Vec3Lerp(glm::vec3 from, glm::vec3 to, float t);
 	glm::vec2 Vec2Lerp(glm::vec2 from, glm::vec2 to, float t);
 	glm::vec4 Vec4Lerp(glm::vec4 from, glm::vec4 to, float t);
+	float DistanceVec3(glm::vec3 from, glm::vec3 to);
 
 }
 

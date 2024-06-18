@@ -219,7 +219,6 @@ namespace Fracture
 				memcpy(ptr, data.data(), size);				
 			};
 			cntxt->Push(cmd);	
-			UnMapbuffer(cntxt, buffer);
 		}
 
 		template<class T>

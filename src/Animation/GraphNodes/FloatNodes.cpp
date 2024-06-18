@@ -118,6 +118,7 @@ void Fracture::FloatLessThanNode::Process(AnimationContext& context)
 
 Fracture::FloatClampNode::FloatClampNode()
 {
+	Name = "Float Clamp";
 	OutPins =
 	{
 		Pin{

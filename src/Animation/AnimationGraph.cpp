@@ -13,7 +13,6 @@ Fracture::AnimationGraph::AnimationGraph(AnimationSystem* sys):
 	mContext->_graph = this;
 	mContext->_system = sys;
 	mContext->GraphID = ID;
-	mPoseBuffer.resize(2);
 }
 
 void Fracture::AnimationGraph::EvaluateStateTransitions()
@@ -129,25 +128,6 @@ void Fracture::AnimationGraph::CalculateFinalGlobalTransforms()
 	mSystem->mPool->ReleasePoseBuffer(0);
 }
 
-std::vector<Fracture::PoseSample>& Fracture::AnimationGraph::GetPoseBufferAndSwap()
-{
-	auto& poses =  mPoseBuffer[mSwapBuffers];
-	mSwapBuffers = !mSwapBuffers;
-	GlobalIndex = (int)mSwapBuffers;
-	return poses;
-}
-
-std::vector<Fracture::PoseSample>& Fracture::AnimationGraph::GetGlobalPoseBuffer(int index)
-{	
-	return mPoseBuffer[index];
-}
-
-void Fracture::AnimationGraph::SetPoseBuffer(std::vector<PoseSample> new_buffer)
-{
-	mPoseBuffer[0] = new_buffer;
-	GlobalIndex = 0;
-}
-
 Fracture::IAnimationNode* Fracture::AnimationGraph::GetNode(UUID node_id)
 {
 	auto it = std::find_if(std::begin(GraphNodes), std::end(GraphNodes), [node_id](const std::unique_ptr<IAnimationNode>& p) { return p->NodeID == node_id; });
@@ -163,6 +143,42 @@ Fracture::IAnimationNode* Fracture::AnimationGraph::GetNode(UUID node_id)
 	return nullptr;
 }
 
+void Fracture::AnimationGraph::SetFloat(const std::string& name, float value)
+{
+	auto id = GetParameterID(name);
+	if (id == 0)
+		return;
+
+	Parameters[id]->Value.FLOAT = value;
+}
+
+void Fracture::AnimationGraph::SetInt(const std::string& name, int value)
+{
+	auto id = GetParameterID(name);
+	if (id == 0)
+		return;
+
+	Parameters[id]->Value.INTERGER = value;
+}
+
+void Fracture::AnimationGraph::SetBool(const std::string& name, bool value)
+{
+	auto id = GetParameterID(name);
+	if (id == 0)
+		return;
+
+	Parameters[id]->Value.BOOLEAN = value;
+}
+
+void Fracture::AnimationGraph::SetTrigger(const std::string& name, bool value)
+{
+	auto id = GetParameterID(name);
+	if (id == 0)
+		return;
+
+	Parameters[id]->Value.TRIGGER = value;
+}
+
 void Fracture::AnimationGraph::TopologicalSort()
 {
 	adjList.clear();
@@ -176,9 +192,9 @@ void Fracture::AnimationGraph::TopologicalSort()
 
 	for (const auto& link : Links)
 	{
-		adjList[link.NodeFrom].push_back(link.NodeTo);
+		adjList[link->NodeFrom].push_back(link->NodeTo);
 
-		const auto& node = GetNode(link.NodeTo);
+		const auto& node = GetNode(link->NodeTo);
 		node->LinkCount += 1;
 	}
 
@@ -247,5 +263,25 @@ void Fracture::AnimationGraph::DepthFirstSearch()
 
 	
 
+}
+
+Fracture::UUID Fracture::AnimationGraph::GetParameterID(const std::string& name)
+{
+	if (mParametreCache.find(name) == mParametreCache.end())
+	{
+		for (const auto& parametre : Parameters)
+		{
+			if (parametre.second->Name == name)
+				mParametreCache[name] = parametre.first;
+		}
+	}
+	
+	if (mParametreCache.find(name) != mParametreCache.end())
+	{
+		return mParametreCache[name];
+	}
+
+
+	return 0;
 }
 

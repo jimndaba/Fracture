@@ -115,6 +115,7 @@ namespace Fracture
 		static void AddComponentInstance(std::shared_ptr<AudioSourceComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<AnimationComponent>& component, UUID new_entity);
 
 
 		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);
@@ -191,7 +192,7 @@ namespace Fracture
 			if (mCurrentScene->ComponentReg[typeid(T)][entity])
 			{
 				return std::dynamic_pointer_cast<T>(mCurrentScene->ComponentReg[typeid(T)][entity]);
-			}
+			}			
 		}
 		return nullptr;
 	}
@@ -228,7 +229,20 @@ namespace Fracture
 	template<class T>
 	inline bool SceneManager::HasComponent(const UUID& id)
 	{
-		return (mCurrentScene->ComponentReg[typeid(T)].find(id) != mCurrentScene->ComponentReg[typeid(T)].end());
+		if ((mCurrentScene->ComponentReg[typeid(T)].find(id) != mCurrentScene->ComponentReg[typeid(T)].end()))
+				return true;
+
+
+		if (mCurrentScene->mScriptReg.find(id) != mCurrentScene->mScriptReg.end())
+		{
+			for (const auto& script : mCurrentScene->mScriptReg[id])
+			{
+				if (script->GetID() == id && dynamic_cast<T*>(script.get()))
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	template<class T, typename ...Args>

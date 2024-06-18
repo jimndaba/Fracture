@@ -15,6 +15,7 @@ namespace Fracture
 	struct MeshComponent;
 	struct PrefabInstanceComponent;
 	struct TerrainComponent;
+	enum class GLCapability;
 
 	enum class DepthSortOrder
 	{
@@ -38,6 +39,7 @@ namespace Fracture
 		Fracture::DrawMode DrawCallPrimitive = DrawMode::Triangles;
 		UUID EntityID;
 		UUID MaterialID;
+		uint32_t GPUMaterialIndex;
 		uint32_t MeshHandle;
 		int basevertex = 0;	
 		void* SizeOfindices = 0;
@@ -55,6 +57,29 @@ namespace Fracture
 		int NUM_VERTS_PER_STRIP;
 	};
 
+	struct GPUMaterial
+	{
+		int TextureSpace;
+		float Tiling;
+		float pAO;
+		float pMetalness;
+		float pRoughness;
+		float pEmissionStrength;
+		float SpecularLevel;
+		float SpecularIntensity;
+		glm::vec4 pDiffuse;
+		glm::vec4 pEmission;
+
+		int AlbedoFlag;
+		int SpecularFlag;
+		int NormalFlag;
+		int RoughnessFlag;
+		int MetalnessFlag;
+		int AOFlag;
+		int EmissionFlag;
+		float _pad;
+	};
+
 	struct RenderBatch
 	{
 		std::vector<glm::mat4> Transforms;
@@ -63,9 +88,11 @@ namespace Fracture
 		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> OutlineDrawCalls;
+		
 		std::vector<SubMesh> Submeshes;
 		
 		uint32_t VAO;
+		uint32_t GPUMaterialIndex;
 		std::shared_ptr<Buffer> EntityID_Buffer;
 		std::shared_ptr<Buffer> Matrix_Buffer;
 
@@ -147,10 +174,14 @@ namespace Fracture
 		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> OutlineDrawCalls;
-
-
+		
+		std::vector<GPUMaterial> MaterialGPUData;
+		std::map<UUID, int> MaterialIndexMap;
+		std::unordered_map<GLCapability, bool> mContextState;
 	
 		uint32_t CurrentProgram;
+		uint32_t CurrentRenderTarget;
+		uint32_t CurrentRenderVAO;
 		int ActiveTextureUnits = 0;
 		int currentIndex = 0;
 		Viewport ContextViewport;

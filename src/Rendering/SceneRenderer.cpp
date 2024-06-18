@@ -288,7 +288,7 @@ void Fracture::SceneRenderer::Begin(float dt)
 	if (SceneManager::CurrentScene())
 	{
 		particleSystem->Update(dt);
-
+		mContext->deltaTime += dt;
 		const auto& current_Camera = SceneManager::ActiveCamera();	
 		//const auto& tranform = SceneManager::GetComponent<CameraComponent>(current_Camera->GetID());
 		data.Camera_Position = glm::vec4(current_Camera->Position.x, current_Camera->Position.y, current_Camera->Position.z, 0);
@@ -297,8 +297,8 @@ void Fracture::SceneRenderer::Begin(float dt)
 		data.Camera_InvProjection = glm::inverse(current_Camera->ProjectMatrix);
 		data.Camera_InvView = glm::inverse(current_Camera->ViewMatrix);
 		data.Near_Far_Width_Height = { current_Camera->Near,current_Camera->Far,1920,1080 };
-		data.DeltaTimeX_PAD3.x += glfwGetTime();
-
+		data.DeltaTimeX_PAD3 = glm::vec4(mContext->deltaTime);
+		GraphicsDevice::Instance()->RENDERBATCH_COUNT = 0;
 		GraphicsDevice::Instance()->RenderSettings.DoFEnabled = current_Camera->EnableDepthOfField;
 		GraphicsDevice::Instance()->RenderSettings.FocalLength = current_Camera->FocalRange;
 		GraphicsDevice::Instance()->RenderSettings.FocalRandge = current_Camera->FocalLength;
@@ -411,7 +411,7 @@ void Fracture::SceneRenderer::Begin(float dt)
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalRenderSettings();
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalWindData();
 		
-		mContext->deltaTime += dt;
+		
 	}
 }
 
@@ -427,7 +427,6 @@ void Fracture::SceneRenderer::End()
 	Fracture::SortKey key;
 	mContext->BeginState(key);
 	mContext->BeginScene();
-
 
 	particleSystem->BeginRender(mContext.get());
 
@@ -490,8 +489,8 @@ void Fracture::SceneRenderer::End()
 	}
 
 	mContext->EndState();
-
 	mContext->Render();
+	mContext->EndScene();
 
 	if (GraphicsDevice::Instance()->EnablePostProsessing)
 	{
@@ -511,7 +510,9 @@ void Fracture::SceneRenderer::End()
 
 	mFinalContext->EndState();
 	mFinalContext->Render();
-	mContext->EndScene();
+	mFinalContext->EndScene();
+	GraphicsDevice::Instance()->RENDERBATCH_COUNT += mContext->mBatches.size();
+	GraphicsDevice::Instance()->RENDERBATCH_COUNT += mFinalContext->mBatches.size();
 }
 
 void Fracture::SceneRenderer::OnSave()

@@ -21,21 +21,13 @@ namespace Fracture
 		AnimationSystem();
 
 		void Init();
-
 		void Update(float dt);
-
-
 		void UpdatePose(Fracture::UUID entity, AnimationClip* clip, float time);
-
 		void Blend(Fracture::UUID grap, BlendFunctionType func, BlendSpaceType space, std::vector<PoseSample> inPose1, std::vector<PoseSample> inPose2, float factor);
-
 		bool GetBoneTrack(AnimationClip* clip, std::string name, AnimationTrack& outTrack);
 		bool GetBoneTrack(AnimationClip* clip, int bone_id, AnimationTrack& outTrack);
-
 		glm::mat4 BoneTransformation(AnimationTrack& outTrack, float time);
-
 		void SampleAnimation(const StaticMesh* mesh, std::vector<PoseSample>& outSample, Fracture::UUID clipID, float& time, float dt);
-
 		float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 
 		glm::mat4 CalcInterpolatedScaling(AnimationTrack& outTrack, const float& animationTime);
@@ -50,12 +42,16 @@ namespace Fracture
 		uint32_t FindNextRotation(const float& time, AnimationTrack& outTrack);
 		uint32_t FindNextPosition(const float& time, AnimationTrack& outTrack);
 
-		void ReloadGraphForAllEntities(UUID graph);
-		
+		void ReloadGraphForAllEntities(UUID graph);		
 		bool HasGlobalPose(UUID entity);
 		bool EntityHasGraph(UUID entity);
 		bool IsPlaying;
 		static AnimationSystem* Instance();
+
+		static void SetFloat(Fracture::UUID entity, const std::string& name, float value);
+		static void Setbool(Fracture::UUID entity, const std::string& name, bool value);
+		static void SetInt(Fracture::UUID entity, const std::string& name, int value);
+		static void SetTrigger(Fracture::UUID entity, const std::string& name, bool value);
 
 		AnimationBlender mBlender;
 		std::unique_ptr<PoseBufferPool> mPool;

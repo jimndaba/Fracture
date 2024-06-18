@@ -76,7 +76,8 @@ namespace Fracture
 		static glm::vec2 current_mousePos;
 		static glm::vec2 last_mousePos;
 		static glm::vec2 mouse_delta;
-	
+		static float last_mouse_X, last_mouse_Y;
+		static bool firstMouse;
 
 	public:
 		Input(AppWindow* window);

@@ -99,10 +99,18 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("GetPosition", LuaBindComponents::GetPosition);
 	lua.set_function("GetScale", LuaBindComponents::GetScale);
 	lua.set_function("GetRotation", LuaBindComponents::GetRotation);
+	lua.set_function("GetRightVec", LuaBindComponents::GetRightVec);
+	lua.set_function("GetForwardVec", LuaBindComponents::GetForwardVec);
+	lua.set_function("GetRotation", LuaBindComponents::GetUpVec);
 	lua.set_function("Translate", LuaBindComponents::Translate);
 	lua.set_function("Rotate", LuaBindComponents::Rotate);
 	lua.set_function("LookAt", LuaBindComponents::LookAt);
 	lua.set_function("Instantiate", LuaBindComponents::Instantiate);
+
+	lua.set_function("SetAnimationBool", LuaBindComponents::SetAnimationBool);
+	lua.set_function("SetAnimationFloat", LuaBindComponents::SetAnimationFloat);
+	lua.set_function("SetAnimationInt", LuaBindComponents::SetAnimationInt);
+	lua.set_function("SetAnimationTrigger", LuaBindComponents::SetAnimationTrigger);
 
 
 	lua.set_function("Destroy", SceneManager::Destroy);
@@ -110,6 +118,7 @@ void Fracture::ScriptManager::BindFunctions(sol::state& lua)
 	lua.set_function("Vec3Lerp", LuaBindComponents::Vec3Lerp);
 	lua.set_function("Vec2Lerp", LuaBindComponents::Vec2Lerp);
 	lua.set_function("Vec4Lerp", LuaBindComponents::Vec4Lerp);
+	lua.set_function("DistanceVec3", LuaBindComponents::DistanceVec3);
 
 	lua.set_function("EmitFx", ParticleSystem::EmittParticles);
 	lua.set_function("StopFx", ParticleSystem::EmittParticles);
@@ -258,6 +267,9 @@ void Fracture::ScriptManager::BindMaths(sol::state& L)
 	LuaBindGLM::BindVec2(&L);
 	LuaBindGLM::BindVec3(&L);
 	LuaBindGLM::BindVec4(&L);
+	LuaBindGLM::BindQuat(&L);
+	LuaBindGLM::BindMat3(&L);
+	LuaBindGLM::BindMat4(&L);
 }
 
 void Fracture::ScriptManager::BindPhysics(sol::state& L)
@@ -602,22 +614,21 @@ std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetInstanceOfScrip
 
 std::shared_ptr<Fracture::LuaScript> Fracture::ScriptManager::GetLuaScript(const UUID& id)
 {
-	if (mScriptRegister.find(id) == mScriptRegister.end())
+	if (mScriptRegister.find(id) != mScriptRegister.end())
 	{
-		FRACTURE_ERROR("Could not find Script");
-		return nullptr;
+		if (mScripts.find(id) != mScripts.end())
+		{
+			return mScripts[id];
+		}		
+		mScripts[id] = std::make_shared<LuaScript>(mScriptRegister[id]);
+		mScripts[id]->Load(*lua.get());		
+		return mScripts[id];
 	}
 	
-	if (mScripts.find(id) == mScripts.end())
-	{
-		mScripts[id] = std::make_shared<LuaScript>(mScriptRegister[id]);
-		return mScripts[id];
-	}
-	else if (mScripts.find(id) != mScripts.end())
-	{
-		return mScripts[id];
-	}
-	return std::shared_ptr<LuaScript>();
+	
+
+	FRACTURE_ERROR("Could not find Script");
+	return nullptr;
 }
 
 void Fracture::ScriptManager::CreateNewScript(const LuaScriptRegistry& reg)
@@ -826,75 +837,79 @@ void Fracture::ScriptManager::SaveScriptProperties(const UUID& id)
 
 void Fracture::ScriptManager::LoadScriptProperties(const UUID& id)
 {
+	FRACTURE_TRACE("Load Script Properties");
 	if (mScriptRegister.find(id) != mScriptRegister.end())
 	{
-		auto& script = mScripts[id];
-		if (script)
+		if (mScripts.find(id) != mScripts.end())
 		{
-			auto saver = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
-			saver.Open(mScriptRegister[id].MetaPath);
-
-			if (saver.BeginStruct("Script"))
+			auto& script = mScripts[id];
+			if (script)
 			{
-				if (saver.BeginCollection("Properties"))
-				{
-					while (saver.CurrentCollectionIndex() < saver.GetCollectionSize())
-					{
-						if (saver.BeginStruct("Property"))
-						{
-							auto prop_Name = saver.STRING("Name");
-							if (script->m_Properties.find(prop_Name) != script->m_Properties.end())
-							{
-								auto& prop = script->m_Properties[prop_Name];
-								switch (prop->Type)
-								{
-								case PROPERTY_TYPE::BOOL:
-								{
-									saver.Property("Value", prop->Bool);
-									break;
-								}
-								case PROPERTY_TYPE::UUID:
-								{
-									saver.Property("Value", prop->ID);
-									break;
-								}
-								case PROPERTY_TYPE::FLOAT:
-								{
-									saver.Property("Value", prop->Float);
-									break;
-								}
-								case PROPERTY_TYPE::INT:
-								{
-									saver.Property("Value", prop->Int);
-									break;
-								}
-								case PROPERTY_TYPE::VEC2:
-								{
-									saver.Property("Value", prop->Vec2);
-									break;
-								}
-								case PROPERTY_TYPE::VEC3:
-								{
-									saver.Property("Value", prop->Vec3);
-									break;
-								}
-								case PROPERTY_TYPE::VEC4:
-								{
-									saver.Property("Value", prop->Vec4);
-									break;
-								}
-								}
-							}
-							saver.EndStruct();
-						}
-						saver.NextInCollection();
-					}
-					saver.EndCollection();
+				auto saver = ISerialiser(Fracture::ISerialiser::IOMode::Open, Fracture::ISerialiser::SerialiseFormat::Json);
+				saver.Open(mScriptRegister[id].MetaPath);
 
+				if (saver.BeginStruct("Script"))
+				{
+					if (saver.BeginCollection("Properties"))
+					{
+						while (saver.CurrentCollectionIndex() < saver.GetCollectionSize())
+						{
+							if (saver.BeginStruct("Property"))
+							{
+								auto prop_Name = saver.STRING("Name");
+								if (script->m_Properties.find(prop_Name) != script->m_Properties.end())
+								{
+									auto& prop = script->m_Properties[prop_Name];
+									switch (prop->Type)
+									{
+									case PROPERTY_TYPE::BOOL:
+									{
+										prop->Bool = saver.BOOL("Value");
+										break;
+									}
+									case PROPERTY_TYPE::UUID:
+									{
+										prop->ID = saver.ID("Value");
+										break;
+									}
+									case PROPERTY_TYPE::FLOAT:
+									{
+										prop->Float = saver.FLOAT("Value");
+										break;
+									}
+									case PROPERTY_TYPE::INT:
+									{
+										prop->Int = saver.INT("Value");
+										break;
+									}
+									case PROPERTY_TYPE::VEC2:
+									{
+										prop->Vec2 = saver.VEC2("Value");
+										break;
+									}
+									case PROPERTY_TYPE::VEC3:
+									{
+										prop->Vec3 = saver.VEC3("Value");
+										break;
+									}
+									case PROPERTY_TYPE::VEC4:
+									{
+										prop->Vec4 = saver.VEC4("Value");
+										break;
+									}
+									}
+								}
+								saver.EndStruct();
+							}
+							saver.NextInCollection();
+						}
+						saver.EndCollection();
+
+					}
+					saver.EndStruct();
 				}
-				saver.EndStruct();
 			}
-		}		
+		}
 	}
 }
 

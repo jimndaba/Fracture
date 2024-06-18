@@ -32,6 +32,8 @@ namespace Fracture
 
 		inline bool operator == (const UUID& other) const {return m_UUID == other.m_UUID;}
 
+		inline bool operator == (const int& other) const { return m_UUID == other; }
+
 
 		inline bool operator < (const UUID& other) const {
 			return m_UUID < other.m_UUID;

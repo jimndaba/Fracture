@@ -90,7 +90,11 @@ void Fracture::FractureGame::Update()
 
     mScriptManager->onUpdate(frameTime);    
 
+    
+
     mScriptManager->onLateUpdate(frameTime);
+
+    AnimationSystem::Instance()->Update(frameTime);
 
     Fracture::CameraSystem mCameraSystem{};
     for (const auto& camera : SceneManager::GetAllComponents<CameraComponent>())
@@ -112,8 +116,6 @@ void Fracture::FractureGame::Update()
     }
  
     Framedelta = frameTime;
-    AnimationSystem::Instance()->Update(frameTime);
-
     mAudioManager->OnUpdate(frameTime);
     
 }

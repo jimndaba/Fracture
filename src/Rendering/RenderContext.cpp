@@ -33,10 +33,8 @@ void Fracture::RenderContext::BeginScene()
 	OpaqueDrawCalls.clear();
 	TransparentDrawCalls.clear();
 	ShadowDrawCalls.clear();
-
-
-
-
+	MaterialGPUData.clear();
+	MaterialIndexMap.clear();
 
 	const auto& terrains = SceneManager::GetAllComponents<TerrainComponent>();
 	for (const auto& terrain : terrains)
@@ -79,6 +77,8 @@ void Fracture::RenderContext::BeginScene()
 			Fracture::RenderCommands::BufferSubData<glm::vec4>(this, batch.second->EntityID_Buffer->RenderID, batch.second->EntityIDs, batch.second->EntityIDs.size() * sizeof(glm::vec4), 0);
 		}
 	}
+
+	GraphicsDevice::Instance()->UpdateMaterialData(MaterialGPUData);
 }
 
 void Fracture::RenderContext::EndScene()
@@ -251,6 +251,31 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 		}
 		
 		const auto& material = AssetManager::GetMaterialByID(materialID);
+		
+
+		if (MaterialIndexMap.find(materialID) == MaterialIndexMap.end())
+		{
+			GPUMaterial gpu_mat;
+			gpu_mat.AlbedoFlag = (int)material->HasAlbedoTexture;
+			gpu_mat.AOFlag = (int)material->HasAOTexture;
+			gpu_mat.EmissionFlag = (int)material->HasEmissionTexture;
+			gpu_mat.MetalnessFlag = (int)material->HasMetalTexture;
+			gpu_mat.NormalFlag = (int)material->HasNormalTexture;
+			gpu_mat.RoughnessFlag = (int)material->HasRoughnessTexture;
+			gpu_mat.SpecularFlag = (int)material->HasSpecularTexture;
+			gpu_mat.pAO = material->AOLevel;
+			gpu_mat.pDiffuse = material->AlbedoColour;
+			gpu_mat.pEmission = material->EmissionColour;
+			gpu_mat.pEmissionStrength = material->EmmisionStrength;
+			gpu_mat.pMetalness = material->MetalicLevel;
+			gpu_mat.pRoughness = material->RoughnessLevel;
+			gpu_mat.SpecularLevel = material->SpecularLevel;
+			gpu_mat.SpecularIntensity = material->SpecularIntensity;
+			gpu_mat.TextureSpace = (int)material->TextureSpace;		
+			gpu_mat.Tiling = material->TextureTiling;
+			MaterialIndexMap[materialID] = MaterialGPUData.size();
+			MaterialGPUData.push_back(gpu_mat);
+		}
 
 		if (cam_system.IsBoxInFrustum(*SceneManager::ActiveCamera(), submesh.BoundingBox.UpdatedAABB(transform)))
 		{
@@ -267,6 +292,7 @@ void Fracture::RenderContext::AddToBatch(MeshComponent* meshcomponent,glm::mat4 
 
 			mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
 			mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
+			mBatches[materialID][mesh->ID]->GPUMaterialIndex = MaterialIndexMap[materialID];
 
 			auto drawcall = std::make_shared<MeshDrawCall>();
 			drawcall->EntityID = entity;
@@ -321,9 +347,29 @@ void Fracture::RenderContext::AddDrawCall(MeshComponent* meshcomp, glm::mat4 tra
 		{
 			auto materialID = meshcomp->Materials[submesh.MaterialIndex];
 			const auto& material = AssetManager::GetMaterialByID(materialID);
+			GPUMaterial gpu_mat;
+			gpu_mat.AlbedoFlag = material->HasAlbedoTexture;
+			gpu_mat.AOFlag = material->HasAOTexture;
+			gpu_mat.EmissionFlag = material->HasEmissionTexture;
+			gpu_mat.MetalnessFlag = material->HasMetalTexture;
+			gpu_mat.NormalFlag = material->HasNormalTexture;
+			gpu_mat.RoughnessFlag = material->HasRoughnessTexture;
+			gpu_mat.SpecularFlag = material->HasSpecularTexture;
+
+			gpu_mat.pAO = material->AOLevel;
+			gpu_mat.pDiffuse = material->AlbedoColour;
+			gpu_mat.pEmission = material->EmissionColour;
+			gpu_mat.pEmissionStrength = material->EmmisionStrength;
+			gpu_mat.pMetalness = material->MetalicLevel;
+			gpu_mat.pRoughness = material->RoughnessLevel;
+			gpu_mat.SpecularLevel = material->SpecularLevel;
+			gpu_mat.SpecularIntensity = material->SpecularIntensity;
+			gpu_mat.TextureSpace = (int)material->TextureSpace;
+			gpu_mat.Tiling = material->TextureTiling;
+			MaterialGPUData.push_back(gpu_mat);
 
 			auto drawcall = std::make_shared<MeshDrawCall>();
-
+			drawcall->GPUMaterialIndex = MaterialGPUData.size() - 1;
 			drawcall->EntityID = entity;
 			drawcall->IDColor = color;
 			drawcall->model = transform;
@@ -371,11 +417,33 @@ void Fracture::RenderContext::AddDrawCall(TerrainComponent* component, glm::mat4
 		const unsigned int NUM_STRIPS = component->TerrianSizeY - 1;
 		const unsigned int NUM_VERTS_PER_STRIP = component->TerrianSizeX * 2;
 
+		GPUMaterial gpu_mat;
+		gpu_mat.AlbedoFlag = material->HasAlbedoTexture;
+		gpu_mat.AOFlag = material->HasAOTexture;
+		gpu_mat.EmissionFlag = material->HasEmissionTexture;
+		gpu_mat.MetalnessFlag = material->HasMetalTexture;
+		gpu_mat.NormalFlag = material->HasNormalTexture;
+		gpu_mat.RoughnessFlag = material->HasRoughnessTexture;
+		gpu_mat.SpecularFlag = material->HasSpecularTexture;
+
+		gpu_mat.pAO = material->AOLevel;
+		gpu_mat.pDiffuse = material->AlbedoColour;
+		gpu_mat.pEmission = material->EmissionColour;
+		gpu_mat.pEmissionStrength = material->EmmisionStrength;
+		gpu_mat.pMetalness = material->MetalicLevel;
+		gpu_mat.pRoughness = material->RoughnessLevel;
+		gpu_mat.SpecularLevel = material->SpecularLevel;
+		gpu_mat.SpecularIntensity = material->SpecularIntensity;
+		gpu_mat.TextureSpace = (int)material->TextureSpace;
+		gpu_mat.Tiling = material->TextureTiling;
+		MaterialGPUData.push_back(gpu_mat);
+
 		for (unsigned int strip = 0; strip < NUM_STRIPS; ++strip)
 		{
 			auto drawcall = std::make_shared<TerrainDrawCall>();
 			drawcall->DrawCallPrimitive = DrawMode::TriangleStrip;
 			drawcall->EntityID = component->GetID();
+			drawcall->GPUMaterialIndex = MaterialGPUData.size() - 1;
 			drawcall->IDColor = color;
 			drawcall->model = transform;
 			drawcall->MaterialID = component->MaterialID;
@@ -384,6 +452,8 @@ void Fracture::RenderContext::AddDrawCall(TerrainComponent* component, glm::mat4
 			drawcall->IndexCount = NUM_VERTS_PER_STRIP;
 			drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * strip);
 
+
+			
 
 			if (material->IsTranslucent)
 				TransparentDrawCalls.push_back(drawcall);
@@ -449,7 +519,6 @@ void Fracture::RenderContext::DrawPrefabOutlines(UUID entity)
 				drawcall->basevertex = submesh.BaseVertex;
 				drawcall->IndexCount = submesh.IndexCount;
 				drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
-
 				OutlineDrawCalls.push_back(drawcall);
 			}
 			
@@ -464,6 +533,8 @@ void Fracture::RenderContext::AddToBatch(PrefabInstanceComponent* meshcomponent,
 		return;
 
 	const auto& mesh = AssetManager::GetStaticByIDMesh(meshcomponent->Mesh);
+
+	
 
 	for (const auto& submesh : mesh->SubMeshes)
 	{
@@ -591,11 +662,35 @@ void Fracture::RenderContext::AddToBatch(PrefabInstanceComponent* meshcomponent,
 		color.b = (float)b / 255.0f;
 		color.a = (float)a / 255.0f;
 
-		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
-		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
-
+		
 
 		const auto& material = AssetManager::GetMaterialByID(materialID);
+		if (MaterialIndexMap.find(materialID) == MaterialIndexMap.end())
+		{
+			GPUMaterial gpu_mat;
+			gpu_mat.AlbedoFlag = material->HasAlbedoTexture;
+			gpu_mat.AOFlag = material->HasAOTexture;
+			gpu_mat.EmissionFlag = material->HasEmissionTexture;
+			gpu_mat.MetalnessFlag = material->HasMetalTexture;
+			gpu_mat.NormalFlag = material->HasNormalTexture;
+			gpu_mat.RoughnessFlag = material->HasRoughnessTexture;
+			gpu_mat.SpecularFlag = material->HasSpecularTexture;
+			gpu_mat.pAO = material->AOLevel;
+			gpu_mat.pDiffuse = material->AlbedoColour;
+			gpu_mat.pEmission = material->EmissionColour;
+			gpu_mat.pEmissionStrength = material->AOLevel;
+			gpu_mat.pMetalness = material->MetalicLevel;
+			gpu_mat.pRoughness = material->RoughnessLevel;
+			gpu_mat.SpecularLevel = material->SpecularLevel;
+			gpu_mat.SpecularIntensity = material->SpecularIntensity;
+			gpu_mat.TextureSpace = (int)material->TextureSpace;
+			MaterialIndexMap[materialID] = MaterialGPUData.size();
+			gpu_mat.Tiling = material->TextureTiling;
+			MaterialGPUData.push_back(gpu_mat);
+		}
+		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
+		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
+		mBatches[materialID][mesh->ID]->GPUMaterialIndex = MaterialIndexMap[materialID];
 
 		auto drawcall = std::make_shared<MeshDrawCall>();
 		drawcall->basevertex = submesh.BaseVertex;
