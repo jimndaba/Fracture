@@ -1,6 +1,6 @@
 #include "FracturePCH.h"
 #include "SSRPass.h"
-#include "Assets/AssetManager.h"
+
 
 Fracture::SSRPass::SSRPass(const std::string& name, RenderContext* context):IPass(name,context)
 {
@@ -49,7 +49,7 @@ void Fracture::SSRPass::Execute()
 		RenderCommands::SetCullMode(Context, CullMode::None);
 		RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.SSR_Resolution.x, GraphicsDevice::RenderSettings.SSR_Resolution.y, 0, 0);
 		RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.SSR_Resolution.x, GraphicsDevice::RenderSettings.SSR_Resolution.y, 0, 0);
-		RenderCommands::ClearColor(Context, Colour::CornflourBlue);
+		RenderCommands::ClearColor(Context, Colour::Black);
 		RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
 
 
@@ -71,9 +71,6 @@ void Fracture::SSRPass::Execute()
 		RenderCommands::BindVertexArrayObject(Context, Vao);
 		RenderCommands::DrawArray(Context, cmd);
 
-
-
-		Fracture::RenderCommands::ResetTextureUnits(Context, mSSR_Shader.get());
 		Fracture::RenderCommands::ReleaseRenderTarget(Context);
 	}
 }

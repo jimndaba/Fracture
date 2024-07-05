@@ -4,7 +4,7 @@
 
 #include "Shader.h"
 #include "Color.h"
-#include "PipelineState.h"
+#include "RenderCommands.h"
 
 namespace Fracture
 {
@@ -123,6 +123,7 @@ namespace Fracture
 		bool IsReflective = false;
 		bool DepthWrite = true;
 		bool IsSkinned = false;
+		bool IsInstanced = true;
 		bool IsAffectedByWind = false;
 		bool IsDirty = false;
 

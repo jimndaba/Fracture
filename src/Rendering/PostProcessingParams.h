@@ -77,6 +77,9 @@ namespace Fracture
 		float FocalRandge = 10.0f;
 		float BokehRadius = 8.0f;
 
+		//EditorData
+		glm::vec4 MousePos_BrushRadius;
+
 	};
 
 }

@@ -48,6 +48,7 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		}
 		info.data = u_data;
 		info.Texture_Type = TextureCreationInfo::TextureType::Texture2D;
+		info.formatType = TextureFormatType::UByte;
 		info.Wrap = TextureWrap::Repeat;
 	}
 	
@@ -75,7 +76,7 @@ std::shared_ptr<Fracture::Texture> Fracture::ImageLoader::LoadTexture(const std:
 		case 1:
 		{
 			info.format = TextureFormat::Red;
-			info.internalFormat = InternalFormat::R16;
+			info.internalFormat = InternalFormat::R16F;
 			break;
 		}
 		case 2:

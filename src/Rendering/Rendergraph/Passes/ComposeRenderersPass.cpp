@@ -1,7 +1,5 @@
 #include "FracturePCH.h"
 #include "ComposeRenderersPass.h"
-#include "Assets/AssetManager.h"
-#include "Rendering/PostProcessPipeline.h"
 
 Fracture::ComposeRenderersPass::ComposeRenderersPass(const std::string& name, RenderContext* context, const ComposeRenderersPassDef& info):IPass(name,context)
 {
@@ -80,7 +78,7 @@ void Fracture::ComposeRenderersPass::Execute()
 	RenderCommands::BindVertexArrayObject(Context, Vao);
 	RenderCommands::DrawArray(Context, cmd);
 
-	Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Compose").get());
+	//Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Compose").get());
 	Fracture::RenderCommands::UseProgram(Context, 0);
 	RenderCommands::Disable(Context, GLCapability::Blending);
 	RenderCommands::ReleaseRenderTarget(Context);

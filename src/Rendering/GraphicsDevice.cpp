@@ -7,6 +7,8 @@
 #include "Common/Logger.h"
 #include "World/SceneManager.h"
 #include "Assets/ImagerLoader.h"
+#include "glsl/Shadinclude.hpp"
+#include "RenderContext.h"
 
 std::unique_ptr<Fracture::GraphicsDevice> Fracture::GraphicsDevice::_Instance;
 uint16_t Fracture::GraphicsDevice::DRAWCALL_COUNT;
@@ -96,6 +98,8 @@ void Fracture::GraphicsDevice::Startup()
         glEnable(GL_CULL_FACE);
         glEnable(GL_SCISSOR_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(GraphicsDevice::MessageCallback, 0);
     }
 
     {
@@ -166,6 +170,17 @@ void Fracture::GraphicsDevice::Startup()
         CreateBuffer(mGWindData.get(), desc);
         SetBufferIndexRange(mGWindData.get(), (int)ShaderUniformIndex::GlobalWindData, 0);
     } 
+    {
+        BufferDescription desc;
+        desc.Name = "GlobalTerrainIndirectBuffer";
+        desc.bufferType = BufferType::DrawIndirectBuffer;
+        desc.data = NULL;
+        desc.size = sizeof(DrawElementsIndirectCommand) * 8000;
+        desc.usage = BufferUsage::Stream;
+        mIndirectBuffer = std::make_shared<Buffer>();
+        CreateBuffer(mIndirectBuffer.get(), desc);
+        //SetBufferIndexRange(mIndirectBuffer.get(), (int)ShaderUniformIndex::IndirectBuffer, 0);
+    }
 
     VertexArrayCreationInfo info;
     GraphicsDevice::Instance()->CreateVertexArray(QuadVAO, info);
@@ -208,6 +223,17 @@ void Fracture::GraphicsDevice::UpdateMaterialData(const std::vector<GPUMaterial>
     GraphicsDevice::Instance()->UpdateBufferData(mGPUMaterialBuffer.get(), 0, sizeof(GPUMaterial) * data.size(), data.data());
 }
 
+void Fracture::GraphicsDevice::UpdateIndirectBuffer(const std::vector<DrawElementsIndirectCommand>& data)
+{
+    GraphicsDevice::Instance()->ClearBufferData(mIndirectBuffer.get());
+    GraphicsDevice::Instance()->UpdateBufferData(mIndirectBuffer.get(), 0, sizeof(DrawElementsIndirectCommand) * data.size(), data.data());
+}
+
+uint32_t Fracture::GraphicsDevice::GetIndirectBuffer()
+{
+   return mIndirectBuffer->RenderID;
+}
+
 void Fracture::GraphicsDevice::UpdateGlobalWindData()
 {
     GraphicsDevice::Instance()->UpdateBufferData(mGWindData.get(), 0, sizeof(WindSystemData), &WindSettings);
@@ -233,15 +259,27 @@ void Fracture::GraphicsDevice::CreateBuffer(Buffer* buffer, const BufferDescript
     glCreateBuffers(1,&buffer->RenderID);    glCheckError();
     buffer->Description = desc;
 
-
     if (desc.data)
     {
-        glNamedBufferData(buffer->RenderID, desc.size, desc.data, (GLenum)desc.usage);    glCheckError();
+        if (!desc.IsPersistantlyMapped)
+        {
+            glNamedBufferData(buffer->RenderID, desc.size, desc.data, (GLenum)desc.usage);    glCheckError();
+        }
+        else
+        {
+            glNamedBufferStorage(buffer->RenderID, desc.size, desc.data, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);glCheckError();
+        }
     }
     else
     {
-        glNamedBufferData(buffer->RenderID, desc.size, NULL, (GLenum)desc.usage);    glCheckError();
-
+        if (!desc.IsPersistantlyMapped)
+        {
+            glNamedBufferData(buffer->RenderID, desc.size, NULL, (GLenum)desc.usage);    glCheckError();
+        }
+        else
+        {
+            glNamedBufferStorage(buffer->RenderID, desc.size, NULL, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT); glCheckError();
+        }
     }
 }
 
@@ -257,18 +295,7 @@ void Fracture::GraphicsDevice::SetBufferIndexRange(Buffer* buffer, uint32_t inde
 
 void Fracture::GraphicsDevice::UpdateBufferData(Buffer* buffer, uint32_t offset, uint32_t size, const void* data)
 {
-    
-    GLint m_size;
-    glGetBufferParameteriv((GLenum)buffer->Description.bufferType, GL_BUFFER_SIZE, &m_size); glCheckError();
-    if (m_size != size)
-    {
-        glNamedBufferSubData(buffer->RenderID, offset, size, data);  glCheckError();
-    }
-    else
-    {
-        glNamedBufferSubData(buffer->RenderID, offset, size, data);  glCheckError();
-    }
-
+    glNamedBufferSubData(buffer->RenderID, offset, size, data);  glCheckError();
 }
 
 void Fracture::GraphicsDevice::ClearBufferData(Buffer* buffer)
@@ -535,9 +562,10 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             {
                 levels = info.MipLevels;
             }
-           //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, info.NoChannels);
             if (info.data.size() && info.Texture_Type != TextureCreationInfo::TextureType::HDR)
             {
+                
                 glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, GL_UNSIGNED_BYTE, info.data.data()); glCheckError();
             }
             else if (info.f_data.size())
@@ -571,7 +599,7 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
 
     glBindTexture(target, 0);
        
-   
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
 void Fracture::GraphicsDevice::CreateGlobalTexture(const std::string& Name, const TextureCreationInfo& info)
@@ -1167,6 +1195,17 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
         {
             target->DepthStencilAttachment = std::make_shared<Texture>(info.DepthStencilAttachments[0]);
             CreateTexture(target->DepthStencilAttachment, info.DepthStencilAttachments[0]);
+
+            // Be sure to call the following after originTexture being created and initialized properly
+            if (info.HasDebugViews)
+            {
+                target->mDebugViews.resize(info.NoDebugViews);
+                for (int32_t i = 0; i < info.NoDebugViews; ++i)
+                {
+                    glGenTextures(1, &target->mDebugViews[i]);
+                    glTextureView(target->mDebugViews[i], GL_TEXTURE_2D, target->DepthStencilAttachment->Handle, (GLenum)info.DepthStencilAttachments[0].internalFormat, 0, 1, i, 1);
+                }
+            }
             glNamedFramebufferTexture(target->Handle, GLenum(info.DepthStencilAttachments[0].AttachmentTrgt), target->DepthStencilAttachment->Handle, 0);  glCheckError();           
         }
         else if(info.HasRenderBuffer)
@@ -1192,6 +1231,16 @@ std::shared_ptr<Fracture::RenderTarget> Fracture::GraphicsDevice::CreateRenderTa
                 glCheckError();
                 glNamedFramebufferTexture(target->Handle, GLenum(info.Target), target->DepthStencilAttachment->Handle, 0);  glCheckError();
             }
+            if (info.HasDebugViews)
+            {
+                target->mDebugViews.resize(info.NoDebugViews);
+                for (int32_t i = 0; i < info.NoDebugViews; ++i)
+                {
+                    glGenTextures(1, &target->mDebugViews[i]); glCheckError();
+                    glTextureView(target->mDebugViews[i],(GLenum)info.DepthStencilAttachments[0].TextureTarget, target->DepthStencilAttachment->Handle, (GLenum)info.DepthStencilAttachments[0].internalFormat, 0, 1, i, 1); glCheckError();
+                }
+            }
+
             glNamedFramebufferDrawBuffer(target->Handle, GL_NONE);   glCheckError();
             glNamedFramebufferReadBuffer(target->Handle, GL_NONE);   glCheckError();
         }
@@ -1299,6 +1348,7 @@ unsigned int Fracture::GraphicsDevice::CompileShader(const std::string& name, co
     {
         FRACTURE_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: {}", path);
     }
+
     const char* vShaderCode = shadercode.c_str();
 
     handle = glCreateShader(GLenum(shadertype));
@@ -1350,4 +1400,11 @@ void Fracture::GraphicsDevice::SaveScreenShot(uint32_t fb, uint32_t attachment_i
     glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
     ImageLoader::SaveImage(path, width, height, nrChannels, buffer, stride);
 
+}
+
+void Fracture::GraphicsDevice::MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+    fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+        (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+        type, severity, message);
 }

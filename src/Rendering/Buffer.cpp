@@ -35,4 +35,5 @@ Fracture::Buffer::Buffer() :
 
 Fracture::Buffer::~Buffer()
 {	
+	glDeleteBuffers(1,&RenderID);
 }

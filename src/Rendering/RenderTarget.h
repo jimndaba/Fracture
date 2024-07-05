@@ -20,6 +20,8 @@ namespace Fracture
 		bool IsResizable = false;
 		float Width = 1.0f;
 		float Height = 1.0f;
+		bool HasDebugViews;
+		int NoDebugViews = 0;
 	};
 
 	struct RenderTarget : public IGraphicsResource
@@ -31,6 +33,7 @@ namespace Fracture
 		std::vector<std::shared_ptr<Texture>> ColorAttachments;
 		std::shared_ptr<Texture> DepthStencilAttachment;
 		uint32_t RenderBufferHandle;
+		std::vector<unsigned int> mDebugViews;
 	private:
 		// pure virtual implementation
 		void bind() {};

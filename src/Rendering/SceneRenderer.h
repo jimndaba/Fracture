@@ -17,16 +17,18 @@
 
 namespace Fracture
 {
+	class TerrainSystem;
 
 	class SceneRenderer
 	{
 
 	public:
-		SceneRenderer();
+		SceneRenderer(TerrainSystem* terrainSystem);
 
 		void Init();
 
 		void Begin(float dt);
+		void Render();
 
 		void OnSave();
 		void OnLoad();
@@ -52,6 +54,8 @@ namespace Fracture
 		std::queue<Fracture::UUID> mLightProbesToRender;
 
 		std::unique_ptr<ParticleSystem> particleSystem;
+
+		TerrainSystem* TerrainSys;
 
 		bool DrawGrid = false;
 		Fracture::GlobalFrameData data;

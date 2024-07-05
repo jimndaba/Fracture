@@ -205,3 +205,56 @@ bool Fracture::CameraSystem::IsBoxInFrustum(Fracture::CameraComponent& component
 {
     return IsBoxInFrustum(component.CameraFustrum, min, max);
 }
+
+bool Fracture::CameraSystem::IntersectRayTriangle(const glm::vec3& orig, const glm::vec3& dir, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& outIntersection)
+{
+    // Using the Möller–Trumbore intersection algorithm
+    const float EPSILON = 0.0000001;
+    glm::vec3 edge1 = v1 - v0;
+    glm::vec3 edge2 = v2 - v0;
+    glm::vec3 h = glm::cross(dir, edge2);
+    float a = glm::dot(edge1, h);
+    if (a > -EPSILON && a < EPSILON)
+        return false;
+
+    float f = 1.0 / a;
+    glm::vec3 s = orig - v0;
+    float u = f * glm::dot(s, h);
+    if (u < 0.0 || u > 1.0)
+        return false;
+
+    glm::vec3 q = glm::cross(s, edge1);
+    float v = f * glm::dot(dir, q);
+    if (v < 0.0 || u + v > 1.0)
+        return false;
+
+    float t = f * glm::dot(edge2, q);
+    if (t > EPSILON) {
+        outIntersection = orig + dir * t;
+        return true;
+    }
+    else
+        return false;
+}
+
+glm::vec3 Fracture::CameraSystem::ScreenToWorldRay(Fracture::CameraComponent& camera,float mouse_x, float mouse_y, float width, float height)
+{
+    // Get the normalized device coordinates
+    float x = (2.0f * mouse_x) / width - 1.0f; // assuming 800 is the window width
+    float y = 1.0f - (2.0f * mouse_y) / height; // assuming 600 is the window height
+    float z = 1.0f;
+
+    glm::vec3 rayNDS = glm::vec3(x, y, z);
+
+    // Convert to homogeneous clip coordinates
+    glm::vec4 rayClip = glm::vec4(rayNDS.x, rayNDS.y, -1.0, 1.0);
+
+    // Convert to eye coordinates
+    glm::vec4 rayEye = glm::inverse(camera.ProjectMatrix) * rayClip;
+    rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0, 0.0);
+
+    // Convert to world coordinates
+    glm::vec3 rayWorld = glm::vec3(glm::inverse(camera.ViewMatrix) * rayEye);
+    rayWorld = glm::normalize(rayWorld);
+    return rayWorld;
+}

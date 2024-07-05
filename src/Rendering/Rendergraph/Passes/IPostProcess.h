@@ -2,6 +2,7 @@
 #ifndef IPOSTPROCESS_H
 #define IPOSTPROCESS_H
 
+#include "IPass.h"
 
 namespace Fracture
 {

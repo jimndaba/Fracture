@@ -1,7 +1,6 @@
 #include "FracturePCH.h"
 #include "GridPass.h"
-#include "Assets/AssetManager.h"
-#include "SSAOPass.h"
+
 
 Fracture::GridPass::GridPass(const std::string& name, RenderContext* context, const GridPassDef& info):IPass(name,context), params(info)
 {

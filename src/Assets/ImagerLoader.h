@@ -17,7 +17,7 @@ namespace Fracture
 
 
 		static void SaveImage(std::string filepath, int width, int height, int nrChannels, std::vector<char> buffer, uint32_t stride);
-
+	
 	};
 
 	struct ImageImporter

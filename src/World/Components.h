@@ -712,6 +712,11 @@ namespace Fracture
 		Fracture::UUID TerrainID;
 		Fracture::UUID MaterialID;
 		Fracture::UUID HeightMapID;
+		std::string HeightMapPath;
+
+
+		std::vector<UUID> PlacementLayers;
+
 		bool HasHeightMap = false;
 		bool HasMaterial = false;
 		bool IsGenerated = false;
@@ -719,8 +724,8 @@ namespace Fracture
 		
 		int TerrianSizeX = 256;
 		int TerrianSizeY = 256;
-		int TerrianYScale = 32;
-		int TerrianYShift = 0;
+		float TerrianYScale = 0.25f;
+		float TerrianYShift = 16.0f;
 		UUID GetID() { return entity; }
 	};
 }

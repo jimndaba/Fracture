@@ -3,20 +3,20 @@
 #define GRAPHICSDEVICE_H
 
 #include "IGraphicsResource.h"
-#include "PipelineState.h"
 #include "Buffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderTarget.h"
-#include "RenderCommands.h"
+#include "RenderContext.h"
 #include "PostProcessingParams.h"
 #include "World/WindSystem.h"
 
-#include "RenderContext.h"
 #include <map>
 
 namespace Fracture
 {
+	struct RenderContext;
+
 	struct GlobalRenderTargets
 	{
 		static std::string GlobalColour;
@@ -40,7 +40,8 @@ namespace Fracture
 		ShadowMatrix,
 		ShadowPlanes,
 		GlobalWindData,
-		GlobalGPUMaterials
+		GlobalGPUMaterials,
+		IndirectBuffer
 	};
 
 	enum class ShaderStorageBufferIndex
@@ -52,7 +53,8 @@ namespace Fracture
 		LightGridSSBO,
 		GlobalIndexCountSSBO,
 		Debuglines,
-		AnimationData
+		AnimationData,
+		TerrainHeightMap
 	};
 
 	enum class GlobalColorAttachments
@@ -127,6 +129,7 @@ namespace Fracture
 
 		std::shared_ptr<Buffer> mGFrameData;
 		std::shared_ptr<Buffer> mGWindData;
+		std::shared_ptr<Buffer> mIndirectBuffer;
 		std::shared_ptr<Buffer> mGLightBuffer;
 		std::shared_ptr<Buffer> mAnimationData;
 		std::shared_ptr<Buffer> mPostProcessingBuffer;
@@ -154,6 +157,8 @@ namespace Fracture
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void UpdateAnimationData(const std::vector<glm::mat4>& data);
 		void UpdateMaterialData(const std::vector<GPUMaterial>& data);
+		void UpdateIndirectBuffer(const std::vector<DrawElementsIndirectCommand>& data);
+		uint32_t GetIndirectBuffer();
 		void UpdateGlobalWindData();
 		void Shutdown();
 
@@ -210,6 +215,9 @@ namespace Fracture
 		static WindSystemData WindSettings;
 
 		static void SaveScreenShot(uint32_t fb,uint32_t attachment_index, int width, int height, const std::string& path);
+
+		static void APIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
+			GLsizei length, const GLchar* message, const void* userParam);
 
 		PostProcessPipeline* PostProcessStack();
 		

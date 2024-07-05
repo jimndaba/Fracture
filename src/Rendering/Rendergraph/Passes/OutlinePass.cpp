@@ -19,7 +19,9 @@ void Fracture::OutlinePass::Setup()
 
 void Fracture::OutlinePass::Execute()
 {
-	
+	float scaleFactor = 1.08f;
+	glm::mat4 scalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+
 	const auto& global_color = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalOutline);
 
 	if (!global_color)
@@ -40,8 +42,8 @@ void Fracture::OutlinePass::Execute()
 		return;
 	}
 
-	RenderCommands::SetViewport(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
-	RenderCommands::SetScissor(Context, Context->ContextViewport.Width, Context->ContextViewport.Height, 0, 0);
+	RenderCommands::SetViewport(Context, GraphicsDevice::Instance()->Viewport_Width, GraphicsDevice::Instance()->Viewport_Height, 0, 0);
+	RenderCommands::SetScissor(Context, GraphicsDevice::Instance()->Viewport_Width, GraphicsDevice::Instance()->Viewport_Height, 0, 0);
 	RenderCommands::SetCullMode(Context, CullMode::None);
 
 	RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
@@ -50,7 +52,6 @@ void Fracture::OutlinePass::Execute()
 	RenderCommands::StencilOperation(Context, StencilOp_TestResult::Keep, StencilOp_TestResult::Keep, StencilOp_TestResult::Replace);
 	RenderCommands::StencilFunction(Context, StencilFunc::Always,1,0xFF);
 	RenderCommands::StencilMask(Context, 0xFF);
-
 	RenderCommands::SetColorMask(Context, 0, 0, 0, 0);
 
 	for (auto& drawcall : Context->OutlineDrawCalls)
@@ -62,13 +63,13 @@ void Fracture::OutlinePass::Execute()
 		}
 
 		const auto& material = AssetManager::Instance()->GetMaterialByID(drawcall->MaterialID);
-		
-		if (material->IsSkinned)
-		{
-			Fracture::RenderCommands::UseProgram(Context, mZShader->Handle);
-			Fracture::RenderCommands::BindMaterial(Context, mZShader.get(), material.get());
-			Fracture::RenderCommands::SetUniform(Context, mZShader.get(), "Model_matrix", drawcall->model);
+		Fracture::RenderCommands::UseProgram(Context, mZShader->Handle);
+		Fracture::RenderCommands::BindMaterial(Context, mZShader.get(), material.get());
+		Fracture::RenderCommands::SetUniform(Context, mZShader.get(), "Model_matrix", drawcall->model);
 
+
+		if (material->IsSkinned)
+		{			
 			if (AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawcall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
 				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawcall->EntityID];
@@ -88,9 +89,6 @@ void Fracture::OutlinePass::Execute()
 		}
 		else
 		{
-			Fracture::RenderCommands::UseProgram(Context, mZShader->Handle);
-			Fracture::RenderCommands::BindMaterial(Context, mZShader.get(), material.get());
-			Fracture::RenderCommands::SetUniform(Context, mZShader.get(), "Model_matrix", drawcall->model);
 			Fracture::RenderCommands::SetUniform(Context, mZShader.get(), "IsAnimated", false);
 		}
 
@@ -110,7 +108,6 @@ void Fracture::OutlinePass::Execute()
 	RenderCommands::StencilMask(Context, 0x00);		
 	RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
 
-
 	for (auto& drawcall : Context->OutlineDrawCalls)
 	{
 		if (!AssetManager::Instance()->IsMaterialLoaded(drawcall->MaterialID))
@@ -120,13 +117,13 @@ void Fracture::OutlinePass::Execute()
 		}
 
 		const auto& material = AssetManager::Instance()->GetMaterialByID(drawcall->MaterialID);
-		
+		Fracture::RenderCommands::UseProgram(Context, mOShader->Handle);
+		Fracture::RenderCommands::BindMaterial(Context, mOShader.get(), material.get());
+		glm::mat4 transform = drawcall->model * scalingMatrix;
+		Fracture::RenderCommands::SetUniform(Context, mOShader.get(), "Model_matrix", transform);
+
 		if (material->IsSkinned)
 		{
-			Fracture::RenderCommands::UseProgram(Context, mOShader->Handle);
-			Fracture::RenderCommands::BindMaterial(Context, mOShader.get(), material.get());
-			Fracture::RenderCommands::SetUniform(Context, mOShader.get(), "Model_matrix", drawcall->model);
-
 			if (AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawcall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
 			{
 				const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawcall->EntityID];
@@ -145,15 +142,11 @@ void Fracture::OutlinePass::Execute()
 			}
 		}
 		else
-		{
-			Fracture::RenderCommands::UseProgram(Context, mOShader->Handle);
-			Fracture::RenderCommands::BindMaterial(Context, mOShader.get(), material.get());
-			Fracture::RenderCommands::SetUniform(Context, mOShader.get(), "Model_matrix", drawcall->model);
+		{				
 			Fracture::RenderCommands::SetUniform(Context, mOShader.get(), "IsAnimated", false);
 		}
 
 		Fracture::RenderCommands::BindVertexArrayObject(Context, drawcall->MeshHandle);
-
 		DrawElementsInstancedBaseVertex cmd;
 		cmd.mode = drawcall->DrawCallPrimitive;
 		cmd.basevertex = drawcall->basevertex;
@@ -166,9 +159,10 @@ void Fracture::OutlinePass::Execute()
 
 	RenderCommands::StencilMask(Context, 0xFF);
 	RenderCommands::StencilFunction(Context, StencilFunc::Always, 1, 0xFF);
-
 	RenderCommands::ReleaseRenderTarget(Context);
 	RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
 	RenderCommands::Disable(Context, Fracture::GLCapability::StencilTest);
+	Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+	Fracture::RenderCommands::ResetTextureUnits(Context, mOShader.get());
 
 }

@@ -4,19 +4,45 @@
 
 #include "Command.h"
 #include "Color.h"
-#include "RenderContext.h"
 #include "RenderTarget.h"
-#include "GraphicsDevice.h"
-#include "PipelineState.h"
+#include <glad/glad.h>
 
 namespace Fracture
 {
 	struct Scissor;
 	struct Viewport;
-
-	struct RenderTarget;
 	struct Shader;
 	struct Material;
+	struct RenderContext;
+
+
+	enum class GLCapability;
+
+	enum class DepthSortOrder
+	{
+		Front_To_Back,
+		Back_To_Front
+	};
+
+	enum class DrawMode : uint32_t
+	{
+		Points = GL_POINTS,
+		Lines = GL_LINES,
+		LineLoops = GL_LINE_LOOP,
+		LineStrip = GL_LINE_STRIP,
+		Triangles = GL_TRIANGLES,
+		TriangleStrip = GL_TRIANGLE_STRIP,
+		TriangleFan = GL_TRIANGLE_FAN
+	};
+
+	enum class DrawCommandType
+	{
+		DrawArrys,
+		DrawElements,
+		DrawElementsInstancedBaseVertex,
+		MultiDrawElementsIndirect
+	};
+
 
 	enum ClearFlags : uint32_t
 	{
@@ -24,16 +50,140 @@ namespace Fracture
 		Depth = GL_DEPTH_BUFFER_BIT,
 		Stencil = GL_STENCIL_BUFFER_BIT
 	};
-
 	
-	
-
 	enum BufferAccess
 	{
 		WriteOnly = GL_WRITE_ONLY,
 		ReadOnly = GL_READ_ONLY,
 		ReadWrite = GL_READ_WRITE
 	};
+
+	enum class CullMode
+	{
+		None = GL_NONE,
+		Front = GL_FRONT,
+		Back = GL_BACK,
+		FrontAndBack = GL_FRONT_AND_BACK
+	};
+
+	enum class FillMode
+	{
+		Line = GL_LINE,
+		Fill = GL_FILL
+	};
+
+	enum class PrimitiveType
+	{
+		Points = GL_POINTS,
+		Lines = GL_LINES,
+		LineLoops = GL_LINE_LOOP,
+		LineStrip = GL_LINE_STRIP,
+		Triangles = GL_TRIANGLES,
+		TriangleStrip = GL_TRIANGLE_STRIP,
+		TriangleFan = GL_TRIANGLE_FAN
+	};
+
+	enum class DepthFunc
+	{
+		Less = GL_LESS,
+		Equal = GL_EQUAL,
+		Never = GL_NEVER,
+		LEqual = GL_LEQUAL,
+		Greater = GL_GREATER,
+		NotEqual = GL_NOTEQUAL,
+		GEqual = GL_GEQUAL,
+		Always = GL_ALWAYS
+	};
+
+	enum class BlendEq
+	{
+		Func_ADD = GL_FUNC_ADD,
+		Func_Subtract = GL_FUNC_SUBTRACT,
+		Func_Rev_Subtract = GL_FUNC_REVERSE_SUBTRACT
+	};
+
+	enum class BlendFunc
+	{
+		Zero = GL_ZERO,
+		One = GL_ONE,
+		SrcColor = GL_SRC_COLOR,
+		OneMinusSrcColor = GL_ONE_MINUS_SRC_COLOR,
+		DstColor = GL_DST_COLOR,
+		OneMinusDstColor = GL_ONE_MINUS_DST_COLOR,
+		SrcAlpha = GL_SRC_ALPHA,
+		OneMinusSrcAlpha = GL_ONE_MINUS_SRC_ALPHA,
+		DstAlpha = GL_DST_ALPHA,
+		OneMinusDstAlpha = GL_ONE_MINUS_DST_ALPHA,
+		ConstantColor = GL_CONSTANT_COLOR,
+		OneMinusConstantColor = GL_ONE_MINUS_CONSTANT_COLOR,
+		ConstantAlpha = GL_CONSTANT_ALPHA,
+		OneMinusConstantAlpha = GL_ONE_MINUS_CONSTANT_ALPHA,
+		AlphaSaturate = GL_SRC_ALPHA_SATURATE,
+		Src1Color = GL_SRC1_COLOR,
+		OneMinusSrc1Color = GL_ONE_MINUS_SRC1_COLOR,
+		Src1Alpha = GL_SRC1_ALPHA,
+		OneMinusSrc1Alpha = GL_ONE_MINUS_SRC1_ALPHA
+	};
+
+	enum class StencilOp_TestResult
+	{
+		Keep = GL_KEEP,
+		Zero = GL_ZERO,
+		Replace = GL_REPLACE,
+		Increase = GL_INCR,
+		IncreaseWrap = GL_INCR_WRAP,
+		Decrease = GL_DECR,
+		DecreaseWrap = GL_DECR_WRAP,
+		Invert = GL_INVERT
+	};
+
+	enum class StencilFunc
+	{
+		Less = GL_LESS,
+		Equal = GL_EQUAL,
+		Never = GL_NEVER,
+		LEqual = GL_LEQUAL,
+		Greater = GL_GREATER,
+		NotEqual = GL_NOTEQUAL,
+		GEqual = GL_GEQUAL,
+		Always = GL_ALWAYS
+	};
+	enum class ShaderDataType
+	{
+		None = 0,
+		Float,
+		Float2,
+		Float3,
+		Float4,
+		Mat3,
+		Mat4,
+		Int,
+		Int2,
+		Int3,
+		Int4,
+		Bool,
+		Float4Instanced
+	};
+
+	enum class BufferUsage
+	{
+		Static = GL_STATIC_DRAW,
+		Dynamic = GL_DYNAMIC_DRAW,
+		Stream = GL_STREAM_DRAW,
+		StaticCopy = GL_STATIC_COPY
+	};
+
+	enum class BufferType
+	{
+		ArrayBuffer = GL_ARRAY_BUFFER,
+		ElementArrayBuffer = GL_ELEMENT_ARRAY_BUFFER,
+		UniformBuffer = GL_UNIFORM_BUFFER,
+		TextureBuffer = GL_TEXTURE_BUFFER,
+		FrameBuffer = GL_FRAMEBUFFER,
+		ShaderStorageBuffer = GL_SHADER_STORAGE_BUFFER,
+		DrawIndirectBuffer = GL_DRAW_INDIRECT_BUFFER
+	};
+
 	
 	struct DrawArray
 	{
@@ -82,11 +232,11 @@ namespace Fracture
 	};
 
 	struct DrawElementsIndirectCommand {
-		uint32_t  count;
-		uint32_t  instanceCount;
-		uint32_t  firstIndex;
-		int  baseVertex;
-		uint32_t  baseInstance;
+		GLuint  count;
+		GLuint  instanceCount;
+		GLuint  firstIndex;
+		GLuint  baseVertex;
+		GLuint  baseInstance;
 	};
 
 	struct MultiDrawElementsIndirect
@@ -153,6 +303,7 @@ namespace Fracture
 		void BindVertexArrayVertexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t index, uint32_t stride, uint32_t buffer, uint32_t offset = 0);
 		void BindVertexArrayIndexBuffer(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t buffer);
 		void BindVertexArraySetDivisor(Fracture::RenderContext* cntxt, uint32_t vao,uint32_t AttributeIndex, uint32_t divisor);
+		void BindBuffer(Fracture::RenderContext* cntxt, Fracture::BufferType target, uint32_t buffer);
 		void ClearBufferData(Fracture::RenderContext* cntxt, uint32_t buffer);
 		
 		void DispatchComputeShader(Fracture::RenderContext* cntxt, uint16_t x, uint16_t y, uint16_t z);
@@ -179,16 +330,19 @@ namespace Fracture
 		void DrawElementsArrayInstanced(Fracture::RenderContext* cntxt,const Fracture::DrawElementsArraysInstanced& cmd);
 		void DrawElementsBaseVertex(Fracture::RenderContext* cntxt,const Fracture::DrawElementsBaseVertex& cmd);
 		void DrawElementsInstancedBaseVertex(Fracture::RenderContext* cntxt, const Fracture::DrawElementsInstancedBaseVertex& cmd);
+		void DrawElementsIndirect(Fracture::RenderContext* cntxt, void* indirect, int count  = 0, int stride = 0);
 		void DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& cmd);
 
+	    void MapDataFrombuffer(void* ptr,uint32_t buffer,BufferAccess access = BufferAccess::WriteOnly);
+
 		template<class T>
-	    void MapDataTobuffer(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size,BufferAccess access = BufferAccess::WriteOnly);
+		void UploadDataTobuffer(void* ptr, std::vector<T>& data, uint32_t size);
 
 		template<class T>
 	    void BufferSubData(Fracture::RenderContext* cntxt,uint32_t buffer, std::vector<T>& data, uint32_t size, uint32_t offset,BufferAccess access = BufferAccess::WriteOnly);
 
 
-		void UnMapbuffer(Fracture::RenderContext* cntxt,uint32_t buffer);
+		void UnMapbuffer(uint32_t buffer);
 
 		template<RenderTargetType E>
 		void CopyRenderTarget(RenderTarget* from_buffer, RenderTarget* to_buffer, uint32_t attachment_index);
@@ -211,14 +365,14 @@ namespace Fracture
 		void ResetTextureUnits(Fracture::RenderContext* cntxt, Fracture::Shader* shader);
 
 		template<class T>
-		void MapDataTobuffer(Fracture::RenderContext* cntxt, uint32_t buffer, std::vector<T>& data, uint32_t size, BufferAccess access)
+		void UploadDataTobuffer(void* ptr, std::vector<T>& data, uint32_t size)
 		{
 			Fracture::Command cmd;
-			cmd.fnc = [cntxt, buffer, data, size,access]() {
-				auto ptr = glMapNamedBuffer(buffer, (GLenum)access);
-				memcpy(ptr, data.data(), size);				
+			cmd.fnc = [ptr, data, size]() {
+				
+				memcpy(ptr, data.data(), size);
 			};
-			cntxt->Push(cmd);	
+			cmd.fnc();
 		}
 
 		template<class T>
@@ -228,7 +382,7 @@ namespace Fracture
 			cmd.fnc = [cntxt, buffer, data, size, access,offset]() {
 				glNamedBufferSubData(buffer, offset, size, data.data());
 			};
-			cntxt->Push(cmd);
+			cmd.fnc();
 		}
 		
 		template<RenderTargetType E>

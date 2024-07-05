@@ -1,9 +1,5 @@
 #include "FracturePCH.h"
 #include "ToneMappingPass.h"
-#include "Assets/AssetManager.h"
-#include "Rendering/RenderContext.h"
-#include "Rendering/RenderCommands.h"
-#include "Rendering/Shader.h"
 
 void Fracture::ToneMappingPass::Setup()
 {

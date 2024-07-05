@@ -26,6 +26,9 @@ namespace Fracture
 		bool IsBoxInFrustum(Fracture::CameraComponent& component, const AABB& aabb);
 		bool IsBoxInFrustum(Fracture::Frustum& frustum, const glm::vec3& min, const glm::vec3& max);
 		bool IsBoxInFrustum(Fracture::CameraComponent& component, const glm::vec3& min, const glm::vec3& max);
+		bool IntersectRayTriangle(const glm::vec3& orig, const glm::vec3& dir, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& outIntersection);
+
+		glm::vec3 ScreenToWorldRay(Fracture::CameraComponent& camera, float mouse_x,float mouse_y, float width, float height);
 
 	private:
 		float lastX = 0;

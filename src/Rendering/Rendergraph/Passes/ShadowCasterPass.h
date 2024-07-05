@@ -27,7 +27,7 @@ namespace Fracture
 
 		ShadowCasterPassDef Properties;
 
-
+		bool IsDirty = true;
 	private:
 		uint32_t Vao;
 		std::vector<float> shadowCascadeLevels;
@@ -36,6 +36,7 @@ namespace Fracture
 		std::shared_ptr<Buffer> mSplaneDistances;	
 
 		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<Shader> mShaderInstanced;
 		std::shared_ptr<Shader> mSpotShader;
 		std::shared_ptr<Shader> mPointShader;
 		std::shared_ptr<Shader> mShaderSkinned;

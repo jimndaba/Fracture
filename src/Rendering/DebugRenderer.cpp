@@ -68,7 +68,7 @@ void Fracture::DebugRenderer::OnBeginFrame()
 
 void Fracture::DebugRenderer::OnRender()
 {
-
+    OPTICK_EVENT();
     GraphicsDevice::Instance()->UpdateBufferData(mlineBufferSSBO.get(), 0, sizeof(Line) * MaxLines, mLines.data());
 
 
@@ -90,8 +90,7 @@ void Fracture::DebugRenderer::OnRender()
         {
             const auto& mShader = AssetManager::GetShader("Debug");
             RenderCommands::UseProgram(mContext.get(), mShader->Handle);
-            RenderCommands::BindVertexArrayObject(mContext.get(), LineVAO);
-         
+            RenderCommands::BindVertexArrayObject(mContext.get(), LineVAO);            
             glLineWidth(3.0f);
             DrawArray cmd;
             cmd.count = mLines.size();
@@ -135,7 +134,6 @@ void Fracture::DebugRenderer::OnRender()
     RenderCommands::ReleaseRenderTarget(mContext.get());
     mContext->EndState();
     mContext->Sort(Fracture::DepthSortOrder::Front_To_Back);
-    mContext->Render();
 }
 
 void Fracture::DebugRenderer::OnRenderSceneBillboards(RenderContext* Context)

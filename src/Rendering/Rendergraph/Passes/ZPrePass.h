@@ -20,8 +20,8 @@ namespace Fracture
 		void Execute();
 
 		ZPrePassDef Properties;
-
 		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<Shader> mShaderInstanced;
 		std::shared_ptr<Shader> mShaderSkinned;
 	};
 

@@ -96,9 +96,6 @@
     <ClInclude Include="src\Rendering\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\PipelineState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Viewport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -510,6 +507,9 @@
     <ClInclude Include="src\Scripting\AnimationLUABindings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\glsl\Shadinclude.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -576,9 +576,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\PipelineState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\VertexArray.cpp">

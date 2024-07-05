@@ -20,6 +20,7 @@ namespace Fracture
 		uint32_t VAO;
 		std::shared_ptr<Buffer> VBO_Buffer;
 		std::shared_ptr<Buffer> EBO_Buffer;
+		bool IsDirty;
 	};
 
 

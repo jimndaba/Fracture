@@ -6,6 +6,7 @@
 #include "Scissor.h"
 #include "Command.h"
 #include "AABB.h"
+#include "RenderCommands.h"
 
 namespace Fracture
 {
@@ -15,28 +16,22 @@ namespace Fracture
 	struct MeshComponent;
 	struct PrefabInstanceComponent;
 	struct TerrainComponent;
-	enum class GLCapability;
 
-	enum class DepthSortOrder
-	{
-		Front_To_Back,
-		Back_To_Front
-	};
+	struct MeshSortKey
+	{		
+		uint16_t ShaderIndex = 0;
+		uint16_t MaterialIndex = 0;
+		uint16_t MeshIndex = 0;
+		float Depth = 0.0f;
 
-	enum class DrawMode : uint32_t
-	{
-		Points = GL_POINTS,
-		Lines = GL_LINES,
-		LineLoops = GL_LINE_LOOP,
-		LineStrip = GL_LINE_STRIP,
-		Triangles = GL_TRIANGLES,
-		TriangleStrip = GL_TRIANGLE_STRIP,
-		TriangleFan = GL_TRIANGLE_FAN
+		bool operator < (const MeshSortKey& r) const;
+		bool operator > (const MeshSortKey& r) const;
 	};
 
 	struct MeshDrawCall
 	{
 		Fracture::DrawMode DrawCallPrimitive = DrawMode::Triangles;
+		Fracture::DrawCommandType CallType = Fracture::DrawCommandType::DrawElementsInstancedBaseVertex;
 		UUID EntityID;
 		UUID MaterialID;
 		uint32_t GPUMaterialIndex;
@@ -49,6 +44,7 @@ namespace Fracture
 		glm::vec4 IDColor;
 		glm::mat4 model;
 		AABB aabb;
+		MeshSortKey Key;
 	};
 
 	struct TerrainDrawCall : MeshDrawCall
@@ -83,16 +79,21 @@ namespace Fracture
 	struct RenderBatch
 	{
 		std::vector<glm::mat4> Transforms;
-		std::vector<glm::vec4> EntityIDs;
-		std::vector<std::shared_ptr<MeshDrawCall>> OpaqueDrawCalls;
-		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
-		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
+		std::vector<glm::vec4> EntityIDs;				
 		std::vector<std::shared_ptr<MeshDrawCall>> OutlineDrawCalls;
-		
-		std::vector<SubMesh> Submeshes;
 		
 		uint32_t VAO;
 		uint32_t GPUMaterialIndex;
+		Fracture::DrawMode DrawCallPrimitive = DrawMode::Triangles;
+		Fracture::DrawCommandType CallType = Fracture::DrawCommandType::DrawElementsInstancedBaseVertex;
+		int basevertex = 0;
+		void* SizeOfindices = 0;
+		int IndexCount = 0;
+		int InstanceCount = 0;
+
+		bool IsTranslucent = false;
+		bool CastShadows = false;
+
 		std::shared_ptr<Buffer> EntityID_Buffer;
 		std::shared_ptr<Buffer> Matrix_Buffer;
 
@@ -100,9 +101,6 @@ namespace Fracture
 		{
 			Transforms.clear();
 			EntityIDs.clear();
-			OpaqueDrawCalls.clear();
-			ShadowDrawCalls.clear();
-			TransparentDrawCalls.clear();
 			OutlineDrawCalls.clear();
 		}
 	};
@@ -136,7 +134,6 @@ namespace Fracture
 
 	};
 
-
 	struct RenderContext
 	{
 		RenderContext(RenderContextFlags flags);
@@ -152,6 +149,8 @@ namespace Fracture
 
 		void Render();
 
+		void AddToBatch(StaticMesh* mesh, Fracture::UUID material, glm::mat4 transform);
+		void AddToBatch(SubMesh* mesh, Fracture::UUID meshID, Fracture::UUID material, std::vector<glm::mat4> Batchtransform);
 		void AddToBatch(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
 		void AddDrawCall(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
 		void AddDrawCall(TerrainComponent* mesh,glm::mat4 transform,UUID Entity);
@@ -160,6 +159,9 @@ namespace Fracture
 		void DrawPrefabOutlines(UUID Entity);
 
 		void AddToBatch(PrefabInstanceComponent* mesh,glm::mat4 transform,UUID Entity);
+
+		void CreateBatchIfMissing(UUID MaterialID, UUID MeshID);
+		void SubmitMaterialstoGPU(UUID MaterialID);
 		void ResetBatches();
 		void WriteToStencilBuffer(Fracture::UUID entity);
 
@@ -170,6 +172,7 @@ namespace Fracture
 		std::map<Fracture::UUID,std::map<Fracture::UUID, std::shared_ptr<RenderBatch>>> mBatches;
 		std::map<Fracture::UUID, bool> mStentilTestPass;
 		
+		std::vector<DrawElementsIndirectCommand> IndirectTerrains;
 		std::vector<std::shared_ptr<MeshDrawCall>> OpaqueDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> ShadowDrawCalls;
 		std::vector<std::shared_ptr<MeshDrawCall>> TransparentDrawCalls;
@@ -187,8 +190,10 @@ namespace Fracture
 		Viewport ContextViewport;
 		Scissor ContextScissor;
 		bool CullFaceEnabled = true;
+		bool TerrainEdititing = false;
 		RenderContextFlags Flags;
 		float deltaTime;
+		int MaxBufferSize = 10240;
 	
 	};
 }

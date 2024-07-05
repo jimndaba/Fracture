@@ -128,6 +128,7 @@ void Fracture::FractureGame::OnFrameStart(SceneRenderer* renderer)
     GraphicsDevice::Instance()->DRAWCALL_COUNT = 0;
 
     renderer->Begin(Framedelta);
+    renderer->Render();
     renderer->End();
 }
 

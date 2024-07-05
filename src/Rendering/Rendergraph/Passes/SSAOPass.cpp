@@ -1,8 +1,5 @@
 #include "FracturePCH.h"
 #include "SSAOPass.h"
-#include "../../GraphicsDevice.h"
-#include "Common/FractureApp.h"
-#include "Assets/AssetManager.h"
 
 
 Fracture::SSAOPass::SSAOPass(const std::string& name, RenderContext* context):
@@ -52,8 +49,8 @@ void Fracture::SSAOPass::Setup()
 			desc.Width = GraphicsDevice::RenderSettings.SSAO_Resolution.x;
 			desc.Height = GraphicsDevice::RenderSettings.SSAO_Resolution.y;
 			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGB;
-			desc.internalFormat = Fracture::InternalFormat::RGB16F;
+			desc.format = Fracture::TextureFormat::Red;
+			desc.internalFormat = Fracture::InternalFormat::R16F;
 			desc.formatType = Fracture::TextureFormatType::Float;
 			desc.minFilter = TextureMinFilter::Near;
 			desc.magFilter = TextureMagFilter::Near;
@@ -69,8 +66,8 @@ void Fracture::SSAOPass::Setup()
 			desc.Width = GraphicsDevice::RenderSettings.SSAO_Resolution.x;
 			desc.Height = GraphicsDevice::RenderSettings.SSAO_Resolution.y;
 			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
-			desc.format = Fracture::TextureFormat::RGB;
-			desc.internalFormat = Fracture::InternalFormat::RGB16F;
+			desc.format = Fracture::TextureFormat::Red;
+			desc.internalFormat = Fracture::InternalFormat::R16F;
 			desc.formatType = Fracture::TextureFormatType::Float;
 			desc.minFilter = TextureMinFilter::Near;
 			desc.magFilter = TextureMagFilter::Near;
@@ -152,7 +149,7 @@ void Fracture::SSAOPass::Execute()
 
 
 
-		Fracture::RenderCommands::ResetTextureUnits(Context, mSSAO_Shader.get());
+		//Fracture::RenderCommands::ResetTextureUnits(Context, mSSAO_Shader.get());
 		Fracture::RenderCommands::ReleaseRenderTarget(Context);
 		Fracture::RenderCommands::UseProgram(Context, 0);
 	}
@@ -172,7 +169,7 @@ void Fracture::SSAOPass::Execute()
 		RenderCommands::DrawArray(Context, cmd);
 
 
-		Fracture::RenderCommands::ResetTextureUnits(Context, mSSAO_Shader.get());
+		//Fracture::RenderCommands::ResetTextureUnits(Context, mSSAO_Shader.get());
 		Fracture::RenderCommands::UseProgram(Context, 0);
 		Fracture::RenderCommands::ReleaseRenderTarget(Context);		
 	}

@@ -3,6 +3,7 @@
 #define TEXTURE_H
 
 #include "IGraphicsResource.h"
+#include <glad/glad.h>
 
 namespace Fracture
 {

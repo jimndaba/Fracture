@@ -1,11 +1,5 @@
 #include "FracturePCH.h"
 #include "ShadowCasterPass.h"
-#include "World/SceneManager.h"
-#include "Assets/AssetManager.h"
-#include "Rendering/Mesh.h"
-#include "Rendering/GraphicsDevice.h"
-#include "Rendering/Material.h"
-#include "Animation/AnimationSystem.h"
 
 
 Fracture::ShadowCasterPass::ShadowCasterPass(const std::string& name, RenderContext* context, const ShadowCasterPassDef& info):
@@ -42,6 +36,8 @@ void Fracture::ShadowCasterPass::Setup()
         info.Width = GraphicsDevice::RenderSettings.Shadow_Resolution;
         info.Height = GraphicsDevice::RenderSettings.Shadow_Resolution;
         info.Target = AttachmentTarget::Depth;
+        info.HasDebugViews = true;
+        info.NoDebugViews = shadowCascadeLevels.size();
         info.DepthStencilAttachments.push_back(desc);
         GraphicsDevice::Instance()->CreateGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows, info);
     }    
@@ -115,29 +111,35 @@ void Fracture::ShadowCasterPass::Setup()
 
     {
         mShader = AssetManager::Instance()->GetShader("CascadeShadows");
+        mShaderInstanced = AssetManager::Instance()->GetShader("CascadeShadowsInstanced");
         mSpotShader = AssetManager::Instance()->GetShader("SpotShadows");
         //mPointShader = AssetManager::Instance()->GetShader("PointShadows");
         mShaderSkinned = AssetManager::Instance()->GetShader("CascadeShadowsSkinned");
     }
 }
 
-
 void Fracture::ShadowCasterPass::Execute()
 {
     OPTICK_EVENT();
     {
-        auto lightMatrices = getLightSpaceMatrices(SceneManager::ActiveCamera().get());
-        GraphicsDevice::Instance()->UpdateBufferData(mMatrixBuffer.get(), 0, sizeof(glm::mat4x4) * 16, &lightMatrices[0]);
-    }
-    //Update Cascade Shadow Levels
-    {
-        auto farPlane = SceneManager::ActiveCamera()->Far;
-        shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
-        for (int i = 0; i < shadowCascadeLevels.size(); i++)
+        if (true)
         {
-            GraphicsDevice::Instance()->UpdateBufferData(mSplaneDistances.get(), i * shadowCascadeLevels.size() * sizeof(shadowCascadeLevels[0]), sizeof(shadowCascadeLevels[0]), &shadowCascadeLevels[i]);
+            auto lightMatrices = getLightSpaceMatrices(SceneManager::ActiveCamera().get());
+            GraphicsDevice::Instance()->UpdateBufferData(mMatrixBuffer.get(), 0, sizeof(glm::mat4x4) * 16, &lightMatrices[0]);
+
+            //Update Cascade Shadow Levels
+            {
+                auto farPlane = SceneManager::ActiveCamera()->Far;
+                shadowCascadeLevels = { (farPlane / 50.0f), (farPlane / 25.0f), (farPlane / 10.0f), (farPlane / 2.0f) };
+                for (int i = 0; i < shadowCascadeLevels.size(); i++)
+                {
+                    GraphicsDevice::Instance()->UpdateBufferData(mSplaneDistances.get(), i * shadowCascadeLevels.size() * sizeof(shadowCascadeLevels[0]), sizeof(shadowCascadeLevels[0]), &shadowCascadeLevels[i]);
+                }
+            }
+            IsDirty = false;
         }
     }
+   
     {
         const auto& global_shadow = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDirectShadows);
 
@@ -149,7 +151,7 @@ void Fracture::ShadowCasterPass::Execute()
         RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.Shadow_Resolution, GraphicsDevice::RenderSettings.Shadow_Resolution, 0, 0);
         RenderCommands::ClearTarget(Context, (uint32_t)ClearBufferBit::Depth);
 
-        RenderCommands::SetCullMode(Context, CullMode::Back);
+        RenderCommands::SetCullMode(Context, CullMode::Front);
         RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
         RenderCommands::SetColorMask(Context, 0, 0, 0, 1);
         if (Context->mBatches.empty() && Context->ShadowDrawCalls.empty())
@@ -158,64 +160,6 @@ void Fracture::ShadowCasterPass::Execute()
             RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
             RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
             return;
-        }
-
-        for (auto& batches : Context->mBatches)
-        {
-            if (batches.second.empty())
-                continue;
-
-           
-
-            if (!AssetManager::Instance()->IsMaterialLoaded(batches.first))
-            {
-                AssetManager::Instance()->AsyncLoadMaterialByID(batches.first);
-                continue;
-            }
-
-            const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
-            if (material->IsTranslucent)
-            {
-                continue;
-            }
-
-
-            if(material->IsSkinned)
-                Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
-            else
-                Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
-
-                Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
-
-
-                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "IsAffectedByWind", material->IsAffectedByWind);
-
-
-
-                //Set Shader
-                for (auto batch : batches.second)
-                {
-                    const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
-                    if (!mesh)
-                        continue;
-                    Fracture::RenderCommands::SetUniform(Context, mShader.get(), "MaterialIndex", (int)batch.second->GPUMaterialIndex);
-
-                    Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
-
-                    if (batch.second->ShadowDrawCalls.size())
-                    {
-                        DrawElementsInstancedBaseVertex cmd;
-                        cmd.mode = batch.second->ShadowDrawCalls[0]->DrawCallPrimitive;
-                        cmd.basevertex = batch.second->ShadowDrawCalls[0]->basevertex;
-                        cmd.instancecount = batch.second->Transforms.size();
-                        cmd.indices = batch.second->ShadowDrawCalls[0]->SizeOfindices;
-                        cmd.count = batch.second->ShadowDrawCalls[0]->IndexCount;
-                        Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
-                    }
-                    Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
-                }
-
-               Fracture::RenderCommands::ResetTextureUnits(Context, mShader.get());
         }
 
         for (auto& drawCall : Context->ShadowDrawCalls)
@@ -233,54 +177,135 @@ void Fracture::ShadowCasterPass::Execute()
             }
 
 
-            if (!material->DepthWrite)
+            if (!material->CastsShadows)
+            {
                 continue;
+            }
+
+            Shader* current_shader;
+            if (material->IsSkinned)
+                current_shader = mShaderSkinned.get();
+            if (material->IsInstanced)
+                current_shader = mShaderInstanced.get();
+            else
+                current_shader = mShader.get();
+
+            
+            Fracture::RenderCommands::UseProgram(Context, current_shader->Handle);
+            Fracture::RenderCommands::BindMaterial(Context, current_shader, material.get());
+            Fracture::RenderCommands::SetUniform(Context, current_shader, "Model_matrix", drawCall->model);
+            Fracture::RenderCommands::SetUniform(Context, current_shader, "MaterialIndex", (int)drawCall->GPUMaterialIndex);
 
             if (material->IsSkinned)
-            {
-                Fracture::RenderCommands::UseProgram(Context, mShaderSkinned->Handle);
-                Fracture::RenderCommands::BindMaterial(Context, mShaderSkinned.get(), material.get());
-                Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "Model_matrix", drawCall->model);
-                Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "MaterialIndex", (int)drawCall->GPUMaterialIndex);
+            {                
                 if (AnimationSystem::Instance()->mGlobalPoseMatrices.find(drawCall->EntityID) != AnimationSystem::Instance()->mGlobalPoseMatrices.end())
                 {
+                    Fracture::RenderCommands::SetUniform(Context, current_shader, "IsAnimated", AnimationSystem::Instance()->IsPlaying);
                     const auto& poses = AnimationSystem::Instance()->mGlobalPoseMatrices[drawCall->EntityID];
                     if (!poses.empty() && AnimationSystem::Instance()->IsPlaying)
-                    {
-                        Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "IsAnimated", true);
+                    {                        
                         GraphicsDevice::Instance()->UpdateAnimationData(poses);
-                    }
-                    else
-                    {
-                        Fracture::RenderCommands::SetUniform(Context, mShaderSkinned.get(), "IsAnimated", false);
-                    }
+                    }                    
                 }
             }
             else
-            {
-                Fracture::RenderCommands::UseProgram(Context, mShader->Handle);
-                Fracture::RenderCommands::BindMaterial(Context, mShader.get(), material.get());
-                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "Model_matrix", drawCall->model);
-                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "IsAnimated", false);
-                Fracture::RenderCommands::SetUniform(Context, mShader.get(), "MaterialIndex", (int)drawCall->GPUMaterialIndex);
-
+            { 
+                Fracture::RenderCommands::SetUniform(Context, current_shader, "IsAnimated", false);
             }
 
             Fracture::RenderCommands::BindVertexArrayObject(Context, drawCall->MeshHandle);
+            switch (drawCall->CallType)
+            {
+            case DrawCommandType::DrawElementsInstancedBaseVertex:
+            {
+                DrawElementsInstancedBaseVertex cmd;
+                cmd.mode = drawCall->DrawCallPrimitive;
+                cmd.basevertex = drawCall->basevertex;
+                cmd.instancecount = 1;
+                cmd.indices = drawCall->SizeOfindices;
+                cmd.count = drawCall->IndexCount;
+                Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+                break;
+            }
+            case DrawCommandType::MultiDrawElementsIndirect:
+            {
+                DrawElementsInstancedBaseVertex cmd;
+                Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, GraphicsDevice::Instance()->GetIndirectBuffer());
+                Fracture::RenderCommands::DrawElementsIndirect(Context, nullptr, Context->IndirectTerrains.size(), 0);
+                Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, 0);
+                break;
+            }
 
-            DrawElementsInstancedBaseVertex cmd;
-            cmd.mode = drawCall->DrawCallPrimitive;
-            cmd.basevertex = drawCall->basevertex;
-            cmd.instancecount = 1;
-            cmd.indices = drawCall->SizeOfindices;
-            cmd.count = drawCall->IndexCount;
-            Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+            }
             Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+            Fracture::RenderCommands::ResetTextureUnits(Context, current_shader);
         }
-        Fracture::RenderCommands::ResetTextureUnits(Context, mShaderSkinned.get());    
-        //RenderCommands::ReleaseRenderTarget(Context);    
-       
- 
+
+        for (auto& batches : Context->mBatches)
+        {
+            if (batches.second.empty())
+                continue;
+            if (!AssetManager::Instance()->IsMaterialLoaded(batches.first))
+            {
+                AssetManager::Instance()->AsyncLoadMaterialByID(batches.first);
+                continue;
+            }
+
+            const auto& material = AssetManager::Instance()->GetMaterialByID(batches.first);
+            if (material->IsTranslucent)
+            {
+                continue;
+            }
+
+            if (!material->CastsShadows)
+            {
+                continue;
+            }
+
+            Shader* current_shader = nullptr;
+            if (material->IsSkinned)
+            {
+                current_shader = mShaderSkinned.get();
+            }
+            if (material->IsInstanced)
+            {
+                current_shader = mShaderInstanced.get();
+            }
+            if (!material->IsInstanced)
+            {
+                current_shader = mShader.get();
+            }
+
+            if (!current_shader)
+                continue;
+            //Set Shader
+            for (auto batch : batches.second)
+            {
+                if (batch.second->Transforms.empty())
+                {
+                    continue;
+                }
+                   
+                Fracture::RenderCommands::UseProgram(Context, current_shader->Handle);
+                Fracture::RenderCommands::BindMaterial(Context, current_shader, material.get());
+                Fracture::RenderCommands::SetUniform(Context, current_shader, "IsAnimated", false);
+                Fracture::RenderCommands::SetUniform(Context, current_shader, "MaterialIndex", (int)batch.second->GPUMaterialIndex);  
+                Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
+
+                DrawElementsInstancedBaseVertex cmd;
+                cmd.mode = batch.second->DrawCallPrimitive;
+                cmd.basevertex = batch.second->basevertex;
+                cmd.instancecount = batch.second->Transforms.size();
+                cmd.indices = batch.second->SizeOfindices;
+                cmd.count = batch.second->IndexCount;
+                Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+
+                Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+            }
+            Fracture::RenderCommands::ResetTextureUnits(Context, current_shader);
+        }
+
+
     }
 
     //SpotShadows
@@ -295,12 +320,6 @@ void Fracture::ShadowCasterPass::Execute()
         RenderCommands::SetViewport(Context, 512, 512, 0, 0);
         RenderCommands::SetScissor(Context, 512, 512, 0, 0);
      
-        
-       
-
-
-
-       
         if (Context->mBatches.empty() && Context->ShadowDrawCalls.empty())
         {
             RenderCommands::ReleaseRenderTarget(Context);
@@ -362,6 +381,11 @@ void Fracture::ShadowCasterPass::Execute()
                     continue;
                 }
 
+                if (!material->CastsShadows)
+                {
+                    continue;
+                }
+
                 uint32_t handle;
                 if (material->IsSkinned)
                    handle = mShaderSkinned->Handle;
@@ -371,23 +395,20 @@ void Fracture::ShadowCasterPass::Execute()
                 Fracture::RenderCommands::UseProgram(Context, handle);
                 Fracture::RenderCommands::BindMaterial(Context, mSpotShader.get(), material.get());
 
-                Fracture::RenderCommands::SetUniform(Context, mSpotShader.get(), "IsAffectedByWind", material->IsAffectedByWind);
-
-
                 //Set Shader
                 for (auto batch : batches.second)
                 {
 
                     Fracture::RenderCommands::SetUniform(Context, mShader.get(), "MaterialIndex", (int)batch.second->GPUMaterialIndex);
                     Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);             
-                    if (batch.second->ShadowDrawCalls.size())
+                    if (batch.second->Transforms.size())
                     {                      
                         DrawElementsInstancedBaseVertex cmd;
-                        cmd.mode = batch.second->OpaqueDrawCalls[0]->DrawCallPrimitive;
-                        cmd.basevertex = batch.second->OpaqueDrawCalls[0]->basevertex;
+                        cmd.mode = batch.second->DrawCallPrimitive;
+                        cmd.basevertex = batch.second->basevertex;
                         cmd.instancecount = batch.second->Transforms.size();
-                        cmd.indices = batch.second->OpaqueDrawCalls[0]->SizeOfindices;
-                        cmd.count = batch.second->OpaqueDrawCalls[0]->IndexCount;
+                        cmd.indices = batch.second->SizeOfindices;
+                        cmd.count = batch.second->IndexCount;
                         Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
                     }
                     Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
@@ -450,18 +471,35 @@ void Fracture::ShadowCasterPass::Execute()
 
                 Fracture::RenderCommands::BindVertexArrayObject(Context, drawCall->MeshHandle);
 
-                DrawElementsInstancedBaseVertex cmd;
-                cmd.mode = drawCall->DrawCallPrimitive;
-                cmd.basevertex = drawCall->basevertex;
-                cmd.instancecount = 1;
-                cmd.indices = drawCall->SizeOfindices;
-                cmd.count = drawCall->IndexCount;
-                Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+                switch (drawCall->CallType)
+                {
+                case DrawCommandType::DrawElementsInstancedBaseVertex:
+                {
+                    DrawElementsInstancedBaseVertex cmd;
+                    cmd.mode = drawCall->DrawCallPrimitive;
+                    cmd.basevertex = drawCall->basevertex;
+                    cmd.instancecount = 1;
+                    cmd.indices = drawCall->SizeOfindices;
+                    cmd.count = drawCall->IndexCount;
+                    Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
+                    break;
+                }               
+
+                case DrawCommandType::MultiDrawElementsIndirect:
+                {
+                    DrawElementsInstancedBaseVertex cmd;
+                    Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, GraphicsDevice::Instance()->GetIndirectBuffer());
+                    Fracture::RenderCommands::DrawElementsIndirect(Context, nullptr, Context->IndirectTerrains.size(), 0);
+                    Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, 0);
+                    break;
+                }
+          
                 Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
+                }
             }
         }
-
-        //Fracture::RenderCommands::UseProgram(Context, 0);
+        Fracture::RenderCommands::ResetTextureUnits(Context, mSpotShader.get());
+        Fracture::RenderCommands::UseProgram(Context, 0);
         RenderCommands::ReleaseRenderTarget(Context);
         RenderCommands::SetColorMask(Context, 1, 1, 1, 1);
         RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);      

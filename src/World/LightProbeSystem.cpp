@@ -178,20 +178,13 @@ void Fracture::LightProbeSystem::DoIrradiance(RenderContext* Context, UUID compo
                             const auto& mesh = AssetManager::GetStaticByIDMesh(batch.first);
 
                             Fracture::RenderCommands::BindVertexArrayObject(Context, batch.second->VAO);
-
-                            std::vector<std::shared_ptr<MeshDrawCall>> drawcalls;
-                            if (material->IsTranslucent)
-                                drawcalls = batch.second->TransparentDrawCalls;
-                            else
-                                drawcalls = batch.second->OpaqueDrawCalls;
-
-                            if (drawcalls.size())
+                            if (batch.second->Transforms.size())
                             {
                                 DrawElementsInstancedBaseVertex cmd;
-                                cmd.basevertex = drawcalls[0]->basevertex;
+                                cmd.basevertex = batch.second->basevertex;
                                 cmd.instancecount = batch.second->Transforms.size();
-                                cmd.indices = drawcalls[0]->SizeOfindices;
-                                cmd.count = drawcalls[0]->IndexCount;
+                                cmd.indices = batch.second->SizeOfindices;
+                                cmd.count = batch.second->IndexCount;
                                 Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Context, cmd);
                             }
                             Fracture::RenderCommands::BindVertexArrayObject(Context, 0);

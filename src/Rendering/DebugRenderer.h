@@ -57,7 +57,7 @@ namespace Fracture
 
 		void DrawCone(const glm::vec3& pos, const glm::quat& rotation, float length, float radius, const glm::vec4& color = glm::vec4(0.9f, 0.4f, 0.3f, 1.0f));
 
-		const uint32_t MaxLines = 10000;
+		const uint32_t MaxLines = 500000;
 
 		std::unique_ptr<RenderContext> mContext;
 

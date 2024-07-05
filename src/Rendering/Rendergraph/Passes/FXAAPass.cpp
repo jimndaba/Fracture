@@ -1,10 +1,5 @@
 #include "FracturePCH.h"
 #include "FXAAPass.h"
-#include "Assets/AssetManager.h"
-#include "Rendering/RenderContext.h"
-#include "Rendering/RenderCommands.h"
-#include "Rendering/Shader.h"
-
 
 void Fracture::FXAAPass::Setup()
 {

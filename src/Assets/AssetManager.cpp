@@ -357,80 +357,81 @@ void Fracture::AssetManager::OnLoad()
 
 	for (auto& mf : mMeshFutures)
 	{		
-		auto mesh = mf.second.get();
+		if (mf.second.valid())
 		{
-			bool IsSkinned = mesh->mBones.size();
-
-			VertexArrayCreationInfo info;
-			if (IsSkinned)
+			auto mesh = mf.second.get();
 			{
-				info.Layout =
+				bool IsSkinned = mesh->mBones.size();
+				VertexArrayCreationInfo info;
+				if (IsSkinned)
 				{
-					{ ShaderDataType::Float3,"aPos",0,true },
-					{ ShaderDataType::Float3,"aNormal" ,0,true},
-					{ ShaderDataType::Float2,"aUV" ,0,true},
-					{ ShaderDataType::Int4,"aBoneIDs" ,0,true},
-					{ ShaderDataType::Float4,"aBoneWeights" ,0,true}
-				};
-			}
-			else
-			{
-				info.Layout =
+					info.Layout =
+					{
+						{ ShaderDataType::Float3,"aPos",0,true },
+						{ ShaderDataType::Float3,"aNormal" ,0,true},
+						{ ShaderDataType::Float2,"aUV" ,0,true},
+						{ ShaderDataType::Int4,"aBoneIDs" ,0,true},
+						{ ShaderDataType::Float4,"aBoneWeights" ,0,true}
+					};
+				}
+				else
 				{
-					{ ShaderDataType::Float3,"aPos",0,true },
-					{ ShaderDataType::Float3,"aNormal" ,0,true},
-					{ ShaderDataType::Float2,"aUV" ,0,true}
-				};
+					info.Layout =
+					{
+						{ ShaderDataType::Float3,"aPos",0,true },
+						{ ShaderDataType::Float3,"aNormal" ,0,true},
+						{ ShaderDataType::Float2,"aUV" ,0,true}
+					};
+				}
+
+
+				GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
+
+				if (IsSkinned)
+				{
+					BufferDescription desc;
+					desc.data = mesh->mSkinnedVerticies.data();
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(mesh->mSkinnedVerticies[0]) * mesh->mSkinnedVerticies.size();
+					desc.usage = BufferUsage::Static;
+					desc.Name = "Verticies";
+					mesh->VBO_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mSkinnedVerticies[0]), mesh->VBO_Buffer->RenderID);
+				}
+				else
+				{
+					BufferDescription desc;
+					desc.data = mesh->mVerticies.data();
+					desc.bufferType = BufferType::ArrayBuffer;
+					desc.size = sizeof(mesh->mVerticies[0]) * mesh->mVerticies.size();
+					desc.usage = BufferUsage::Static;
+					desc.Name = "Verticies";
+					mesh->VBO_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
+				}
+
+				{
+					BufferDescription desc;
+					desc.data = mesh->Indices.data();
+					desc.bufferType = BufferType::ElementArrayBuffer;
+					desc.size = sizeof(mesh->Indices[0]) * mesh->Indices.size();
+					desc.usage = BufferUsage::Static;
+					desc.Name = "IndexBuffer";
+					mesh->EBO_Buffer = std::make_shared<Buffer>();
+					GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
+					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
+				}
+				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+
 			}
-			
 
-			GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
-
-			if (IsSkinned)
-			{
-				BufferDescription desc;
-				desc.data = mesh->mSkinnedVerticies.data();
-				desc.bufferType = BufferType::ArrayBuffer;
-				desc.size = sizeof(mesh->mSkinnedVerticies[0]) * mesh->mSkinnedVerticies.size();
-				desc.usage = BufferUsage::Static;
-				desc.Name = "Verticies";
-				mesh->VBO_Buffer = std::make_shared<Buffer>();
-				GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
-				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mSkinnedVerticies[0]), mesh->VBO_Buffer->RenderID);
-			}
-			else
-			{
-				BufferDescription desc;
-				desc.data = mesh->mVerticies.data();
-				desc.bufferType = BufferType::ArrayBuffer;
-				desc.size = sizeof(mesh->mVerticies[0]) * mesh->mVerticies.size();
-				desc.usage = BufferUsage::Static;
-				desc.Name = "Verticies";
-				mesh->VBO_Buffer = std::make_shared<Buffer>();
-				GraphicsDevice::Instance()->CreateBuffer(mesh->VBO_Buffer.get(), desc);
-				GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mesh->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID);
-			}
-
-			{
-				BufferDescription desc;
-				desc.data = mesh->Indices.data();
-				desc.bufferType = BufferType::ElementArrayBuffer;
-				desc.size = sizeof(mesh->Indices[0]) * mesh->Indices.size();
-				desc.usage = BufferUsage::Static;
-				desc.Name = "IndexBuffer";
-				mesh->EBO_Buffer = std::make_shared<Buffer>();
-				GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
-				GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
-			}
-
-
-			GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+			mesh->ID = mf.first;
+			mLoadedMeshes.push_back(mesh->ID);
+			mMeshes[mf.first] = mesh;
+			mMeshFutures.erase(mf.first);
 		}
-
-		mesh->ID = mf.first;
-		mLoadedMeshes.push_back(mesh->ID);
-		mMeshes[mf.first] = mesh;	
-		mMeshFutures.erase(mf.first);
 	}
 
 	while (!mMeshesToLoadandAttach.empty())
@@ -446,7 +447,7 @@ void Fracture::AssetManager::OnLoad()
 		if (mf.second.valid())
 		{
 			auto mesh = mf.second.get();
-			{
+			{				
 				bool IsSkinned = mesh->mBones.size();
 				VertexArrayCreationInfo info;
 				if (IsSkinned)
@@ -471,8 +472,8 @@ void Fracture::AssetManager::OnLoad()
 						{ ShaderDataType::Mat4, "instanceMatrix",1 },
 					};
 				}
+				
 				GraphicsDevice::Instance()->CreateVertexArray(mesh->VAO, info);
-
 				if (IsSkinned)
 				{
 					BufferDescription desc;
@@ -514,19 +515,17 @@ void Fracture::AssetManager::OnLoad()
 					GraphicsDevice::Instance()->CreateBuffer(mesh->EBO_Buffer.get(), desc);
 					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mesh->VAO, mesh->EBO_Buffer->RenderID);
 				}
-				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);
+				GraphicsDevice::Instance()->VertexArray_BindAttributes(mesh->VAO, info);				
 			}
 
 			mesh->ID = mf.first.Mesh;
-			//mesh->mVerticies.clear();		
-			//mesh->SubMeshes.clear();
 			mLoadedMeshes.push_back(mesh->ID);
 			mMeshes[mf.first.Mesh] = mesh;
 			mMeshAndAttachFutures.erase(mf.first);
 			if (mesh->mBones.size())
-				SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mesh->mMaterials, true);
+				SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mMeshes[mf.first.Mesh]->mMaterials, true);
 			else
-				SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mesh->mMaterials);
+				SceneManager::AddComponent<MeshComponent>(mf.first.Entity, mf.first.Mesh, mMeshes[mf.first.Mesh]->mMaterials);
 
 			
 		}
@@ -1001,7 +1000,9 @@ void Fracture::AssetManager::OnAsyncLoadandAttach(const std::shared_ptr<AsyncLoa
 	if (IsMeshLoaded(evnt->MeshID))
 	{
 		SceneManager::AddComponent<MeshComponent>(evnt->EntityID, evnt->MeshID,mMeshes[evnt->MeshID]->mMaterials);
+		return;
 	}
+
 	auto it = mMeshRegister.find(evnt->MeshID);
 	if (it != mMeshRegister.end())
 	{

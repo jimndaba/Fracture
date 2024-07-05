@@ -13,8 +13,9 @@
 #include "World/LightProbeSystem.h"
 #include "Common/Math.h"
 #include "World/SceneManager.h"
+#include "World/TerrainSystem.h"
 
-Fracture::SceneRenderer::SceneRenderer()
+Fracture::SceneRenderer::SceneRenderer(TerrainSystem* terrainSystem):TerrainSys(terrainSystem)
 {
 }
 
@@ -283,8 +284,14 @@ void Fracture::SceneRenderer::Init()
 
 void Fracture::SceneRenderer::Begin(float dt)
 {
-
 	OPTICK_EVENT();
+	Fracture::SortKey key;
+	mContext->BeginState(key);
+	mContext->BeginScene();
+	particleSystem->BeginRender(mContext.get());
+	TerrainSys->OnBeginFrame(mContext.get());
+
+
 	if (SceneManager::CurrentScene())
 	{
 		particleSystem->Update(dt);
@@ -407,11 +414,43 @@ void Fracture::SceneRenderer::Begin(float dt)
 		}
 
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalFrameData(data);
-		Fracture::GraphicsDevice::Instance()->UpdateGlobalLightData(lightdata);
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalRenderSettings();
+		Fracture::GraphicsDevice::Instance()->UpdateGlobalLightData(lightdata);		
 		Fracture::GraphicsDevice::Instance()->UpdateGlobalWindData();
 		
 		
+	}
+}
+
+void Fracture::SceneRenderer::Render()
+{
+	const auto& terrains = SceneManager::GetAllComponents<TerrainComponent>();
+	for (const auto& terrain : terrains)
+	{
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(terrain->GetID());
+		mContext->AddDrawCall(terrain.get(), transform->WorldTransform, terrain->GetID());
+	}
+
+	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
+	for (const auto& meshcomponent : components)
+	{
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(meshcomponent->GetID());
+		if (!transform)
+			continue;
+
+		if (meshcomponent->meshType == MeshComponent::MeshType::Static)
+			mContext->AddToBatch(meshcomponent.get(), transform->WorldTransform, meshcomponent->GetID());
+
+		if (meshcomponent->meshType == MeshComponent::MeshType::Skinned)
+			mContext->AddDrawCall(meshcomponent.get(), transform->WorldTransform, meshcomponent->GetID());
+	}
+
+	const auto& prefabInstancecomponents = SceneManager::GetAllComponents<PrefabInstanceComponent>();
+	for (const auto& prefab : prefabInstancecomponents)
+	{
+		const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
+		if (prefab->meshType == PrefabInstanceComponent::MeshType::Static)
+			mContext->AddToBatch(prefab.get(), transform->WorldTransform, prefab->Parent_PrefabID);
 	}
 }
 
@@ -424,11 +463,11 @@ void Fracture::SceneRenderer::QueueLightProbesToBake(UUID id)
 void Fracture::SceneRenderer::End()
 {
 	OPTICK_EVENT();
-	Fracture::SortKey key;
-	mContext->BeginState(key);
-	mContext->BeginScene();
+	
+	TerrainSys->OnEndFrame();
+	mContext->EndScene();
+	mContext->EndState();
 
-	particleSystem->BeginRender(mContext.get());
 
 	Fracture::ClearTargetPassDef passDef;
 	passDef.ClearColor = Fracture::Colour::Black;
@@ -455,7 +494,6 @@ void Fracture::SceneRenderer::End()
 		s.Bake(mContext.get(), mLightProbesToRender.front());
 		mLightProbesToRender.pop();
 	}
-
 	{
 		cleartarget.Execute();
 
@@ -488,17 +526,12 @@ void Fracture::SceneRenderer::End()
 	
 	}
 
-	mContext->EndState();
-	mContext->Render();
-	mContext->EndScene();
-
 	if (GraphicsDevice::Instance()->EnablePostProsessing)
 	{
 		GraphicsDevice::Instance()->PostProcessStack()->OnRender();
 		GraphicsDevice::Instance()->PostProcessStack()->Submit();
 	}
 	
-
 	Fracture::SortKey nkey;
 	mFinalContext->BeginState(nkey);
 
@@ -508,9 +541,10 @@ void Fracture::SceneRenderer::End()
 	if (presentPass)
 	   presentPass->Execute();
 
-	mFinalContext->EndState();
+	
 	mFinalContext->Render();
-	mFinalContext->EndScene();
+	mFinalContext->EndState();
+
 	GraphicsDevice::Instance()->RENDERBATCH_COUNT += mContext->mBatches.size();
 	GraphicsDevice::Instance()->RENDERBATCH_COUNT += mFinalContext->mBatches.size();
 }

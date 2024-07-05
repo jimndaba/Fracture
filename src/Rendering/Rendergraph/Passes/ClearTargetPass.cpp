@@ -1,6 +1,5 @@
 #include "FracturePCH.h"
 #include "ClearTargetPass.h"
-#include "ForwardPass.h"
 
 std::string Fracture::ClearTargetSockets::InBuffer = "InBuffer";
 std::string Fracture::ClearTargetSockets::OutBuffer = "OutBuffer";

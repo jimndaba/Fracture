@@ -1,8 +1,6 @@
 #include "FracturePCH.h"
 #include "PresentPass.h"
-#include "Rendering/VertexArray.h"
-#include "Assets/AssetManager.h"
-#include "Rendering/PostProcessPipeline.h"
+
 
 Fracture::PresentPass::PresentPass(const std::string& name,RenderContext* context, const PresentPassDef& info):IPass(name,context),definition(info)
 {
@@ -41,6 +39,6 @@ void Fracture::PresentPass::Execute()
 	RenderCommands::DrawArray(Context, cmd);
 
 
-	Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Fullscreen").get());
+	//Fracture::RenderCommands::ResetTextureUnits(Context, AssetManager::GetShader("Fullscreen").get());
 	Fracture::RenderCommands::UseProgram(Context, 0);
 }

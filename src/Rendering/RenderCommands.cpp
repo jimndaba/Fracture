@@ -1,18 +1,14 @@
 #include "FracturePCH.h"
 #include "RenderCommands.h"
-
 #include "Viewport.h"
 #include "Scissor.h"
-
 #include "RenderContext.h"
-#include "RenderTarget.h"
-
 #include "Shader.h"
 #include "Material.h"
-
 #include "GraphicsDevice.h"
-
 #include "Assets/AssetManager.h"
+
+
 
 std::function mErroCallback = [](std::string fnc) {
 	GLenum errorCode;
@@ -286,6 +282,7 @@ void Fracture::RenderCommands::DepthMask(Fracture::RenderContext* cntxt, bool ma
 	cmd.fnc = [mask]() {
 		glDepthMask(mask);
 	};
+	cmd.fnc();
 	//cntxt->Push(cmd); 
 }
 
@@ -394,6 +391,17 @@ void Fracture::RenderCommands::BindVertexArraySetDivisor(Fracture::RenderContext
 	};
 	cmd.fnc();
 	//cntxt->Push(cmd); 
+}
+
+void Fracture::RenderCommands::BindBuffer(Fracture::RenderContext* cntxt, Fracture::BufferType target, uint32_t buffer)
+{
+	Fracture::Command cmd;
+	cmd.fnc = [target,buffer]() {
+		GLubyte val = 0;
+		glBindBuffer((GLenum)target, buffer);
+		mErroCallback("Buffer Bind");
+	};
+	cmd.fnc();
 }
 
 void Fracture::RenderCommands::ClearBufferData(Fracture::RenderContext* cntxt, uint32_t buffer)
@@ -592,6 +600,13 @@ void Fracture::RenderCommands::DrawElementsInstancedBaseVertex(Fracture::RenderC
 	//cntxt->Push(cmd); 
 }
 
+void Fracture::RenderCommands::DrawElementsIndirect(Fracture::RenderContext* cntxt, void* indirect,int count, int stride)
+{
+	glMultiDrawElementsIndirect((GLenum)GL_TRIANGLE_STRIP, GL_UNSIGNED_INT,indirect,count,stride);
+	mErroCallback("Draw Elements Indirect");
+	GraphicsDevice::DRAWCALL_COUNT++;
+}
+
 void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderContext* cntxt, const Fracture::DrawArraysInstancedBaseInstance& render_cmd)
 {
 	Fracture::Command cmd;
@@ -607,14 +622,23 @@ void Fracture::RenderCommands::DrawArraysInstancedBaseInstance(Fracture::RenderC
 	//cntxt->Push(cmd); 
 }
 
-void Fracture::RenderCommands::UnMapbuffer(Fracture::RenderContext* cntxt, uint32_t buffer)
+void Fracture::RenderCommands::MapDataFrombuffer(void* ptr, uint32_t buffer, BufferAccess access)
+{	
+	Fracture::Command cmd;
+	cmd.fnc = [&ptr, buffer, access]() {};
+	ptr = glMapNamedBuffer(buffer, (GLenum)access);
+	mErroCallback("MapNamedBuffer");
+	cmd.fnc();	
+}
+
+void Fracture::RenderCommands::UnMapbuffer(uint32_t buffer)
 {
 	Fracture::Command cmd;
 	cmd.fnc = [buffer]() {
-		glUnmapNamedBuffer(buffer);
-
-		mErroCallback("UnMap");
+	
 	};
+	glUnmapNamedBuffer(buffer);
+	mErroCallback("UnMap");
 	cmd.fnc();
 	//cntxt->Push(cmd); 
 	
@@ -785,7 +809,6 @@ void Fracture::RenderCommands::SetUniform(Fracture::RenderContext* cntxt, Fractu
 	};
 	cmd.Key.ShaderIndex = shader->Handle;
 	cmd.fnc();
-	//cntxt->Push(cmd); 
 }
 
 void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fracture::Shader* shader, const std::string& name, const uint32_t& RenderID, unsigned int unit)
@@ -798,8 +821,6 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 		glUniform1i(location, unit);
 		mErroCallback(name);
 	};
-	cmd.Key.ShaderIndex = shader->Handle;
-	//cntxt->Push(cmd); 
 	cmd.fnc();
 	cntxt->ActiveTextureUnits++;
 
@@ -809,26 +830,7 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 {
 	if (material)
 	{
-		/*
-		SetUniform(cntxt, shader, "TextureSpace",(int)material->TextureSpace);
-		SetUniform(cntxt, shader, "Tiling",material->TextureTiling);
-		SetUniform(cntxt, shader, "pDiffuse",material->AlbedoColour);
-		SetUniform(cntxt, shader, "pEmission",material->EmissionColour);
-		SetUniform(cntxt, shader, "pAO",material->AOLevel);
-		SetUniform(cntxt, shader, "pMetalness",material->MetalicLevel);
-		SetUniform(cntxt, shader, "pRoughness",material->RoughnessLevel);
-		SetUniform(cntxt, shader, "pEmissionStrength",material->EmmisionStrength);
-		SetUniform(cntxt, shader, "SpecularLevel",material->SpecularLevel);
-		SetUniform(cntxt, shader, "SpecularIntensity",material->SpecularIntensity);
-
-		SetUniform(cntxt, shader, "_AlbedoFlag", material->HasAlbedoTexture);
-		SetUniform(cntxt, shader, "_SpecularFlag", material->HasSpecularTexture);
-		SetUniform(cntxt, shader, "_NormalFlag", material->HasNormalTexture);
-		SetUniform(cntxt, shader, "_RoughnessFlag", material->HasRoughnessTexture);
-		SetUniform(cntxt, shader, "_MetalnessFlag", material->HasMetalTexture);
-		SetUniform(cntxt, shader, "_AOFlag", material->HasAOTexture); 
-		SetUniform(cntxt, shader, "_EmissionFlag", material->HasEmissionTexture);
-		*/
+		SetUniform(cntxt, shader, "IsAffectedByWind", material->IsAffectedByWind);
 
 		if (material->HasAlbedoTexture)
 		{
@@ -885,10 +887,7 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 			{				
 				SetTexture(cntxt, shader, "aEmission", texture->Handle, (int)TEXTURESLOT::Emmission);
 			}
-		}
-
-		
-
+		}		
 		for (const auto& uniform : material->Uniforms)
 		{
 			switch (uniform.type)
@@ -991,11 +990,9 @@ void Fracture::RenderCommands::ResetTextureUnits(Fracture::RenderContext* cntxt,
 			glBindTextureUnit(i, 0);
 			mErroCallback("Reset Texture Unit");		
 		};
-	}
-	
+	}	
 	cmd.Key.ShaderIndex = shader->Handle;
 	cmd.fnc();
-	//cntxt->Push(cmd); 
 	cntxt->ActiveTextureUnits = 0;
 }
 

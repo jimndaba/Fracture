@@ -1,7 +1,5 @@
 #include "FracturePCH.h"
 #include "LightCullingPass.h"
-#include "Assets/AssetManager.h"
-#include "World/SceneManager.h"
 
 Fracture::LightCullPass::LightCullPass(const std::string& name, RenderContext* context, const LightCullPassDef& info):IPass(name,context),Properties(info)
 {

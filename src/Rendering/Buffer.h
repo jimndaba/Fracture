@@ -2,44 +2,11 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#include "RenderCommands.h"
+
 namespace Fracture
 {
-	enum class ShaderDataType
-	{
-		None = 0,
-		Float,
-		Float2,
-		Float3,
-		Float4,
-		Mat3,
-		Mat4,
-		Int,
-		Int2,
-		Int3,
-		Int4,
-		Bool,
-		Float4Instanced
-	};
-
-	enum class BufferUsage
-	{
-		Static = GL_STATIC_DRAW,
-		Dynamic = GL_DYNAMIC_DRAW,
-		Stream = GL_STREAM_DRAW,
-		StaticCopy = GL_STATIC_COPY
-	};
-
-	enum class BufferType
-	{
-		ArrayBuffer = GL_ARRAY_BUFFER,
-		ElementArrayBuffer = GL_ELEMENT_ARRAY_BUFFER,
-		UniformBuffer = GL_UNIFORM_BUFFER,
-		TextureBuffer = GL_TEXTURE_BUFFER,
-		FrameBuffer = GL_FRAMEBUFFER,
-		ShaderStorageBuffer = GL_SHADER_STORAGE_BUFFER,
-		DrawIndirectBuffer = GL_DRAW_INDIRECT_BUFFER
-	};
-
+	
 	struct BufferAttribute
 	{
 		BufferAttribute(ShaderDataType shadertype, const std::string& name) :
@@ -101,8 +68,10 @@ namespace Fracture
 		std::string Name;
 		BufferType bufferType;
 		BufferUsage usage;
+		uint32_t BufferAccessFlags;
 		uint32_t size;
 		uint32_t count;
+		bool IsPersistantlyMapped = false;		
 		const void* data;
 		VertexBufferLayout m_layout;
 	};
