@@ -59,9 +59,10 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;$(ProjectDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\lua</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -87,9 +88,10 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>FracturePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;$(ProjectDir)vendor\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalUsingDirectories>$(ProjectDir)src\;$(ProjectDir)vendor\;$(ProjectDir)vendor\pxshared\;E:\Development\Fracture\vendor\lua</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
