@@ -9,6 +9,7 @@ namespace Fracture
 	struct CameraComponent;
 	struct Buffer;
 	struct RenderContext;
+	struct PlacementMapModifier;
 
 	struct TerrainBrush {
 		enum BrushTypeOptions {
@@ -59,6 +60,15 @@ namespace Fracture
 		bool IsDirty = false;
 	};
 	
+	struct Ecotope
+	{
+
+
+
+	};
+
+
+
 	/* Thinging Aloud
 	struct TerrainMapModifier
 	{
@@ -85,6 +95,9 @@ namespace Fracture
 		glm::vec3 Scale = glm::vec3(1.0f);
 		bool IsMeshSet = false;
 		bool IsFootPrintDirty = true;
+		bool Dirty = true;
+
+		std::vector<std::unique_ptr<PlacementMapModifier>> Modifiers;
 	};
 
 	class TerrainSystem
@@ -107,9 +120,9 @@ namespace Fracture
 		void AddNewPlacementLayer(Fracture::UUID entity);
 
 		void AddNewDensityGrid(Fracture::UUID entity);
-		
 
-		//void UpdateDensityGrid(Fracture::UUID placementID);
+		void UpdateLayer(Fracture::UUID entity, int index);
+	
 		void UpdateDensityMap(Fracture::UUID placementID);
 	
 		void SetCurrentPlacementMapForEdit(Fracture::UUID mapID);
@@ -135,8 +148,7 @@ namespace Fracture
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mPlacementMaps;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mDenistyMaps;
 		std::unordered_map<UUID, std::vector<glm::vec3>> mPlacementPoints;
-
-		//std::map<UUID, std::shared_ptr<DensityGrid>> mDensityGrids;
+		std::unordered_map<UUID, std::vector<float>> mModifiedPlacementMaps;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mSplatMaps;
 
 

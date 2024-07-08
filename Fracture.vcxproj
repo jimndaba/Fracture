@@ -201,6 +201,7 @@
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h" />
+    <ClInclude Include="src\World\PlacementModifiers.h" />
     <ClInclude Include="src\World\PrefabFactor.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
@@ -378,6 +379,7 @@
     <ClCompile Include="src\World\Entity.cpp" />
     <ClCompile Include="src\World\LightProbeSystem.cpp" />
     <ClCompile Include="src\World\PhysicsSystem.cpp" />
+    <ClCompile Include="src\World\PlacementModifiers.cpp" />
     <ClCompile Include="src\World\PrefabFactor.cpp" />
     <ClCompile Include="src\World\Scene.cpp" />
     <ClCompile Include="src\World\Scenegraph.cpp" />

@@ -13,6 +13,7 @@
 #include "EventSystem/Eventbus.h"
 #include "Rendering/Mesh.h"
 #include <random>
+#include "PlacementModifiers.h"
 
 void Fracture::TerrainSystem::GenerateTerrain(Fracture::UUID entity)
 {
@@ -238,8 +239,10 @@ void Fracture::TerrainSystem::OnUpdate()
 			if (mPlacementLayers.find(comp->entity) != mPlacementLayers.end())
 			{
 				const auto& layers = mPlacementLayers[comp->entity];
+				int index = 0;
 				for (const auto& layer : layers)
-				{
+				{			
+					UpdateLayer(comp->entity, index);
 					if (mPlacementMaps.find(layer->PlacemenMapID) != mPlacementMaps.end())
 					{
 						auto& map = mPlacementMaps[layer->PlacemenMapID];
@@ -254,6 +257,7 @@ void Fracture::TerrainSystem::OnUpdate()
 							map->IsDirty = false;
 						}
 					}
+					index++;
 				}
 			}
 		}	
@@ -268,49 +272,51 @@ void Fracture::TerrainSystem::OnBeginFrame(RenderContext* context)
 		if (!component->IsGenerated)
 			continue;
 
-		for (const auto& layerId : component->PlacementLayers)
+		if (mPlacementLayers.find(component->entity) == mPlacementLayers.end())
+			continue;
+		const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
+
+		for (const auto& layer : mPlacementLayers[component->entity])
 		{
-			if (mPlacementLayers.find(component->entity) == mPlacementLayers.end())
-				continue;		
-			const auto& comp = SceneManager::GetComponent<MeshComponent>(layerId);
-			if (comp)
+			const auto& comp = SceneManager::GetComponent<MeshComponent>(layer->LayerID);
+			if (!comp)
+				continue;
+
+			std::vector<glm::mat4> mBatch;
+			CameraSystem cam_system;
+			for (int i = 0; i < mPlacementPoints[layer->PlacemenMapID].size(); i++)
 			{
-				for (const auto& layer : mPlacementLayers[component->entity])
+				float offsetx = -component->TerrianSizeX / 2;
+				float offsety = -component->TerrianSizeY / 2;
+
+				int index = (int)mPlacementPoints[layer->PlacemenMapID][i].z * component->TerrianSizeX + (int)mPlacementPoints[layer->PlacemenMapID][i].x;
+				
+				glm::vec3 position = glm::vec3(mPlacementPoints[layer->PlacemenMapID][i].x + offsetx, 0, mPlacementPoints[layer->PlacemenMapID][i].z + offsety);
+				position.y = terrain->HeightMap[(int)(int)mPlacementPoints[layer->PlacemenMapID][i].z][(int)mPlacementPoints[layer->PlacemenMapID][i].x];
+				//DebugRenderer::DrawSphere(position, 0.5f);
+				if (index >= 0 && index < mDenistyMaps[layer->PlacemenMapID]->Data.size() && mDenistyMaps[layer->PlacemenMapID]->Data[index] > 0)
 				{
-					std::vector<glm::mat4> mBatch;
-					CameraSystem cam_system;
-					for (int i = 0; i < mPlacementPoints[layer->PlacemenMapID].size(); i++)
+					if (cam_system.IsPointInFrustum(*SceneManager::ActiveCamera(), position))
 					{
-						float offsetx = -component->TerrianSizeX / 2;
-						float offsety = -component->TerrianSizeY / 2;
-						
-						int index = (int)mPlacementPoints[layer->PlacemenMapID][i].z * component->TerrianSizeX + (int)mPlacementPoints[layer->PlacemenMapID][i].x;
-						glm::vec3 position = glm::vec3(mPlacementPoints[layer->PlacemenMapID][i].x + offsetx, 0, mPlacementPoints[layer->PlacemenMapID][i].z + offsety);
-						//DebugRenderer::DrawSphere(position, 0.5f);
-						if (index >= 0 && index < mDenistyMaps[layer->PlacemenMapID]->Data.size() && mDenistyMaps[layer->PlacemenMapID]->Data[index] > 0)
-						{						
-							if (cam_system.IsPointInFrustum(*SceneManager::ActiveCamera(), position))
-							{
-								float distance = glm::distance(SceneManager::ActiveCamera()->Position, position);
-								if (distance < layer->DrawDistance)
-								{
-									glm::mat4 translation = glm::translate(position);
-									glm::mat4 scale = glm::scale(layer->Scale);
-									glm::mat4 rotate = glm::toMat4(glm::normalize(glm::quat(layer->Rotation)));
-									glm::mat4 transform = translation * rotate * scale;
-									mBatch.push_back(transform);
-								}
-							}							
+						float distance = glm::distance(SceneManager::ActiveCamera()->Position, position);
+						if (distance < layer->DrawDistance)
+						{
+							glm::mat4 translation = glm::translate(position);
+							glm::mat4 scale = glm::scale(layer->Scale);
+							glm::mat4 rotate = glm::toMat4(glm::normalize(glm::quat(layer->Rotation)));
+							glm::mat4 transform = translation * rotate * scale;
+							mBatch.push_back(transform);
 						}
 					}
-
-					const auto& mesh = AssetManager::GetStaticByIDMesh(layer->MeshID);
-					for (auto& sub : mesh->SubMeshes)
-					{
-						context->AddToBatch(&sub, comp->Mesh, comp->Materials[sub.MaterialIndex], mBatch);
-					}
 				}
-			}		
+			}
+
+			const auto& mesh = AssetManager::GetStaticByIDMesh(comp->Mesh);
+			for (auto& sub : mesh->SubMeshes)
+			{
+				context->AddToBatch(&sub, comp->Mesh, comp->Materials[sub.MaterialIndex], mBatch);
+			}
+
 		}
 	}
 }
@@ -464,11 +470,11 @@ void Fracture::TerrainSystem::ApplyBrush(float dt, glm::vec3 centre)
 						float influence = (1.0f - (distance / RaiseBrush.radius)) * 1.0f;
 						switch (RaiseBrush.BrushType) {
 						case TerrainBrush::BrushTypeOptions::RAISE:
-							layer->Data[y * layer->Width + x] += influence;
+							layer->Data[y * layer->Width + x] = 1;
 							layer->IsDirty = true;
 							break;
 						case TerrainBrush::BrushTypeOptions::LOWER:
-							layer->Data[y * layer->Width + x] -= influence;
+							layer->Data[y * layer->Width + x] = 0;
 							layer->IsDirty = true;
 							break;
 						case TerrainBrush::BrushTypeOptions::FLATTEN:
@@ -520,6 +526,36 @@ void Fracture::TerrainSystem::AddNewDensityGrid(Fracture::UUID entity)
 	*/
 }
 
+void Fracture::TerrainSystem::UpdateLayer(Fracture::UUID entity, int index)
+{
+	if (mPlacementLayers.find(entity) != mPlacementLayers.end())
+	{
+		if (!mPlacementLayers[entity][index]->Dirty)
+			return;	
+		
+		auto& layer = mPlacementLayers[entity][index];
+
+		if (mPlacementMaps.find(layer->PlacemenMapID) == mPlacementMaps.end())
+			return;
+
+		auto& map = mPlacementMaps[layer->PlacemenMapID];
+		PlacementContext cntxt;
+		cntxt.height = map->Height;;
+		cntxt.width = map->Width;
+		cntxt.PlacementMapID = layer->PlacemenMapID;
+		cntxt._system = this;
+		mModifiedPlacementMaps[layer->PlacemenMapID].resize(cntxt.height * cntxt.width);
+		mModifiedPlacementMaps[layer->PlacemenMapID] = map->Data;
+
+		for (const auto& m : layer->Modifiers)
+		{
+			if (!m->Enabled)
+				continue;
+			m->Modify(cntxt, mModifiedPlacementMaps[layer->PlacemenMapID]);
+		}
+	}
+}
+
 void Fracture::TerrainSystem::AddNewPlacementLayer(Fracture::UUID entity)
 {
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
@@ -541,6 +577,8 @@ void Fracture::TerrainSystem::AddNewPlacementLayer(Fracture::UUID entity)
 	density_texture->Channels = 1;
 	density_texture->Name = "NewDensityTexture";
 	density_texture->Data.resize(density_texture->Width * density_texture->Height * density_texture->Channels, 1.0f);
+
+	mModifiedPlacementMaps[texture->ID].resize(texture->Width * texture->Height * texture->Channels);
 		
 	mDenistyMaps[texture->ID] = density_texture;
 	mPlacementMaps[texture->ID] = texture;
@@ -585,7 +623,10 @@ void Fracture::TerrainSystem::UpdateDensityMap(Fracture::UUID placementID)
 	if (mDenistyMaps.find(placementID) == mDenistyMaps.end())
 		return;
 
-	mDenistyMaps[placementID]->Data = mPlacementMaps[placementID]->Data;
+	if (mModifiedPlacementMaps.find(placementID) == mModifiedPlacementMaps.end())
+		return;
+
+	mDenistyMaps[placementID]->Data = mModifiedPlacementMaps[placementID];
 }
 
 void Fracture::TerrainSystem::SetCurrentPlacementMapForEdit(Fracture::UUID mapID)
@@ -884,3 +925,4 @@ float Fracture::TerrainSystem::sqrMagnitude(const glm::vec3& v)
 {
 	return v.x * v.x + v.y * v.y + v.z * v.z;
 }
+
