@@ -32,7 +32,8 @@ namespace Fracture
 		LineStrip = GL_LINE_STRIP,
 		Triangles = GL_TRIANGLES,
 		TriangleStrip = GL_TRIANGLE_STRIP,
-		TriangleFan = GL_TRIANGLE_FAN
+		TriangleFan = GL_TRIANGLE_FAN,
+		Patches = GL_PATCHES
 	};
 
 	enum class DrawCommandType

@@ -37,7 +37,7 @@ void Fracture::RenderContext::BeginScene()
 	MaterialIndexMap.clear();
 	OutlineDrawCalls.clear();
 	IndirectTerrains.clear();
-	ActiveTextureUnits = 0;
+	ActiveTextureUnits.clear();
 
 }
 
@@ -58,8 +58,12 @@ void Fracture::RenderContext::EndScene()
 
 	Sort(DepthSortOrder::Front_To_Back);
 	Sort(DepthSortOrder::Back_To_Front);
-	GraphicsDevice::Instance()->UpdateMaterialData(MaterialGPUData);
-	GraphicsDevice::Instance()->UpdateIndirectBuffer(IndirectTerrains);
+
+	if(!MaterialGPUData.empty())
+		GraphicsDevice::Instance()->UpdateMaterialData(MaterialGPUData);
+
+	if(!IndirectTerrains.empty())
+		GraphicsDevice::Instance()->UpdateIndirectBuffer(IndirectTerrains);
 
 
 }
@@ -111,7 +115,7 @@ void Fracture::RenderContext::Sort(DepthSortOrder order)
 void Fracture::RenderContext::Render()
 {
 	OPTICK_EVENT();
-	ActiveTextureUnits = 0;
+	ActiveTextureUnits.clear();
 
 	
 
@@ -162,19 +166,13 @@ void Fracture::RenderContext::AddToBatch(StaticMesh* mesh, Fracture::UUID materi
 
 void Fracture::RenderContext::AddToBatch(SubMesh* sub, Fracture::UUID meshID, Fracture::UUID materialID, std::vector<glm::mat4> Batchtransform)
 {
-	if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(meshID) == mBatches[materialID].end())
-	{
-		CreateBatchIfMissing(materialID, meshID);
-	}
+	CreateBatchIfMissing(materialID, meshID);
 
 	const auto& material = AssetManager::GetMaterialByID(materialID);
 	if (!material)
 		return;
 
-	if (MaterialIndexMap.find(materialID) == MaterialIndexMap.end())
-	{
-		SubmitMaterialstoGPU(materialID);
-	}
+	SubmitMaterialstoGPU(materialID);
 	mBatches[materialID][meshID]->EntityIDs.push_back(glm::vec4(0));
 	mBatches[materialID][meshID]->Transforms.insert(mBatches[materialID][meshID]->Transforms.begin(), Batchtransform.begin(), Batchtransform.end());
 	mBatches[materialID][meshID]->GPUMaterialIndex = MaterialIndexMap[materialID];
@@ -308,47 +306,36 @@ void Fracture::RenderContext::AddDrawCall(TerrainComponent* component, glm::mat4
 		const auto& material = AssetManager::GetMaterialByID(component->MaterialID);
 		if (!material)
 			return;
-
-		const unsigned int NUM_STRIPS = component->TerrianSizeY - 1;
-		const unsigned int NUM_VERTS_PER_STRIP = component->TerrianSizeX * 2;
+		material->HasHeightMapTexture = component->HasHeightMap;
+		material->HeightMapTexture = component->HeightMapID;
+		material->TerrainMaxHeight = component->TerrianMaxHeight;
+		material->TerrainYOffset = component->TerrianYShift;
+		material->HasMixMapTexture = component->HasMixMap;
+		material->MixMapTexture = component->MixMapID;
+		material->HasHeightMapTexture = component->HasHeightMap;
+		material->HasDiffuseAtlasTexture = component->HasDiffuseTextureAtlas;
+		material->DiffuseAtlasTexture = component->DiffuseTextureAtlasID;
+		material->HasNormalAtlasTexture = component->HasNormalTextureAtlas;
+		material->NormalAtlasTexture = component->NormalTextureAtlasID;
 
 		SubmitMaterialstoGPU(component->MaterialID);
-
 		auto drawcall = std::make_shared<TerrainDrawCall>();
-		drawcall->DrawCallPrimitive = DrawMode::TriangleStrip;
-		drawcall->CallType = DrawCommandType::MultiDrawElementsIndirect;
+		drawcall->DrawCallPrimitive = DrawMode::Patches;
+		drawcall->CallType = DrawCommandType::DrawArrys;
 		drawcall->EntityID = component->GetID();
-		drawcall->GPUMaterialIndex = MaterialGPUData.size() - 1;
+		drawcall->GPUMaterialIndex = MaterialIndexMap[component->MaterialID];
 		drawcall->IDColor = color;
 		drawcall->model = transform;
 		drawcall->MaterialID = component->MaterialID;
 		drawcall->MeshHandle = terrain->VAO;
 		drawcall->basevertex = 0;
-		drawcall->IndexCount = NUM_VERTS_PER_STRIP;
+		drawcall->baseIndex = 0;
+		drawcall->IndexCount = 4 * component->TerrianResolution * component->TerrianResolution;
 		drawcall->SizeOfindices = 0;
 
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-		glm::decompose(transform, scale, rotation, translation, skew, perspective);
-		drawcall->Key.Depth = glm::distance(translation, SceneManager::ActiveCamera()->Position);
+		
 
-		IndirectTerrains.resize(NUM_STRIPS);
-		for (unsigned int strip = 0; strip < NUM_STRIPS; ++strip)
-		{			
-			IndirectTerrains[strip].baseInstance = 0;
-			IndirectTerrains[strip].baseVertex = 0;
-			IndirectTerrains[strip].count = NUM_VERTS_PER_STRIP;
-			IndirectTerrains[strip].firstIndex = NUM_VERTS_PER_STRIP * strip;
-			IndirectTerrains[strip].instanceCount = 1;
-		}
-
-		if (material->IsTranslucent)
-			TransparentDrawCalls.push_back(drawcall);
-		else
-			OpaqueDrawCalls.push_back(drawcall);
+		OpaqueDrawCalls.push_back(drawcall);
 		if (material->CastsShadows)
 			ShadowDrawCalls.push_back(drawcall);
 	}

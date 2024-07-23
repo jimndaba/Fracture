@@ -236,6 +236,16 @@ void Fracture::ShadowCasterPass::Execute()
                 break;
             }
 
+            case DrawCommandType::DrawArrys:
+            {
+                DrawArray cmd;
+                cmd.count = drawCall->IndexCount;
+                cmd.first = drawCall->baseIndex;
+                cmd.mode = drawCall->DrawCallPrimitive;
+                //Fracture::RenderCommands::DrawArray(Context, cmd);
+                break;
+            }
+
             }
             Fracture::RenderCommands::BindVertexArrayObject(Context, 0);
             Fracture::RenderCommands::ResetTextureUnits(Context, current_shader);
@@ -491,6 +501,16 @@ void Fracture::ShadowCasterPass::Execute()
                     Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, GraphicsDevice::Instance()->GetIndirectBuffer());
                     Fracture::RenderCommands::DrawElementsIndirect(Context, nullptr, Context->IndirectTerrains.size(), 0);
                     Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, 0);
+                    break;
+                }
+
+                case DrawCommandType::DrawArrys:
+                {
+                    DrawArray cmd;
+                    cmd.count = drawCall->IndexCount;
+                    cmd.first = drawCall->baseIndex;
+                    cmd.mode = drawCall->DrawCallPrimitive;
+                    Fracture::RenderCommands::DrawArray(Context, cmd);
                     break;
                 }
           

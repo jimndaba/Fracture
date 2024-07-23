@@ -20,6 +20,7 @@ namespace Fracture
 	struct Material;
 	struct AnimationClip;
 	struct AnimationGraph;
+	struct TextureCreationInfo;
 
 	struct AsyncLoadMeshEvent : public Event
 	{
@@ -86,6 +87,8 @@ namespace Fracture
 		static void AsyncLoadMaterialByID(const UUID& id);
 		static void AsyncLoadAnimation(const std::string& Name);
 		static void AsyncLoadAnimationByID(const UUID& id);
+
+		static void AddTexture(TextureCreationInfo& desc);
 
 		static bool IsMeshLoaded(const std::string& Name);
 		static bool IsMeshLoaded(const UUID& Name);

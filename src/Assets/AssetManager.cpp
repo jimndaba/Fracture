@@ -1085,6 +1085,13 @@ void Fracture::AssetManager::AsyncLoadAnimationByID(const UUID& id)
 	}
 }
 
+void Fracture::AssetManager::AddTexture(TextureCreationInfo& desc)
+{	
+	mTextures[desc.ID] = std::make_shared<Texture>(desc);
+	GraphicsDevice::Instance()->CreateTexture(mTextures[desc.ID], desc);
+	mLoadedTextures.push_back(desc.ID);
+}
+
 bool Fracture::AssetManager::IsMeshLoaded(const std::string& Name)
 {
 	return std::find(mLoadedMeshes.begin(), mLoadedMeshes.end(), mMeshIDLookUp[Name]) != mLoadedMeshes.end();

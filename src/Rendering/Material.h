@@ -31,6 +31,10 @@ namespace Fracture
 		GlobalNormal,
 		GlobalSpots,
 		GlobalPoint,
+		HeightMap,
+		MixMap,
+		DiffuseAtlas,
+		NormalAtlas,
 		TotalSlots
 	};
 
@@ -45,6 +49,13 @@ namespace Fracture
 	{
 		BlinnPhong,
 		PBR
+	};
+
+	enum class MaterialTypeOptions
+	{
+		Mesh,
+		Terrain,
+		Particle
 	};
 
 	enum class BlendingModeOption
@@ -73,7 +84,7 @@ namespace Fracture
 		void SetTexture(const std::string name, const UniformType& mtype, const std::string& texture_name);
 		void SetTextureByID(const std::string name, const UniformType& mtype, const Fracture::UUID& texture_name);
 
-		//Material Flags
+		//Mesh Flags
 		bool HasAlbedoTexture = false;
 		bool HasNormalTexture = false;
 		bool HasSpecularTexture = false;
@@ -82,6 +93,14 @@ namespace Fracture
 		bool HasAOTexture = false;
 		bool HasEmissionTexture = false;
 
+		//Terrain Material Flags
+		bool HasHeightMapTexture = false;
+		bool HasMixMapTexture = false;
+		bool HasDiffuseAtlasTexture = false;
+		bool HasNormalAtlasTexture = false;
+
+
+
 		Fracture::UUID AlbedoTexture;
 		Fracture::UUID NormalTexture;
 		Fracture::UUID SpecularTexture;
@@ -89,6 +108,13 @@ namespace Fracture
 		Fracture::UUID MetallicTexture;
 		Fracture::UUID AOTexture;
 		Fracture::UUID EmmissionTexture;
+
+		//Terrain Maps
+		Fracture::UUID HeightMapTexture;
+		Fracture::UUID MixMapTexture;
+		Fracture::UUID DiffuseAtlasTexture;
+		Fracture::UUID NormalAtlasTexture;
+
 
 
 		std::function<void(Fracture::RenderContext* cntxt, Fracture::Shader* shader, int unit)> GlobalDepth;
@@ -107,6 +133,8 @@ namespace Fracture
 		float AOLevel = 1.0f;
 		float MetalicLevel = 0.1f;
 		float EmmisionStrength = 0.0f;
+		float TerrainMaxHeight = 0.0f;
+		float TerrainYOffset = 0.0f;
 
 
 
@@ -115,6 +143,7 @@ namespace Fracture
 		UVSpace TextureSpace = UVSpace::Object;
 		BlendingModeOption BlendMode = BlendingModeOption::Linear;
 		MaterialShadingModel ShadingModel = MaterialShadingModel::PBR;
+		MaterialTypeOptions MaterialType = MaterialTypeOptions::Mesh;
 
 		float TextureTiling = 1.0f;
 
@@ -123,6 +152,7 @@ namespace Fracture
 		bool IsReflective = false;
 		bool DepthWrite = true;
 		bool IsSkinned = false;
+		bool ShaderOverride = false;
 		bool IsInstanced = true;
 		bool IsAffectedByWind = false;
 		bool IsDirty = false;
@@ -135,6 +165,22 @@ namespace Fracture
 		uint32_t UnitCount = 1;
 	};
 
+	struct TerrainMaterial : Material
+	{
+		Fracture::UUID TerrainComponent;
+
+		Fracture::UUID HeightMapTexture;
+
+		Fracture::UUID RTexture;
+		Fracture::UUID GTexture;
+		Fracture::UUID BTexture;
+		Fracture::UUID ATexture;
+
+		bool HasRTexture = false;
+		bool HasGTexture = false;
+		bool HasBTexture = false;
+		bool HasATexture = false;
+	};
 }
 
 #endif

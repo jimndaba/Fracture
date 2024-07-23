@@ -161,6 +161,7 @@
     <ClInclude Include="src\Physics\Ray.h" />
     <ClInclude Include="src\Rendering\AABB.h" />
     <ClInclude Include="src\Rendering\Buffer.h" />
+    <ClInclude Include="src\Rendering\BVH.h" />
     <ClInclude Include="src\Rendering\Color.h" />
     <ClInclude Include="src\Rendering\Command.h" />
     <ClInclude Include="src\Rendering\DebugRenderer.h" />
@@ -326,6 +327,7 @@
     <ClCompile Include="src\Physics\Ray.cpp" />
     <ClCompile Include="src\Rendering\AABB.cpp" />
     <ClCompile Include="src\Rendering\Buffer.cpp" />
+    <ClCompile Include="src\Rendering\BVH.cpp" />
     <ClCompile Include="src\Rendering\Color.cpp" />
     <ClCompile Include="src\Rendering\Command.cpp" />
     <ClCompile Include="src\Rendering\DebugRenderer.cpp" />

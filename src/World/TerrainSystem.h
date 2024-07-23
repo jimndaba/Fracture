@@ -2,7 +2,7 @@
 #ifndef TERRAINSYSTEM_H
 #define TERRAINSYSTEM_H
 
-#include "Rendering/Vertex.h"
+#include "Rendering/BVH.h"
 
 namespace Fracture
 {
@@ -22,7 +22,15 @@ namespace Fracture
 
 		BrushTypeOptions BrushType = BrushTypeOptions::RAISE;
 		float radius = 10.0f;
-		float strength = 5.0f;
+		float strength = 1.0f;
+		float Falloff = 0.1f;
+	};
+
+	struct BrushParams
+	{
+		glm::vec3 centre;
+		int TextureIndex = 0;
+		float TextureWeight = 0;
 	};
 
 	enum class TerrainEditModeOptions
@@ -58,31 +66,20 @@ namespace Fracture
 		int Height = 1;
 		int Channels = 1;
 		bool IsDirty = false;
+		bool HasTexture = false;
+		Fracture::UUID TextureID;
 	};
 	
-	struct Ecotope
-	{
-
-
-
-	};
-
-
 
 	/* Thinging Aloud
-	struct TerrainMapModifier
-	{
-		virtual void Modify() = 0;
-		bool Enabled;
-	};
-
 	struct Ecotope
 	{
 		std::string Name;
 		std::vector<std::shared_ptr<TerrainMapModifier>> Modifiers;
 	};
-	*/
 
+
+	*/
 	struct PlacementLayer
 	{
 		Fracture::UUID LayerID;
@@ -100,6 +97,22 @@ namespace Fracture
 		std::vector<std::unique_ptr<PlacementMapModifier>> Modifiers;
 	};
 
+
+	struct TerrainMaterialLayer
+	{
+		TerrainTextureMap BlendMap;
+		Fracture::UUID R_Texture;
+		Fracture::UUID G_Texture;
+		Fracture::UUID B_Texture;
+		Fracture::UUID A_Texture;
+	};
+
+	struct DebugRays
+	{
+		glm::vec3 start;
+		glm::vec3 finish;
+	};
+
 	class TerrainSystem
 	{
 	public:
@@ -111,11 +124,13 @@ namespace Fracture
 		void OnBeginFrame(RenderContext* context);
 		void OnEndFrame();
 		void OnDebugDraw();
+		void DrawNode(BVHNode* node);
+
 		void SaveHeightMap(const std::string& path);
 		void SubmitTerrainForEditing(Fracture::UUID entity);
 		void ReleaseTerrainFromEditing();
 
-		void ApplyBrush(float dt, glm::vec3 centre);
+		void ApplyBrush(BrushParams params);
 
 		void AddNewPlacementLayer(Fracture::UUID entity);
 
@@ -124,6 +139,8 @@ namespace Fracture
 		void UpdateLayer(Fracture::UUID entity, int index);
 	
 		void UpdateDensityMap(Fracture::UUID placementID);
+
+		void UpdateTerrainAtlas();
 	
 		void SetCurrentPlacementMapForEdit(Fracture::UUID mapID);
 		void SetCurrentPlacementLayerForEdit(Fracture::UUID entityID, int index);
@@ -136,34 +153,41 @@ namespace Fracture
 		std::vector<glm::vec3> GenerateGridPoints(float footprint, glm::vec2 regionSize, int NoOfSamples = 30);
 		
 
-		TerrainBrush RaiseBrush;
+		TerrainBrush MainBrush;
 		TerrainEditModeOptions EditMode = TerrainEditModeOptions::Selection;
+		int CurrentMixID = 0;
+		float CurrentMixWeight = 0;
 		DensityGrid TestGrid;
 
-		glm::vec3 GetTerrainIntersectionPoint(Fracture::CameraComponent& camera, bool& intersects,float mouse_x, float mouse_y, float width, float height);
+		glm::vec3 GetTerrainIntersectionPoint(Fracture::CameraComponent& camera, bool& intersects,float mouse_x, float mouse_y);
 		bool IsEditing();
 
-		//Terrain -> Many PlacementLayers;
 		std::map<UUID, std::vector<std::shared_ptr<PlacementLayer>>> mPlacementLayers;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mPlacementMaps;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mDenistyMaps;
 		std::unordered_map<UUID, std::vector<glm::vec3>> mPlacementPoints;
 		std::unordered_map<UUID, std::vector<float>> mModifiedPlacementMaps;
-		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mSplatMaps;
+		std::unordered_map<UUID, TerrainMaterialLayer> mMaterialLayers;
 
+		std::unordered_map<UUID, std::shared_ptr<Texture>> mGPUTextures;
 
-
-	
+		std::unique_ptr<BVHTree> bvh;			
+		int DrawDepthFrom = 0;
 		UUID CurrentMappedTerrain = 0;
 		int CurrentSelectedLayer = -1;		
+		bool IsTerrainSubmittedForEdit = false;
 		TerrainTextureMap* mCurrentPlacementMapForEdit;
 		PlacementLayer* mCurrentPlacementLayerForEdit;
 	private:
-		Vertex* current_terrian_data;
+		//Vertex* current_terrian_data;
 		uint32_t OriginalTerrainSize = 0;
 		Vertex* mVerticesForEdit;
 		
 		int Terrain_Width, Terrain_Height;
+
+		std::vector<DebugRays> mRays;
+		std::vector<glm::vec3> mHitpoints;
+		
 
 		float GetHeightatPoint(int index);
 		glm::vec3 CalcNormal(int index);

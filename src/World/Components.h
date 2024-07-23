@@ -690,6 +690,17 @@ namespace Fracture
 		UUID GetID() { return entity; }
 	};
 
+
+	struct TerrainTileSet
+	{
+		Fracture::UUID DiffuseTexture;
+		Fracture::UUID NormalTexture;
+
+		bool HasDiffuse;
+		bool HasNormal;
+		float Weight = 1.0f;
+	};
+
 	struct TerrainComponent : public IComponent
 	{
 		TerrainComponent(const Fracture::UUID& id) :
@@ -703,29 +714,50 @@ namespace Fracture
 			TerrainID = other.TerrainID;
 			TerrianSizeX = other.TerrianSizeX;
 			TerrianSizeY = other.TerrianSizeX;
-			TerrianYScale = other.TerrianYScale;
+			HeightMapID = other.HeightMapID;
+			MixMapID = other.MixMapID;
+			TerrianMaxHeight = other.TerrianMaxHeight;
 			TerrianYShift = other.TerrianYShift;
 			HasHeightMap = other.HasHeightMap;
+			HasMixMap = other.MixMapID;
 		}
 
 		UUID entity;
 		Fracture::UUID TerrainID;
 		Fracture::UUID MaterialID;
+
 		Fracture::UUID HeightMapID;
 		std::string HeightMapPath;
 
+		Fracture::UUID MixMapID;
+		Fracture::UUID IndexMapID;
+		Fracture::UUID DiffuseTextureAtlasID;
+		Fracture::UUID NormalTextureAtlasID;
 
 		std::vector<UUID> PlacementLayers;
+		std::vector<TerrainTileSet> TerrainTextures;
 
 		bool HasHeightMap = false;
+		bool HasMixMap = false;
+		bool IsMixMapDirty = false;
+		bool IsAtlasDirty = false;
+		bool HasTextureAtlasIndexMap = false;
+		bool HasDiffuseTextureAtlas = false;
+		bool HasNormalTextureAtlas = false;
 		bool HasMaterial = false;
 		bool IsGenerated = false;
 		bool Dirty = false;
 		
 		int TerrianSizeX = 256;
 		int TerrianSizeY = 256;
-		float TerrianYScale = 0.25f;
-		float TerrianYShift = 16.0f;
+		int TerrianResolution = 20;
+		float TerrianMaxHeight = 100.0f;
+		float TerrianYShift = 0.0f;
+
+		//Texture Params
+		int AtlasPerTextureSize = 512;
+		int MaxTextures = 8;
+
 		UUID GetID() { return entity; }
 	};
 }

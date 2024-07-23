@@ -63,6 +63,7 @@ namespace Fracture
 		RGB = GL_RGB,
 		RGB8 = GL_RGB8,
 		RGB16 = GL_RGB16,
+		RGB32F = GL_RGB32F,
 		RGB16F = GL_RGB16F,
 		RGBA = GL_RGBA,
 		RGBA8 = GL_RGBA8,
@@ -162,6 +163,7 @@ namespace Fracture
 		~Texture();
 		TextureCreationInfo Description;		
 		uint32_t Handle = 0;
+		bool IsDirty = true;
 	private:
 		// pure virtual implementation
 		void bind() {};

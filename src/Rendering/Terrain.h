@@ -11,8 +11,8 @@ namespace Fracture
 	{
 		Terrain(Fracture::UUID id);
 		Fracture::UUID ID;
-		Fracture::UUID HeightMapTexture;
-		std::vector<std::vector<float>> HeightMap;
+		Fracture::UUID HeightMapTexture;		
+		std::vector<float> HeightMapData;
 
 		std::vector<unsigned int> Indices;
 		std::vector<Vertex> Vertices;

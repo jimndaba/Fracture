@@ -101,16 +101,23 @@ void Fracture::ZPrePass::Execute()
 		const auto& material = AssetManager::Instance()->GetMaterialByID(drawCall->MaterialID);
 
 		Shader* current_shader;
-		if (material->IsSkinned)
-			current_shader = mShaderSkinned.get();
-		else if (material->IsInstanced)
-			current_shader = mShaderInstanced.get();
-		else 
-			current_shader = mShader.get();
+		if (material->ShaderOverride)
+		{
+			const auto& override_shader = AssetManager::Instance()->GetShaderByID(material->Shader);
+			current_shader = override_shader.get();
+		}
+		else
+		{
+			if (material->IsSkinned)
+				current_shader = mShaderSkinned.get();
+			else if (material->IsInstanced)
+				current_shader = mShaderInstanced.get();
+			else
+				current_shader = mShader.get();
 
-		if (!material->DepthWrite)
-			continue;
-		
+			if (!material->DepthWrite)
+				continue;
+		}
 	
 		Fracture::RenderCommands::UseProgram(Context, current_shader->Handle);
 		Fracture::RenderCommands::SetUniform(Context, current_shader, "MaterialIndex", (int)drawCall->GPUMaterialIndex);
@@ -161,6 +168,16 @@ void Fracture::ZPrePass::Execute()
 				Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer, GraphicsDevice::Instance()->GetIndirectBuffer());
 				Fracture::RenderCommands::DrawElementsIndirect(Context,nullptr ,Context->IndirectTerrains.size(),0);
 				Fracture::RenderCommands::BindBuffer(Context, BufferType::DrawIndirectBuffer,0);
+				break;
+			}
+
+			case DrawCommandType::DrawArrys :
+			{			
+				DrawArray cmd;
+				cmd.count = drawCall->IndexCount;
+				cmd.first = drawCall->baseIndex;
+				cmd.mode = drawCall->DrawCallPrimitive;
+				Fracture::RenderCommands::DrawArray(Context,cmd);
 				break;
 			}
 	

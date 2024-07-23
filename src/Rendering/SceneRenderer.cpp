@@ -289,8 +289,6 @@ void Fracture::SceneRenderer::Begin(float dt)
 	mContext->BeginState(key);
 	mContext->BeginScene();
 	particleSystem->BeginRender(mContext.get());
-	TerrainSys->OnBeginFrame(mContext.get());
-
 
 	if (SceneManager::CurrentScene())
 	{
@@ -430,6 +428,8 @@ void Fracture::SceneRenderer::Render()
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(terrain->GetID());
 		mContext->AddDrawCall(terrain.get(), transform->WorldTransform, terrain->GetID());
 	}
+
+	TerrainSys->OnBeginFrame(mContext.get());
 
 	const auto& components = SceneManager::GetAllComponents<MeshComponent>();
 	for (const auto& meshcomponent : components)

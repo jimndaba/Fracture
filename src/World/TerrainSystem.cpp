@@ -14,139 +14,199 @@
 #include "Rendering/Mesh.h"
 #include <random>
 #include "PlacementModifiers.h"
+#include "Physics/Ray.h"
+
+float smootherstep(float edge0, float edge1, float x) {
+	// Scale, bias and saturate x to 0..1 range
+	x = glm::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+	// Evaluate polynomial
+	return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
+float EncodeIDAndWeight(int id, float weight) {
+	// Ensure weight is in the range [0, 1)
+	weight = std::clamp(weight, 0.0f, 0.9999f);
+	return static_cast<float>(id) + weight;
+}
+
+std::pair<int, float> DecodeIDAndWeight(float encodedValue) {
+	int id = static_cast<int>(encodedValue);
+	float weight = encodedValue - static_cast<float>(id);
+	if (weight >= 0.98f) weight = 1.0f;
+	return { id, weight };
+}
 
 void Fracture::TerrainSystem::GenerateTerrain(Fracture::UUID entity)
 {
-
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);	
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 
 	if (!terrain)
 		return;
 
-	// load height map texture
-	terrain->HeightMap.resize(component->TerrianSizeY, std::vector<float>(component->TerrianSizeX, 0.0f));
-
-	if (component->HasHeightMap)
 	{
-		const auto& heightmap = AssetManager::Instance()->GetTextureByID(component->HeightMapID); int width, height, nChannels;
-		unsigned char* data = stbi_load(component->HeightMapPath.c_str(),
-			&width, &height, &nChannels,
-			0);
-
-		for (unsigned int i = 0; i < component->TerrianSizeY; i++)
+		if (component->HasHeightMap)
 		{
-			for (unsigned int j = 0; j < component->TerrianSizeX; j++)
-			{
-				// retrieve texel for (i,j) tex coord
-			// data() + (j + component->TerrianSizeX * i) * heightmap->Description.NoChannels;
-				unsigned char* texel = data + (j + width * i) * nChannels;
-				// raw height at coordinate
-				unsigned char y = texel[0];
-				terrain->HeightMap[i][j] =(float)y;// heightmap->Description.data[(j + component->TerrianSizeX * i) * heightmap->Description.NoChannels];
-				//FRACTURE_INFO("text {}", (float)heightmap->Description.data[i, j]);;
-			}
-		}
-	}
-
-	for (int i = 0; i < component->TerrianSizeY; i++)
-	{
-		for (int j = 0; j < component->TerrianSizeX; j++)
-		{
-			Vertex v;
-			v.Position.x = -component->TerrianSizeY / 2.0f + j;
-			v.Position.y = terrain->HeightMap[i][j];
-			v.Position.z = -component->TerrianSizeX / 2.0f + i;
-
-			v.Normal = glm::vec3(0, 1.0f, 0);
+			int width, height, nChannels;
+			unsigned char* data = stbi_load(component->HeightMapPath.c_str(),
+				&width, &height, &nChannels,
+				0);
 			
-			v.Uvs.x = (float)i / (float)component->TerrianSizeY;
-			v.Uvs.y = (float)j / (float)component->TerrianSizeX;
+			TextureCreationInfo desc;
+			desc.ID = UUID();
+			desc.TextureTarget = TextureTarget::Texture2D;
+			desc.AttachmentTrgt = AttachmentTarget::Color;
+			desc.format = TextureFormat::Red;
+			desc.formatType = TextureFormatType::Float;
+			desc.internalFormat = InternalFormat::R16F;
+			desc.minFilter = TextureMinFilter::Linear;
+			desc.magFilter = TextureMagFilter::Linear;
+			desc.Wrap = TextureWrap::ClampToEdge;
+			desc.Name = "HeightMap";
+			component->TerrianSizeX = width;
+			component->TerrianSizeY = height;
+			desc.Width = (int)component->TerrianSizeX;
+			desc.Height = (int)component->TerrianSizeY;			
+			terrain->HeightMapData.resize(component->TerrianSizeY * component->TerrianSizeX, 0.0f);
+			desc.texture_data = data;
 
-			terrain->Vertices.push_back(v);
-		}
-	}	
-	
-	for (int i = 0; i < component->TerrianSizeY - 1; i++) // Row
-	{
-		for (int j = 0; j < component->TerrianSizeX; j++) // Col
-		{			
-
-			for (int k = 0; k < 2; k++)
-			{			
-				int v1 = j + component->TerrianSizeX * (i + k);
-				terrain->Indices.push_back(v1);
-			}		
-		}
-	}
-	/*
-	for (unsigned int z = 0; z < component->TerrianSizeY - 1; ++z) {
-		if (z > 0) {
-			// Add a degenerate triangle (same vertex as last and first in this strip)
-			terrain->Indices.push_back(z * component->TerrianSizeX);
-		}
-		for (unsigned int x = 0; x < component->TerrianSizeX; ++x) {
-			// Vertex at the current row
-			terrain->Indices.push_back(z * component->TerrianSizeX + x);
-			// Vertex at the next row
-			terrain->Indices.push_back((z + 1) * component->TerrianSizeX + x);
-		}
-		if (z < component->TerrianSizeY - 2) {
-			// Add a degenerate triangle (same vertex as last in this strip and first in the next)
-			terrain->Indices.push_back((z + 1) * component->TerrianSizeX + (component->TerrianSizeX - 1));
-		}
-	}
-*/
-	//Let A be the vertex we are interseted in, B and C two other vertices of the same triangle
-	//the normal of the triangle is then = Vector3.cross((B - A).normalized, (C - A).normalized).
-
-	
-	//calculate Normals	
-	/*
-	for (int i = 0; i < terrain->Indices.size() - 2; i++)
-	{
-
-		int index0 = terrain->Indices[i];
-		int index1 = terrain->Indices[i + 1];
-		int index2 = terrain->Indices[i + 2];
-
-		glm::vec3 v0 = terrain->Vertices[index0].Position;
-		glm::vec3 v1 = terrain->Vertices[index1].Position;
-		glm::vec3 v2 = terrain->Vertices[index2].Position;
-
-		// Check for degenerate triangles (skip if indices are the same)
-		if (index0 == index1 || index1 == index2 || index2 == index0) {
-			continue;
-		}
-				
-		glm::vec3 edge1 = v1 - v0;
-		glm::vec3 edge2 = v2 - v0;
-
-		glm::vec3 normal = glm::normalize(glm::cross(edge1, edge2));
-
-		float normalLength = glm::length(normal);
-		if (normalLength > 1e-6) {			
-			terrain->Vertices[index0].Normal += normal;
-			terrain->Vertices[index1].Normal += normal;
-			terrain->Vertices[index2].Normal += normal;
+			for (unsigned int i = 0; i < component->TerrianSizeY; i++)
+			{
+				for (unsigned int j = 0; j < component->TerrianSizeX; j++)
+				{				
+					unsigned char* texel = data + (j + width * i) * nChannels;
+					// raw height at coordinate
+					unsigned char y = texel[0];
+					terrain->HeightMapData[i * width + j] = (float)y;
+				}
+			}
+			desc.texture_data = terrain->HeightMapData.data();
+			component->HeightMapID = desc.ID;
+			AssetManager::Instance()->AddTexture(desc);
 		}
 		else
 		{
-			FRACTURE_ERROR("Nan");
+			// load height map texture
+			TextureCreationInfo desc;
+			desc.ID = UUID();
+			desc.TextureTarget = TextureTarget::Texture2D;
+			desc.AttachmentTrgt = AttachmentTarget::Color;
+			desc.format = TextureFormat::Red;
+			desc.formatType = TextureFormatType::Float;
+			desc.internalFormat = InternalFormat::R16F;
+			desc.minFilter = TextureMinFilter::Linear;
+			desc.magFilter = TextureMagFilter::Linear;
+			desc.Wrap = TextureWrap::ClampToEdge;
+			terrain->HeightMapData.resize(component->TerrianSizeY * component->TerrianSizeX, 0.0f);
+			component->HeightMapID = desc.ID;
+			component->HasHeightMap = true;
+			desc.Name = "HeightMap";
+			desc.Width = (int)component->TerrianSizeX;
+			desc.Height = (int)component->TerrianSizeY;
+			desc.texture_data = terrain->HeightMapData.data();
+			AssetManager::Instance()->AddTexture(desc);
+		}
+		{
+			TextureCreationInfo mixmap_desc;
+			mixmap_desc.ID = UUID();
+			mixmap_desc.TextureTarget = TextureTarget::Texture2D;
+			mixmap_desc.AttachmentTrgt = AttachmentTarget::Color;
+			mixmap_desc.format = TextureFormat::RGB;
+			mixmap_desc.formatType = TextureFormatType::Float;
+			mixmap_desc.internalFormat = InternalFormat::RGB32F;
+			mixmap_desc.minFilter = TextureMinFilter::Linear;
+			mixmap_desc.magFilter = TextureMagFilter::Linear;
+			mixmap_desc.Wrap = TextureWrap::ClampToEdge;
+			mixmap_desc.Width = (int)component->TerrianSizeY;
+			mixmap_desc.Height = (int)component->TerrianSizeX;
+			mixmap_desc.Name = "MixMap";
+			mixmap_desc.f_data.resize(component->TerrianSizeX * component->TerrianSizeY * 3, 1.0f);
+			component->MixMapID = mixmap_desc.ID;
+			component->HasMixMap = true;
+			AssetManager::Instance()->AddTexture(mixmap_desc);
+		}
+		{
+			TextureCreationInfo diff_desc;
+			diff_desc.ID = UUID();
+			diff_desc.TextureTarget = TextureTarget::Texture2D;
+			diff_desc.AttachmentTrgt = AttachmentTarget::Color;
+			diff_desc.format = TextureFormat::RGB;
+			diff_desc.formatType = TextureFormatType::UByte;
+			diff_desc.internalFormat = InternalFormat::RGB32F;
+			diff_desc.minFilter = TextureMinFilter::Linear;
+			diff_desc.magFilter = TextureMagFilter::Linear;
+			diff_desc.Wrap = TextureWrap::ClampToEdge;
+			diff_desc.Width = 2048;
+			diff_desc.Height = 2560;
+			diff_desc.NoChannels = 3;
+			diff_desc.Name = "DiffuseAtlasMap";
+			diff_desc.data.resize(diff_desc.Width * diff_desc.Height * diff_desc.NoChannels, 0);
+			component->DiffuseTextureAtlasID =diff_desc.ID;
+			component->HasDiffuseTextureAtlas = true;
+			AssetManager::Instance()->AddTexture(diff_desc);
+		}
+		{
+			TextureCreationInfo Norm_desc;
+			Norm_desc.ID = UUID();
+			Norm_desc.TextureTarget = TextureTarget::Texture2D;
+			Norm_desc.AttachmentTrgt = AttachmentTarget::Color;
+			Norm_desc.format = TextureFormat::RGB;
+			Norm_desc.formatType = TextureFormatType::UByte;
+			Norm_desc.internalFormat = InternalFormat::RGB32F;
+			Norm_desc.minFilter = TextureMinFilter::Linear;
+			Norm_desc.magFilter = TextureMagFilter::Linear;
+			Norm_desc.Wrap = TextureWrap::ClampToEdge;
+			Norm_desc.Width = 2048;
+			Norm_desc.Height = 2560;
+			Norm_desc.NoChannels = 3;
+			Norm_desc.Name = "NormalAtlasMap";
+			Norm_desc.data.resize(Norm_desc.Width * Norm_desc.Height * Norm_desc.NoChannels, 0);
+			component->NormalTextureAtlasID = Norm_desc.ID;
+			component->HasNormalTextureAtlas = true;
+			AssetManager::Instance()->AddTexture(Norm_desc);
 		}
 	}
 
-	for (auto& vertex : terrain->Vertices) {
-			vertex.Normal = glm::normalize(vertex.Normal);
-		}
-	*/
-	for (int i = 0; i < terrain->Indices.size() - 2; i++)
-	{
-		int index0 = terrain->Indices[i];
-		glm::vec2 p = glm::vec2(terrain->Vertices[index0].Position.x, terrain->Vertices[index0].Position.z);
-		terrain->Vertices[index0].Normal = CalcNormal(index0);
-	}
+	int width = component->TerrianSizeX;
+	int height = component->TerrianSizeY;
+	for (unsigned i = 0; i <= component->TerrianResolution - 1; i++)
+		{
+			for (unsigned j = 0; j <= component->TerrianResolution - 1; j++)
+			{
+				Vertex v1;
+				v1.Position.x = (-width / 2.0f + width * i / (float)component->TerrianResolution); // v.x
+				v1.Position.y = (0.0f); // v.y
+				v1.Position.z = (-height / 2.0f + height * j / (float)component->TerrianResolution); // v.z
+				v1.Uvs.x = (i / (float)component->TerrianResolution); // u
+				v1.Uvs.y = (j / (float)component->TerrianResolution); // v
+				terrain->Vertices.push_back(v1);
 
+				Vertex v2;
+				v2.Position.x = (-width / 2.0f + width * (i + 1) / (float)component->TerrianResolution); // v.x
+				v2.Position.y = (0.0f); // v.y
+				v2.Position.z = (-height / 2.0f + height * j / (float)component->TerrianResolution); // v.z
+				v2.Uvs.x = (i + 1) / (float)component->TerrianResolution; // u
+				v2.Uvs.y = (j / (float)component->TerrianResolution); // v
+				terrain->Vertices.push_back(v2);
+
+				Vertex v3;
+				v3.Position.x = (-width / 2.0f + width * i / (float)component->TerrianResolution); // v.x
+				v3.Position.y = (0.0f); // v.y
+				v3.Position.z = (-height / 2.0f + height * (j + 1) / (float)component->TerrianResolution); // v.z
+				v3.Uvs.x = (i / (float)component->TerrianResolution); // u
+				v3.Uvs.y = ((j + 1) / (float)component->TerrianResolution); // v
+				terrain->Vertices.push_back(v3);
+
+				Vertex v4;
+				v4.Position.x = (-width / 2.0f + width * (i + 1) / (float)component->TerrianResolution); // v.x
+				v4.Position.y = (0.0f); // v.y
+				v4.Position.z = (-height / 2.0f + height * (j + 1) / (float)component->TerrianResolution); // v.z
+				v4.Uvs.x = ((i + 1) / (float)component->TerrianResolution); // u
+				v4.Uvs.y = ((j + 1) / (float)component->TerrianResolution); // v
+				terrain->Vertices.push_back(v4);
+			}
+		}
+	
 	VertexArrayCreationInfo info;
 	info.Layout =
 	{
@@ -157,83 +217,64 @@ void Fracture::TerrainSystem::GenerateTerrain(Fracture::UUID entity)
 
 	GraphicsDevice::Instance()->CreateVertexArray(terrain->VAO, info);
 	{
-		BufferDescription desc;
-		desc.data = terrain->Vertices.data();
-		desc.bufferType = BufferType::ArrayBuffer;
-		desc.size = sizeof(terrain->Vertices[0]) * terrain->Vertices.size();
-		desc.usage = BufferUsage::Static;
-		desc.Name = "Verticies";
-		desc.IsPersistantlyMapped = true;
-		desc.BufferAccessFlags = BufferAccess::ReadWrite;
+		BufferDescription b_desc;
+		b_desc.data = terrain->Vertices.data();
+		b_desc.bufferType = BufferType::ArrayBuffer;
+		b_desc.size = sizeof(terrain->Vertices[0]) * terrain->Vertices.size();
+		b_desc.usage = BufferUsage::Static;
+		b_desc.Name = "Verticies";
+		b_desc.IsPersistantlyMapped = true;
+		b_desc.BufferAccessFlags = BufferAccess::ReadWrite;
 		terrain->VBO_Buffer = std::make_shared<Buffer>();
-		GraphicsDevice::Instance()->CreateBuffer(terrain->VBO_Buffer.get(), desc);
+		GraphicsDevice::Instance()->CreateBuffer(terrain->VBO_Buffer.get(), b_desc);
 		GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(terrain->VAO, 0, sizeof(terrain->Vertices[0]), terrain->VBO_Buffer->RenderID);
 	}
-
-	{
-		BufferDescription desc;
-		desc.data = terrain->Indices.data();
-		desc.bufferType = BufferType::ElementArrayBuffer;
-		desc.size = sizeof(terrain->Indices[0]) * terrain->Indices.size();
-		desc.usage = BufferUsage::Static;
-		desc.Name = "IndexBuffer";
-		terrain->EBO_Buffer = std::make_shared<Buffer>();
-		GraphicsDevice::Instance()->CreateBuffer(terrain->EBO_Buffer.get(), desc);
-		GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(terrain->VAO, terrain->EBO_Buffer->RenderID);
-	}
-
+	
 	GraphicsDevice::Instance()->VertexArray_BindAttributes(terrain->VAO, info);
 	component->IsGenerated = true;
+
+
 }
 
 void Fracture::TerrainSystem::UpdateTerrain(Fracture::UUID entity)
 {
 	OPTICK_EVENT();
-	if (!current_terrian_data)
-		return;
+	if (IsTerrainSubmittedForEdit)
+	{
+		const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
+		const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 
-	const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
-	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
-
-	const int numThreads = std::thread::hardware_concurrency();
-	std::vector<std::thread> threads;
-	std::mutex mtx;
-	float brushRadiusSq = RaiseBrush.radius * RaiseBrush.radius;
-
-	auto brushFunc = [&](int start, int end) {
-		OPTICK_EVENT();
-		for (int i = start; i < end; ++i)
-		{					
-			int index0 = terrain->Indices[i];
-			glm::vec2 p = glm::vec2(terrain->Vertices[index0].Position.x, terrain->Vertices[index0].Position.z);	
-			terrain->Vertices[index0].Normal = CalcNormal(index0);
+		if (component->HasHeightMap && terrain->IsDirty)
+		{
+			GraphicsDevice::Instance()->UpdateTexture<float>(component->HeightMapID, terrain->HeightMapData, 0, 0, component->TerrianSizeX, component->TerrianSizeY);
+			terrain->IsDirty = false;
 		}
-	};
+		if (component->HasMixMap && component->IsMixMapDirty)
+		{
+			GraphicsDevice::Instance()->UpdateFloatTexture(component->MixMapID);
+			component->IsMixMapDirty = false;
+		}
 
-	int chunkSize = terrain->Indices.size() / numThreads;
-	for (int i = 0; i < numThreads; ++i) {
-		int start = i * chunkSize;
-		int end = (i == numThreads - 1) ? terrain->Indices.size() : start + chunkSize;
-		threads.emplace_back(brushFunc, start, end);
+		if (component->IsAtlasDirty)
+		{
+			UpdateTerrainAtlas();
+			component->IsAtlasDirty = false;
+		}
 	}
-
-	for (auto& thread : threads) {
-		thread.join();
-	}
-	GLsizeiptr bufferSize = terrain->Vertices.size() * sizeof(Vertex);
-	memcpy(current_terrian_data, terrain->Vertices.data(), bufferSize);
-
 }
 
 void Fracture::TerrainSystem::OnInit()
 {
+	bvh = std::make_unique<BVHTree>();
 }
 
 void Fracture::TerrainSystem::OnUpdate()
 {
+	OPTICK_EVENT();
 	const auto& terrains = SceneManager::GetAllComponents<TerrainComponent>();
 	for (const auto& comp : terrains)
 	{
+		UpdateTerrain(comp->entity);
 		for (const auto& layerId : comp->PlacementLayers)
 		{
 			if (mPlacementLayers.find(comp->entity) != mPlacementLayers.end())
@@ -246,9 +287,10 @@ void Fracture::TerrainSystem::OnUpdate()
 					if (mPlacementMaps.find(layer->PlacemenMapID) != mPlacementMaps.end())
 					{
 						auto& map = mPlacementMaps[layer->PlacemenMapID];
+						UpdateDensityMap(layer->PlacemenMapID);
+						
 						if (map->IsDirty)
-						{
-							UpdateDensityMap(layer->PlacemenMapID);
+						{							
 							if (layer->IsFootPrintDirty)
 							{
 								mPlacementPoints[layer->PlacemenMapID] = GenerateGridPoints(layer->FootPrint, glm::vec2(map->Width, map->Height));
@@ -266,6 +308,7 @@ void Fracture::TerrainSystem::OnUpdate()
 
 void Fracture::TerrainSystem::OnBeginFrame(RenderContext* context)
 {
+	OPTICK_EVENT();
 	const auto& terrains = SceneManager::GetAllComponents<TerrainComponent>();
 	for (const auto& component : terrains)
 	{
@@ -292,7 +335,7 @@ void Fracture::TerrainSystem::OnBeginFrame(RenderContext* context)
 				int index = (int)mPlacementPoints[layer->PlacemenMapID][i].z * component->TerrianSizeX + (int)mPlacementPoints[layer->PlacemenMapID][i].x;
 				
 				glm::vec3 position = glm::vec3(mPlacementPoints[layer->PlacemenMapID][i].x + offsetx, 0, mPlacementPoints[layer->PlacemenMapID][i].z + offsety);
-				position.y = terrain->HeightMap[(int)(int)mPlacementPoints[layer->PlacemenMapID][i].z][(int)mPlacementPoints[layer->PlacemenMapID][i].x];
+				position.y = terrain->HeightMapData[(int)(int)mPlacementPoints[layer->PlacemenMapID][i].z * component->TerrianSizeX + (int)mPlacementPoints[layer->PlacemenMapID][i].x] * component->TerrianMaxHeight - component->TerrianYShift;
 				//DebugRenderer::DrawSphere(position, 0.5f);
 				if (index >= 0 && index < mDenistyMaps[layer->PlacemenMapID]->Data.size() && mDenistyMaps[layer->PlacemenMapID]->Data[index] > 0)
 				{
@@ -322,36 +365,43 @@ void Fracture::TerrainSystem::OnBeginFrame(RenderContext* context)
 }
 
 void Fracture::TerrainSystem::OnEndFrame()
-{	
-	if (!current_terrian_data)
-		return;
-
-	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
-	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
-
-
-	if (terrain->IsDirty)
-	{
-		UpdateTerrain(CurrentMappedTerrain);
-		terrain->IsDirty = false;
-	}
+{		
 		
 }
 
 void Fracture::TerrainSystem::OnDebugDraw()
-{
-	if (!current_terrian_data)
-		return;
-		
+{	
+	if (bvh->root)
+	{
+		DrawNode(bvh->root.get());
+	}
+
+	for (auto& ray : mRays)
+	{
+		DebugRenderer::DrawLine(ray.start,ray.finish);	
+	}
+	for (auto& p : mHitpoints)
+	{
+		DebugRenderer::DrawSphere(p,1.0f);		
+	}
 }
 
-void Fracture::TerrainSystem::ApplyBrush(float dt, glm::vec3 centre)
+void Fracture::TerrainSystem::DrawNode(BVHNode* node)
+{
+	if (!node)return;
+
+	if (node->Depth == DrawDepthFrom) {
+
+		DebugRenderer::DrawAABB(node->Bounds);
+	
+	}
+	DrawNode(node->Left.get());
+	DrawNode(node->Right.get());
+}
+
+void Fracture::TerrainSystem::ApplyBrush(BrushParams params)
 {
 	OPTICK_EVENT();
-	if (!current_terrian_data)
-		return;
-
-
 	switch (EditMode)
 	{
 	case TerrainEditModeOptions::Selection:
@@ -363,79 +413,66 @@ void Fracture::TerrainSystem::ApplyBrush(float dt, glm::vec3 centre)
 		const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
 		const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 
+		if (!terrain)
+			return;
+
 		const int numThreads = std::thread::hardware_concurrency();
 		std::vector<std::thread> threads;
 		std::mutex mtx;
-		float brushRadiusSq = RaiseBrush.radius * RaiseBrush.radius;
+		
+		auto brushFunc = [&](int startx, int endx, int starty, int endy,int heightX, int heightY) {			
+				for (int y = starty; y < endy; ++y) {
+					for (int x = startx; x < endx; ++x) {
+						// Calculate the distance from the brush center
+						float distance = std::sqrt((x - heightX) * (x - heightX) + (y - heightY) * (y - heightY));
+						// Apply the influence if within the brush radius
+						if (distance < MainBrush.radius) {							
+							float influence = glm::exp(-MainBrush.Falloff * distance) * MainBrush.strength;
+							float normalizedInfluence = influence / component->TerrianMaxHeight;
+							int index = y * component->TerrianSizeX + x;						
+							switch (MainBrush.BrushType) {
+							case TerrainBrush::BrushTypeOptions::RAISE:
+								terrain->HeightMapData[index] = std::clamp(terrain->HeightMapData[index] + normalizedInfluence, -1.0f, 1.0f);
+								break;
+							case TerrainBrush::BrushTypeOptions::LOWER:
+								terrain->HeightMapData[index] = std::clamp(terrain->HeightMapData[index] - normalizedInfluence, -1.0f, 1.0f);
+								break;
+							case TerrainBrush::BrushTypeOptions::FLATTEN:
+								terrain->HeightMapData[index] = glm::mix(terrain->HeightMapData[index], params.centre.y, influence);
+								break;
+							}
+						}
+					}
+				}
+		};
 
+		float brushRadiusSq = MainBrush.radius * MainBrush.radius;
 		// Calculate normalized coordinates
-		float normalizedX = static_cast<float>(centre.x) / static_cast<float>(component->TerrianSizeX) + 0.5f;
-		float normalizedY = static_cast<float>(centre.z) / static_cast<float>(component->TerrianSizeY) + 0.5f;
+		float normalizedX = static_cast<float>(params.centre.x) / static_cast<float>(component->TerrianSizeX) + 0.5f;
+		float normalizedY = static_cast<float>(params.centre.z) / static_cast<float>(component->TerrianSizeY) + 0.5f;
 
 		int heightMapX = static_cast<int>(normalizedX * component->TerrianSizeX);
 		int heightMapY = static_cast<int>(normalizedY * component->TerrianSizeY);
 
-		int startX = std::max(0, static_cast<int>(heightMapX - RaiseBrush.radius));
-		int endX = std::min(component->TerrianSizeX, static_cast<int>(heightMapX + RaiseBrush.radius));
-		int startY = std::max(0, static_cast<int>(heightMapY - RaiseBrush.radius));
-		int endY = std::min(component->TerrianSizeY, static_cast<int>(heightMapY + RaiseBrush.radius));
 
-		for (int y = startY; y < endY; ++y) {
-			for (int x = startX; x < endX; ++x) {
-				// Calculate the distance from the brush center
-				float distance = std::sqrt((x - heightMapX) * (x - heightMapX) + (y - heightMapY) * (y - heightMapY));
-				// Apply the influence if within the brush radius
-				if (distance < RaiseBrush.radius) {
-					float influence = (1.0f - (distance / RaiseBrush.radius)) * RaiseBrush.strength;
-					switch (RaiseBrush.BrushType) {
-					case TerrainBrush::BrushTypeOptions::RAISE:
-						terrain->HeightMap[y][x] += influence;
-						break;
-					case TerrainBrush::BrushTypeOptions::LOWER:
-						terrain->HeightMap[y][x] -= influence;
-						break;
-					case TerrainBrush::BrushTypeOptions::FLATTEN:
-						terrain->HeightMap[y][x] = centre.y;
-						break;
-					}					
-				}
-			}
-		}
+		int startX = std::max(0, static_cast<int>(heightMapX - MainBrush.radius));
+		int endX = std::min(component->TerrianSizeX, static_cast<int>(heightMapX + MainBrush.radius));
+		int startY = std::max(0, static_cast<int>(heightMapY - MainBrush.radius));
+		int endY = std::min(component->TerrianSizeY, static_cast<int>(heightMapY + MainBrush.radius));
 
-		auto brushFunc = [&](int start, int end) {
-			OPTICK_EVENT();
-			for (int i = start; i < end; ++i)
-			{
-				glm::vec3 offset = terrain->Vertices[i].Position - centre;
-				float distanceSq = glm::dot(offset, offset);
-				if (distanceSq < brushRadiusSq) {
-					float distance = glm::length(terrain->Vertices[i].Position - centre);
-					float influence = (1.0f - (distance / RaiseBrush.radius)) * RaiseBrush.strength;
-					switch (RaiseBrush.BrushType) {
-					case TerrainBrush::BrushTypeOptions::RAISE:
-						terrain->Vertices[i].Position.y += influence;
-						break;
-					case TerrainBrush::BrushTypeOptions::LOWER:
-						terrain->Vertices[i].Position.y -= influence;
-						break;
-					case TerrainBrush::BrushTypeOptions::FLATTEN:
-						terrain->Vertices[i].Position.y = centre.y;
-						break;
-					}
-				}
-			}
-		};
-
-		int chunkSize = terrain->Vertices.size() / numThreads;
+		
+		int chunkHeight = component->TerrianSizeY / numThreads;
 		for (int i = 0; i < numThreads; ++i) {
-			int start = i * chunkSize;
-			int end = (i == numThreads - 1) ? terrain->Vertices.size() : start + chunkSize;
-			threads.emplace_back(brushFunc, start, end);
+			int startY = i * chunkHeight;
+			int endY = (i == numThreads - 1) ? component->TerrianSizeY : startY + chunkHeight;
+			threads.emplace_back(brushFunc, 0, component->TerrianSizeX, startY, endY,heightMapX,heightMapY);
 		}
 
 		for (auto& thread : threads) {
 			thread.join();
 		}
+
+		//bvh->update(terrain->Vertices, terrain->Indices);
 
 		terrain->IsDirty = true;
 		break;
@@ -449,26 +486,26 @@ void Fracture::TerrainSystem::ApplyBrush(float dt, glm::vec3 centre)
 			auto& layer = mCurrentPlacementMapForEdit;
 			
 			// Calculate normalized coordinates
-			float normalizedX = static_cast<float>(centre.x) / static_cast<float>(layer->Width) + 0.5f;
-			float normalizedY = static_cast<float>(centre.z) / static_cast<float>(layer->Height) + 0.5f;
+			float normalizedX = static_cast<float>(params.centre.x) / static_cast<float>(layer->Width) + 0.5f;
+			float normalizedY = static_cast<float>(params.centre.z) / static_cast<float>(layer->Height) + 0.5f;
 
 			int heightMapX = static_cast<int>(normalizedX * layer->Width);
 			int heightMapY = static_cast<int>(normalizedY * layer->Height);
 
-			int startX = std::max(0, static_cast<int>(heightMapX - RaiseBrush.radius));
-			int endX = std::min(component->TerrianSizeX, static_cast<int>(heightMapX + RaiseBrush.radius));
+			int startX = std::max(0, static_cast<int>(heightMapX - MainBrush.radius));
+			int endX = std::min(component->TerrianSizeX, static_cast<int>(heightMapX + MainBrush.radius));
 
-			int startY = std::max(0, static_cast<int>(heightMapY - RaiseBrush.radius));
-			int endY = std::min(component->TerrianSizeY, static_cast<int>(heightMapY + RaiseBrush.radius));
+			int startY = std::max(0, static_cast<int>(heightMapY - MainBrush.radius));
+			int endY = std::min(component->TerrianSizeY, static_cast<int>(heightMapY + MainBrush.radius));
 
 			for (int y = startY; y < endY; ++y) {
 				for (int x = startX; x < endX; ++x) {
 					// Calculate the distance from the brush center
 					float distance = std::sqrt((x - heightMapX) * (x - heightMapX) + (y - heightMapY) * (y - heightMapY));
 					// Apply the influence if within the brush radius
-					if (distance < RaiseBrush.radius) {
-						float influence = (1.0f - (distance / RaiseBrush.radius)) * 1.0f;
-						switch (RaiseBrush.BrushType) {
+					if (distance < MainBrush.radius) {
+						float influence = (1.0f - (distance / MainBrush.radius)) * 1.0f;
+						switch (MainBrush.BrushType) {
 						case TerrainBrush::BrushTypeOptions::RAISE:
 							layer->Data[y * layer->Width + x] = 1;
 							layer->IsDirty = true;
@@ -483,7 +520,114 @@ void Fracture::TerrainSystem::ApplyBrush(float dt, glm::vec3 centre)
 					}
 				}
 			}
+			terrain->IsDirty = true;
 		}
+		break;
+	}
+	case TerrainEditModeOptions::Painting:
+	{
+		const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
+		const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
+
+		const auto& mixmap = AssetManager::GetTextureByID(component->MixMapID);
+		if (!mixmap)
+			return;
+
+		// Calculate normalized coordinates
+		float normalizedX = static_cast<float>(params.centre.x) / static_cast<float>(component->TerrianSizeX) + 0.5f;
+		float normalizedY = static_cast<float>(params.centre.z) / static_cast<float>(component->TerrianSizeY) + 0.5f;
+
+		int heightMapX = static_cast<int>(normalizedX * component->TerrianSizeX);
+		int heightMapY = static_cast<int>(normalizedY * component->TerrianSizeY);
+
+		int startX = std::max(0, static_cast<int>(heightMapX - MainBrush.radius));
+		int endX = std::min(component->TerrianSizeX, static_cast<int>(heightMapX + MainBrush.radius));
+
+		int startY = std::max(0, static_cast<int>(heightMapY - MainBrush.radius));
+		int endY = std::min(component->TerrianSizeY, static_cast<int>(heightMapY + MainBrush.radius));
+
+		//FRACTURE_INFO("data size {}", mixmap->Description.f_data.size());
+		for (int y = startY; y < endY; ++y) {
+			for (int x = startX; x < endX; ++x) {
+				// Calculate the distance from the brush center
+				float distance = std::sqrt((x - heightMapX) * (x - heightMapX) + (y - heightMapY) * (y - heightMapY));
+				// Apply the influence if within the brush radius
+
+				
+				//int index = (y * component->TerrianSizeX + x) * 3;					
+				if (distance < MainBrush.radius) {
+					float influence = glm::exp(-MainBrush.Falloff * distance) * MainBrush.strength;
+					//float normalizedInfluence = influence / 255.0f;
+					float normalizedInfluence = 1.0f - (distance / MainBrush.radius) * (distance / MainBrush.radius);
+					int index = y * component->TerrianSizeX * 3 + x * 3;
+					int indexG = index + 1;
+					int indexB = index + 2;
+
+					if (index >= 0 && index + 1 < mixmap->Description.f_data.size()) {
+						switch (MainBrush.BrushType) {
+						case TerrainBrush::BrushTypeOptions::RAISE:
+						{
+							auto [id1, weight1] = DecodeIDAndWeight(mixmap->Description.f_data[index]); //From
+							auto [id2, weight2] = DecodeIDAndWeight(mixmap->Description.f_data[indexG]);// To
+							float mask = mixmap->Description.f_data[indexB];
+							int id3 = params.TextureIndex; // New Texture ID being painted.
+							float weight = component->TerrainTextures[params.TextureIndex].Weight;
+							weight1 = component->TerrainTextures[id1].Weight;
+							weight2 = component->TerrainTextures[id2].Weight;
+
+							float newWeight = std::clamp(normalizedInfluence, 0.0f, 1.0f);
+							
+							if (weight == 0.0f) {
+								id1 = id3;
+								id2 = id1; // If weight is 0, set both IDs to id1
+								weight1 = weight;
+								weight2 = weight; // Reset the weight2 to weight1
+							}
+							if (id3 == id1)
+							{
+								weight1 = weight;// std::clamp(weight1 + newWeight, 0.0f, 1.0f);
+								//weight2 = ;// std::clamp(weight2 - newWeight, 0.0f, 1.0f);
+							}
+							else if (id3 == id2 && id2 != id1)
+							{
+								//weight1 = std::clamp(weight1 - newWeight, 0.0f, 1.0f);
+								weight2 = weight;// std::clamp(weight2 + newWeight, 0.0f, 1.0f);
+							}
+							else
+							{
+								id2 = id3;
+								weight2 = weight;
+							}
+
+							if (weight2 > weight1)
+							{
+								std::swap(id1, id2);
+								std::swap(weight1, weight2);
+							}
+
+							mask += newWeight;				
+
+							mixmap->Description.f_data[index] = EncodeIDAndWeight(id1, weight1); //Id1 weights for comparison
+							mixmap->Description.f_data[indexG] = EncodeIDAndWeight(id2, weight2); //Id2 weights for comparison
+							mixmap->Description.f_data[indexB] = std::clamp(mask, 0.0f, 1.0f);// total weight mask for blending
+							component->IsMixMapDirty = true;
+							break;
+						}
+						case TerrainBrush::BrushTypeOptions::LOWER:
+						{
+							mixmap->Description.f_data[index] = std::clamp(mixmap->Description.f_data[index] - normalizedInfluence, 0.0f, 1.0f);
+							mixmap->Description.f_data[index + 1] = 0;
+							component->IsMixMapDirty = true;
+							break;
+						}
+						case TerrainBrush::BrushTypeOptions::FLATTEN:
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		break;
 	}
 	}
@@ -528,6 +672,7 @@ void Fracture::TerrainSystem::AddNewDensityGrid(Fracture::UUID entity)
 
 void Fracture::TerrainSystem::UpdateLayer(Fracture::UUID entity, int index)
 {
+	OPTICK_EVENT();
 	if (mPlacementLayers.find(entity) != mPlacementLayers.end())
 	{
 		if (!mPlacementLayers[entity][index]->Dirty)
@@ -558,8 +703,10 @@ void Fracture::TerrainSystem::UpdateLayer(Fracture::UUID entity, int index)
 
 void Fracture::TerrainSystem::AddNewPlacementLayer(Fracture::UUID entity)
 {
-	const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
+	if (!IsTerrainSubmittedForEdit)
+		return;
 
+	const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
 	auto layer = std::make_shared<PlacementLayer>();
 
 	auto texture = std::make_shared<TerrainTextureMap>();
@@ -587,36 +734,9 @@ void Fracture::TerrainSystem::AddNewPlacementLayer(Fracture::UUID entity)
 	mPlacementLayers[entity].push_back(layer);
 }
 
-/*
-void Fracture::TerrainSystem::UpdateDensityGrid(Fracture::UUID placementID)
-{
-	if (mPlacementMaps.find(placementID) == mPlacementMaps.end()) return;
-	
-	//const auto& component = SceneManager::GetComponent<TerrainComponent>(entity);
-	//auto terrain = AssetManager::GetTerrainByID(component->TerrainID);
-
-	//mCurrentGridForEdit->GridCellPositions.resize((mPlacementMaps[placementID]->Height / mCurrentGridForEdit->FootPrint) * (mPlacementMaps[placementID]->Width / mCurrentGridForEdit->FootPrint));
-
-	for (float i = 0; i < mCurrentGridForEdit->GridCellPositions.size(); i += mCurrentGridForEdit->FootPrint)
-	{
-		mCurrentGridForEdit->GridCellPositions[(int)i][(int)j].x = (-component->TerrianSizeX / 2.0f) + (component->TerrianSizeX * j / (mCurrentGridForEdit->GriseSizeNoPoints.x - 1));
-		mCurrentGridForEdit->GridCellPositions[(int)i][(int)j].z = (-component->TerrianSizeY / 2.0f) + (component->TerrianSizeY * i / (mCurrentGridForEdit->GriseSizeNoPoints.y - 1));
-		mCurrentGridForEdit->GridCellPositions[i][j] = AddJitterToVector(mCurrentGridForEdit->GridCellPositions[i][j], (0.8f * mCurrentGridForEdit->GriseSizePx.x));
-
-		// Calculate normalized coordinates
-		float normalizedX = static_cast<float>(mCurrentGridForEdit->GridCellPositions[i][j].x) / static_cast<float>(component->TerrianSizeX) + 0.5f;
-		float normalizedY = static_cast<float>(mCurrentGridForEdit->GridCellPositions[i][j].z) / static_cast<float>(component->TerrianSizeY) + 0.5f;
-		int heightMapX = static_cast<int>(normalizedX * component->TerrianSizeX);
-		int heightMapY = static_cast<int>(normalizedY * component->TerrianSizeY);
-		heightMapX = std::clamp(heightMapX, 0, component->TerrianSizeX - 1);
-		heightMapY = std::clamp(heightMapY, 0, component->TerrianSizeY - 1);
-		mCurrentGridForEdit->GridCellPositions[i][j].y = terrain->HeightMap[heightMapY][heightMapX];
-	}
-	mCurrentGridForEdit->IsDirty = false;
-}
-*/
 void Fracture::TerrainSystem::UpdateDensityMap(Fracture::UUID placementID)
 {
+	OPTICK_EVENT();
 	if (mPlacementMaps.find(placementID) == mPlacementMaps.end())
 		return;
 
@@ -627,6 +747,105 @@ void Fracture::TerrainSystem::UpdateDensityMap(Fracture::UUID placementID)
 		return;
 
 	mDenistyMaps[placementID]->Data = mModifiedPlacementMaps[placementID];
+}
+
+void Fracture::TerrainSystem::UpdateTerrainAtlas()
+{
+	if (!IsTerrainSubmittedForEdit)
+		return;
+
+	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
+	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
+	const auto& DiffAtlastexture = AssetManager::Instance()->GetTextureByID(component->DiffuseTextureAtlasID);
+	const auto& NormAtlastexture = AssetManager::Instance()->GetTextureByID(component->NormalTextureAtlasID);
+	int index = 0;
+	int atlasWidth = DiffAtlastexture->Description.Width;
+	int atlasHeight = DiffAtlastexture->Description.Height;
+	int patchSize = component->AtlasPerTextureSize;
+	int numChannels = DiffAtlastexture->Description.NoChannels;
+	int maxWidth = atlasWidth / patchSize;
+	int maxHeight = atlasHeight / patchSize;
+
+	//Update Diffuse Textures
+	for (int yIndex = 0;  yIndex < maxHeight; ++yIndex) {
+		for (int xIndex = 0; xIndex < maxWidth; ++xIndex) {
+			if (index < component->TerrainTextures.size()) {
+				if (component->TerrainTextures[index].HasDiffuse)
+				{
+					const auto& current_texture = AssetManager::Instance()->GetTextureByID(component->TerrainTextures[index].DiffuseTexture);
+					if (current_texture)
+					{
+						int xOffset = xIndex * patchSize;
+						int yOffset = yIndex * patchSize;
+
+						for (int y = 0; y < patchSize; y++)
+						{
+							for (int x = 0; x < patchSize; x++)
+							{
+								int textureWidth = current_texture->Description.Width;
+								int textureHeight = current_texture->Description.Height;
+								// Compute the corresponding source coordinates
+								int srcX = std::min(static_cast<int>(x * (textureWidth / static_cast<float>(patchSize))), textureWidth - 1);
+								int srcY = std::min(static_cast<int>(y * (textureHeight / static_cast<float>(patchSize))), textureHeight - 1);
+
+
+								for (int c = 0; c < numChannels; ++c)
+								{
+									int atlasIndex = ((yOffset + y) * atlasWidth + (xOffset + x)) * numChannels + c;
+									int textureIndex = (srcY * textureWidth + srcX) * numChannels + c;
+									DiffAtlastexture->Description.data[atlasIndex] = current_texture->Description.data[textureIndex];
+								}
+							}
+						}
+						index++;
+					}
+				}
+			}
+		}
+	}
+
+	index = 0;
+	//Update Normal Textures
+	for (int yIndex = 0; yIndex < maxHeight; ++yIndex) {
+		for (int xIndex = 0; xIndex < maxWidth; ++xIndex) {
+			if (index < component->TerrainTextures.size()) {
+				if (component->TerrainTextures[index].HasNormal)
+				{
+					const auto& current_texture = AssetManager::Instance()->GetTextureByID(component->TerrainTextures[index].NormalTexture);
+					if (current_texture)
+					{
+						int xOffset = xIndex * patchSize;
+						int yOffset = yIndex * patchSize;
+
+						for (int y = 0; y < patchSize; y++)
+						{
+							for (int x = 0; x < patchSize; x++)
+							{
+								int textureWidth = current_texture->Description.Width;
+								int textureHeight = current_texture->Description.Height;
+								// Compute the corresponding source coordinates
+								int srcX = std::min(static_cast<int>(x * (textureWidth / static_cast<float>(patchSize))), textureWidth - 1);
+								int srcY = std::min(static_cast<int>(y * (textureHeight / static_cast<float>(patchSize))), textureHeight - 1);
+
+
+								for (int c = 0; c < numChannels; ++c)
+								{
+									int atlasIndex = ((yOffset + y) * atlasWidth + (xOffset + x)) * numChannels + c;
+									int textureIndex = (srcY * textureWidth + srcX) * numChannels + c;
+									NormAtlastexture->Description.data[atlasIndex] = current_texture->Description.data[textureIndex];
+								}
+							}
+						}
+						index++;
+					}
+				}
+			}
+		}
+	}
+
+
+	GraphicsDevice::Instance()->UpdateTexture<uint8_t>(component->DiffuseTextureAtlasID, DiffAtlastexture->Description.data,0,0, DiffAtlastexture->Description.Width, DiffAtlastexture->Description.Height);
+	GraphicsDevice::Instance()->UpdateTexture<uint8_t>(component->NormalTextureAtlasID, NormAtlastexture->Description.data,0,0, NormAtlastexture->Description.Width, NormAtlastexture->Description.Height);
 }
 
 void Fracture::TerrainSystem::SetCurrentPlacementMapForEdit(Fracture::UUID mapID)
@@ -714,9 +933,7 @@ bool Fracture::TerrainSystem::IsCandidateValid(glm::vec3 candidate, glm::vec2 re
 
 std::vector<glm::vec3> Fracture::TerrainSystem::GenerateGridPoints(float footprint, glm::vec2 regionSize, int NoOfSamples)
 {
-	//mCurrentGridForEdit->GridCellPositions[(int)i][(int)j].x = (-component->TerrianSizeX / 2.0f) 
-	//mCurrentGridForEdit->GridCellPositions[(int)i][(int)j].z = (-component->TerrianSizeY / 2.0f) + (component->TerrianSizeY * i / (mCurrentGridForEdit->GriseSizeNoPoints.y - 1));
-
+	OPTICK_EVENT();
 	float cellSize = footprint / std::sqrt(2);
 	int gridSizeX = (int)std::ceil( regionSize.x /cellSize);
 	int gridSizeY = (int)std::ceil(regionSize.y / cellSize);
@@ -766,22 +983,17 @@ std::vector<glm::vec3> Fracture::TerrainSystem::GenerateGridPoints(float footpri
 
 void Fracture::TerrainSystem::SaveHeightMap(const std::string& path)
 {
-	if (!current_terrian_data)
-		return;
-
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
-	const auto& terrainVerts = std::vector<Vertex>(current_terrian_data, current_terrian_data + terrain->Vertices.size());
-
 
 	GLsizei nrChannels = 1;
 	GLsizei stride = nrChannels * component->TerrianSizeX;
 	stride += (stride % 1) ? (1 - stride % 1) : 0;
 	GLsizei bufferSize = stride * component->TerrianSizeY;
 	std::vector<char> buffer(bufferSize);
-	for (int i = 0; i < terrainVerts.size(); i++)
+	for (int i = 0; i < terrain->HeightMapData.size(); i++)
 	{
-		buffer[i] =(char)terrainVerts[i].Position.y;
+		buffer[i] =(char)terrain->HeightMapData[i];
 	}
 	ImageLoader::SaveImage(path, component->TerrianSizeX, component->TerrianSizeY, nrChannels, buffer, stride);
 }
@@ -793,83 +1005,107 @@ void Fracture::TerrainSystem::SubmitTerrainForEditing(Fracture::UUID entity)
 
 	if (!terrain)
 		return;
+
 	Terrain_Width = component->TerrianSizeX;
 	Terrain_Height = component->TerrianSizeY;
 	OriginalTerrainSize = terrain->Vertices.size()* sizeof(terrain->Vertices[0]);;
 	CurrentMappedTerrain = component->entity;	
-
-	current_terrian_data = static_cast<Vertex*>(glMapNamedBufferRange(terrain->VBO_Buffer->RenderID, 0, OriginalTerrainSize, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT));
-
-	if (!current_terrian_data)
-		FRACTURE_ERROR("Failed to map buffer");
+	IsTerrainSubmittedForEdit = true;
 }
 
 void Fracture::TerrainSystem::ReleaseTerrainFromEditing()
-{
-	if (!current_terrian_data)
+{	
+	if (!IsTerrainSubmittedForEdit)
 		return;
 
 	EditMode = TerrainEditModeOptions::Selection;
-
-
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 
 	if (!terrain)
 		return;
 	
-	RenderCommands::UnMapbuffer(terrain->VBO_Buffer->RenderID);
-	current_terrian_data = nullptr;
 	CurrentMappedTerrain = 0;
 	mVerticesForEdit = nullptr;
+	IsTerrainSubmittedForEdit = false;
 }
 
-glm::vec3 Fracture::TerrainSystem::GetTerrainIntersectionPoint(Fracture::CameraComponent& camera,bool& intersects,float mouse_x, float mouse_y, float width, float height)
+glm::vec3 Fracture::TerrainSystem::GetTerrainIntersectionPoint(Fracture::CameraComponent& camera,bool& intersects,float mouse_x, float mouse_y)
 {
 	OPTICK_EVENT();
-	if (!current_terrian_data)
-		return glm::vec3(0.0f);
-
-	
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
+	const auto& transform = SceneManager::GetComponent<TransformComponent>(CurrentMappedTerrain);
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 
+	if(!terrain)
+		return glm::vec3(0.0f);
 	//const auto& terrainVerts = std::vector<Vertex>(current_terrian_data, current_terrian_data + terrain->Vertices.size());
 	
 	CameraSystem system;
 	glm::vec3 rayOrigin = camera.Position; // Define your camera position
-	glm::vec3 rayDirection = system.ScreenToWorldRay(camera, mouse_x, mouse_y,width,height);
+	glm::vec3 rayDirection = system.ScreenToWorldRay(camera, mouse_x, mouse_y,1920,1080);
 	glm::vec3 intersection;
+	
+	// Calculate the terrain boundaries
+	float terrainWidth = component->TerrianSizeX;
+	float terrainHeight = component->TerrianSizeY;
+	
+	// Traverse the heightmap along the ray
+	glm::vec3 step = glm::normalize(rayDirection) * 1.0f;  // Assume square terrain cells
+	glm::vec3 currentPos = rayOrigin;
 
-	int index = 0;
-	for (auto i = terrain->Indices.begin(); i < terrain->Indices.end() - 2; i++) {
-		const glm::vec3& v0 = terrain->Vertices[terrain->Indices[index]].Position;
-		const glm::vec3& v1 = terrain->Vertices[terrain->Indices[index + 1]].Position;
-		const glm::vec3& v2 = terrain->Vertices[terrain->Indices[index + 2]].Position;
-		index++;
+	
+	for (int i = 0; i < 1000; ++i) {  // Arbitrary large number to prevent infinite loop	
+		// Calculate local position relative to terrain center
+		glm::vec3 localPos = currentPos;// - transform->Position
+		// Convert local position to heightmap grid coordinates
+		float normalizedX = (localPos.x + terrainWidth / 2) / terrainWidth * component->TerrianSizeX;
+		float normalizedZ = (localPos.z + terrainHeight / 2) / terrainHeight * component->TerrianSizeY;
+	
+		int gridX = static_cast<int>(normalizedX);
+		int gridZ = static_cast<int>(normalizedZ);
 
-		if (system.IntersectRayTriangle(rayOrigin, rayDirection, v0, v1, v2, intersection)) 
-		{
-			intersects = true;
-			return intersection;
+	
+		if (gridX < 0 || gridX >= component->TerrianSizeX - 1 || gridZ < 0 || gridZ >= component->TerrianSizeY - 1) {
+			currentPos += step;
+			continue;  // Ensure we don't go out of bounds
 		}
 
+		// Bilinear interpolation to find height at current position
+		float h00 = terrain->HeightMapData[gridZ * terrainWidth + gridX];
+		float h01 = terrain->HeightMapData[gridZ * terrainWidth + (gridX + 1)];
+		float h10 = terrain->HeightMapData[(gridZ + 1) * terrainWidth + gridX];
+		float h11 = terrain->HeightMapData[(gridZ + 1) * terrainWidth + (gridX + 1)];
+
+		float tx = normalizedX - gridX;
+		float tz = normalizedZ - gridZ;
+
+
+		float height = (1 - tx) * ((1 - tz) * h00 + tz * h10) + tx * ((1 - tz) * h01 + tz * h11);
+
+		if (currentPos.y <= height) {		
+			intersects = true;
+			//mHitpoints.push_back(glm::vec3(currentPos.x, height, currentPos.z));
+			return glm::vec3(currentPos.x, height, currentPos.z);
+		}
+
+		currentPos += step;		
 	}
+	
+
+
 	intersects = false;
 	return glm::vec3(-1.0f);
 }
 
 bool Fracture::TerrainSystem::IsEditing()
 {
-	if (current_terrian_data)
-		return true;
-	return false;
+	return IsTerrainSubmittedForEdit;
 }
 
 float Fracture::TerrainSystem::GetHeightatPoint(int index)
 {
-	if (!current_terrian_data)
-		return 0.0f;
+	
 
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
@@ -885,9 +1121,6 @@ float Fracture::TerrainSystem::GetHeightatPoint(int index)
 
 glm::vec3 Fracture::TerrainSystem::CalcNormal(int index)
 {
-	if (!current_terrian_data)
-		return glm::vec3(0);
-
 	const auto& component = SceneManager::GetComponent<TerrainComponent>(CurrentMappedTerrain);
 	const auto& terrain = AssetManager::GetTerrainByID(component->TerrainID);
 

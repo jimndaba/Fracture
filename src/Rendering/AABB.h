@@ -8,6 +8,7 @@ namespace Fracture
 	class Ray;
 	struct RayHit;
 	struct MeshTriangle;
+	struct Vertex;
 
 	struct Point
 	{
@@ -40,12 +41,16 @@ namespace Fracture
 		glm::vec3 GetDiagonal() const;
 		glm::vec3 Extents() const;
 
+		int LongestAxis() const;
+
 		bool RayHitAABB(const Ray& r, float& t) const;
 
 		bool Intersects(const MeshTriangle& triangle) const;
 		bool Intersects(const AABB& aabb) const;
 
 		AABB UpdatedAABB(const glm::mat4& transform) const;
+		AABB GrowAABB(const std::vector<Vertex>& v, const std::vector<unsigned int>& indxs, int start, int end);
+		void Grow(const AABB& other);
 
 		AABB Merge(const AABB& other) const;
 	};

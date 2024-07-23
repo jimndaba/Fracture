@@ -28,7 +28,7 @@ namespace Fracture
 		static void AddComponent(const UUID& entity, Args&&... params);
 
 		template< class T, typename... Args >
-		static void AddComponentByInstance(const UUID& entity, const std::shared_ptr<T>& component);
+		static void AddComponentByInstance(const UUID& entity, std::shared_ptr<T> component);
 
 
 		template<class T>
@@ -145,7 +145,7 @@ namespace Fracture
 	}
 
 	template< class T, typename... Args >
-	inline void SceneManager::AddComponentByInstance(const UUID& entity, const std::shared_ptr<T>& component)
+	inline void SceneManager::AddComponentByInstance(const UUID& entity, std::shared_ptr<T> component)
 	{
 		if (!mCurrentScene)
 			return;

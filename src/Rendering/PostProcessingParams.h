@@ -78,7 +78,9 @@ namespace Fracture
 		float BokehRadius = 8.0f;
 
 		//EditorData
+		bool IsEditingTerrain = false;
 		glm::vec4 MousePos_BrushRadius;
+		float BrushFallOff;
 
 	};
 

@@ -157,6 +157,13 @@ namespace Fracture
 		void UpdateGlobalLightData(const std::vector<LightData>& data);
 		void UpdateAnimationData(const std::vector<glm::mat4>& data);
 		void UpdateMaterialData(const std::vector<GPUMaterial>& data);
+		
+		template<typename T>
+		void UpdateTexture(Fracture::UUID id,const std::vector<T>& data,float x = 0,float y = 0, int width = 1, int height = 1);
+
+
+		void UpdateFloatTexture(Fracture::UUID id);
+
 		void UpdateIndirectBuffer(const std::vector<DrawElementsIndirectCommand>& data);
 		uint32_t GetIndirectBuffer();
 		void UpdateGlobalWindData();

@@ -98,8 +98,7 @@ void Fracture::GraphicsDevice::Startup()
         glEnable(GL_CULL_FACE);
         glEnable(GL_SCISSOR_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(GraphicsDevice::MessageCallback, 0);
+       glPatchParameteri(GL_PATCH_VERTICES, 4);
     }
 
     {
@@ -222,6 +221,44 @@ void Fracture::GraphicsDevice::UpdateMaterialData(const std::vector<GPUMaterial>
     GraphicsDevice::Instance()->ClearBufferData(mGPUMaterialBuffer.get());
     GraphicsDevice::Instance()->UpdateBufferData(mGPUMaterialBuffer.get(), 0, sizeof(GPUMaterial) * data.size(), data.data());
 }
+
+template<typename T>
+void Fracture::GraphicsDevice::UpdateTexture(Fracture::UUID id,const std::vector<T>& data,float x , float y, int width, int height)
+{
+    const auto& texture = AssetManager::Instance()->GetTextureByID(id);
+    if (texture)
+    {
+        unsigned int target = GLenum(texture->Description.TextureTarget);
+        unsigned int internalFormat = GLenum(texture->Description.internalFormat);
+        unsigned int textureformat = GLenum(texture->Description.format);
+        unsigned int formatType = GLenum(texture->Description.formatType);
+        unsigned int MinFilter = GLenum(texture->Description.minFilter);
+        unsigned int MagFilter = GLenum(texture->Description.magFilter);
+        unsigned int wrap = GLenum(texture->Description.Wrap);       
+        glTextureSubImage2D(texture->Handle,0,x,y,width, height, textureformat, formatType, data.data()); glCheckError();  
+    }
+}
+
+
+void Fracture::GraphicsDevice::UpdateFloatTexture(Fracture::UUID id)
+{
+    const auto& texture = AssetManager::Instance()->GetTextureByID(id);
+    if (texture)
+    {
+        unsigned int target = GLenum(texture->Description.TextureTarget);
+        unsigned int internalFormat = GLenum(texture->Description.internalFormat);
+        unsigned int textureformat = GLenum(texture->Description.format);
+        unsigned int formatType = GLenum(texture->Description.formatType);
+        unsigned int MinFilter = GLenum(texture->Description.minFilter);
+        unsigned int MagFilter = GLenum(texture->Description.magFilter);
+        unsigned int wrap = GLenum(texture->Description.Wrap);
+        glTextureSubImage2D(texture->Handle, 0, 0, 0, texture->Description.Width, texture->Description.Height, textureformat, formatType, texture->Description.f_data.data()); glCheckError();
+    }
+}
+
+template void Fracture::GraphicsDevice::UpdateTexture<float>(Fracture::UUID id,const std::vector<float>& data, float x, float y, int width, int height);
+template void Fracture::GraphicsDevice::UpdateTexture<uint8_t>(Fracture::UUID id,const std::vector<uint8_t>& data, float x, float y, int width, int height);
+
 
 void Fracture::GraphicsDevice::UpdateIndirectBuffer(const std::vector<DrawElementsIndirectCommand>& data)
 {
@@ -1031,11 +1068,9 @@ std::shared_ptr<Fracture::Shader> Fracture::GraphicsDevice::CreateShader(const S
         {
             AttachShaderToProgram(mshader, shader->Handle);
         }
-        glLinkProgram(shader->Handle); glCheckError();;
-
+        glLinkProgram(shader->Handle); glCheckError();;       
         int m_success;
         glGetProgramiv(shader->Handle, GL_LINK_STATUS, &m_success);
-
         if (!m_success)
         {
             std::cerr << "WARNING: COULD NOT LINK PROGRAM: " << shader->Handle << std::endl;

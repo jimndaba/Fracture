@@ -47,11 +47,13 @@ void Fracture::MaterialSerialiser::WriteMaterial(Fracture::Material* material)
 		Property("CullMode", (int)material->cullmode);
 		Property("TextureSpace", (int)material->TextureSpace);
 		Property("BlendMode", (int)material->BlendMode);
+		Property("MaterialType", (int)material->MaterialType);
 		Property("TextureTiling", material->TextureTiling);
 		Property("IsTranslucent", material->IsTranslucent);
 		Property("IsSkinned", material->IsSkinned);
 		Property("IsAffectedWind", material->IsAffectedByWind);
 		Property("IsInstanced", material->IsInstanced);
+		Property("ShaderOverride", material->ShaderOverride);
 		Property("DepthWrite", material->DepthWrite);
 
 
@@ -86,6 +88,7 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		material->IsSkinned = BOOL("IsSkinned");
 		material->IsInstanced = BOOL("IsInstanced");
 		material->IsAffectedByWind = BOOL("IsAffectedWind");
+		material->ShaderOverride = BOOL("ShaderOverride");
 		material->CastsShadows = BOOL("CastsShadows");
 		material->DepthWrite = BOOL("DepthWrite");
 
@@ -112,6 +115,7 @@ std::shared_ptr<Fracture::Material> Fracture::MaterialSerialiser::ReadMaterial()
 		material->cullmode = (CullMode)INT("CullMode");
 		material->TextureSpace = (UVSpace)INT("TextureSpace");
 		material->BlendMode = (BlendingModeOption)INT("BlendMode");
+		material->MaterialType = (MaterialTypeOptions)INT("MaterialType");
 		material->TextureTiling = FLOAT("TextureTiling");
 
 

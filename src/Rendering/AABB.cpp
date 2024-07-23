@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "Common/Math.h"
 #include "Common/Frustum.h"
+#include "Vertex.h"
 
 Fracture::AABB::AABB() :
     min(glm::vec3(0)), max(glm::vec3(0))
@@ -91,6 +92,20 @@ glm::vec3 Fracture::AABB::GetDiagonal() const
 glm::vec3 Fracture::AABB::Extents() const
 {
     return 0.5f * (max - min);
+}
+
+int Fracture::AABB::LongestAxis() const
+{
+    glm::vec3 extents = Extents();
+    if (extents.x > extents.y && extents.x > extents.z) {
+        return 0; // x-axis
+    }
+    else if (extents.y > extents.x && extents.y > extents.z) {
+        return 1; // y-axis
+    }
+    else {
+        return 2; // z-axis
+    }
 }
 
 bool Fracture::AABB::RayHitAABB(const Ray& r, float& t) const
@@ -340,4 +355,29 @@ Fracture::AABB Fracture::AABB::UpdatedAABB(const glm::mat4& transform) const
 
 
 	return aabb;
+}
+
+Fracture::AABB Fracture::AABB::GrowAABB(const std::vector<Vertex>& v,const std::vector<unsigned int>& indxs, int start, int end)
+{
+    AABB bound; 
+
+    // Initialize min and max with the first vertex in the range
+    glm::vec3 _min = v[indxs[start]].Position;
+    glm::vec3 _max = v[indxs[start]].Position;
+
+    for (int i = start + 1; i < start + end; ++i) {
+        const glm::vec3& pos = v[indxs[i]].Position;
+        _min = glm::min(_min, pos);
+        _max = glm::max(_max, pos);
+    }
+
+    bound.min = _min;
+    bound.max = _max;
+    return bound;
+}
+
+void Fracture::AABB::Grow(const AABB& other)
+{
+    min = glm::min(min, other.min);
+    max = glm::max(max, other.max);
 }

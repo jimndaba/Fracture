@@ -36,6 +36,7 @@ namespace Fracture
 		UUID MaterialID;
 		uint32_t GPUMaterialIndex;
 		uint32_t MeshHandle;
+		int baseIndex = 0;
 		int basevertex = 0;	
 		void* SizeOfindices = 0;
 		int IndexCount = 0;
@@ -73,7 +74,10 @@ namespace Fracture
 		int MetalnessFlag;
 		int AOFlag;
 		int EmissionFlag;
-		float _pad;
+		float pad;
+		//int HeightMapFlag;
+		//int MixMapFlag;
+		//glm::vec2 _pad;
 	};
 
 	struct RenderBatch
@@ -185,7 +189,8 @@ namespace Fracture
 		uint32_t CurrentProgram;
 		uint32_t CurrentRenderTarget;
 		uint32_t CurrentRenderVAO;
-		int ActiveTextureUnits = 0;
+		std::vector<int> ActiveTextureUnits;
+
 		int currentIndex = 0;
 		Viewport ContextViewport;
 		Scissor ContextScissor;

@@ -661,6 +661,7 @@ void Fracture::RenderCommands::UseProgram(Fracture::RenderContext* cntxt, uint32
 		return;
 	
 	cntxt->CurrentProgram = program;
+	cntxt->ActiveTextureUnits.clear();
 
 	Fracture::Command cmd;
 	cmd.Key.ShaderIndex = program;
@@ -822,7 +823,7 @@ void Fracture::RenderCommands::SetTexture(Fracture::RenderContext* cntxt, Fractu
 		mErroCallback(name);
 	};
 	cmd.fnc();
-	cntxt->ActiveTextureUnits++;
+	cntxt->ActiveTextureUnits.push_back(unit);
 
 }
 
@@ -887,7 +888,43 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 			{				
 				SetTexture(cntxt, shader, "aEmission", texture->Handle, (int)TEXTURESLOT::Emmission);
 			}
-		}		
+		}	
+		if (material->HasHeightMapTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->HeightMapTexture);
+			if (texture)
+			{
+				SetTexture(cntxt, shader, "aHeightMap", texture->Handle, (int)TEXTURESLOT::HeightMap);
+			}
+
+			SetUniform(cntxt, shader, "MaxHeight", material->TerrainMaxHeight);
+			SetUniform(cntxt, shader, "HeightOffset", material->TerrainYOffset);
+		}
+		if (material->HasMixMapTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->MixMapTexture);
+			if (texture)
+			{
+				SetTexture(cntxt, shader, "aMixMap", texture->Handle, (int)TEXTURESLOT::MixMap);
+			}
+		}
+		if (material->HasDiffuseAtlasTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->DiffuseAtlasTexture);
+			if (texture)
+			{
+				SetTexture(cntxt, shader, "aDiffuseAtlas", texture->Handle, (int)TEXTURESLOT::DiffuseAtlas);
+			}
+		}
+		if (material->HasNormalAtlasTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->NormalAtlasTexture);
+			if (texture)
+			{
+				SetTexture(cntxt, shader, "aNormalAtlas", texture->Handle, (int)TEXTURESLOT::NormalAtlas);
+			}
+		}
+
 		for (const auto& uniform : material->Uniforms)
 		{
 			switch (uniform.type)
@@ -980,20 +1017,20 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 
 void Fracture::RenderCommands::ResetTextureUnits(Fracture::RenderContext* cntxt,Fracture::Shader* shader)
 {
-	if (cntxt->ActiveTextureUnits <= 0)
+	if (cntxt->ActiveTextureUnits.empty())
 		return;
 
 	Fracture::Command cmd;	
-	for (int i = 0; i < cntxt->ActiveTextureUnits; i++)
+	for (int i = 0; i < cntxt->ActiveTextureUnits.size(); i++)
 	{
-		cmd.fnc = [i]() {
-			glBindTextureUnit(i, 0);
+		cmd.fnc = [i, cntxt]() {
+			glBindTextureUnit(cntxt->ActiveTextureUnits[i], 0);
 			mErroCallback("Reset Texture Unit");		
 		};
 	}	
 	cmd.Key.ShaderIndex = shader->Handle;
 	cmd.fnc();
-	cntxt->ActiveTextureUnits = 0;
+	cntxt->ActiveTextureUnits.clear();
 }
 
 
