@@ -49,6 +49,16 @@ void Fracture::ForwardPass::Execute()
 
 		RenderCommands::SetCullMode(Context, material->cullmode);
 
+		if (!material->DepthTest)
+		{
+			RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
+		}
+		else
+		{
+			RenderCommands::Enable(Context, Fracture::GLCapability::DepthTest);
+		}
+	
+
 		if (GraphicsDevice::Instance()->RenderSettings.SSAO_Enabled)
 		{
 			const auto& global_SSAO = GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalSSAO);

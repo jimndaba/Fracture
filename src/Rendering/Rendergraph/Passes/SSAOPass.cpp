@@ -63,8 +63,8 @@ void Fracture::SSAOPass::Setup()
 		Fracture::RenderTargetCreationInfo info;
 		{
 			Fracture::TextureCreationInfo desc;
-			desc.Width = GraphicsDevice::RenderSettings.SSAO_Resolution.x;
-			desc.Height = GraphicsDevice::RenderSettings.SSAO_Resolution.y;
+			desc.Width = GraphicsDevice::RenderSettings.SSAO_Resolution.x /2;
+			desc.Height = GraphicsDevice::RenderSettings.SSAO_Resolution.y /2;
 			desc.AttachmentTrgt = Fracture::AttachmentTarget::Color;
 			desc.format = Fracture::TextureFormat::Red;
 			desc.internalFormat = Fracture::InternalFormat::R16F;
@@ -125,8 +125,8 @@ void Fracture::SSAOPass::Execute()
 	{
 		Fracture::RenderCommands::SetRenderTarget(Context, mSSAOrt.get());
 		RenderCommands::Disable(Context, Fracture::GLCapability::DepthTest);
-		RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x, GraphicsDevice::RenderSettings.SSAO_Resolution.y, 0, 0);
-		RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x, GraphicsDevice::RenderSettings.SSAO_Resolution.y, 0, 0);
+		RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x / 2, GraphicsDevice::RenderSettings.SSAO_Resolution.y /2 , 0, 0);
+		RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x /2, GraphicsDevice::RenderSettings.SSAO_Resolution.y/2, 0, 0);
 		RenderCommands::ClearColor(Context, Colour::CornflourBlue);
 		RenderCommands::ClearTarget(Context, (uint32_t)Fracture::ClearFlags::Color | (uint32_t)Fracture::ClearFlags::Depth);
 
@@ -155,6 +155,8 @@ void Fracture::SSAOPass::Execute()
 	}
 	{
 		Fracture::RenderCommands::SetRenderTarget(Context, global_SSAO);
+		RenderCommands::SetViewport(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x , GraphicsDevice::RenderSettings.SSAO_Resolution.y, 0, 0);
+		RenderCommands::SetScissor(Context, GraphicsDevice::RenderSettings.SSAO_Resolution.x, GraphicsDevice::RenderSettings.SSAO_Resolution.y , 0, 0);
 		Fracture::RenderCommands::UseProgram(Context, mBlur_Shader->Handle);
 		Fracture::RenderCommands::SetTexture(Context, mBlur_Shader.get(), "InSSAO", mSSAOrt->ColorAttachments[0]->Handle, 0);
 

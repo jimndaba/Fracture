@@ -5,6 +5,7 @@
 
 #include "Common/UUID.h"
 #include <string>
+#include "Rendering/Texture.h"
 
 namespace Fracture
 {
@@ -68,7 +69,7 @@ namespace Fracture
 	{
 		UUID ID;		
 		std::string Name;
-		std::string Path;
+		std::string Path;		
 	};
 
 	struct TextureRegistry
@@ -76,6 +77,20 @@ namespace Fracture
 		UUID ID;
 		std::string Name;
 		std::string Path;	
+		//
+		TextureCreationInfo::TextureType Texture_Type;
+		TextureTarget TextureTarget = TextureTarget::Texture2D;	
+		InternalFormat internalFormat = InternalFormat::RGB8;
+		TextureFormat format = TextureFormat::RGB;
+		TextureFormatType formatType = TextureFormatType::UByte;
+		TextureMagFilter magFilter = TextureMagFilter::Linear;
+		TextureMinFilter minFilter = TextureMinFilter::Linear;
+		TextureWrap Wrap = TextureWrap::ClampToEdge;
+		int Width = 1;
+		int Height = 1;
+		int NoChannels = 1;
+		bool GenMinMaps = false;
+
 		bool Success = false;
 	};
 

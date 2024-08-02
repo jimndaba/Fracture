@@ -54,6 +54,7 @@ namespace Fracture
 		void SerialiseComponent(Fracture::AnimationComponent* component);
 		void SerialiseComponent(Fracture::CharacterControllerComponent* component);
 		void SerialiseComponent(Fracture::ParticleSystemComponent* component);
+		void SerialiseComponent(Fracture::TerrainComponent* component);
 
 		void ReadTagComponentIfExists(Fracture::UUID entity_id);
 		void ReadTransformComponentIfExists(Fracture::UUID entity_id);
@@ -75,6 +76,7 @@ namespace Fracture
 		void ReadAnimationComponentIfExists(Fracture::UUID entity_id);
 		void ReadCharacterControllerComponentIfExists(Fracture::UUID entity_id);
 		void ReadParticleSystemComponentIfExists(Fracture::UUID entity_id);
+		void ReadTerrainComponentIfExists(Fracture::UUID entity_id);
 
 		void WriteScene(Scene* scene);
 		void EntitiesToPrefab(PrefabCreationInfo info);

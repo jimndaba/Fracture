@@ -116,6 +116,9 @@ namespace Fracture
 		static void AddComponentInstance(std::shared_ptr<ScriptComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<CameraComponent>& component, UUID new_entity);
 		static void AddComponentInstance(std::shared_ptr<AnimationComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<ParticleSystemComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<SplineComponent>& component, UUID new_entity);
+		static void AddComponentInstance(std::shared_ptr<TerrainComponent>& component, UUID new_entity);
 
 
 		void OnDestroyEntity(const std::shared_ptr<DestroyEntityEvent>& evnt);

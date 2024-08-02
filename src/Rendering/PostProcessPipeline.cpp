@@ -23,9 +23,9 @@ void Fracture::PostProcessPipeline::Init()
 	info.AttachmentTrgt = AttachmentTarget::Color;
 	info.Width = 1920;
 	info.Height = 1080;
-	info.formatType = TextureFormatType::UInt;
+	info.formatType = TextureFormatType::Float;
 	info.format = TextureFormat::RGBA;
-	info.internalFormat = InternalFormat::RGBA32F;
+	info.internalFormat = InternalFormat::RGBA16F;
 	info.TextureTarget = TextureTarget::Texture2D;
 	info.magFilter = TextureMagFilter::Linear;
 	info.minFilter = TextureMinFilter::Linear;

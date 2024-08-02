@@ -908,6 +908,14 @@ void Fracture::RenderCommands::BindMaterial(Fracture::RenderContext* cntxt, Frac
 				SetTexture(cntxt, shader, "aMixMap", texture->Handle, (int)TEXTURESLOT::MixMap);
 			}
 		}
+		if (material->HasRoadMapTexture)
+		{
+			const auto& texture = AssetManager::GetTextureByID(material->RoadMapTexture);
+			if (texture)
+			{
+				SetTexture(cntxt, shader, "aRoadMap", texture->Handle, (int)TEXTURESLOT::RoadMap);
+			}
+		}
 		if (material->HasDiffuseAtlasTexture)
 		{
 			const auto& texture = AssetManager::GetTextureByID(material->DiffuseAtlasTexture);

@@ -238,6 +238,21 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::ParticleSystemCompo
 	EndStruct();
 }
 
+void Fracture::SceneSerialiser::SerialiseComponent(Fracture::TerrainComponent* component)
+{
+	BeginStruct("TerrainComponent");
+	Property("TerrainID", component->TerrainID);
+	Property("MaterialID", component->MaterialID);
+	Property("TerrainSizeX", component->TerrianSizeX);
+	Property("TerrainSizeY", component->TerrianSizeY);
+	Property("TerrainResolution", component->TerrianResolution);
+	Property("TerrainYShift", component->TerrianYShift);
+	Property("TerrainMaxHeight", component->TerrianMaxHeight);
+	Property("HasHeightMap", component->HasHeightMap);
+	Property("HeightMapPath", component->HeightMapPath);
+	EndStruct();
+}
+
 void Fracture::SceneSerialiser::ReadTagComponentIfExists(Fracture::UUID entity_id)
 {
 	if (BeginStruct("Tag"))
@@ -646,6 +661,25 @@ void Fracture::SceneSerialiser::ReadParticleSystemComponentIfExists(Fracture::UU
 	}
 }
 
+void Fracture::SceneSerialiser::ReadTerrainComponentIfExists(Fracture::UUID entity_id)
+{
+	if (BeginStruct("TerrainComponent"))
+	{
+		auto comp = std::make_shared<TerrainComponent>(entity_id);
+		comp->TerrainID = ID("TerrainID");
+		comp->MaterialID = ID("MaterialID");
+		comp->TerrianSizeX = INT("TerrainSizeX");
+		comp->TerrianSizeY = INT("TerrainSizeY");
+		comp->TerrianResolution = INT("TerrainResolution");
+		comp->TerrianYShift = FLOAT("TerrainYShift");
+		comp->TerrianMaxHeight = FLOAT("TerrainMaxHeight");
+		comp->HasHeightMap = BOOL("HasHeightMap");
+		comp->HeightMapPath = STRING("HeightMapPath");
+		SceneManager::AddComponentByInstance<TerrainComponent>(entity_id, comp);
+		EndStruct();
+	}
+}
+
 void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 {
 	BeginStruct("Scene");
@@ -673,6 +707,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 			WriteEntityComponentOfType<AnimationComponent>(scene->RootID);
 			WriteEntityComponentOfType<CharacterControllerComponent>(scene->RootID);
 			WriteEntityComponentOfType<ParticleSystemComponent>(scene->RootID);
+			WriteEntityComponentOfType<TerrainComponent>(scene->RootID);
 
 			BeginCollection("Scripts");
 			{
@@ -802,6 +837,7 @@ void Fracture::SceneSerialiser::WriteScene(Fracture::Scene* scene)
 					WriteEntityComponentOfType<AnimationComponent>(entity->ID);
 					WriteEntityComponentOfType<CharacterControllerComponent>(entity->ID);
 					WriteEntityComponentOfType<ParticleSystemComponent>(entity->ID);
+					WriteEntityComponentOfType<TerrainComponent>(entity->ID);
 				}
 				EndCollection();
 
@@ -1013,6 +1049,7 @@ void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Frac
 					auto new_component = TransformComponent(component, entityid);
 					SerialiseComponent(&new_component);
 				}
+				if (SceneManager::HasComponent<HierachyComponent>(entity))
 				{
 					auto new_component = HierachyComponent(hierachy, entityid);
 					new_component.HasParent = true;
@@ -1103,6 +1140,12 @@ void Fracture::SceneSerialiser::WriteEntityToPrefab(Fracture::UUID& parent, Frac
 					auto new_component = ParticleSystemComponent(component, entityid);
 					SerialiseComponent(&new_component);
 				}
+				if (SceneManager::HasComponent<TerrainComponent>(entity))
+				{
+					auto& component = *SceneManager::GetComponent<TerrainComponent>(entity);
+					auto new_component = TerrainComponent(component, entityid);
+					SerialiseComponent(&new_component);
+				}
 				EndCollection();
 			}
 		}
@@ -1144,6 +1187,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 			ReadAnimationComponentIfExists(new_Scene->RootID);
 			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
 			ReadParticleSystemComponentIfExists(new_Scene->RootID);
+			ReadTerrainComponentIfExists(new_Scene->RootID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1275,6 +1319,7 @@ std::shared_ptr<Fracture::Scene>  Fracture::SceneSerialiser::ReadScene()
 							ReadAnimationComponentIfExists(entity_id);
 							ReadCharacterControllerComponentIfExists(entity_id);
 							ReadParticleSystemComponentIfExists(entity_id);
+							ReadTerrainComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1443,6 +1488,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 			ReadLightProbeComponentIfExists(new_Scene->RootID);
 			ReadCharacterControllerComponentIfExists(new_Scene->RootID);
 			ReadParticleSystemComponentIfExists(new_Scene->RootID);
+			ReadTerrainComponentIfExists(new_Scene->RootID);
 			EndStruct();
 		}
 
@@ -1475,6 +1521,7 @@ std::shared_ptr<Fracture::Scene> Fracture::SceneSerialiser::ReadSceneWithoutLoad
 							ReadAnimationComponentIfExists(entity_id);
 							ReadCharacterControllerComponentIfExists(entity_id); 
 							ReadParticleSystemComponentIfExists(entity_id);
+							ReadTerrainComponentIfExists(entity_id);
 							NextInCollection();
 						}
 						EndCollection();
@@ -1553,6 +1600,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 			ReadAnimationComponentIfExists(prefab.PrefabID);
 			ReadCharacterControllerComponentIfExists(prefab.PrefabID);
 			ReadParticleSystemComponentIfExists(prefab.PrefabID);
+			ReadTerrainComponentIfExists(prefab.PrefabID);
 
 			if (BeginCollection("Scripts"))
 			{
@@ -1684,6 +1732,7 @@ void Fracture::SceneSerialiser::ReadScenePrefab(ScenePrefab prefab)
 							ReadAnimationComponentIfExists(entity);
 							ReadCharacterControllerComponentIfExists(entity);
 							ReadParticleSystemComponentIfExists(entity);
+							ReadTerrainComponentIfExists(entity);
 							NextInCollection();
 						}
 						EndCollection();

@@ -109,6 +109,7 @@ void Fracture::ImageLoader::SaveImage(std::string filepath, int width, int heigh
 	stbi_flip_vertically_on_write(true);
 	if (stbi_write_png(filepath.c_str(), width, height, nrChannels, buffer.data(), stride))
 	{
+		
 		FRACTURE_INFO("Saved image");
 	}
 	else
@@ -213,7 +214,7 @@ Fracture::TextureRegistry Fracture::ImageImporter::LoadHDRTexture(const std::str
 		header.Count = mdata.size();
 		header.DataSize = ((int64_t)width * (int64_t)height * channels);
 		fwrite(&header, sizeof(header), 1, f);
-		fwrite(&mdata[0], sizeof(mdata[0]), mdata.size(), f);
+		fwrite(mdata.data(), sizeof(mdata[0]), mdata.size(), f);
 		fclose(f);
 
 		FRACTURE_INFO("Imported HDR Texture: {}", path);		

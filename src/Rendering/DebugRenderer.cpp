@@ -69,36 +69,35 @@ void Fracture::DebugRenderer::OnBeginFrame()
 void Fracture::DebugRenderer::OnRender()
 {
     OPTICK_EVENT();
-    GraphicsDevice::Instance()->UpdateBufferData(mlineBufferSSBO.get(), 0, sizeof(Line) * MaxLines, mLines.data());
+   
 
-
-    mContext->BeginState(SortKey());
-
-    const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);
   
+
+    const auto& target =  GraphicsDevice::Instance()->GetGlobalRenderTarget(Fracture::GlobalRenderTargets::GlobalDebug);  
     if (target)
     {
-
-        
-        RenderCommands::SetRenderTarget(mContext.get(),target);
-        RenderCommands::SetViewport(mContext.get(), mContext->ContextViewport.Width, mContext->ContextViewport.Height,0,0);
+        RenderCommands::SetRenderTarget(mContext.get(), target);
+        RenderCommands::SetViewport(mContext.get(), GraphicsDevice::Instance()->Viewport_Width, GraphicsDevice::Instance()->Viewport_Height, 0, 0);
         RenderCommands::ClearColor(mContext.get(), glm::vec4(0, 0, 0, 0));
         RenderCommands::ClearTarget(mContext.get(), ClearFlags::Color);
-      
-       
+
+        
+        GraphicsDevice::Instance()->UpdateBufferData(mlineBufferSSBO.get(), 0, sizeof(Line) * MaxLines, mLines.data());
+        if (mLines.empty() && mBillboardDrawCalls.empty())
+            return;
+
+        mContext->BeginState(SortKey());       
         if (mLines.size() > 0)
         {
+            glLineWidth(2.0f);
             const auto& mShader = AssetManager::GetShader("Debug");
             RenderCommands::UseProgram(mContext.get(), mShader->Handle);
             RenderCommands::BindVertexArrayObject(mContext.get(), LineVAO);            
-            glLineWidth(3.0f);
             DrawArray cmd;
             cmd.count = mLines.size();
             cmd.first = 0;
             cmd.mode = DrawMode::Lines;
             RenderCommands::DrawArray(mContext.get(), cmd);
-
-
             RenderCommands::UseProgram(mContext.get(), 0);
             RenderCommands::BindVertexArrayObject(mContext.get(), 0);
 

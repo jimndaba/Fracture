@@ -568,6 +568,9 @@ void Fracture::SceneManager::OnDestroyEntity(const std::shared_ptr<Fracture::Des
     RemoveComponentIfExists<Fracture::LightProbeComponent>(evnt->ID);
     RemoveComponentIfExists<Fracture::CameraComponent>(evnt->ID);
     RemoveComponentIfExists<Fracture::AnimationComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::SplineComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::TerrainComponent>(evnt->ID);
+    RemoveComponentIfExists<Fracture::ParticleSystemComponent>(evnt->ID);
 
     if (Fracture::SceneManager::IsPrefabScene(evnt->ID))
     {

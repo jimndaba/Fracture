@@ -516,6 +516,9 @@
     <ClInclude Include="src\Rendering\BVH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\World\BezierSpline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FracturePCH.cpp">
@@ -966,6 +969,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\BVH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World\BezierSpline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -332,6 +332,7 @@ void Fracture::GraphicsDevice::SetBufferIndexRange(Buffer* buffer, uint32_t inde
 
 void Fracture::GraphicsDevice::UpdateBufferData(Buffer* buffer, uint32_t offset, uint32_t size, const void* data)
 {
+    OPTICK_EVENT();
     glNamedBufferSubData(buffer->RenderID, offset, size, data);  glCheckError();
 }
 
@@ -599,10 +600,9 @@ void Fracture::GraphicsDevice::CreateTexture(std::shared_ptr<Texture>& texture, 
             {
                 levels = info.MipLevels;
             }
-            glPixelStorei(GL_UNPACK_ALIGNMENT, info.NoChannels);
+            //glPixelStorei(GL_UNPACK_ALIGNMENT, info.NoChannels);
             if (info.data.size() && info.Texture_Type != TextureCreationInfo::TextureType::HDR)
-            {
-                
+            {                
                 glTexImage2D(target, 0, internalFormat, info.Width, info.Height, 0, textureformat, GL_UNSIGNED_BYTE, info.data.data()); glCheckError();
             }
             else if (info.f_data.size())

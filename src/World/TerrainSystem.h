@@ -97,7 +97,6 @@ namespace Fracture
 		std::vector<std::unique_ptr<PlacementMapModifier>> Modifiers;
 	};
 
-
 	struct TerrainMaterialLayer
 	{
 		TerrainTextureMap BlendMap;
@@ -120,13 +119,15 @@ namespace Fracture
 		void UpdateTerrain(Fracture::UUID entity);
 
 		void OnInit();
+		void OnLoad();
 		void OnUpdate();	
 		void OnBeginFrame(RenderContext* context);
 		void OnEndFrame();
 		void OnDebugDraw();
+		void OnSave(const std::string& folder);
 		void DrawNode(BVHNode* node);
 
-		void SaveHeightMap(const std::string& path);
+		void SaveHeightMap(const std::string& path, Fracture::UUID entity);
 		void SubmitTerrainForEditing(Fracture::UUID entity);
 		void ReleaseTerrainFromEditing();
 
@@ -153,6 +154,8 @@ namespace Fracture
 		std::vector<glm::vec3> GenerateGridPoints(float footprint, glm::vec2 regionSize, int NoOfSamples = 30);
 		
 
+		void SplineModifier(Fracture::UUID entity,Fracture::UUID splineID);
+
 		TerrainBrush MainBrush;
 		TerrainEditModeOptions EditMode = TerrainEditModeOptions::Selection;
 		int CurrentMixID = 0;
@@ -165,8 +168,13 @@ namespace Fracture
 		std::map<UUID, std::vector<std::shared_ptr<PlacementLayer>>> mPlacementLayers;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mPlacementMaps;
 		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mDenistyMaps;
+		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mRoadMaps;
+		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mWaterWayMaps;
+		std::unordered_map<UUID, std::shared_ptr<TerrainTextureMap>> mHeightMaps;
+		
 		std::unordered_map<UUID, std::vector<glm::vec3>> mPlacementPoints;
 		std::unordered_map<UUID, std::vector<float>> mModifiedPlacementMaps;
+		std::unordered_map<UUID, std::vector<float>> mOutputHeightMaps;
 		std::unordered_map<UUID, TerrainMaterialLayer> mMaterialLayers;
 
 		std::unordered_map<UUID, std::shared_ptr<Texture>> mGPUTextures;

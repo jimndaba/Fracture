@@ -32,6 +32,7 @@ namespace Fracture
 		GlobalSpots,
 		GlobalPoint,
 		HeightMap,
+		RoadMap,
 		MixMap,
 		DiffuseAtlas,
 		NormalAtlas,
@@ -95,6 +96,7 @@ namespace Fracture
 
 		//Terrain Material Flags
 		bool HasHeightMapTexture = false;
+		bool HasRoadMapTexture = false;
 		bool HasMixMapTexture = false;
 		bool HasDiffuseAtlasTexture = false;
 		bool HasNormalAtlasTexture = false;
@@ -111,6 +113,7 @@ namespace Fracture
 
 		//Terrain Maps
 		Fracture::UUID HeightMapTexture;
+		Fracture::UUID RoadMapTexture;
 		Fracture::UUID MixMapTexture;
 		Fracture::UUID DiffuseAtlasTexture;
 		Fracture::UUID NormalAtlasTexture;
@@ -151,6 +154,7 @@ namespace Fracture
 		bool IsTranslucent = false;
 		bool IsReflective = false;
 		bool DepthWrite = true;
+		bool DepthTest = true;
 		bool IsSkinned = false;
 		bool ShaderOverride = false;
 		bool IsInstanced = true;

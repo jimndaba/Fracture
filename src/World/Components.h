@@ -6,6 +6,8 @@
 #include "physx/PxPhysicsAPI.h"
 #include "Scripting/LuaScript.h"
 #include "Common/Frustum.h"
+#include "BezierSpline.h"
+
 namespace Fracture
 {
 	struct IComponent
@@ -698,7 +700,7 @@ namespace Fracture
 
 		bool HasDiffuse;
 		bool HasNormal;
-		float Weight = 1.0f;
+		float Weight = 0;
 	};
 
 	struct TerrainComponent : public IComponent
@@ -727,6 +729,7 @@ namespace Fracture
 		Fracture::UUID MaterialID;
 
 		Fracture::UUID HeightMapID;
+		Fracture::UUID RoadMapID;
 		std::string HeightMapPath;
 
 		Fracture::UUID MixMapID;
@@ -738,8 +741,10 @@ namespace Fracture
 		std::vector<TerrainTileSet> TerrainTextures;
 
 		bool HasHeightMap = false;
+		bool HasRoadsMap = false;
 		bool HasMixMap = false;
 		bool IsMixMapDirty = false;
+		bool IsRoadMapDirty = false;
 		bool IsAtlasDirty = false;
 		bool HasTextureAtlasIndexMap = false;
 		bool HasDiffuseTextureAtlas = false;
@@ -758,6 +763,42 @@ namespace Fracture
 		int AtlasPerTextureSize = 512;
 		int MaxTextures = 8;
 
+		UUID GetID() { return entity; }
+	};
+
+	struct SplineComponent : public IComponent
+	{
+
+		SplineComponent(const Fracture::UUID& id) :
+			IComponent(), entity(id) {
+		}
+
+
+		SplineComponent(SplineComponent& other, UUID new_entity) :
+			IComponent()
+		{
+		}
+
+		enum class SplineTypeComponent
+		{
+
+		};
+
+
+		UUID entity;
+		CubicBezierSpline Spline;
+		float SplineU = 0.0f;
+
+		//Properties
+		float Width = 3.0f;
+		float Falloff = 0.1f;
+		float FalloffWidth = 0.1f;
+		//Property bools
+		bool UseWidth = false;
+		bool UseFalloff = false;
+
+		//Mesh Instancing
+		bool IsDirty = false;
 		UUID GetID() { return entity; }
 	};
 }

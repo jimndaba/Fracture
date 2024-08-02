@@ -153,7 +153,7 @@ namespace Fracture
 
 		void Render();
 
-		void AddToBatch(StaticMesh* mesh, Fracture::UUID material, glm::mat4 transform);
+		void AddToBatch(StaticMesh* mesh, Fracture::UUID material, glm::mat4 transform, UUID Entity = 0);
 		void AddToBatch(SubMesh* mesh, Fracture::UUID meshID, Fracture::UUID material, std::vector<glm::mat4> Batchtransform);
 		void AddToBatch(MeshComponent* mesh,glm::mat4 transform,UUID Entity);
 		void AddDrawCall(MeshComponent* mesh,glm::mat4 transform,UUID Entity);

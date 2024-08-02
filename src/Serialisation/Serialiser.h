@@ -84,7 +84,14 @@ namespace nlohmann
 		j = json{
 			{"ID", (uint32_t)reg.ID},
 			{"Name", reg.Name},
-			{"Path", reg.Path}
+			{"Path", reg.Path},
+			{"FormatType", (int)reg.formatType},
+			{"Format", (int)reg.format},
+			{"InternalFormat", (int)reg.internalFormat},
+			{"MagFilter", (int)reg.magFilter},
+			{"MinFilter",  (int)reg.minFilter},
+			{"GenMipmaps", reg.GenMinMaps},
+			{"Wrap",  (int)reg.Wrap}
 		};
 	}
 	inline void  to_json(json& j, const Fracture::LuaScriptRegistry& reg)
@@ -168,6 +175,13 @@ namespace nlohmann
 		j.at("ID").get_to(id);
 		j.at("Name").get_to(reg.Name);
 		j.at("Path").get_to(reg.Path);
+		j.at("Format").get_to(reg.format);
+		j.at("FormatType").get_to(reg.formatType);
+		j.at("InternalFormat").get_to(reg.internalFormat);
+		j.at("MagFilter").get_to(reg.magFilter);
+		j.at("MinFilter").get_to(reg.minFilter);
+		j.at("GenMipmaps").get_to(reg.GenMinMaps);
+		j.at("Wrap").get_to(reg.Wrap);
 		reg.ID = id;
 	}
 	inline void from_json(const json& j, Fracture::LuaScriptRegistry& reg) {

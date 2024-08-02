@@ -31,4 +31,11 @@ namespace Fracture
 		const char* Name() { return "DestroyEntityEvent"; };
 	};
 
+	struct LoadTextureEvent : public Fracture::Event
+	{
+		LoadTextureEvent(Fracture::UUID id) : Event(), TextureID(id) {}
+		Fracture::UUID TextureID;
+		const char* Name() { return "LoadTextureEvent"; };
+	};
+
 }

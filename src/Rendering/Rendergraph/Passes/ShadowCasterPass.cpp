@@ -354,7 +354,7 @@ void Fracture::ShadowCasterPass::Execute()
             // Calculate the full field of view
             float fov = 2.0f * outerConeAngleRadians;
 
-            glm::mat4 projection = glm::perspective(fov, 1.0f, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(fov, 1.0f, 0.1f, lightlist[i]->Strength);
             
             glm::vec3 defaultDirection = glm::vec3(0.0f, 0.0f, -1.0f);
             glm::vec3 spotlightDirection = glm::normalize(glm::rotate(transform->Rotation, defaultDirection));
@@ -363,6 +363,7 @@ void Fracture::ShadowCasterPass::Execute()
             mSpotMatricies[i] = projection * view;
         }
 
+        RenderCommands::SetCullMode(Context, CullMode::None);
        
         for (int i = 0; i < lightlist.size(); i++)
         {

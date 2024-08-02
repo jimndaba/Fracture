@@ -23,10 +23,10 @@ void Fracture::LightCullPass::Setup()
         //workGroupsY = (SCREEN_SIZE.y + (SCREEN_SIZE.y % 16)) / 16;
         //size_t numberOfTiles = workGroupsX * workGroupsY;
 
-        Properties.sizeX = (unsigned int)(Context->ContextViewport.Width + (Context->ContextViewport.Width % Properties.gridSizeX))/ Properties.gridSizeX;
-        Properties.sizeY = (unsigned int)(Context->ContextViewport.Height + (Context->ContextViewport.Height% Properties.gridSizeY))/ Properties.gridSizeY;
-        Properties.screen2View.screenWidth = Context->ContextViewport.Width;
-        Properties.screen2View.screenHeight = Context->ContextViewport.Height;
+        Properties.sizeX = (unsigned int)(GraphicsDevice::Instance()->Viewport_Width + (GraphicsDevice::Instance()->Viewport_Width % Properties.gridSizeX))/ Properties.gridSizeX;
+        Properties.sizeY = (unsigned int)(GraphicsDevice::Instance()->Viewport_Height + (GraphicsDevice::Instance()->Viewport_Height% Properties.gridSizeY))/ Properties.gridSizeY;
+        Properties.screen2View.screenWidth = GraphicsDevice::Instance()->Viewport_Width;
+        Properties.screen2View.screenHeight = GraphicsDevice::Instance()->Viewport_Height;
         Properties.screen2View.tileSizes[0] = Properties.gridSizeX;
         Properties.screen2View.tileSizes[1] = Properties.gridSizeY;
         Properties.screen2View.tileSizes[2] = Properties.gridSizeZ;
@@ -88,10 +88,10 @@ void Fracture::LightCullPass::Setup()
 
 void Fracture::LightCullPass::Execute()
 {
-    Properties.sizeX = (unsigned int)(Context->ContextViewport.Width + (Context->ContextViewport.Width % Properties.gridSizeX)) / Properties.gridSizeX;
-    Properties.sizeY = (unsigned int)(Context->ContextViewport.Height + (Context->ContextViewport.Height % Properties.gridSizeY)) / Properties.gridSizeY;
-    Properties.screen2View.screenWidth = Context->ContextViewport.Width;
-    Properties.screen2View.screenHeight = Context->ContextViewport.Height;
+    Properties.sizeX = (unsigned int)(GraphicsDevice::Instance()->Viewport_Width + (GraphicsDevice::Instance()->Viewport_Width % Properties.gridSizeX)) / Properties.gridSizeX;
+    Properties.sizeY = (unsigned int)(GraphicsDevice::Instance()->Viewport_Height + (GraphicsDevice::Instance()->Viewport_Height % Properties.gridSizeY)) / Properties.gridSizeY;
+    Properties.screen2View.screenWidth = GraphicsDevice::Instance()->Viewport_Width;
+    Properties.screen2View.screenHeight = GraphicsDevice::Instance()->Viewport_Height;
 
     GraphicsDevice::Instance()->UpdateBufferData(ScreenToViewSSBO.get(), 0, sizeof(ScreenToView), &Properties.screen2View);
 

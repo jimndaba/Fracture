@@ -8,6 +8,7 @@
 #include "AssetRegistries.h"
 #include "EventSystem/Eventbus.h"
 #include "taskflow/taskflow.hpp"
+#include "World/WorldEvents.h"
 
 namespace Fracture
 {
@@ -61,8 +62,6 @@ namespace Fracture
 			return Mesh == p.Mesh && Entity == p.Entity;
 		}
 	};
-
-
 
 	class AssetManager
 	{
@@ -143,6 +142,7 @@ namespace Fracture
 		void OnAsyncLoadTexture(const std::shared_ptr<AsyncLoadTextureEvent>& evnt);
 		void OnAsyncLoadMaterial(const std::shared_ptr<AsyncLoadMaterialEvent>& evnt);
 		void OnAsyncLoadandAttach(const std::shared_ptr<AsyncLoadMeshAndAttachEvent>& evnt);
+		void OnLoadTexture(const std::shared_ptr<LoadTextureEvent>& evnt);
 
 		static std::map<UUID, MeshRegistry> mMeshRegister;
 		static std::map<std::string, UUID> mMeshIDLookUp;

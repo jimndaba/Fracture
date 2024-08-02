@@ -204,6 +204,7 @@
     <ClInclude Include="src\Serialisation\AnimationGraphSerialiser.h" />
     <ClInclude Include="src\Serialisation\AnimationSerialiser.h" />
     <ClInclude Include="src\Serialisation\ParticleFXSerialiser.h" />
+    <ClInclude Include="src\World\BezierSpline.h" />
     <ClInclude Include="src\World\PlacementModifiers.h" />
     <ClInclude Include="src\World\PrefabFactor.h" />
     <ClInclude Include="src\World\SkyboxSystem.h" />
@@ -378,6 +379,7 @@
     <ClCompile Include="src\Serialisation\ParticleFXSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\SceneSerialiser.cpp" />
     <ClCompile Include="src\Serialisation\Serialiser.cpp" />
+    <ClCompile Include="src\World\BezierSpline.cpp" />
     <ClCompile Include="src\World\CameraSystem.cpp" />
     <ClCompile Include="src\World\Components.cpp" />
     <ClCompile Include="src\World\Entity.cpp" />

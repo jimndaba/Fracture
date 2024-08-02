@@ -137,7 +137,7 @@ void Fracture::RenderContext::Render()
 
 }
 
-void Fracture::RenderContext::AddToBatch(StaticMesh* mesh, Fracture::UUID materialID, glm::mat4 transform)
+void Fracture::RenderContext::AddToBatch(StaticMesh* mesh, Fracture::UUID materialID, glm::mat4 transform, UUID Entity)
 {
 	OPTICK_EVENT();
 	CreateBatchIfMissing(materialID, mesh->ID);
@@ -152,8 +152,19 @@ void Fracture::RenderContext::AddToBatch(StaticMesh* mesh, Fracture::UUID materi
 			return;
 		SubmitMaterialstoGPU(materialID);
 		if (cam_system.IsBoxInFrustum(*SceneManager::ActiveCamera(), submesh.BoundingBox.UpdatedAABB(transform)))
-		{			
-			mBatches[materialID][mesh->ID]->EntityIDs.push_back(glm::vec4(0));
+		{		
+			glm::vec4 color(0);
+			uint32_t id = Entity;
+			uint8_t r = (id >> 24) & 0xFF; // Red component
+			uint8_t g = (id >> 16) & 0xFF; // Green component
+			uint8_t b = (id >> 8) & 0xFF;  // Blue component
+			uint8_t a = id & 0xFF;         // Alpha component
+			color.r = (float)r / 255.0f;
+			color.g = (float)g / 255.0f;
+			color.b = (float)b / 255.0f;
+			color.a = (float)a / 255.0f;
+
+			mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
 			mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
 			mBatches[materialID][mesh->ID]->GPUMaterialIndex = MaterialIndexMap[materialID];
 			mBatches[materialID][mesh->ID]->basevertex = submesh.BaseVertex;
@@ -307,16 +318,18 @@ void Fracture::RenderContext::AddDrawCall(TerrainComponent* component, glm::mat4
 		if (!material)
 			return;
 		material->HasHeightMapTexture = component->HasHeightMap;
+		material->HasRoadMapTexture = component->HasRoadsMap;
+		material->HasMixMapTexture = component->HasMixMap;
+		material->HasDiffuseAtlasTexture = component->HasDiffuseTextureAtlas;
+		material->HasNormalAtlasTexture = component->HasNormalTextureAtlas;
+		
+		material->RoadMapTexture = component->RoadMapID;
+		material->DiffuseAtlasTexture = component->DiffuseTextureAtlasID;		
+		material->NormalAtlasTexture = component->NormalTextureAtlasID;
 		material->HeightMapTexture = component->HeightMapID;
 		material->TerrainMaxHeight = component->TerrianMaxHeight;
 		material->TerrainYOffset = component->TerrianYShift;
-		material->HasMixMapTexture = component->HasMixMap;
 		material->MixMapTexture = component->MixMapID;
-		material->HasHeightMapTexture = component->HasHeightMap;
-		material->HasDiffuseAtlasTexture = component->HasDiffuseTextureAtlas;
-		material->DiffuseAtlasTexture = component->DiffuseTextureAtlasID;
-		material->HasNormalAtlasTexture = component->HasNormalTextureAtlas;
-		material->NormalAtlasTexture = component->NormalTextureAtlasID;
 
 		SubmitMaterialstoGPU(component->MaterialID);
 		auto drawcall = std::make_shared<TerrainDrawCall>();

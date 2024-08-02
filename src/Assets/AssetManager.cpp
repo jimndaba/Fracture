@@ -85,6 +85,8 @@ void Fracture::AssetManager::RegisterCallbacks(Eventbus* bus)
 	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadMesh);
 	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadTexture);
 	bus->Subscribe(this, &Fracture::AssetManager::OnAsyncLoadandAttach);
+	bus->Subscribe(this, &Fracture::AssetManager::OnLoadTexture);
+
 }
 
 void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
@@ -121,7 +123,14 @@ void Fracture::AssetManager::OnInit(const std::string& assetfilepath)
 				TextureRegistry reg;
 				reg.ID = reg_serialiser.ID("ID");
 				reg.Name = reg_serialiser.STRING("Name");
-				reg.Path = reg_serialiser.STRING("Path");				
+				reg.Path = reg_serialiser.STRING("Path");	
+				reg.format = (TextureFormat)reg_serialiser.INT("Format");
+				reg.formatType = (TextureFormatType)reg_serialiser.INT("FormatType");
+				reg.GenMinMaps = reg_serialiser.BOOL("GenMipmaps");				
+				reg.internalFormat = (InternalFormat)reg_serialiser.INT("InternalFormat");
+				reg.magFilter =(TextureMagFilter) reg_serialiser.INT("MagFilter");
+				reg.minFilter =(TextureMinFilter) reg_serialiser.INT("MinFilter");
+				reg.Wrap =(TextureWrap)reg_serialiser.INT("Wrap");
 				RegisterTexture(reg);
 				reg_serialiser.NextInCollection();
 
@@ -347,7 +356,6 @@ void Fracture::AssetManager::OnSave(const std::string& path)
 
 void Fracture::AssetManager::OnLoad()
 {
-
 	while (!mMeshesToLoad.empty())
 	{
 		auto reg = mMeshesToLoad.front();
@@ -547,6 +555,14 @@ void Fracture::AssetManager::OnLoad()
 		{
 			auto texture = mf.second.get();
 			{
+				texture->Description.ID = mf.first;
+				texture->Description.format = mTextureRegister[mf.first].format;
+				texture->Description.internalFormat = mTextureRegister[mf.first].internalFormat;
+				texture->Description.Wrap = mTextureRegister[mf.first].Wrap;
+				texture->Description.magFilter = mTextureRegister[mf.first].magFilter;
+				texture->Description.minFilter = mTextureRegister[mf.first].minFilter;
+				texture->Description.GenMinMaps = mTextureRegister[mf.first].GenMinMaps;
+				texture->Description.formatType = mTextureRegister[mf.first].formatType;
 				mTextures[mf.first] = texture;
 				GraphicsDevice::Instance()->CreateTexture(mTextures[mf.first], mTextures[mf.first]->Description);
 				mLoadedTextures.push_back(mf.first);
@@ -734,7 +750,16 @@ std::shared_ptr<Fracture::Texture>Fracture::AssetManager::GetTextureByID(const F
 			{
 				return nullptr;
 			}		
+			
 			mTextures[id] = ImageLoader::LoadTexture(mTextureRegister[id].Path);
+			mTextures[id]->Description.ID = id;
+			mTextures[id]->Description.format = mTextureRegister[id].format;
+			mTextures[id]->Description.internalFormat = mTextureRegister[id].internalFormat;
+			mTextures[id]->Description.Wrap = mTextureRegister[id].Wrap;
+			mTextures[id]->Description.magFilter = mTextureRegister[id].magFilter;
+			mTextures[id]->Description.minFilter = mTextureRegister[id].minFilter;
+			mTextures[id]->Description.GenMinMaps = mTextureRegister[id].GenMinMaps;
+			mTextures[id]->Description.formatType = mTextureRegister[id].formatType;
 			GraphicsDevice::Instance()->CreateTexture(mTextures[id], mTextures[id]->Description);
 			mLoadedTextures.push_back(id);
 			FRACTURE_TRACE("Loaded Texture: {}", mTextureRegister[id].Path);
@@ -1010,6 +1035,26 @@ void Fracture::AssetManager::OnAsyncLoadandAttach(const std::shared_ptr<AsyncLoa
 		cntxt.Entity = evnt->EntityID;
 		cntxt.Mesh = it->first;
 		mMeshesToLoadandAttach.push(cntxt);
+	}
+}
+
+void Fracture::AssetManager::OnLoadTexture(const std::shared_ptr<LoadTextureEvent>& evnt)
+{
+	if (IsTextureLoaded(evnt->TextureID))
+	{
+		glDeleteTextures(1, &mTextures[evnt->TextureID]->Handle);
+		mTextures[evnt->TextureID]->Description.format = mTextureRegister[evnt->TextureID].format;
+		mTextures[evnt->TextureID]->Description.internalFormat = mTextureRegister[evnt->TextureID].internalFormat;
+		mTextures[evnt->TextureID]->Description.Wrap = mTextureRegister[evnt->TextureID].Wrap;
+		mTextures[evnt->TextureID]->Description.magFilter = mTextureRegister[evnt->TextureID].magFilter;
+		mTextures[evnt->TextureID]->Description.minFilter = mTextureRegister[evnt->TextureID].minFilter;
+		mTextures[evnt->TextureID]->Description.GenMinMaps = mTextureRegister[evnt->TextureID].GenMinMaps;
+		mTextures[evnt->TextureID]->Description.formatType = mTextureRegister[evnt->TextureID].formatType;
+		GraphicsDevice::Instance()->CreateTexture(mTextures[evnt->TextureID], mTextures[evnt->TextureID]->Description);
+	}
+	else
+	{
+		AsyncLoadTextureByID(evnt->TextureID);
 	}
 }
 
