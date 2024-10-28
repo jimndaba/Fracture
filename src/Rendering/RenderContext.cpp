@@ -433,190 +433,51 @@ void Fracture::RenderContext::DrawPrefabOutlines(UUID entity)
 
 void Fracture::RenderContext::AddToBatch(PrefabInstanceComponent* meshcomponent, glm::mat4 transform, UUID entity)
 {
-	/*
+
+	OPTICK_EVENT();
 	if (!AssetManager::Instance()->IsMeshLoaded(meshcomponent->Mesh))
 		return;
 
+	glm::vec4 color(0);
+	uint32_t id = entity;
+	uint8_t r = (id >> 24) & 0xFF; // Red component
+	uint8_t g = (id >> 16) & 0xFF; // Green component
+	uint8_t b = (id >> 8) & 0xFF;  // Blue component
+	uint8_t a = id & 0xFF;         // Alpha component
+	color.r = (float)r / 255.0f;
+	color.g = (float)g / 255.0f;
+	color.b = (float)b / 255.0f;
+	color.a = (float)a / 255.0f;
+
+	for (const auto& material : meshcomponent->Materials)
+	{
+		CreateBatchIfMissing(material, meshcomponent->Mesh);
+	}
+
+
 	const auto& mesh = AssetManager::GetStaticByIDMesh(meshcomponent->Mesh);
-	
 	for (const auto& submesh : mesh->SubMeshes)
 	{
-		auto materialID = meshcomponent->Materials[submesh.MaterialIndex];
-		if (mBatches.find(materialID) == mBatches.end() || mBatches[materialID].find(mesh->ID) == mBatches[materialID].end())
+		CameraSystem cam_system;
+
+		if (cam_system.IsBoxInFrustum(*SceneManager::ActiveCamera(), submesh.BoundingBox.UpdatedAABB(transform)))
 		{
-			mBatches[materialID][mesh->ID] = std::make_shared<RenderBatch>();
-			VertexArrayCreationInfo info;
-			
-			bool IsSkinned = mesh->mBones.size();		
-			if (IsSkinned)
-			{
-				info.Layout =
-				{
-					{ ShaderDataType::Float3,"aPos",0,true },
-					{ ShaderDataType::Float3,"aNormal" ,0,true},
-					{ ShaderDataType::Float2,"aUV" ,0,true},
-					{ ShaderDataType::Int4,"aBoneID",0 },
-					{ ShaderDataType::Float4,"aBoneWeights",0 },
-					{ ShaderDataType::Int4,"aEntityID",1 },
-					{ ShaderDataType::Mat4, "instanceMatrix",1 },
-				};
+			auto materialID = meshcomponent->Materials[submesh.MaterialIndex];
+			const auto& material = AssetManager::GetMaterialByID(materialID);
+			SubmitMaterialstoGPU(materialID);
 
-				GraphicsDevice::Instance()->CreateVertexArray(mBatches[materialID][mesh->ID]->VAO, info);
-				GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
-
-				{
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 3, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, (sizeof(glm::vec3) * 2) + sizeof(glm::vec2));
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, (sizeof(glm::vec3) * 2) + sizeof(glm::vec2) + sizeof(glm::ivec4));
-					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
-				}
-				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::vec4) * 1024;
-					desc.usage = BufferUsage::Stream;
-					desc.Name = "EntityIDBuffer";
-					desc.data = nullptr;
-					mBatches[materialID][mesh->ID]->EntityID_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->EntityID_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 5, sizeof(glm::vec4), mBatches[materialID][mesh->ID]->EntityID_Buffer->RenderID);
-
-					GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 5, 1);
-				}
-				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::mat4) * 1024;
-					desc.usage = BufferUsage::Stream;
-					desc.Name = "MatrixBuffer";
-					desc.data = nullptr;
-					mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 6, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-
-					GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 6, 1);
-
-				}
-			}
-			else
-			{
-				info.Layout =
-				{
-					{ ShaderDataType::Float3,"aPos",0,true },
-					{ ShaderDataType::Float3,"aNormal" ,0,true},
-					{ ShaderDataType::Float2,"aUV" ,0,true},
-					{ ShaderDataType::Int4,"aEntityID",1 },
-					{ ShaderDataType::Mat4, "instanceMatrix",1 },
-				};
-
-				GraphicsDevice::Instance()->CreateVertexArray(mBatches[materialID][mesh->ID]->VAO, info);
-				GraphicsDevice::Instance()->VertexArray_BindAttributes(mBatches[materialID][mesh->ID]->VAO, info);
-
-				{
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 0, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, 0);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 1, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3));
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 2, sizeof(mesh->mVerticies[0]), mesh->VBO_Buffer->RenderID, sizeof(glm::vec3) * 2);
-					GraphicsDevice::Instance()->VertexArray_BindIndexBuffers(mBatches[materialID][mesh->ID]->VAO, mesh->EBO_Buffer->RenderID);
-				}
-				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::vec4) * 1024;
-					desc.usage = BufferUsage::Stream;
-					desc.Name = "EntityIDBuffer";
-					desc.data = nullptr;
-					mBatches[materialID][mesh->ID]->EntityID_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->EntityID_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 3, sizeof(glm::vec4), mBatches[materialID][mesh->ID]->EntityID_Buffer->RenderID);
-
-					GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 3, 1);
-				}
-				{
-					BufferDescription desc;
-					desc.bufferType = BufferType::ArrayBuffer;
-					desc.size = sizeof(glm::mat4) * 1024;
-					desc.usage = BufferUsage::Stream;
-					desc.Name = "MatrixBuffer";
-					desc.data = nullptr;
-					mBatches[materialID][mesh->ID]->Matrix_Buffer = std::make_shared<Buffer>();
-					GraphicsDevice::Instance()->CreateBuffer(mBatches[materialID][mesh->ID]->Matrix_Buffer.get(), desc);
-					GraphicsDevice::Instance()->VertexArray_BindVertexBuffer(mBatches[materialID][mesh->ID]->VAO, 4, sizeof(glm::mat4), mBatches[materialID][mesh->ID]->Matrix_Buffer->RenderID, 0);
-
-					GraphicsDevice::Instance()->VertexArray_SetDivisor(mBatches[materialID][mesh->ID]->VAO, 4, 1);
-
-				}
-			}
-
-			
+			SubmitMaterialstoGPU(materialID);
+			mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
+			mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
+			mBatches[materialID][mesh->ID]->GPUMaterialIndex = MaterialIndexMap[materialID];
+			mBatches[materialID][mesh->ID]->IsTranslucent = material->IsTranslucent;
+			mBatches[materialID][mesh->ID]->CastShadows = material->CastsShadows;
+			mBatches[materialID][mesh->ID]->basevertex = submesh.BaseVertex;
+			mBatches[materialID][mesh->ID]->IndexCount = submesh.IndexCount;
+			mBatches[materialID][mesh->ID]->InstanceCount += 1;
+			mBatches[materialID][mesh->ID]->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
 		}
-
-
-
-		glm::vec4 color(0);
-		uint32_t id = entity;
-		uint8_t r = (id >> 24) & 0xFF; // Red component
-		uint8_t g = (id >> 16) & 0xFF; // Green component
-		uint8_t b = (id >> 8) & 0xFF;  // Blue component
-		uint8_t a = id & 0xFF;         // Alpha component
-		color.r = (float)r / 255.0f;
-		color.g = (float)g / 255.0f;
-		color.b = (float)b / 255.0f;
-		color.a = (float)a / 255.0f;
-
-		
-
-		const auto& material = AssetManager::GetMaterialByID(materialID);
-		if (MaterialIndexMap.find(materialID) == MaterialIndexMap.end())
-		{
-			GPUMaterial gpu_mat;
-			gpu_mat.AlbedoFlag = material->HasAlbedoTexture;
-			gpu_mat.AOFlag = material->HasAOTexture;
-			gpu_mat.EmissionFlag = material->HasEmissionTexture;
-			gpu_mat.MetalnessFlag = material->HasMetalTexture;
-			gpu_mat.NormalFlag = material->HasNormalTexture;
-			gpu_mat.RoughnessFlag = material->HasRoughnessTexture;
-			gpu_mat.SpecularFlag = material->HasSpecularTexture;
-			gpu_mat.pAO = material->AOLevel;
-			gpu_mat.pDiffuse = material->AlbedoColour;
-			gpu_mat.pEmission = material->EmissionColour;
-			gpu_mat.pEmissionStrength = material->AOLevel;
-			gpu_mat.pMetalness = material->MetalicLevel;
-			gpu_mat.pRoughness = material->RoughnessLevel;
-			gpu_mat.SpecularLevel = material->SpecularLevel;
-			gpu_mat.SpecularIntensity = material->SpecularIntensity;
-			gpu_mat.TextureSpace = (int)material->TextureSpace;
-			MaterialIndexMap[materialID] = MaterialGPUData.size();
-			gpu_mat.Tiling = material->TextureTiling;
-			MaterialGPUData.push_back(gpu_mat);
-		}
-		mBatches[materialID][mesh->ID]->EntityIDs.push_back(color);
-		mBatches[materialID][mesh->ID]->Transforms.push_back(transform);
-		mBatches[materialID][mesh->ID]->GPUMaterialIndex = MaterialIndexMap[materialID];
-
-		auto drawcall = std::make_shared<MeshDrawCall>();
-		drawcall->basevertex = submesh.BaseVertex;
-		drawcall->IndexCount = submesh.IndexCount;
-		drawcall->SizeOfindices = (void*)(sizeof(unsigned int) * submesh.BaseIndex);
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-		glm::decompose(transform, scale, rotation, translation, skew, perspective);
-		drawcall->Key.Depth = glm::distance(translation, SceneManager::ActiveCamera()->Position);
-
-
-		if (material->IsTranslucent)
-			mBatches[materialID][mesh->ID]->TransparentDrawCalls.push_back(drawcall);
-		else
-			mBatches[materialID][mesh->ID]->OpaqueDrawCalls.push_back(drawcall);
-
-		if (material->CastsShadows)
-			mBatches[materialID][mesh->ID]->ShadowDrawCalls.push_back(drawcall);
-	}
-	*/
+	}	
 }
 
 void Fracture::RenderContext::CreateBatchIfMissing(UUID materialID, UUID MeshID)

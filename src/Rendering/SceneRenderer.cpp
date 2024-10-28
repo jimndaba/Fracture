@@ -449,8 +449,7 @@ void Fracture::SceneRenderer::Render()
 	for (const auto& prefab : prefabInstancecomponents)
 	{
 		const auto& transform = SceneManager::GetComponent<TransformComponent>(prefab->GetID());
-		if (prefab->meshType == PrefabInstanceComponent::MeshType::Static)
-			mContext->AddToBatch(prefab.get(), transform->WorldTransform, prefab->Parent_PrefabID);
+		mContext->AddToBatch(prefab.get(), transform->WorldTransform, prefab->Parent_PrefabID);
 	}
 }
 

@@ -47,7 +47,7 @@ bool Fracture::FractureGame::Run(AppWindow* window,SceneRenderer* renderer)
     //TODO On Start Scripts
    
     mScriptManager->onStart();
-    
+    currentGameTime = glfwGetTime();
     return GameRunning;
 }
 

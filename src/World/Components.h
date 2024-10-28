@@ -733,6 +733,7 @@ namespace Fracture
 		std::string HeightMapPath;
 
 		Fracture::UUID MixMapID;
+		std::string MixMapPath;
 		Fracture::UUID IndexMapID;
 		Fracture::UUID DiffuseTextureAtlasID;
 		Fracture::UUID NormalTextureAtlasID;

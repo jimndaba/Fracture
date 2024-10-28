@@ -243,6 +243,7 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::TerrainComponent* c
 	BeginStruct("TerrainComponent");
 	Property("TerrainID", component->TerrainID);
 	Property("MaterialID", component->MaterialID);
+	Property("HasMaterial", component->HasMaterial);
 	Property("TerrainSizeX", component->TerrianSizeX);
 	Property("TerrainSizeY", component->TerrianSizeY);
 	Property("TerrainResolution", component->TerrianResolution);
@@ -250,6 +251,23 @@ void Fracture::SceneSerialiser::SerialiseComponent(Fracture::TerrainComponent* c
 	Property("TerrainMaxHeight", component->TerrianMaxHeight);
 	Property("HasHeightMap", component->HasHeightMap);
 	Property("HeightMapPath", component->HeightMapPath);
+	Property("HasMixMap", component->HasMixMap);
+	Property("MixMapPath", component->MixMapPath);
+	Property("MixMapID", component->MixMapID);
+
+	BeginCollection("TextureTilesets");
+	for (const auto& set : component->TerrainTextures)
+	{
+		BeginStruct("TileSet");
+		Property("DiffuseTexture", set.DiffuseTexture);
+		Property("HasDiffuse", set.HasDiffuse);
+		Property("NormalTexture", set.NormalTexture);
+		Property("HasNormal", set.HasNormal);
+		Property("Weight", set.Weight);
+		EndStruct();
+	}
+	EndCollection();
+
 	EndStruct();
 }
 
@@ -668,6 +686,7 @@ void Fracture::SceneSerialiser::ReadTerrainComponentIfExists(Fracture::UUID enti
 		auto comp = std::make_shared<TerrainComponent>(entity_id);
 		comp->TerrainID = ID("TerrainID");
 		comp->MaterialID = ID("MaterialID");
+		comp->HasMaterial = ID("HasMaterial");
 		comp->TerrianSizeX = INT("TerrainSizeX");
 		comp->TerrianSizeY = INT("TerrainSizeY");
 		comp->TerrianResolution = INT("TerrainResolution");
@@ -675,6 +694,30 @@ void Fracture::SceneSerialiser::ReadTerrainComponentIfExists(Fracture::UUID enti
 		comp->TerrianMaxHeight = FLOAT("TerrainMaxHeight");
 		comp->HasHeightMap = BOOL("HasHeightMap");
 		comp->HeightMapPath = STRING("HeightMapPath");
+		comp->MixMapID = ID("MixMapID");
+		comp->HasMixMap = BOOL("HasMixMap");
+		comp->MixMapPath = STRING("MixMapPath");
+
+
+		BeginCollection("TextureTilesets");
+		while (CurrentCollectionIndex() < GetCollectionSize())
+		{
+			if (BeginStruct("TileSet"))
+			{
+				TerrainTileSet set;
+				set.DiffuseTexture = ID("DiffuseTexture");
+				set.NormalTexture = ID("NormalTexture");
+				set.HasDiffuse = BOOL("HasDiffuse");
+				set.HasNormal = BOOL("HasNormal");
+				set.Weight = FLOAT("Weight");
+				comp->TerrainTextures.push_back(set);
+				EndStruct();
+			}
+			NextInCollection();
+		}
+		EndCollection();
+
+
 		SceneManager::AddComponentByInstance<TerrainComponent>(entity_id, comp);
 		EndStruct();
 	}

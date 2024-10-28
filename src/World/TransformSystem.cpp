@@ -101,7 +101,6 @@ void Fracture::TransformSystem::Translate(const std::shared_ptr<TransformCompone
 	transform->Position += value;
 	transform->IsDirty = true;
 }
-
 void Fracture::TransformSystem::LookAt(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value, const glm::vec3& up)
 {
 	if ((value - transform->Position) == glm::vec3(0, 0, 0)) return;
@@ -123,7 +122,6 @@ void Fracture::TransformSystem::LookAt(const std::shared_ptr<TransformComponent>
 
 	transform->IsDirty = true;
 }
-
 void Fracture::TransformSystem::SetPosition(const std::shared_ptr<TransformComponent>& transform, const glm::vec3& value)
 {
 	transform->Position = value;

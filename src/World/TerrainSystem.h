@@ -128,6 +128,7 @@ namespace Fracture
 		void DrawNode(BVHNode* node);
 
 		void SaveHeightMap(const std::string& path, Fracture::UUID entity);
+		void LoadHeightMap(const std::string& path, std::vector<float>& heightMapData, int NoChannels = 1);
 		void SubmitTerrainForEditing(Fracture::UUID entity);
 		void ReleaseTerrainFromEditing();
 
@@ -141,7 +142,7 @@ namespace Fracture
 	
 		void UpdateDensityMap(Fracture::UUID placementID);
 
-		void UpdateTerrainAtlas();
+		void UpdateTerrainAtlas(Fracture::UUID entity);
 	
 		void SetCurrentPlacementMapForEdit(Fracture::UUID mapID);
 		void SetCurrentPlacementLayerForEdit(Fracture::UUID entityID, int index);
